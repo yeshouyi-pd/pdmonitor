@@ -1,0 +1,496 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pd.server.main.mapper.DeptMapper">
+  <resultMap id="BaseResultMap" type="com.pd.server.main.domain.Dept">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="deptcode" jdbcType="VARCHAR" property="deptcode" />
+    <result column="deptname" jdbcType="VARCHAR" property="deptname" />
+    <result column="upcode" jdbcType="VARCHAR" property="upcode" />
+    <result column="deptdesc" jdbcType="VARCHAR" property="deptdesc" />
+    <result column="linkadd" jdbcType="VARCHAR" property="linkadd" />
+    <result column="linktel" jdbcType="VARCHAR" property="linktel" />
+    <result column="linkman" jdbcType="VARCHAR" property="linkman" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="depttype" jdbcType="VARCHAR" property="depttype" />
+    <result column="zffw" jdbcType="VARCHAR" property="zffw" />
+    <result column="jd" jdbcType="VARCHAR" property="jd" />
+    <result column="wd" jdbcType="VARCHAR" property="wd" />
+    <result column="fdr" jdbcType="CHAR" property="fdr" />
+    <result column="maxday" jdbcType="INTEGER" property="maxday" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="createman" jdbcType="VARCHAR" property="createman" />
+    <result column="updatetime" jdbcType="TIMESTAMP" property="updatetime" />
+    <result column="updateman" jdbcType="VARCHAR" property="updateman" />
+    <result column="yyzt" jdbcType="VARCHAR" property="yyzt" />
+    <result column="gryymax" jdbcType="INTEGER" property="gryymax" />
+    <result column="qyyymax" jdbcType="INTEGER" property="qyyymax" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, deptcode, deptname, upcode, deptdesc, linkadd, linktel, linkman, `status`, depttype, 
+    zffw, jd, wd, fdr, maxday, createtime, createman, updatetime, updateman, yyzt, gryymax, 
+    qyyymax
+  </sql>
+  <select id="selectByExample" parameterType="com.pd.server.main.domain.DeptExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from dept
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from dept
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from dept
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pd.server.main.domain.DeptExample">
+    delete from dept
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pd.server.main.domain.Dept">
+    insert into dept (id, deptcode, deptname, 
+      upcode, deptdesc, linkadd, 
+      linktel, linkman, `status`, 
+      depttype, zffw, jd, 
+      wd, fdr, maxday, createtime, 
+      createman, updatetime, updateman, 
+      yyzt, gryymax, qyyymax
+      )
+    values (#{id,jdbcType=VARCHAR}, #{deptcode,jdbcType=VARCHAR}, #{deptname,jdbcType=VARCHAR}, 
+      #{upcode,jdbcType=VARCHAR}, #{deptdesc,jdbcType=VARCHAR}, #{linkadd,jdbcType=VARCHAR}, 
+      #{linktel,jdbcType=VARCHAR}, #{linkman,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
+      #{depttype,jdbcType=VARCHAR}, #{zffw,jdbcType=VARCHAR}, #{jd,jdbcType=VARCHAR}, 
+      #{wd,jdbcType=VARCHAR}, #{fdr,jdbcType=CHAR}, #{maxday,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{createman,jdbcType=VARCHAR}, #{updatetime,jdbcType=TIMESTAMP}, #{updateman,jdbcType=VARCHAR}, 
+      #{yyzt,jdbcType=VARCHAR}, #{gryymax,jdbcType=INTEGER}, #{qyyymax,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.pd.server.main.domain.Dept">
+    insert into dept
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="deptcode != null">
+        deptcode,
+      </if>
+      <if test="deptname != null">
+        deptname,
+      </if>
+      <if test="upcode != null">
+        upcode,
+      </if>
+      <if test="deptdesc != null">
+        deptdesc,
+      </if>
+      <if test="linkadd != null">
+        linkadd,
+      </if>
+      <if test="linktel != null">
+        linktel,
+      </if>
+      <if test="linkman != null">
+        linkman,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="depttype != null">
+        depttype,
+      </if>
+      <if test="zffw != null">
+        zffw,
+      </if>
+      <if test="jd != null">
+        jd,
+      </if>
+      <if test="wd != null">
+        wd,
+      </if>
+      <if test="fdr != null">
+        fdr,
+      </if>
+      <if test="maxday != null">
+        maxday,
+      </if>
+      <if test="createtime != null">
+        createtime,
+      </if>
+      <if test="createman != null">
+        createman,
+      </if>
+      <if test="updatetime != null">
+        updatetime,
+      </if>
+      <if test="updateman != null">
+        updateman,
+      </if>
+      <if test="yyzt != null">
+        yyzt,
+      </if>
+      <if test="gryymax != null">
+        gryymax,
+      </if>
+      <if test="qyyymax != null">
+        qyyymax,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="deptcode != null">
+        #{deptcode,jdbcType=VARCHAR},
+      </if>
+      <if test="deptname != null">
+        #{deptname,jdbcType=VARCHAR},
+      </if>
+      <if test="upcode != null">
+        #{upcode,jdbcType=VARCHAR},
+      </if>
+      <if test="deptdesc != null">
+        #{deptdesc,jdbcType=VARCHAR},
+      </if>
+      <if test="linkadd != null">
+        #{linkadd,jdbcType=VARCHAR},
+      </if>
+      <if test="linktel != null">
+        #{linktel,jdbcType=VARCHAR},
+      </if>
+      <if test="linkman != null">
+        #{linkman,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="depttype != null">
+        #{depttype,jdbcType=VARCHAR},
+      </if>
+      <if test="zffw != null">
+        #{zffw,jdbcType=VARCHAR},
+      </if>
+      <if test="jd != null">
+        #{jd,jdbcType=VARCHAR},
+      </if>
+      <if test="wd != null">
+        #{wd,jdbcType=VARCHAR},
+      </if>
+      <if test="fdr != null">
+        #{fdr,jdbcType=CHAR},
+      </if>
+      <if test="maxday != null">
+        #{maxday,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createman != null">
+        #{createman,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null">
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateman != null">
+        #{updateman,jdbcType=VARCHAR},
+      </if>
+      <if test="yyzt != null">
+        #{yyzt,jdbcType=VARCHAR},
+      </if>
+      <if test="gryymax != null">
+        #{gryymax,jdbcType=INTEGER},
+      </if>
+      <if test="qyyymax != null">
+        #{qyyymax,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pd.server.main.domain.DeptExample" resultType="java.lang.Long">
+    select count(*) from dept
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update dept
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deptcode != null">
+        deptcode = #{record.deptcode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deptname != null">
+        deptname = #{record.deptname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.upcode != null">
+        upcode = #{record.upcode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deptdesc != null">
+        deptdesc = #{record.deptdesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.linkadd != null">
+        linkadd = #{record.linkadd,jdbcType=VARCHAR},
+      </if>
+      <if test="record.linktel != null">
+        linktel = #{record.linktel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.linkman != null">
+        linkman = #{record.linkman,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        `status` = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.depttype != null">
+        depttype = #{record.depttype,jdbcType=VARCHAR},
+      </if>
+      <if test="record.zffw != null">
+        zffw = #{record.zffw,jdbcType=VARCHAR},
+      </if>
+      <if test="record.jd != null">
+        jd = #{record.jd,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wd != null">
+        wd = #{record.wd,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fdr != null">
+        fdr = #{record.fdr,jdbcType=CHAR},
+      </if>
+      <if test="record.maxday != null">
+        maxday = #{record.maxday,jdbcType=INTEGER},
+      </if>
+      <if test="record.createtime != null">
+        createtime = #{record.createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createman != null">
+        createman = #{record.createman,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updatetime != null">
+        updatetime = #{record.updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateman != null">
+        updateman = #{record.updateman,jdbcType=VARCHAR},
+      </if>
+      <if test="record.yyzt != null">
+        yyzt = #{record.yyzt,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gryymax != null">
+        gryymax = #{record.gryymax,jdbcType=INTEGER},
+      </if>
+      <if test="record.qyyymax != null">
+        qyyymax = #{record.qyyymax,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update dept
+    set id = #{record.id,jdbcType=VARCHAR},
+      deptcode = #{record.deptcode,jdbcType=VARCHAR},
+      deptname = #{record.deptname,jdbcType=VARCHAR},
+      upcode = #{record.upcode,jdbcType=VARCHAR},
+      deptdesc = #{record.deptdesc,jdbcType=VARCHAR},
+      linkadd = #{record.linkadd,jdbcType=VARCHAR},
+      linktel = #{record.linktel,jdbcType=VARCHAR},
+      linkman = #{record.linkman,jdbcType=VARCHAR},
+      `status` = #{record.status,jdbcType=VARCHAR},
+      depttype = #{record.depttype,jdbcType=VARCHAR},
+      zffw = #{record.zffw,jdbcType=VARCHAR},
+      jd = #{record.jd,jdbcType=VARCHAR},
+      wd = #{record.wd,jdbcType=VARCHAR},
+      fdr = #{record.fdr,jdbcType=CHAR},
+      maxday = #{record.maxday,jdbcType=INTEGER},
+      createtime = #{record.createtime,jdbcType=TIMESTAMP},
+      createman = #{record.createman,jdbcType=VARCHAR},
+      updatetime = #{record.updatetime,jdbcType=TIMESTAMP},
+      updateman = #{record.updateman,jdbcType=VARCHAR},
+      yyzt = #{record.yyzt,jdbcType=VARCHAR},
+      gryymax = #{record.gryymax,jdbcType=INTEGER},
+      qyyymax = #{record.qyyymax,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pd.server.main.domain.Dept">
+    update dept
+    <set>
+      <if test="deptcode != null">
+        deptcode = #{deptcode,jdbcType=VARCHAR},
+      </if>
+      <if test="deptname != null">
+        deptname = #{deptname,jdbcType=VARCHAR},
+      </if>
+      <if test="upcode != null">
+        upcode = #{upcode,jdbcType=VARCHAR},
+      </if>
+      <if test="deptdesc != null">
+        deptdesc = #{deptdesc,jdbcType=VARCHAR},
+      </if>
+      <if test="linkadd != null">
+        linkadd = #{linkadd,jdbcType=VARCHAR},
+      </if>
+      <if test="linktel != null">
+        linktel = #{linktel,jdbcType=VARCHAR},
+      </if>
+      <if test="linkman != null">
+        linkman = #{linkman,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="depttype != null">
+        depttype = #{depttype,jdbcType=VARCHAR},
+      </if>
+      <if test="zffw != null">
+        zffw = #{zffw,jdbcType=VARCHAR},
+      </if>
+      <if test="jd != null">
+        jd = #{jd,jdbcType=VARCHAR},
+      </if>
+      <if test="wd != null">
+        wd = #{wd,jdbcType=VARCHAR},
+      </if>
+      <if test="fdr != null">
+        fdr = #{fdr,jdbcType=CHAR},
+      </if>
+      <if test="maxday != null">
+        maxday = #{maxday,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null">
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createman != null">
+        createman = #{createman,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null">
+        updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateman != null">
+        updateman = #{updateman,jdbcType=VARCHAR},
+      </if>
+      <if test="yyzt != null">
+        yyzt = #{yyzt,jdbcType=VARCHAR},
+      </if>
+      <if test="gryymax != null">
+        gryymax = #{gryymax,jdbcType=INTEGER},
+      </if>
+      <if test="qyyymax != null">
+        qyyymax = #{qyyymax,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pd.server.main.domain.Dept">
+    update dept
+    set deptcode = #{deptcode,jdbcType=VARCHAR},
+      deptname = #{deptname,jdbcType=VARCHAR},
+      upcode = #{upcode,jdbcType=VARCHAR},
+      deptdesc = #{deptdesc,jdbcType=VARCHAR},
+      linkadd = #{linkadd,jdbcType=VARCHAR},
+      linktel = #{linktel,jdbcType=VARCHAR},
+      linkman = #{linkman,jdbcType=VARCHAR},
+      `status` = #{status,jdbcType=VARCHAR},
+      depttype = #{depttype,jdbcType=VARCHAR},
+      zffw = #{zffw,jdbcType=VARCHAR},
+      jd = #{jd,jdbcType=VARCHAR},
+      wd = #{wd,jdbcType=VARCHAR},
+      fdr = #{fdr,jdbcType=CHAR},
+      maxday = #{maxday,jdbcType=INTEGER},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      createman = #{createman,jdbcType=VARCHAR},
+      updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      updateman = #{updateman,jdbcType=VARCHAR},
+      yyzt = #{yyzt,jdbcType=VARCHAR},
+      gryymax = #{gryymax,jdbcType=INTEGER},
+      qyyymax = #{qyyymax,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <select id="findByJdAndWd" resultMap="BaseResultMap"  parameterType="java.util.Map" >
+    SELECT *,(
+	  6378.137 * ACOS(
+	    COS(RADIANS(#{wd,jdbcType=VARCHAR}))
+	    * COS( RADIANS( wd ) )
+	    * COS(RADIANS( jd ) - RADIANS(#{jd,jdbcType=VARCHAR}))
+	    +
+	    SIN( RADIANS(30.49984) )
+	    * SIN( RADIANS( wd ) )
+	  )
+	)
+	AS distance
+	FROM dept WHERE jd IS NOT NULL AND wd IS NOT NULL ORDER BY distance;
+  </select>
+
+</mapper>

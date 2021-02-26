@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pd.server.main.mapper.JdccxLogMapper">
+  <resultMap id="BaseResultMap" type="com.pd.server.main.domain.JdccxLog">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="qqcs" jdbcType="VARCHAR" property="qqcs" />
+    <result column="fhztm" jdbcType="VARCHAR" property="fhztm" />
+    <result column="cjh" jdbcType="VARCHAR" property="cjh" />
+    <result column="zcrq" jdbcType="VARCHAR" property="zcrq" />
+    <result column="sccj" jdbcType="VARCHAR" property="sccj" />
+    <result column="dw" jdbcType="VARCHAR" property="dw" />
+    <result column="sjhm" jdbcType="VARCHAR" property="sjhm" />
+    <result column="hpzl" jdbcType="VARCHAR" property="hpzl" />
+    <result column="zhhm" jdbcType="VARCHAR" property="zhhm" />
+    <result column="hphm" jdbcType="VARCHAR" property="hphm" />
+    <result column="syr" jdbcType="VARCHAR" property="syr" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.pd.server.main.domain.JdccxLog">
+    <result column="fhjg" jdbcType="LONGVARCHAR" property="fhjg" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, create_by, create_time, qqcs, fhztm, cjh, zcrq, sccj, dw, sjhm, hpzl, zhhm, hphm, 
+    syr
+  </sql>
+  <sql id="Blob_Column_List">
+    fhjg
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.pd.server.main.domain.JdccxLogExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from jdccx_log
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.pd.server.main.domain.JdccxLogExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from jdccx_log
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from jdccx_log
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from jdccx_log
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pd.server.main.domain.JdccxLogExample">
+    delete from jdccx_log
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pd.server.main.domain.JdccxLog">
+    insert into jdccx_log (id, create_by, create_time, 
+      qqcs, fhztm, cjh, zcrq, 
+      sccj, dw, sjhm, hpzl, 
+      zhhm, hphm, syr, fhjg
+      )
+    values (#{id,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{qqcs,jdbcType=VARCHAR}, #{fhztm,jdbcType=VARCHAR}, #{cjh,jdbcType=VARCHAR}, #{zcrq,jdbcType=VARCHAR}, 
+      #{sccj,jdbcType=VARCHAR}, #{dw,jdbcType=VARCHAR}, #{sjhm,jdbcType=VARCHAR}, #{hpzl,jdbcType=VARCHAR}, 
+      #{zhhm,jdbcType=VARCHAR}, #{hphm,jdbcType=VARCHAR}, #{syr,jdbcType=VARCHAR}, #{fhjg,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.pd.server.main.domain.JdccxLog">
+    insert into jdccx_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="qqcs != null">
+        qqcs,
+      </if>
+      <if test="fhztm != null">
+        fhztm,
+      </if>
+      <if test="cjh != null">
+        cjh,
+      </if>
+      <if test="zcrq != null">
+        zcrq,
+      </if>
+      <if test="sccj != null">
+        sccj,
+      </if>
+      <if test="dw != null">
+        dw,
+      </if>
+      <if test="sjhm != null">
+        sjhm,
+      </if>
+      <if test="hpzl != null">
+        hpzl,
+      </if>
+      <if test="zhhm != null">
+        zhhm,
+      </if>
+      <if test="hphm != null">
+        hphm,
+      </if>
+      <if test="syr != null">
+        syr,
+      </if>
+      <if test="fhjg != null">
+        fhjg,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="qqcs != null">
+        #{qqcs,jdbcType=VARCHAR},
+      </if>
+      <if test="fhztm != null">
+        #{fhztm,jdbcType=VARCHAR},
+      </if>
+      <if test="cjh != null">
+        #{cjh,jdbcType=VARCHAR},
+      </if>
+      <if test="zcrq != null">
+        #{zcrq,jdbcType=VARCHAR},
+      </if>
+      <if test="sccj != null">
+        #{sccj,jdbcType=VARCHAR},
+      </if>
+      <if test="dw != null">
+        #{dw,jdbcType=VARCHAR},
+      </if>
+      <if test="sjhm != null">
+        #{sjhm,jdbcType=VARCHAR},
+      </if>
+      <if test="hpzl != null">
+        #{hpzl,jdbcType=VARCHAR},
+      </if>
+      <if test="zhhm != null">
+        #{zhhm,jdbcType=VARCHAR},
+      </if>
+      <if test="hphm != null">
+        #{hphm,jdbcType=VARCHAR},
+      </if>
+      <if test="syr != null">
+        #{syr,jdbcType=VARCHAR},
+      </if>
+      <if test="fhjg != null">
+        #{fhjg,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pd.server.main.domain.JdccxLogExample" resultType="java.lang.Long">
+    select count(*) from jdccx_log
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update jdccx_log
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createBy != null">
+        create_by = #{record.createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.qqcs != null">
+        qqcs = #{record.qqcs,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fhztm != null">
+        fhztm = #{record.fhztm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cjh != null">
+        cjh = #{record.cjh,jdbcType=VARCHAR},
+      </if>
+      <if test="record.zcrq != null">
+        zcrq = #{record.zcrq,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sccj != null">
+        sccj = #{record.sccj,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dw != null">
+        dw = #{record.dw,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sjhm != null">
+        sjhm = #{record.sjhm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hpzl != null">
+        hpzl = #{record.hpzl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.zhhm != null">
+        zhhm = #{record.zhhm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hphm != null">
+        hphm = #{record.hphm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.syr != null">
+        syr = #{record.syr,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fhjg != null">
+        fhjg = #{record.fhjg,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update jdccx_log
+    set id = #{record.id,jdbcType=VARCHAR},
+      create_by = #{record.createBy,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      qqcs = #{record.qqcs,jdbcType=VARCHAR},
+      fhztm = #{record.fhztm,jdbcType=VARCHAR},
+      cjh = #{record.cjh,jdbcType=VARCHAR},
+      zcrq = #{record.zcrq,jdbcType=VARCHAR},
+      sccj = #{record.sccj,jdbcType=VARCHAR},
+      dw = #{record.dw,jdbcType=VARCHAR},
+      sjhm = #{record.sjhm,jdbcType=VARCHAR},
+      hpzl = #{record.hpzl,jdbcType=VARCHAR},
+      zhhm = #{record.zhhm,jdbcType=VARCHAR},
+      hphm = #{record.hphm,jdbcType=VARCHAR},
+      syr = #{record.syr,jdbcType=VARCHAR},
+      fhjg = #{record.fhjg,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update jdccx_log
+    set id = #{record.id,jdbcType=VARCHAR},
+      create_by = #{record.createBy,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      qqcs = #{record.qqcs,jdbcType=VARCHAR},
+      fhztm = #{record.fhztm,jdbcType=VARCHAR},
+      cjh = #{record.cjh,jdbcType=VARCHAR},
+      zcrq = #{record.zcrq,jdbcType=VARCHAR},
+      sccj = #{record.sccj,jdbcType=VARCHAR},
+      dw = #{record.dw,jdbcType=VARCHAR},
+      sjhm = #{record.sjhm,jdbcType=VARCHAR},
+      hpzl = #{record.hpzl,jdbcType=VARCHAR},
+      zhhm = #{record.zhhm,jdbcType=VARCHAR},
+      hphm = #{record.hphm,jdbcType=VARCHAR},
+      syr = #{record.syr,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pd.server.main.domain.JdccxLog">
+    update jdccx_log
+    <set>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="qqcs != null">
+        qqcs = #{qqcs,jdbcType=VARCHAR},
+      </if>
+      <if test="fhztm != null">
+        fhztm = #{fhztm,jdbcType=VARCHAR},
+      </if>
+      <if test="cjh != null">
+        cjh = #{cjh,jdbcType=VARCHAR},
+      </if>
+      <if test="zcrq != null">
+        zcrq = #{zcrq,jdbcType=VARCHAR},
+      </if>
+      <if test="sccj != null">
+        sccj = #{sccj,jdbcType=VARCHAR},
+      </if>
+      <if test="dw != null">
+        dw = #{dw,jdbcType=VARCHAR},
+      </if>
+      <if test="sjhm != null">
+        sjhm = #{sjhm,jdbcType=VARCHAR},
+      </if>
+      <if test="hpzl != null">
+        hpzl = #{hpzl,jdbcType=VARCHAR},
+      </if>
+      <if test="zhhm != null">
+        zhhm = #{zhhm,jdbcType=VARCHAR},
+      </if>
+      <if test="hphm != null">
+        hphm = #{hphm,jdbcType=VARCHAR},
+      </if>
+      <if test="syr != null">
+        syr = #{syr,jdbcType=VARCHAR},
+      </if>
+      <if test="fhjg != null">
+        fhjg = #{fhjg,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.pd.server.main.domain.JdccxLog">
+    update jdccx_log
+    set create_by = #{createBy,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      qqcs = #{qqcs,jdbcType=VARCHAR},
+      fhztm = #{fhztm,jdbcType=VARCHAR},
+      cjh = #{cjh,jdbcType=VARCHAR},
+      zcrq = #{zcrq,jdbcType=VARCHAR},
+      sccj = #{sccj,jdbcType=VARCHAR},
+      dw = #{dw,jdbcType=VARCHAR},
+      sjhm = #{sjhm,jdbcType=VARCHAR},
+      hpzl = #{hpzl,jdbcType=VARCHAR},
+      zhhm = #{zhhm,jdbcType=VARCHAR},
+      hphm = #{hphm,jdbcType=VARCHAR},
+      syr = #{syr,jdbcType=VARCHAR},
+      fhjg = #{fhjg,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pd.server.main.domain.JdccxLog">
+    update jdccx_log
+    set create_by = #{createBy,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      qqcs = #{qqcs,jdbcType=VARCHAR},
+      fhztm = #{fhztm,jdbcType=VARCHAR},
+      cjh = #{cjh,jdbcType=VARCHAR},
+      zcrq = #{zcrq,jdbcType=VARCHAR},
+      sccj = #{sccj,jdbcType=VARCHAR},
+      dw = #{dw,jdbcType=VARCHAR},
+      sjhm = #{sjhm,jdbcType=VARCHAR},
+      hpzl = #{hpzl,jdbcType=VARCHAR},
+      zhhm = #{zhhm,jdbcType=VARCHAR},
+      hphm = #{hphm,jdbcType=VARCHAR},
+      syr = #{syr,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

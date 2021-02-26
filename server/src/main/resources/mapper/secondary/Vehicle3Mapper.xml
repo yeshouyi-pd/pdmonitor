@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pd.server.secondary.mapper.Vehicle3Mapper">
+  <resultMap id="BaseResultMap" type="com.pd.server.secondary.domain.Vehicle3">
+    <id column="SFZMHM" jdbcType="VARCHAR" property="sfzmhm" />
+    <result column="HPZL" jdbcType="VARCHAR" property="hpzl" />
+    <result column="HPHM" jdbcType="VARCHAR" property="hphm" />
+    <result column="SYR" jdbcType="VARCHAR" property="syr" />
+    <result column="CLSBDH" jdbcType="VARCHAR" property="clsbdh" />
+    <result column="FDJH" jdbcType="VARCHAR" property="fdjh" />
+    <result column="CCDJRQ" jdbcType="VARCHAR" property="ccdjrq" />
+    <result column="YXQZ" jdbcType="VARCHAR" property="yxqz" />
+    <result column="ZT" jdbcType="VARCHAR" property="zt" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    SFZMHM, HPZL, HPHM, SYR, CLSBDH, FDJH, CCDJRQ, YXQZ, ZT
+  </sql>
+  <select id="selectByExample" parameterType="com.pd.server.secondary.domain.Vehicle3Example" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from VEHICLE3
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from VEHICLE3
+    where SFZMHM = #{sfzmhm,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from VEHICLE3
+    where SFZMHM = #{sfzmhm,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pd.server.secondary.domain.Vehicle3Example">
+    delete from VEHICLE3
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pd.server.secondary.domain.Vehicle3">
+    insert into VEHICLE3 (SFZMHM, HPZL, HPHM, 
+      SYR, CLSBDH, FDJH, 
+      CCDJRQ, YXQZ, ZT)
+    values (#{sfzmhm,jdbcType=VARCHAR}, #{hpzl,jdbcType=VARCHAR}, #{hphm,jdbcType=VARCHAR}, 
+      #{syr,jdbcType=VARCHAR}, #{clsbdh,jdbcType=VARCHAR}, #{fdjh,jdbcType=VARCHAR}, 
+      #{ccdjrq,jdbcType=VARCHAR}, #{yxqz,jdbcType=VARCHAR}, #{zt,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pd.server.secondary.domain.Vehicle3">
+    insert into VEHICLE3
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="sfzmhm != null">
+        SFZMHM,
+      </if>
+      <if test="hpzl != null">
+        HPZL,
+      </if>
+      <if test="hphm != null">
+        HPHM,
+      </if>
+      <if test="syr != null">
+        SYR,
+      </if>
+      <if test="clsbdh != null">
+        CLSBDH,
+      </if>
+      <if test="fdjh != null">
+        FDJH,
+      </if>
+      <if test="ccdjrq != null">
+        CCDJRQ,
+      </if>
+      <if test="yxqz != null">
+        YXQZ,
+      </if>
+      <if test="zt != null">
+        ZT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="sfzmhm != null">
+        #{sfzmhm,jdbcType=VARCHAR},
+      </if>
+      <if test="hpzl != null">
+        #{hpzl,jdbcType=VARCHAR},
+      </if>
+      <if test="hphm != null">
+        #{hphm,jdbcType=VARCHAR},
+      </if>
+      <if test="syr != null">
+        #{syr,jdbcType=VARCHAR},
+      </if>
+      <if test="clsbdh != null">
+        #{clsbdh,jdbcType=VARCHAR},
+      </if>
+      <if test="fdjh != null">
+        #{fdjh,jdbcType=VARCHAR},
+      </if>
+      <if test="ccdjrq != null">
+        #{ccdjrq,jdbcType=VARCHAR},
+      </if>
+      <if test="yxqz != null">
+        #{yxqz,jdbcType=VARCHAR},
+      </if>
+      <if test="zt != null">
+        #{zt,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pd.server.secondary.domain.Vehicle3Example" resultType="java.lang.Long">
+    select count(*) from VEHICLE3
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update VEHICLE3
+    <set>
+      <if test="record.sfzmhm != null">
+        SFZMHM = #{record.sfzmhm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hpzl != null">
+        HPZL = #{record.hpzl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hphm != null">
+        HPHM = #{record.hphm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.syr != null">
+        SYR = #{record.syr,jdbcType=VARCHAR},
+      </if>
+      <if test="record.clsbdh != null">
+        CLSBDH = #{record.clsbdh,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fdjh != null">
+        FDJH = #{record.fdjh,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ccdjrq != null">
+        CCDJRQ = #{record.ccdjrq,jdbcType=VARCHAR},
+      </if>
+      <if test="record.yxqz != null">
+        YXQZ = #{record.yxqz,jdbcType=VARCHAR},
+      </if>
+      <if test="record.zt != null">
+        ZT = #{record.zt,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update VEHICLE3
+    set SFZMHM = #{record.sfzmhm,jdbcType=VARCHAR},
+      HPZL = #{record.hpzl,jdbcType=VARCHAR},
+      HPHM = #{record.hphm,jdbcType=VARCHAR},
+      SYR = #{record.syr,jdbcType=VARCHAR},
+      CLSBDH = #{record.clsbdh,jdbcType=VARCHAR},
+      FDJH = #{record.fdjh,jdbcType=VARCHAR},
+      CCDJRQ = #{record.ccdjrq,jdbcType=VARCHAR},
+      YXQZ = #{record.yxqz,jdbcType=VARCHAR},
+      ZT = #{record.zt,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pd.server.secondary.domain.Vehicle3">
+    update VEHICLE3
+    <set>
+      <if test="hpzl != null">
+        HPZL = #{hpzl,jdbcType=VARCHAR},
+      </if>
+      <if test="hphm != null">
+        HPHM = #{hphm,jdbcType=VARCHAR},
+      </if>
+      <if test="syr != null">
+        SYR = #{syr,jdbcType=VARCHAR},
+      </if>
+      <if test="clsbdh != null">
+        CLSBDH = #{clsbdh,jdbcType=VARCHAR},
+      </if>
+      <if test="fdjh != null">
+        FDJH = #{fdjh,jdbcType=VARCHAR},
+      </if>
+      <if test="ccdjrq != null">
+        CCDJRQ = #{ccdjrq,jdbcType=VARCHAR},
+      </if>
+      <if test="yxqz != null">
+        YXQZ = #{yxqz,jdbcType=VARCHAR},
+      </if>
+      <if test="zt != null">
+        ZT = #{zt,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where SFZMHM = #{sfzmhm,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pd.server.secondary.domain.Vehicle3">
+    update VEHICLE3
+    set HPZL = #{hpzl,jdbcType=VARCHAR},
+      HPHM = #{hphm,jdbcType=VARCHAR},
+      SYR = #{syr,jdbcType=VARCHAR},
+      CLSBDH = #{clsbdh,jdbcType=VARCHAR},
+      FDJH = #{fdjh,jdbcType=VARCHAR},
+      CCDJRQ = #{ccdjrq,jdbcType=VARCHAR},
+      YXQZ = #{yxqz,jdbcType=VARCHAR},
+      ZT = #{zt,jdbcType=VARCHAR}
+    where SFZMHM = #{sfzmhm,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pd.server.main.mapper.WebchatIllcodeMapper">
+  <resultMap id="BaseResultMap" type="com.pd.server.main.domain.WebchatIllcode">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="wfdm" jdbcType="VARCHAR" property="wfdm" />
+    <result column="wfxw" jdbcType="VARCHAR" property="wfxw" />
+    <result column="wftl" jdbcType="VARCHAR" property="wftl" />
+    <result column="cfyj" jdbcType="VARCHAR" property="cfyj" />
+    <result column="jf" jdbcType="VARCHAR" property="jf" />
+    <result column="fkje" jdbcType="REAL" property="fkje" />
+    <result column="qtcf" jdbcType="VARCHAR" property="qtcf" />
+    <result column="cs" jdbcType="VARCHAR" property="cs" />
+    <result column="bz" jdbcType="VARCHAR" property="bz" />
+    <result column="deptcode" jdbcType="VARCHAR" property="deptcode" />
+    <result column="usercode" jdbcType="VARCHAR" property="usercode" />
+    <result column="fbsj" jdbcType="TIMESTAMP" property="fbsj" />
+    <result column="zt" jdbcType="VARCHAR" property="zt" />
+    <result column="lb" jdbcType="VARCHAR" property="lb" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, wfdm, wfxw, wftl, cfyj, jf, fkje, qtcf, cs, bz, deptcode, usercode, fbsj, zt, 
+    lb
+  </sql>
+  <select id="selectByExample" parameterType="com.pd.server.main.domain.WebchatIllcodeExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from webchat_illcode
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from webchat_illcode
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from webchat_illcode
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pd.server.main.domain.WebchatIllcodeExample">
+    delete from webchat_illcode
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pd.server.main.domain.WebchatIllcode">
+    insert into webchat_illcode (id, wfdm, wfxw, 
+      wftl, cfyj, jf, fkje, 
+      qtcf, cs, bz, deptcode, 
+      usercode, fbsj, zt, 
+      lb)
+    values (#{id,jdbcType=VARCHAR}, #{wfdm,jdbcType=VARCHAR}, #{wfxw,jdbcType=VARCHAR}, 
+      #{wftl,jdbcType=VARCHAR}, #{cfyj,jdbcType=VARCHAR}, #{jf,jdbcType=VARCHAR}, #{fkje,jdbcType=REAL}, 
+      #{qtcf,jdbcType=VARCHAR}, #{cs,jdbcType=VARCHAR}, #{bz,jdbcType=VARCHAR}, #{deptcode,jdbcType=VARCHAR}, 
+      #{usercode,jdbcType=VARCHAR}, #{fbsj,jdbcType=TIMESTAMP}, #{zt,jdbcType=VARCHAR}, 
+      #{lb,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pd.server.main.domain.WebchatIllcode">
+    insert into webchat_illcode
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="wfdm != null">
+        wfdm,
+      </if>
+      <if test="wfxw != null">
+        wfxw,
+      </if>
+      <if test="wftl != null">
+        wftl,
+      </if>
+      <if test="cfyj != null">
+        cfyj,
+      </if>
+      <if test="jf != null">
+        jf,
+      </if>
+      <if test="fkje != null">
+        fkje,
+      </if>
+      <if test="qtcf != null">
+        qtcf,
+      </if>
+      <if test="cs != null">
+        cs,
+      </if>
+      <if test="bz != null">
+        bz,
+      </if>
+      <if test="deptcode != null">
+        deptcode,
+      </if>
+      <if test="usercode != null">
+        usercode,
+      </if>
+      <if test="fbsj != null">
+        fbsj,
+      </if>
+      <if test="zt != null">
+        zt,
+      </if>
+      <if test="lb != null">
+        lb,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="wfdm != null">
+        #{wfdm,jdbcType=VARCHAR},
+      </if>
+      <if test="wfxw != null">
+        #{wfxw,jdbcType=VARCHAR},
+      </if>
+      <if test="wftl != null">
+        #{wftl,jdbcType=VARCHAR},
+      </if>
+      <if test="cfyj != null">
+        #{cfyj,jdbcType=VARCHAR},
+      </if>
+      <if test="jf != null">
+        #{jf,jdbcType=VARCHAR},
+      </if>
+      <if test="fkje != null">
+        #{fkje,jdbcType=REAL},
+      </if>
+      <if test="qtcf != null">
+        #{qtcf,jdbcType=VARCHAR},
+      </if>
+      <if test="cs != null">
+        #{cs,jdbcType=VARCHAR},
+      </if>
+      <if test="bz != null">
+        #{bz,jdbcType=VARCHAR},
+      </if>
+      <if test="deptcode != null">
+        #{deptcode,jdbcType=VARCHAR},
+      </if>
+      <if test="usercode != null">
+        #{usercode,jdbcType=VARCHAR},
+      </if>
+      <if test="fbsj != null">
+        #{fbsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="zt != null">
+        #{zt,jdbcType=VARCHAR},
+      </if>
+      <if test="lb != null">
+        #{lb,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pd.server.main.domain.WebchatIllcodeExample" resultType="java.lang.Long">
+    select count(*) from webchat_illcode
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update webchat_illcode
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wfdm != null">
+        wfdm = #{record.wfdm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wfxw != null">
+        wfxw = #{record.wfxw,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wftl != null">
+        wftl = #{record.wftl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cfyj != null">
+        cfyj = #{record.cfyj,jdbcType=VARCHAR},
+      </if>
+      <if test="record.jf != null">
+        jf = #{record.jf,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fkje != null">
+        fkje = #{record.fkje,jdbcType=REAL},
+      </if>
+      <if test="record.qtcf != null">
+        qtcf = #{record.qtcf,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cs != null">
+        cs = #{record.cs,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bz != null">
+        bz = #{record.bz,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deptcode != null">
+        deptcode = #{record.deptcode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.usercode != null">
+        usercode = #{record.usercode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fbsj != null">
+        fbsj = #{record.fbsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.zt != null">
+        zt = #{record.zt,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lb != null">
+        lb = #{record.lb,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update webchat_illcode
+    set id = #{record.id,jdbcType=VARCHAR},
+      wfdm = #{record.wfdm,jdbcType=VARCHAR},
+      wfxw = #{record.wfxw,jdbcType=VARCHAR},
+      wftl = #{record.wftl,jdbcType=VARCHAR},
+      cfyj = #{record.cfyj,jdbcType=VARCHAR},
+      jf = #{record.jf,jdbcType=VARCHAR},
+      fkje = #{record.fkje,jdbcType=REAL},
+      qtcf = #{record.qtcf,jdbcType=VARCHAR},
+      cs = #{record.cs,jdbcType=VARCHAR},
+      bz = #{record.bz,jdbcType=VARCHAR},
+      deptcode = #{record.deptcode,jdbcType=VARCHAR},
+      usercode = #{record.usercode,jdbcType=VARCHAR},
+      fbsj = #{record.fbsj,jdbcType=TIMESTAMP},
+      zt = #{record.zt,jdbcType=VARCHAR},
+      lb = #{record.lb,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pd.server.main.domain.WebchatIllcode">
+    update webchat_illcode
+    <set>
+      <if test="wfdm != null">
+        wfdm = #{wfdm,jdbcType=VARCHAR},
+      </if>
+      <if test="wfxw != null">
+        wfxw = #{wfxw,jdbcType=VARCHAR},
+      </if>
+      <if test="wftl != null">
+        wftl = #{wftl,jdbcType=VARCHAR},
+      </if>
+      <if test="cfyj != null">
+        cfyj = #{cfyj,jdbcType=VARCHAR},
+      </if>
+      <if test="jf != null">
+        jf = #{jf,jdbcType=VARCHAR},
+      </if>
+      <if test="fkje != null">
+        fkje = #{fkje,jdbcType=REAL},
+      </if>
+      <if test="qtcf != null">
+        qtcf = #{qtcf,jdbcType=VARCHAR},
+      </if>
+      <if test="cs != null">
+        cs = #{cs,jdbcType=VARCHAR},
+      </if>
+      <if test="bz != null">
+        bz = #{bz,jdbcType=VARCHAR},
+      </if>
+      <if test="deptcode != null">
+        deptcode = #{deptcode,jdbcType=VARCHAR},
+      </if>
+      <if test="usercode != null">
+        usercode = #{usercode,jdbcType=VARCHAR},
+      </if>
+      <if test="fbsj != null">
+        fbsj = #{fbsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="zt != null">
+        zt = #{zt,jdbcType=VARCHAR},
+      </if>
+      <if test="lb != null">
+        lb = #{lb,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pd.server.main.domain.WebchatIllcode">
+    update webchat_illcode
+    set wfdm = #{wfdm,jdbcType=VARCHAR},
+      wfxw = #{wfxw,jdbcType=VARCHAR},
+      wftl = #{wftl,jdbcType=VARCHAR},
+      cfyj = #{cfyj,jdbcType=VARCHAR},
+      jf = #{jf,jdbcType=VARCHAR},
+      fkje = #{fkje,jdbcType=REAL},
+      qtcf = #{qtcf,jdbcType=VARCHAR},
+      cs = #{cs,jdbcType=VARCHAR},
+      bz = #{bz,jdbcType=VARCHAR},
+      deptcode = #{deptcode,jdbcType=VARCHAR},
+      usercode = #{usercode,jdbcType=VARCHAR},
+      fbsj = #{fbsj,jdbcType=TIMESTAMP},
+      zt = #{zt,jdbcType=VARCHAR},
+      lb = #{lb,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="findAllWfdm" resultType="java.lang.String">
+    select wfdm from webchat_illcode
+  </select>
+</mapper>

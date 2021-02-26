@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pd.server.main.mapper.VehPasslineMapper">
+  <resultMap id="BaseResultMap" type="com.pd.server.main.domain.VehPassline">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="qx" jdbcType="VARCHAR" property="qx" />
+    <result column="jddz" jdbcType="VARCHAR" property="jddz" />
+    <result column="px" jdbcType="INTEGER" property="px" />
+    <result column="ms" jdbcType="VARCHAR" property="ms" />
+    <result column="bz" jdbcType="VARCHAR" property="bz" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="sys_org_code" jdbcType="VARCHAR" property="sysOrgCode" />
+    <result column="jddm" jdbcType="VARCHAR" property="jddm" />
+    <result column="zt" jdbcType="VARCHAR" property="zt" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, qx, jddz, px, ms, bz, create_by, create_time, update_by, update_time, sys_org_code, 
+    jddm, zt
+  </sql>
+  <select id="selectByExample" parameterType="com.pd.server.main.domain.VehPasslineExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from veh_pass_line
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from veh_pass_line
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from veh_pass_line
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pd.server.main.domain.VehPasslineExample">
+    delete from veh_pass_line
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pd.server.main.domain.VehPassline">
+    insert into veh_pass_line (id, qx, jddz, 
+      px, ms, bz, create_by, 
+      create_time, update_by, update_time, 
+      sys_org_code, jddm, zt
+      )
+    values (#{id,jdbcType=VARCHAR}, #{qx,jdbcType=VARCHAR}, #{jddz,jdbcType=VARCHAR}, 
+      #{px,jdbcType=INTEGER}, #{ms,jdbcType=VARCHAR}, #{bz,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{sysOrgCode,jdbcType=VARCHAR}, #{jddm,jdbcType=VARCHAR}, #{zt,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.pd.server.main.domain.VehPassline">
+    insert into veh_pass_line
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="qx != null">
+        qx,
+      </if>
+      <if test="jddz != null">
+        jddz,
+      </if>
+      <if test="px != null">
+        px,
+      </if>
+      <if test="ms != null">
+        ms,
+      </if>
+      <if test="bz != null">
+        bz,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateBy != null">
+        update_by,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="sysOrgCode != null">
+        sys_org_code,
+      </if>
+      <if test="jddm != null">
+        jddm,
+      </if>
+      <if test="zt != null">
+        zt,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="qx != null">
+        #{qx,jdbcType=VARCHAR},
+      </if>
+      <if test="jddz != null">
+        #{jddz,jdbcType=VARCHAR},
+      </if>
+      <if test="px != null">
+        #{px,jdbcType=INTEGER},
+      </if>
+      <if test="ms != null">
+        #{ms,jdbcType=VARCHAR},
+      </if>
+      <if test="bz != null">
+        #{bz,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sysOrgCode != null">
+        #{sysOrgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="jddm != null">
+        #{jddm,jdbcType=VARCHAR},
+      </if>
+      <if test="zt != null">
+        #{zt,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pd.server.main.domain.VehPasslineExample" resultType="java.lang.Long">
+    select count(*) from veh_pass_line
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update veh_pass_line
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.qx != null">
+        qx = #{record.qx,jdbcType=VARCHAR},
+      </if>
+      <if test="record.jddz != null">
+        jddz = #{record.jddz,jdbcType=VARCHAR},
+      </if>
+      <if test="record.px != null">
+        px = #{record.px,jdbcType=INTEGER},
+      </if>
+      <if test="record.ms != null">
+        ms = #{record.ms,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bz != null">
+        bz = #{record.bz,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createBy != null">
+        create_by = #{record.createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateBy != null">
+        update_by = #{record.updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.sysOrgCode != null">
+        sys_org_code = #{record.sysOrgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.jddm != null">
+        jddm = #{record.jddm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.zt != null">
+        zt = #{record.zt,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update veh_pass_line
+    set id = #{record.id,jdbcType=VARCHAR},
+      qx = #{record.qx,jdbcType=VARCHAR},
+      jddz = #{record.jddz,jdbcType=VARCHAR},
+      px = #{record.px,jdbcType=INTEGER},
+      ms = #{record.ms,jdbcType=VARCHAR},
+      bz = #{record.bz,jdbcType=VARCHAR},
+      create_by = #{record.createBy,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_by = #{record.updateBy,jdbcType=VARCHAR},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      sys_org_code = #{record.sysOrgCode,jdbcType=VARCHAR},
+      jddm = #{record.jddm,jdbcType=VARCHAR},
+      zt = #{record.zt,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pd.server.main.domain.VehPassline">
+    update veh_pass_line
+    <set>
+      <if test="qx != null">
+        qx = #{qx,jdbcType=VARCHAR},
+      </if>
+      <if test="jddz != null">
+        jddz = #{jddz,jdbcType=VARCHAR},
+      </if>
+      <if test="px != null">
+        px = #{px,jdbcType=INTEGER},
+      </if>
+      <if test="ms != null">
+        ms = #{ms,jdbcType=VARCHAR},
+      </if>
+      <if test="bz != null">
+        bz = #{bz,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sysOrgCode != null">
+        sys_org_code = #{sysOrgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="jddm != null">
+        jddm = #{jddm,jdbcType=VARCHAR},
+      </if>
+      <if test="zt != null">
+        zt = #{zt,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pd.server.main.domain.VehPassline">
+    update veh_pass_line
+    set qx = #{qx,jdbcType=VARCHAR},
+      jddz = #{jddz,jdbcType=VARCHAR},
+      px = #{px,jdbcType=INTEGER},
+      ms = #{ms,jdbcType=VARCHAR},
+      bz = #{bz,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_by = #{updateBy,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      sys_org_code = #{sysOrgCode,jdbcType=VARCHAR},
+      jddm = #{jddm,jdbcType=VARCHAR},
+      zt = #{zt,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

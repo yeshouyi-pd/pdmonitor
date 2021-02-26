@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pd.server.main.mapper.my.MyUserMapper" >
+
+  <!-- 一个用户可以属于多个角色，配置的资源可能重复，所以用distinct去重 -->
+  <select id="findResources" resultType="com.pd.server.main.dto.ResourceDto">
+    SELECT DISTINCT r.id, r.name,r.page,r.parent,r.request
+    FROM  role_resource rr ,resource r
+    WHERE rr.resource_id  =  r.id
+    AND  rr.`role_id` = #{rode}   ORDER BY  r.id ASC
+  </select>
+
+</mapper>

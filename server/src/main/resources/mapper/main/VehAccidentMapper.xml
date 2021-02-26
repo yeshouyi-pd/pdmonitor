@@ -1,0 +1,996 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pd.server.main.mapper.VehAccidentMapper">
+  <resultMap id="BaseResultMap" type="com.pd.server.main.domain.VehAccident">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="sys_org_code" jdbcType="VARCHAR" property="sysOrgCode" />
+    <result column="sgbh" jdbcType="VARCHAR" property="sgbh" />
+    <result column="lsh" jdbcType="VARCHAR" property="lsh" />
+    <result column="sgfssj" jdbcType="VARCHAR" property="sgfssj" />
+    <result column="sgdd" jdbcType="VARCHAR" property="sgdd" />
+    <result column="sgqx" jdbcType="VARCHAR" property="sgqx" />
+    <result column="xzqh" jdbcType="VARCHAR" property="xzqh" />
+    <result column="glbm" jdbcType="VARCHAR" property="glbm" />
+    <result column="dzzb" jdbcType="VARCHAR" property="dzzb" />
+    <result column="sfgj" jdbcType="CHAR" property="sfgj" />
+    <result column="tq" jdbcType="VARCHAR" property="tq" />
+    <result column="yhdh" jdbcType="VARCHAR" property="yhdh" />
+    <result column="clfs" jdbcType="VARCHAR" property="clfs" />
+    <result column="dsrsm" jdbcType="VARCHAR" property="dsrsm" />
+    <result column="dsrss1" jdbcType="CHAR" property="dsrss1" />
+    <result column="dsrxm1" jdbcType="VARCHAR" property="dsrxm1" />
+    <result column="dsrsfzmhm1" jdbcType="VARCHAR" property="dsrsfzmhm1" />
+    <result column="dsrsjhm1" jdbcType="VARCHAR" property="dsrsjhm1" />
+    <result column="hpzl1" jdbcType="VARCHAR" property="hpzl1" />
+    <result column="hphm1" jdbcType="VARCHAR" property="hphm1" />
+    <result column="dsrjtfs1" jdbcType="VARCHAR" property="dsrjtfs1" />
+    <result column="dsrcsbw1" jdbcType="VARCHAR" property="dsrcsbw1" />
+    <result column="dsrbsgzr1" jdbcType="CHAR" property="dsrbsgzr1" />
+    <result column="dsrwfxw1" jdbcType="VARCHAR" property="dsrwfxw1" />
+    <result column="dsrwftk1" jdbcType="VARCHAR" property="dsrwftk1" />
+    <result column="dsrbxgs1" jdbcType="VARCHAR" property="dsrbxgs1" />
+    <result column="dsrbxqz1" jdbcType="VARCHAR" property="dsrbxqz1" />
+    <result column="dsrbxpzh1" jdbcType="VARCHAR" property="dsrbxpzh1" />
+    <result column="dsrss2" jdbcType="CHAR" property="dsrss2" />
+    <result column="dsrxm2" jdbcType="VARCHAR" property="dsrxm2" />
+    <result column="dsrsfzmhm2" jdbcType="VARCHAR" property="dsrsfzmhm2" />
+    <result column="dsrsjhm2" jdbcType="VARCHAR" property="dsrsjhm2" />
+    <result column="hpzl2" jdbcType="VARCHAR" property="hpzl2" />
+    <result column="hphm2" jdbcType="VARCHAR" property="hphm2" />
+    <result column="dsrjtfs2" jdbcType="VARCHAR" property="dsrjtfs2" />
+    <result column="dsrcsbw2" jdbcType="VARCHAR" property="dsrcsbw2" />
+    <result column="dsrbsgzr2" jdbcType="CHAR" property="dsrbsgzr2" />
+    <result column="dsrwfxw2" jdbcType="VARCHAR" property="dsrwfxw2" />
+    <result column="dsrwftk2" jdbcType="VARCHAR" property="dsrwftk2" />
+    <result column="dsrbxgs2" jdbcType="VARCHAR" property="dsrbxgs2" />
+    <result column="dsrbxqz2" jdbcType="VARCHAR" property="dsrbxqz2" />
+    <result column="dsrbxpzh2" jdbcType="VARCHAR" property="dsrbxpzh2" />
+    <result column="openid" jdbcType="VARCHAR" property="openid" />
+    <result column="bz" jdbcType="VARCHAR" property="bz" />
+    <result column="shrxm" jdbcType="VARCHAR" property="shrxm" />
+    <result column="shyy" jdbcType="VARCHAR" property="shyy" />
+    <result column="shsm" jdbcType="VARCHAR" property="shsm" />
+    <result column="dzmj" jdbcType="VARCHAR" property="dzmj" />
+    <result column="dzsj" jdbcType="TIMESTAMP" property="dzsj" />
+    <result column="zt" jdbcType="VARCHAR" property="zt" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, create_by, create_time, update_by, update_time, sys_org_code, sgbh, lsh, sgfssj, 
+    sgdd, sgqx, xzqh, glbm, dzzb, sfgj, tq, yhdh, clfs, dsrsm, dsrss1, dsrxm1, dsrsfzmhm1, 
+    dsrsjhm1, hpzl1, hphm1, dsrjtfs1, dsrcsbw1, dsrbsgzr1, dsrwfxw1, dsrwftk1, dsrbxgs1, 
+    dsrbxqz1, dsrbxpzh1, dsrss2, dsrxm2, dsrsfzmhm2, dsrsjhm2, hpzl2, hphm2, dsrjtfs2, 
+    dsrcsbw2, dsrbsgzr2, dsrwfxw2, dsrwftk2, dsrbxgs2, dsrbxqz2, dsrbxpzh2, openid, bz, 
+    shrxm, shyy, shsm, dzmj, dzsj, zt
+  </sql>
+  <select id="selectByExample" parameterType="com.pd.server.main.domain.VehAccidentExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from veh_accident
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from veh_accident
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from veh_accident
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pd.server.main.domain.VehAccidentExample">
+    delete from veh_accident
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pd.server.main.domain.VehAccident">
+    insert into veh_accident (id, create_by, create_time, 
+      update_by, update_time, sys_org_code, 
+      sgbh, lsh, sgfssj, 
+      sgdd, sgqx, xzqh, glbm, 
+      dzzb, sfgj, tq, yhdh, 
+      clfs, dsrsm, dsrss1, dsrxm1, 
+      dsrsfzmhm1, dsrsjhm1, hpzl1, 
+      hphm1, dsrjtfs1, dsrcsbw1, 
+      dsrbsgzr1, dsrwfxw1, dsrwftk1, 
+      dsrbxgs1, dsrbxqz1, dsrbxpzh1, 
+      dsrss2, dsrxm2, dsrsfzmhm2, 
+      dsrsjhm2, hpzl2, hphm2, 
+      dsrjtfs2, dsrcsbw2, dsrbsgzr2, 
+      dsrwfxw2, dsrwftk2, dsrbxgs2, 
+      dsrbxqz2, dsrbxpzh2, openid, 
+      bz, shrxm, shyy, shsm,
+      dzmj, dzsj, zt)
+    values (#{id,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{sysOrgCode,jdbcType=VARCHAR}, 
+      #{sgbh,jdbcType=VARCHAR}, #{lsh,jdbcType=VARCHAR}, #{sgfssj,jdbcType=VARCHAR}, 
+      #{sgdd,jdbcType=VARCHAR}, #{sgqx,jdbcType=VARCHAR}, #{xzqh,jdbcType=VARCHAR}, #{glbm,jdbcType=VARCHAR}, 
+      #{dzzb,jdbcType=VARCHAR}, #{sfgj,jdbcType=CHAR}, #{tq,jdbcType=VARCHAR}, #{yhdh,jdbcType=VARCHAR}, 
+      #{clfs,jdbcType=VARCHAR}, #{dsrsm,jdbcType=VARCHAR}, #{dsrss1,jdbcType=CHAR}, #{dsrxm1,jdbcType=VARCHAR}, 
+      #{dsrsfzmhm1,jdbcType=VARCHAR}, #{dsrsjhm1,jdbcType=VARCHAR}, #{hpzl1,jdbcType=VARCHAR}, 
+      #{hphm1,jdbcType=VARCHAR}, #{dsrjtfs1,jdbcType=VARCHAR}, #{dsrcsbw1,jdbcType=VARCHAR}, 
+      #{dsrbsgzr1,jdbcType=CHAR}, #{dsrwfxw1,jdbcType=VARCHAR}, #{dsrwftk1,jdbcType=VARCHAR}, 
+      #{dsrbxgs1,jdbcType=VARCHAR}, #{dsrbxqz1,jdbcType=VARCHAR}, #{dsrbxpzh1,jdbcType=VARCHAR}, 
+      #{dsrss2,jdbcType=CHAR}, #{dsrxm2,jdbcType=VARCHAR}, #{dsrsfzmhm2,jdbcType=VARCHAR}, 
+      #{dsrsjhm2,jdbcType=VARCHAR}, #{hpzl2,jdbcType=VARCHAR}, #{hphm2,jdbcType=VARCHAR}, 
+      #{dsrjtfs2,jdbcType=VARCHAR}, #{dsrcsbw2,jdbcType=VARCHAR}, #{dsrbsgzr2,jdbcType=CHAR}, 
+      #{dsrwfxw2,jdbcType=VARCHAR}, #{dsrwftk2,jdbcType=VARCHAR}, #{dsrbxgs2,jdbcType=VARCHAR}, 
+      #{dsrbxqz2,jdbcType=VARCHAR}, #{dsrbxpzh2,jdbcType=VARCHAR}, #{openid,jdbcType=VARCHAR}, 
+      #{bz,jdbcType=VARCHAR}, #{shrxm,jdbcType=VARCHAR}, #{shyy,jdbcType=VARCHAR}, #{shsm,jdbcType=VARCHAR},
+      #{dzmj,jdbcType=VARCHAR}, #{dzsj,jdbcType=TIMESTAMP}, #{zt,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pd.server.main.domain.VehAccident">
+    insert into veh_accident
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateBy != null">
+        update_by,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="sysOrgCode != null">
+        sys_org_code,
+      </if>
+      <if test="sgbh != null">
+        sgbh,
+      </if>
+      <if test="lsh != null">
+        lsh,
+      </if>
+      <if test="sgfssj != null">
+        sgfssj,
+      </if>
+      <if test="sgdd != null">
+        sgdd,
+      </if>
+      <if test="sgqx != null">
+        sgqx,
+      </if>
+      <if test="xzqh != null">
+        xzqh,
+      </if>
+      <if test="glbm != null">
+        glbm,
+      </if>
+      <if test="dzzb != null">
+        dzzb,
+      </if>
+      <if test="sfgj != null">
+        sfgj,
+      </if>
+      <if test="tq != null">
+        tq,
+      </if>
+      <if test="yhdh != null">
+        yhdh,
+      </if>
+      <if test="clfs != null">
+        clfs,
+      </if>
+      <if test="dsrsm != null">
+        dsrsm,
+      </if>
+      <if test="dsrss1 != null">
+        dsrss1,
+      </if>
+      <if test="dsrxm1 != null">
+        dsrxm1,
+      </if>
+      <if test="dsrsfzmhm1 != null">
+        dsrsfzmhm1,
+      </if>
+      <if test="dsrsjhm1 != null">
+        dsrsjhm1,
+      </if>
+      <if test="hpzl1 != null">
+        hpzl1,
+      </if>
+      <if test="hphm1 != null">
+        hphm1,
+      </if>
+      <if test="dsrjtfs1 != null">
+        dsrjtfs1,
+      </if>
+      <if test="dsrcsbw1 != null">
+        dsrcsbw1,
+      </if>
+      <if test="dsrbsgzr1 != null">
+        dsrbsgzr1,
+      </if>
+      <if test="dsrwfxw1 != null">
+        dsrwfxw1,
+      </if>
+      <if test="dsrwftk1 != null">
+        dsrwftk1,
+      </if>
+      <if test="dsrbxgs1 != null">
+        dsrbxgs1,
+      </if>
+      <if test="dsrbxqz1 != null">
+        dsrbxqz1,
+      </if>
+      <if test="dsrbxpzh1 != null">
+        dsrbxpzh1,
+      </if>
+      <if test="dsrss2 != null">
+        dsrss2,
+      </if>
+      <if test="dsrxm2 != null">
+        dsrxm2,
+      </if>
+      <if test="dsrsfzmhm2 != null">
+        dsrsfzmhm2,
+      </if>
+      <if test="dsrsjhm2 != null">
+        dsrsjhm2,
+      </if>
+      <if test="hpzl2 != null">
+        hpzl2,
+      </if>
+      <if test="hphm2 != null">
+        hphm2,
+      </if>
+      <if test="dsrjtfs2 != null">
+        dsrjtfs2,
+      </if>
+      <if test="dsrcsbw2 != null">
+        dsrcsbw2,
+      </if>
+      <if test="dsrbsgzr2 != null">
+        dsrbsgzr2,
+      </if>
+      <if test="dsrwfxw2 != null">
+        dsrwfxw2,
+      </if>
+      <if test="dsrwftk2 != null">
+        dsrwftk2,
+      </if>
+      <if test="dsrbxgs2 != null">
+        dsrbxgs2,
+      </if>
+      <if test="dsrbxqz2 != null">
+        dsrbxqz2,
+      </if>
+      <if test="dsrbxpzh2 != null">
+        dsrbxpzh2,
+      </if>
+      <if test="openid != null">
+        openid,
+      </if>
+      <if test="bz != null">
+        bz,
+      </if>
+      <if test="shrxm != null">
+        shrxm,
+      </if>
+      <if test="shyy != null">
+        shyy,
+      </if>
+      <if test="shsm != null">
+        shsm,
+      </if>
+      <if test="dzmj != null">
+        dzmj,
+      </if>
+      <if test="dzsj != null">
+        dzsj,
+      </if>
+      <if test="zt != null">
+        zt,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sysOrgCode != null">
+        #{sysOrgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sgbh != null">
+        #{sgbh,jdbcType=VARCHAR},
+      </if>
+      <if test="lsh != null">
+        #{lsh,jdbcType=VARCHAR},
+      </if>
+      <if test="sgfssj != null">
+        #{sgfssj,jdbcType=VARCHAR},
+      </if>
+      <if test="sgdd != null">
+        #{sgdd,jdbcType=VARCHAR},
+      </if>
+      <if test="sgqx != null">
+        #{sgqx,jdbcType=VARCHAR},
+      </if>
+      <if test="xzqh != null">
+        #{xzqh,jdbcType=VARCHAR},
+      </if>
+      <if test="glbm != null">
+        #{glbm,jdbcType=VARCHAR},
+      </if>
+      <if test="dzzb != null">
+        #{dzzb,jdbcType=VARCHAR},
+      </if>
+      <if test="sfgj != null">
+        #{sfgj,jdbcType=CHAR},
+      </if>
+      <if test="tq != null">
+        #{tq,jdbcType=VARCHAR},
+      </if>
+      <if test="yhdh != null">
+        #{yhdh,jdbcType=VARCHAR},
+      </if>
+      <if test="clfs != null">
+        #{clfs,jdbcType=VARCHAR},
+      </if>
+      <if test="dsrsm != null">
+        #{dsrsm,jdbcType=VARCHAR},
+      </if>
+      <if test="dsrss1 != null">
+        #{dsrss1,jdbcType=CHAR},
+      </if>
+      <if test="dsrxm1 != null">
+        #{dsrxm1,jdbcType=VARCHAR},
+      </if>
+      <if test="dsrsfzmhm1 != null">
+        #{dsrsfzmhm1,jdbcType=VARCHAR},
+      </if>
+      <if test="dsrsjhm1 != null">
+        #{dsrsjhm1,jdbcType=VARCHAR},
+      </if>
+      <if test="hpzl1 != null">
+        #{hpzl1,jdbcType=VARCHAR},
+      </if>
+      <if test="hphm1 != null">
+        #{hphm1,jdbcType=VARCHAR},
+      </if>
+      <if test="dsrjtfs1 != null">
+        #{dsrjtfs1,jdbcType=VARCHAR},
+      </if>
+      <if test="dsrcsbw1 != null">
+        #{dsrcsbw1,jdbcType=VARCHAR},
+      </if>
+      <if test="dsrbsgzr1 != null">
+        #{dsrbsgzr1,jdbcType=CHAR},
+      </if>
+      <if test="dsrwfxw1 != null">
+        #{dsrwfxw1,jdbcType=VARCHAR},
+      </if>
+      <if test="dsrwftk1 != null">
+        #{dsrwftk1,jdbcType=VARCHAR},
+      </if>
+      <if test="dsrbxgs1 != null">
+        #{dsrbxgs1,jdbcType=VARCHAR},
+      </if>
+      <if test="dsrbxqz1 != null">
+        #{dsrbxqz1,jdbcType=VARCHAR},
+      </if>
+      <if test="dsrbxpzh1 != null">
+        #{dsrbxpzh1,jdbcType=VARCHAR},
+      </if>
+      <if test="dsrss2 != null">
+        #{dsrss2,jdbcType=CHAR},
+      </if>
+      <if test="dsrxm2 != null">
+        #{dsrxm2,jdbcType=VARCHAR},
+      </if>
+      <if test="dsrsfzmhm2 != null">
+        #{dsrsfzmhm2,jdbcType=VARCHAR},
+      </if>
+      <if test="dsrsjhm2 != null">
+        #{dsrsjhm2,jdbcType=VARCHAR},
+      </if>
+      <if test="hpzl2 != null">
+        #{hpzl2,jdbcType=VARCHAR},
+      </if>
+      <if test="hphm2 != null">
+        #{hphm2,jdbcType=VARCHAR},
+      </if>
+      <if test="dsrjtfs2 != null">
+        #{dsrjtfs2,jdbcType=VARCHAR},
+      </if>
+      <if test="dsrcsbw2 != null">
+        #{dsrcsbw2,jdbcType=VARCHAR},
+      </if>
+      <if test="dsrbsgzr2 != null">
+        #{dsrbsgzr2,jdbcType=CHAR},
+      </if>
+      <if test="dsrwfxw2 != null">
+        #{dsrwfxw2,jdbcType=VARCHAR},
+      </if>
+      <if test="dsrwftk2 != null">
+        #{dsrwftk2,jdbcType=VARCHAR},
+      </if>
+      <if test="dsrbxgs2 != null">
+        #{dsrbxgs2,jdbcType=VARCHAR},
+      </if>
+      <if test="dsrbxqz2 != null">
+        #{dsrbxqz2,jdbcType=VARCHAR},
+      </if>
+      <if test="dsrbxpzh2 != null">
+        #{dsrbxpzh2,jdbcType=VARCHAR},
+      </if>
+      <if test="openid != null">
+        #{openid,jdbcType=VARCHAR},
+      </if>
+      <if test="bz != null">
+        #{bz,jdbcType=VARCHAR},
+      </if>
+      <if test="shrxm != null">
+        #{shrxm,jdbcType=VARCHAR},
+      </if>
+      <if test="shyy != null">
+        #{shyy,jdbcType=VARCHAR},
+      </if>
+      <if test="shsm != null">
+        #{shsm,jdbcType=VARCHAR},
+      </if>
+      <if test="dzmj != null">
+        #{dzmj,jdbcType=VARCHAR},
+      </if>
+      <if test="dzsj != null">
+        #{dzsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="zt != null">
+        #{zt,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pd.server.main.domain.VehAccidentExample" resultType="java.lang.Long">
+    select count(*) from veh_accident
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update veh_accident
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createBy != null">
+        create_by = #{record.createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateBy != null">
+        update_by = #{record.updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.sysOrgCode != null">
+        sys_org_code = #{record.sysOrgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sgbh != null">
+        sgbh = #{record.sgbh,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lsh != null">
+        lsh = #{record.lsh,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sgfssj != null">
+        sgfssj = #{record.sgfssj,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sgdd != null">
+        sgdd = #{record.sgdd,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sgqx != null">
+        sgqx = #{record.sgqx,jdbcType=VARCHAR},
+      </if>
+      <if test="record.xzqh != null">
+        xzqh = #{record.xzqh,jdbcType=VARCHAR},
+      </if>
+      <if test="record.glbm != null">
+        glbm = #{record.glbm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dzzb != null">
+        dzzb = #{record.dzzb,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sfgj != null">
+        sfgj = #{record.sfgj,jdbcType=CHAR},
+      </if>
+      <if test="record.tq != null">
+        tq = #{record.tq,jdbcType=VARCHAR},
+      </if>
+      <if test="record.yhdh != null">
+        yhdh = #{record.yhdh,jdbcType=VARCHAR},
+      </if>
+      <if test="record.clfs != null">
+        clfs = #{record.clfs,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dsrsm != null">
+        dsrsm = #{record.dsrsm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dsrss1 != null">
+        dsrss1 = #{record.dsrss1,jdbcType=CHAR},
+      </if>
+      <if test="record.dsrxm1 != null">
+        dsrxm1 = #{record.dsrxm1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dsrsfzmhm1 != null">
+        dsrsfzmhm1 = #{record.dsrsfzmhm1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dsrsjhm1 != null">
+        dsrsjhm1 = #{record.dsrsjhm1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hpzl1 != null">
+        hpzl1 = #{record.hpzl1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hphm1 != null">
+        hphm1 = #{record.hphm1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dsrjtfs1 != null">
+        dsrjtfs1 = #{record.dsrjtfs1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dsrcsbw1 != null">
+        dsrcsbw1 = #{record.dsrcsbw1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dsrbsgzr1 != null">
+        dsrbsgzr1 = #{record.dsrbsgzr1,jdbcType=CHAR},
+      </if>
+      <if test="record.dsrwfxw1 != null">
+        dsrwfxw1 = #{record.dsrwfxw1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dsrwftk1 != null">
+        dsrwftk1 = #{record.dsrwftk1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dsrbxgs1 != null">
+        dsrbxgs1 = #{record.dsrbxgs1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dsrbxqz1 != null">
+        dsrbxqz1 = #{record.dsrbxqz1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dsrbxpzh1 != null">
+        dsrbxpzh1 = #{record.dsrbxpzh1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dsrss2 != null">
+        dsrss2 = #{record.dsrss2,jdbcType=CHAR},
+      </if>
+      <if test="record.dsrxm2 != null">
+        dsrxm2 = #{record.dsrxm2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dsrsfzmhm2 != null">
+        dsrsfzmhm2 = #{record.dsrsfzmhm2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dsrsjhm2 != null">
+        dsrsjhm2 = #{record.dsrsjhm2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hpzl2 != null">
+        hpzl2 = #{record.hpzl2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hphm2 != null">
+        hphm2 = #{record.hphm2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dsrjtfs2 != null">
+        dsrjtfs2 = #{record.dsrjtfs2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dsrcsbw2 != null">
+        dsrcsbw2 = #{record.dsrcsbw2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dsrbsgzr2 != null">
+        dsrbsgzr2 = #{record.dsrbsgzr2,jdbcType=CHAR},
+      </if>
+      <if test="record.dsrwfxw2 != null">
+        dsrwfxw2 = #{record.dsrwfxw2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dsrwftk2 != null">
+        dsrwftk2 = #{record.dsrwftk2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dsrbxgs2 != null">
+        dsrbxgs2 = #{record.dsrbxgs2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dsrbxqz2 != null">
+        dsrbxqz2 = #{record.dsrbxqz2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dsrbxpzh2 != null">
+        dsrbxpzh2 = #{record.dsrbxpzh2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.openid != null">
+        openid = #{record.openid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bz != null">
+        bz = #{record.bz,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shrxm != null">
+        shrxm = #{record.shrxm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shyy != null">
+        shyy = #{record.shyy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shsm != null">
+        shsm = #{record.shsm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dzmj != null">
+        dzmj = #{record.dzmj,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dzsj != null">
+        dzsj = #{record.dzsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.zt != null">
+        zt = #{record.zt,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update veh_accident
+    set id = #{record.id,jdbcType=VARCHAR},
+      create_by = #{record.createBy,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_by = #{record.updateBy,jdbcType=VARCHAR},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      sys_org_code = #{record.sysOrgCode,jdbcType=VARCHAR},
+      sgbh = #{record.sgbh,jdbcType=VARCHAR},
+      lsh = #{record.lsh,jdbcType=VARCHAR},
+      sgfssj = #{record.sgfssj,jdbcType=VARCHAR},
+      sgdd = #{record.sgdd,jdbcType=VARCHAR},
+      sgqx = #{record.sgqx,jdbcType=VARCHAR},
+      xzqh = #{record.xzqh,jdbcType=VARCHAR},
+      glbm = #{record.glbm,jdbcType=VARCHAR},
+      dzzb = #{record.dzzb,jdbcType=VARCHAR},
+      sfgj = #{record.sfgj,jdbcType=CHAR},
+      tq = #{record.tq,jdbcType=VARCHAR},
+      yhdh = #{record.yhdh,jdbcType=VARCHAR},
+      clfs = #{record.clfs,jdbcType=VARCHAR},
+      dsrsm = #{record.dsrsm,jdbcType=VARCHAR},
+      dsrss1 = #{record.dsrss1,jdbcType=CHAR},
+      dsrxm1 = #{record.dsrxm1,jdbcType=VARCHAR},
+      dsrsfzmhm1 = #{record.dsrsfzmhm1,jdbcType=VARCHAR},
+      dsrsjhm1 = #{record.dsrsjhm1,jdbcType=VARCHAR},
+      hpzl1 = #{record.hpzl1,jdbcType=VARCHAR},
+      hphm1 = #{record.hphm1,jdbcType=VARCHAR},
+      dsrjtfs1 = #{record.dsrjtfs1,jdbcType=VARCHAR},
+      dsrcsbw1 = #{record.dsrcsbw1,jdbcType=VARCHAR},
+      dsrbsgzr1 = #{record.dsrbsgzr1,jdbcType=CHAR},
+      dsrwfxw1 = #{record.dsrwfxw1,jdbcType=VARCHAR},
+      dsrwftk1 = #{record.dsrwftk1,jdbcType=VARCHAR},
+      dsrbxgs1 = #{record.dsrbxgs1,jdbcType=VARCHAR},
+      dsrbxqz1 = #{record.dsrbxqz1,jdbcType=VARCHAR},
+      dsrbxpzh1 = #{record.dsrbxpzh1,jdbcType=VARCHAR},
+      dsrss2 = #{record.dsrss2,jdbcType=CHAR},
+      dsrxm2 = #{record.dsrxm2,jdbcType=VARCHAR},
+      dsrsfzmhm2 = #{record.dsrsfzmhm2,jdbcType=VARCHAR},
+      dsrsjhm2 = #{record.dsrsjhm2,jdbcType=VARCHAR},
+      hpzl2 = #{record.hpzl2,jdbcType=VARCHAR},
+      hphm2 = #{record.hphm2,jdbcType=VARCHAR},
+      dsrjtfs2 = #{record.dsrjtfs2,jdbcType=VARCHAR},
+      dsrcsbw2 = #{record.dsrcsbw2,jdbcType=VARCHAR},
+      dsrbsgzr2 = #{record.dsrbsgzr2,jdbcType=CHAR},
+      dsrwfxw2 = #{record.dsrwfxw2,jdbcType=VARCHAR},
+      dsrwftk2 = #{record.dsrwftk2,jdbcType=VARCHAR},
+      dsrbxgs2 = #{record.dsrbxgs2,jdbcType=VARCHAR},
+      dsrbxqz2 = #{record.dsrbxqz2,jdbcType=VARCHAR},
+      dsrbxpzh2 = #{record.dsrbxpzh2,jdbcType=VARCHAR},
+      openid = #{record.openid,jdbcType=VARCHAR},
+      bz = #{record.bz,jdbcType=VARCHAR},
+      shrxm = #{record.shrxm,jdbcType=VARCHAR},
+      shyy = #{record.shyy,jdbcType=VARCHAR},
+      shsm = #{record.shsm,jdbcType=VARCHAR},
+      dzmj = #{record.dzmj,jdbcType=VARCHAR},
+      dzsj = #{record.dzsj,jdbcType=TIMESTAMP},
+      zt = #{record.zt,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pd.server.main.domain.VehAccident">
+    update veh_accident
+    <set>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sysOrgCode != null">
+        sys_org_code = #{sysOrgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sgbh != null">
+        sgbh = #{sgbh,jdbcType=VARCHAR},
+      </if>
+      <if test="lsh != null">
+        lsh = #{lsh,jdbcType=VARCHAR},
+      </if>
+      <if test="sgfssj != null">
+        sgfssj = #{sgfssj,jdbcType=VARCHAR},
+      </if>
+      <if test="sgdd != null">
+        sgdd = #{sgdd,jdbcType=VARCHAR},
+      </if>
+      <if test="sgqx != null">
+        sgqx = #{sgqx,jdbcType=VARCHAR},
+      </if>
+      <if test="xzqh != null">
+        xzqh = #{xzqh,jdbcType=VARCHAR},
+      </if>
+      <if test="glbm != null">
+        glbm = #{glbm,jdbcType=VARCHAR},
+      </if>
+      <if test="dzzb != null">
+        dzzb = #{dzzb,jdbcType=VARCHAR},
+      </if>
+      <if test="sfgj != null">
+        sfgj = #{sfgj,jdbcType=CHAR},
+      </if>
+      <if test="tq != null">
+        tq = #{tq,jdbcType=VARCHAR},
+      </if>
+      <if test="yhdh != null">
+        yhdh = #{yhdh,jdbcType=VARCHAR},
+      </if>
+      <if test="clfs != null">
+        clfs = #{clfs,jdbcType=VARCHAR},
+      </if>
+      <if test="dsrsm != null">
+        dsrsm = #{dsrsm,jdbcType=VARCHAR},
+      </if>
+      <if test="dsrss1 != null">
+        dsrss1 = #{dsrss1,jdbcType=CHAR},
+      </if>
+      <if test="dsrxm1 != null">
+        dsrxm1 = #{dsrxm1,jdbcType=VARCHAR},
+      </if>
+      <if test="dsrsfzmhm1 != null">
+        dsrsfzmhm1 = #{dsrsfzmhm1,jdbcType=VARCHAR},
+      </if>
+      <if test="dsrsjhm1 != null">
+        dsrsjhm1 = #{dsrsjhm1,jdbcType=VARCHAR},
+      </if>
+      <if test="hpzl1 != null">
+        hpzl1 = #{hpzl1,jdbcType=VARCHAR},
+      </if>
+      <if test="hphm1 != null">
+        hphm1 = #{hphm1,jdbcType=VARCHAR},
+      </if>
+      <if test="dsrjtfs1 != null">
+        dsrjtfs1 = #{dsrjtfs1,jdbcType=VARCHAR},
+      </if>
+      <if test="dsrcsbw1 != null">
+        dsrcsbw1 = #{dsrcsbw1,jdbcType=VARCHAR},
+      </if>
+      <if test="dsrbsgzr1 != null">
+        dsrbsgzr1 = #{dsrbsgzr1,jdbcType=CHAR},
+      </if>
+      <if test="dsrwfxw1 != null">
+        dsrwfxw1 = #{dsrwfxw1,jdbcType=VARCHAR},
+      </if>
+      <if test="dsrwftk1 != null">
+        dsrwftk1 = #{dsrwftk1,jdbcType=VARCHAR},
+      </if>
+      <if test="dsrbxgs1 != null">
+        dsrbxgs1 = #{dsrbxgs1,jdbcType=VARCHAR},
+      </if>
+      <if test="dsrbxqz1 != null">
+        dsrbxqz1 = #{dsrbxqz1,jdbcType=VARCHAR},
+      </if>
+      <if test="dsrbxpzh1 != null">
+        dsrbxpzh1 = #{dsrbxpzh1,jdbcType=VARCHAR},
+      </if>
+      <if test="dsrss2 != null">
+        dsrss2 = #{dsrss2,jdbcType=CHAR},
+      </if>
+      <if test="dsrxm2 != null">
+        dsrxm2 = #{dsrxm2,jdbcType=VARCHAR},
+      </if>
+      <if test="dsrsfzmhm2 != null">
+        dsrsfzmhm2 = #{dsrsfzmhm2,jdbcType=VARCHAR},
+      </if>
+      <if test="dsrsjhm2 != null">
+        dsrsjhm2 = #{dsrsjhm2,jdbcType=VARCHAR},
+      </if>
+      <if test="hpzl2 != null">
+        hpzl2 = #{hpzl2,jdbcType=VARCHAR},
+      </if>
+      <if test="hphm2 != null">
+        hphm2 = #{hphm2,jdbcType=VARCHAR},
+      </if>
+      <if test="dsrjtfs2 != null">
+        dsrjtfs2 = #{dsrjtfs2,jdbcType=VARCHAR},
+      </if>
+      <if test="dsrcsbw2 != null">
+        dsrcsbw2 = #{dsrcsbw2,jdbcType=VARCHAR},
+      </if>
+      <if test="dsrbsgzr2 != null">
+        dsrbsgzr2 = #{dsrbsgzr2,jdbcType=CHAR},
+      </if>
+      <if test="dsrwfxw2 != null">
+        dsrwfxw2 = #{dsrwfxw2,jdbcType=VARCHAR},
+      </if>
+      <if test="dsrwftk2 != null">
+        dsrwftk2 = #{dsrwftk2,jdbcType=VARCHAR},
+      </if>
+      <if test="dsrbxgs2 != null">
+        dsrbxgs2 = #{dsrbxgs2,jdbcType=VARCHAR},
+      </if>
+      <if test="dsrbxqz2 != null">
+        dsrbxqz2 = #{dsrbxqz2,jdbcType=VARCHAR},
+      </if>
+      <if test="dsrbxpzh2 != null">
+        dsrbxpzh2 = #{dsrbxpzh2,jdbcType=VARCHAR},
+      </if>
+      <if test="openid != null">
+        openid = #{openid,jdbcType=VARCHAR},
+      </if>
+      <if test="bz != null">
+        bz = #{bz,jdbcType=VARCHAR},
+      </if>
+      <if test="shrxm != null">
+        shrxm = #{shrxm,jdbcType=VARCHAR},
+      </if>
+      <if test="shyy != null">
+        shyy = #{shyy,jdbcType=VARCHAR},
+      </if>
+      <if test="shsm != null">
+        shsm = #{shsm,jdbcType=VARCHAR},
+      </if>
+      <if test="dzmj != null">
+        dzmj = #{dzmj,jdbcType=VARCHAR},
+      </if>
+      <if test="dzsj != null">
+        dzsj = #{dzsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="zt != null">
+        zt = #{zt,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pd.server.main.domain.VehAccident">
+    update veh_accident
+    set create_by = #{createBy,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_by = #{updateBy,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      sys_org_code = #{sysOrgCode,jdbcType=VARCHAR},
+      sgbh = #{sgbh,jdbcType=VARCHAR},
+      lsh = #{lsh,jdbcType=VARCHAR},
+      sgfssj = #{sgfssj,jdbcType=VARCHAR},
+      sgdd = #{sgdd,jdbcType=VARCHAR},
+      sgqx = #{sgqx,jdbcType=VARCHAR},
+      xzqh = #{xzqh,jdbcType=VARCHAR},
+      glbm = #{glbm,jdbcType=VARCHAR},
+      dzzb = #{dzzb,jdbcType=VARCHAR},
+      sfgj = #{sfgj,jdbcType=CHAR},
+      tq = #{tq,jdbcType=VARCHAR},
+      yhdh = #{yhdh,jdbcType=VARCHAR},
+      clfs = #{clfs,jdbcType=VARCHAR},
+      dsrsm = #{dsrsm,jdbcType=VARCHAR},
+      dsrss1 = #{dsrss1,jdbcType=CHAR},
+      dsrxm1 = #{dsrxm1,jdbcType=VARCHAR},
+      dsrsfzmhm1 = #{dsrsfzmhm1,jdbcType=VARCHAR},
+      dsrsjhm1 = #{dsrsjhm1,jdbcType=VARCHAR},
+      hpzl1 = #{hpzl1,jdbcType=VARCHAR},
+      hphm1 = #{hphm1,jdbcType=VARCHAR},
+      dsrjtfs1 = #{dsrjtfs1,jdbcType=VARCHAR},
+      dsrcsbw1 = #{dsrcsbw1,jdbcType=VARCHAR},
+      dsrbsgzr1 = #{dsrbsgzr1,jdbcType=CHAR},
+      dsrwfxw1 = #{dsrwfxw1,jdbcType=VARCHAR},
+      dsrwftk1 = #{dsrwftk1,jdbcType=VARCHAR},
+      dsrbxgs1 = #{dsrbxgs1,jdbcType=VARCHAR},
+      dsrbxqz1 = #{dsrbxqz1,jdbcType=VARCHAR},
+      dsrbxpzh1 = #{dsrbxpzh1,jdbcType=VARCHAR},
+      dsrss2 = #{dsrss2,jdbcType=CHAR},
+      dsrxm2 = #{dsrxm2,jdbcType=VARCHAR},
+      dsrsfzmhm2 = #{dsrsfzmhm2,jdbcType=VARCHAR},
+      dsrsjhm2 = #{dsrsjhm2,jdbcType=VARCHAR},
+      hpzl2 = #{hpzl2,jdbcType=VARCHAR},
+      hphm2 = #{hphm2,jdbcType=VARCHAR},
+      dsrjtfs2 = #{dsrjtfs2,jdbcType=VARCHAR},
+      dsrcsbw2 = #{dsrcsbw2,jdbcType=VARCHAR},
+      dsrbsgzr2 = #{dsrbsgzr2,jdbcType=CHAR},
+      dsrwfxw2 = #{dsrwfxw2,jdbcType=VARCHAR},
+      dsrwftk2 = #{dsrwftk2,jdbcType=VARCHAR},
+      dsrbxgs2 = #{dsrbxgs2,jdbcType=VARCHAR},
+      dsrbxqz2 = #{dsrbxqz2,jdbcType=VARCHAR},
+      dsrbxpzh2 = #{dsrbxpzh2,jdbcType=VARCHAR},
+      openid = #{openid,jdbcType=VARCHAR},
+      bz = #{bz,jdbcType=VARCHAR},
+      shrxm = #{shrxm,jdbcType=VARCHAR},
+      shyy = #{shyy,jdbcType=VARCHAR},
+      shsm = #{shsm,jdbcType=VARCHAR},
+      dzmj = #{dzmj,jdbcType=VARCHAR},
+      dzsj = #{dzsj,jdbcType=TIMESTAMP},
+      zt = #{zt,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

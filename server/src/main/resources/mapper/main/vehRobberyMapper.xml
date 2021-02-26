@@ -1,0 +1,492 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pd.server.main.mapper.VehRobberyMapper">
+  <resultMap id="BaseResultMap" type="com.pd.server.main.domain.VehRobbery">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="sys_org_code" jdbcType="VARCHAR" property="sysOrgCode" />
+    <result column="xm" jdbcType="VARCHAR" property="xm" />
+    <result column="sfzmhm" jdbcType="VARCHAR" property="sfzmhm" />
+    <result column="lxdh" jdbcType="VARCHAR" property="lxdh" />
+    <result column="jtzz" jdbcType="VARCHAR" property="jtzz" />
+    <result column="hphm" jdbcType="VARCHAR" property="hphm" />
+    <result column="clpp" jdbcType="VARCHAR" property="clpp" />
+    <result column="zj" jdbcType="VARCHAR" property="zj" />
+    <result column="qksm" jdbcType="VARCHAR" property="qksm" />
+    <result column="bz" jdbcType="VARCHAR" property="bz" />
+    <result column="zt" jdbcType="VARCHAR" property="zt" />
+    <result column="openid" jdbcType="VARCHAR" property="openid" />
+    <result column="lsh" jdbcType="VARCHAR" property="lsh" />
+    <result column="shr" jdbcType="VARCHAR" property="shr" />
+    <result column="shsj" jdbcType="TIMESTAMP" property="shsj" />
+    <result column="shsm" jdbcType="VARCHAR" property="shsm" />
+    <result column="lb" jdbcType="VARCHAR" property="lb" />
+    <result column="hpzl" jdbcType="VARCHAR" property="hpzl" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, create_by, create_time, update_by, update_time, sys_org_code, xm, sfzmhm, lxdh, 
+    jtzz, hphm, clpp, zj, qksm, bz, zt, openid, lsh, shr, shsj, shsm, lb, hpzl
+  </sql>
+  <select id="selectByExample" parameterType="com.pd.server.main.domain.VehRobberyExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from veh_robbery
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from veh_robbery
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from veh_robbery
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pd.server.main.domain.VehRobberyExample">
+    delete from veh_robbery
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pd.server.main.domain.VehRobbery">
+    insert into veh_robbery (id, create_by, create_time, 
+      update_by, update_time, sys_org_code, 
+      xm, sfzmhm, lxdh, jtzz, 
+      hphm, clpp, zj, qksm, 
+      bz, zt, openid, lsh, 
+      shr, shsj, shsm, 
+      lb, hpzl)
+    values (#{id,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{sysOrgCode,jdbcType=VARCHAR}, 
+      #{xm,jdbcType=VARCHAR}, #{sfzmhm,jdbcType=VARCHAR}, #{lxdh,jdbcType=VARCHAR}, #{jtzz,jdbcType=VARCHAR}, 
+      #{hphm,jdbcType=VARCHAR}, #{clpp,jdbcType=VARCHAR}, #{zj,jdbcType=VARCHAR}, #{qksm,jdbcType=VARCHAR}, 
+      #{bz,jdbcType=VARCHAR}, #{zt,jdbcType=VARCHAR}, #{openid,jdbcType=VARCHAR}, #{lsh,jdbcType=VARCHAR}, 
+      #{shr,jdbcType=VARCHAR}, #{shsj,jdbcType=TIMESTAMP}, #{shsm,jdbcType=VARCHAR}, 
+      #{lb,jdbcType=VARCHAR}, #{hpzl,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pd.server.main.domain.VehRobbery">
+    insert into veh_robbery
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateBy != null">
+        update_by,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="sysOrgCode != null">
+        sys_org_code,
+      </if>
+      <if test="xm != null">
+        xm,
+      </if>
+      <if test="sfzmhm != null">
+        sfzmhm,
+      </if>
+      <if test="lxdh != null">
+        lxdh,
+      </if>
+      <if test="jtzz != null">
+        jtzz,
+      </if>
+      <if test="hphm != null">
+        hphm,
+      </if>
+      <if test="clpp != null">
+        clpp,
+      </if>
+      <if test="zj != null">
+        zj,
+      </if>
+      <if test="qksm != null">
+        qksm,
+      </if>
+      <if test="bz != null">
+        bz,
+      </if>
+      <if test="zt != null">
+        zt,
+      </if>
+      <if test="openid != null">
+        openid,
+      </if>
+      <if test="lsh != null">
+        lsh,
+      </if>
+      <if test="shr != null">
+        shr,
+      </if>
+      <if test="shsj != null">
+        shsj,
+      </if>
+      <if test="shsm != null">
+        shsm,
+      </if>
+      <if test="lb != null">
+        lb,
+      </if>
+      <if test="hpzl != null">
+        hpzl,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sysOrgCode != null">
+        #{sysOrgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="xm != null">
+        #{xm,jdbcType=VARCHAR},
+      </if>
+      <if test="sfzmhm != null">
+        #{sfzmhm,jdbcType=VARCHAR},
+      </if>
+      <if test="lxdh != null">
+        #{lxdh,jdbcType=VARCHAR},
+      </if>
+      <if test="jtzz != null">
+        #{jtzz,jdbcType=VARCHAR},
+      </if>
+      <if test="hphm != null">
+        #{hphm,jdbcType=VARCHAR},
+      </if>
+      <if test="clpp != null">
+        #{clpp,jdbcType=VARCHAR},
+      </if>
+      <if test="zj != null">
+        #{zj,jdbcType=VARCHAR},
+      </if>
+      <if test="qksm != null">
+        #{qksm,jdbcType=VARCHAR},
+      </if>
+      <if test="bz != null">
+        #{bz,jdbcType=VARCHAR},
+      </if>
+      <if test="zt != null">
+        #{zt,jdbcType=VARCHAR},
+      </if>
+      <if test="openid != null">
+        #{openid,jdbcType=VARCHAR},
+      </if>
+      <if test="lsh != null">
+        #{lsh,jdbcType=VARCHAR},
+      </if>
+      <if test="shr != null">
+        #{shr,jdbcType=VARCHAR},
+      </if>
+      <if test="shsj != null">
+        #{shsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shsm != null">
+        #{shsm,jdbcType=VARCHAR},
+      </if>
+      <if test="lb != null">
+        #{lb,jdbcType=VARCHAR},
+      </if>
+      <if test="hpzl != null">
+        #{hpzl,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pd.server.main.domain.VehRobberyExample" resultType="java.lang.Long">
+    select count(*) from veh_robbery
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update veh_robbery
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createBy != null">
+        create_by = #{record.createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateBy != null">
+        update_by = #{record.updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.sysOrgCode != null">
+        sys_org_code = #{record.sysOrgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.xm != null">
+        xm = #{record.xm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sfzmhm != null">
+        sfzmhm = #{record.sfzmhm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lxdh != null">
+        lxdh = #{record.lxdh,jdbcType=VARCHAR},
+      </if>
+      <if test="record.jtzz != null">
+        jtzz = #{record.jtzz,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hphm != null">
+        hphm = #{record.hphm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.clpp != null">
+        clpp = #{record.clpp,jdbcType=VARCHAR},
+      </if>
+      <if test="record.zj != null">
+        zj = #{record.zj,jdbcType=VARCHAR},
+      </if>
+      <if test="record.qksm != null">
+        qksm = #{record.qksm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bz != null">
+        bz = #{record.bz,jdbcType=VARCHAR},
+      </if>
+      <if test="record.zt != null">
+        zt = #{record.zt,jdbcType=VARCHAR},
+      </if>
+      <if test="record.openid != null">
+        openid = #{record.openid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lsh != null">
+        lsh = #{record.lsh,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shr != null">
+        shr = #{record.shr,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shsj != null">
+        shsj = #{record.shsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.shsm != null">
+        shsm = #{record.shsm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lb != null">
+        lb = #{record.lb,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hpzl != null">
+        hpzl = #{record.hpzl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update veh_robbery
+    set id = #{record.id,jdbcType=VARCHAR},
+      create_by = #{record.createBy,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_by = #{record.updateBy,jdbcType=VARCHAR},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      sys_org_code = #{record.sysOrgCode,jdbcType=VARCHAR},
+      xm = #{record.xm,jdbcType=VARCHAR},
+      sfzmhm = #{record.sfzmhm,jdbcType=VARCHAR},
+      lxdh = #{record.lxdh,jdbcType=VARCHAR},
+      jtzz = #{record.jtzz,jdbcType=VARCHAR},
+      hphm = #{record.hphm,jdbcType=VARCHAR},
+      clpp = #{record.clpp,jdbcType=VARCHAR},
+      zj = #{record.zj,jdbcType=VARCHAR},
+      qksm = #{record.qksm,jdbcType=VARCHAR},
+      bz = #{record.bz,jdbcType=VARCHAR},
+      zt = #{record.zt,jdbcType=VARCHAR},
+      openid = #{record.openid,jdbcType=VARCHAR},
+      lsh = #{record.lsh,jdbcType=VARCHAR},
+      shr = #{record.shr,jdbcType=VARCHAR},
+      shsj = #{record.shsj,jdbcType=TIMESTAMP},
+      shsm = #{record.shsm,jdbcType=VARCHAR},
+      lb = #{record.lb,jdbcType=VARCHAR},
+      hpzl = #{record.hpzl,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pd.server.main.domain.VehRobbery">
+    update veh_robbery
+    <set>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sysOrgCode != null">
+        sys_org_code = #{sysOrgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="xm != null">
+        xm = #{xm,jdbcType=VARCHAR},
+      </if>
+      <if test="sfzmhm != null">
+        sfzmhm = #{sfzmhm,jdbcType=VARCHAR},
+      </if>
+      <if test="lxdh != null">
+        lxdh = #{lxdh,jdbcType=VARCHAR},
+      </if>
+      <if test="jtzz != null">
+        jtzz = #{jtzz,jdbcType=VARCHAR},
+      </if>
+      <if test="hphm != null">
+        hphm = #{hphm,jdbcType=VARCHAR},
+      </if>
+      <if test="clpp != null">
+        clpp = #{clpp,jdbcType=VARCHAR},
+      </if>
+      <if test="zj != null">
+        zj = #{zj,jdbcType=VARCHAR},
+      </if>
+      <if test="qksm != null">
+        qksm = #{qksm,jdbcType=VARCHAR},
+      </if>
+      <if test="bz != null">
+        bz = #{bz,jdbcType=VARCHAR},
+      </if>
+      <if test="zt != null">
+        zt = #{zt,jdbcType=VARCHAR},
+      </if>
+      <if test="openid != null">
+        openid = #{openid,jdbcType=VARCHAR},
+      </if>
+      <if test="lsh != null">
+        lsh = #{lsh,jdbcType=VARCHAR},
+      </if>
+      <if test="shr != null">
+        shr = #{shr,jdbcType=VARCHAR},
+      </if>
+      <if test="shsj != null">
+        shsj = #{shsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shsm != null">
+        shsm = #{shsm,jdbcType=VARCHAR},
+      </if>
+      <if test="lb != null">
+        lb = #{lb,jdbcType=VARCHAR},
+      </if>
+      <if test="hpzl != null">
+        hpzl = #{hpzl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pd.server.main.domain.VehRobbery">
+    update veh_robbery
+    set create_by = #{createBy,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_by = #{updateBy,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      sys_org_code = #{sysOrgCode,jdbcType=VARCHAR},
+      xm = #{xm,jdbcType=VARCHAR},
+      sfzmhm = #{sfzmhm,jdbcType=VARCHAR},
+      lxdh = #{lxdh,jdbcType=VARCHAR},
+      jtzz = #{jtzz,jdbcType=VARCHAR},
+      hphm = #{hphm,jdbcType=VARCHAR},
+      clpp = #{clpp,jdbcType=VARCHAR},
+      zj = #{zj,jdbcType=VARCHAR},
+      qksm = #{qksm,jdbcType=VARCHAR},
+      bz = #{bz,jdbcType=VARCHAR},
+      zt = #{zt,jdbcType=VARCHAR},
+      openid = #{openid,jdbcType=VARCHAR},
+      lsh = #{lsh,jdbcType=VARCHAR},
+      shr = #{shr,jdbcType=VARCHAR},
+      shsj = #{shsj,jdbcType=TIMESTAMP},
+      shsm = #{shsm,jdbcType=VARCHAR},
+      lb = #{lb,jdbcType=VARCHAR},
+      hpzl = #{hpzl,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
