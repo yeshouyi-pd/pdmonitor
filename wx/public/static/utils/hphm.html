@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="apple-touch-fullscreen" content="yes" />
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, user-scalable=no">
+    <title>号牌选择</title>
+    <script src="../js/session-storage.js"></script>
+    <style>
+        * {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            margin: 0 auto;
+            padding: 0 auto;
+            height: 100%;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        div#single-keyboard-box, div#mixed-keyboard-box {
+            height: 80%;
+        }
+
+
+    </style>
+</head>
+
+<body>
+<div style="height: 20%;text-align: center" >
+    <div style="height: 20%"></div>
+    <div style="width: 100%">
+        <div style="display : inline-block">
+            <font style="font-size: 1em;color: #969799"> 新能源号牌请先选择省份再选择</font>
+        </div>
+        <div style="display : inline-block;">
+            <img   style="width: 1.2em;height: 1.2em;vertical-align:text-bottom" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSc5OCcgaGVpZ2h0PSc5OCcgdmlld0JveD0nMCAwIDk4IDk4Jz48ZGVmcz48c3R5bGU+LmV2ZW5vZGQge2ZpbGwtcnVsZTogZXZlbm9kZDt9PC9zdHlsZT48L2RlZnM+PGNpcmNsZSBmaWxsPScjMzA5NzdkJyBjeD0nNDknIGN5PSc0OScgcj0nNDgnLz48Y2lyY2xlIGZpbGw9JyM1OGI4YTAnIGN4PSc0OScgY3k9JzQ5JyByPSc0NCcvPjxwYXRoIGZpbGw9JyMzNmIwZTQnIGNsYXNzPSdldmVub2RkJyBkPSdNMTIuMTI5LDI1YTQzLjk4Niw0My45ODYsMCwwLDEsNzMuNzQxLDBIMTIuMTI5WicvPjxwYXRoIGZpbGw9JyMzOGJlNzAnIGNsYXNzPSdldmVub2RkJyBkPSdNMTIuMTI5LDczSDg1Ljg3MUE0My45ODYsNDMuOTg2LDAsMCwxLDEyLjEyOSw3M1onLz48cGF0aCBmaWxsPScjZWM0Njg4JyBjbGFzcz0nZXZlbm9kZCcgZD0nTTEyLjEyOSwyNUg4NS44NzFhNDMuNzMzLDQzLjczMywwLDAsMSw2LjIsMTVINS45MjVBNDMuNzMzLDQzLjczMywwLDAsMSwxMi4xMjksMjVaJy8+PHBhdGggZmlsbD0nI2QwZTIzZicgY2xhc3M9J2V2ZW5vZGQnIGQ9J002LjE1NSw1OUg5MS44NDVhNDMuNzQyLDQzLjc0MiwwLDAsMS01Ljk3NCwxNEgxMi4xMjlBNDMuNzQzLDQzLjc0MywwLDAsMSw2LjE1NSw1OVonLz48cGF0aCBmaWxsPScjZWM5ODQxJyBjbGFzcz0nZXZlbm9kZCcgZD0nTTUsNDlBNDQuMDkyLDQ0LjA5MiwwLDAsMSw2LjE1NSwzOUg5MS44NDVhNDMuODU2LDQzLjg1NiwwLDAsMSwwLDIwSDYuMTU1QTQ0LjA5Miw0NC4wOTIsMCwwLDEsNSw0OVonLz48cGF0aCBmaWxsPScjZmZmZmZmJyBjbGFzcz0nZXZlbm9kZCcgZD0nTTUuMDUxLDUxSDYxdjRINS40MThDNS4yMzgsNTMuNjg0LDUuMTExLDUyLjM1MSw1LjA1MSw1MVptMC4zNjctOEg2MXY0SDUuMDUxQzUuMTExLDQ1LjY0OSw1LjIzOCw0NC4zMTYsNS40MTgsNDNaJy8+PHBhdGggZmlsbD0nIzEwMjYxZScgY2xhc3M9J2V2ZW5vZGQnIGQ9J002MSw5MS4zM1Y3M0gzNS4yMTVMMjUuMDYzLDYyLjgzNmEyLjk4NCwyLjk4NCwwLDAsMSwuNzU4LTUuODE4YzAtLjAwNiwwLTAuMDEyLTAuMDA1LTAuMDE4SDYxVjQxSDI1LjIyMWMwLjAyNi0uMDI5LjA0NS0wLjA2MywwLjA3LTAuMDkzQTIuOTc0LDIuOTc0LDAsMCwxLDIzLjcsMzYuMWMtMC4wNjItLjAxNS0wLjEyLTAuMDM4LTAuMTgyLTAuMDQ4TDM0LjksMjVINjFWNi42N0E0NCw0NCwwLDAsMSw2MSw5MS4zM1onLz48cGF0aCBmaWxsPScjZmZmZmZmJyBjbGFzcz0nZXZlbm9kZCcgZD0nTTY1LDg1LjAwNlY2OUgzN2wtOC04SDY1VjM3SDI5bDgtOEg2NVYxMi45OTRBMzkuMDEsMzkuMDEsMCwwLDEsNjUsODUuMDA2WicvPjwvc3ZnPg=="/>
+        </div>
+    </div>
+
+</div>
+<div id="mixed-keyboard-box">
+    <mixed-keyboard :args="args" :callbacks="callbacks"/>
+</div>
+<script src="../js/MixedKeyboard.js"></script>
+</body>
+<script>
+
+    var number = "";
+
+    function native_callback_ontextkey(text){
+        number += text;
+        console.log("当前车牌[KEY]：" + number);
+        _updateKeyboard();
+    }
+
+    function native_callback_ondelkey(){
+        console.log("当前车牌[DEL]：" + number);
+        _updateKeyboard();
+    }
+
+    function native_callback_onokkey(){
+        console.log("当前车牌[OK]");
+    }
+
+    function native_callback_completed(number, isAutoCompleted){
+        console.log("当前车牌[完成]：" + number + ", 自动完成:" + isAutoCompleted);
+
+
+    }
+
+    function native_callback_changed(number, isCompleted){
+        console.log("当前车牌[变更]：" + number + ", 已完成:" + isCompleted);
+        if(number){//完成选择
+            SessionStorage.set("CHECKHPHM",isCompleted);
+        }
+    }
+
+    function native_callback_show_message(message){
+        console.log(message);
+    }
+
+    function _updateKeyboard(){
+        // native_update_keyboard(presetNumber, keyboardType, provinceName, numberType, inputIndex)
+        native_update_keyboard(number, 0, "海南省", 5, -1);
+    }
+
+    _updateKeyboard();
+
+</script>
+
+</html>
