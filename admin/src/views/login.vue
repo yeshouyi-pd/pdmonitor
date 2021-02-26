@@ -1,17 +1,18 @@
 <template>
     <div class="main-container">
         <img class="bgimg" src="/static/image/index1.jpg"/>
-        <div class="main-content">
-            <div class="row divrow">
-                <div class="col-sm-10 col-sm-offset-1">
-                    <div class="login-container">
-                        <div class="center">
-                            <h1>
-                                <i class="ace-icon fa fa-leaf green"></i>
-                                <span style="color: #D6F1FF">&nbsp;&nbsp;登录控制v1.0</span>
-                            </h1>
-                        </div>
+      <br/><br/><br/><br/><br/><br/><br/><br/><br/>
 
+        <div class="main-content" >
+          <div class="row">
+            <div class="col-sm-10 col-sm-offset-1">
+                    <div class="center">
+                                  <span style="font-size: 45px">
+                                      <i class="ace-icon fa fa-leaf green"></i>
+                                      <span style="color: #D6F1FF">水环境动态监测系统v1.0</span>
+                                  </span>
+                    </div>
+                    <div class="login-container">
                         <div class="space-6"></div>
 
                         <div class="position-relative">

@@ -16,7 +16,7 @@
                   <a href="index.html" class="navbar-brand">
                       <small>
                           <i class="fa fa-leaf"></i>
-                          海口市便民服务管理系统v1.0
+                          水环境动态监测系统v1.0
                       </small>
                   </a>
               </div>

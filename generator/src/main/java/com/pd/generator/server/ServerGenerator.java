@@ -11,11 +11,11 @@ import java.io.File;
 import java.util.*;
 
 public class ServerGenerator {
-    static String MODULE = "wxbase";
+    static String MODULE = "monitor";
     static String DATASOURCE = "main";//数据源main 主数据 secondary 副数据
     static String toDtoPath = "server\\src\\main\\java\\com\\pd\\server\\"+ DATASOURCE + "\\dto\\";
-    static String toServicePath = "server\\src\\main\\java\\com\\pd\\server\\"+ DATASOURCE + "\\service\\";
-    static String toControllerPath = MODULE + "\\src\\main\\java\\com\\pd\\" + MODULE + "\\wx\\controller\\";
+    static String toServicePath = "server\\src\\main\\java\\com\\pd\\server\\"+DATASOURCE+"\\service\\"+MODULE+"\\";
+    static String toControllerPath = MODULE + "\\src\\main\\java\\com\\pd\\" + MODULE + "\\controller\\";
     static String generatorConfigPath = "server\\src\\main\\resources\\generator\\generatorConfig.xml";
 
     public static void main(String[] args) throws Exception {

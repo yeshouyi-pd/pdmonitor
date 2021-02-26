@@ -14,7 +14,7 @@ public class DbUtil {
         Connection conn = null;
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            String url = "jdbc:mysql://192.168.10.146:3306/course";
+            String url = "jdbc:mysql://192.168.10.146:3306/monitor";
             String user = "root";
             String pass = "mysql";
 
