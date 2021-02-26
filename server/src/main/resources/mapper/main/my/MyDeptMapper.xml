@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pd.server.main.mapper.my.MyDeptMapper">
+    <resultMap id="getAllMumResult"   type="com.pd.server.main.dto.KvIntDto">
+        <result property="key" column="key" jdbcType="VARCHAR" />
+        <result property="value" column="value" jdbcType="INTEGER"/>
+    </resultMap>
+
+  <select id="getDeptByYwlx" resultType="com.pd.server.main.domain.Dept" parameterType="com.pd.server.main.dto.basewx.my.YwyyParamDto">
+    SELECT * FROM `dept` t WHERE t.deptcode IN (
+        SELECT  DISTINCT d.`deptcode` deptcode FROM `dept_ywlx`  d
+        where  d.ywfl = #{ywfl} and d.ywlx = #{ywlx}
+        )
+      <if test="searchvalue != null and searchvalue !=''">
+          and
+          deptname  like  #{searchvalue}
+      </if>
+  </select>
+
+    <!--  获取每个部门的每日最大预约量 -->
+    <select id="getDeptYyMum"    resultMap="getAllMumResult"   >
+        SELECT  deptcode as `key` ,SUM(yymun) as `value`  FROM   `dept_yysj` GROUP BY deptcode
+    </select>
+
+    <!--  部门上下级关联拆线呢-->
+    <select id="getUpdeptcode"    parameterType="java.lang.String" resultType="java.lang.String" >
+        select getDeptList(#{deptcode,jdbcType=VARCHAR}) from dual
+    </select>
+
+    <!-- 跟据当前的部门获取当天以及当天之后的每天预约已预约总量 -->
+    <select id="getYysjMum"    resultMap="getAllMumResult"    parameterType="java.lang.String"  >
+        SELECT  yysj  as `key`,SUM(yysl)  as `value`  FROM `wx_yy`  WHERE deptcode =#{deptcode,jdbcType=VARCHAR}  AND zt !='2'  AND  yysj &gt;= DATE_FORMAT(SYSDATE(),'%Y-%m-%d')
+        GROUP  BY yysj
+    </select>
+
+    <!-- 跟据当前的部门获取当天各时段的有效预约数量 -->
+    <select id="getYysjByDayMum"    resultMap="getAllMumResult"    parameterType="com.pd.server.main.dto.DeptYysjDto" >
+        SELECT  yysd  AS `key`,SUM(yysl)  AS `value`  FROM `wx_yy`  WHERE deptcode =#{deptcode,jdbcType=VARCHAR}  AND zt !='2'  AND  yysj =#{checkday,jdbcType=VARCHAR}
+        GROUP  BY yysd
+
+    </select>
+
+    <!-- 跟据当前的部门获取当天已预约总量 -->
+    <select id="getYysjByDayNowMum"    resultType="java.lang.Integer"    parameterType="com.pd.server.main.dto.WxYyDto" >
+        SELECT  SUM(yysl)  FROM `wx_yy`  WHERE deptcode =#{deptcode,jdbcType=VARCHAR}  AND zt !='2'  AND  yysj =#{yysj,jdbcType=VARCHAR} AND yysd =#{yysd,jdbcType=VARCHAR}
+
+    </select>
+
+    <!-- 跟据当前的部门和当前时段当前时段的最大预约量 -->
+    <select id="getYysjByDayYysdMum"    resultType="java.lang.Integer"    parameterType="com.pd.server.main.dto.WxYyDto" >
+        SELECT  yymun  FROM `dept_yysj`  WHERE `deptcode` =#{deptcode,jdbcType=VARCHAR}   AND `id` =#{yysd,jdbcType=VARCHAR}
+
+    </select>
+
+    <!-- 当点击个人预约或企业预约时校验当前部门的预约次数是否充足-->
+    <select id="queryCanyyBydept"    resultType="java.lang.Integer"    parameterType="com.pd.server.main.dto.WxYyDto" >
+        SELECT  SUM(ywlx) FROM wx_yy WHERE openid = #{openid,jdbcType=VARCHAR} AND    zt IN ('1','4')  AND deptcode = #{deptcode,jdbcType=VARCHAR} AND yytype = #{yytype,jdbcType=VARCHAR} AND yysj= #{yysj,jdbcType=VARCHAR}
+    </select>
+
+
+</mapper>

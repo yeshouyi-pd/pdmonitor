@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pd.server.main.mapper.DrvExamlogMapper">
+  <resultMap id="BaseResultMap" type="com.pd.server.main.domain.DrvExamlog">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <id column="xm" jdbcType="VARCHAR" property="xm" />
+    <result column="sfzmhm" jdbcType="VARCHAR" property="sfzmhm" />
+    <result column="sjh" jdbcType="VARCHAR" property="sjh" />
+    <result column="cfbh" jdbcType="VARCHAR" property="cfbh" />
+    <result column="dtkm" jdbcType="VARCHAR" property="dtkm" />
+    <result column="kssj" jdbcType="TIMESTAMP" property="kssj" />
+    <result column="jssj" jdbcType="TIMESTAMP" property="jssj" />
+    <result column="sdfs" jdbcType="INTEGER" property="sdfs" />
+    <result column="sfjg" jdbcType="VARCHAR" property="sfjg" />
+    <result column="wxid" jdbcType="VARCHAR" property="wxid" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, xm, sfzmhm, sjh, cfbh, dtkm, kssj, jssj, sdfs, sfjg, wxid
+  </sql>
+  <select id="selectByExample" parameterType="com.pd.server.main.domain.DrvExamlogExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from drv_examlog
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from drv_examlog
+    where id = #{id,jdbcType=VARCHAR}
+      and xm = #{xm,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map">
+    delete from drv_examlog
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pd.server.main.domain.DrvExamlogExample">
+    delete from drv_examlog
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pd.server.main.domain.DrvExamlog">
+    insert into drv_examlog (id, xm, sfzmhm, 
+      sjh, cfbh, dtkm, kssj, 
+      jssj, sdfs, sfjg, 
+      wxid)
+    values (#{id,jdbcType=VARCHAR}, #{xm,jdbcType=VARCHAR}, #{sfzmhm,jdbcType=VARCHAR}, 
+      #{sjh,jdbcType=VARCHAR}, #{cfbh,jdbcType=VARCHAR}, #{dtkm,jdbcType=VARCHAR}, #{kssj,jdbcType=TIMESTAMP}, 
+      #{jssj,jdbcType=TIMESTAMP}, #{sdfs,jdbcType=INTEGER}, #{sfjg,jdbcType=VARCHAR}, 
+      #{wxid,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pd.server.main.domain.DrvExamlog">
+    insert into drv_examlog
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="xm != null">
+        xm,
+      </if>
+      <if test="sfzmhm != null">
+        sfzmhm,
+      </if>
+      <if test="sjh != null">
+        sjh,
+      </if>
+      <if test="cfbh != null">
+        cfbh,
+      </if>
+      <if test="dtkm != null">
+        dtkm,
+      </if>
+      <if test="kssj != null">
+        kssj,
+      </if>
+      <if test="jssj != null">
+        jssj,
+      </if>
+      <if test="sdfs != null">
+        sdfs,
+      </if>
+      <if test="sfjg != null">
+        sfjg,
+      </if>
+      <if test="wxid != null">
+        wxid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="xm != null">
+        #{xm,jdbcType=VARCHAR},
+      </if>
+      <if test="sfzmhm != null">
+        #{sfzmhm,jdbcType=VARCHAR},
+      </if>
+      <if test="sjh != null">
+        #{sjh,jdbcType=VARCHAR},
+      </if>
+      <if test="cfbh != null">
+        #{cfbh,jdbcType=VARCHAR},
+      </if>
+      <if test="dtkm != null">
+        #{dtkm,jdbcType=VARCHAR},
+      </if>
+      <if test="kssj != null">
+        #{kssj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="jssj != null">
+        #{jssj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sdfs != null">
+        #{sdfs,jdbcType=INTEGER},
+      </if>
+      <if test="sfjg != null">
+        #{sfjg,jdbcType=VARCHAR},
+      </if>
+      <if test="wxid != null">
+        #{wxid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pd.server.main.domain.DrvExamlogExample" resultType="java.lang.Long">
+    select count(*) from drv_examlog
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update drv_examlog
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.xm != null">
+        xm = #{record.xm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sfzmhm != null">
+        sfzmhm = #{record.sfzmhm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sjh != null">
+        sjh = #{record.sjh,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cfbh != null">
+        cfbh = #{record.cfbh,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dtkm != null">
+        dtkm = #{record.dtkm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.kssj != null">
+        kssj = #{record.kssj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.jssj != null">
+        jssj = #{record.jssj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.sdfs != null">
+        sdfs = #{record.sdfs,jdbcType=INTEGER},
+      </if>
+      <if test="record.sfjg != null">
+        sfjg = #{record.sfjg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wxid != null">
+        wxid = #{record.wxid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update drv_examlog
+    set id = #{record.id,jdbcType=VARCHAR},
+      xm = #{record.xm,jdbcType=VARCHAR},
+      sfzmhm = #{record.sfzmhm,jdbcType=VARCHAR},
+      sjh = #{record.sjh,jdbcType=VARCHAR},
+      cfbh = #{record.cfbh,jdbcType=VARCHAR},
+      dtkm = #{record.dtkm,jdbcType=VARCHAR},
+      kssj = #{record.kssj,jdbcType=TIMESTAMP},
+      jssj = #{record.jssj,jdbcType=TIMESTAMP},
+      sdfs = #{record.sdfs,jdbcType=INTEGER},
+      sfjg = #{record.sfjg,jdbcType=VARCHAR},
+      wxid = #{record.wxid,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pd.server.main.domain.DrvExamlog">
+    update drv_examlog
+    <set>
+      <if test="sfzmhm != null">
+        sfzmhm = #{sfzmhm,jdbcType=VARCHAR},
+      </if>
+      <if test="sjh != null">
+        sjh = #{sjh,jdbcType=VARCHAR},
+      </if>
+      <if test="cfbh != null">
+        cfbh = #{cfbh,jdbcType=VARCHAR},
+      </if>
+      <if test="dtkm != null">
+        dtkm = #{dtkm,jdbcType=VARCHAR},
+      </if>
+      <if test="kssj != null">
+        kssj = #{kssj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="jssj != null">
+        jssj = #{jssj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sdfs != null">
+        sdfs = #{sdfs,jdbcType=INTEGER},
+      </if>
+      <if test="sfjg != null">
+        sfjg = #{sfjg,jdbcType=VARCHAR},
+      </if>
+      <if test="wxid != null">
+        wxid = #{wxid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+      and xm = #{xm,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pd.server.main.domain.DrvExamlog">
+    update drv_examlog
+    set sfzmhm = #{sfzmhm,jdbcType=VARCHAR},
+      sjh = #{sjh,jdbcType=VARCHAR},
+      cfbh = #{cfbh,jdbcType=VARCHAR},
+      dtkm = #{dtkm,jdbcType=VARCHAR},
+      kssj = #{kssj,jdbcType=TIMESTAMP},
+      jssj = #{jssj,jdbcType=TIMESTAMP},
+      sdfs = #{sdfs,jdbcType=INTEGER},
+      sfjg = #{sfjg,jdbcType=VARCHAR},
+      wxid = #{wxid,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+      and xm = #{xm,jdbcType=VARCHAR}
+  </update>
+</mapper>

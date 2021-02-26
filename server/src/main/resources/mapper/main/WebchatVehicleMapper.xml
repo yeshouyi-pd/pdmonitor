@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pd.server.main.mapper.WebchatVehicleMapper">
+  <resultMap id="BaseResultMap" type="com.pd.server.main.domain.WebchatVehicle">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="xm" jdbcType="VARCHAR" property="xm" />
+    <result column="sfzmhm" jdbcType="VARCHAR" property="sfzmhm" />
+    <result column="hphm" jdbcType="VARCHAR" property="hphm" />
+    <result column="hpzl" jdbcType="VARCHAR" property="hpzl" />
+    <result column="clsbdh" jdbcType="VARCHAR" property="clsbdh" />
+    <result column="fdjh" jdbcType="VARCHAR" property="fdjh" />
+    <result column="cjsj" jdbcType="TIMESTAMP" property="cjsj" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, xm, sfzmhm, hphm, hpzl, clsbdh, fdjh, cjsj
+  </sql>
+  <select id="selectByExample" parameterType="com.pd.server.main.domain.WebchatVehicleExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from webchat_vehicle
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from webchat_vehicle
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from webchat_vehicle
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pd.server.main.domain.WebchatVehicleExample">
+    delete from webchat_vehicle
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pd.server.main.domain.WebchatVehicle">
+    insert into webchat_vehicle (id, xm, sfzmhm, 
+      hphm, hpzl, clsbdh, 
+      fdjh, cjsj)
+    values (#{id,jdbcType=INTEGER}, #{xm,jdbcType=VARCHAR}, #{sfzmhm,jdbcType=VARCHAR}, 
+      #{hphm,jdbcType=VARCHAR}, #{hpzl,jdbcType=VARCHAR}, #{clsbdh,jdbcType=VARCHAR}, 
+      #{fdjh,jdbcType=VARCHAR}, #{cjsj,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pd.server.main.domain.WebchatVehicle">
+    insert into webchat_vehicle
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="xm != null">
+        xm,
+      </if>
+      <if test="sfzmhm != null">
+        sfzmhm,
+      </if>
+      <if test="hphm != null">
+        hphm,
+      </if>
+      <if test="hpzl != null">
+        hpzl,
+      </if>
+      <if test="clsbdh != null">
+        clsbdh,
+      </if>
+      <if test="fdjh != null">
+        fdjh,
+      </if>
+      <if test="cjsj != null">
+        cjsj,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="xm != null">
+        #{xm,jdbcType=VARCHAR},
+      </if>
+      <if test="sfzmhm != null">
+        #{sfzmhm,jdbcType=VARCHAR},
+      </if>
+      <if test="hphm != null">
+        #{hphm,jdbcType=VARCHAR},
+      </if>
+      <if test="hpzl != null">
+        #{hpzl,jdbcType=VARCHAR},
+      </if>
+      <if test="clsbdh != null">
+        #{clsbdh,jdbcType=VARCHAR},
+      </if>
+      <if test="fdjh != null">
+        #{fdjh,jdbcType=VARCHAR},
+      </if>
+      <if test="cjsj != null">
+        #{cjsj,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pd.server.main.domain.WebchatVehicleExample" resultType="java.lang.Long">
+    select count(*) from webchat_vehicle
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update webchat_vehicle
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.xm != null">
+        xm = #{record.xm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sfzmhm != null">
+        sfzmhm = #{record.sfzmhm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hphm != null">
+        hphm = #{record.hphm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hpzl != null">
+        hpzl = #{record.hpzl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.clsbdh != null">
+        clsbdh = #{record.clsbdh,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fdjh != null">
+        fdjh = #{record.fdjh,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cjsj != null">
+        cjsj = #{record.cjsj,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update webchat_vehicle
+    set id = #{record.id,jdbcType=INTEGER},
+      xm = #{record.xm,jdbcType=VARCHAR},
+      sfzmhm = #{record.sfzmhm,jdbcType=VARCHAR},
+      hphm = #{record.hphm,jdbcType=VARCHAR},
+      hpzl = #{record.hpzl,jdbcType=VARCHAR},
+      clsbdh = #{record.clsbdh,jdbcType=VARCHAR},
+      fdjh = #{record.fdjh,jdbcType=VARCHAR},
+      cjsj = #{record.cjsj,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pd.server.main.domain.WebchatVehicle">
+    update webchat_vehicle
+    <set>
+      <if test="xm != null">
+        xm = #{xm,jdbcType=VARCHAR},
+      </if>
+      <if test="sfzmhm != null">
+        sfzmhm = #{sfzmhm,jdbcType=VARCHAR},
+      </if>
+      <if test="hphm != null">
+        hphm = #{hphm,jdbcType=VARCHAR},
+      </if>
+      <if test="hpzl != null">
+        hpzl = #{hpzl,jdbcType=VARCHAR},
+      </if>
+      <if test="clsbdh != null">
+        clsbdh = #{clsbdh,jdbcType=VARCHAR},
+      </if>
+      <if test="fdjh != null">
+        fdjh = #{fdjh,jdbcType=VARCHAR},
+      </if>
+      <if test="cjsj != null">
+        cjsj = #{cjsj,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pd.server.main.domain.WebchatVehicle">
+    update webchat_vehicle
+    set xm = #{xm,jdbcType=VARCHAR},
+      sfzmhm = #{sfzmhm,jdbcType=VARCHAR},
+      hphm = #{hphm,jdbcType=VARCHAR},
+      hpzl = #{hpzl,jdbcType=VARCHAR},
+      clsbdh = #{clsbdh,jdbcType=VARCHAR},
+      fdjh = #{fdjh,jdbcType=VARCHAR},
+      cjsj = #{cjsj,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

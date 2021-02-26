@@ -1,0 +1,476 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pd.server.main.mapper.WebchatRewardMapper">
+  <resultMap id="BaseResultMap" type="com.pd.server.main.domain.WebchatReward">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="sys_org_code" jdbcType="VARCHAR" property="sysOrgCode" />
+    <result column="wfxwxx" jdbcType="VARCHAR" property="wfxwxx" />
+    <result column="sfzmhm" jdbcType="VARCHAR" property="sfzmhm" />
+    <result column="sjh" jdbcType="VARCHAR" property="sjh" />
+    <result column="shr" jdbcType="VARCHAR" property="shr" />
+    <result column="shsj" jdbcType="TIMESTAMP" property="shsj" />
+    <result column="shyy" jdbcType="VARCHAR" property="shyy" />
+    <result column="shsm" jdbcType="VARCHAR" property="shsm" />
+    <result column="zt" jdbcType="VARCHAR" property="zt" />
+    <result column="openid" jdbcType="VARCHAR" property="openid" />
+    <result column="lsh" jdbcType="VARCHAR" property="lsh" />
+    <result column="ffzt" jdbcType="VARCHAR" property="ffzt" />
+    <result column="cplx" jdbcType="VARCHAR" property="cplx" />
+    <result column="cphm" jdbcType="VARCHAR" property="cphm" />
+    <result column="ffsj" jdbcType="TIMESTAMP" property="ffsj" />
+    <result column="ffr" jdbcType="VARCHAR" property="ffr" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, create_time, create_by, update_time, update_by, sys_org_code, wfxwxx, sfzmhm, 
+    sjh, shr, shsj, shyy, shsm, zt, openid, lsh, ffzt, cplx, cphm, ffsj, ffr
+  </sql>
+  <sql id="Base_Column_List_Other">
+    id, DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') as create_time, create_by, update_time, update_by, sys_org_code, wfxwxx, sfzmhm,
+    sjh, shr, shsj, shyy, shsm, zt, openid, lsh, ffzt, cplx, cphm, ffsj, ffr
+  </sql>
+  <select id="selectByExample" parameterType="com.pd.server.main.domain.WebchatRewardExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List_Other" />
+    from webchat_reward
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from webchat_reward
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from webchat_reward
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pd.server.main.domain.WebchatRewardExample">
+    delete from webchat_reward
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pd.server.main.domain.WebchatReward">
+    insert into webchat_reward (id, create_time, create_by, 
+      update_time, update_by, sys_org_code, 
+      wfxwxx, sfzmhm, sjh, 
+      shr, shsj, shyy, 
+      shsm, zt, openid, lsh, 
+      ffzt, cplx, cphm, ffsj, 
+      ffr)
+    values (#{id,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, #{sysOrgCode,jdbcType=VARCHAR}, 
+      #{wfxwxx,jdbcType=VARCHAR}, #{sfzmhm,jdbcType=VARCHAR}, #{sjh,jdbcType=VARCHAR}, 
+      #{shr,jdbcType=VARCHAR}, #{shsj,jdbcType=TIMESTAMP}, #{shyy,jdbcType=VARCHAR}, 
+      #{shsm,jdbcType=VARCHAR}, #{zt,jdbcType=VARCHAR}, #{openid,jdbcType=VARCHAR}, #{lsh,jdbcType=VARCHAR}, 
+      #{ffzt,jdbcType=VARCHAR}, #{cplx,jdbcType=VARCHAR}, #{cphm,jdbcType=VARCHAR}, #{ffsj,jdbcType=TIMESTAMP}, 
+      #{ffr,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pd.server.main.domain.WebchatReward">
+    insert into webchat_reward
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="updateBy != null">
+        update_by,
+      </if>
+      <if test="sysOrgCode != null">
+        sys_org_code,
+      </if>
+      <if test="wfxwxx != null">
+        wfxwxx,
+      </if>
+      <if test="sfzmhm != null">
+        sfzmhm,
+      </if>
+      <if test="sjh != null">
+        sjh,
+      </if>
+      <if test="shr != null">
+        shr,
+      </if>
+      <if test="shsj != null">
+        shsj,
+      </if>
+      <if test="shyy != null">
+        shyy,
+      </if>
+      <if test="shsm != null">
+        shsm,
+      </if>
+      <if test="zt != null">
+        zt,
+      </if>
+      <if test="openid != null">
+        openid,
+      </if>
+      <if test="lsh != null">
+        lsh,
+      </if>
+      <if test="ffzt != null">
+        ffzt,
+      </if>
+      <if test="cplx != null">
+        cplx,
+      </if>
+      <if test="cphm != null">
+        cphm,
+      </if>
+      <if test="ffsj != null">
+        ffsj,
+      </if>
+      <if test="ffr != null">
+        ffr,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="sysOrgCode != null">
+        #{sysOrgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="wfxwxx != null">
+        #{wfxwxx,jdbcType=VARCHAR},
+      </if>
+      <if test="sfzmhm != null">
+        #{sfzmhm,jdbcType=VARCHAR},
+      </if>
+      <if test="sjh != null">
+        #{sjh,jdbcType=VARCHAR},
+      </if>
+      <if test="shr != null">
+        #{shr,jdbcType=VARCHAR},
+      </if>
+      <if test="shsj != null">
+        #{shsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shyy != null">
+        #{shyy,jdbcType=VARCHAR},
+      </if>
+      <if test="shsm != null">
+        #{shsm,jdbcType=VARCHAR},
+      </if>
+      <if test="zt != null">
+        #{zt,jdbcType=VARCHAR},
+      </if>
+      <if test="openid != null">
+        #{openid,jdbcType=VARCHAR},
+      </if>
+      <if test="lsh != null">
+        #{lsh,jdbcType=VARCHAR},
+      </if>
+      <if test="ffzt != null">
+        #{ffzt,jdbcType=VARCHAR},
+      </if>
+      <if test="cplx != null">
+        #{cplx,jdbcType=VARCHAR},
+      </if>
+      <if test="cphm != null">
+        #{cphm,jdbcType=VARCHAR},
+      </if>
+      <if test="ffsj != null">
+        #{ffsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ffr != null">
+        #{ffr,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pd.server.main.domain.WebchatRewardExample" resultType="java.lang.Long">
+    select count(*) from webchat_reward
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update webchat_reward
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createBy != null">
+        create_by = #{record.createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateBy != null">
+        update_by = #{record.updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sysOrgCode != null">
+        sys_org_code = #{record.sysOrgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wfxwxx != null">
+        wfxwxx = #{record.wfxwxx,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sfzmhm != null">
+        sfzmhm = #{record.sfzmhm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sjh != null">
+        sjh = #{record.sjh,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shr != null">
+        shr = #{record.shr,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shsj != null">
+        shsj = #{record.shsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.shyy != null">
+        shyy = #{record.shyy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shsm != null">
+        shsm = #{record.shsm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.zt != null">
+        zt = #{record.zt,jdbcType=VARCHAR},
+      </if>
+      <if test="record.openid != null">
+        openid = #{record.openid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lsh != null">
+        lsh = #{record.lsh,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ffzt != null">
+        ffzt = #{record.ffzt,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cplx != null">
+        cplx = #{record.cplx,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cphm != null">
+        cphm = #{record.cphm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ffsj != null">
+        ffsj = #{record.ffsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.ffr != null">
+        ffr = #{record.ffr,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update webchat_reward
+    set id = #{record.id,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      create_by = #{record.createBy,jdbcType=VARCHAR},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      update_by = #{record.updateBy,jdbcType=VARCHAR},
+      sys_org_code = #{record.sysOrgCode,jdbcType=VARCHAR},
+      wfxwxx = #{record.wfxwxx,jdbcType=VARCHAR},
+      sfzmhm = #{record.sfzmhm,jdbcType=VARCHAR},
+      sjh = #{record.sjh,jdbcType=VARCHAR},
+      shr = #{record.shr,jdbcType=VARCHAR},
+      shsj = #{record.shsj,jdbcType=TIMESTAMP},
+      shyy = #{record.shyy,jdbcType=VARCHAR},
+      shsm = #{record.shsm,jdbcType=VARCHAR},
+      zt = #{record.zt,jdbcType=VARCHAR},
+      openid = #{record.openid,jdbcType=VARCHAR},
+      lsh = #{record.lsh,jdbcType=VARCHAR},
+      ffzt = #{record.ffzt,jdbcType=VARCHAR},
+      cplx = #{record.cplx,jdbcType=VARCHAR},
+      cphm = #{record.cphm,jdbcType=VARCHAR},
+      ffsj = #{record.ffsj,jdbcType=TIMESTAMP},
+      ffr = #{record.ffr,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pd.server.main.domain.WebchatReward">
+    update webchat_reward
+    <set>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="sysOrgCode != null">
+        sys_org_code = #{sysOrgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="wfxwxx != null">
+        wfxwxx = #{wfxwxx,jdbcType=VARCHAR},
+      </if>
+      <if test="sfzmhm != null">
+        sfzmhm = #{sfzmhm,jdbcType=VARCHAR},
+      </if>
+      <if test="sjh != null">
+        sjh = #{sjh,jdbcType=VARCHAR},
+      </if>
+      <if test="shr != null">
+        shr = #{shr,jdbcType=VARCHAR},
+      </if>
+      <if test="shsj != null">
+        shsj = #{shsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shyy != null">
+        shyy = #{shyy,jdbcType=VARCHAR},
+      </if>
+      <if test="shsm != null">
+        shsm = #{shsm,jdbcType=VARCHAR},
+      </if>
+      <if test="zt != null">
+        zt = #{zt,jdbcType=VARCHAR},
+      </if>
+      <if test="openid != null">
+        openid = #{openid,jdbcType=VARCHAR},
+      </if>
+      <if test="lsh != null">
+        lsh = #{lsh,jdbcType=VARCHAR},
+      </if>
+      <if test="ffzt != null">
+        ffzt = #{ffzt,jdbcType=VARCHAR},
+      </if>
+      <if test="cplx != null">
+        cplx = #{cplx,jdbcType=VARCHAR},
+      </if>
+      <if test="cphm != null">
+        cphm = #{cphm,jdbcType=VARCHAR},
+      </if>
+      <if test="ffsj != null">
+        ffsj = #{ffsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ffr != null">
+        ffr = #{ffr,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pd.server.main.domain.WebchatReward">
+    update webchat_reward
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_by = #{updateBy,jdbcType=VARCHAR},
+      sys_org_code = #{sysOrgCode,jdbcType=VARCHAR},
+      wfxwxx = #{wfxwxx,jdbcType=VARCHAR},
+      sfzmhm = #{sfzmhm,jdbcType=VARCHAR},
+      sjh = #{sjh,jdbcType=VARCHAR},
+      shr = #{shr,jdbcType=VARCHAR},
+      shsj = #{shsj,jdbcType=TIMESTAMP},
+      shyy = #{shyy,jdbcType=VARCHAR},
+      shsm = #{shsm,jdbcType=VARCHAR},
+      zt = #{zt,jdbcType=VARCHAR},
+      openid = #{openid,jdbcType=VARCHAR},
+      lsh = #{lsh,jdbcType=VARCHAR},
+      ffzt = #{ffzt,jdbcType=VARCHAR},
+      cplx = #{cplx,jdbcType=VARCHAR},
+      cphm = #{cphm,jdbcType=VARCHAR},
+      ffsj = #{ffsj,jdbcType=TIMESTAMP},
+      ffr = #{ffr,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateById" parameterType="com.pd.server.main.domain.WebchatReward">
+    update webchat_reward
+    set
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+        update_by = #{updateBy,jdbcType=VARCHAR},
+        ffzt = #{ffzt,jdbcType=VARCHAR},
+        ffsj = #{ffsj,jdbcType=TIMESTAMP},
+        ffr = #{ffr,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
