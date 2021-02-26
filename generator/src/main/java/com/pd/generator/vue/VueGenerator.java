@@ -11,8 +11,8 @@ import java.io.File;
 import java.util.*;
 
 public class VueGenerator {
-    static String MODULE = "wxbase";
-    static String toVuePath = "admin\\src\\views\\wxbase\\";
+    static String MODULE = "monitor";
+    static String toVuePath = "admin\\src\\views\\monitor\\";
     static String generatorConfigPath = "server\\src\\main\\resources\\generator\\generatorConfig.xml";
 
     public static void main(String[] args) throws Exception {

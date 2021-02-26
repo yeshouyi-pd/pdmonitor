@@ -84,10 +84,6 @@
             <artifactId>thumbnailator</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.oracle</groupId>
-            <artifactId>ojdbc6</artifactId>
-        </dependency>
 
     </dependencies>
 

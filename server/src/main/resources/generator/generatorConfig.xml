@@ -21,7 +21,7 @@
         </commentGenerator>
         <!-- mysql 数据源-->
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://192.168.10.146:3306/course"
+                        connectionURL="jdbc:mysql://192.168.10.146:3306/monitor"
                         userId="root"
                         password="mysql">
         </jdbcConnection>
@@ -49,6 +49,6 @@
 
         <!-- 请修改数据源位置  main主数据源  secondary 副数据源-->
         <!---  看上面部分  很关键 请选择数据源 -->
-        <table tableName="user" domainObjectName="User"/>
+        <table tableName="water_data" domainObjectName="WaterData"/>
     </context>
 </generatorConfiguration>
