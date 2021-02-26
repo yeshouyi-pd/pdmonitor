@@ -8,7 +8,9 @@
 		<module>system</module>
 		<module>gateway</module>
 		<module>server</module>
-	</modules>
+		<module>generator</module>
+		<module>wxbase</module>
+    </modules>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
@@ -26,6 +28,8 @@
 		<spring-cloud.version>Hoxton.RELEASE</spring-cloud.version>
 	</properties>
 
+
+
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -35,7 +39,14 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-			<!-- 集成mybatis -->
+			<!-- mybatis分页插件pagehelper -->
+			<dependency>
+				<groupId>com.github.pagehelper</groupId>
+				<artifactId>pagehelper-spring-boot-starter</artifactId>
+				<version>1.2.10</version>
+			</dependency>
+
+			<!-- 集成mybatis  -->
 			<dependency>
 				<groupId>org.mybatis.spring.boot</groupId>
 				<artifactId>mybatis-spring-boot-starter</artifactId>
@@ -46,20 +57,99 @@
 				<artifactId>mysql-connector-java</artifactId>
 				<version>5.1.37</version>
 			</dependency>
-			<dependency>
+			<dependency> <!--自定义依赖 -->
 				<groupId>com.pd</groupId>
 				<artifactId>server</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
+			<dependency>
+				<groupId>com.alibaba</groupId>
+				<artifactId>fastjson</artifactId>
+				<version>1.2.60</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi</artifactId>
+				<version>3.9</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi-ooxml</artifactId>
+				<version>3.9</version>
+			</dependency>
+
+			<!-- 模板引擎freemarker -->
+			<dependency>
+				<groupId>org.freemarker</groupId>
+				<artifactId>freemarker</artifactId>
+				<version>2.3.29</version>
+			</dependency>
+			<!-- 读xml -->
+			<dependency>
+				<groupId>org.dom4j</groupId>
+				<artifactId>dom4j</artifactId>
+				<version>2.1.1</version>
+			</dependency>
+			<!-- 图形验证码 -->
+			<dependency>
+				<groupId>com.github.penggle</groupId>
+				<artifactId>kaptcha</artifactId>
+				<version>2.3.2</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.httpcomponents</groupId>
+				<artifactId>httpclient</artifactId>
+				<version>4.5.13</version>
+			</dependency>
+			<dependency>
+				<groupId>net.sf.barcode4j</groupId>
+				<artifactId>barcode4j-light</artifactId>
+				<version>2.0</version>
+			</dependency>
+
+			<!-- 压缩图片 -->
+			<dependency>
+				<groupId>net.coobird</groupId>
+				<artifactId>thumbnailator</artifactId>
+				<version>0.4.8</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.tencentcloudapi</groupId>
+				<artifactId>tencentcloud-sdk-java</artifactId>
+				<version>3.1.87</version>
+			</dependency>
+
+			<!-- 二维码 -->
+			<dependency>
+				<groupId>com.google.zxing</groupId>
+				<artifactId>core</artifactId>
+				<version>3.1.0</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.google.zxing</groupId>
+				<artifactId>javase</artifactId>
+				<version>3.1.0</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.google.zxing</groupId>
+				<artifactId>zxing-parent</artifactId>
+				<version>3.1.0</version>
+				<type>pom</type>
+			</dependency>
+			<dependency>
+				<groupId>com.oracle</groupId>
+				<artifactId>ojdbc6</artifactId>
+				<version>12.1.0.1-atlassian-hosted</version>
+			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
 
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
 			<!-- mybatis generator 自动生成代码插件 -->
 			<plugin>
 				<groupId>org.mybatis.generator</groupId>
@@ -75,6 +165,11 @@
 						<groupId>mysql</groupId>
 						<artifactId>mysql-connector-java</artifactId>
 						<version>5.1.37</version>
+					</dependency>
+					<dependency>
+						<groupId>com.oracle</groupId>
+						<artifactId>ojdbc6</artifactId>
+						<version>12.1.0.1-atlassian-hosted</version>
 					</dependency>
 				</dependencies>
 			</plugin>
