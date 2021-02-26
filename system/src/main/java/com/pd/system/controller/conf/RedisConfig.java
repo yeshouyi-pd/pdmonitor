@@ -93,7 +93,6 @@ public class RedisConfig  implements CommandLineRunner {
         init_code();//加载部门缓存
         init_dept();//加载部门
         init_user();//加载用户缓存
-        init_Yynum();//所有部门预约量
         init_attr();//加载系统参数
         LegalholidayUtils.loop();//获取当年以及明年的所有法定节假日
 
@@ -132,28 +131,7 @@ public class RedisConfig  implements CommandLineRunner {
     }
 
 
-    /**
-     * 加载当前所有部门能办理的业务预约量
-     */
 
-    public  synchronized static boolean init_Yynum() {
-        try {
-
-            List<KvIntDto>  list = myDeptstaticMapper.getDeptYyMum();
-            if(!CollectionUtils.isEmpty(list)){
-                Map<String, Integer>  map = new LinkedHashMap<String,Integer>();
-                for(KvIntDto kv  :list){
-                    map.put(kv.getKey(),kv.getValue());
-                }
-                redisTstaticemplate.opsForValue().set(RedisCode.DEPTYYNUM, map);//将参数信息写入redis缓存
-            }
-        }catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
-
-    }
 
     /**
      *加载用户

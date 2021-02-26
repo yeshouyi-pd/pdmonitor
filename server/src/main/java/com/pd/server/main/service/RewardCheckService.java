@@ -4,7 +4,6 @@ import com.pd.server.main.domain.RewardCheck;
 import com.pd.server.main.domain.RewardCheckExample;
 import com.pd.server.main.dto.RewardCheckDto;
 import com.pd.server.main.mapper.RewardCheckMapper;
-import com.pd.server.main.mapper.WebchatIllegalMapper;
 import com.pd.server.util.CopyUtil;
 import com.pd.server.util.UuidUtil;
 import org.springframework.stereotype.Service;
@@ -19,8 +18,6 @@ public class RewardCheckService {
 
 @Resource
 private RewardCheckMapper rewardCheckMapper;
-@Resource
-private WebchatIllegalMapper webchatIllegalMapper;
 
 /**
 * 列表查询

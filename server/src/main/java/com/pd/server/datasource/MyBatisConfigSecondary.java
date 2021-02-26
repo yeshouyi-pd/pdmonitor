@@ -15,7 +15,6 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.jdbc.core.JdbcTemplate;
 import com.atomikos.jdbc.AtomikosDataSourceBean;
-import oracle.jdbc.xa.client.OracleXADataSource;
 
 // basePackages 最好分开配置 如果放在同一个文件夹可能会报错
 @Configuration
@@ -25,12 +24,7 @@ public class MyBatisConfigSecondary {
 	// 配置数据源
 	@Bean(name = "secondaryDataSource")
 	public DataSource SecondaryDataSource(DBConfigSecondary secondaryConfig) throws SQLException {
-		OracleXADataSource oracleXADataSource = new OracleXADataSource();
-		oracleXADataSource.setURL(secondaryConfig.getUrl());
-		oracleXADataSource.setPassword(secondaryConfig.getPassword());
-		oracleXADataSource.setUser(secondaryConfig.getUsername());
 		AtomikosDataSourceBean xaDataSource = new AtomikosDataSourceBean();
-		xaDataSource.setXaDataSource(oracleXADataSource);
 		xaDataSource.setUniqueResourceName("secondaryDataSource");
 
 		xaDataSource.setMinPoolSize(secondaryConfig.getMinPoolSize());
