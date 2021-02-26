@@ -14,6 +14,7 @@ public class EurekaApplication {
 
 
 	public static void main(String[] args) {
+
 		SpringApplication app = new SpringApplication(EurekaApplication.class);
 		Environment env = app.run(args).getEnvironment();
 		LOG.info("启动成功！！");
