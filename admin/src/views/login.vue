@@ -85,7 +85,7 @@
                     </div>
                 </div><!-- /.col -->
             </div><!-- /.row -->
-          <div class="position-relative-gs">武汉品度科技有限公司</div>
+          <div class="position-relative-gs"><h4>版权所有：武汉品度科技有限公司</h4></div>
         </div><!-- /.main-content -->
     </div><!-- /.main-container -->
 </template>
