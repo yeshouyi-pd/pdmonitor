@@ -1,0 +1,540 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pd.server.main.mapper.WaterEquipmentMapper">
+  <resultMap id="BaseResultMap" type="com.pd.server.main.domain.WaterEquipment">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="sbmc" jdbcType="VARCHAR" property="sbmc" />
+    <result column="sbsn" jdbcType="VARCHAR" property="sbsn" />
+    <result column="port" jdbcType="INTEGER" property="port" />
+    <result column="ip" jdbcType="VARCHAR" property="ip" />
+    <result column="deptcode" jdbcType="VARCHAR" property="deptcode" />
+    <result column="center_code" jdbcType="VARCHAR" property="centerCode" />
+    <result column="sblb" jdbcType="VARCHAR" property="sblb" />
+    <result column="dqzl" jdbcType="VARCHAR" property="dqzl" />
+    <result column="sbxh" jdbcType="VARCHAR" property="sbxh" />
+    <result column="gps" jdbcType="VARCHAR" property="gps" />
+    <result column="fzr" jdbcType="VARCHAR" property="fzr" />
+    <result column="fzrdh" jdbcType="VARCHAR" property="fzrdh" />
+    <result column="sblc" jdbcType="VARCHAR" property="sblc" />
+    <result column="jdfw" jdbcType="VARCHAR" property="jdfw" />
+    <result column="fzwz" jdbcType="VARCHAR" property="fzwz" />
+    <result column="sbcj" jdbcType="VARCHAR" property="sbcj" />
+    <result column="sbzt" jdbcType="VARCHAR" property="sbzt" />
+    <result column="bz" jdbcType="VARCHAR" property="bz" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="gxsj" jdbcType="TIMESTAMP" property="gxsj" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="sm1" jdbcType="VARCHAR" property="sm1" />
+    <result column="sm2" jdbcType="VARCHAR" property="sm2" />
+    <result column="sm3" jdbcType="VARCHAR" property="sm3" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, sbmc, sbsn, port, ip, deptcode, center_code, sblb, dqzl, sbxh, gps, fzr, fzrdh, 
+    sblc, jdfw, fzwz, sbcj, sbzt, bz, create_time, create_by, gxsj, update_by, sm1, sm2, 
+    sm3
+  </sql>
+  <select id="selectByExample" parameterType="com.pd.server.main.domain.WaterEquipmentExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from water_equipment
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from water_equipment
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from water_equipment
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pd.server.main.domain.WaterEquipmentExample">
+    delete from water_equipment
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pd.server.main.domain.WaterEquipment">
+    insert into water_equipment (id, sbmc, sbsn, 
+      port, ip, deptcode, 
+      center_code, sblb, dqzl, 
+      sbxh, gps, fzr, fzrdh, 
+      sblc, jdfw, fzwz, sbcj, 
+      sbzt, bz, create_time, 
+      create_by, gxsj, update_by, 
+      sm1, sm2, sm3)
+    values (#{id,jdbcType=VARCHAR}, #{sbmc,jdbcType=VARCHAR}, #{sbsn,jdbcType=VARCHAR}, 
+      #{port,jdbcType=INTEGER}, #{ip,jdbcType=VARCHAR}, #{deptcode,jdbcType=VARCHAR}, 
+      #{centerCode,jdbcType=VARCHAR}, #{sblb,jdbcType=VARCHAR}, #{dqzl,jdbcType=VARCHAR}, 
+      #{sbxh,jdbcType=VARCHAR}, #{gps,jdbcType=VARCHAR}, #{fzr,jdbcType=VARCHAR}, #{fzrdh,jdbcType=VARCHAR}, 
+      #{sblc,jdbcType=VARCHAR}, #{jdfw,jdbcType=VARCHAR}, #{fzwz,jdbcType=VARCHAR}, #{sbcj,jdbcType=VARCHAR}, 
+      #{sbzt,jdbcType=VARCHAR}, #{bz,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{createBy,jdbcType=VARCHAR}, #{gxsj,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, 
+      #{sm1,jdbcType=VARCHAR}, #{sm2,jdbcType=VARCHAR}, #{sm3,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pd.server.main.domain.WaterEquipment">
+    insert into water_equipment
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="sbmc != null">
+        sbmc,
+      </if>
+      <if test="sbsn != null">
+        sbsn,
+      </if>
+      <if test="port != null">
+        port,
+      </if>
+      <if test="ip != null">
+        ip,
+      </if>
+      <if test="deptcode != null">
+        deptcode,
+      </if>
+      <if test="centerCode != null">
+        center_code,
+      </if>
+      <if test="sblb != null">
+        sblb,
+      </if>
+      <if test="dqzl != null">
+        dqzl,
+      </if>
+      <if test="sbxh != null">
+        sbxh,
+      </if>
+      <if test="gps != null">
+        gps,
+      </if>
+      <if test="fzr != null">
+        fzr,
+      </if>
+      <if test="fzrdh != null">
+        fzrdh,
+      </if>
+      <if test="sblc != null">
+        sblc,
+      </if>
+      <if test="jdfw != null">
+        jdfw,
+      </if>
+      <if test="fzwz != null">
+        fzwz,
+      </if>
+      <if test="sbcj != null">
+        sbcj,
+      </if>
+      <if test="sbzt != null">
+        sbzt,
+      </if>
+      <if test="bz != null">
+        bz,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="gxsj != null">
+        gxsj,
+      </if>
+      <if test="updateBy != null">
+        update_by,
+      </if>
+      <if test="sm1 != null">
+        sm1,
+      </if>
+      <if test="sm2 != null">
+        sm2,
+      </if>
+      <if test="sm3 != null">
+        sm3,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="sbmc != null">
+        #{sbmc,jdbcType=VARCHAR},
+      </if>
+      <if test="sbsn != null">
+        #{sbsn,jdbcType=VARCHAR},
+      </if>
+      <if test="port != null">
+        #{port,jdbcType=INTEGER},
+      </if>
+      <if test="ip != null">
+        #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="deptcode != null">
+        #{deptcode,jdbcType=VARCHAR},
+      </if>
+      <if test="centerCode != null">
+        #{centerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sblb != null">
+        #{sblb,jdbcType=VARCHAR},
+      </if>
+      <if test="dqzl != null">
+        #{dqzl,jdbcType=VARCHAR},
+      </if>
+      <if test="sbxh != null">
+        #{sbxh,jdbcType=VARCHAR},
+      </if>
+      <if test="gps != null">
+        #{gps,jdbcType=VARCHAR},
+      </if>
+      <if test="fzr != null">
+        #{fzr,jdbcType=VARCHAR},
+      </if>
+      <if test="fzrdh != null">
+        #{fzrdh,jdbcType=VARCHAR},
+      </if>
+      <if test="sblc != null">
+        #{sblc,jdbcType=VARCHAR},
+      </if>
+      <if test="jdfw != null">
+        #{jdfw,jdbcType=VARCHAR},
+      </if>
+      <if test="fzwz != null">
+        #{fzwz,jdbcType=VARCHAR},
+      </if>
+      <if test="sbcj != null">
+        #{sbcj,jdbcType=VARCHAR},
+      </if>
+      <if test="sbzt != null">
+        #{sbzt,jdbcType=VARCHAR},
+      </if>
+      <if test="bz != null">
+        #{bz,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gxsj != null">
+        #{gxsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="sm1 != null">
+        #{sm1,jdbcType=VARCHAR},
+      </if>
+      <if test="sm2 != null">
+        #{sm2,jdbcType=VARCHAR},
+      </if>
+      <if test="sm3 != null">
+        #{sm3,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pd.server.main.domain.WaterEquipmentExample" resultType="java.lang.Long">
+    select count(*) from water_equipment
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update water_equipment
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sbmc != null">
+        sbmc = #{record.sbmc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sbsn != null">
+        sbsn = #{record.sbsn,jdbcType=VARCHAR},
+      </if>
+      <if test="record.port != null">
+        port = #{record.port,jdbcType=INTEGER},
+      </if>
+      <if test="record.ip != null">
+        ip = #{record.ip,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deptcode != null">
+        deptcode = #{record.deptcode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.centerCode != null">
+        center_code = #{record.centerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sblb != null">
+        sblb = #{record.sblb,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dqzl != null">
+        dqzl = #{record.dqzl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sbxh != null">
+        sbxh = #{record.sbxh,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gps != null">
+        gps = #{record.gps,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fzr != null">
+        fzr = #{record.fzr,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fzrdh != null">
+        fzrdh = #{record.fzrdh,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sblc != null">
+        sblc = #{record.sblc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.jdfw != null">
+        jdfw = #{record.jdfw,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fzwz != null">
+        fzwz = #{record.fzwz,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sbcj != null">
+        sbcj = #{record.sbcj,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sbzt != null">
+        sbzt = #{record.sbzt,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bz != null">
+        bz = #{record.bz,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createBy != null">
+        create_by = #{record.createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gxsj != null">
+        gxsj = #{record.gxsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateBy != null">
+        update_by = #{record.updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sm1 != null">
+        sm1 = #{record.sm1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sm2 != null">
+        sm2 = #{record.sm2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sm3 != null">
+        sm3 = #{record.sm3,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update water_equipment
+    set id = #{record.id,jdbcType=VARCHAR},
+      sbmc = #{record.sbmc,jdbcType=VARCHAR},
+      sbsn = #{record.sbsn,jdbcType=VARCHAR},
+      port = #{record.port,jdbcType=INTEGER},
+      ip = #{record.ip,jdbcType=VARCHAR},
+      deptcode = #{record.deptcode,jdbcType=VARCHAR},
+      center_code = #{record.centerCode,jdbcType=VARCHAR},
+      sblb = #{record.sblb,jdbcType=VARCHAR},
+      dqzl = #{record.dqzl,jdbcType=VARCHAR},
+      sbxh = #{record.sbxh,jdbcType=VARCHAR},
+      gps = #{record.gps,jdbcType=VARCHAR},
+      fzr = #{record.fzr,jdbcType=VARCHAR},
+      fzrdh = #{record.fzrdh,jdbcType=VARCHAR},
+      sblc = #{record.sblc,jdbcType=VARCHAR},
+      jdfw = #{record.jdfw,jdbcType=VARCHAR},
+      fzwz = #{record.fzwz,jdbcType=VARCHAR},
+      sbcj = #{record.sbcj,jdbcType=VARCHAR},
+      sbzt = #{record.sbzt,jdbcType=VARCHAR},
+      bz = #{record.bz,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      create_by = #{record.createBy,jdbcType=VARCHAR},
+      gxsj = #{record.gxsj,jdbcType=TIMESTAMP},
+      update_by = #{record.updateBy,jdbcType=VARCHAR},
+      sm1 = #{record.sm1,jdbcType=VARCHAR},
+      sm2 = #{record.sm2,jdbcType=VARCHAR},
+      sm3 = #{record.sm3,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pd.server.main.domain.WaterEquipment">
+    update water_equipment
+    <set>
+      <if test="sbmc != null">
+        sbmc = #{sbmc,jdbcType=VARCHAR},
+      </if>
+      <if test="sbsn != null">
+        sbsn = #{sbsn,jdbcType=VARCHAR},
+      </if>
+      <if test="port != null">
+        port = #{port,jdbcType=INTEGER},
+      </if>
+      <if test="ip != null">
+        ip = #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="deptcode != null">
+        deptcode = #{deptcode,jdbcType=VARCHAR},
+      </if>
+      <if test="centerCode != null">
+        center_code = #{centerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sblb != null">
+        sblb = #{sblb,jdbcType=VARCHAR},
+      </if>
+      <if test="dqzl != null">
+        dqzl = #{dqzl,jdbcType=VARCHAR},
+      </if>
+      <if test="sbxh != null">
+        sbxh = #{sbxh,jdbcType=VARCHAR},
+      </if>
+      <if test="gps != null">
+        gps = #{gps,jdbcType=VARCHAR},
+      </if>
+      <if test="fzr != null">
+        fzr = #{fzr,jdbcType=VARCHAR},
+      </if>
+      <if test="fzrdh != null">
+        fzrdh = #{fzrdh,jdbcType=VARCHAR},
+      </if>
+      <if test="sblc != null">
+        sblc = #{sblc,jdbcType=VARCHAR},
+      </if>
+      <if test="jdfw != null">
+        jdfw = #{jdfw,jdbcType=VARCHAR},
+      </if>
+      <if test="fzwz != null">
+        fzwz = #{fzwz,jdbcType=VARCHAR},
+      </if>
+      <if test="sbcj != null">
+        sbcj = #{sbcj,jdbcType=VARCHAR},
+      </if>
+      <if test="sbzt != null">
+        sbzt = #{sbzt,jdbcType=VARCHAR},
+      </if>
+      <if test="bz != null">
+        bz = #{bz,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gxsj != null">
+        gxsj = #{gxsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="sm1 != null">
+        sm1 = #{sm1,jdbcType=VARCHAR},
+      </if>
+      <if test="sm2 != null">
+        sm2 = #{sm2,jdbcType=VARCHAR},
+      </if>
+      <if test="sm3 != null">
+        sm3 = #{sm3,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pd.server.main.domain.WaterEquipment">
+    update water_equipment
+    set sbmc = #{sbmc,jdbcType=VARCHAR},
+      sbsn = #{sbsn,jdbcType=VARCHAR},
+      port = #{port,jdbcType=INTEGER},
+      ip = #{ip,jdbcType=VARCHAR},
+      deptcode = #{deptcode,jdbcType=VARCHAR},
+      center_code = #{centerCode,jdbcType=VARCHAR},
+      sblb = #{sblb,jdbcType=VARCHAR},
+      dqzl = #{dqzl,jdbcType=VARCHAR},
+      sbxh = #{sbxh,jdbcType=VARCHAR},
+      gps = #{gps,jdbcType=VARCHAR},
+      fzr = #{fzr,jdbcType=VARCHAR},
+      fzrdh = #{fzrdh,jdbcType=VARCHAR},
+      sblc = #{sblc,jdbcType=VARCHAR},
+      jdfw = #{jdfw,jdbcType=VARCHAR},
+      fzwz = #{fzwz,jdbcType=VARCHAR},
+      sbcj = #{sbcj,jdbcType=VARCHAR},
+      sbzt = #{sbzt,jdbcType=VARCHAR},
+      bz = #{bz,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      gxsj = #{gxsj,jdbcType=TIMESTAMP},
+      update_by = #{updateBy,jdbcType=VARCHAR},
+      sm1 = #{sm1,jdbcType=VARCHAR},
+      sm2 = #{sm2,jdbcType=VARCHAR},
+      sm3 = #{sm3,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

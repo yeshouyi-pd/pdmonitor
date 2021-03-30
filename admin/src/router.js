@@ -10,8 +10,11 @@ import Dept from  "./views/admin/dept.vue"
 import Codeset from  "./views/admin/codeset.vue"
 import Attr from  "./views/admin/attr.vue"
 import WaterData from "./views/monitor/waterData.vue"
-
-
+import WaterEquipment from "./views/monitor/waterEquipment"
+import WaterQuality from "./views/monitor/waterQuality"
+import WaterQualityResult from "./views/monitor/waterQualityResult"
+import EquipmentMap from "./views/monitor/equipmentMap"
+import MonitorEquipment from "./views/monitor/monitorEquipment"
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -73,6 +76,26 @@ export default new Router({
             path: "monitor/waterData",
             name:"monitor/waterData",
             component:WaterData
+        },{
+            path: "monitor/waterEquipment",
+            name:"monitor/waterEquipment",
+            component:WaterEquipment
+        },{
+            path: "monitor/waterQuality",
+            name:"monitor/waterQuality",
+            component:WaterQuality
+        },{
+            path: "monitor/waterQualityResult",
+            name:"monitor/waterQualityResult",
+            component:WaterQualityResult
+        },{
+            path: "monitor/equipmentMap",
+            name: "monitor/equipmentMap",
+            component: EquipmentMap
+        },{
+            path: "monitor/monitorEquipment",
+            name: "monitor/monitorEquipment",
+            component: MonitorEquipment
         }]
     }]
 })

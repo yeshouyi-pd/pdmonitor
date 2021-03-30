@@ -96,6 +96,19 @@ let optionCNArray = (list, key) =>  {
         return result;
     }
 };
+let optionWDArray = (list, key) =>  {
+    if (!list || !key) {
+        return "";
+    } else {
+        let result = "";
+        for (let i = 0; i < list.length; i++) {
+            if (key === list[i]["centerCode"]) {
+                result = list[i]["centerName"];
+            }
+        }
+        return result;
+    }
+};
 /**
  * 时长格式化
  */
@@ -203,5 +216,6 @@ export default {
     formatDate,
     formatDateTime,
     optionMapAndMapKV,
-    optionCNArray
+    optionCNArray,
+    optionWDArray
 }

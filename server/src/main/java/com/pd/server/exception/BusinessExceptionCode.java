@@ -11,7 +11,8 @@ public enum BusinessExceptionCode {
     YYTIME_VAILD("请输入合法预约配置参数信息！"),
     YYTIME_BEFOR_VAILD("开始时间段不能大于结束时间段"),
     ATTR_CODE_EXIST("代码属性已存在"),
-    ;
+    CENTER_CODE_EXIST("代码已存在"),
+    EQUIPMENT_EXIST("设备不唯一，设备sn已存在");
 
     private String desc;
 

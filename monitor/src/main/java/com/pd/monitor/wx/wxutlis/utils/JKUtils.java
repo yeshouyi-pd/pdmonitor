@@ -1,4 +1,4 @@
-package com.pd.wxbase.wx.wxutlis.utils;
+package com.pd.monitor.wx.wxutlis.utils;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;

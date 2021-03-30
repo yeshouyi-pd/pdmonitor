@@ -149,4 +149,8 @@ public class CodeType {
      */
     public static final String CODE_XX_SGFSQX = "0505";
 
+    /**
+     * 水质检测项
+     */
+    public final  static String  SZJCX_CODE ="11";
 }

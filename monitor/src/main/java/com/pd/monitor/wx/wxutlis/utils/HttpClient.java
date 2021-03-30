@@ -1,7 +1,7 @@
-package com.pd.wxbase.wx.wxutlis.utils;
+package com.pd.monitor.wx.wxutlis.utils;
 
 import com.alibaba.fastjson.JSONObject;
-import com.pd.wxbase.wx.conf.WxRedisConfig;
+import com.pd.monitor.wx.conf.WxRedisConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

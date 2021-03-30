@@ -1,4 +1,4 @@
-package com.pd.wxbase.wx.wxutlis.servlet;
+package com.pd.monitor.wx.wxutlis.servlet;
 
 
 import java.io.IOException;
@@ -11,9 +11,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.pd.wxbase.wx.wxutlis.utils.CheckUtil;
-import com.pd.wxbase.wx.wxutlis.utils.MessageUtil;
-import com.pd.wxbase.wx.wxutlis.utils.WeixinUtil;
+import com.pd.monitor.wx.wxutlis.utils.CheckUtil;
+import com.pd.monitor.wx.wxutlis.utils.MessageUtil;
+import com.pd.monitor.wx.wxutlis.utils.WeixinUtil;
 import org.dom4j.DocumentException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

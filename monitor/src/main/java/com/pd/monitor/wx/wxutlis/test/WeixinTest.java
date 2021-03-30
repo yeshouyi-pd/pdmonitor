@@ -1,12 +1,12 @@
-package com.pd.wxbase.wx.wxutlis.test;
+package com.pd.monitor.wx.wxutlis.test;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
-import com.pd.wxbase.wx.wxutlis.utils.AccessToken;
-import com.pd.wxbase.wx.wxutlis.utils.WeixinUtil;
+import com.pd.monitor.wx.wxutlis.utils.AccessToken;
+import com.pd.monitor.wx.wxutlis.utils.WeixinUtil;
 import org.apache.http.ParseException;
 
 

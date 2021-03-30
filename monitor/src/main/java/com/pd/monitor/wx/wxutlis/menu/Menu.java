@@ -1,4 +1,4 @@
-package com.pd.wxbase.wx.wxutlis.menu;
+package com.pd.monitor.wx.wxutlis.menu;
 
 public class Menu {
 	//一级菜单

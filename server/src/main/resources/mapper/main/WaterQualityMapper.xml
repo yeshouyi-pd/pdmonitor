@@ -1,0 +1,604 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pd.server.main.mapper.WaterQualityMapper">
+  <resultMap id="BaseResultMap" type="com.pd.server.main.domain.WaterQuality">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="sbsn" jdbcType="VARCHAR" property="sbsn" />
+    <result column="ip" jdbcType="VARCHAR" property="ip" />
+    <result column="port" jdbcType="INTEGER" property="port" />
+    <result column="datacenter" jdbcType="VARCHAR" property="datacenter" />
+    <result column="water_depth" jdbcType="REAL" property="waterDepth" />
+    <result column="water_velocity" jdbcType="REAL" property="waterVelocity" />
+    <result column="temperature" jdbcType="VARCHAR" property="temperature" />
+    <result column="oxidative" jdbcType="VARCHAR" property="oxidative" />
+    <result column="salinity" jdbcType="VARCHAR" property="salinity" />
+    <result column="cod" jdbcType="VARCHAR" property="cod" />
+    <result column="turbidity" jdbcType="VARCHAR" property="turbidity" />
+    <result column="ph" jdbcType="VARCHAR" property="ph" />
+    <result column="transparency" jdbcType="VARCHAR" property="transparency" />
+    <result column="ad" jdbcType="VARCHAR" property="ad" />
+    <result column="suspended" jdbcType="VARCHAR" property="suspended" />
+    <result column="ppm" jdbcType="VARCHAR" property="ppm" />
+    <result column="chl_flu" jdbcType="VARCHAR" property="chlFlu" />
+    <result column="chlorophyll" jdbcType="VARCHAR" property="chlorophyll" />
+    <result column="cyanobacteria" jdbcType="VARCHAR" property="cyanobacteria" />
+    <result column="orp" jdbcType="VARCHAR" property="orp" />
+    <result column="oil" jdbcType="VARCHAR" property="oil" />
+    <result column="phosphorus" jdbcType="VARCHAR" property="phosphorus" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="fzr" jdbcType="VARCHAR" property="fzr" />
+    <result column="bz" jdbcType="VARCHAR" property="bz" />
+    <result column="sm1" jdbcType="VARCHAR" property="sm1" />
+    <result column="sm2" jdbcType="VARCHAR" property="sm2" />
+    <result column="sm3" jdbcType="VARCHAR" property="sm3" />
+    <result column="sm4" jdbcType="VARCHAR" property="sm4" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, sbsn, ip, port, datacenter, water_depth, water_velocity, temperature, oxidative, 
+    salinity, cod, turbidity, ph, transparency, ad, suspended, ppm, chl_flu, chlorophyll, 
+    cyanobacteria, orp, oil, phosphorus, create_time, fzr, bz, sm1, sm2, sm3, sm4
+  </sql>
+  <select id="selectByExample" parameterType="com.pd.server.main.domain.WaterQualityExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from water_quality
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from water_quality
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from water_quality
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pd.server.main.domain.WaterQualityExample">
+    delete from water_quality
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pd.server.main.domain.WaterQuality">
+    insert into water_quality (id, sbsn, ip, 
+      port, datacenter, water_depth, 
+      water_velocity, temperature, oxidative, 
+      salinity, cod, turbidity, 
+      ph, transparency, ad, 
+      suspended, ppm, chl_flu, 
+      chlorophyll, cyanobacteria, orp, 
+      oil, phosphorus, create_time, 
+      fzr, bz, sm1, sm2, 
+      sm3, sm4)
+    values (#{id,jdbcType=VARCHAR}, #{sbsn,jdbcType=VARCHAR}, #{ip,jdbcType=VARCHAR}, 
+      #{port,jdbcType=INTEGER}, #{datacenter,jdbcType=VARCHAR}, #{waterDepth,jdbcType=REAL}, 
+      #{waterVelocity,jdbcType=REAL}, #{temperature,jdbcType=VARCHAR}, #{oxidative,jdbcType=VARCHAR}, 
+      #{salinity,jdbcType=VARCHAR}, #{cod,jdbcType=VARCHAR}, #{turbidity,jdbcType=VARCHAR}, 
+      #{ph,jdbcType=VARCHAR}, #{transparency,jdbcType=VARCHAR}, #{ad,jdbcType=VARCHAR}, 
+      #{suspended,jdbcType=VARCHAR}, #{ppm,jdbcType=VARCHAR}, #{chlFlu,jdbcType=VARCHAR}, 
+      #{chlorophyll,jdbcType=VARCHAR}, #{cyanobacteria,jdbcType=VARCHAR}, #{orp,jdbcType=VARCHAR}, 
+      #{oil,jdbcType=VARCHAR}, #{phosphorus,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{fzr,jdbcType=VARCHAR}, #{bz,jdbcType=VARCHAR}, #{sm1,jdbcType=VARCHAR}, #{sm2,jdbcType=VARCHAR}, 
+      #{sm3,jdbcType=VARCHAR}, #{sm4,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pd.server.main.domain.WaterQuality">
+    insert into water_quality
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="sbsn != null">
+        sbsn,
+      </if>
+      <if test="ip != null">
+        ip,
+      </if>
+      <if test="port != null">
+        port,
+      </if>
+      <if test="datacenter != null">
+        datacenter,
+      </if>
+      <if test="waterDepth != null">
+        water_depth,
+      </if>
+      <if test="waterVelocity != null">
+        water_velocity,
+      </if>
+      <if test="temperature != null">
+        temperature,
+      </if>
+      <if test="oxidative != null">
+        oxidative,
+      </if>
+      <if test="salinity != null">
+        salinity,
+      </if>
+      <if test="cod != null">
+        cod,
+      </if>
+      <if test="turbidity != null">
+        turbidity,
+      </if>
+      <if test="ph != null">
+        ph,
+      </if>
+      <if test="transparency != null">
+        transparency,
+      </if>
+      <if test="ad != null">
+        ad,
+      </if>
+      <if test="suspended != null">
+        suspended,
+      </if>
+      <if test="ppm != null">
+        ppm,
+      </if>
+      <if test="chlFlu != null">
+        chl_flu,
+      </if>
+      <if test="chlorophyll != null">
+        chlorophyll,
+      </if>
+      <if test="cyanobacteria != null">
+        cyanobacteria,
+      </if>
+      <if test="orp != null">
+        orp,
+      </if>
+      <if test="oil != null">
+        oil,
+      </if>
+      <if test="phosphorus != null">
+        phosphorus,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="fzr != null">
+        fzr,
+      </if>
+      <if test="bz != null">
+        bz,
+      </if>
+      <if test="sm1 != null">
+        sm1,
+      </if>
+      <if test="sm2 != null">
+        sm2,
+      </if>
+      <if test="sm3 != null">
+        sm3,
+      </if>
+      <if test="sm4 != null">
+        sm4,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="sbsn != null">
+        #{sbsn,jdbcType=VARCHAR},
+      </if>
+      <if test="ip != null">
+        #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="port != null">
+        #{port,jdbcType=INTEGER},
+      </if>
+      <if test="datacenter != null">
+        #{datacenter,jdbcType=VARCHAR},
+      </if>
+      <if test="waterDepth != null">
+        #{waterDepth,jdbcType=REAL},
+      </if>
+      <if test="waterVelocity != null">
+        #{waterVelocity,jdbcType=REAL},
+      </if>
+      <if test="temperature != null">
+        #{temperature,jdbcType=VARCHAR},
+      </if>
+      <if test="oxidative != null">
+        #{oxidative,jdbcType=VARCHAR},
+      </if>
+      <if test="salinity != null">
+        #{salinity,jdbcType=VARCHAR},
+      </if>
+      <if test="cod != null">
+        #{cod,jdbcType=VARCHAR},
+      </if>
+      <if test="turbidity != null">
+        #{turbidity,jdbcType=VARCHAR},
+      </if>
+      <if test="ph != null">
+        #{ph,jdbcType=VARCHAR},
+      </if>
+      <if test="transparency != null">
+        #{transparency,jdbcType=VARCHAR},
+      </if>
+      <if test="ad != null">
+        #{ad,jdbcType=VARCHAR},
+      </if>
+      <if test="suspended != null">
+        #{suspended,jdbcType=VARCHAR},
+      </if>
+      <if test="ppm != null">
+        #{ppm,jdbcType=VARCHAR},
+      </if>
+      <if test="chlFlu != null">
+        #{chlFlu,jdbcType=VARCHAR},
+      </if>
+      <if test="chlorophyll != null">
+        #{chlorophyll,jdbcType=VARCHAR},
+      </if>
+      <if test="cyanobacteria != null">
+        #{cyanobacteria,jdbcType=VARCHAR},
+      </if>
+      <if test="orp != null">
+        #{orp,jdbcType=VARCHAR},
+      </if>
+      <if test="oil != null">
+        #{oil,jdbcType=VARCHAR},
+      </if>
+      <if test="phosphorus != null">
+        #{phosphorus,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fzr != null">
+        #{fzr,jdbcType=VARCHAR},
+      </if>
+      <if test="bz != null">
+        #{bz,jdbcType=VARCHAR},
+      </if>
+      <if test="sm1 != null">
+        #{sm1,jdbcType=VARCHAR},
+      </if>
+      <if test="sm2 != null">
+        #{sm2,jdbcType=VARCHAR},
+      </if>
+      <if test="sm3 != null">
+        #{sm3,jdbcType=VARCHAR},
+      </if>
+      <if test="sm4 != null">
+        #{sm4,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pd.server.main.domain.WaterQualityExample" resultType="java.lang.Long">
+    select count(*) from water_quality
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update water_quality
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sbsn != null">
+        sbsn = #{record.sbsn,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ip != null">
+        ip = #{record.ip,jdbcType=VARCHAR},
+      </if>
+      <if test="record.port != null">
+        port = #{record.port,jdbcType=INTEGER},
+      </if>
+      <if test="record.datacenter != null">
+        datacenter = #{record.datacenter,jdbcType=VARCHAR},
+      </if>
+      <if test="record.waterDepth != null">
+        water_depth = #{record.waterDepth,jdbcType=REAL},
+      </if>
+      <if test="record.waterVelocity != null">
+        water_velocity = #{record.waterVelocity,jdbcType=REAL},
+      </if>
+      <if test="record.temperature != null">
+        temperature = #{record.temperature,jdbcType=VARCHAR},
+      </if>
+      <if test="record.oxidative != null">
+        oxidative = #{record.oxidative,jdbcType=VARCHAR},
+      </if>
+      <if test="record.salinity != null">
+        salinity = #{record.salinity,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cod != null">
+        cod = #{record.cod,jdbcType=VARCHAR},
+      </if>
+      <if test="record.turbidity != null">
+        turbidity = #{record.turbidity,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ph != null">
+        ph = #{record.ph,jdbcType=VARCHAR},
+      </if>
+      <if test="record.transparency != null">
+        transparency = #{record.transparency,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ad != null">
+        ad = #{record.ad,jdbcType=VARCHAR},
+      </if>
+      <if test="record.suspended != null">
+        suspended = #{record.suspended,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ppm != null">
+        ppm = #{record.ppm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.chlFlu != null">
+        chl_flu = #{record.chlFlu,jdbcType=VARCHAR},
+      </if>
+      <if test="record.chlorophyll != null">
+        chlorophyll = #{record.chlorophyll,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cyanobacteria != null">
+        cyanobacteria = #{record.cyanobacteria,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orp != null">
+        orp = #{record.orp,jdbcType=VARCHAR},
+      </if>
+      <if test="record.oil != null">
+        oil = #{record.oil,jdbcType=VARCHAR},
+      </if>
+      <if test="record.phosphorus != null">
+        phosphorus = #{record.phosphorus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.fzr != null">
+        fzr = #{record.fzr,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bz != null">
+        bz = #{record.bz,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sm1 != null">
+        sm1 = #{record.sm1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sm2 != null">
+        sm2 = #{record.sm2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sm3 != null">
+        sm3 = #{record.sm3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sm4 != null">
+        sm4 = #{record.sm4,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update water_quality
+    set id = #{record.id,jdbcType=VARCHAR},
+      sbsn = #{record.sbsn,jdbcType=VARCHAR},
+      ip = #{record.ip,jdbcType=VARCHAR},
+      port = #{record.port,jdbcType=INTEGER},
+      datacenter = #{record.datacenter,jdbcType=VARCHAR},
+      water_depth = #{record.waterDepth,jdbcType=REAL},
+      water_velocity = #{record.waterVelocity,jdbcType=REAL},
+      temperature = #{record.temperature,jdbcType=VARCHAR},
+      oxidative = #{record.oxidative,jdbcType=VARCHAR},
+      salinity = #{record.salinity,jdbcType=VARCHAR},
+      cod = #{record.cod,jdbcType=VARCHAR},
+      turbidity = #{record.turbidity,jdbcType=VARCHAR},
+      ph = #{record.ph,jdbcType=VARCHAR},
+      transparency = #{record.transparency,jdbcType=VARCHAR},
+      ad = #{record.ad,jdbcType=VARCHAR},
+      suspended = #{record.suspended,jdbcType=VARCHAR},
+      ppm = #{record.ppm,jdbcType=VARCHAR},
+      chl_flu = #{record.chlFlu,jdbcType=VARCHAR},
+      chlorophyll = #{record.chlorophyll,jdbcType=VARCHAR},
+      cyanobacteria = #{record.cyanobacteria,jdbcType=VARCHAR},
+      orp = #{record.orp,jdbcType=VARCHAR},
+      oil = #{record.oil,jdbcType=VARCHAR},
+      phosphorus = #{record.phosphorus,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      fzr = #{record.fzr,jdbcType=VARCHAR},
+      bz = #{record.bz,jdbcType=VARCHAR},
+      sm1 = #{record.sm1,jdbcType=VARCHAR},
+      sm2 = #{record.sm2,jdbcType=VARCHAR},
+      sm3 = #{record.sm3,jdbcType=VARCHAR},
+      sm4 = #{record.sm4,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pd.server.main.domain.WaterQuality">
+    update water_quality
+    <set>
+      <if test="sbsn != null">
+        sbsn = #{sbsn,jdbcType=VARCHAR},
+      </if>
+      <if test="ip != null">
+        ip = #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="port != null">
+        port = #{port,jdbcType=INTEGER},
+      </if>
+      <if test="datacenter != null">
+        datacenter = #{datacenter,jdbcType=VARCHAR},
+      </if>
+      <if test="waterDepth != null">
+        water_depth = #{waterDepth,jdbcType=REAL},
+      </if>
+      <if test="waterVelocity != null">
+        water_velocity = #{waterVelocity,jdbcType=REAL},
+      </if>
+      <if test="temperature != null">
+        temperature = #{temperature,jdbcType=VARCHAR},
+      </if>
+      <if test="oxidative != null">
+        oxidative = #{oxidative,jdbcType=VARCHAR},
+      </if>
+      <if test="salinity != null">
+        salinity = #{salinity,jdbcType=VARCHAR},
+      </if>
+      <if test="cod != null">
+        cod = #{cod,jdbcType=VARCHAR},
+      </if>
+      <if test="turbidity != null">
+        turbidity = #{turbidity,jdbcType=VARCHAR},
+      </if>
+      <if test="ph != null">
+        ph = #{ph,jdbcType=VARCHAR},
+      </if>
+      <if test="transparency != null">
+        transparency = #{transparency,jdbcType=VARCHAR},
+      </if>
+      <if test="ad != null">
+        ad = #{ad,jdbcType=VARCHAR},
+      </if>
+      <if test="suspended != null">
+        suspended = #{suspended,jdbcType=VARCHAR},
+      </if>
+      <if test="ppm != null">
+        ppm = #{ppm,jdbcType=VARCHAR},
+      </if>
+      <if test="chlFlu != null">
+        chl_flu = #{chlFlu,jdbcType=VARCHAR},
+      </if>
+      <if test="chlorophyll != null">
+        chlorophyll = #{chlorophyll,jdbcType=VARCHAR},
+      </if>
+      <if test="cyanobacteria != null">
+        cyanobacteria = #{cyanobacteria,jdbcType=VARCHAR},
+      </if>
+      <if test="orp != null">
+        orp = #{orp,jdbcType=VARCHAR},
+      </if>
+      <if test="oil != null">
+        oil = #{oil,jdbcType=VARCHAR},
+      </if>
+      <if test="phosphorus != null">
+        phosphorus = #{phosphorus,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fzr != null">
+        fzr = #{fzr,jdbcType=VARCHAR},
+      </if>
+      <if test="bz != null">
+        bz = #{bz,jdbcType=VARCHAR},
+      </if>
+      <if test="sm1 != null">
+        sm1 = #{sm1,jdbcType=VARCHAR},
+      </if>
+      <if test="sm2 != null">
+        sm2 = #{sm2,jdbcType=VARCHAR},
+      </if>
+      <if test="sm3 != null">
+        sm3 = #{sm3,jdbcType=VARCHAR},
+      </if>
+      <if test="sm4 != null">
+        sm4 = #{sm4,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pd.server.main.domain.WaterQuality">
+    update water_quality
+    set sbsn = #{sbsn,jdbcType=VARCHAR},
+      ip = #{ip,jdbcType=VARCHAR},
+      port = #{port,jdbcType=INTEGER},
+      datacenter = #{datacenter,jdbcType=VARCHAR},
+      water_depth = #{waterDepth,jdbcType=REAL},
+      water_velocity = #{waterVelocity,jdbcType=REAL},
+      temperature = #{temperature,jdbcType=VARCHAR},
+      oxidative = #{oxidative,jdbcType=VARCHAR},
+      salinity = #{salinity,jdbcType=VARCHAR},
+      cod = #{cod,jdbcType=VARCHAR},
+      turbidity = #{turbidity,jdbcType=VARCHAR},
+      ph = #{ph,jdbcType=VARCHAR},
+      transparency = #{transparency,jdbcType=VARCHAR},
+      ad = #{ad,jdbcType=VARCHAR},
+      suspended = #{suspended,jdbcType=VARCHAR},
+      ppm = #{ppm,jdbcType=VARCHAR},
+      chl_flu = #{chlFlu,jdbcType=VARCHAR},
+      chlorophyll = #{chlorophyll,jdbcType=VARCHAR},
+      cyanobacteria = #{cyanobacteria,jdbcType=VARCHAR},
+      orp = #{orp,jdbcType=VARCHAR},
+      oil = #{oil,jdbcType=VARCHAR},
+      phosphorus = #{phosphorus,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      fzr = #{fzr,jdbcType=VARCHAR},
+      bz = #{bz,jdbcType=VARCHAR},
+      sm1 = #{sm1,jdbcType=VARCHAR},
+      sm2 = #{sm2,jdbcType=VARCHAR},
+      sm3 = #{sm3,jdbcType=VARCHAR},
+      sm4 = #{sm4,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
