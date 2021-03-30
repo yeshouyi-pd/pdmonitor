@@ -1,4 +1,4 @@
-package com.pd.wxbase.wx.conf;
+package com.pd.monitor.wx.conf;
 
 import com.alibaba.fastjson.JSONObject;
 import com.pd.server.config.RedisCode;
@@ -6,8 +6,8 @@ import com.pd.server.main.domain.AddrInfo;
 import com.pd.server.main.domain.AddrInfoExample;
 import com.pd.server.main.mapper.AddrInfoMapper;
 import com.pd.server.util.DateTools;
-import com.pd.wxbase.wx.wxutlis.utils.AccountsServlet;
-import com.pd.wxbase.wx.wxutlis.utils.TokenThread;
+import com.pd.monitor.wx.wxutlis.utils.AccountsServlet;
+import com.pd.monitor.wx.wxutlis.utils.TokenThread;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;

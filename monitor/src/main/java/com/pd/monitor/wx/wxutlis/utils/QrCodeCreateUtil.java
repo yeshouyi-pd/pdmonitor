@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.pd.wxbase.wx.wxutlis.utils;
+package com.pd.monitor.wx.wxutlis.utils;
 
 import java.awt.image.BufferedImage;
 import java.io.File;

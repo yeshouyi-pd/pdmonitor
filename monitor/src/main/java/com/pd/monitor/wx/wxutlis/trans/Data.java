@@ -1,4 +1,4 @@
-package com.pd.wxbase.wx.wxutlis.trans;
+package com.pd.monitor.wx.wxutlis.trans;
 
 public class Data {
 	private String word_name;

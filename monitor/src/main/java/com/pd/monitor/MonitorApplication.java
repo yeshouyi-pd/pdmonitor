@@ -1,4 +1,4 @@
-package com.pd.wxbase;
+package com.pd.monitor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

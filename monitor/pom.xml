@@ -9,7 +9,7 @@
 </parent>
 <modelVersion>4.0.0</modelVersion>
 
-<artifactId>wxbase</artifactId>
+<artifactId>monitor</artifactId>
 
     <dependencies>
         <dependency><!-- 注册 中心客户端-->

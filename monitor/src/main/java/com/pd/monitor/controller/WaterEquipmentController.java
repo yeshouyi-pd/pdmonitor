@@ -1,0 +1,180 @@
+package com.pd.monitor.controller;
+
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.pd.monitor.wx.conf.BaseWxController;
+import com.pd.server.config.CodeType;
+import com.pd.server.main.domain.*;
+import com.pd.server.main.dto.LoginUserDto;
+import com.pd.server.main.dto.MonitorEquipmentDto;
+import com.pd.server.main.dto.WaterEquipmentDto;
+import com.pd.server.main.dto.ResponseDto;
+import com.pd.server.main.service.CodesetService;
+import com.pd.server.main.service.DeptService;
+import com.pd.server.main.service.WaterEquipmentService;
+import com.pd.server.util.CopyUtil;
+import com.pd.server.util.ValidatorUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+@RestController
+@RequestMapping("/admin/waterEquipment")
+public class WaterEquipmentController  extends BaseWxController {
+
+    private static final Logger LOG = LoggerFactory.getLogger(WaterEquipmentController.class);
+    public static final String BUSINESS_NAME = "设备管理";
+
+    @Resource
+    private WaterEquipmentService waterEquipmentService;
+    @Resource
+    private DeptService deptService;
+    @Resource
+    private CodesetService codesetService;
+
+    /**
+     * 监测点数据中心树
+     */
+    @GetMapping("/findMonitorEqupmentTree")
+    public ResponseDto findMonitorEquipmentTree(){
+        ResponseDto responseDto = new ResponseDto();
+        CodesetExample codesetExample = new CodesetExample();
+        CodesetExample.Criteria codesetCa = codesetExample.createCriteria();
+        codesetCa.andTypeEqualTo(CodeType.SZJCX_CODE);
+        List<Codeset> codesetList = codesetService.list(codesetExample);
+        List<MonitorEquipmentDto> codesetChildren = new ArrayList<>();
+        for(Codeset codeset : codesetList){
+            MonitorEquipmentDto entity = new MonitorEquipmentDto();
+            entity.setName(codeset.getName());
+            entity.setCode(codeset.getCode());
+            entity.setType("3");
+            codesetChildren.add(entity);
+        }
+        List<Dept> waterDataList = deptService.list(null);
+        Map<String, String> map = waterDataList.stream().collect(Collectors.toMap(p -> p.getDeptcode(), p -> p.getDeptname()));
+        List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(null);
+        Map<String,List<WaterEquipment>> deptcodeMap = waterEquipmentList.stream().collect(Collectors.groupingBy(WaterEquipment::getDeptcode));
+        List<MonitorEquipmentDto> lists = new ArrayList<>();
+        for(String key : deptcodeMap.keySet()){
+            MonitorEquipmentDto entity = new MonitorEquipmentDto();
+            List<MonitorEquipmentDto> childrenList = new ArrayList<>();
+            entity.setName(map.get(key));
+            entity.setCode(key);
+            entity.setType("1");
+            entity.setChildren(childrenList);
+            List<WaterEquipment> waterEquipments = deptcodeMap.get(key);
+            for(WaterEquipment item : waterEquipments){
+                MonitorEquipmentDto obj = new MonitorEquipmentDto();
+                obj.setName(item.getSbmc()+"("+item.getSbmc()+":"+item.getSbsn()+")");
+                obj.setCode(item.getId());
+                obj.setType("2");
+                obj.setChildren(codesetChildren);
+                childrenList.add(obj);
+            }
+            lists.add(entity);
+        }
+        responseDto.setContent(lists);
+        return responseDto;
+    }
+
+    /**
+     * 列表查询
+     */
+    @PostMapping("/findAll")
+    public ResponseDto findAll(@RequestBody WaterEquipmentDto waterEquipmentDto) {
+        ResponseDto responseDto = new ResponseDto();
+        WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
+        WaterEquipmentExample.Criteria ca = waterEquipmentExample.createCriteria();
+        ca.andGpsIsNotNull();
+        List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(waterEquipmentExample);
+        List<WaterEquipmentDto> waterEquipmentDtoList = CopyUtil.copyList(waterEquipmentList, WaterEquipmentDto.class);
+        responseDto.setContent(waterEquipmentDtoList);
+        return responseDto;
+    }
+
+    /**
+    * 列表查询
+    */
+    @PostMapping("/list")
+    public ResponseDto list(@RequestBody WaterEquipmentDto pageDto) {
+        ResponseDto responseDto = new ResponseDto();
+        LoginUserDto loginUserDto = getRequestHeader();
+        List<String> list = getUpdeptcode(loginUserDto.getDeptcode());
+        PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
+        WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
+        WaterEquipmentExample.Criteria ca = waterEquipmentExample.createCriteria();
+        ca.andDeptcodeIn(list);
+        List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(waterEquipmentExample);
+        PageInfo<WaterEquipment> pageInfo = new PageInfo<>(waterEquipmentList);
+        pageDto.setTotal(pageInfo.getTotal());
+        List<WaterEquipmentDto> waterEquipmentDtoList = CopyUtil.copyList(waterEquipmentList, WaterEquipmentDto.class);
+        pageDto.setList(waterEquipmentDtoList);
+        responseDto.setContent(pageDto);
+        return responseDto;
+    }
+
+    /**
+    * 保存，id有值时更新，无值时新增
+    */
+    @PostMapping("/save")
+    public ResponseDto save(@RequestBody WaterEquipmentDto waterEquipmentDto) {
+        // 保存校验
+                ValidatorUtil.require(waterEquipmentDto.getSbmc(), "设备名称");
+                ValidatorUtil.length(waterEquipmentDto.getSbmc(), "设备名称", 1, 128);
+                ValidatorUtil.length(waterEquipmentDto.getSbsn(), "设备SN", 1, 128);
+                //ValidatorUtil.require(waterEquipmentDto.getPort(), "设备端口");
+                //ValidatorUtil.require(waterEquipmentDto.getIp(), "设备IP");
+                ValidatorUtil.length(waterEquipmentDto.getIp(), "设备IP", 1, 45);
+                ValidatorUtil.require(waterEquipmentDto.getDeptcode(), "所属监测点");
+                ValidatorUtil.length(waterEquipmentDto.getDeptcode(), "所属监测点", 1, 45);
+                ValidatorUtil.require(waterEquipmentDto.getCenterCode(), "所属数据中心");
+                ValidatorUtil.length(waterEquipmentDto.getCenterCode(), "所属数据中心", 1, 45);
+                //ValidatorUtil.require(waterEquipmentDto.getSblb(), "设备类别");
+                ValidatorUtil.length(waterEquipmentDto.getSblb(), "设备类别", 1, 45);
+                //ValidatorUtil.require(waterEquipmentDto.getDqzl(), "设备读取指令");
+                ValidatorUtil.length(waterEquipmentDto.getDqzl(), "设备读取指令", 1, 45);
+                ValidatorUtil.length(waterEquipmentDto.getSbxh(), "设备型号", 1, 45);
+                ValidatorUtil.length(waterEquipmentDto.getGps(), "设备gps坐标", 1, 45);
+                ValidatorUtil.length(waterEquipmentDto.getFzr(), "设备负责人", 1, 128);
+                ValidatorUtil.length(waterEquipmentDto.getFzrdh(), "负责人电话", 1, 45);
+                ValidatorUtil.length(waterEquipmentDto.getSblc(), "设备量程", 1, 45);
+                ValidatorUtil.length(waterEquipmentDto.getJdfw(), "设备进度范围", 1, 128);
+                ValidatorUtil.length(waterEquipmentDto.getFzwz(), "设备放置位置", 1, 450);
+                ValidatorUtil.length(waterEquipmentDto.getSbcj(), "设备厂家", 1, 450);
+                ValidatorUtil.length(waterEquipmentDto.getSbzt(), "设备状态1正常2离线3设备故障", 1, 1);
+                ValidatorUtil.length(waterEquipmentDto.getBz(), "备注", 1, 2000);
+                ValidatorUtil.length(waterEquipmentDto.getCreateBy(), "创建人", 1, 128);
+                ValidatorUtil.length(waterEquipmentDto.getUpdateBy(), "更新人", 1, 128);
+                ValidatorUtil.length(waterEquipmentDto.getSm1(), "", 1, 450);
+                ValidatorUtil.length(waterEquipmentDto.getSm2(), "", 1, 450);
+                ValidatorUtil.length(waterEquipmentDto.getSm3(), "", 1, 450);
+
+        ResponseDto responseDto = new ResponseDto();
+        LoginUserDto loginUserDto = getRequestHeader();
+        try{
+            waterEquipmentService.save(waterEquipmentDto, loginUserDto);
+            responseDto.setContent(waterEquipmentDto);
+        }catch (Exception e) {
+            responseDto.setSuccess(false);
+            responseDto.setMessage(e.getMessage());
+        }
+        return responseDto;
+    }
+
+    /**
+    * 删除
+    */
+    @DeleteMapping("/delete/{id}")
+    public ResponseDto delete(@PathVariable String id) {
+        ResponseDto responseDto = new ResponseDto();
+        waterEquipmentService.delete(id);
+        return responseDto;
+    }
+
+}

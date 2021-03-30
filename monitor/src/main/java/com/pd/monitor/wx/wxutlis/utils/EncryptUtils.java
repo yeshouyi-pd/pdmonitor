@@ -1,4 +1,4 @@
-package com.pd.wxbase.wx.wxutlis.utils;
+package com.pd.monitor.wx.wxutlis.utils;
 
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.codec.binary.Base64;

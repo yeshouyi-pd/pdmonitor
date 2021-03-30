@@ -74,3 +74,19 @@
 .testswitch-checkbox:checked + .testswitch-label .testswitch-switch {
   right: 5px;
 }
+.add-input>i{
+  display:inline-block;
+  position:absolute;
+  top:7px;
+  height:20px;
+  width:20px;
+  background-image:url('../image/add-gray.png');
+  cursor:pointer;
+}
+.add-input input:disabled, .add-input input[readonly] {
+  color: #848484!important;
+  background-color: #fff!important;
+}
+.ztree *{
+  font-size: 15px;
+}

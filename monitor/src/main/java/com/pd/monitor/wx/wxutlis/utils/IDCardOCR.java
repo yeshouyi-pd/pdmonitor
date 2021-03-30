@@ -1,4 +1,4 @@
-package com.pd.wxbase.wx.wxutlis.utils;
+package com.pd.monitor.wx.wxutlis.utils;
 import com.alibaba.fastjson.JSONObject;
 import com.tencentcloudapi.common.Credential;
 import com.tencentcloudapi.common.profile.ClientProfile;

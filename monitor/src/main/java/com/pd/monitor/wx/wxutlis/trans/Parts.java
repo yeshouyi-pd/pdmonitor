@@ -1,4 +1,4 @@
-package com.pd.wxbase.wx.wxutlis.trans;
+package com.pd.monitor.wx.wxutlis.trans;
 
 public class Parts {
 	private String part;

@@ -1,4 +1,4 @@
-package com.pd.wxbase.wx.wxutlis.utils;
+package com.pd.monitor.wx.wxutlis.utils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * 电视交警接口常量类
  */
-public class DsjkJsonConstant {
+public class ShjJsonConstant {
 
     public static String CODE_0000 = "0000" ;
     public static String MSG_0000 = "成功" ;
@@ -33,7 +33,7 @@ public class DsjkJsonConstant {
     public static String MSG_4103 = "时间戳不存在或不合法" ;
 
     public static String CODE_4104 = "4104" ;
-    public static String MSG_4104 = "业务数据不存在或不合法" ;
+    public static String MSG_4104 = "请求方法名不存在或不合法" ;
 
     public static String CODE_4105 = "4105" ;
     public static String MSG_4105 = "签名不存在或不合法" ;
@@ -45,29 +45,9 @@ public class DsjkJsonConstant {
         private static final long serialVersionUID = 1L;
         {
             /**
-             * 新闻头条
+             * 设备文件
              */
-            put("NewsHeadlines", "com.pd.server.main.service.dsjk.NewsHeadlinesService");
-            /**
-             * 违法曝光台
-             */
-            put("IllegalExposure", "com.pd.server.main.service.dsjk.IllegalExposureService");
-            /**
-             * 预约查询
-             */
-            put("Wxyy", "com.pd.server.main.service.dsjk.WxyyService");
-            /**
-             * 办事网点
-             */
-            put("Bswd", "com.pd.server.main.service.dsjk.BswdService");
-            /**
-             * 办事流程
-             */
-            put("Bslc", "com.pd.server.main.service.dsjk.BslcService");
-            /**
-             * 违法在线教育视频
-             */
-            put("Wfzxjyspxx", "com.pd.server.main.service.dsjk.WfzxjyspxxService");
+            put("EquipmentFile", "com.pd.server.main.service.shj.EquipmentFileShjService");
         }
     };
 

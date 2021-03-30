@@ -1,4 +1,4 @@
-package com.pd.wxbase.wx.wxutlis.po;
+package com.pd.monitor.wx.wxutlis.po;
 
 public class BaseMessage {
 

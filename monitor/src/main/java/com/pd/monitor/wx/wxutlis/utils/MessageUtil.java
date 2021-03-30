@@ -1,4 +1,4 @@
-package com.pd.wxbase.wx.wxutlis.utils;
+package com.pd.monitor.wx.wxutlis.utils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.pd.wxbase.wx.wxutlis.po.*;
+import com.pd.monitor.wx.wxutlis.po.*;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;

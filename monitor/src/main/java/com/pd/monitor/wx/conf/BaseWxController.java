@@ -1,4 +1,4 @@
-package com.pd.wxbase.wx.conf;
+package com.pd.monitor.wx.conf;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;

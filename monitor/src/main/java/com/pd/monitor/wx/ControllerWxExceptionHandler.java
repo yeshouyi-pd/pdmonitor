@@ -1,4 +1,4 @@
-package com.pd.wxbase.wx;
+package com.pd.monitor.wx;
 
 import com.pd.server.main.dto.ResponseDto;
 import com.pd.server.exception.WxException;
