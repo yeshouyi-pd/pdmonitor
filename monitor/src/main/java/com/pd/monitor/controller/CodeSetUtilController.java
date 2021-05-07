@@ -30,4 +30,17 @@ public class CodeSetUtilController extends BaseWxController {
         return responseDto;
     }
 
+    /**
+     * 获取设备型号
+     * @return
+     */
+    @GetMapping("/getSblb")
+    public ResponseDto getSblb(){
+        ResponseDto responseDto = new ResponseDto();
+        Map<String,String> map = new LinkedHashMap<String,String>();
+        Map<String, Map<String,String>>  allmap = (Map<String, Map<String, String>>) redisTemplate.opsForValue().get(RedisCode.CODESET);
+        map = allmap.get(CodeType.SBLB_CODE);
+        responseDto.setContent(map);
+        return responseDto;
+    }
 }

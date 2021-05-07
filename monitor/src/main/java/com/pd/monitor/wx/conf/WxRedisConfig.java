@@ -6,8 +6,6 @@ import com.pd.server.main.domain.AddrInfo;
 import com.pd.server.main.domain.AddrInfoExample;
 import com.pd.server.main.mapper.AddrInfoMapper;
 import com.pd.server.util.DateTools;
-import com.pd.monitor.wx.wxutlis.utils.AccountsServlet;
-import com.pd.monitor.wx.wxutlis.utils.TokenThread;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -67,7 +65,6 @@ public class WxRedisConfig implements CommandLineRunner {
         LOG.info(">>>>>>>>>>>>>>开始加载数据库参数<<<<<<<<<<<<<");
         macos = System.getProperties().getProperty("os.name");// 获取系统操作类型
         reload();
-        new Thread(new TokenThread()).start();//启动进程获取token
         LOG.info(">>>>>>>>>>>>>>>服务启动，基础数据加载完成 <<<<<<<<<<<<<");
     }
 
@@ -124,22 +121,6 @@ public class WxRedisConfig implements CommandLineRunner {
      */
     public static synchronized void reload() {
         init_city();//加载省市县
-        getBaseData();
-    }
-
-    /**
-     * 从数据库获取基本参数配置
-     * @Title: getBaseData
-     * @Description:TODO
-     */
-    public static synchronized void getBaseData(){
-        Map<String, String> map = (Map<String, String>) redisTstaticemplate.opsForValue().get(RedisCode.ATTRECODEKEY);
-        AccountsServlet.appid = "wxb7807839fc5db896";
-        AccountsServlet.appsecret = "4ceb0dc6b59e16a1a478226333a58c09";
-        AccountsServlet.serverUrl = map.get("serveraddress");
-        AccountsServlet.wxqdurl = map.get("wxqdurl");
-        AccountsServlet.token = map.get("token");
-        LOG.info("-------微信基本参数加载完成--------" + AccountsServlet.appid);
     }
 
     public synchronized static boolean init_city(){
@@ -180,24 +161,5 @@ public class WxRedisConfig implements CommandLineRunner {
         }
         return map;
     }
-
-    /**
-     * 获取微信调用的token
-     */
-    /*public static synchronized void initToken() {
-        try{
-            AccessToken token = WeixinUtil.getAccessToken();
-            if(null != token){
-                redisTstaticemplate.opsForValue().set(RedisCode.ACCESSTOKEN, token.getToken());//将参数信息写入redis缓存
-                AccountsServlet.ticket = WeixinUtil.getTicket(token.getToken());
-                redisTstaticemplate.opsForValue().set(RedisCode.JSPTICKET, AccountsServlet.ticket.getTicket());
-            }
-            LOG.info("access_token="+(String) redisTstaticemplate.opsForValue().get(RedisCode.ACCESSTOKEN));
-            LOG.info("jsp_ticket="+(String) redisTstaticemplate.opsForValue().get(RedisCode.JSPTICKET));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }*/
-
 
 }

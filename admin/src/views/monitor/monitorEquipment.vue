@@ -40,7 +40,7 @@ export default {
       chooseJcx:'',
       jcxdw:'',
       chooseTimeType:'1',
-      echartsData:[]//最近30天的数据
+      curNode:null
     }
   },
   mounted() {
@@ -87,6 +87,7 @@ export default {
     },
     zTreeOnClick(event, treeId, treeNode){
       let _this = this;
+      _this.curNode = treeNode;
       if(treeNode.type=='3'){
         _this.findYAxisName(treeNode.code);
         _this.findWaterQualityResultByMonth(treeNode);
@@ -117,23 +118,16 @@ export default {
       let _this = this;
       let waterQualityResultDto = {
         'deviceId':treeNode.getParentNode().code,
-        'jcxm':treeNode.code
+        'jcxm':treeNode.code,
+        'chooseTimeType':_this.chooseTimeType
       }
       Loading.show();
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterQualityResult/findWaterQualityResultByMonth', waterQualityResultDto).then((response)=> {
         Loading.hide();
         let resp = response.data;
         if (resp.success) {
-          // let data = [];
-          // for(let key in resp.content){
-          //   let obj = [];
-          //   obj.push(key,resp.content[key]);
-          //   data.push(obj);
-          // }
           let data = resp.content==null?[]:resp.content;
-          //_this.initEcharts(data);
-          _this.echartsData = data;
-          _this.selectData();
+          _this.initEcharts(data);
         } else {
           Toast.warning(resp.message)
         }
@@ -199,12 +193,9 @@ export default {
     },
     selectData(){
       let _this = this;
-      if(_this.chooseTimeType=='1'){
-        _this.initEcharts(_this.echartsData)
-      }else if(_this.chooseTimeType=='2'){
-        _this.initEcharts(_this.echartsData.slice(-15));
-      }else if(_this.chooseTimeType=='3'){
-        _this.initEcharts(_this.echartsData.slice(-7));
+      if(_this.curNode.type=='3'){
+        _this.findYAxisName(_this.curNode.code);
+        _this.findWaterQualityResultByMonth(_this.curNode);
       }
     }
   }

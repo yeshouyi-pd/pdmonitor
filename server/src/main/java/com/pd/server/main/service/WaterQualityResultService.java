@@ -33,6 +33,7 @@ public class WaterQualityResultService {
     public void list(PageDto pageDto) {
         PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
         WaterQualityResultExample waterQualityResultExample = new WaterQualityResultExample();
+        waterQualityResultExample.setOrderByClause(" create_time desc");
         List<WaterQualityResult> waterQualityResultList = waterQualityResultMapper.selectByExample(waterQualityResultExample);
         PageInfo<WaterQualityResult> pageInfo = new PageInfo<>(waterQualityResultList);
         pageDto.setTotal(pageInfo.getTotal());

@@ -194,5 +194,6 @@
       position: absolute;
       bottom: 10px;
       left: 50%;
+      margin-left: -135px;
     }
 </style>

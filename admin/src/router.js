@@ -10,11 +10,14 @@ import Dept from  "./views/admin/dept.vue"
 import Codeset from  "./views/admin/codeset.vue"
 import Attr from  "./views/admin/attr.vue"
 import WaterData from "./views/monitor/waterData.vue"
-import WaterEquipment from "./views/monitor/waterEquipment"
-import WaterQuality from "./views/monitor/waterQuality"
-import WaterQualityResult from "./views/monitor/waterQualityResult"
-import EquipmentMap from "./views/monitor/equipmentMap"
-import MonitorEquipment from "./views/monitor/monitorEquipment"
+import WaterEquipment from "./views/monitor/waterEquipment.vue"
+import WaterQuality from "./views/monitor/waterQuality.vue"
+import WaterQualityResult from "./views/monitor/waterQualityResult.vue"
+import EquipmentMap from "./views/monitor/equipmentMap.vue"
+import MonitorEquipment from "./views/monitor/monitorEquipment.vue"
+import WaterNoiseImage from "./views/monitor/waterNoiseImage.vue"
+import EquipmentFile from "./views/monitor/equipmentFile.vue"
+import AlarmNumbers from "./views/monitor/alarmNumbers.vue";;
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -96,6 +99,18 @@ export default new Router({
             path: "monitor/monitorEquipment",
             name: "monitor/monitorEquipment",
             component: MonitorEquipment
+        },{
+            path: "monitor/waterNoiseImage",
+            name: "monitor/waterNoiseImage",
+            component: WaterNoiseImage
+        },{
+            path: "monitor/equipmentFile",
+            name: "monitor/equipmentFile",
+            component: EquipmentFile
+        },{
+            path: "monitor/alarmNumbers",
+            name: "monitor/alarmNumbers",
+            component: AlarmNumbers
         }]
     }]
 })

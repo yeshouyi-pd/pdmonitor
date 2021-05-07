@@ -17,29 +17,9 @@ public class AccountsServlet {
     public static final long MAX_TIME = 7200 * 1000;
 
     /**
-     * 开发者ID
-     */
-    public static String appid = "wxb7807839fc5db896";
-
-    /**
-     * 开发者密码
-     */
-    public static String appsecret = "4ceb0dc6b59e16a1a478226333a58c09";
-
-    /**
      * 服务器地址
      */
     public static String serverUrl;
-
-    /**
-     * 微信前端服务地址
-     */
-    public static String wxqdurl;
-
-    /**
-     * 微信token
-     */
-    public static String token;
 
     /**
      * 临时票据

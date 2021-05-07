@@ -58,7 +58,10 @@ public class WaterEquipmentController  extends BaseWxController {
         }
         List<Dept> waterDataList = deptService.list(null);
         Map<String, String> map = waterDataList.stream().collect(Collectors.toMap(p -> p.getDeptcode(), p -> p.getDeptname()));
-        List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(null);
+        WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
+        WaterEquipmentExample.Criteria weCa = waterEquipmentExample.createCriteria();
+        weCa.andSblbEqualTo("0002");
+        List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(waterEquipmentExample);
         Map<String,List<WaterEquipment>> deptcodeMap = waterEquipmentList.stream().collect(Collectors.groupingBy(WaterEquipment::getDeptcode));
         List<MonitorEquipmentDto> lists = new ArrayList<>();
         for(String key : deptcodeMap.keySet()){
@@ -71,7 +74,7 @@ public class WaterEquipmentController  extends BaseWxController {
             List<WaterEquipment> waterEquipments = deptcodeMap.get(key);
             for(WaterEquipment item : waterEquipments){
                 MonitorEquipmentDto obj = new MonitorEquipmentDto();
-                obj.setName(item.getSbmc()+"("+item.getSbmc()+":"+item.getSbsn()+")");
+                obj.setName(item.getSbmc()+"("+item.getSbsn()+")");
                 obj.setCode(item.getId());
                 obj.setType("2");
                 obj.setChildren(codesetChildren);

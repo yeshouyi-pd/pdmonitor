@@ -46,7 +46,7 @@
 <!--              <td>{{waterEquipment.ip}}</td>-->
               <td>{{deptMap|optionMapKV(waterEquipment.deptcode)}}</td>
               <td>{{waterDatas|optionWDArray(waterEquipment.centerCode)}}</td>
-              <td>{{waterEquipment.sblb}}</td>
+              <td>{{sblbs|optionMapKV(waterEquipment.sblb)}}</td>
               <td>{{waterEquipment.dqzl}}</td>
               <td>{{waterEquipment.sbxh}}</td>
               <td>{{waterEquipment.gps}}</td>
@@ -122,7 +122,10 @@
                       </div>
                       <label class="col-sm-2 control-label">设备类别</label>
                       <div class="col-sm-4">
-                        <input v-model="waterEquipment.sblb" class="form-control">
+<!--                        <input v-model="waterEquipment.sblb" class="form-control">-->
+                        <select v-model="waterEquipment.sblb" style="width: 100%;">
+                          <option v-for="(key,value) in sblbs" :value="value">{{key}}</option>
+                        </select>
                       </div>
                     </div>
                     <div class="form-group">
@@ -234,6 +237,7 @@
         trees:[],
         checkHeightMax:'',
         chooseDeptName:'',
+        sblbs:[]
       }
     },
     mounted: function() {
@@ -242,6 +246,7 @@
       _this.list(1);
       _this.getDeptTree();
       _this.findWaterData();
+      _this.getSblb();
       // sidebar激活样式方法一
       // this.$parent.activeSidebar("monitor-waterData-sidebar");
       _this.deptMap = Tool.getDeptUser();
@@ -249,6 +254,16 @@
       _this.checkHeightMax = h*0.8;
     },
     methods: {
+      /**
+       * 获取设备型号
+       */
+      getSblb(){
+        let _this = this;
+        _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/CodeSetUtil/getSbxh').then((res) => {
+          let response = res.data;
+          _this.sblbs = response.content;
+        })
+      },
       getDeptTree() {
         let _this = this;
         _this.$ajax.get(process.env.VUE_APP_SERVER + '/system/admin/dept/load-deptTree').then((res) => {

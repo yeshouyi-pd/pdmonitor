@@ -78,6 +78,8 @@ public class WaterQualityResultDto extends PageDto{
 
     private String deviceId;//设备id
 
+    private String chooseTimeType;
+
     public String getId() {
         return id;
     }
@@ -196,6 +198,14 @@ public class WaterQualityResultDto extends PageDto{
 
     public void setDeviceId(String deviceId) {
         this.deviceId = deviceId;
+    }
+
+    public String getChooseTimeType() {
+        return chooseTimeType;
+    }
+
+    public void setChooseTimeType(String chooseTimeType) {
+        this.chooseTimeType = chooseTimeType;
     }
 
     @Override
