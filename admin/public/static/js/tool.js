@@ -199,7 +199,7 @@ Tool = {
 
   //DES解密
   //DES 解密
-  decryptByDES(ciphertext) {
+  decryptByDES : function (ciphertext) {
     if(ciphertext != undefined){
       let key = "11111111";
       let keyHex = CryptoJS.enc.Utf8.parse(key);
