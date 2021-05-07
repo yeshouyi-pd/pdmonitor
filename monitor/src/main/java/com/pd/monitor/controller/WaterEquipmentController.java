@@ -16,6 +16,7 @@ import com.pd.server.util.CopyUtil;
 import com.pd.server.util.ValidatorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -113,6 +114,12 @@ public class WaterEquipmentController  extends BaseWxController {
         WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
         WaterEquipmentExample.Criteria ca = waterEquipmentExample.createCriteria();
         ca.andDeptcodeIn(list);
+        if(!StringUtils.isEmpty(pageDto.getSbsn())){
+            ca.andSbsnEqualTo(pageDto.getSbsn());
+        }
+        if(!StringUtils.isEmpty(pageDto.getSblb())){
+            ca.andSblbEqualTo(pageDto.getSblb());
+        }
         List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(waterEquipmentExample);
         PageInfo<WaterEquipment> pageInfo = new PageInfo<>(waterEquipmentList);
         pageDto.setTotal(pageInfo.getTotal());

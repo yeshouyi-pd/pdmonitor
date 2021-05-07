@@ -4,6 +4,7 @@ import com.pd.server.main.domain.EquipmentFile;
 import com.pd.server.main.domain.EquipmentFileExample;
 import com.pd.server.main.dto.EquipmentFileDto;
 import com.pd.server.main.dto.PageDto;
+import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
 import com.pd.server.main.mapper.EquipmentFileMapper;
 import com.pd.server.util.CopyUtil;
 import com.pd.server.util.DateUtil;
@@ -25,6 +26,10 @@ public class EquipmentFileService {
 
     public List<String> findSbbh(EquipmentFileDto equipmentFileDto){
         return equipmentFileMapper.selectSbbhByExample(null);
+    }
+
+    public List<AlarmNumbersDto> statisticsAlarmNums(EquipmentFileExample example){
+        return equipmentFileMapper.statisticsAlarmNums(example);
     }
 
     /**

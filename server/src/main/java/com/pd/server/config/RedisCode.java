@@ -26,6 +26,7 @@ public enum RedisCode {
 
     AllUSER("alluser"),//所有用户
 
+    SBSNCENTERCODE("sbsncentercode"),//设备sn对应的监测点
     ;
 
     private String desc;

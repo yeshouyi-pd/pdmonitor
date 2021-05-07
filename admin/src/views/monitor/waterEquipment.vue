@@ -1,77 +1,135 @@
 <template>
   <div>
-    <p>
-      <button v-on:click="add()" class="btn btn-white btn-default btn-round">
-        <i class="ace-icon fa fa-edit"></i>
-        新增
-      </button>
-      &nbsp;
-      <button v-on:click="list(1)" class="btn btn-white btn-default btn-round">
-        <i class="ace-icon fa fa-refresh"></i>
-        刷新
-      </button>
-    </p>
+    <div style="margin-bottom: 20px;">
+      <ul class="nav nav-tabs padding-18 tab-size-bigger" id="myTab">
+        <li class="active" v-on:click="changeTab()">
+          <a data-toggle="tab" href="#faq-tab-1" aria-expanded="true">
+            列表模式
+          </a>
+        </li>
+        <li class="" v-on:click="changeTab()">
+          <a data-toggle="tab" href="#faq-tab-2" aria-expanded="false">
+            地图模式
+          </a>
+        </li>
+      </ul>
+    </div>
 
-
-    <div>
-    <table id="simple-table" class="table  table-bordered table-hover">
-      <thead>
-        <tr>
-            <th>设备名称</th>
-            <th>设备SN</th>
-<!--            <th>设备端口</th>-->
-<!--            <th>设备IP</th>-->
-            <th>所属监测点</th>
-            <th>所属数据中心</th>
-            <th>设备类别</th>
-            <th>设备读取指令</th>
-            <th>设备型号</th>
-            <th>设备gps坐标</th>
-            <th>设备负责人</th>
-            <th>负责人电话</th>
-            <th>设备量程</th>
-            <th>设备进度范围</th>
-            <th>设备放置位置</th>
-            <th>设备厂家</th>
-            <th>设备状态</th>
-          <th>操作</th>
-        </tr>
-      </thead>
-
-      <tbody>
-      <tr v-for="waterEquipment in waterEquipments">
-              <td>{{waterEquipment.sbmc}}</td>
-              <td>{{waterEquipment.sbsn}}</td>
-<!--              <td>{{waterEquipment.port}}</td>-->
-<!--              <td>{{waterEquipment.ip}}</td>-->
-              <td>{{deptMap|optionMapKV(waterEquipment.deptcode)}}</td>
-              <td>{{waterDatas|optionWDArray(waterEquipment.centerCode)}}</td>
-              <td>{{sblbs|optionMapKV(waterEquipment.sblb)}}</td>
-              <td>{{waterEquipment.dqzl}}</td>
-              <td>{{waterEquipment.sbxh}}</td>
-              <td>{{waterEquipment.gps}}</td>
-              <td>{{waterEquipment.fzr}}</td>
-              <td>{{waterEquipment.fzrdh}}</td>
-              <td>{{waterEquipment.sblc}}</td>
-              <td>{{waterEquipment.jdfw}}</td>
-              <td>{{waterEquipment.fzwz}}</td>
-              <td>{{waterEquipment.sbcj}}</td>
-        <td><span v-if="waterEquipment.sbzt=='1'">正常</span><span v-if="waterEquipment.sbzt=='2'">离线</span><span v-if="waterEquipment.sbzt=='3'">设备故障</span></td>
-        <td>
-          <div class="hidden-sm hidden-xs btn-group">
-            <button v-on:click="edit(waterEquipment)" class="btn btn-xs btn-info" title="修改">
-              <i class="ace-icon fa fa-pencil bigger-120"></i>
-            </button>
-<!--            <button v-on:click="del(waterEquipment.id)" class="btn btn-xs btn-danger">-->
-<!--              <i class="ace-icon fa fa-trash-o bigger-120"></i>-->
-<!--            </button>-->
+    <div v-if="defaultShow">
+      <div class="widget-box">
+        <div class="widget-header">
+          <h4 class="widget-title">设备管理查询</h4>
+        </div>
+        <div class="widget-body">
+          <div class="widget-main">
+            <form>
+              <table style="font-size: 1.1em;width:80%" class="text-right">
+                <tbody>
+                <tr>
+                  <td style="width:10%">
+                    设备SN：
+                  </td>
+                  <td style="width: 15%">
+                    <input class="input-sm" type="text"  v-model="waterEquipmentDto.sbsn"/>
+                  </td>
+                  <td style="width: 10%">
+                    设备类别：
+                  </td>
+                  <td style="width: 20%">
+                    <select v-model="waterEquipmentDto.sblb" style="width: 100%;">
+                      <option value="">请选择</option>
+                      <option v-for="(key,value) in sblbs" :value="value">{{key}}</option>
+                    </select>
+                  </td>
+                  <td colspan="2" class="text-center">
+                    <button  type="button" v-on:click="list(1)" class="btn btn-sm  btn-info btn-round">
+                      <i class="ace-icon fa fa-book"></i>
+                      查询
+                    </button>
+                    <a href="javascript:location.replace(location.href);"  class="btn btn-sm   btn-success btn-round">
+                      <i class="ace-icon fa fa-refresh"></i>
+                      重置
+                    </a>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </form>
           </div>
-        </td>
-      </tr>
-      </tbody>
-    </table>
+        </div>
+      </div>
+      <p>
+        <button v-on:click="add()" class="btn btn-white btn-default btn-round">
+          <i class="ace-icon fa fa-edit"></i>
+          新增
+        </button>
+        &nbsp;
+        <button v-on:click="list(1)" class="btn btn-white btn-default btn-round">
+          <i class="ace-icon fa fa-refresh"></i>
+          刷新
+        </button>
+      </p>
+      <table id="simple-table" class="table  table-bordered table-hover">
+        <thead>
+          <tr>
+              <th>设备名称</th>
+              <th>设备SN</th>
+  <!--            <th>设备端口</th>-->
+  <!--            <th>设备IP</th>-->
+              <th>所属监测点</th>
+              <th>所属数据中心</th>
+              <th>设备类别</th>
+              <th>设备读取指令</th>
+              <th>设备型号</th>
+              <th>设备gps坐标</th>
+              <th>设备负责人</th>
+              <th>负责人电话</th>
+              <th>设备量程</th>
+              <th>设备进度范围</th>
+              <th>设备放置位置</th>
+              <th>设备厂家</th>
+              <th>设备状态</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+
+        <tbody>
+        <tr v-for="waterEquipment in waterEquipments">
+                <td>{{waterEquipment.sbmc}}</td>
+                <td>{{waterEquipment.sbsn}}</td>
+  <!--              <td>{{waterEquipment.port}}</td>-->
+  <!--              <td>{{waterEquipment.ip}}</td>-->
+                <td>{{deptMap|optionMapKV(waterEquipment.deptcode)}}</td>
+                <td>{{waterDatas|optionWDArray(waterEquipment.centerCode)}}</td>
+                <td>{{sblbs|optionMapKV(waterEquipment.sblb)}}</td>
+                <td>{{waterEquipment.dqzl}}</td>
+                <td>{{waterEquipment.sbxh}}</td>
+                <td>{{waterEquipment.gps}}</td>
+                <td>{{waterEquipment.fzr}}</td>
+                <td>{{waterEquipment.fzrdh}}</td>
+                <td>{{waterEquipment.sblc}}</td>
+                <td>{{waterEquipment.jdfw}}</td>
+                <td>{{waterEquipment.fzwz}}</td>
+                <td>{{waterEquipment.sbcj}}</td>
+          <td><span v-if="waterEquipment.sbzt=='1'">正常</span><span v-if="waterEquipment.sbzt=='2'">离线</span><span v-if="waterEquipment.sbzt=='3'">设备故障</span></td>
+          <td>
+            <div class="hidden-sm hidden-xs btn-group">
+              <button v-on:click="edit(waterEquipment)" class="btn btn-xs btn-info" title="修改">
+                <i class="ace-icon fa fa-pencil bigger-120"></i>
+              </button>
+  <!--            <button v-on:click="del(waterEquipment.id)" class="btn btn-xs btn-danger">-->
+  <!--              <i class="ace-icon fa fa-trash-o bigger-120"></i>-->
+  <!--            </button>-->
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
       <pagination ref="pagination" v-bind:list="list" v-bind:itemCount="8"></pagination>
     </div>
+
+    <div v-else><equipment-map></equipment-map></div>
+
     <div id="form-modal" class="modal fade" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document" style="width: 60%;">
         <div class="modal-content">
@@ -225,11 +283,13 @@
 
 <script>
   import Pagination from "../../components/pagination";
+  import EquipmentMap from "@/views/monitor/equipmentMap";
   export default {
-    components: {Pagination},
+    components: {Pagination, EquipmentMap},
     name: "monitor-waterEquipment",
     data: function() {
       return {
+        waterEquipmentDto: {},
         waterEquipment: {},
         waterEquipments: [],
         waterDatas:[],
@@ -237,7 +297,8 @@
         trees:[],
         checkHeightMax:'',
         chooseDeptName:'',
-        sblbs:[]
+        sblbs:[],
+        defaultShow:true
       }
     },
     mounted: function() {
@@ -254,12 +315,19 @@
       _this.checkHeightMax = h*0.8;
     },
     methods: {
+      changeTab(){
+        let _this = this;
+        _this.defaultShow = !_this.defaultShow;
+        if(!_this.defaultShow){
+          $("map-top").css("top","58px");
+        }
+      },
       /**
        * 获取设备型号
        */
       getSblb(){
         let _this = this;
-        _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/CodeSetUtil/getSbxh').then((res) => {
+        _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/CodeSetUtil/getSblb').then((res) => {
           let response = res.data;
           _this.sblbs = response.content;
         })
