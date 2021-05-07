@@ -17,7 +17,7 @@ import EquipmentMap from "./views/monitor/equipmentMap.vue"
 import MonitorEquipment from "./views/monitor/monitorEquipment.vue"
 import WaterNoiseImage from "./views/monitor/waterNoiseImage.vue"
 import EquipmentFile from "./views/monitor/equipmentFile.vue"
-import AlarmNumbers from "./views/monitor/alarmNumbers.vue";;
+import AlarmNumbers from "./views/monitor/alarmNumbers.vue"
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
