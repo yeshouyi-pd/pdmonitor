@@ -122,7 +122,7 @@
                       <div class="clearfix">
 
                         <div class="widget-body">
-                          <div class="widget-main no-padding" style="height:328px;">
+                          <div class="widget-main no-padding" style="height:325px;">
                             <table class="table table-bordered table-striped">
                               <thead class="thin-border-bottom">
                               <tr>
@@ -182,7 +182,7 @@
                       <div class="clearfix">
 
                         <div class="widget-body">
-                          <div class="widget-main no-padding" style="height:329px;">
+                          <div class="widget-main no-padding" style="height:325px;">
                             <table class="table table-bordered table-striped">
                               <thead class="thin-border-bottom">
                               <tr>
