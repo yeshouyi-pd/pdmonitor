@@ -4,7 +4,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.pd.server.config.RedisCode;
 import com.pd.server.main.domain.AddrInfo;
 import com.pd.server.main.domain.AddrInfoExample;
+import com.pd.server.main.domain.WaterEquipment;
 import com.pd.server.main.mapper.AddrInfoMapper;
+import com.pd.server.main.mapper.WaterEquipmentMapper;
 import com.pd.server.util.DateTools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +22,7 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * rddis 缓存工具
@@ -47,16 +50,22 @@ public class WxRedisConfig implements CommandLineRunner {
 
     public  static AddrInfoMapper  addrInfostaticMapper;
 
+    public static WaterEquipmentMapper waterEquipmentstaticMapper;
+
     @Resource
     private RedisTemplate redisTemplate;
 
     @Resource
     private AddrInfoMapper addrInfoMapper;
 
+    @Resource
+    private WaterEquipmentMapper waterEquipmentMapper;
+
     @PostConstruct
     protected void init() {
         redisTstaticemplate = redisTemplate;
         addrInfostaticMapper = addrInfoMapper;
+        waterEquipmentstaticMapper = waterEquipmentMapper;
     }
 
 
@@ -121,6 +130,21 @@ public class WxRedisConfig implements CommandLineRunner {
      */
     public static synchronized void reload() {
         init_city();//加载省市县
+        init_sbsnCenterCodeMap();//加载设备编号对应的监测点编号
+    }
+
+    public synchronized static boolean init_sbsnCenterCodeMap(){
+        try {
+            List<WaterEquipment> list = waterEquipmentstaticMapper.selectByExample(null);
+            Map<String, String> map = list.stream().collect(Collectors.toMap(p -> p.getSbsn(), p -> p.getDeptcode()));
+            String s = JSONObject.toJSONString(map);
+            JSONObject jsonObj = JSONObject.parseObject(s);
+            redisTstaticemplate.opsForValue().set(RedisCode.SBSNCENTERCODE, jsonObj);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     public synchronized static boolean init_city(){

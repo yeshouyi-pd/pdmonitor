@@ -19,6 +19,8 @@ import org.springframework.util.StringUtils;
 import javax.annotation.Resource;
 import java.util.List;
         import java.util.Date;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class WaterEquipmentService {
@@ -28,6 +30,15 @@ public class WaterEquipmentService {
 
     public WaterEquipment findById(String id){
         return waterEquipmentMapper.selectByPrimaryKey(id);
+    }
+
+    public List<String> findSbsnByDeptcode(String deptcode){
+        WaterEquipmentExample example = new WaterEquipmentExample();
+        WaterEquipmentExample.Criteria ca = example.createCriteria();
+        ca.andDeptcodeEqualTo(deptcode);
+        List<WaterEquipment> lists = waterEquipmentMapper.selectByExample(example);
+        List<String> sbsns = lists.stream().filter(Objects::nonNull).map(WaterEquipment::getSbsn).collect(Collectors.toList());
+        return sbsns;
     }
 
     /**
