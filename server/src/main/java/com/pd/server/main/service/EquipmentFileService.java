@@ -3,6 +3,7 @@ package com.pd.server.main.service;
 import com.pd.server.main.domain.EquipmentFile;
 import com.pd.server.main.domain.EquipmentFileExample;
 import com.pd.server.main.dto.EquipmentFileDto;
+import com.pd.server.main.dto.KvMapDto;
 import com.pd.server.main.dto.PageDto;
 import com.pd.server.main.mapper.EquipmentFileMapper;
 import com.pd.server.util.CopyUtil;
@@ -96,6 +97,12 @@ public class EquipmentFileService {
     */
     public void delete(String id) {
         equipmentFileMapper.deleteByPrimaryKey(id);
+    }
+
+
+
+    public  List<KvMapDto> getWarningDate(){
+        return equipmentFileMapper.getWarningDate();
     }
 
 }
