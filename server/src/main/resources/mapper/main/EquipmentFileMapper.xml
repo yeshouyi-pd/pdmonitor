@@ -11,6 +11,11 @@
     <result column="yf" jdbcType="VARCHAR" property="yf" />
     <result column="rq" jdbcType="VARCHAR" property="rq" />
   </resultMap>
+  <resultMap id="StatisticsResultMap" type="com.pd.server.main.dto.basewx.my.AlarmNumbersDto">
+    <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
+    <result column="bjsj" jdbcType="VARCHAR" property="bjsj" />
+    <result column="alarmNum" jdbcType="INTEGER" property="alarmNum" />
+  </resultMap>
 
   <resultMap id="BaseResultMapKV" type="com.pd.server.main.dto.KvMapDto">
     <id column="text" jdbcType="VARCHAR" property="text" />
@@ -281,6 +286,16 @@
     <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
+  </select>
+  <select id="statisticsAlarmNums" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultMap="StatisticsResultMap">
+    select
+    sbbh,rq bjsj,count(*) alarmNum
+    from equipment_file
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    group by sbbh, rq
+    order by rq
   </select>
 
   <select id="getWarningDate"  resultMap="BaseResultMapKV">

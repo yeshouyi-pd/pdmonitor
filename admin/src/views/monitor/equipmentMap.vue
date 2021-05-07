@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div style="width: 115px;height: 80px;border: 1px solid #EEEEEE;position: absolute;top: 0;left: 12px;z-index: 100;background-color: #fff;">
+    <div id="map-top" style="width: 115px;height: 80px;border: 1px solid #EEEEEE;position: absolute;left: 12px;z-index: 100;background-color: #fff;">
       <div style="padding:5px 0px 5px 5px"><i class="fa fa-map-marker" style="color:#03C449;padding-right: 10px"></i>设备正常 {{onLineCount}}个</div>
       <div style="padding:0px 0px 5px 5px"><i class="fa fa-map-marker" style="color:#555555;padding-right: 10px"></i>设备离线 {{offLineCount}}个</div>
       <div style="padding:0px 0px 5px 5px"><i class="fa fa-map-marker" style="color:#B03A5B;padding-right: 10px"></i>设备故障 {{errorCount}}个</div>

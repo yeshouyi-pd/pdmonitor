@@ -1,5 +1,12 @@
 <template>
   <div>
+    <p>
+      <button v-on:click="getRealtimeData()" class="btn btn-white btn-default btn-round">
+        <i class="ace-icon fa fa-edit"></i>
+        获取实时数据
+      </button>
+      (因后台有定时任务，请不要在整点的时候点击该按钮，最好能在整点过5分钟以后点击)
+    </p>
     <div>
     <table id="simple-table" class="table  table-bordered table-hover">
       <thead>
@@ -191,7 +198,8 @@
         waterQualityResult: {},
         waterQualityResults: [],
         waterDatas:[],
-        szjcx:[]
+        szjcx:[],
+        num:0,
       }
     },
     mounted: function() {
@@ -204,6 +212,25 @@
       _this.getSzjcx();
     },
     methods: {
+      getRealtimeData(){
+        let _this = this;
+        Loading.show();
+        if(_this.num==0){
+          _this.num=1;
+          _this.$forceUpdate();
+          _this.$ajax.get(process.env.VUE_APP_SERVER + '/system/realtimeData/getRealtimeData', {
+          }).then((response)=>{
+            Loading.hide();
+            let resp = response.data;
+            Toast.warning(resp.message);
+            if(resp.success){
+              _this.list(1);
+            }
+            _this.num=0;
+            _this.$forceUpdate();
+          })
+        }
+      },
       /**
        * 点击【新增】
        */

@@ -15,10 +15,6 @@ import java.util.Date;
 @Component
 public class SubscribeSampleController implements ApplicationContextAware {
 
-//    @Scheduled(cron = "0 0/1 * * * ? ")
-//    public static void loop() {
-//        System.out.println("------------test-------------");
-//    }
 private static ApplicationContext applicationContext;
     private static boolean flag=false;
 
