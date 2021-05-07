@@ -153,4 +153,9 @@ public class CodeType {
      * 水质检测项
      */
     public final  static String  SZJCX_CODE ="11";
+
+    /**
+     * 设备型号
+     */
+    public final  static String  SBLB_CODE ="0701";
 }

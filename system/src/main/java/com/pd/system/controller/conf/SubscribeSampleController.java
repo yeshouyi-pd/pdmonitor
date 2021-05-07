@@ -5,18 +5,29 @@ import com.pd.server.main.dto.WaterQualityResultDto;
 import com.pd.server.main.service.WaterQualityResultService;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
-
+import org.eclipse.paho.client.mqttv3.MqttClient;
 import java.util.Date;
 
 @Component
-public class SubscribeSampleController {
+public class SubscribeSampleController implements ApplicationContextAware {
 
 //    @Scheduled(cron = "0 0/1 * * * ? ")
 //    public static void loop() {
 //        System.out.println("------------test-------------");
 //    }
+private static ApplicationContext applicationContext;
     private static boolean flag=false;
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        if(SubscribeSampleController.applicationContext == null) {
+            SubscribeSampleController.applicationContext = applicationContext;
+        }
+    }
 
     public static int encodeToString(byte[] bytes) {
         byte[] bytes1 = new byte[2];
@@ -75,8 +86,8 @@ public class SubscribeSampleController {
                     waterQualityResult.setDataResult(wd/10+"."+wd%10);
                     waterQualityResult.setDataOriginal(bytes2hex02(message.getPayload()));
                     waterQualityResult.setCreateTime(new Date());
-                    System.out.println(waterQualityResult.toString());
                     if(flag){
+                        System.out.println(waterQualityResult.toString());
                         WaterQualityResultService service = SpringUtil.getBean(WaterQualityResultService.class);
                         service.save(waterQualityResult);
                     }
@@ -100,8 +111,7 @@ public class SubscribeSampleController {
         subscribeSample();
     }
 
-    public static String bytes2hex02(byte[] bytes)
-    {
+    public static String bytes2hex02(byte[] bytes){
         StringBuilder sb = new StringBuilder();
         String tmp = null;
         for (byte b : bytes)

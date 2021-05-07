@@ -2,6 +2,10 @@ package com.pd.system.controller.conf;
 
 import com.alibaba.fastjson.JSONObject;
 import com.pd.server.config.RedisCode;
+import com.pd.server.config.SpringUtil;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -20,8 +24,8 @@ import java.util.*;
  * 每月更新一次
  */
 @Component
-public class LegalholidayUtils {
-
+public class LegalholidayUtils implements ApplicationContextAware {
+    private static ApplicationContext applicationContext;
 
     /**
      *  每天中午十二点触发
@@ -150,4 +154,10 @@ public class LegalholidayUtils {
     }
 
 
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        if(LegalholidayUtils.applicationContext == null) {
+            LegalholidayUtils.applicationContext = applicationContext;
+        }
     }
+}

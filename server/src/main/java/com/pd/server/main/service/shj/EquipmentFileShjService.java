@@ -33,6 +33,9 @@ public class EquipmentFileShjService extends AbstractScanRequest{
         entity.setSbbh(sbbh);
         entity.setTplj(tplj);
         entity.setCjsj(DateUtil.toDate(cjsj,"yyyy-MM-dd HH:mm:ss"));
+        entity.setNf(DateUtil.getFormatDate(entity.getCjsj(),"yyyy"));
+        entity.setYf(DateUtil.getFormatDate(entity.getCjsj(),"yyyy-MM"));
+        entity.setRq(DateUtil.getFormatDate(entity.getCjsj(),"yyyy-MM-dd"));
         entity.setCreateTime(new Date());
         equipmentFileMapper.insert(entity);
         data="保存成功";

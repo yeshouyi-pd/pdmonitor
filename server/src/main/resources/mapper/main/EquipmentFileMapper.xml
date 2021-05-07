@@ -7,6 +7,9 @@
     <result column="tplj" jdbcType="VARCHAR" property="tplj" />
     <result column="cjsj" jdbcType="TIMESTAMP" property="cjsj" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="nf" jdbcType="VARCHAR" property="nf" />
+    <result column="yf" jdbcType="VARCHAR" property="yf" />
+    <result column="rq" jdbcType="VARCHAR" property="rq" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -67,7 +70,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, sbbh, tplj, cjsj, create_time
+    id, sbbh, tplj, cjsj, create_time, nf, yf, rq
   </sql>
   <select id="selectByExample" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultMap="BaseResultMap">
     select
@@ -101,9 +104,10 @@
   </delete>
   <insert id="insert" parameterType="com.pd.server.main.domain.EquipmentFile">
     insert into equipment_file (id, sbbh, tplj, 
-      cjsj, create_time)
+      cjsj, create_time, nf, yf, rq)
     values (#{id,jdbcType=VARCHAR}, #{sbbh,jdbcType=VARCHAR}, #{tplj,jdbcType=VARCHAR}, 
-      #{cjsj,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP})
+      #{cjsj,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, #{nf,jdbcType=VARCHAR},
+      #{yf,jdbcType=VARCHAR}, #{rq,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.pd.server.main.domain.EquipmentFile">
     insert into equipment_file
@@ -123,6 +127,15 @@
       <if test="createTime != null">
         create_time,
       </if>
+      <if test="nf != null">
+        nf,
+      </if>
+      <if test="yf != null">
+        yf,
+      </if>
+      <if test="rq != null">
+        rq,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -139,6 +152,15 @@
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="nf != null">
+        #{nf,jdbcType=VARCHAR},
+      </if>
+      <if test="yf != null">
+        #{yf,jdbcType=VARCHAR},
+      </if>
+      <if test="rq != null">
+        #{rq,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -166,6 +188,15 @@
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.nf != null">
+        nf = #{record.nf,jdbcType=VARCHAR},
+      </if>
+      <if test="record.yf != null">
+        yf = #{record.yf,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rq != null">
+        rq = #{record.rq,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -177,7 +208,10 @@
       sbbh = #{record.sbbh,jdbcType=VARCHAR},
       tplj = #{record.tplj,jdbcType=VARCHAR},
       cjsj = #{record.cjsj,jdbcType=TIMESTAMP},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP}
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      nf = #{record.nf,jdbcType=VARCHAR},
+      yf = #{record.yf,jdbcType=VARCHAR},
+      rq = #{record.rq,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -197,6 +231,15 @@
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="nf != null">
+        nf = #{nf,jdbcType=VARCHAR},
+      </if>
+      <if test="yf != null">
+        yf = #{yf,jdbcType=VARCHAR},
+      </if>
+      <if test="rq != null">
+        rq = #{rq,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -205,7 +248,32 @@
     set sbbh = #{sbbh,jdbcType=VARCHAR},
       tplj = #{tplj,jdbcType=VARCHAR},
       cjsj = #{cjsj,jdbcType=TIMESTAMP},
-      create_time = #{createTime,jdbcType=TIMESTAMP}
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      nf = #{nf,jdbcType=VARCHAR},
+      yf = #{yf,jdbcType=VARCHAR},
+      rq = #{rq,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
+  <select id="selectAudioByExample" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultType="java.lang.String">
+    select
+    tplj
+    from equipment_file
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectSbbhByExample" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultType="java.lang.String">
+    select
+    distinct sbbh
+    from equipment_file
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
 </mapper>

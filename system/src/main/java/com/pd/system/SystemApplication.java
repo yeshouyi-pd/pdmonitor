@@ -1,7 +1,6 @@
 package com.pd.system;
 
-import com.pd.system.controller.conf.SubscribeSampleController;
-import org.mybatis.spring.annotation.MapperScan;
+import com.pd.system.controller.conf.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -27,7 +26,6 @@ public class SystemApplication {
 		LOG.info("启动成功！！");
 		LOG.info("System地址：\thttp://127.0.0.1:{}",env.getProperty("server.port"));
 
-		SubscribeSampleController.subscribeSample();
 	}
 
 }

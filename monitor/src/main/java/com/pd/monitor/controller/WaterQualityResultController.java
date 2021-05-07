@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 public class WaterQualityResultController {
 
     private static final Logger LOG = LoggerFactory.getLogger(WaterQualityResultController.class);
-    public static final String BUSINESS_NAME = "";
+    public static final String BUSINESS_NAME = "监测点设备管理";
 
     @Resource
     private WaterQualityResultService waterQualityResultService;
@@ -43,19 +43,25 @@ public class WaterQualityResultController {
         if(!StringUtils.isEmpty(waterEquipment)&&!StringUtils.isEmpty(waterEquipment.getCenterCode())){
             ca.andDatacenterEqualTo(waterEquipment.getCenterCode());
         }
-        if(!StringUtils.isEmpty(waterEquipment)&&!StringUtils.isEmpty(waterEquipment.getIp())){
-            ca.andIpEqualTo(waterEquipment.getIp());
+        if(!StringUtils.isEmpty(waterEquipment)&&!StringUtils.isEmpty(waterEquipment.getSbsn())){
+            ca.andIpEqualTo(waterEquipment.getSbsn());
         }
-        if(!StringUtils.isEmpty(waterEquipment)&&!StringUtils.isEmpty(waterEquipment.getPort())){
-            ca.andPortEqualTo(waterEquipment.getPort());
-        }
+//        if(!StringUtils.isEmpty(waterEquipment)&&!StringUtils.isEmpty(waterEquipment.getPort())){
+//            ca.andPortEqualTo(waterEquipment.getPort());
+//        }
         if(!StringUtils.isEmpty(pageDto.getJcxm())){
             ca.andJcxmEqualTo(pageDto.getJcxm());
         }
-        ca.andCreateTimeBetween(DateUtil.getMonthBeforeOrLater(-1),new Date());
+        if(!StringUtils.isEmpty(pageDto.getChooseTimeType())&&pageDto.getChooseTimeType().equals("1")){
+            ca.andCreateTimeBetween(DateUtil.getMonthBeforeOrLater(-1),new Date());
+        }else if(!StringUtils.isEmpty(pageDto.getChooseTimeType())&&pageDto.getChooseTimeType().equals("2")){
+            ca.andCreateTimeBetween(DateUtil.getNextNumDay(new Date(), -15),new Date());
+        }else {
+            ca.andCreateTimeBetween(DateUtil.getNextNumDay(new Date(), -7),new Date());
+        }
         example.setOrderByClause(" create_time ");
         List<WaterQualityResult> list = waterQualityResultService.findByExample(example);
-       List<List<String>> result = new ArrayList<>();
+        List<List<String>> result = new ArrayList<>();
         for(WaterQualityResult entity : list){
             List<String> obj = new ArrayList<>();
             obj.add(DateUtil.getFormatDate(entity.getCreateTime(),"yyyy-MM-dd HH:mm:ss"));

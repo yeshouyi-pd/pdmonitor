@@ -27,4 +27,8 @@ public interface EquipmentFileMapper {
     int updateByPrimaryKeySelective(EquipmentFile record);
 
     int updateByPrimaryKey(EquipmentFile record);
+
+    List<String> selectAudioByExample(EquipmentFileExample example);
+
+    List<String> selectSbbhByExample(EquipmentFileExample example);
 }

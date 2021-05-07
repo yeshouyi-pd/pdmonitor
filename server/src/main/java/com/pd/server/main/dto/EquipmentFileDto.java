@@ -1,23 +1,38 @@
-package com.pd.server.main.domain;
+package com.pd.server.main.dto;
 
 import java.util.Date;
+        import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class EquipmentFile {
+public class EquipmentFileDto extends PageDto{
+
+    /**
+    * 
+    */
     private String id;
 
+    /**
+    * 设备唯一标识
+    */
     private String sbbh;
 
+    /**
+    * 图片路径
+    */
     private String tplj;
 
+    /**
+    * 采集时间
+    */
+        @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date cjsj;
 
+    /**
+    * 创建时间
+    */
+        @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date createTime;
 
-    private String nf;
-
-    private String yf;
-
-    private String rq;
+    private boolean hasAudio;//图片是否有对应的音频
 
     public String getId() {
         return id;
@@ -59,28 +74,12 @@ public class EquipmentFile {
         this.createTime = createTime;
     }
 
-    public String getNf() {
-        return nf;
+    public boolean isHasAudio() {
+        return hasAudio;
     }
 
-    public void setNf(String nf) {
-        this.nf = nf;
-    }
-
-    public String getYf() {
-        return yf;
-    }
-
-    public void setYf(String yf) {
-        this.yf = yf;
-    }
-
-    public String getRq() {
-        return rq;
-    }
-
-    public void setRq(String rq) {
-        this.rq = rq;
+    public void setHasAudio(boolean hasAudio) {
+        this.hasAudio = hasAudio;
     }
 
     @Override
@@ -89,15 +88,13 @@ public class EquipmentFile {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", sbbh=").append(sbbh);
-        sb.append(", tplj=").append(tplj);
-        sb.append(", cjsj=").append(cjsj);
-        sb.append(", createTime=").append(createTime);
-        sb.append(", nf=").append(nf);
-        sb.append(", yf=").append(yf);
-        sb.append(", rq=").append(rq);
+            sb.append(", id=").append(id);
+            sb.append(", sbbh=").append(sbbh);
+            sb.append(", tplj=").append(tplj);
+            sb.append(", cjsj=").append(cjsj);
+            sb.append(", createTime=").append(createTime);
         sb.append("]");
         return sb.toString();
     }
+
 }
