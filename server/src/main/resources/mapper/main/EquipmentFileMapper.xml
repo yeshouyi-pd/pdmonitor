@@ -11,6 +11,12 @@
     <result column="yf" jdbcType="VARCHAR" property="yf" />
     <result column="rq" jdbcType="VARCHAR" property="rq" />
   </resultMap>
+
+  <resultMap id="BaseResultMapKV" type="com.pd.server.main.dto.KvMapDto">
+    <id column="text" jdbcType="VARCHAR" property="text" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+  </resultMap>
+
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -275,5 +281,9 @@
     <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
+  </select>
+
+  <select id="getWarningDate"  resultMap="BaseResultMapKV">
+   SELECT sbbh  `test` ,COUNT(*)  `code`  FROM   equipment_file  WHERE   rq =  CURRENT_DATE() AND tplj LIKE '%.png' GROUP BY sbbh
   </select>
 </mapper>

@@ -3,6 +3,8 @@ package com.pd.server.main.mapper;
 import com.pd.server.main.domain.EquipmentFile;
 import com.pd.server.main.domain.EquipmentFileExample;
 import java.util.List;
+
+import com.pd.server.main.dto.KvMapDto;
 import org.apache.ibatis.annotations.Param;
 
 public interface EquipmentFileMapper {
@@ -31,4 +33,6 @@ public interface EquipmentFileMapper {
     List<String> selectAudioByExample(EquipmentFileExample example);
 
     List<String> selectSbbhByExample(EquipmentFileExample example);
+
+    List<KvMapDto> getWarningDate();
 }

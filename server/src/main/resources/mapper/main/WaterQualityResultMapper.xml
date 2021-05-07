@@ -17,6 +17,7 @@
     <result column="sm3" jdbcType="VARCHAR" property="sm3" />
     <result column="sm4" jdbcType="VARCHAR" property="sm4" />
   </resultMap>
+
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -51,7 +52,7 @@
       <foreach collection="example.oredCriteria" item="criteria" separator="or">
         <if test="criteria.valid">
           <trim prefix="(" prefixOverrides="and" suffix=")">
-            <foreach collection="criteria.criteria" item="criterion">
+            <foreach collection="criteria.criteria" item="criterion">coun
               <choose>
                 <when test="criterion.noValue">
                   and ${criterion.condition}
@@ -350,4 +351,14 @@
       sm4 = #{sm4,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
+
+  <select id="getLatestDate"  resultMap="BaseResultMap">
+    SELECT a.* FROM water_quality_result a,( SELECT ip,jcxm , MAX(create_time) AS create_time  FROM water_quality_result GROUP BY ip ,jcxm  ) b WHERE a.ip = b.ip AND a.create_time = b.create_time  AND a.jcxm = b.jcxm  ORDER BY a.ip ,a.jcxm
+  </select>
+
+
+
+
+
+
 </mapper>
