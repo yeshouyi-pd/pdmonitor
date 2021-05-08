@@ -1,28 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.pd.server.main.mapper.WaterQualityResultMapper">
-  <resultMap id="BaseResultMap" type="com.pd.server.main.domain.WaterQualityResult">
+<mapper namespace="com.pd.server.main.mapper.WaterQualityAvgMapper">
+  <resultMap id="BaseResultMap" type="com.pd.server.main.domain.WaterQualityAvg">
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="ip" jdbcType="VARCHAR" property="ip" />
-    <result column="port" jdbcType="INTEGER" property="port" />
     <result column="datacenter" jdbcType="VARCHAR" property="datacenter" />
     <result column="jcxm" jdbcType="VARCHAR" property="jcxm" />
-    <result column="instruct" jdbcType="VARCHAR" property="instruct" />
     <result column="data_result" jdbcType="VARCHAR" property="dataResult" />
-    <result column="data_original" jdbcType="VARCHAR" property="dataOriginal" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="bz" jdbcType="VARCHAR" property="bz" />
     <result column="sm1" jdbcType="VARCHAR" property="sm1" />
     <result column="sm2" jdbcType="VARCHAR" property="sm2" />
-    <result column="sm3" jdbcType="VARCHAR" property="sm3" />
-    <result column="sm4" jdbcType="VARCHAR" property="sm4" />
-  </resultMap>
-  <resultMap id="AvgResultMap" type="com.pd.server.main.dto.WaterQualityAvgDto">
-    <result column="ip" jdbcType="VARCHAR" property="ip" />
-    <result column="datacenter" jdbcType="VARCHAR" property="datacenter" />
-    <result column="jcxm" jdbcType="VARCHAR" property="jcxm" />
-    <result column="sumDataResult" jdbcType="DOUBLE" property="sumDataResult" />
-    <result column="count" jdbcType="INTEGER" property="count" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -83,16 +70,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, ip, port, datacenter, jcxm, instruct, data_result, data_original, create_time, 
-    bz, sm1, sm2, sm3, sm4
+    id, ip, datacenter, jcxm, data_result, create_time, sm1, sm2
   </sql>
-  <select id="selectByExample" parameterType="com.pd.server.main.domain.WaterQualityResultExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.pd.server.main.domain.WaterQualityAvgExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from water_quality_result
+    from water_quality_avg
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -103,33 +89,29 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from water_quality_result
+    from water_quality_avg
     where id = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    delete from water_quality_result
+    delete from water_quality_avg
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.pd.server.main.domain.WaterQualityResultExample">
-    delete from water_quality_result
+  <delete id="deleteByExample" parameterType="com.pd.server.main.domain.WaterQualityAvgExample">
+    delete from water_quality_avg
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.pd.server.main.domain.WaterQualityResult">
-    insert into water_quality_result (id, ip, port, 
-      datacenter, jcxm, instruct, 
-      data_result, data_original, create_time, 
-      bz, sm1, sm2, sm3, 
-      sm4)
-    values (#{id,jdbcType=VARCHAR}, #{ip,jdbcType=VARCHAR}, #{port,jdbcType=INTEGER}, 
-      #{datacenter,jdbcType=VARCHAR}, #{jcxm,jdbcType=VARCHAR}, #{instruct,jdbcType=VARCHAR}, 
-      #{dataResult,jdbcType=VARCHAR}, #{dataOriginal,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{bz,jdbcType=VARCHAR}, #{sm1,jdbcType=VARCHAR}, #{sm2,jdbcType=VARCHAR}, #{sm3,jdbcType=VARCHAR}, 
-      #{sm4,jdbcType=VARCHAR})
+  <insert id="insert" parameterType="com.pd.server.main.domain.WaterQualityAvg">
+    insert into water_quality_avg (id, ip, datacenter, 
+      jcxm, data_result, create_time, 
+      sm1, sm2)
+    values (#{id,jdbcType=VARCHAR}, #{ip,jdbcType=VARCHAR}, #{datacenter,jdbcType=VARCHAR}, 
+      #{jcxm,jdbcType=VARCHAR}, #{dataResult,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{sm1,jdbcType=VARCHAR}, #{sm2,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.pd.server.main.domain.WaterQualityResult">
-    insert into water_quality_result
+  <insert id="insertSelective" parameterType="com.pd.server.main.domain.WaterQualityAvg">
+    insert into water_quality_avg
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
@@ -137,41 +119,23 @@
       <if test="ip != null">
         ip,
       </if>
-      <if test="port != null">
-        port,
-      </if>
       <if test="datacenter != null">
         datacenter,
       </if>
       <if test="jcxm != null">
         jcxm,
       </if>
-      <if test="instruct != null">
-        instruct,
-      </if>
       <if test="dataResult != null">
         data_result,
       </if>
-      <if test="dataOriginal != null">
-        data_original,
-      </if>
       <if test="createTime != null">
         create_time,
-      </if>
-      <if test="bz != null">
-        bz,
       </if>
       <if test="sm1 != null">
         sm1,
       </if>
       <if test="sm2 != null">
         sm2,
-      </if>
-      <if test="sm3 != null">
-        sm3,
-      </if>
-      <if test="sm4 != null">
-        sm4,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -181,29 +145,17 @@
       <if test="ip != null">
         #{ip,jdbcType=VARCHAR},
       </if>
-      <if test="port != null">
-        #{port,jdbcType=INTEGER},
-      </if>
       <if test="datacenter != null">
         #{datacenter,jdbcType=VARCHAR},
       </if>
       <if test="jcxm != null">
         #{jcxm,jdbcType=VARCHAR},
       </if>
-      <if test="instruct != null">
-        #{instruct,jdbcType=VARCHAR},
-      </if>
       <if test="dataResult != null">
         #{dataResult,jdbcType=VARCHAR},
       </if>
-      <if test="dataOriginal != null">
-        #{dataOriginal,jdbcType=VARCHAR},
-      </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="bz != null">
-        #{bz,jdbcType=VARCHAR},
       </if>
       <if test="sm1 != null">
         #{sm1,jdbcType=VARCHAR},
@@ -211,22 +163,16 @@
       <if test="sm2 != null">
         #{sm2,jdbcType=VARCHAR},
       </if>
-      <if test="sm3 != null">
-        #{sm3,jdbcType=VARCHAR},
-      </if>
-      <if test="sm4 != null">
-        #{sm4,jdbcType=VARCHAR},
-      </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.pd.server.main.domain.WaterQualityResultExample" resultType="java.lang.Long">
-    select count(*) from water_quality_result
+  <select id="countByExample" parameterType="com.pd.server.main.domain.WaterQualityAvgExample" resultType="java.lang.Long">
+    select count(*) from water_quality_avg
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update water_quality_result
+    update water_quality_avg
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=VARCHAR},
@@ -234,29 +180,17 @@
       <if test="record.ip != null">
         ip = #{record.ip,jdbcType=VARCHAR},
       </if>
-      <if test="record.port != null">
-        port = #{record.port,jdbcType=INTEGER},
-      </if>
       <if test="record.datacenter != null">
         datacenter = #{record.datacenter,jdbcType=VARCHAR},
       </if>
       <if test="record.jcxm != null">
         jcxm = #{record.jcxm,jdbcType=VARCHAR},
       </if>
-      <if test="record.instruct != null">
-        instruct = #{record.instruct,jdbcType=VARCHAR},
-      </if>
       <if test="record.dataResult != null">
         data_result = #{record.dataResult,jdbcType=VARCHAR},
       </if>
-      <if test="record.dataOriginal != null">
-        data_original = #{record.dataOriginal,jdbcType=VARCHAR},
-      </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.bz != null">
-        bz = #{record.bz,jdbcType=VARCHAR},
       </if>
       <if test="record.sm1 != null">
         sm1 = #{record.sm1,jdbcType=VARCHAR},
@@ -264,45 +198,30 @@
       <if test="record.sm2 != null">
         sm2 = #{record.sm2,jdbcType=VARCHAR},
       </if>
-      <if test="record.sm3 != null">
-        sm3 = #{record.sm3,jdbcType=VARCHAR},
-      </if>
-      <if test="record.sm4 != null">
-        sm4 = #{record.sm4,jdbcType=VARCHAR},
-      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update water_quality_result
+    update water_quality_avg
     set id = #{record.id,jdbcType=VARCHAR},
       ip = #{record.ip,jdbcType=VARCHAR},
-      port = #{record.port,jdbcType=INTEGER},
       datacenter = #{record.datacenter,jdbcType=VARCHAR},
       jcxm = #{record.jcxm,jdbcType=VARCHAR},
-      instruct = #{record.instruct,jdbcType=VARCHAR},
       data_result = #{record.dataResult,jdbcType=VARCHAR},
-      data_original = #{record.dataOriginal,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      bz = #{record.bz,jdbcType=VARCHAR},
       sm1 = #{record.sm1,jdbcType=VARCHAR},
-      sm2 = #{record.sm2,jdbcType=VARCHAR},
-      sm3 = #{record.sm3,jdbcType=VARCHAR},
-      sm4 = #{record.sm4,jdbcType=VARCHAR}
+      sm2 = #{record.sm2,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.pd.server.main.domain.WaterQualityResult">
-    update water_quality_result
+  <update id="updateByPrimaryKeySelective" parameterType="com.pd.server.main.domain.WaterQualityAvg">
+    update water_quality_avg
     <set>
       <if test="ip != null">
         ip = #{ip,jdbcType=VARCHAR},
-      </if>
-      <if test="port != null">
-        port = #{port,jdbcType=INTEGER},
       </if>
       <if test="datacenter != null">
         datacenter = #{datacenter,jdbcType=VARCHAR},
@@ -310,20 +229,11 @@
       <if test="jcxm != null">
         jcxm = #{jcxm,jdbcType=VARCHAR},
       </if>
-      <if test="instruct != null">
-        instruct = #{instruct,jdbcType=VARCHAR},
-      </if>
       <if test="dataResult != null">
         data_result = #{dataResult,jdbcType=VARCHAR},
       </if>
-      <if test="dataOriginal != null">
-        data_original = #{dataOriginal,jdbcType=VARCHAR},
-      </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="bz != null">
-        bz = #{bz,jdbcType=VARCHAR},
       </if>
       <if test="sm1 != null">
         sm1 = #{sm1,jdbcType=VARCHAR},
@@ -331,38 +241,18 @@
       <if test="sm2 != null">
         sm2 = #{sm2,jdbcType=VARCHAR},
       </if>
-      <if test="sm3 != null">
-        sm3 = #{sm3,jdbcType=VARCHAR},
-      </if>
-      <if test="sm4 != null">
-        sm4 = #{sm4,jdbcType=VARCHAR},
-      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.pd.server.main.domain.WaterQualityResult">
-    update water_quality_result
+  <update id="updateByPrimaryKey" parameterType="com.pd.server.main.domain.WaterQualityAvg">
+    update water_quality_avg
     set ip = #{ip,jdbcType=VARCHAR},
-      port = #{port,jdbcType=INTEGER},
       datacenter = #{datacenter,jdbcType=VARCHAR},
       jcxm = #{jcxm,jdbcType=VARCHAR},
-      instruct = #{instruct,jdbcType=VARCHAR},
       data_result = #{dataResult,jdbcType=VARCHAR},
-      data_original = #{dataOriginal,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      bz = #{bz,jdbcType=VARCHAR},
       sm1 = #{sm1,jdbcType=VARCHAR},
-      sm2 = #{sm2,jdbcType=VARCHAR},
-      sm3 = #{sm3,jdbcType=VARCHAR},
-      sm4 = #{sm4,jdbcType=VARCHAR}
+      sm2 = #{sm2,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
-  <select id="selectAvgByExample" parameterType="com.pd.server.main.domain.WaterQualityResultExample" resultMap="AvgResultMap">
-    select ip,datacenter,jcxm,SUM(data_result) sumDataResult,COUNT(*) count
-    from water_quality_result
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    GROUP BY ip,datacenter,jcxm
-  </select>
 </mapper>

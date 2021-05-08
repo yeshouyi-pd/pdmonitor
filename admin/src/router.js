@@ -14,7 +14,8 @@ import WaterEquipment from "./views/monitor/waterEquipment.vue"
 import WaterQuality from "./views/monitor/waterQuality.vue"
 import WaterQualityResult from "./views/monitor/waterQualityResult.vue"
 import EquipmentMap from "./views/monitor/equipmentMap.vue"
-import MonitorEquipment from "./views/monitor/monitorEquipment.vue"
+import MonitorEquipmentNow from "./views/monitor/monitorEquipmentNow.vue"
+import MonitorEquipmentHis from "./views/monitor/monitorEquipmentHis.vue"
 import WaterNoiseImage from "./views/monitor/waterNoiseImage.vue"
 import EquipmentFile from "./views/monitor/equipmentFile.vue"
 import AlarmNumbers from "./views/monitor/alarmNumbers.vue"
@@ -96,9 +97,13 @@ export default new Router({
             name: "monitor/equipmentMap",
             component: EquipmentMap
         },{
-            path: "monitor/monitorEquipment",
-            name: "monitor/monitorEquipment",
-            component: MonitorEquipment
+            path: "monitor/monitorEquipmentNow",
+            name: "monitor/monitorEquipmentNow",
+            component: MonitorEquipmentNow
+        },{
+            path: "monitor/monitorEquipmentHis",
+            name: "monitor/monitorEquipmentHis",
+            component: MonitorEquipmentHis
         },{
             path: "monitor/waterNoiseImage",
             name: "monitor/waterNoiseImage",

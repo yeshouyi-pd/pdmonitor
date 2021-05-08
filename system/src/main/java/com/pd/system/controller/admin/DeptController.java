@@ -97,15 +97,11 @@ public ResponseDto save(@RequestBody DeptDto deptDto) {
             ValidatorUtil.length(deptDto.getLinkman(), "联系人", 1, 100);
             ValidatorUtil.require(deptDto.getJd(), "经度");
             ValidatorUtil.require(deptDto.getWd(), "纬度");
-            ValidatorUtil.require(deptDto.getGryymax(), "个人每日最大预约数");
-            ValidatorUtil.require(deptDto.getQyyymax(), "企业每日最大预约数");
-            ValidatorUtil.require(deptDto.getDepttype(), "机构类别");
-            ValidatorUtil.require(deptDto.getMaxday(), "最大提前预约天数");
 
     ResponseDto responseDto = new ResponseDto();
     deptDto.setCreatetime(new Date());//创建时间
     deptDto.setUpdatetime(new Date());//修改时间
-    LoginUserDto user    =getRequestHeader();
+    LoginUserDto user=getRequestHeader();
     deptDto.setCreateman(user.getLoginName());
     deptDto.setUpdateman(user.getLoginName());
 

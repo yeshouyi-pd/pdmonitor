@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class WaterQualityResultExample {
+public class WaterQualityAvgExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public WaterQualityResultExample() {
+    public WaterQualityAvgExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -245,66 +245,6 @@ public class WaterQualityResultExample {
             return (Criteria) this;
         }
 
-        public Criteria andPortIsNull() {
-            addCriterion("port is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPortIsNotNull() {
-            addCriterion("port is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPortEqualTo(Integer value) {
-            addCriterion("port =", value, "port");
-            return (Criteria) this;
-        }
-
-        public Criteria andPortNotEqualTo(Integer value) {
-            addCriterion("port <>", value, "port");
-            return (Criteria) this;
-        }
-
-        public Criteria andPortGreaterThan(Integer value) {
-            addCriterion("port >", value, "port");
-            return (Criteria) this;
-        }
-
-        public Criteria andPortGreaterThanOrEqualTo(Integer value) {
-            addCriterion("port >=", value, "port");
-            return (Criteria) this;
-        }
-
-        public Criteria andPortLessThan(Integer value) {
-            addCriterion("port <", value, "port");
-            return (Criteria) this;
-        }
-
-        public Criteria andPortLessThanOrEqualTo(Integer value) {
-            addCriterion("port <=", value, "port");
-            return (Criteria) this;
-        }
-
-        public Criteria andPortIn(List<Integer> values) {
-            addCriterion("port in", values, "port");
-            return (Criteria) this;
-        }
-
-        public Criteria andPortNotIn(List<Integer> values) {
-            addCriterion("port not in", values, "port");
-            return (Criteria) this;
-        }
-
-        public Criteria andPortBetween(Integer value1, Integer value2) {
-            addCriterion("port between", value1, value2, "port");
-            return (Criteria) this;
-        }
-
-        public Criteria andPortNotBetween(Integer value1, Integer value2) {
-            addCriterion("port not between", value1, value2, "port");
-            return (Criteria) this;
-        }
-
         public Criteria andDatacenterIsNull() {
             addCriterion("datacenter is null");
             return (Criteria) this;
@@ -445,76 +385,6 @@ public class WaterQualityResultExample {
             return (Criteria) this;
         }
 
-        public Criteria andInstructIsNull() {
-            addCriterion("instruct is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andInstructIsNotNull() {
-            addCriterion("instruct is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andInstructEqualTo(String value) {
-            addCriterion("instruct =", value, "instruct");
-            return (Criteria) this;
-        }
-
-        public Criteria andInstructNotEqualTo(String value) {
-            addCriterion("instruct <>", value, "instruct");
-            return (Criteria) this;
-        }
-
-        public Criteria andInstructGreaterThan(String value) {
-            addCriterion("instruct >", value, "instruct");
-            return (Criteria) this;
-        }
-
-        public Criteria andInstructGreaterThanOrEqualTo(String value) {
-            addCriterion("instruct >=", value, "instruct");
-            return (Criteria) this;
-        }
-
-        public Criteria andInstructLessThan(String value) {
-            addCriterion("instruct <", value, "instruct");
-            return (Criteria) this;
-        }
-
-        public Criteria andInstructLessThanOrEqualTo(String value) {
-            addCriterion("instruct <=", value, "instruct");
-            return (Criteria) this;
-        }
-
-        public Criteria andInstructLike(String value) {
-            addCriterion("instruct like", value, "instruct");
-            return (Criteria) this;
-        }
-
-        public Criteria andInstructNotLike(String value) {
-            addCriterion("instruct not like", value, "instruct");
-            return (Criteria) this;
-        }
-
-        public Criteria andInstructIn(List<String> values) {
-            addCriterion("instruct in", values, "instruct");
-            return (Criteria) this;
-        }
-
-        public Criteria andInstructNotIn(List<String> values) {
-            addCriterion("instruct not in", values, "instruct");
-            return (Criteria) this;
-        }
-
-        public Criteria andInstructBetween(String value1, String value2) {
-            addCriterion("instruct between", value1, value2, "instruct");
-            return (Criteria) this;
-        }
-
-        public Criteria andInstructNotBetween(String value1, String value2) {
-            addCriterion("instruct not between", value1, value2, "instruct");
-            return (Criteria) this;
-        }
-
         public Criteria andDataResultIsNull() {
             addCriterion("data_result is null");
             return (Criteria) this;
@@ -585,76 +455,6 @@ public class WaterQualityResultExample {
             return (Criteria) this;
         }
 
-        public Criteria andDataOriginalIsNull() {
-            addCriterion("data_original is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andDataOriginalIsNotNull() {
-            addCriterion("data_original is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andDataOriginalEqualTo(String value) {
-            addCriterion("data_original =", value, "dataOriginal");
-            return (Criteria) this;
-        }
-
-        public Criteria andDataOriginalNotEqualTo(String value) {
-            addCriterion("data_original <>", value, "dataOriginal");
-            return (Criteria) this;
-        }
-
-        public Criteria andDataOriginalGreaterThan(String value) {
-            addCriterion("data_original >", value, "dataOriginal");
-            return (Criteria) this;
-        }
-
-        public Criteria andDataOriginalGreaterThanOrEqualTo(String value) {
-            addCriterion("data_original >=", value, "dataOriginal");
-            return (Criteria) this;
-        }
-
-        public Criteria andDataOriginalLessThan(String value) {
-            addCriterion("data_original <", value, "dataOriginal");
-            return (Criteria) this;
-        }
-
-        public Criteria andDataOriginalLessThanOrEqualTo(String value) {
-            addCriterion("data_original <=", value, "dataOriginal");
-            return (Criteria) this;
-        }
-
-        public Criteria andDataOriginalLike(String value) {
-            addCriterion("data_original like", value, "dataOriginal");
-            return (Criteria) this;
-        }
-
-        public Criteria andDataOriginalNotLike(String value) {
-            addCriterion("data_original not like", value, "dataOriginal");
-            return (Criteria) this;
-        }
-
-        public Criteria andDataOriginalIn(List<String> values) {
-            addCriterion("data_original in", values, "dataOriginal");
-            return (Criteria) this;
-        }
-
-        public Criteria andDataOriginalNotIn(List<String> values) {
-            addCriterion("data_original not in", values, "dataOriginal");
-            return (Criteria) this;
-        }
-
-        public Criteria andDataOriginalBetween(String value1, String value2) {
-            addCriterion("data_original between", value1, value2, "dataOriginal");
-            return (Criteria) this;
-        }
-
-        public Criteria andDataOriginalNotBetween(String value1, String value2) {
-            addCriterion("data_original not between", value1, value2, "dataOriginal");
-            return (Criteria) this;
-        }
-
         public Criteria andCreateTimeIsNull() {
             addCriterion("create_time is null");
             return (Criteria) this;
@@ -667,11 +467,6 @@ public class WaterQualityResultExample {
 
         public Criteria andCreateTimeEqualTo(Date value) {
             addCriterion("create_time =", value, "createTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateTimeEqualTo(String value) {
-            addCriterion("DATE_FORMAT(create_time,'%Y-%m-%d') =", value, "createTime");
             return (Criteria) this;
         }
 
@@ -717,76 +512,6 @@ public class WaterQualityResultExample {
 
         public Criteria andCreateTimeNotBetween(Date value1, Date value2) {
             addCriterion("create_time not between", value1, value2, "createTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andBzIsNull() {
-            addCriterion("bz is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andBzIsNotNull() {
-            addCriterion("bz is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andBzEqualTo(String value) {
-            addCriterion("bz =", value, "bz");
-            return (Criteria) this;
-        }
-
-        public Criteria andBzNotEqualTo(String value) {
-            addCriterion("bz <>", value, "bz");
-            return (Criteria) this;
-        }
-
-        public Criteria andBzGreaterThan(String value) {
-            addCriterion("bz >", value, "bz");
-            return (Criteria) this;
-        }
-
-        public Criteria andBzGreaterThanOrEqualTo(String value) {
-            addCriterion("bz >=", value, "bz");
-            return (Criteria) this;
-        }
-
-        public Criteria andBzLessThan(String value) {
-            addCriterion("bz <", value, "bz");
-            return (Criteria) this;
-        }
-
-        public Criteria andBzLessThanOrEqualTo(String value) {
-            addCriterion("bz <=", value, "bz");
-            return (Criteria) this;
-        }
-
-        public Criteria andBzLike(String value) {
-            addCriterion("bz like", value, "bz");
-            return (Criteria) this;
-        }
-
-        public Criteria andBzNotLike(String value) {
-            addCriterion("bz not like", value, "bz");
-            return (Criteria) this;
-        }
-
-        public Criteria andBzIn(List<String> values) {
-            addCriterion("bz in", values, "bz");
-            return (Criteria) this;
-        }
-
-        public Criteria andBzNotIn(List<String> values) {
-            addCriterion("bz not in", values, "bz");
-            return (Criteria) this;
-        }
-
-        public Criteria andBzBetween(String value1, String value2) {
-            addCriterion("bz between", value1, value2, "bz");
-            return (Criteria) this;
-        }
-
-        public Criteria andBzNotBetween(String value1, String value2) {
-            addCriterion("bz not between", value1, value2, "bz");
             return (Criteria) this;
         }
 
@@ -927,146 +652,6 @@ public class WaterQualityResultExample {
 
         public Criteria andSm2NotBetween(String value1, String value2) {
             addCriterion("sm2 not between", value1, value2, "sm2");
-            return (Criteria) this;
-        }
-
-        public Criteria andSm3IsNull() {
-            addCriterion("sm3 is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andSm3IsNotNull() {
-            addCriterion("sm3 is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andSm3EqualTo(String value) {
-            addCriterion("sm3 =", value, "sm3");
-            return (Criteria) this;
-        }
-
-        public Criteria andSm3NotEqualTo(String value) {
-            addCriterion("sm3 <>", value, "sm3");
-            return (Criteria) this;
-        }
-
-        public Criteria andSm3GreaterThan(String value) {
-            addCriterion("sm3 >", value, "sm3");
-            return (Criteria) this;
-        }
-
-        public Criteria andSm3GreaterThanOrEqualTo(String value) {
-            addCriterion("sm3 >=", value, "sm3");
-            return (Criteria) this;
-        }
-
-        public Criteria andSm3LessThan(String value) {
-            addCriterion("sm3 <", value, "sm3");
-            return (Criteria) this;
-        }
-
-        public Criteria andSm3LessThanOrEqualTo(String value) {
-            addCriterion("sm3 <=", value, "sm3");
-            return (Criteria) this;
-        }
-
-        public Criteria andSm3Like(String value) {
-            addCriterion("sm3 like", value, "sm3");
-            return (Criteria) this;
-        }
-
-        public Criteria andSm3NotLike(String value) {
-            addCriterion("sm3 not like", value, "sm3");
-            return (Criteria) this;
-        }
-
-        public Criteria andSm3In(List<String> values) {
-            addCriterion("sm3 in", values, "sm3");
-            return (Criteria) this;
-        }
-
-        public Criteria andSm3NotIn(List<String> values) {
-            addCriterion("sm3 not in", values, "sm3");
-            return (Criteria) this;
-        }
-
-        public Criteria andSm3Between(String value1, String value2) {
-            addCriterion("sm3 between", value1, value2, "sm3");
-            return (Criteria) this;
-        }
-
-        public Criteria andSm3NotBetween(String value1, String value2) {
-            addCriterion("sm3 not between", value1, value2, "sm3");
-            return (Criteria) this;
-        }
-
-        public Criteria andSm4IsNull() {
-            addCriterion("sm4 is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andSm4IsNotNull() {
-            addCriterion("sm4 is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andSm4EqualTo(String value) {
-            addCriterion("sm4 =", value, "sm4");
-            return (Criteria) this;
-        }
-
-        public Criteria andSm4NotEqualTo(String value) {
-            addCriterion("sm4 <>", value, "sm4");
-            return (Criteria) this;
-        }
-
-        public Criteria andSm4GreaterThan(String value) {
-            addCriterion("sm4 >", value, "sm4");
-            return (Criteria) this;
-        }
-
-        public Criteria andSm4GreaterThanOrEqualTo(String value) {
-            addCriterion("sm4 >=", value, "sm4");
-            return (Criteria) this;
-        }
-
-        public Criteria andSm4LessThan(String value) {
-            addCriterion("sm4 <", value, "sm4");
-            return (Criteria) this;
-        }
-
-        public Criteria andSm4LessThanOrEqualTo(String value) {
-            addCriterion("sm4 <=", value, "sm4");
-            return (Criteria) this;
-        }
-
-        public Criteria andSm4Like(String value) {
-            addCriterion("sm4 like", value, "sm4");
-            return (Criteria) this;
-        }
-
-        public Criteria andSm4NotLike(String value) {
-            addCriterion("sm4 not like", value, "sm4");
-            return (Criteria) this;
-        }
-
-        public Criteria andSm4In(List<String> values) {
-            addCriterion("sm4 in", values, "sm4");
-            return (Criteria) this;
-        }
-
-        public Criteria andSm4NotIn(List<String> values) {
-            addCriterion("sm4 not in", values, "sm4");
-            return (Criteria) this;
-        }
-
-        public Criteria andSm4Between(String value1, String value2) {
-            addCriterion("sm4 between", value1, value2, "sm4");
-            return (Criteria) this;
-        }
-
-        public Criteria andSm4NotBetween(String value1, String value2) {
-            addCriterion("sm4 not between", value1, value2, "sm4");
             return (Criteria) this;
         }
     }
