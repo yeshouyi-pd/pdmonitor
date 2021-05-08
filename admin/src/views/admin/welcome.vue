@@ -53,7 +53,10 @@
                               {{szjcx|optionMapKV(item.jcxm )}}
                             </td>
                             <td >
-                              <b class="green">{{item.dataResult}}</b>{{JYXM_DW|optionKV(item.jcxm)}}
+                              <div v-show="item.dataResult">
+                                <b class="green">{{item.dataResult}}</b>{{JYXM_DW|optionKV(item.jcxm)}}
+                              </div>
+
                             </td>
                             <td>{{item.createTime}}</td>
                           </tr>
