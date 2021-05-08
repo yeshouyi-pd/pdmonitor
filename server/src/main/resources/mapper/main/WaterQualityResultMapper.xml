@@ -363,11 +363,6 @@
     SELECT a.* FROM water_quality_result a,( SELECT ip,jcxm , MAX(create_time) AS create_time  FROM water_quality_result GROUP BY ip ,jcxm  ) b WHERE a.ip = b.ip AND a.create_time = b.create_time  AND a.jcxm = b.jcxm  ORDER BY a.ip ,a.jcxm
   </select>
 
-
-
-
-
-
   <select id="selectAvgByExample" parameterType="com.pd.server.main.domain.WaterQualityResultExample" resultMap="AvgResultMap">
     select ip,datacenter,jcxm,SUM(data_result) sumDataResult,COUNT(*) count
     from water_quality_result
