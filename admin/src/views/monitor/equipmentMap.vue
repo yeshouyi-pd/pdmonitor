@@ -13,9 +13,13 @@
 <script>
 export default {
   name:'equipment-map',
+  props: {
+    heightMax: {
+      default: ""
+    },
+  },
   data: function() {
     return {
-      heightMax:'',
       waterDatas:[],
       deptMap:[],
       onLineCount:0,
@@ -33,8 +37,11 @@ export default {
         _this.$forceUpdate();
       }
     })
-    let h = document.documentElement.clientHeight || document.body.clientHeight;
-    _this.heightMax = h*0.8-20;
+    if(Tool.isEmpty(_this.heightMax)){
+      let h = document.documentElement.clientHeight || document.body.clientHeight;
+      _this.heightMax = h*0.8-20;
+    }
+
     _this.deptMap = Tool.getDeptUser();
     _this.findDeviceInfo();
   },
@@ -79,7 +86,7 @@ export default {
       let option = {
         amap: {
           center: [114.299945,30.593221],
-          zoom: 7,
+          zoom: 8,
           roam: true, // 允许缩放
         },
         tooltip : {

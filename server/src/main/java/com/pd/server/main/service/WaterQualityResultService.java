@@ -2,6 +2,7 @@ package com.pd.server.main.service;
 
 import com.pd.server.main.domain.WaterQualityResult;
 import com.pd.server.main.domain.WaterQualityResultExample;
+import com.pd.server.main.dto.KvMapDto;
 import com.pd.server.main.dto.WaterQualityResultDto;
 import com.pd.server.main.dto.PageDto;
 import com.pd.server.main.mapper.WaterQualityResultMapper;
@@ -75,5 +76,16 @@ public class WaterQualityResultService {
     public void delete(String id) {
         waterQualityResultMapper.deleteByPrimaryKey(id);
     }
+
+
+    public List<WaterQualityResultDto> getLatestDate(){
+        List<WaterQualityResult>  listdata = waterQualityResultMapper.getLatestDate();
+        List<WaterQualityResultDto> list = CopyUtil.copyList(listdata, WaterQualityResultDto.class);
+        return   list;
+
+    }
+
+
+
 
 }

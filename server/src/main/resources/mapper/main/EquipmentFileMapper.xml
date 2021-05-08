@@ -16,6 +16,13 @@
     <result column="bjsj" jdbcType="VARCHAR" property="bjsj" />
     <result column="alarmNum" jdbcType="INTEGER" property="alarmNum" />
   </resultMap>
+
+  <resultMap id="BaseResultMapKV" type="com.pd.server.main.dto.WelcomeKvDto">
+    <result column="deptname" jdbcType="VARCHAR" property="deptname" />
+    <result column="text" jdbcType="VARCHAR" property="text" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+  </resultMap>
+
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -290,5 +297,9 @@
     </if>
     group by sbbh, rq
     order by rq desc
+  </select>
+
+  <select id="getWarningDate"  resultMap="BaseResultMapKV">
+    SELECT  b.`deptname`  , c.`text`  , c.`code` FROM     water_equipment a , dept  b , ( SELECT sbbh  `text` ,COUNT(*)  `code`  FROM   equipment_file  WHERE   rq =  CURRENT_DATE() AND tplj LIKE '%.png' GROUP BY sbbh ) c  WHERE a.sbsn = c.text AND  a.deptcode = b.deptcode
   </select>
 </mapper>

@@ -5,6 +5,7 @@ import com.pd.server.exception.BusinessExceptionCode;
 import com.pd.server.main.domain.WaterEquipment;
 import com.pd.server.main.domain.WaterEquipmentExample;
 import com.pd.server.main.dto.LoginUserDto;
+import com.pd.server.main.dto.PieChartDto;
 import com.pd.server.main.dto.WaterEquipmentDto;
 import com.pd.server.main.dto.PageDto;
 import com.pd.server.main.mapper.WaterEquipmentMapper;
@@ -99,4 +100,7 @@ public class WaterEquipmentService {
         waterEquipmentMapper.deleteByPrimaryKey(id);
     }
 
+    public List<PieChartDto> getPieChart() {
+       return waterEquipmentMapper.getPieChart();
+    }
 }
