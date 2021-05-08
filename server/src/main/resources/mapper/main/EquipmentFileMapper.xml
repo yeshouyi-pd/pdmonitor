@@ -289,6 +289,6 @@
       <include refid="Example_Where_Clause" />
     </if>
     group by sbbh, rq
-    order by rq
+    order by rq desc
   </select>
 </mapper>

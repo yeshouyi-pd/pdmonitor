@@ -144,8 +144,8 @@
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
     <div id="form-modal" class="modal fade" tabindex="-1" role="dialog">
-      <div class="modal-dialog" style="width: 50%;height: auto" role="document">
-        <div class="modal-content">
+      <div class="modal-dialog" style="width: 60%;height: auto" role="document">
+        <div class="modal-content" >
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title">用户管理</h4>
@@ -153,29 +153,29 @@
           <div class="modal-body">
             <form class="form-horizontal">
               <div class="form-group">
-                <label class="col-sm-1 control-label">账号</label>
-                <div class="col-sm-5">
+                <label class="col-sm-2 control-label">账号</label>
+                <div class="col-sm-3">
                   <input v-model="user.loginName"   v-bind:disabled="user.id" class="form-control">
                 </div>
-                <label class="col-sm-1 control-label">密码</label>
-                <div class="col-sm-5">
+                <label class="col-sm-2 control-label">密码</label>
+                <div class="col-sm-3">
                   <input v-model="user.password"   class="form-control">
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-1 control-label">用户名称</label>
-                <div class="col-sm-5">
+                <label class="col-sm-2 control-label">用户名称</label>
+                <div class="col-sm-3">
                   <input v-model="user.name" class="form-control">
                 </div>
-                <label class="col-sm-1 control-label">证件号码</label>
-                <div class="col-sm-5">
+                <label class="col-sm-2 control-label">证件号码</label>
+                <div class="col-sm-3">
                   <input v-model="user.sfzhm" class="form-control">
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="col-sm-1 control-label">部门</label>
-                <div class="col-sm-5">
+                <label class="col-sm-2 control-label">部门</label>
+                <div class="col-sm-3">
                   <div class="row">
                     <div class="col-sm-9">
                       <input  style="display: none" v-model="user.deptcode"  class="form-control">
@@ -186,8 +186,8 @@
                     </div>
                   </div>
                 </div>
-                <label class="col-sm-1 control-label">角色</label>
-                <div class="col-sm-5">
+                <label class="col-sm-2 control-label">角色</label>
+                <div class="col-sm-3">
                   <select v-model="user.rode" class="form-control">
                     <option v-for="o in roles" v-bind:value="o.id">{{o.name}}</option>
                   </select>
@@ -196,52 +196,18 @@
               </div>
 
               <div class="form-group">
-                <label class="col-sm-1 control-label">是否警员</label>
-                <div class="col-sm-5">
-                  <div class="radio">
-                    <label>
-                      <input name="form-sfjy-radio" type="radio"  value="Y" v-model="user.sfjy" class="ace input-lg" />
-                      <span class="lbl bigger-120">是</span>
-                    </label>
-                    <label>
-                      <input name="form-sfjy-radio" type="radio"  value="N"  v-model="user.sfjy" class="ace input-lg" />
-                      <span class="lbl bigger-120">否</span>
-                    </label>
-                  </div>
-                </div>
-                <label class="col-sm-1 control-label">警员编号</label>
-                <div class="col-sm-5">
-                  <input v-model="user.jjbh" class="form-control">
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-sm-1 control-label">用户有效期</label>
-                <div class="col-sm-5">
+                <label class="col-sm-2 control-label">用户有效期</label>
+                <div class="col-sm-3">
                   <Dategreater  @methodName="ipstartDate" style="width:100%" idValue="yhyxq"   :setValue="user.yhyxq"></Dategreater>
                 </div>
-                <label class="col-sm-1 control-label">密码有效期</label>
-                <div class="col-sm-5">
+                <label class="col-sm-2 control-label">密码有效期</label>
+                <div class="col-sm-3">
                   <Dategreater @methodName="ipendDate" style="width:100%" idValue="mmyxq"   :setValue="user.mmyxq"></Dategreater>
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-1 control-label">IP范围</label>
-                <div class="col-sm-5">
-                  <div class="row">
-                    <div class="col-sm-5">
-                      <input   v-model="user.ipstart" class="form-control" pattern="起始IP">
-                    </div>
-                    <div class="col-sm-2">
-
-                    </div>
-                    <div class="col-sm-5">
-                      <input   v-model="user.ipend" class="form-control" pattern="结束IP">
-                    </div>
-                  </div>
-
-                </div>
-                <label class="col-sm-1 control-label">是否启用</label>
-                <div class="col-sm-5">
+                <label class="col-sm-2 control-label">是否启用</label>
+                <div class="col-sm-3">
                   <div class="radio">
                     <label>
                       <input name="form-zt-radio" type="radio"  value="Y" v-model="user.zt" class="ace input-lg" />

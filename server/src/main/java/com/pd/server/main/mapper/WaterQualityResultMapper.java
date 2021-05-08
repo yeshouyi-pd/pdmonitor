@@ -1,8 +1,11 @@
 package com.pd.server.main.mapper;
 
+import com.pd.server.main.domain.WaterQualityAvg;
 import com.pd.server.main.domain.WaterQualityResult;
 import com.pd.server.main.domain.WaterQualityResultExample;
 import java.util.List;
+
+import com.pd.server.main.dto.WaterQualityAvgDto;
 import org.apache.ibatis.annotations.Param;
 
 public interface WaterQualityResultMapper {
@@ -27,4 +30,6 @@ public interface WaterQualityResultMapper {
     int updateByPrimaryKeySelective(WaterQualityResult record);
 
     int updateByPrimaryKey(WaterQualityResult record);
+
+    List<WaterQualityAvgDto> selectAvgByExample(WaterQualityResultExample example);
 }
