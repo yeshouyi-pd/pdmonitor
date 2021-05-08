@@ -5,6 +5,7 @@ import com.pd.server.main.domain.EquipmentFileExample;
 import com.pd.server.main.dto.EquipmentFileDto;
 import com.pd.server.main.dto.KvMapDto;
 import com.pd.server.main.dto.PageDto;
+import com.pd.server.main.dto.WelcomeKvDto;
 import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
 import com.pd.server.main.mapper.EquipmentFileMapper;
 import com.pd.server.util.CopyUtil;
@@ -106,7 +107,7 @@ public class EquipmentFileService {
 
 
 
-    public  List<KvMapDto> getWarningDate(){
+    public  List<WelcomeKvDto> getWarningDate(){
         return equipmentFileMapper.getWarningDate();
     }
 

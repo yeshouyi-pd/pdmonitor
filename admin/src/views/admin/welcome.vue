@@ -46,20 +46,16 @@
 
                           <tbody>
 
-                          <tr>
-                            <td>internet.com</td>
 
+                          <tr v-for="item  in  waterQualityResults" style="text-align: left">
+                            <td>{{ item.ip }}</td>
                             <td>
-                              <small>
-                                <s class="red">$29.99</s>
-                              </small>
-                              <b class="green">$19.99</b>
+                             {{ item.jcxm }}
                             </td>
-
-                            <td class="hidden-480">
-                              <span class="label label-info arrowed-right arrowed-in">on sale</span>
+                            <td >
+                              <b class="green">{{item.dataResult}}</b>
                             </td>
-                            <td>internet.com</td>
+                            <td>{{item.createTime}}</td>
                           </tr>
 
 
@@ -141,18 +137,13 @@
                               </thead>
 
                               <tbody>
-                              <tr>
-                                <td>internet.com</td>
-
+                              <tr v-for="keval in kvMaps">
+                                <td>{{ keval.deptname }}</td>
                                 <td>
-                                  <small>
-                                    <s class="red">$29.99</s>
-                                  </small>
-                                  <b class="green">$19.99</b>
+                                 {{keval.text}}
                                 </td>
-
-                                <td class="hidden-480">
-                                  <span class="label label-info arrowed-right arrowed-in">on sale</span>
+                                <td>
+                                  <b class="red">{{keval.code}}</b>
                                 </td>
                               </tr>
                               </tbody>
@@ -245,10 +236,48 @@
 
 export default {
   name:'welcome',
-  mounted:function(){//mounted初始化方法
-    // this.$parent 调用父组件
-    //   this.$parent.activeSidebae("welcome-sidebar");
-  }
+  data: function() {
+    return {
+      waterQualityResults:[],
+      kvMaps:[],
+    }
+  },
+  mounted:function(){
+    let _this = this;
+    _this.getLatestDate();
+    _this.getWarningDate();
+  },
+  methods: {
+
+    /**
+     *  welcome 水质实时数据
+     */
+    getLatestDate() {
+      let _this = this;
+      Loading.show();
+      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getLatestDate').then((res)=>{
+        Loading.hide();
+        let response = res.data;
+        _this.waterQualityResults = response.content;
+      })
+    },
+
+    /**
+     *  welcome 实时越限警告
+     */
+    getWarningDate() {
+      let _this = this;
+      Loading.show();
+      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getWarningDate').then((res)=>{
+        Loading.hide();
+        let response = res.data;
+        _this.kvMaps = response.content;
+        console.log(_this.kvMaps);
+      })
+    }
+
+
+  },
 
 }
 </script>
