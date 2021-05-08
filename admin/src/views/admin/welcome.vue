@@ -1,7 +1,7 @@
 <template>
   <div class="page-content">
     <div class="row">
-      <div class="hr hr32 hr-dotted"></div>
+
       <div class="col-xs-12">
         <!-- PAGE CONTENT BEGINS -->
 
@@ -50,10 +50,10 @@
                           <tr v-for="item  in  waterQualityResults" style="text-align: left">
                             <td>{{ item.ip }}</td>
                             <td>
-                             {{ item.jcxm }}
+                              {{szjcx|optionMapKV(item.jcxm )}}
                             </td>
                             <td >
-                              <b class="green">{{item.dataResult}}</b>
+                              <b class="green">{{item.dataResult}}</b>{{JYXM_DW|optionKV(item.jcxm)}}
                             </td>
                             <td>{{item.createTime}}</td>
                           </tr>
@@ -75,7 +75,7 @@
               <div class="widget-header ">
                 <h5 class="widget-title">
                   <i class="ace-icon fa fa-tachometer  "></i>
-                 监测站分布图
+                 监测站设备分布图
                 </h5>
               </div>
 
@@ -106,7 +106,7 @@
                   <div class="widget-header ">
                     <h5 class="widget-title">
                       <i class="ace-icon fa fa-bell"></i>
-                      实时越限告警
+                      江豚预警
                     </h5>
                   </div>
                   <div class="widget-body">
@@ -154,7 +154,7 @@
                                 <div class="widget-header ">
                                   <h5 class="widget-title">
                                     <i class="ace-icon fa fa-signal"></i>
-                                    监测站在线率
+                                    设备在线率
                                   </h5>
                                 </div>
                                 <div class="widget-body">
@@ -252,14 +252,18 @@ export default {
       waterQualityResults:[],
       kvMaps:[],
       count:{},
+      szjcx:[],
       zs:0,
       zc:0,
       lx:0,
       gz:0,
+      JYXM_DW:JYXM_DW
+
     }
   },
   mounted:function(){
     let _this = this;
+    _this.getSzjcx();
     _this.getLatestDate();
     _this.getWarningDate();
     _this.getPieChart();
@@ -319,6 +323,17 @@ export default {
             _this.gz = gzs;
         }
 
+      })
+    },
+    /**
+     * 获取水质检测项
+     */
+    getSzjcx(){
+      let _this = this;
+      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/CodeSetUtil/getSzjcx', {
+      }).then((response)=>{
+        let resp = response.data;
+        _this.szjcx = resp.content;
       })
     },
     /**
