@@ -32,46 +32,12 @@
               <td>{{szjcx|optionMapKV(waterQualityResult.jcxm)}}</td>
               <td>{{waterQualityResult.instruct}}</td>
               <td>
-                <span v-if="waterQualityResult.jcxm=='waterDepth' && waterQualityResult.dataResult">{{waterQualityResult.dataResult}}M</span>
-                <span v-if="waterQualityResult.jcxm=='waterVelocity' && waterQualityResult.dataResult">{{waterQualityResult.dataResult}}M/S</span>
-                <span v-if="waterQualityResult.jcxm=='temperature' && waterQualityResult.dataResult">{{waterQualityResult.dataResult}}°C</span>
-                <span v-if="waterQualityResult.jcxm=='oxidative' && waterQualityResult.dataResult">{{waterQualityResult.dataResult}}mg/L</span>
-                <span v-if="waterQualityResult.jcxm=='salinity' && waterQualityResult.dataResult">{{waterQualityResult.dataResult}}uS/cm</span>
-                <span v-if="waterQualityResult.jcxm=='cod' && waterQualityResult.dataResult">{{waterQualityResult.dataResult}}mg/L</span>
-                <span v-if="waterQualityResult.jcxm=='turbidity' && waterQualityResult.dataResult">{{waterQualityResult.dataResult}}NTU</span>
-                <span v-if="waterQualityResult.jcxm=='ph' && waterQualityResult.dataResult">{{waterQualityResult.dataResult}}pH</span>
-                <span v-if="waterQualityResult.jcxm=='transparency' && waterQualityResult.dataResult">{{waterQualityResult.dataResult}}mm</span>
-                <span v-if="waterQualityResult.jcxm=='ad' && waterQualityResult.dataResult">{{waterQualityResult.dataResult}}mg/L</span>
-                <span v-if="waterQualityResult.jcxm=='suspended' && waterQualityResult.dataResult">{{waterQualityResult.dataResult}}mg/L</span>
-                <span v-if="waterQualityResult.jcxm=='ppm' && waterQualityResult.dataResult">{{waterQualityResult.dataResult}}ppm</span>
-                <span v-if="waterQualityResult.jcxm=='chlFlu' && waterQualityResult.dataResult">{{waterQualityResult.dataResult}}mg/L</span>
-                <span v-if="waterQualityResult.jcxm=='chlorophyll' && waterQualityResult.dataResult">{{waterQualityResult.dataResult}}ug/L</span>
-                <span v-if="waterQualityResult.jcxm=='cyanobacteria' && waterQualityResult.dataResult">{{waterQualityResult.dataResult}}cells/mL</span>
-                <span v-if="waterQualityResult.jcxm=='orp' && waterQualityResult.dataResult">{{waterQualityResult.dataResult}}mV</span>
-                <span v-if="waterQualityResult.jcxm=='oil' && waterQualityResult.dataResult">{{waterQualityResult.dataResult}}ug/L</span>
-                <span v-if="waterQualityResult.jcxm=='phosphorus' && waterQualityResult.dataResult">{{waterQualityResult.dataResult}}mg/L</span>
+                <span v-show="waterQualityResult.dataResult">
+                  {{waterQualityResult.dataResult}}{{JYXM_DW|optionKV(waterQualityResult.jcxm)}}
+                </span>
               </td>
               <td>
-                <span>{{waterQualityResult.dataOriginal}}</span>
-<!--                <span v-if="waterQualityResult.jcxm=='waterDepth' && waterQualityResult.dataOriginal">{{waterQualityResult.dataOriginal}}M</span>-->
-<!--                <span v-if="waterQualityResult.jcxm=='waterVelocity' && waterQualityResult.dataOriginal">{{waterQualityResult.dataOriginal}}M/S</span>-->
-<!--                <span v-if="waterQualityResult.jcxm=='temperature' && waterQualityResult.dataOriginal">{{waterQualityResult.dataOriginal}}°C</span>-->
-<!--                <span v-if="waterQualityResult.jcxm=='oxidative' && waterQualityResult.dataOriginal">{{waterQualityResult.dataOriginal}}mg/L</span>-->
-<!--                <span v-if="waterQualityResult.jcxm=='salinity' && waterQualityResult.dataOriginal">{{waterQualityResult.dataOriginal}}uS/cm</span>-->
-<!--                <span v-if="waterQualityResult.jcxm=='cod' && waterQualityResult.dataOriginal">{{waterQualityResult.dataOriginal}}mg/L</span>-->
-<!--                <span v-if="waterQualityResult.jcxm=='turbidity' && waterQualityResult.dataOriginal">{{waterQualityResult.dataOriginal}}NTU</span>-->
-<!--                <span v-if="waterQualityResult.jcxm=='ph' && waterQualityResult.dataOriginal">{{waterQualityResult.dataOriginal}}pH</span>-->
-<!--                <span v-if="waterQualityResult.jcxm=='transparency' && waterQualityResult.dataOriginal">{{waterQualityResult.dataOriginal}}mm</span>-->
-<!--                <span v-if="waterQualityResult.jcxm=='ad' && waterQualityResult.dataOriginal">{{waterQualityResult.dataOriginal}}mg/L</span>-->
-<!--                <span v-if="waterQualityResult.jcxm=='suspended' && waterQualityResult.dataOriginal">{{waterQualityResult.dataOriginal}}mg/L</span>-->
-<!--                <span v-if="waterQualityResult.jcxm=='ppm' && waterQualityResult.dataOriginal">{{waterQualityResult.dataOriginal}}ppm</span>-->
-<!--                <span v-if="waterQualityResult.jcxm=='chlFlu' && waterQualityResult.dataOriginal">{{waterQualityResult.dataOriginal}}mg/L</span>-->
-<!--                <span v-if="waterQualityResult.jcxm=='chlorophyll' && waterQualityResult.dataOriginal">{{waterQualityResult.dataOriginal}}ug/L</span>-->
-<!--                <span v-if="waterQualityResult.jcxm=='cyanobacteria' && waterQualityResult.dataOriginal">{{waterQualityResult.dataOriginal}}cells/mL</span>-->
-<!--                <span v-if="waterQualityResult.jcxm=='orp' && waterQualityResult.dataOriginal">{{waterQualityResult.dataOriginal}}mV</span>-->
-<!--                <span v-if="waterQualityResult.jcxm=='oil' && waterQualityResult.dataOriginal">{{waterQualityResult.dataOriginal}}ug/L</span>-->
-<!--                <span v-if="waterQualityResult.jcxm=='phosphorus' && waterQualityResult.dataOriginal">{{waterQualityResult.dataOriginal}}mg/L</span>-->
-              </td>
+                <span>{{waterQualityResult.dataOriginal}}</span></td>
               <td>{{waterQualityResult.createTime}}</td>
               <td>{{waterQualityResult.bz}}</td>
 <!--        <td>-->
@@ -200,6 +166,7 @@
         waterDatas:[],
         szjcx:[],
         num:0,
+        JYXM_DW:JYXM_DW
       }
     },
     mounted: function() {

@@ -29,6 +29,11 @@
     <result column="sm2" jdbcType="VARCHAR" property="sm2" />
     <result column="sm3" jdbcType="VARCHAR" property="sm3" />
   </resultMap>
+  <resultMap id="BaseResultMapPieChartDto" type="com.pd.server.main.dto.PieChartDto">
+    <result column="label" jdbcType="VARCHAR" property="label" />
+    <result column="data" jdbcType="INTEGER" property="data" />
+  </resultMap>
+
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -537,4 +542,10 @@
       sm3 = #{sm3,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
+
+  <select id="getPieChart"  resultMap="BaseResultMapPieChartDto">
+    SELECT   sbzt label, COUNT(*)  `data` FROM  water_equipment GROUP BY  sbzt
+  </select>
+
+
 </mapper>
