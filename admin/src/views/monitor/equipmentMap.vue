@@ -86,7 +86,7 @@ export default {
       let option = {
         amap: {
           center: [114.299945,30.593221],
-          zoom: 7,
+          zoom: 8,
           roam: true, // 允许缩放
         },
         tooltip : {
