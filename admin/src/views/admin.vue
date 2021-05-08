@@ -104,24 +104,7 @@
 
          <div class="sidebar                  responsive                    ace-save-state">
              <div class="sidebar-shortcuts" id="sidebar-shortcuts">
-                 <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large" >
-                     <button class="btn btn-success"  >
-                         <i class="ace-icon fa fa-signal" ></i>
-                     </button>
-                     &nbsp;
-                     <button class="btn btn-info"  >
-                         <i class="ace-icon fa fa-pencil"></i>
-                     </button>
-                     &nbsp;
-                     <button class="btn btn-warning"  >
-                         <i class="ace-icon fa fa-users"></i>
-                     </button>
-                     &nbsp;
-                     <button class="btn btn-danger" >
-                         <i class="ace-icon fa fa-cogs"></i>
-                     </button>
 
-                 </div>
 
 
              </div><!-- /.sidebar-shortcuts -->
