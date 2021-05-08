@@ -3,6 +3,8 @@ package com.pd.server.main.mapper;
 import com.pd.server.main.domain.WaterEquipment;
 import com.pd.server.main.domain.WaterEquipmentExample;
 import java.util.List;
+
+import com.pd.server.main.dto.PieChartDto;
 import org.apache.ibatis.annotations.Param;
 
 public interface WaterEquipmentMapper {
@@ -27,4 +29,6 @@ public interface WaterEquipmentMapper {
     int updateByPrimaryKeySelective(WaterEquipment record);
 
     int updateByPrimaryKey(WaterEquipment record);
+
+    List<PieChartDto> getPieChart();
 }
