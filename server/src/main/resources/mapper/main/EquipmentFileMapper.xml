@@ -17,8 +17,9 @@
     <result column="alarmNum" jdbcType="INTEGER" property="alarmNum" />
   </resultMap>
 
-  <resultMap id="BaseResultMapKV" type="com.pd.server.main.dto.KvMapDto">
-    <id column="text" jdbcType="VARCHAR" property="text" />
+  <resultMap id="BaseResultMapKV" type="com.pd.server.main.dto.WelcomeKvDto">
+    <result column="deptname" jdbcType="VARCHAR" property="deptname" />
+    <result column="text" jdbcType="VARCHAR" property="text" />
     <result column="code" jdbcType="VARCHAR" property="code" />
   </resultMap>
 
@@ -299,6 +300,6 @@
   </select>
 
   <select id="getWarningDate"  resultMap="BaseResultMapKV">
-   SELECT sbbh  `test` ,COUNT(*)  `code`  FROM   equipment_file  WHERE   rq =  CURRENT_DATE() AND tplj LIKE '%.png' GROUP BY sbbh
+    SELECT  b.`deptname`  , c.`text`  , c.`code` FROM     water_equipment a , dept  b , ( SELECT sbbh  `text` ,COUNT(*)  `code`  FROM   equipment_file  WHERE   rq =  CURRENT_DATE() AND tplj LIKE '%.png' GROUP BY sbbh ) c  WHERE a.sbsn = c.text AND  a.deptcode = b.deptcode
   </select>
 </mapper>

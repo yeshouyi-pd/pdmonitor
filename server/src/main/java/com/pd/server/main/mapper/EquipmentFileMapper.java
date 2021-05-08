@@ -4,6 +4,7 @@ import com.pd.server.main.domain.EquipmentFile;
 import com.pd.server.main.domain.EquipmentFileExample;
 import java.util.List;
 
+import com.pd.server.main.dto.WelcomeKvDto;
 import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
 
 import com.pd.server.main.dto.KvMapDto;
@@ -38,5 +39,5 @@ public interface EquipmentFileMapper {
 
     List<AlarmNumbersDto> statisticsAlarmNums(EquipmentFileExample example);
 
-    List<KvMapDto> getWarningDate();
+    List<WelcomeKvDto> getWarningDate();
 }

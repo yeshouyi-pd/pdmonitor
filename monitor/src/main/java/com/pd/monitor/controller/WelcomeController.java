@@ -2,10 +2,7 @@ package com.pd.monitor.controller;
 
 
 import com.pd.monitor.wx.conf.BaseWxController;
-import com.pd.server.main.dto.KvMapDto;
-import com.pd.server.main.dto.PageDto;
-import com.pd.server.main.dto.ResponseDto;
-import com.pd.server.main.dto.WaterQualityResultDto;
+import com.pd.server.main.dto.*;
 import com.pd.server.main.service.EquipmentFileService;
 import com.pd.server.main.service.WaterEquipmentService;
 import com.pd.server.main.service.WaterQualityResultService;
@@ -55,12 +52,12 @@ public class WelcomeController  extends BaseWxController{
     }
 
     /**
-     *  welcome 试试越限警告
+     *  welcome 实时越限警告
      */
     @GetMapping("/getWarningDate")
     public ResponseDto getWarningDate() {
         ResponseDto responseDto = new ResponseDto();
-        List<KvMapDto>  list  =  equipmentFileService.getWarningDate();
+        List<WelcomeKvDto>  list  =  equipmentFileService.getWarningDate();
         responseDto.setContent(list);
         return responseDto;
     }
