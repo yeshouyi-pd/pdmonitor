@@ -19,6 +19,12 @@ public class EquipmentFile {
 
     private String rq;
 
+    private String xs;
+
+    private String fz;
+
+    private String deptcode;
+
     public String getId() {
         return id;
     }
@@ -83,6 +89,30 @@ public class EquipmentFile {
         this.rq = rq;
     }
 
+    public String getXs() {
+        return xs;
+    }
+
+    public void setXs(String xs) {
+        this.xs = xs;
+    }
+
+    public String getFz() {
+        return fz;
+    }
+
+    public void setFz(String fz) {
+        this.fz = fz;
+    }
+
+    public String getDeptcode() {
+        return deptcode;
+    }
+
+    public void setDeptcode(String deptcode) {
+        this.deptcode = deptcode;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -97,6 +127,9 @@ public class EquipmentFile {
         sb.append(", nf=").append(nf);
         sb.append(", yf=").append(yf);
         sb.append(", rq=").append(rq);
+        sb.append(", xs=").append(xs);
+        sb.append(", fz=").append(fz);
+        sb.append(", deptcode=").append(deptcode);
         sb.append("]");
         return sb.toString();
     }

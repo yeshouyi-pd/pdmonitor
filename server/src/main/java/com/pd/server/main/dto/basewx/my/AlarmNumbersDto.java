@@ -6,6 +6,10 @@ public class AlarmNumbersDto {
 
     private String bjsj;//报警时间
 
+    private String xs;//报警小时
+
+    private String fz;//报警分钟
+
     private String deptcode;//所属监测点
 
     private Integer alarmNum;//报警次数
@@ -28,6 +32,22 @@ public class AlarmNumbersDto {
 
     public void setBjsj(String bjsj) {
         this.bjsj = bjsj;
+    }
+
+    public String getXs() {
+        return xs;
+    }
+
+    public void setXs(String xs) {
+        this.xs = xs;
+    }
+
+    public String getFz() {
+        return fz;
+    }
+
+    public void setFz(String fz) {
+        this.fz = fz;
     }
 
     public String getDeptcode() {

@@ -8,8 +8,9 @@
             <div class="col-sm-10 col-sm-offset-1">
                     <div class="center">
                                   <span style="font-size: 45px">
-                                      <i class="ace-icon fa fa-leaf green"></i>
-                                      <span style="color: #D6F1FF">水下声学实时预警系统v1.0</span>
+<!--                                      <i class="ace-icon fa fa-leaf green"></i>-->
+                                    <img style="height: 61px;margin-top: -10px;" src="/static/favicon.png"/>
+                                      <span style="color: #D6F1FF">水下声学实时预警系统</span>
                                   </span>
                     </div>
                     <div class="login-container">
@@ -85,7 +86,7 @@
                     </div>
                 </div><!-- /.col -->
             </div><!-- /.row -->
-          <div class="position-relative-gs"><h6>专注自然生态  共建美丽中国</h6><h6>Tel：180 8600 2259</h6></div>
+          <div class="position-relative-gs"><h6>专注自然生态  共建美丽中国</h6><h6>Tel：180 8600 2259</h6><h6>版本：v1.0</h6></div>
         </div><!-- /.main-content -->
     </div><!-- /.main-container -->
 </template>
@@ -194,6 +195,7 @@
       position: absolute;
       bottom: 30px;
       left: 50%;
-      margin-left: -135px;
+      margin-left: -82px;
+      text-align: center;
     }
 </style>

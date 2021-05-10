@@ -1,5 +1,6 @@
 package com.pd.system.controller.conf;
 
+import com.pd.server.config.RedisCode;
 import com.pd.server.config.SpringUtil;
 import com.pd.server.main.dto.WaterQualityResultDto;
 import com.pd.server.main.service.WaterQualityResultService;
@@ -8,8 +9,10 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.Date;
+import java.util.Map;
 
 public class MqttClientTestXH implements ApplicationContextAware {
     private static ApplicationContext applicationContext;
@@ -127,6 +130,7 @@ public class MqttClientTestXH implements ApplicationContextAware {
     }
 
     public static void saveData(MqttMessage message){
+        Map<String,String> map = (Map<String, String>) RedisConfig.redisTstaticemplate.opsForValue().get(RedisCode.SBSNCENTERCODE);
         WaterQualityResultDto waterQualityResult = new WaterQualityResultDto();
         waterQualityResult.setIp(bytes2hex02(message.getPayload()).substring(0,4));
         waterQualityResult.setDatacenter("tcp://47.244.23.44");
@@ -134,9 +138,9 @@ public class MqttClientTestXH implements ApplicationContextAware {
         waterQualityResult.setDataResult(encodeToString(message.getPayload(),type));
         waterQualityResult.setDataOriginal(bytes2hex02(message.getPayload()));
         waterQualityResult.setCreateTime(new Date());
+        waterQualityResult.setSm1(map.get(waterQualityResult.getIp()));
         System.out.println(waterQualityResult.toString());
         WaterQualityResultService service = SpringUtil.getBean(WaterQualityResultService.class);
-        System.out.println(service);
         service.save(waterQualityResult);
     }
 

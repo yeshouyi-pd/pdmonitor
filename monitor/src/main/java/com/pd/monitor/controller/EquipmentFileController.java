@@ -61,10 +61,6 @@ public class EquipmentFileController {
         }
         ca.andTpljLike("%png");
         List<AlarmNumbersDto> lists = equipmentFileService.statisticsAlarmNums(example);
-        Map<String,String> map = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.SBSNCENTERCODE);
-        for(AlarmNumbersDto entity : lists){
-            entity.setDeptcode(map.get(entity.getSbbh()));
-        }
         responseDto.setContent(lists);
         return responseDto;
     }
