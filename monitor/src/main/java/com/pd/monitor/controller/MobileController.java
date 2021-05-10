@@ -2,6 +2,7 @@ package com.pd.monitor.controller;
 
 
 import com.pd.monitor.wx.conf.BaseWxController;
+import com.pd.server.main.domain.EquipmentFileExample;
 import com.pd.server.main.domain.WaterEquipment;
 import com.pd.server.main.domain.WaterEquipmentExample;
 import com.pd.server.main.domain.WaterQualityResultExample;
@@ -60,6 +61,29 @@ public class MobileController  extends BaseWxController {
                 WaterQualityResultExample.Criteria  waterQualityResultca = waterQualityResultExample.createCriteria();
                 waterQualityResultca.andSm1In(listdept);
                 List<KvIntDto>  list   = waterQualityResultService.getAlljcsjByDept(waterQualityResultExample);
+                responseDto.setContent(list);
+            }
+        }
+        return responseDto;
+
+    }
+
+
+    /**
+     * 江豚预警
+     * @return
+     */
+    @GetMapping("/getAlljtByDept")
+    public ResponseDto getAlljtByDept(){
+        ResponseDto responseDto = new ResponseDto();
+        LoginUserDto user   = getRequestHeader();
+        if(null != user){
+            if(!StringUtils.isEmpty(user.getDeptcode())){
+                List<String > listdept   =  getUpdeptcode(user.getDeptcode());
+                EquipmentFileExample equipmentFileExample = new EquipmentFileExample();
+                EquipmentFileExample.Criteria  equipmentFileExampleca = equipmentFileExample.createCriteria();
+                equipmentFileExampleca.andDeptcodeIn(listdept);
+                List<KvIntDto>  list   = equipmentFileService.getAlljcsjByDept(equipmentFileExample);
                 responseDto.setContent(list);
             }
         }
