@@ -405,10 +405,9 @@
       list(page) {
         let _this = this;
         Loading.show();
-        _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/list', {
-          page: page,
-          size: _this.$refs.pagination.size,
-        }).then((response)=>{
+        _this.waterEquipmentDto.page = page;
+        _this.waterEquipmentDto.size = _this.$refs.pagination.size;
+        _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/list', _this.waterEquipmentDto).then((response)=>{
           Loading.hide();
           let resp = response.data;
           _this.waterEquipments = resp.content.list;

@@ -121,9 +121,9 @@
                         <td>{{dept.updateman}}</td>
                         <td>
                             <div class="hidden-sm hidden-xs btn-group">
-                                <button v-on:click="editYlwx(dept)" class="btn btn-xs btn-info" title="详情">
-                                    <i class="ace-icon fa fa-list bigger-120"></i>
-                                </button>
+<!--                                <button v-on:click="editYlwx(dept)" class="btn btn-xs btn-info" title="详情">-->
+<!--                                    <i class="ace-icon fa fa-list bigger-120"></i>-->
+<!--                                </button>-->
 
                                 <button v-on:click="edit(dept)" class="btn btn-xs btn-info" title="修改">
                                     <i class="ace-icon fa fa-pencil bigger-120"></i>
@@ -151,7 +151,7 @@
                         <h4 class="modal-title">双击选择上级部门</h4>
                     </div>
                     <div class="modal-body">
-                        <ul id="checktree" class="ztree"></ul>
+                        <ul id="checktreeNode" class="ztree"></ul>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-white btn-default btn-round" data-dismiss="modal">
@@ -279,35 +279,6 @@
                                     <input v-model="dept.linktel" class="form-control">
                                 </div>
                             </div>
-                          <div class="form-group">
-                            <label class="col-sm-1 control-label">最大提前预约天数</label>
-                            <div class="col-sm-5">
-                              <input  v-model="dept.maxday" class="form-control" />
-                            </div>
-                            <label class="col-sm-1 control-label">是否启用预约</label>
-                            <div class="col-sm-5">
-                              <div class="radio">
-                                <label>
-                                  <input name="form-yyzt-radio" type="radio"  value="Y" v-model="dept.yyzt" class="ace input-lg" />
-                                  <span class="lbl bigger-120">是</span>
-                                </label>
-                                <label>
-                                  <input name="form-yyzt-radio" type="radio"  value="N"  v-model="dept.yyzt" class="ace input-lg" />
-                                  <span class="lbl bigger-120">否</span>
-                                </label>
-                              </div>
-                            </div>
-                          </div>
-                            <div class="form-group">
-                              <label class="col-sm-1 control-label">个人每日预约最大数</label>
-                              <div class="col-sm-5">
-                                    <input v-model="dept.gryymax" class="form-control">
-                                </div>
-                                <label class="col-sm-1 control-label">企业每日预约最大数</label>
-                                <div class="col-sm-5">
-                                    <input v-model="dept.qyyymax" class="form-control">
-                                </div>
-                            </div>
                             <div class="form-group">
                                 <label class="col-sm-1 control-label">部门地址</label>
                                 <div class="col-sm-5">
@@ -328,62 +299,24 @@
 
                                 </div>
                             </div>
-
-                            <div class="form-group">
-                                <label class="col-sm-1 control-label">坐标经度</label>
-                                <div class="col-sm-5">
-                                    <input v-model="dept.jd" class="form-control">
-                                </div>
-                                <label class="col-sm-1 control-label">坐标纬度</label>
-                                <div class="col-sm-5">
-                                    <input v-model="dept.wd" class="form-control">
-                                </div>
+                          <div class="form-group">
+                            <label class="col-sm-1 control-label">坐标经度</label>
+                            <div class="col-sm-5">
+                              <input v-model="dept.jd" class="form-control">
                             </div>
-
-
+                            <label class="col-sm-1 control-label">坐标纬度</label>
+                            <div class="col-sm-5">
+                              <input v-model="dept.wd" class="form-control">
+                            </div>
+                          </div>
                             <div class="form-group">
                                 <label class="col-sm-1 control-label">描述</label>
                                 <div class="col-sm-5">
                                     <input v-model="dept.deptdesc" class="form-control">
                                 </div>
-                                <label class="col-sm-1 control-label">违法业务</label>
-                                <div class="col-sm-5">
-                                    <div class="checkbox">
-                                        <template v-for="(value, key) in fwyw">
-                                            <label>
-                                                <input name="fwyw" type="checkbox" :value="key"    v-model="checkfwywVal"  class="ace input-lg" />
-                                                <span class="lbl bigger-120">{{value}}</span>
-                                            </label>
-                                        </template>
-                                    </div>
-                                </div>
+
                             </div>
 
-                            <div class="form-group">
-                                <label class="col-sm-1 control-label">机动车业务</label>
-                                <div class="col-sm-5">
-                                    <div class="checkbox">
-                                        <template v-for="(value, key) in jdcyw">
-                                            <label>
-                                                <input name="jdcyw" type="checkbox" :value="key"  v-model="checkjdcywVal"   class="ace input-lg" />
-                                                <span class="lbl bigger-120">{{value}}</span>
-                                            </label>
-                                        </template>
-
-                                    </div>
-                                </div>
-                                <label class="col-sm-1 control-label">驾驶人业务</label>
-                                <div class="col-sm-5">
-                                    <div class="checkbox">
-                                        <template v-for="(value, key) in jsryw">
-                                            <label>
-                                                <input name="jsryw" type="checkbox" :value="key"    v-model="checkjsrywVal"  class="ace input-lg" />
-                                                <span class="lbl bigger-120">{{value}}</span>
-                                            </label>
-                                        </template>
-                                    </div>
-                                </div>
-                            </div>
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -406,13 +339,7 @@
         data: function() {
             return {
                 deptDto:{},//查询条件对象
-                checkjdcywVal:[],//选择的机动车业务
-                checkjsrywVal:[],//选择的驾驶人业务
-                checkfwywVal:[],//选择的违法业务
                 depttypes:[],
-                jdcyw:[],//后台初始化的机动车所有业务
-                jsryw:[],//后台初始化的驾驶人所有业务
-                fwyw:[],//后台初始化的违法所有业务
                 dept: {},
                 depts: [],
                 trees:[],
@@ -434,7 +361,6 @@
             let _this = this;
             _this.list(1);
             _this.getDeptTree();
-            _this.getAllYwlx();
             //or change it into a date range picker
 
             // sidebar激活样式方法一
@@ -464,19 +390,7 @@
                 _this.deptDto.etime = rep;
                 _this.$forceUpdate();
             },
-            /**
-             * 获取所有业务类型
-             */
-            getAllYwlx(){
-                let _this = this;
-                _this.$ajax.get(process.env.VUE_APP_SERVER + '/system/admin/dept/getAllYwlx').then((response)=>{
-                    let resp = response.data.content;
-                    _this.jdcyw = resp.CODE_JDC_YWLX;
-                    _this.jsryw = resp.CODE_JSR_YWLX;
-                    _this.fwyw = resp.CODE_WF_YWLX;
-                   _this.depttypes=resp.CODE_XX_DEPTTYPE
-                })
-            },
+
             editYlwx(dept){
                 let _this = this;
                 SessionStorage.set(SESSION_KEY_DEPT,dept); //写入缓存
@@ -542,9 +456,6 @@
              */
             add() {
                 let _this = this;
-                _this.checkjdcywVal=[];//选择的机动车业务
-                _this.checkjsrywVal=[];//选择的驾驶人业务
-                _this.checkfwywVal=[];//选择的违法业务
                 _this.dept = {};
                 _this.dept.status="Y";
                 _this.dept.fdr="Y";
@@ -573,18 +484,7 @@
              */
             edit(dept) {
                 let _this = this;
-                _this.checkjdcywVal = [];
-                _this.checkjsrywVal = [];
-                _this.checkfwywVal = [];
                 _this.dept = $.extend({}, dept);
-                _this.$ajax.post(process.env.VUE_APP_SERVER + '/system/admin/deptYwlx/getYwlxByDept',  _this.dept).then((response)=>{
-                    let resp = response.data.content;
-                    _this.checkjdcywVal = resp.CODE_JDC_YWLX;
-                    _this.checkjsrywVal = resp.CODE_JSR_YWLX;
-                    _this.checkfwywVal = resp.CODE_WF_YWLX;
-
-
-                })
                 _this.getAllDept()
                 $("#form-modal").modal("show");
 
@@ -631,24 +531,11 @@
                     || !Validator.length(_this.dept.jd, "经度", 1, 12)
                     || !Validator.require(_this.dept.wd, "纬度")
                     || !Validator.length(_this.dept.wd, "纬度", 1, 12)
-                    || !Validator.require(_this.dept.gryymax+"", "个人每日预约数")
-                    || !Validator.require(_this.dept.qyyymax+"", "企业每日预约数")
-                    || !Validator.checkisNaN(_this.dept.gryymax, "个人每日预约数")
-                    || !Validator.checkisNaN(_this.dept.qyyymax, "企业每日预约数")
-                    || !Validator.require(_this.dept.depttype, "机构类别")
-                    || !Validator.require(_this.dept.maxday+"", "最大提前预约天数")
-                    || !Validator.checkisNaN(_this.dept.maxday, "最大提前预约天数")
-
-
-
                 ) {
                     return;
                 }
 
                 Loading.show();
-                _this.$set(_this.dept,"checkjdcywVal",_this.checkjdcywVal);
-                _this.$set(_this.dept,"checkjsrywVal",_this.checkjsrywVal);
-                _this.$set(_this.dept,"checkfwywVal",_this.checkfwywVal);
                 _this.$ajax.post(process.env.VUE_APP_SERVER + '/system/admin/dept/save', _this.dept).then((response)=>{
                     Loading.hide();
                     let resp = response.data;
@@ -732,16 +619,16 @@
                     },
                 };
 
-                _this.zTree = $.fn.zTree.init($("#checktree"), setting, _this.checktrees);
+                _this.zTree = $.fn.zTree.init($("#checktreeNode"), setting, _this.checktrees);
                 _this.zTree.expandAll(true);
             },
             zTreeOnDblClick(event, treeId, treeNode) {
                 let  _this = this;
               //_this.deptDto.deptcode = treeNode.deptcode;
-              _this.deptDto.upcode = treeNode.deptcode;
+              _this.dept.upcode = treeNode.deptcode;
               _this.$forceUpdate();
-              _this.list(1);
-
+              //_this.list(1);
+              $("#tree-modal").modal("hide");
             },
             //创建一个map
             mapInit() {

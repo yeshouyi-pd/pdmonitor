@@ -34,7 +34,7 @@
                       <Times v-bind:startTime="startTime" v-bind:endTime="endTime"></Times>
                     </td>
                     <td colspan="2" class="text-center">
-                      <button type="button" v-on:click="list(1)" class="btn btn-sm btn-info btn-round">
+                      <button type="button" v-on:click="list(1)" class="btn btn-sm btn-info btn-round" style="margin-right: 10px;">
                         <i class="ace-icon fa fa-book"></i>
                         查询
                       </button>
@@ -62,7 +62,7 @@
           </div>
           <div style="margin: 0 auto;">{{item.sbbh}}</div>
           <div style="margin: 0 auto;">{{item.cjsj}}</div>
-          <div style="margin: 0 auto;">
+          <div style="margin: 0 auto;" v-if="item.hasAudio">
             <button class="btn btn-white btn-default btn-round" style="margin: 0 auto;" v-on:click="downloadAudio(item)">
               <i class="ace-icon fa fa-volume-down red2">下载音频</i>
             </button>
@@ -174,21 +174,10 @@ export default {
         Toast.warning("该图片没有对应的音频文件！");
         return;
       }
-      // console.log(obj.substring(0,obj.length-3)+"wav");
-      // //window.location.href = obj.substring(0,obj.length-3)+"wav";
-      //window.location = "http://146.56.226.176:8088/tempData/888888/2021_04_30_19_52_09.wav";
-      //window.open("http://146.56.226.176:8088/tempData/888888/2021_04_30_19_52_09.wav")
-      var eleLink = document.createElement('a');
-      eleLink.download = obj.tplj.substring(0,obj.tplj.length-3)+"wav";
-      eleLink.style.display = 'none';
-      // 字符内容转变成blob地址
-      var blob = new Blob(['wav']);
-      eleLink.href = URL.createObjectURL(blob);
-      // 触发点击
-      document.body.appendChild(eleLink);
-      eleLink.click();
-      // 然后移除
-      document.body.removeChild(eleLink);
+      let paramsStr = "fileUrl="+obj.tplj.substring(0,obj.tplj.length-3)+"wav"+"&fileName="+obj.tplj.substring(obj.tplj.lastIndexOf("/")+1,obj.tplj.length-3)+"wav";
+      let url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downAudioFile?'+paramsStr;
+      console.log(url);
+      window.location.href = url;
     }
   }
 }

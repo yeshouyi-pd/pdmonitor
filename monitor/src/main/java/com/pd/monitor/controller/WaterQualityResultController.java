@@ -34,8 +34,8 @@ public class WaterQualityResultController {
     @Resource
     private WaterEquipmentService waterEquipmentService;
 
-    @PostMapping("/findWaterQualityResultByMonth")
-    public ResponseDto findWaterQualityResultByMonth(@RequestBody WaterQualityResultDto pageDto){
+    @PostMapping("/findWaterQualityResultByDay")
+    public ResponseDto findWaterQualityResultByDay(@RequestBody WaterQualityResultDto pageDto){
         ResponseDto responseDto = new ResponseDto();
         WaterEquipment waterEquipment = waterEquipmentService.findById(pageDto.getDeviceId());
         WaterQualityResultExample example = new WaterQualityResultExample();
@@ -46,19 +46,10 @@ public class WaterQualityResultController {
         if(!StringUtils.isEmpty(waterEquipment)&&!StringUtils.isEmpty(waterEquipment.getSbsn())){
             ca.andIpEqualTo(waterEquipment.getSbsn());
         }
-//        if(!StringUtils.isEmpty(waterEquipment)&&!StringUtils.isEmpty(waterEquipment.getPort())){
-//            ca.andPortEqualTo(waterEquipment.getPort());
-//        }
         if(!StringUtils.isEmpty(pageDto.getJcxm())){
             ca.andJcxmEqualTo(pageDto.getJcxm());
         }
-        if(!StringUtils.isEmpty(pageDto.getChooseTimeType())&&pageDto.getChooseTimeType().equals("1")){
-            ca.andCreateTimeBetween(DateUtil.getMonthBeforeOrLater(-1),new Date());
-        }else if(!StringUtils.isEmpty(pageDto.getChooseTimeType())&&pageDto.getChooseTimeType().equals("2")){
-            ca.andCreateTimeBetween(DateUtil.getNextNumDay(new Date(), -15),new Date());
-        }else {
-            ca.andCreateTimeBetween(DateUtil.getNextNumDay(new Date(), -7),new Date());
-        }
+        ca.andCreateTimeEqualTo(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd"));
         example.setOrderByClause(" create_time ");
         List<WaterQualityResult> list = waterQualityResultService.findByExample(example);
         List<List<String>> result = new ArrayList<>();

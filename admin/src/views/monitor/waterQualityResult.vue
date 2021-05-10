@@ -11,11 +11,11 @@
     <table id="simple-table" class="table  table-bordered table-hover">
       <thead>
       <tr>
-            <th>设备IP</th>
-            <th>设备端口号</th>
+            <th>设备SN</th>
+<!--            <th>设备端口号</th>-->
             <th>数据中心</th>
             <th>检测项目</th>
-            <th>指令</th>
+<!--            <th>指令</th>-->
             <th>检测数据</th>
             <th>原始数据</th>
             <th>创建时间</th>
@@ -27,10 +27,10 @@
       <tbody>
       <tr v-for="waterQualityResult in waterQualityResults">
               <td>{{waterQualityResult.ip}}</td>
-              <td>{{waterQualityResult.port}}</td>
+<!--              <td>{{waterQualityResult.port}}</td>-->
               <td>{{waterDatas|optionWDArray(waterQualityResult.datacenter)}}</td>
               <td>{{szjcx|optionMapKV(waterQualityResult.jcxm)}}</td>
-              <td>{{waterQualityResult.instruct}}</td>
+<!--              <td>{{waterQualityResult.instruct}}</td>-->
               <td>
                 <span v-show="waterQualityResult.dataResult">
                   {{waterQualityResult.dataResult}}{{JYXM_DW|optionKV(waterQualityResult.jcxm)}}
