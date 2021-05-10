@@ -5,6 +5,7 @@ import com.pd.server.main.domain.WaterQualityResult;
 import com.pd.server.main.domain.WaterQualityResultExample;
 import java.util.List;
 
+import com.pd.server.main.dto.KvIntDto;
 import com.pd.server.main.dto.WaterQualityAvgDto;
 
 import com.pd.server.main.dto.KvMapDto;
@@ -37,6 +38,8 @@ public interface WaterQualityResultMapper {
     List<WaterQualityAvgDto> selectAvgByExample(WaterQualityResultExample example);
 
     List<WaterQualityResult> getLatestDate();
+
+    List<KvIntDto> getAlljcsjByDept(WaterQualityResultExample example);
 
 
 

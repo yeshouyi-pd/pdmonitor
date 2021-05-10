@@ -19,6 +19,9 @@ import MonitorEquipmentHis from "./views/monitor/monitorEquipmentHis.vue"
 import WaterNoiseImage from "./views/monitor/waterNoiseImage.vue"
 import EquipmentFile from "./views/monitor/equipmentFile.vue"
 import AlarmNumbers from "./views/monitor/alarmNumbers.vue"
+import Ywydxz from "../../wx/src/views/wx/ywyy/ywydxz.vue";
+
+import Mindex  from "./views/mobile/mindex.vue"
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -41,6 +44,9 @@ export default new Router({
     },{
         path: "/login",
         component:Login
+    },{
+        path: "/mobile/mindex",
+        component:Mindex
     },{
         path: "/",
         name:"admin",//为每一个路由都加上name属性，后续做通用的aidebar激活方法样式会用的

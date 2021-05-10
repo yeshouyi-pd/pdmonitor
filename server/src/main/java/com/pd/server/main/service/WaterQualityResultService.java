@@ -2,6 +2,7 @@ package com.pd.server.main.service;
 
 import com.pd.server.main.domain.WaterQualityResult;
 import com.pd.server.main.domain.WaterQualityResultExample;
+import com.pd.server.main.dto.KvIntDto;
 import com.pd.server.main.dto.KvMapDto;
 import com.pd.server.main.dto.WaterQualityResultDto;
 import com.pd.server.main.dto.PageDto;
@@ -82,6 +83,11 @@ public class WaterQualityResultService {
         List<WaterQualityResult>  listdata = waterQualityResultMapper.getLatestDate();
         List<WaterQualityResultDto> list = CopyUtil.copyList(listdata, WaterQualityResultDto.class);
         return   list;
+
+    }
+
+    public List<KvIntDto> getAlljcsjByDept(WaterQualityResultExample example){
+        return   waterQualityResultMapper.getAlljcsjByDept(example);
 
     }
 

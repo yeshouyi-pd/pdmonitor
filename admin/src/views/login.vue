@@ -154,7 +154,7 @@
                         }
 
                          //window.open("/welcome", "_self")
-                          _this.$router.push("/welcome")
+                          _this.$router.push("/mobile/mindex")
                     } else {
                         _this.user.password="";
                         _this.loadImageCode();
