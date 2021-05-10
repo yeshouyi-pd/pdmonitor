@@ -2,6 +2,7 @@ package com.pd.server.main.service;
 
 import com.pd.server.main.domain.EquipmentFile;
 import com.pd.server.main.domain.EquipmentFileExample;
+import com.pd.server.main.domain.WaterQualityResultExample;
 import com.pd.server.main.dto.*;
 import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
 import com.pd.server.main.mapper.EquipmentFileMapper;
@@ -110,5 +111,9 @@ public class EquipmentFileService {
 
     public List<KvIntDto> getAlljcsjByDept(EquipmentFileExample equipmentFileExample) {
         return equipmentFileMapper.getAlljcsjByDept(equipmentFileExample);
+    }
+
+    public List<WaterQualityResultDto> getthisDeptjxsj(WaterQualityResultExample waterQualityResultExample) {
+        return equipmentFileMapper.getthisDeptjxsj(waterQualityResultExample);
     }
 }
