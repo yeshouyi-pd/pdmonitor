@@ -4,6 +4,7 @@ import com.pd.server.main.domain.WaterQualityResult;
 import com.pd.server.main.domain.WaterQualityResultExample;
 import java.util.List;
 
+import com.pd.server.main.dto.KvIntDto;
 import com.pd.server.main.dto.KvMapDto;
 import com.pd.server.main.dto.WaterQualityResultDto;
 import org.apache.ibatis.annotations.Param;
@@ -32,6 +33,8 @@ public interface WaterQualityResultMapper {
     int updateByPrimaryKey(WaterQualityResult record);
 
     List<WaterQualityResult> getLatestDate();
+
+    List<KvIntDto> getAlljcsjByDept(WaterQualityResultExample example);
 
 
 
