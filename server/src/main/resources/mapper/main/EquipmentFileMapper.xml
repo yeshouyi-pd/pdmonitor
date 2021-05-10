@@ -10,6 +10,9 @@
     <result column="nf" jdbcType="VARCHAR" property="nf" />
     <result column="yf" jdbcType="VARCHAR" property="yf" />
     <result column="rq" jdbcType="VARCHAR" property="rq" />
+    <result column="xs" jdbcType="VARCHAR" property="xs" />
+    <result column="fz" jdbcType="VARCHAR" property="fz" />
+    <result column="deptcode" jdbcType="VARCHAR" property="deptcode" />
   </resultMap>
   <resultMap id="StatisticsResultMap" type="com.pd.server.main.dto.basewx.my.AlarmNumbersDto">
     <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
@@ -82,7 +85,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, sbbh, tplj, cjsj, create_time, nf, yf, rq
+    id, sbbh, tplj, cjsj, create_time, nf, yf, rq, xs, fz, deptcode
   </sql>
   <select id="selectByExample" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultMap="BaseResultMap">
     select
@@ -116,10 +119,11 @@
   </delete>
   <insert id="insert" parameterType="com.pd.server.main.domain.EquipmentFile">
     insert into equipment_file (id, sbbh, tplj, 
-      cjsj, create_time, nf, yf, rq)
+      cjsj, create_time, nf, yf, rq, xs, fz, deptcode)
     values (#{id,jdbcType=VARCHAR}, #{sbbh,jdbcType=VARCHAR}, #{tplj,jdbcType=VARCHAR}, 
       #{cjsj,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, #{nf,jdbcType=VARCHAR},
-      #{yf,jdbcType=VARCHAR}, #{rq,jdbcType=VARCHAR})
+      #{yf,jdbcType=VARCHAR}, #{rq,jdbcType=VARCHAR}, #{xs,jdbcType=VARCHAR}, #{fz,jdbcType=VARCHAR},
+      #{deptcode,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.pd.server.main.domain.EquipmentFile">
     insert into equipment_file
@@ -148,6 +152,15 @@
       <if test="rq != null">
         rq,
       </if>
+      <if test="xs != null">
+        xs,
+      </if>
+      <if test="fz != null">
+        fz,
+      </if>
+      <if test="deptcode != null">
+        deptcode,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -173,6 +186,15 @@
       </if>
       <if test="rq != null">
         #{rq,jdbcType=VARCHAR},
+      </if>
+      <if test="xs != null">
+        #{xs,jdbcType=VARCHAR},
+      </if>
+      <if test="fz != null">
+        #{fz,jdbcType=VARCHAR},
+      </if>
+      <if test="deptcode != null">
+        #{deptcode,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -209,6 +231,15 @@
       <if test="record.rq != null">
         rq = #{record.rq,jdbcType=VARCHAR},
       </if>
+      <if test="record.xs != null">
+        xs = #{record.xs,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fz != null">
+        fz = #{record.fz,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deptcode != null">
+        deptcode = #{record.deptcode,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -223,7 +254,10 @@
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       nf = #{record.nf,jdbcType=VARCHAR},
       yf = #{record.yf,jdbcType=VARCHAR},
-      rq = #{record.rq,jdbcType=VARCHAR}
+      rq = #{record.rq,jdbcType=VARCHAR},
+      xs = #{record.xs,jdbcType=VARCHAR},
+      fz = #{record.fz,jdbcType=VARCHAR},
+      deptcode = #{record.deptcode,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -252,6 +286,15 @@
       <if test="rq != null">
         rq = #{rq,jdbcType=VARCHAR},
       </if>
+      <if test="xs != null">
+        xs = #{xs,jdbcType=VARCHAR},
+      </if>
+      <if test="fz != null">
+        fz = #{fz,jdbcType=VARCHAR},
+      </if>
+      <if test="deptcode != null">
+        deptcode = #{deptcode,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -263,7 +306,10 @@
       create_time = #{createTime,jdbcType=TIMESTAMP},
       nf = #{nf,jdbcType=VARCHAR},
       yf = #{yf,jdbcType=VARCHAR},
-      rq = #{rq,jdbcType=VARCHAR}
+      rq = #{rq,jdbcType=VARCHAR},
+      xs = #{xs,jdbcType=VARCHAR},
+      fz = #{fz,jdbcType=VARCHAR},
+      deptcode = #{deptcode,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
   <select id="selectAudioByExample" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultType="java.lang.String">
@@ -289,14 +335,14 @@
     </if>
   </select>
   <select id="statisticsAlarmNums" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultMap="StatisticsResultMap">
-    select
-    sbbh,rq bjsj,count(*) alarmNum
+    SELECT
+    sbbh,rq bjsj,xs,fz,deptcode,COUNT(*) alarmNum
     from equipment_file
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
-    group by sbbh, rq
-    order by rq desc
+    GROUP BY sbbh,rq,xs,fz,deptcode
+    ORDER BY rq DESC,xs DESC,fz DESC
   </select>
 
   <select id="getWarningDate"  resultMap="BaseResultMapKV">

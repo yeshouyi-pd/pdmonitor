@@ -655,6 +655,216 @@ public class EquipmentFileExample {
             addCriterion("rq not between", value1, value2, "rq");
             return (Criteria) this;
         }
+
+        public Criteria andXsIsNull() {
+            addCriterion("xs is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andXsIsNotNull() {
+            addCriterion("xs is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andXsEqualTo(String value) {
+            addCriterion("xs =", value, "xs");
+            return (Criteria) this;
+        }
+
+        public Criteria andXsNotEqualTo(String value) {
+            addCriterion("xs <>", value, "xs");
+            return (Criteria) this;
+        }
+
+        public Criteria andXsGreaterThan(String value) {
+            addCriterion("xs >", value, "xs");
+            return (Criteria) this;
+        }
+
+        public Criteria andXsGreaterThanOrEqualTo(String value) {
+            addCriterion("xs >=", value, "xs");
+            return (Criteria) this;
+        }
+
+        public Criteria andXsLessThan(String value) {
+            addCriterion("xs <", value, "xs");
+            return (Criteria) this;
+        }
+
+        public Criteria andXsLessThanOrEqualTo(String value) {
+            addCriterion("xs <=", value, "xs");
+            return (Criteria) this;
+        }
+
+        public Criteria andXsLike(String value) {
+            addCriterion("xs like", value, "xs");
+            return (Criteria) this;
+        }
+
+        public Criteria andXsNotLike(String value) {
+            addCriterion("xs not like", value, "xs");
+            return (Criteria) this;
+        }
+
+        public Criteria andXsIn(List<String> values) {
+            addCriterion("xs in", values, "xs");
+            return (Criteria) this;
+        }
+
+        public Criteria andXsNotIn(List<String> values) {
+            addCriterion("xs not in", values, "xs");
+            return (Criteria) this;
+        }
+
+        public Criteria andXsBetween(String value1, String value2) {
+            addCriterion("xs between", value1, value2, "xs");
+            return (Criteria) this;
+        }
+
+        public Criteria andXsNotBetween(String value1, String value2) {
+            addCriterion("xs not between", value1, value2, "xs");
+            return (Criteria) this;
+        }
+
+        public Criteria andFzIsNull() {
+            addCriterion("fz is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFzIsNotNull() {
+            addCriterion("fz is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFzEqualTo(String value) {
+            addCriterion("fz =", value, "fz");
+            return (Criteria) this;
+        }
+
+        public Criteria andFzNotEqualTo(String value) {
+            addCriterion("fz <>", value, "fz");
+            return (Criteria) this;
+        }
+
+        public Criteria andFzGreaterThan(String value) {
+            addCriterion("fz >", value, "fz");
+            return (Criteria) this;
+        }
+
+        public Criteria andFzGreaterThanOrEqualTo(String value) {
+            addCriterion("fz >=", value, "fz");
+            return (Criteria) this;
+        }
+
+        public Criteria andFzLessThan(String value) {
+            addCriterion("fz <", value, "fz");
+            return (Criteria) this;
+        }
+
+        public Criteria andFzLessThanOrEqualTo(String value) {
+            addCriterion("fz <=", value, "fz");
+            return (Criteria) this;
+        }
+
+        public Criteria andFzLike(String value) {
+            addCriterion("fz like", value, "fz");
+            return (Criteria) this;
+        }
+
+        public Criteria andFzNotLike(String value) {
+            addCriterion("fz not like", value, "fz");
+            return (Criteria) this;
+        }
+
+        public Criteria andFzIn(List<String> values) {
+            addCriterion("fz in", values, "fz");
+            return (Criteria) this;
+        }
+
+        public Criteria andFzNotIn(List<String> values) {
+            addCriterion("fz not in", values, "fz");
+            return (Criteria) this;
+        }
+
+        public Criteria andFzBetween(String value1, String value2) {
+            addCriterion("fz between", value1, value2, "fz");
+            return (Criteria) this;
+        }
+
+        public Criteria andFzNotBetween(String value1, String value2) {
+            addCriterion("fz not between", value1, value2, "fz");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptcodeIsNull() {
+            addCriterion("deptcode is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptcodeIsNotNull() {
+            addCriterion("deptcode is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptcodeEqualTo(String value) {
+            addCriterion("deptcode =", value, "deptcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptcodeNotEqualTo(String value) {
+            addCriterion("deptcode <>", value, "deptcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptcodeGreaterThan(String value) {
+            addCriterion("deptcode >", value, "deptcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptcodeGreaterThanOrEqualTo(String value) {
+            addCriterion("deptcode >=", value, "deptcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptcodeLessThan(String value) {
+            addCriterion("deptcode <", value, "deptcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptcodeLessThanOrEqualTo(String value) {
+            addCriterion("deptcode <=", value, "deptcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptcodeLike(String value) {
+            addCriterion("deptcode like", value, "deptcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptcodeNotLike(String value) {
+            addCriterion("deptcode not like", value, "deptcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptcodeIn(List<String> values) {
+            addCriterion("deptcode in", values, "deptcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptcodeNotIn(List<String> values) {
+            addCriterion("deptcode not in", values, "deptcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptcodeBetween(String value1, String value2) {
+            addCriterion("deptcode between", value1, value2, "deptcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptcodeNotBetween(String value1, String value2) {
+            addCriterion("deptcode not between", value1, value2, "deptcode");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

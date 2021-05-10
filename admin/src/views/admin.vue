@@ -15,7 +15,7 @@
               <div class="navbar-header pull-left">
                   <a href="index.html" class="navbar-brand">
                       <small>
-                          <i class="fa fa-leaf"></i>
+                          <img style="height: 28px;margin-top: -8px;" src="/static/favicon.png"/>
                           水环境动态监测系统v1.0
                       </small>
                   </a>
