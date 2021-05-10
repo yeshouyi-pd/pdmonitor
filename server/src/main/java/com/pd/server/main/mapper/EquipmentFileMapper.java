@@ -46,5 +46,4 @@ public interface EquipmentFileMapper {
 
     List<KvIntDto> getAlljcsjByDept(EquipmentFileExample equipmentFileExample);
 
-    List<WaterQualityResultDto> getthisDeptjxsj(WaterQualityResultExample waterQualityResultExample);
 }

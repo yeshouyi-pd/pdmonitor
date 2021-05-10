@@ -113,7 +113,4 @@ public class EquipmentFileService {
         return equipmentFileMapper.getAlljcsjByDept(equipmentFileExample);
     }
 
-    public List<WaterQualityResultDto> getthisDeptjxsj(WaterQualityResultExample waterQualityResultExample) {
-        return equipmentFileMapper.getthisDeptjxsj(waterQualityResultExample);
-    }
 }

@@ -92,6 +92,7 @@ public class WaterQualityResultService {
     }
 
 
-
-
+    public List<WaterQualityResultDto> getthisDeptjxsj(WaterQualityResultExample waterQualityResultExample) {
+        return   waterQualityResultMapper.getthisDeptjxsj(waterQualityResultExample);
+    }
 }
