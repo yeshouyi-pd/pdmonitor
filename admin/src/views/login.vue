@@ -99,11 +99,14 @@
             return{
                 user:{},
                 remember:true,
-                imageCodeToken: ""
+                imageCodeToken: "",
+                isMobileflag:false,
             }
         },
         mounted:function(){//mounted初始化方法
             let _this = this;
+             _this.isMobile();
+
             $('body').removeClass('no-skin');
             $('body').attr('class', 'login-layout light-login');
 
@@ -116,6 +119,15 @@
             _this.loadImageCode();
         },
         methods:{
+
+          isMobile() {
+            let _this = this;
+            if(/phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone/i.test(navigator.userAgent)){
+              _this.isMobileflag =true;
+            }else{
+              _this.isMobileflag =false;
+            }
+          },
             login(){//push跳转到某一个地址
                 let _this = this;
 
@@ -154,8 +166,12 @@
                         }
 
                          //window.open("/welcome", "_self")
-                         // _this.$router.push("/mobile/mindex")
-                         _this.$router.push("/welcome")
+                      if(_this.isMobileflag){
+                        _this.$router.push("/mobile/mindex")
+                      }else{
+                        _this.$router.push("/welcome")
+                      }
+
                     } else {
                         _this.user.password="";
                         _this.loadImageCode();
