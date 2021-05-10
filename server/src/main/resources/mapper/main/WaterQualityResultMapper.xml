@@ -364,8 +364,15 @@
     where id = #{id,jdbcType=VARCHAR}
   </update>
 
-  <select id="getLatestDate"  resultMap="BaseResultMap">
-    SELECT a.* FROM water_quality_result a,( SELECT ip,jcxm , MAX(create_time) AS create_time  FROM water_quality_result GROUP BY ip ,jcxm  ) b WHERE a.ip = b.ip AND a.create_time = b.create_time  AND a.jcxm = b.jcxm  ORDER BY a.ip ,a.jcxm
+  <select id="getLatestDate"  resultMap="BaseResultMap" parameterType="com.pd.server.main.domain.WaterQualityResultExample">
+    SELECT a.* FROM water_quality_result a,(
+    SELECT ip,jcxm , MAX(create_time) AS create_time  FROM water_quality_result
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    and TO_DAYS(create_time) = TO_DAYS(NOW())
+    GROUP BY ip ,jcxm
+    ) b WHERE a.ip = b.ip AND a.create_time = b.create_time  AND a.jcxm = b.jcxm  ORDER BY a.ip ,a.jcxm
   </select>
 
 

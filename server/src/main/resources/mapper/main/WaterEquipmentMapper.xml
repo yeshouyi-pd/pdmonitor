@@ -543,8 +543,12 @@
     where id = #{id,jdbcType=VARCHAR}
   </update>
 
-  <select id="getPieChart"  resultMap="BaseResultMapPieChartDto">
-    SELECT   sbzt label, COUNT(*)  `data` FROM  water_equipment GROUP BY  sbzt
+  <select id="getPieChart"  resultMap="BaseResultMapPieChartDto" parameterType="com.pd.server.main.domain.WaterEquipmentExample">
+    SELECT   sbzt label, COUNT(*)  `data` FROM  water_equipment
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+     GROUP BY  sbzt
   </select>
 
 

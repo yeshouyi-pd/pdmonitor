@@ -104,8 +104,8 @@ public class EquipmentFileService {
 
 
 
-    public  List<WelcomeKvDto> getWarningDate(){
-        return equipmentFileMapper.getWarningDate();
+    public  List<WelcomeKvDto> getWarningDate(EquipmentFileExample equipmentFileExample){
+        return equipmentFileMapper.getWarningDate(equipmentFileExample);
     }
 
     public List<KvIntDto> getAlljcsjByDept(EquipmentFileExample equipmentFileExample) {
