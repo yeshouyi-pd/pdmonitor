@@ -62,7 +62,7 @@
 
                   </td>
                   <td style="width: 80%">
-                    <span class="line-height-1 bigger-200"> {{shjcount}} </span>
+                              <span  v-on:click="toshjlist()" class="line-height-1 bigger-200"> {{shjcount}} </span>
                     <br/>
                     <span class="line-height-1 smaller-75"> 水环境监测数据 </span>
                   </td>
@@ -83,7 +83,8 @@
                     </div>
                   </td>
                   <td style="width: 80%">
-                    <span class="line-height-1 bigger-200"> {{jtcount}} </span>
+                       <span class="line-height-1 bigger-200"> {{jtcount}} </span>
+
                     <br/>
                     <span class="line-height-1 smaller-75"> 江豚报警数据 </span>
                   </td>
@@ -161,7 +162,10 @@ export default {
     _this.findDeviceInfo();
 
   }, methods: {
-
+    toshjlist (){
+         let _this = this;
+          _this.$router.push("/mobile/shjlist");
+        },
     /**
      *  welcome 水环境数据监测
      */
@@ -176,7 +180,7 @@ export default {
                  count = count +key.value;
                }
           _this.shjcount = count;
-
+          SessionStorage.set(MSHJMAP,_this.KvMap);
         }
       })
     },
