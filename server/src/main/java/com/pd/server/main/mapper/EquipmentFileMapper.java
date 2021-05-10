@@ -40,7 +40,7 @@ public interface EquipmentFileMapper {
 
     List<AlarmNumbersDto> statisticsAlarmNums(EquipmentFileExample example);
 
-    List<WelcomeKvDto> getWarningDate();
+    List<WelcomeKvDto> getWarningDate(EquipmentFileExample equipmentFileExample);
 
     List<KvIntDto> getAlljcsjByDept(EquipmentFileExample equipmentFileExample);
 }

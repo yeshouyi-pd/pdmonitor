@@ -37,7 +37,7 @@ public interface WaterQualityResultMapper {
 
     List<WaterQualityAvgDto> selectAvgByExample(WaterQualityResultExample example);
 
-    List<WaterQualityResult> getLatestDate();
+    List<WaterQualityResult> getLatestDate(WaterQualityResultExample waterQualityResultExample);
 
     List<KvIntDto> getAlljcsjByDept(WaterQualityResultExample example);
 

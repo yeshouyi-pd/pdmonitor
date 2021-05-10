@@ -304,8 +304,13 @@
     order by rq desc
   </select>
 
-  <select id="getWarningDate"  resultMap="BaseResultMapKV">
-    SELECT  b.`deptname`  , c.`text`  , c.`code` FROM     water_equipment a , dept  b , ( SELECT sbbh  `text` ,COUNT(*)  `code`  FROM   equipment_file  WHERE   rq =  CURRENT_DATE() AND tplj LIKE '%.png' GROUP BY sbbh ) c  WHERE a.sbsn = c.text AND  a.deptcode = b.deptcode
+  <select id="getWarningDate"  resultMap="BaseResultMapKV" parameterType="com.pd.server.main.domain.EquipmentFileExample">
+    SELECT  b.`deptname`  , c.`text`  , c.`code` FROM     water_equipment a , dept  b , (
+    SELECT sbbh  `text` ,COUNT(*)  `code`  FROM   equipment_file
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    and   TO_DAYS(create_time) = TO_DAYS(NOW())  AND tplj LIKE '%.png' GROUP BY sbbh ) c  WHERE a.sbsn = c.text AND  a.deptcode = b.deptcode
   </select>
 
 
