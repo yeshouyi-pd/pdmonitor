@@ -2,36 +2,36 @@
   <div style="display: flex">
     <div id="tree" class="ztree" :style="{height: heightMax + 'px', overflowY: 'auto', width:'20%', border:'1px solid #ccc'}"></div>
     <div :style="{height: heightMax + 'px', width:'78%', border: '1px solid #ccc', marginLeft: '1%'}">
-      <div style="width: 100%;height: 6%;display: flex">
-        <label style="font-size: 22px;margin-left: 20px;margin-top: 3px;">时间:</label>
-        <div class="col-sm-4" style="display: flex;">
-          <div class="radio">
-            <label>
-              <input name="form-sbzt-radio" type="radio"  value="1" v-model="chooseTimeType" class="ace input-lg" />
-              <span class="lbl bigger-120">最近30天</span>
-            </label>
-            <label>
-              <input name="form-sbzt-radio" type="radio"  value="2"  v-model="chooseTimeType" class="ace input-lg" />
-              <span class="lbl bigger-120">最近15天</span>
-            </label>
-            <label>
-              <input name="form-sbzt-radio" type="radio"  value="3"  v-model="chooseTimeType" class="ace input-lg" />
-              <span class="lbl bigger-120">最近7天</span>
-            </label>
-          </div>
-          <button v-on:click="selectData()" class="btn btn-white btn-default btn-round" style="height: 34px;margin-top: 5px;margin-left: 20px;">
-            <i class="ace-icon fa fa-book"></i>
-            查询
-          </button>
-        </div>
-      </div>
-      <div id="echarts-data" style="height: 94%;width: 100%;"></div>
+<!--      <div style="width: 100%;height: 6%;display: flex">-->
+<!--        <label style="font-size: 22px;margin-left: 20px;margin-top: 3px;">时间:</label>-->
+<!--        <div class="col-sm-4" style="display: flex;">-->
+<!--          <div class="radio">-->
+<!--            <label>-->
+<!--              <input name="form-sbzt-radio" type="radio"  value="1" v-model="chooseTimeType" class="ace input-lg" />-->
+<!--              <span class="lbl bigger-120">最近30天</span>-->
+<!--            </label>-->
+<!--            <label>-->
+<!--              <input name="form-sbzt-radio" type="radio"  value="2"  v-model="chooseTimeType" class="ace input-lg" />-->
+<!--              <span class="lbl bigger-120">最近15天</span>-->
+<!--            </label>-->
+<!--            <label>-->
+<!--              <input name="form-sbzt-radio" type="radio"  value="3"  v-model="chooseTimeType" class="ace input-lg" />-->
+<!--              <span class="lbl bigger-120">最近7天</span>-->
+<!--            </label>-->
+<!--          </div>-->
+<!--          <button v-on:click="selectData()" class="btn btn-white btn-default btn-round" style="height: 34px;margin-top: 5px;margin-left: 20px;">-->
+<!--            <i class="ace-icon fa fa-book"></i>-->
+<!--            查询-->
+<!--          </button>-->
+<!--        </div>-->
+<!--      </div>-->
+      <div id="echarts-data" style="height: 94%;"></div>
     </div>
   </div>
 </template>
 <script>
 export default {
-  name:"monitor-equipment",
+  name:"monitor-equipment-now",
   data:function(){
     return {
       trees:[],
@@ -39,7 +39,6 @@ export default {
       yAxisName:'',
       chooseJcx:'',
       jcxdw:'',
-      chooseTimeType:'1',
       curNode:null
     }
   },
@@ -122,7 +121,7 @@ export default {
         'chooseTimeType':_this.chooseTimeType
       }
       Loading.show();
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterQualityResult/findWaterQualityResultByMonth', waterQualityResultDto).then((response)=> {
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterQualityResult/findWaterQualityResultByDay', waterQualityResultDto).then((response)=> {
         Loading.hide();
         let resp = response.data;
         if (resp.success) {
@@ -153,7 +152,8 @@ export default {
             symbolSize:[35, 35]
           },
           axisLabel: {
-            interval:0,
+            show: true,
+            interval:1,
             width: 100,
             overflow: 'break'
           }

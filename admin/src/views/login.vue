@@ -9,7 +9,7 @@
                     <div class="center">
                                   <span style="font-size: 45px">
                                       <i class="ace-icon fa fa-leaf green"></i>
-                                      <span style="color: #D6F1FF">水环境动态监测系统v1.0</span>
+                                      <span style="color: #D6F1FF">水下声学实时预警系统v1.0</span>
                                   </span>
                     </div>
                     <div class="login-container">
@@ -85,7 +85,7 @@
                     </div>
                 </div><!-- /.col -->
             </div><!-- /.row -->
-          <div class="position-relative-gs"><h4>版权所有：武汉品度科技有限公司</h4></div>
+          <div class="position-relative-gs"><h6>专注自然生态  共建美丽中国</h6><h6>Tel：180 8600 2259</h6></div>
         </div><!-- /.main-content -->
     </div><!-- /.main-container -->
 </template>
@@ -192,7 +192,7 @@
     .position-relative-gs{
       color: #fff;
       position: absolute;
-      bottom: 10px;
+      bottom: 30px;
       left: 50%;
       margin-left: -135px;
     }
