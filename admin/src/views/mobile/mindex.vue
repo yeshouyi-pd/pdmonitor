@@ -83,7 +83,7 @@
                     </div>
                   </td>
                   <td style="width: 80%">
-                    <span class="line-height-1 bigger-200"> 4 </span>
+                    <span class="line-height-1 bigger-200"> {{jtcount}} </span>
                     <br/>
                     <span class="line-height-1 smaller-75"> 江豚报警数据 </span>
                   </td>
@@ -130,6 +130,8 @@ export default {
       errorCount:0,
       KvMap:[],
       shjcount:0,
+      KvMapjt:[],
+      jtcount:0,
 
     }
   },
@@ -140,6 +142,7 @@ export default {
       _this.$router.push("/login");
     }
     _this.getAlljcsjByDept();//水环境监测
+    _this.getAlljtByDept();//江豚预警
 
     let userInfo = Tool.getLoginUser();
     _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterData/findAll/' + userInfo.deptcode).then((response)=>{
@@ -173,6 +176,25 @@ export default {
                  count = count +key.value;
                }
           _this.shjcount = count;
+
+        }
+      })
+    },
+
+    /**
+     *江豚预警
+     */
+    getAlljtByDept() {
+      let _this = this;
+      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/mobile/getAlljtByDept').then((res)=>{
+        let response = res.data;
+        _this.KvMapjt = response.content;
+        if(!Tool.isEmpty(_this.KvMapjt)){
+          let count =0;
+          for(let key of _this.KvMapjt){
+            count = count +key.value;
+          }
+          _this.jtcount = count;
 
         }
       })
