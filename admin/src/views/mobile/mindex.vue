@@ -154,7 +154,7 @@ export default {
     })
     if(Tool.isEmpty(_this.heightMax)){
       let h = document.documentElement.clientHeight || document.body.clientHeight;
-      _this.heightMax = h*0.6-50;
+      _this.heightMax = h*0.6-70;
     }
 
     _this.deptMap = Tool.getDeptUser();
