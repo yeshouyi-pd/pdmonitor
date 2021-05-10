@@ -102,7 +102,7 @@ public class MobileController  extends BaseWxController {
                 WaterQualityResultExample waterQualityResultExample = new WaterQualityResultExample();
                 WaterQualityResultExample.Criteria  waterQualityResultca = waterQualityResultExample.createCriteria();
                 waterQualityResultca.andSm1EqualTo(waterQualityResultDto.getSm1());
-                List<WaterQualityResultDto>  list   = equipmentFileService.getthisDeptjxsj(waterQualityResultExample);
+                List<WaterQualityResultDto>  list   = waterQualityResultService.getthisDeptjxsj(waterQualityResultExample);
                 responseDto.setContent(list);
             }
         }

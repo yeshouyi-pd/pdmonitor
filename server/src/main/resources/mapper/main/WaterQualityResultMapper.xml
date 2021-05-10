@@ -395,4 +395,14 @@
     </if>
     GROUP BY ip,datacenter,jcxm
   </select>
+
+  <select id="getthisDeptjxsj" parameterType="com.pd.server.main.domain.WaterQualityResultExample" resultMap="BaseResultMap">
+    select * from water_quality_result
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    AND  TO_DAYS(create_time) = TO_DAYS(NOW())  ORDER BY ip , jcxm , create_time DESC
+  </select>
+
+
 </mapper>
