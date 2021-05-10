@@ -25,6 +25,11 @@
     <result column="count" jdbcType="INTEGER" property="count" />
   </resultMap>
 
+  <resultMap id="BaseResultMapKV" type="com.pd.server.main.dto.KvIntDto">
+    <result column="key" jdbcType="VARCHAR" property="key" />
+    <result column="value" jdbcType="VARCHAR" property="value" />
+  </resultMap>
+
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -362,6 +367,18 @@
   <select id="getLatestDate"  resultMap="BaseResultMap">
     SELECT a.* FROM water_quality_result a,( SELECT ip,jcxm , MAX(create_time) AS create_time  FROM water_quality_result GROUP BY ip ,jcxm  ) b WHERE a.ip = b.ip AND a.create_time = b.create_time  AND a.jcxm = b.jcxm  ORDER BY a.ip ,a.jcxm
   </select>
+
+
+  <select id="getAlljcsjByDept" parameterType="com.pd.server.main.domain.WaterQualityResultExample"  resultMap="BaseResultMapKV">
+    SELECT sm1 `key` ,COUNT(*)  `value` FROM  water_quality_result
+      <if test="_parameter != null">
+        <include refid="Example_Where_Clause" />
+       </if>
+      and   TO_DAYS(create_time) = TO_DAYS(NOW()) GROUP  BY  sm1
+
+  </select>
+
+
 
   <select id="selectAvgByExample" parameterType="com.pd.server.main.domain.WaterQualityResultExample" resultMap="AvgResultMap">
     select ip,datacenter,jcxm,SUM(data_result) sumDataResult,COUNT(*) count
