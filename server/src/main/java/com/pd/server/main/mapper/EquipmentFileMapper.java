@@ -4,7 +4,9 @@ import com.pd.server.main.domain.EquipmentFile;
 import com.pd.server.main.domain.EquipmentFileExample;
 import java.util.List;
 
+import com.pd.server.main.domain.WaterQualityResultExample;
 import com.pd.server.main.dto.KvIntDto;
+import com.pd.server.main.dto.WaterQualityResultDto;
 import com.pd.server.main.dto.WelcomeKvDto;
 import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
 
@@ -43,4 +45,6 @@ public interface EquipmentFileMapper {
     List<WelcomeKvDto> getWarningDate(EquipmentFileExample equipmentFileExample);
 
     List<KvIntDto> getAlljcsjByDept(EquipmentFileExample equipmentFileExample);
+
+    List<WaterQualityResultDto> getthisDeptjxsj(WaterQualityResultExample waterQualityResultExample);
 }
