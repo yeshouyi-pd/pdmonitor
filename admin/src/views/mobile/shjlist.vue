@@ -10,7 +10,7 @@
       <div class="space-6"></div>
         <div class="message-list" id="message-list">
           <div v-for="key in KvMap">
-          <div class="message-item message-unread" v-on:click="shjlistinfo()">
+          <div class="message-item message-unread" v-on:click="shjlistinfo(key.key)">
             <i class="message-star ace-icon fa fa-star orange2"></i>
 
             <span class="sender" >
@@ -67,8 +67,9 @@ export default {
         _this.deptmap = response.content;
       })
     },
-  shjlistinfo(){
+   shjlistinfo(sm1){
     let _this = this;
+     SessionStorage.set(MSHJSM,sm1);
     _this.$router.push("/mobile/shjlistinfo");
   }
 

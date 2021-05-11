@@ -182,16 +182,29 @@ export default {
   name: "shjlistinfo",
   data: function () {
     return {
+      sm1:'',
 
     }
   },
   mounted: function () {
     let _this =this;
     _this.activetbale();
+    _this.sm1 = SessionStorage.get(MSHJSM);
+    _this.getxxinfo();
 
 
   },
   methods: {
+
+    getxxinfo(){
+      let _this =this;
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/mobile/getthisDeptjxsj', {sm1:_this.sm1}).then((response)=>{
+        let resp = response.data;
+        let datas  =  resp.content
+        console.log("========"+datas);
+       })
+
+      },
 
     activetbale(){
       let _this =this;
