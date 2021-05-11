@@ -131,8 +131,8 @@ export default {
     _this.mc = SessionStorage.get(MSHJMC);
 
 
-   // _this.getxxinfo();
-  //  _this.getSzjcx();
+    _this.getxxinfo();
+    _this.getSzjcx();
 
   },
   methods: {
