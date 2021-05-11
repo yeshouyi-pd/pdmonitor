@@ -68,6 +68,7 @@
                                 <td>设备编号</td>
                                 <td>检测时间</td>
                                 <td>查看图片</td>
+                                <td style="display: none">>音频</td>
                               </tr>
 
                               </thead>
@@ -78,10 +79,13 @@
                                 </td>
                                 <td>{{ list.createTime }}</td>
                                 <td style="text-align: center"  v-on:click="showpic(list.id)">
-<!--                                  <a class="blue"  href="#">
-                                    <i class="ace-icon fa fa-search-plus bigger-130"></i>
-                                  </a>-->
+
                                     <img  :data-original="list.tplj"  style="width:10px;height: auto"  :id="list.id" :src="list.tplj" :alt="list.createTime">
+                                </td>
+                                <td style="display: none">
+                                  <div style="width: 100%;text-align: center" >
+                                    <aplayer :music="list.playDto"   :mini="true" ></aplayer>
+                                  </div>
                                 </td>
                               </tr>
                               </tbody>
@@ -112,7 +116,9 @@
 <script>
 import Viewer from 'viewerjs';
 import 'viewerjs/dist/viewer.css';
+import Aplayer from 'vue-aplayer'
 export default {
+  components: {Aplayer},
   name: "jtlistinfo",
   data: function () {
     return {
@@ -121,7 +127,6 @@ export default {
       lists:[], //数据
       sets:[], //业务
       JYXM_DW:JYXM_DW,
-
     }
   },
   mounted: function () {
