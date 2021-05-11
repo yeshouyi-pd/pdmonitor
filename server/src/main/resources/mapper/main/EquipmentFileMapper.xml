@@ -10,6 +10,7 @@
     <result column="nf" jdbcType="VARCHAR" property="nf" />
     <result column="yf" jdbcType="VARCHAR" property="yf" />
     <result column="rq" jdbcType="VARCHAR" property="rq" />
+    <result column="sbmc" jdbcType="VARCHAR" property="sbmc" />
   </resultMap>
   <resultMap id="StatisticsResultMap" type="com.pd.server.main.dto.basewx.my.AlarmNumbersDto">
     <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
@@ -323,4 +324,17 @@
     and   TO_DAYS(create_time) = TO_DAYS(NOW())  and  tplj LIKE '%.png'  GROUP  BY  deptcode
 
   </select>
+
+
+  <select id="getthisDeptjxsjJT" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultMap="BaseResultMap">
+    SELECT  b. * , a. sbmc   FROM  water_equipment a, (
+    select * from equipment_file
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    AND  TO_DAYS(create_time) = TO_DAYS(NOW()) and  tplj LIKE '%.png'  ORDER BY sbbh  , create_time DESC ) b WHERE a.sbsn = b.sbbh
+  </select>
+
+
+
 </mapper>
