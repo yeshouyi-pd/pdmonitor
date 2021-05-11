@@ -4,7 +4,7 @@
     <div class="space-1"></div>
     <div>
 						<span class="label label-primary arrowed-in-right label-lg">
-									<b>水环境监测数据</b>
+									<b>【{{mc}}】</b>
 						</span>
     </div>
       <div class="space-2"></div>
@@ -27,14 +27,14 @@
                 </thead>
 
                 <tbody>
-                <template v-for="set  in sets"  >
-                <tr>
-                  <td class="center">1</td>
-                  <td>老湾豚类基地流速和深度设备</td>
-                  <td>{{set}}</td>
+                <template v-for="(name,set,index)  in sets"  >
+                <tr v-on:click="activetbale(set+'details');">
+                  <td class="center">{{ index +1 }}</td>
+                  <td>{{name}}</td>
+                  <td>{{set}} </td>
                   <td class="center">
                     <div class="action-buttons">
-                      <a href="#" class="green bigger-140 show-details-btn" :id="set+'details'"  v-on:click="activetbale(set+'details');" title="Show Details">
+                      <a href="#" class="green bigger-140 show-details-btn" :id="set+'details'"  title="Show Details">
                         <i class="ace-icon fa fa-angle-double-down"></i>
                         <span class="sr-only">详情</span>
                       </a>
@@ -52,7 +52,7 @@
                                 <a class="user-title-label" href="#">
                                   <i class="ace-icon fa fa-circle light-green"></i>
                                   &nbsp;
-                                  <span class="white">老湾豚类基地流速和深度设备</span>
+                                  <span class="white">{{ name }}</span>
                                 </a>
                               </div>
                             </div>
@@ -73,8 +73,14 @@
                               </thead>
                               <tbody>
                               <tr v-for="list in  lists.filter((x,y)=>{ return x.ip === set })" >
-                                <td>{{ list.jcxm }}</td>
-                                <td>{{ list.dataResult }}</td>
+                                <td>
+                                  {{szjcx|optionMapKV(list.jcxm )}}
+                                </td>
+                                <td>
+                                  <div v-show="list.dataResult">
+                                    <b class="green">{{list.dataResult}}</b>{{JYXM_DW|optionKV(list.jcxm)}}
+                                  </div>
+                                </td>
                                 <td>{{ list.createTime }}</td>
                               </tr>
                               </tbody>
@@ -108,20 +114,39 @@ export default {
   data: function () {
     return {
       sm1:'',
+      mc:'',
       lists:[], //数据
       sets:[], //业务
+      JYXM_DW:JYXM_DW,
+      szjcx:[],
 
     }
   },
   mounted: function () {
     let _this =this;
     _this.sm1 = SessionStorage.get(MSHJSM);
+    if(Tool.isEmpty(_this.sm1)){
+      _this.$router.push("/mobile/mindex");
+    }
+    _this.mc = SessionStorage.get(MSHJMC);
+
     _this.getxxinfo();
-
-
+    _this.getSzjcx();
 
   },
   methods: {
+
+    /**
+     * 获取水质检测项
+     */
+    getSzjcx(){
+      let _this = this;
+      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/CodeSetUtil/getSzjcx', {
+      }).then((response)=>{
+        let resp = response.data;
+        _this.szjcx = resp.content;
+      })
+    },
 
     getxxinfo(){
       let _this =this;
@@ -129,7 +154,7 @@ export default {
         let resp = response.data;
         let datas  =  resp.content
         _this.lists = datas.list;
-         _this.sets  =datas.set;
+         _this.sets  =datas.map;
 
 
        })

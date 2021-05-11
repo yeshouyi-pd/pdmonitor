@@ -101,15 +101,15 @@ public class MobileController  extends BaseWxController {
                 WaterQualityResultExample.Criteria  waterQualityResultca = waterQualityResultExample.createCriteria();
                 waterQualityResultca.andSm1EqualTo(waterQualityResultDto.getSm1());
                 List<WaterQualityResultDto>  list   = waterQualityResultService.getthisDeptjxsj(waterQualityResultExample);
-                Set<String> set  =   new HashSet<String>();
+                Map<String,String> map  =   new HashMap<String,String>();
                 if(!CollectionUtils.isEmpty(list)){
                     for(WaterQualityResultDto vo :list){
-                        set.add(vo.getIp());
+                        map.put(vo.getIp(),vo.getSbmc());
                     }
                 }
                 Map<String ,Object> remap = new HashMap<String ,Object>();
                 remap.put("list" ,list);
-                remap.put("set", set);
+                remap.put("map", map);
                 responseDto.setContent(remap);
 
             }

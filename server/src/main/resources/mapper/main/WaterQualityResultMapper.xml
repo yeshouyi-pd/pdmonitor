@@ -16,6 +16,7 @@
     <result column="sm2" jdbcType="VARCHAR" property="sm2" />
     <result column="sm3" jdbcType="VARCHAR" property="sm3" />
     <result column="sm4" jdbcType="VARCHAR" property="sm4" />
+    <result column="sbmc" jdbcType="VARCHAR" property="sbmc" />
   </resultMap>
   <resultMap id="AvgResultMap" type="com.pd.server.main.dto.WaterQualityAvgDto">
     <result column="ip" jdbcType="VARCHAR" property="ip" />
@@ -397,11 +398,12 @@
   </select>
 
   <select id="getthisDeptjxsj" parameterType="com.pd.server.main.domain.WaterQualityResultExample" resultMap="BaseResultMap">
+    SELECT  b. * , a. sbmc   FROM  water_equipment a, (
     select * from water_quality_result
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
-    AND  TO_DAYS(create_time) = TO_DAYS(NOW())  ORDER BY ip , jcxm , create_time DESC
+    AND  TO_DAYS(create_time) = TO_DAYS(NOW())  ORDER BY ip , jcxm , create_time DESC ) b WHERE a.sbsn = b.ip
   </select>
 
 
