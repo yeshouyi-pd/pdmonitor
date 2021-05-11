@@ -11,6 +11,9 @@ SESSION_KEY_ACCIDENT="SESSION_KEY_ACCIDENT";//事故管理
 MSHJMAP ="MSHJMAP";//水环境
 MSHJSM="MSHJSM";
 MSHJMC="MSHJMC";
+MJTMAP="MJTMAP";//江豚
+MJTSM="MJTSM";
+MJTMC="MJTMC";
 
 SessionStorage = {
     get: function (key) {

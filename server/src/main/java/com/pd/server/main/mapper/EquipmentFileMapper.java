@@ -46,4 +46,5 @@ public interface EquipmentFileMapper {
 
     List<KvIntDto> getAlljcsjByDept(EquipmentFileExample equipmentFileExample);
 
+    List<EquipmentFile> getthisDeptjxsjJT(EquipmentFileExample equipmentFileExample);
 }

@@ -24,6 +24,8 @@ import Ywydxz from "../../wx/src/views/wx/ywyy/ywydxz.vue";
 import Mindex  from "./views/mobile/mindex.vue"
 import Shjlist  from "./views/mobile/shjlist.vue"
 import Shjlistinfo  from "./views/mobile/shjlistinfo.vue"
+import Jtlist  from "./views/mobile/jtlist.vue"
+import Jtlistinfo  from "./views/mobile/jtlistinfo.vue"
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -55,6 +57,12 @@ export default new Router({
     },{
         path: "/mobile/shjlistinfo",
         component:Shjlistinfo
+    },{
+        path: "/mobile/jtlist",
+        component:Jtlist
+    },{
+        path: "/mobile/jtlistinfo",
+        component:Jtlistinfo
     },{
         path: "/",
         name:"admin",//为每一个路由都加上name属性，后续做通用的aidebar激活方法样式会用的

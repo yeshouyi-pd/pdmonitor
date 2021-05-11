@@ -119,4 +119,37 @@ public class MobileController  extends BaseWxController {
     }
 
 
+
+    /**
+     * 获取当前部门的所有数据 ---江豚
+     * @return
+     */
+    @PostMapping("/getthisDeptjxsjJT")
+    public ResponseDto getthisDeptjxsjJT(@RequestBody EquipmentFileDto equipmentFileDto){
+        ResponseDto responseDto = new ResponseDto();
+
+        if(null != equipmentFileDto){
+            if(!StringUtils.isEmpty(equipmentFileDto.getDeptcode())){
+                EquipmentFileExample equipmentFileExample = new EquipmentFileExample();
+                EquipmentFileExample.Criteria  equipmentFileca = equipmentFileExample.createCriteria();
+                equipmentFileca.andDeptcodeEqualTo(equipmentFileDto.getDeptcode());
+                List<EquipmentFileDto>  list   = equipmentFileService.getthisDeptjxsjJT(equipmentFileExample);
+                Map<String,String> map  =   new HashMap<String,String>();
+                if(!CollectionUtils.isEmpty(list)){
+                    for(EquipmentFileDto vo :list){
+                        map.put(vo.getSbbh(),vo.getSbmc());
+                    }
+                }
+                Map<String ,Object> remap = new HashMap<String ,Object>();
+                remap.put("list" ,list);
+                remap.put("map", map);
+                responseDto.setContent(remap);
+
+            }
+        }
+        return responseDto;
+
+    }
+
+
 }

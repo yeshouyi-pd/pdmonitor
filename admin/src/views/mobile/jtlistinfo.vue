@@ -65,23 +65,24 @@
                             <table  class="table table-striped table-bordered table-hover">
                               <thead>
                               <tr>
-                                <td>检测项目</td>
-                                <td>监测结果</td>
+                                <td>设备编号</td>
                                 <td>检测时间</td>
+                                <td>查看图片</td>
                               </tr>
 
                               </thead>
                               <tbody>
-                              <tr v-for="list in  lists.filter((x,y)=>{ return x.ip === set })" >
+                              <tr v-for="list in  lists.filter((x,y)=>{ return x.sbbh === set })" >
                                 <td>
-                                  {{szjcx|optionMapKV(list.jcxm )}}
-                                </td>
-                                <td>
-                                  <div v-show="list.dataResult">
-                                    <b class="green">{{list.dataResult}}</b>{{JYXM_DW|optionKV(list.jcxm)}}
-                                  </div>
+                                  {{set}}
                                 </td>
                                 <td>{{ list.createTime }}</td>
+                                <td style="text-align: center"  v-on:click="showpic(list.id)">
+<!--                                  <a class="blue"  href="#">
+                                    <i class="ace-icon fa fa-search-plus bigger-130"></i>
+                                  </a>-->
+                                    <img  :data-original="list.tplj"  style="width:10px;height: auto"  :id="list.id" :src="list.tplj" :alt="list.createTime">
+                                </td>
                               </tr>
                               </tbody>
                             </table>
@@ -109,8 +110,10 @@
 </template>
 
 <script>
+import Viewer from 'viewerjs';
+import 'viewerjs/dist/viewer.css';
 export default {
-  name: "shjlistinfo",
+  name: "jtlistinfo",
   data: function () {
     return {
       sm1:'',
@@ -118,40 +121,50 @@ export default {
       lists:[], //数据
       sets:[], //业务
       JYXM_DW:JYXM_DW,
-      szjcx:[],
 
     }
   },
   mounted: function () {
     let _this =this;
-    _this.sm1 = SessionStorage.get(MSHJSM);
+
+
+    _this.sm1 = SessionStorage.get(MJTSM);
     if(Tool.isEmpty(_this.sm1)){
       _this.$router.push("/mobile/mindex");
     }
-    _this.mc = SessionStorage.get(MSHJMC);
+    _this.mc = SessionStorage.get(MJTMC);
+
+    _this.getxxinfo();
 
 
-   // _this.getxxinfo();
-  //  _this.getSzjcx();
+
 
   },
   methods: {
+    showpic(id){
+      let viewer = new Viewer(document.getElementById(id), {
+        url: 'data-original',
+        toolbar:{
+          "zoomIn":1,
+          "zoomOut":1,
+          "oneToOne":1,
+          "reset":1,
+          "prev":0,
+          "next":0,
+          "play":0,
+          "rotateLeft":1,
+          "rotateRight":1,
+          "flipHorizontal":0,
+          "flipVertical":0,
+        }
 
-    /**
-     * 获取水质检测项
-     */
-    getSzjcx(){
-      let _this = this;
-      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/CodeSetUtil/getSzjcx', {
-      }).then((response)=>{
-        let resp = response.data;
-        _this.szjcx = resp.content;
-      })
+      });
+
+
     },
-
     getxxinfo(){
       let _this =this;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/mobile/getthisDeptjxsj', {sm1:_this.sm1}).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/mobile/getthisDeptjxsjJT', {deptcode:_this.sm1}).then((response)=>{
         let resp = response.data;
         let datas  =  resp.content
         _this.lists = datas.list;

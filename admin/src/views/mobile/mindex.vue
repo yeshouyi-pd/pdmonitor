@@ -83,7 +83,7 @@
                     </div>
                   </td>
                   <td style="width: 80%">
-                       <span class="line-height-1 bigger-200"> {{jtcount}} </span>
+                       <span  v-on:click="tojtlist()" class="line-height-1 bigger-200"> {{jtcount}} </span>
 
                     <br/>
                     <span class="line-height-1 smaller-75"> 江豚报警数据 </span>
@@ -166,6 +166,13 @@ export default {
          let _this = this;
           _this.$router.push("/mobile/shjlist");
         },
+
+    tojtlist (){
+      let _this = this;
+      _this.$router.push("/mobile/jtlist");
+    },
+
+
     /**
      *  welcome 水环境数据监测
      */
@@ -199,6 +206,7 @@ export default {
             count = count +key.value;
           }
           _this.jtcount = count;
+          SessionStorage.set(MJTMAP,_this.KvMapjt);
 
         }
       })

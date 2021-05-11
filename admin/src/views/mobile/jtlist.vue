@@ -4,7 +4,7 @@
     <div class="space-1"></div>
     <div>
 						<span class="label label-primary arrowed-in-right label-lg">
-									<b>水环境监测数据</b>
+									<b>江豚报警数据</b>
 						</span>
     </div>
       <div class="space-6"></div>
@@ -41,7 +41,7 @@
 
 <script>
 export default {
-  name: "shjlist",
+  name: "jtlist",
   data: function () {
     return {
       KvMap:[],
@@ -50,19 +50,15 @@ export default {
   },
   mounted: function () {
     let _this =this;
-    _this.KvMap  =  SessionStorage.get(MSHJMAP )|| [] ;
+    _this.KvMap  =  SessionStorage.get(MJTMAP )|| [] ;
     if(Tool.isEmpty(_this.KvMap)){
-      _this.$router.push("/mobile/mindex");
+      _this.$router.push("/mobile/jtlistinfo");
     }
     _this.getdeptname();
 
   },
   methods: {
 
-
-    /**
-     *江豚预警
-     */
     getdeptname() {
       let _this = this;
       _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/CodeSetUtil/getdeptname').then((res)=>{
@@ -72,9 +68,9 @@ export default {
     },
    shjlistinfo(sm1){
     let _this = this;
-     SessionStorage.set(MSHJSM,sm1);
-     SessionStorage.set(MSHJMC,_this.option(_this.deptmap,sm1));
-    _this.$router.push("/mobile/shjlistinfo");
+     SessionStorage.set(MJTSM,sm1);
+     SessionStorage.set(MJTMC,_this.option(_this.deptmap,sm1));
+    _this.$router.push("/mobile/jtlistinfo");
   },
 
     option(object ,key){
