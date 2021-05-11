@@ -42,5 +42,5 @@ public interface WaterQualityResultMapper {
     List<KvIntDto> getAlljcsjByDept(WaterQualityResultExample example);
 
 
-    List<WaterQualityResultDto> getthisDeptjxsj(WaterQualityResultExample waterQualityResultExample);
+    List<WaterQualityResult> getthisDeptjxsj(WaterQualityResultExample waterQualityResultExample);
 }

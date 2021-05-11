@@ -10,14 +10,12 @@ import com.pd.server.main.dto.*;
 import com.pd.server.main.service.EquipmentFileService;
 import com.pd.server.main.service.WaterEquipmentService;
 import com.pd.server.main.service.WaterQualityResultService;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/mobile")
@@ -103,7 +101,17 @@ public class MobileController  extends BaseWxController {
                 WaterQualityResultExample.Criteria  waterQualityResultca = waterQualityResultExample.createCriteria();
                 waterQualityResultca.andSm1EqualTo(waterQualityResultDto.getSm1());
                 List<WaterQualityResultDto>  list   = waterQualityResultService.getthisDeptjxsj(waterQualityResultExample);
-                responseDto.setContent(list);
+                Set<String> set  =   new HashSet<String>();
+                if(!CollectionUtils.isEmpty(list)){
+                    for(WaterQualityResultDto vo :list){
+                        set.add(vo.getIp());
+                    }
+                }
+                Map<String ,Object> remap = new HashMap<String ,Object>();
+                remap.put("list" ,list);
+                remap.put("set", set);
+                responseDto.setContent(remap);
+
             }
         }
         return responseDto;

@@ -93,6 +93,8 @@ public class WaterQualityResultService {
 
 
     public List<WaterQualityResultDto> getthisDeptjxsj(WaterQualityResultExample waterQualityResultExample) {
-        return   waterQualityResultMapper.getthisDeptjxsj(waterQualityResultExample);
+        List<WaterQualityResult> listdata   =   waterQualityResultMapper.getthisDeptjxsj(waterQualityResultExample);
+        List<WaterQualityResultDto> list = CopyUtil.copyList(listdata, WaterQualityResultDto.class);
+        return   list;
     }
 }
