@@ -144,6 +144,7 @@ export default {
     showpic(id){
       let viewer = new Viewer(document.getElementById(id), {
         url: 'data-original',
+        navbar:false,
         toolbar:{
           "zoomIn":1,
           "zoomOut":1,
