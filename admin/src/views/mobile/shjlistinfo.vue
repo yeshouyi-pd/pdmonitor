@@ -27,19 +27,19 @@
                 </thead>
 
                 <tbody>
+                <template v-for="set  in sets"  >
                 <tr>
                   <td class="center">1</td>
                   <td>老湾豚类基地流速和深度设备</td>
-                  <td>888888</td>
+                  <td>{{set}}</td>
                   <td class="center">
                     <div class="action-buttons">
-                      <a href="#" class="green bigger-140 show-details-btn" title="Show Details">
+                      <a href="#" class="green bigger-140 show-details-btn" :id="set+'details'"  v-on:click="activetbale(set+'details');" title="Show Details">
                         <i class="ace-icon fa fa-angle-double-down"></i>
                         <span class="sr-only">详情</span>
                       </a>
                     </div>
                   </td>
-
                 </tr>
                 <tr class="detail-row">
                   <td colspan="4">
@@ -72,95 +72,20 @@
 
                               </thead>
                               <tbody>
-                              <tr>
-                                <td>waterVelocity</td>
-                                <td>0.3591608</td>
-                                <td>2021-05-09 20:00:40</td>
-                              </tr>
-                              <tr>
-                                <td>waterVelocity</td>
-                                <td>0.3591608</td>
-                                <td>2021-05-09 20:00:40</td>
+                              <tr v-for="list in  lists.filter((x,y)=>{ return x.ip === set })" >
+                                <td>{{ list.jcxm }}</td>
+                                <td>{{ list.dataResult }}</td>
+                                <td>{{ list.createTime }}</td>
                               </tr>
                               </tbody>
                             </table>
-
-
                         </div>
-
-
                       </div>
                     </div>
                   </td>
                 </tr>
+                </template>
 
-
-                <tr>
-                  <td class="center">1</td>
-                  <td>老湾豚类基地流速和深度设备</td>
-                  <td>888888</td>
-                  <td class="center">
-                    <div class="action-buttons">
-                      <a href="#" class="green bigger-140 show-details-btn" title="Show Details">
-                        <i class="ace-icon fa fa-angle-double-down"></i>
-                        <span class="sr-only">详情</span>
-                      </a>
-                    </div>
-                  </td>
-
-                </tr>
-                <tr class="detail-row">
-                  <td colspan="4">
-                    <div class="table-detail">
-                      <div class="row">
-                        <div class="col-xs-12 col-sm-2">
-                          <div class="text-center">
-                            <div class="width-80 label label-info label-xlg arrowed-in arrowed-in-right">
-                              <div class="inline position-relative">
-                                <a class="user-title-label" href="#">
-                                  <i class="ace-icon fa fa-circle light-green"></i>
-                                  &nbsp;
-                                  <span class="white">老湾豚类基地流速和深度设备</span>
-                                </a>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="col-xs-12 col-sm-12">
-                          <div class="space visible-xs"></div>
-
-                          <table  class="table table-striped table-bordered table-hover">
-                            <thead>
-                            <tr>
-                              <td>检测项目</td>
-                              <td>监测结果</td>
-                              <td>检测时间</td>
-                            </tr>
-
-                            </thead>
-                            <tbody>
-                            <tr>
-                              <td>waterVelocity</td>
-                              <td>0.3591608</td>
-                              <td>2021-05-09 20:00:40</td>
-                            </tr>
-                            <tr>
-                              <td>waterVelocity</td>
-                              <td>0.3591608</td>
-                              <td>2021-05-09 20:00:40</td>
-                            </tr>
-                            </tbody>
-                          </table>
-
-
-                        </div>
-
-
-                      </div>
-                    </div>
-                  </td>
-                </tr>
                 </tbody>
               </table>
 
@@ -183,14 +108,16 @@ export default {
   data: function () {
     return {
       sm1:'',
+      lists:[], //数据
+      sets:[], //业务
 
     }
   },
   mounted: function () {
     let _this =this;
-    _this.activetbale();
     _this.sm1 = SessionStorage.get(MSHJSM);
     _this.getxxinfo();
+
 
 
   },
@@ -201,20 +128,20 @@ export default {
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/mobile/getthisDeptjxsj', {sm1:_this.sm1}).then((response)=>{
         let resp = response.data;
         let datas  =  resp.content
-        console.log("========"+datas);
+        _this.lists = datas.list;
+         _this.sets  =datas.set;
+
+
        })
 
       },
 
-    activetbale(){
+    activetbale(id){
       let _this =this;
       $('[data-rel="tooltip"]').tooltip({placement: _this.tooltip_placement});
       /***************/
-      $('.show-details-btn').on('click', function(e) {
-        e.preventDefault();
-        $(this).closest('tr').next().toggleClass('open');
-        $(this).find(ace.vars['.icon']).toggleClass('fa-angle-double-down').toggleClass('fa-angle-double-up');
-      });
+         $('#'+id).closest('tr').next().toggleClass('open');
+         $('#'+id).find(ace.vars['.icon']).toggleClass('fa-angle-double-down').toggleClass('fa-angle-double-up');
       /***************/
 
     },
