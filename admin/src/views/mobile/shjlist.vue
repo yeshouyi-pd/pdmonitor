@@ -51,6 +51,9 @@ export default {
   mounted: function () {
     let _this =this;
     _this.KvMap  =  SessionStorage.get(MSHJMAP )|| [] ;
+    if(Tool.isEmpty(_this.KvMap)){
+      _this.$router.push("/mobile/mindex");
+    }
     _this.getdeptname();
 
   },
@@ -70,8 +73,25 @@ export default {
    shjlistinfo(sm1){
     let _this = this;
      SessionStorage.set(MSHJSM,sm1);
+     SessionStorage.set(MSHJMC,_this.option(_this.deptmap,sm1));
     _this.$router.push("/mobile/shjlistinfo");
-  }
+  },
+
+    option(object ,key){
+      if (!object || !key) {
+        return "";
+      } else {
+        let result = "";
+        for(let enums in object){
+          if (key === enums) {
+            result = object[enums];
+          }
+        }
+        return result;
+      }
+
+    },
+
 
 
 
