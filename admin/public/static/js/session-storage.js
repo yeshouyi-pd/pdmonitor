@@ -9,6 +9,7 @@ CODE_KEY_FSZMLM ="4";//身份证名类型
 CODE_KEY_FBXXLX ="6";//发布信息类型
 SESSION_KEY_ACCIDENT="SESSION_KEY_ACCIDENT";//事故管理
 MSHJMAP ="MSHJMAP";//水环境
+MSHJSM="MSHJSM";
 
 SessionStorage = {
     get: function (key) {

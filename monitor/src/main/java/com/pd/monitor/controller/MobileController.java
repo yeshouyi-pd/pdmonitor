@@ -98,7 +98,7 @@ public class MobileController  extends BaseWxController {
         ResponseDto responseDto = new ResponseDto();
 
         if(null != waterQualityResultDto){
-            if(StringUtils.isEmpty(waterQualityResultDto.getSm1())){
+            if(!StringUtils.isEmpty(waterQualityResultDto.getSm1())){
                 WaterQualityResultExample waterQualityResultExample = new WaterQualityResultExample();
                 WaterQualityResultExample.Criteria  waterQualityResultca = waterQualityResultExample.createCriteria();
                 waterQualityResultca.andSm1EqualTo(waterQualityResultDto.getSm1());
