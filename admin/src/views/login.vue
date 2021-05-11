@@ -129,8 +129,8 @@
             let _this = this;
             if(/phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone/i.test(navigator.userAgent)){
               _this.isMobileflag =true;
-              _this.fontsize =30;
-              _this.imgsize = 40;
+              _this.fontsize =27;
+              _this.imgsize = 31;
               _this.paddingsize=30;
             }else{
               _this.isMobileflag =false;
