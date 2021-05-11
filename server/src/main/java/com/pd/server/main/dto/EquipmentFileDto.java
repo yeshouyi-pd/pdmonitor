@@ -36,6 +36,15 @@ public class EquipmentFileDto extends PageDto{
 
     private String sbmc;
 
+    private  PlayDto playDto;
+
+    public PlayDto getPlayDto() {
+        return playDto;
+    }
+
+    public void setPlayDto(PlayDto playDto) {
+        this.playDto = playDto;
+    }
 
     public String getSbmc() {
         return sbmc;

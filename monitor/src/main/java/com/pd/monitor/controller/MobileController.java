@@ -134,14 +134,24 @@ public class MobileController  extends BaseWxController {
                 EquipmentFileExample.Criteria  equipmentFileca = equipmentFileExample.createCriteria();
                 equipmentFileca.andDeptcodeEqualTo(equipmentFileDto.getDeptcode());
                 List<EquipmentFileDto>  list   = equipmentFileService.getthisDeptjxsjJT(equipmentFileExample);
+                List<EquipmentFileDto>  listenw   = new ArrayList<EquipmentFileDto>();
                 Map<String,String> map  =   new HashMap<String,String>();
                 if(!CollectionUtils.isEmpty(list)){
                     for(EquipmentFileDto vo :list){
                         map.put(vo.getSbbh(),vo.getSbmc());
+                        if(!StringUtils.isEmpty(vo.getTplj())){
+                            String  wav = vo.getTplj().replaceAll("png","wav");
+                            PlayDto p = new PlayDto();
+                            p.setSrc(wav);
+                            vo.setPlayDto(p);
+                            listenw.add(vo);
+
+                        }
+
                     }
                 }
                 Map<String ,Object> remap = new HashMap<String ,Object>();
-                remap.put("list" ,list);
+                remap.put("list" ,listenw);
                 remap.put("map", map);
                 responseDto.setContent(remap);
 
