@@ -311,7 +311,7 @@
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
-    and   TO_DAYS(create_time) = TO_DAYS(NOW())  AND tplj LIKE '%.png' GROUP BY sbbh ) c  WHERE a.sbsn = c.text AND  a.deptcode = b.deptcode
+    and   TO_DAYS(cjsj) = TO_DAYS(NOW())  AND tplj LIKE '%.png' GROUP BY sbbh ) c  WHERE a.sbsn = c.text AND  a.deptcode = b.deptcode
   </select>
 
 
@@ -321,7 +321,7 @@
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
-    and   TO_DAYS(create_time) = TO_DAYS(NOW())  and  tplj LIKE '%.png'  GROUP  BY  deptcode
+    and   TO_DAYS(cjsj) = TO_DAYS(NOW())  and  tplj LIKE '%.png'  GROUP  BY  deptcode
 
   </select>
 
@@ -332,7 +332,7 @@
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
-    AND  TO_DAYS(create_time) = TO_DAYS(NOW()) and  tplj LIKE '%.png'  ORDER BY sbbh  , create_time DESC ) b WHERE a.sbsn = b.sbbh
+    AND  TO_DAYS(cjsj) = TO_DAYS(NOW()) and  tplj LIKE '%.png'   ) b WHERE a.sbsn = b.sbbh ORDER BY b.sbbh  , b.cjsj DESC
   </select>
 
 
