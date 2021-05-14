@@ -37,6 +37,7 @@
 
                                       </td>
                                     </tr>
+                                    <tr style="height: 10px;"></tr>
                                     <tr>
                                         <td >
                                             部门编号：
@@ -54,6 +55,7 @@
                                         </select>
                                       </td>
                                     </tr>
+                                    <tr style="height: 10px;"></tr>
                                     <tr>
                                       <td >
                                         创建时间：
@@ -365,9 +367,16 @@
 
             // sidebar激活样式方法一
             // this.$parent.activeSidebar("system-dept-sidebar");
-
+            _this.getJglb();
         },
         methods: {
+          getJglb(){
+            let _this = this;
+            _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/CodeSetUtil/getJglb').then((res) => {
+              let response = res.data;
+              _this.depttypes = response.content;
+            })
+          },
             queyCheckedepe(rep){
                 let _this = this;
                 _this.deptDto.upcode = rep;//获取查询条件上级部门

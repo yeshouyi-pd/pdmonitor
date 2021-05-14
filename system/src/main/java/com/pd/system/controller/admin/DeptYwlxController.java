@@ -26,23 +26,6 @@ public class DeptYwlxController {
     @Resource
     private RedisTemplate redisTemplate;
 
-    /**
-     * 获取业务分类和业务类型
-     */
-    @GetMapping("/getywflandyewlx")
-    public  ResponseDto getywflandylx(){
-        ResponseDto responseDto = new ResponseDto();
-        Map<String, Map<String, String>> nmap = new LinkedHashMap<String, Map<String, String>>();
-        Map<String, Map<String, String>> all =(Map<String, Map<String, String>>)redisTemplate.opsForValue().get(RedisCode.CODESET);
-        nmap.put("CODE_JDC_YWLX",all.get(CodeType.CODE_JDC_YWLX));
-        nmap.put("CODE_JSR_YWLX",all.get(CodeType.CODE_JSR_YWLX));
-        nmap.put("CODE_WF_YWLX",all.get(CodeType.CODE_WF_YWLX));
-        nmap.put("YWZL_CODE",all.get(CodeType.YWZL_CODE));
-        responseDto.setContent(nmap);
-
-        return responseDto;
-    }
-
 
 
 }

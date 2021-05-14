@@ -42,21 +42,44 @@ public class WaterEquipmentController  extends BaseWxController {
     /**
      * 监测点数据中心树
      */
+    @GetMapping("/findMonitorEquipmentTreeByFile")
+    public ResponseDto findMonitorEquipmentTreeByFile(){
+        ResponseDto responseDto = new ResponseDto();
+        List<Dept> waterDataList = deptService.list(null);
+        Map<String, String> map = waterDataList.stream().collect(Collectors.toMap(p -> p.getDeptcode(), p -> p.getDeptname()));
+        WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
+        WaterEquipmentExample.Criteria weCa = waterEquipmentExample.createCriteria();
+        weCa.andSblbEqualTo("0001");
+        List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(waterEquipmentExample);
+        Map<String,List<WaterEquipment>> deptcodeMap = waterEquipmentList.stream().collect(Collectors.groupingBy(WaterEquipment::getDeptcode));
+        List<MonitorEquipmentDto> lists = new ArrayList<>();
+        for(String key : deptcodeMap.keySet()){
+            MonitorEquipmentDto entity = new MonitorEquipmentDto();
+            List<MonitorEquipmentDto> childrenList = new ArrayList<>();
+            entity.setName(map.get(key));
+            entity.setCode(key);
+            entity.setType("1");
+            entity.setChildren(childrenList);
+            List<WaterEquipment> waterEquipments = deptcodeMap.get(key);
+            for(WaterEquipment item : waterEquipments){
+                MonitorEquipmentDto obj = new MonitorEquipmentDto();
+                obj.setName(item.getSbmc()+"("+item.getSbsn()+")");
+                obj.setCode(item.getSbsn());
+                obj.setType("2");
+                childrenList.add(obj);
+            }
+            lists.add(entity);
+        }
+        responseDto.setContent(lists);
+        return responseDto;
+    }
+
+    /**
+     * 监测点数据中心树
+     */
     @GetMapping("/findMonitorEqupmentTree")
     public ResponseDto findMonitorEquipmentTree(){
         ResponseDto responseDto = new ResponseDto();
-        CodesetExample codesetExample = new CodesetExample();
-        CodesetExample.Criteria codesetCa = codesetExample.createCriteria();
-        codesetCa.andTypeEqualTo(CodeType.SZJCX_CODE);
-        List<Codeset> codesetList = codesetService.list(codesetExample);
-        List<MonitorEquipmentDto> codesetChildren = new ArrayList<>();
-        for(Codeset codeset : codesetList){
-            MonitorEquipmentDto entity = new MonitorEquipmentDto();
-            entity.setName(codeset.getName());
-            entity.setCode(codeset.getCode());
-            entity.setType("3");
-            codesetChildren.add(entity);
-        }
         List<Dept> waterDataList = deptService.list(null);
         Map<String, String> map = waterDataList.stream().collect(Collectors.toMap(p -> p.getDeptcode(), p -> p.getDeptname()));
         WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
@@ -78,7 +101,6 @@ public class WaterEquipmentController  extends BaseWxController {
                 obj.setName(item.getSbmc()+"("+item.getSbsn()+")");
                 obj.setCode(item.getId());
                 obj.setType("2");
-                obj.setChildren(codesetChildren);
                 childrenList.add(obj);
             }
             lists.add(entity);

@@ -11,19 +11,19 @@
               <tbody>
               <tr>
                 <td style="width:10%">
-                  报警时间：
+                  报警日期：
                 </td>
                 <td style="width: 25%">
-                  <Times v-bind:startTime="startTime" v-bind:endTime="endTime"></Times>
+                  <time-range-picker v-bind:startTime="startTime" v-bind:endTime="endTime"></time-range-picker>
                 </td>
                 <td style="width:10%">
                   设备sn：
                 </td>
-                <td style="width: 15%">
+                <td style="width: 10%">
                   <input class="input-sm" type="text"  v-model="alarmNumbersDto.sbbh"/>
                 </td>
                 <td colspan="2" class="text-center">
-                  <button v-on:click="statisticsAlarmNums()" type="button" class="btn btn-sm  btn-info btn-round">
+                  <button type="button" v-on:click="list(1)" class="btn btn-sm btn-info btn-round" style="margin-right: 10px;">
                     <i class="ace-icon fa fa-book"></i>
                     查询
                   </button>
@@ -54,18 +54,21 @@
           <tr v-for="item in alarmDatas">
             <td>{{deptMap|optionMapKV(item.deptcode)}}</td>
             <td>{{item.sbbh}}</td>
-            <td>{{item.bjsj}}</td>
+            <td>{{item.bjsj+" "+item.xs+":"+item.fz}}</td>
             <td>{{item.alarmNum}}</td>
           </tr>
         </tbody>
       </table>
     </div>
+    <pagination ref="pagination" v-bind:list="list" v-bind:itemCount="10"></pagination>
   </div>
 </template>
 <script>
-import Times from "../../components/time";
+import Pagination from "../../components/pagination";
+import TimeRangePicker from "../../components/timeRangePicker";
+import Times from "../../components/times";
 export default {
-  components: {Times},
+  components: {Pagination,TimeRangePicker,Times},
   name: "alarm-numbers",
   data: function (){
     return {
@@ -77,7 +80,8 @@ export default {
   mounted() {
     let _this = this;
     _this.deptMap = Tool.getDeptUser();
-    _this.statisticsAlarmNums();
+    _this.list(1);
+    _this.$refs.pagination.size = 10;
   },
   methods: {
     /**
@@ -96,14 +100,16 @@ export default {
       _this.alarmNumbersDto.etime = rep;
       _this.$forceUpdate();
     },
-    statisticsAlarmNums(){
+    list(page){
       let _this = this;
       Loading.show();
-      _this.alarmDatas = [];
+      _this.alarmNumbersDto.page=page;
+      _this.alarmNumbersDto.size=_this.$refs.pagination.size;
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFile/statisticsAlarmNums', _this.alarmNumbersDto).then((response) => {
         Loading.hide();
         let resp = response.data;
-        _this.alarmDatas = resp.content;
+        _this.alarmDatas = resp.content.list;
+        _this.$refs.pagination.render(page, resp.content.total);
       })
     }
   }

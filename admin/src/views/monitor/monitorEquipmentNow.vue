@@ -1,31 +1,7 @@
 <template>
   <div style="display: flex">
     <div id="tree" class="ztree" :style="{height: heightMax + 'px', overflowY: 'auto', width:'20%', border:'1px solid #ccc'}"></div>
-    <div :style="{height: heightMax + 'px', width:'78%', border: '1px solid #ccc', marginLeft: '1%'}">
-<!--      <div style="width: 100%;height: 6%;display: flex">-->
-<!--        <label style="font-size: 22px;margin-left: 20px;margin-top: 3px;">时间:</label>-->
-<!--        <div class="col-sm-4" style="display: flex;">-->
-<!--          <div class="radio">-->
-<!--            <label>-->
-<!--              <input name="form-sbzt-radio" type="radio"  value="1" v-model="chooseTimeType" class="ace input-lg" />-->
-<!--              <span class="lbl bigger-120">最近30天</span>-->
-<!--            </label>-->
-<!--            <label>-->
-<!--              <input name="form-sbzt-radio" type="radio"  value="2"  v-model="chooseTimeType" class="ace input-lg" />-->
-<!--              <span class="lbl bigger-120">最近15天</span>-->
-<!--            </label>-->
-<!--            <label>-->
-<!--              <input name="form-sbzt-radio" type="radio"  value="3"  v-model="chooseTimeType" class="ace input-lg" />-->
-<!--              <span class="lbl bigger-120">最近7天</span>-->
-<!--            </label>-->
-<!--          </div>-->
-<!--          <button v-on:click="selectData()" class="btn btn-white btn-default btn-round" style="height: 34px;margin-top: 5px;margin-left: 20px;">-->
-<!--            <i class="ace-icon fa fa-book"></i>-->
-<!--            查询-->
-<!--          </button>-->
-<!--        </div>-->
-<!--      </div>-->
-      <div id="echarts-data" style="height: 94%;"></div>
+    <div id="echarbox" :style="{height: heightMax + 'px',overflowY:'auto', width:'78%', border: '1px solid #ccc', marginLeft: '1%'}">
     </div>
   </div>
 </template>
@@ -79,7 +55,7 @@ export default {
       _this.zTree = $.fn.zTree.init($("#tree"), setting, _this.trees);
       _this.zTree.expandAll(true);
       //获取第一个节点
-      let node = _this.zTree.getNodes()[0].children[0].children[0];
+      let node = _this.zTree.getNodes()[0].children[0];
       //选中第一个子节点
       _this.zTree.selectNode(node);
       setting.callback.onClick(null, _this.zTree.setting.treeId, node);
@@ -87,8 +63,7 @@ export default {
     zTreeOnClick(event, treeId, treeNode){
       let _this = this;
       _this.curNode = treeNode;
-      if(treeNode.type=='3'){
-        _this.findYAxisName(treeNode.code);
+      if(treeNode.type=='2'){
         _this.findWaterQualityResultByMonth(treeNode);
       }
     },
@@ -116,8 +91,7 @@ export default {
     findWaterQualityResultByMonth(treeNode){
       let _this = this;
       let waterQualityResultDto = {
-        'deviceId':treeNode.getParentNode().code,
-        'jcxm':treeNode.code,
+        'deviceId':treeNode.code,
         'chooseTimeType':_this.chooseTimeType
       }
       Loading.show();
@@ -126,13 +100,19 @@ export default {
         let resp = response.data;
         if (resp.success) {
           let data = resp.content==null?[]:resp.content;
-          _this.initEcharts(data);
+          $("#echarbox").empty();
+          for(let key in data){
+            _this.findYAxisName(key);
+            let echartData = data[key]==null?[]:data[key];
+            $("#echarbox").append("<div id='echarts-data-"+key+"' style='height: 350px;margin-bottom: 30px;'></div>");
+            _this.initEcharts(echartData, 'echarts-data-'+key);
+          }
         } else {
           Toast.warning(resp.message)
         }
       })
     },
-    initEcharts(data){
+    initEcharts(data, id){
       let _this = this;
       let option = {
         tooltip: {
@@ -153,7 +133,6 @@ export default {
           },
           axisLabel: {
             show: true,
-            interval:1,
             width: 100,
             overflow: 'break'
           }
@@ -188,7 +167,7 @@ export default {
           }
         ]
       };
-      let echartsData = echarts.init(document.getElementById('echarts-data'));
+      let echartsData = echarts.init(document.getElementById(id));
       echartsData.setOption(option);
     },
     selectData(){
