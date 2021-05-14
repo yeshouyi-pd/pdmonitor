@@ -164,7 +164,7 @@ export default {
   }, methods: {
     toshjlist (){
          let _this = this;
-      if(_this.shjcount > 1){
+      if(_this.shjcount < 1){
         Toast.warning("暂无相关数据")
       }else{
         _this.$router.push("/mobile/shjlist");
