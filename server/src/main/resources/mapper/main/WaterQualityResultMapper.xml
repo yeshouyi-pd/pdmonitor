@@ -403,7 +403,7 @@
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
-    AND  TO_DAYS(create_time) = TO_DAYS(NOW())  ORDER BY ip , jcxm , create_time DESC ) b WHERE a.sbsn = b.ip
+    AND  TO_DAYS(create_time) = TO_DAYS(NOW())   ) b WHERE a.sbsn = b.ip ORDER BY b.ip , b.jcxm , b.create_time DESC
   </select>
 
 
