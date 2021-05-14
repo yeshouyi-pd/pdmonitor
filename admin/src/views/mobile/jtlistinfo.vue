@@ -77,10 +77,10 @@
                                 <td>
                                   {{set}}
                                 </td>
-                                <td>{{ list.createTime }}</td>
+                                <td>{{ list.cjsj }}</td>
                                 <td style="text-align: center"  v-on:click="showpic(list.id)">
 
-                                    <img  :data-original="list.tplj"  style="width:10px;height: auto"  :id="list.id" :src="list.tplj" :alt="list.createTime">
+                                    <img  :data-original="list.tplj"  style="width:10px;height: auto"  :id="list.id" :src="list.tplj" :alt="list.cjsj">
                                 </td>
                                 <td style="display: none">
                                   <div style="width: 100%;text-align: center" >
