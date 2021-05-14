@@ -2,10 +2,8 @@ package com.pd.server.main.service;
 
 import com.pd.server.main.domain.EquipmentFile;
 import com.pd.server.main.domain.EquipmentFileExample;
-import com.pd.server.main.dto.EquipmentFileDto;
-import com.pd.server.main.dto.KvMapDto;
-import com.pd.server.main.dto.PageDto;
-import com.pd.server.main.dto.WelcomeKvDto;
+import com.pd.server.main.domain.WaterQualityResultExample;
+import com.pd.server.main.dto.*;
 import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
 import com.pd.server.main.mapper.EquipmentFileMapper;
 import com.pd.server.util.CopyUtil;
@@ -107,8 +105,18 @@ public class EquipmentFileService {
 
 
 
-    public  List<WelcomeKvDto> getWarningDate(){
-        return equipmentFileMapper.getWarningDate();
+    public  List<WelcomeKvDto> getWarningDate(EquipmentFileExample equipmentFileExample){
+        return equipmentFileMapper.getWarningDate(equipmentFileExample);
     }
 
+    public List<KvIntDto> getAlljcsjByDept(EquipmentFileExample equipmentFileExample) {
+        return equipmentFileMapper.getAlljcsjByDept(equipmentFileExample);
+    }
+
+    public List<EquipmentFileDto> getthisDeptjxsjJT(EquipmentFileExample equipmentFileExample) {
+        List<EquipmentFile> list  = equipmentFileMapper.getthisDeptjxsjJT(equipmentFileExample);
+        List<EquipmentFileDto> equipmentFileDtoList = CopyUtil.copyList(list , EquipmentFileDto.class);
+        return equipmentFileDtoList;
+
+    }
 }

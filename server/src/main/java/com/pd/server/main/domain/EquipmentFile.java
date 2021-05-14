@@ -25,6 +25,16 @@ public class EquipmentFile {
 
     private String deptcode;
 
+    private String sbmc;
+
+    public String getSbmc() {
+        return sbmc;
+    }
+
+    public void setSbmc(String sbmc) {
+        this.sbmc = sbmc;
+    }
+
     public String getId() {
         return id;
     }

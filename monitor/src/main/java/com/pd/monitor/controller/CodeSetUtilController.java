@@ -44,6 +44,23 @@ public class CodeSetUtilController extends BaseWxController {
         return responseDto;
     }
 
+
+
+    /**
+     * 获取部门名称
+     * @return
+     */
+    @GetMapping("/getdeptname")
+    public ResponseDto getdeptname(){
+        ResponseDto responseDto = new ResponseDto();
+        Map<String,String> map = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.DEPTCODENAME);
+        responseDto.setContent(map);
+        return responseDto;
+    }
+
+
+
+
     /**
      * 获取机构类别
      * @return

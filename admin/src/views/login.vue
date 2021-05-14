@@ -1,18 +1,19 @@
 <template>
     <div class="main-container">
         <img class="bgimg" src="/static/image/index1.jpg"/>
-      <br/><br/><br/><br/><br/><br/><br/><br/><br/>
-
+      <div :style="'padding-top:'+paddingsize+'%'"></div>
         <div class="main-content" >
           <div class="row">
             <div class="col-sm-10 col-sm-offset-1">
-                    <div class="center">
-                                  <span style="font-size: 45px">
+
+              <div class="center">
+                                  <span :style="'font-size:'+fontsize+'px'">
 <!--                                      <i class="ace-icon fa fa-leaf green"></i>-->
-                                    <img style="height: 61px;margin-top: -10px;" src="/static/favicon.png"/>
+                                    <img :style="'height:'+imgsize+'px;margin-top: -10px;'" src="/static/favicon.png"/>
                                       <span style="color: #D6F1FF">水下声学实时预警系统</span>
                                   </span>
-                    </div>
+              </div>
+
                     <div class="login-container">
                         <div class="space-6"></div>
 
@@ -86,7 +87,7 @@
                     </div>
                 </div><!-- /.col -->
             </div><!-- /.row -->
-          <div class="position-relative-gs"><h6>专注自然生态  共建美丽中国</h6><h6>Tel：180 8600 2259</h6><h6>版本：v1.0</h6></div>
+          <div   class="position-relative-gs"><h6>专注自然生态  共建美丽中国</h6><h6>Tel：180 8600 2259</h6><h6>版本：v1.0</h6></div>
         </div><!-- /.main-content -->
     </div><!-- /.main-container -->
 </template>
@@ -99,11 +100,18 @@
             return{
                 user:{},
                 remember:true,
-                imageCodeToken: ""
+                imageCodeToken: "",
+                isMobileflag:false,
+                fontsize:45,
+                imgsize: 51,
+                paddingsize:10,
+
             }
         },
         mounted:function(){//mounted初始化方法
             let _this = this;
+             _this.isMobile();
+
             $('body').removeClass('no-skin');
             $('body').attr('class', 'login-layout light-login');
 
@@ -116,6 +124,21 @@
             _this.loadImageCode();
         },
         methods:{
+
+          isMobile() {
+            let _this = this;
+            if(/phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone/i.test(navigator.userAgent)){
+              _this.isMobileflag =true;
+              _this.fontsize =27;
+              _this.imgsize = 31;
+              _this.paddingsize=30;
+            }else{
+              _this.isMobileflag =false;
+              _this.fontsize =45;
+              _this.imgsize = 51;
+              _this.paddingsize=10;
+            }
+          },
             login(){//push跳转到某一个地址
                 let _this = this;
 
@@ -154,8 +177,12 @@
                         }
 
                          //window.open("/welcome", "_self")
-                          //_this.$router.push("/mobile/mindex")
-                      _this.$router.push("/welcome")
+                      if(_this.isMobileflag){
+                        _this.$router.push("/mobile/mindex")
+                      }else{
+                        _this.$router.push("/welcome")
+                      }
+
                     } else {
                         _this.user.password="";
                         _this.loadImageCode();

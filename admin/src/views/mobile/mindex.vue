@@ -62,7 +62,7 @@
 
                   </td>
                   <td style="width: 80%">
-                    <span class="line-height-1 bigger-200"> {{shjcount}} </span>
+                              <span  v-on:click="toshjlist()" class="line-height-1 bigger-200"> {{shjcount}} </span>
                     <br/>
                     <span class="line-height-1 smaller-75"> 水环境监测数据 </span>
                   </td>
@@ -83,7 +83,8 @@
                     </div>
                   </td>
                   <td style="width: 80%">
-                    <span class="line-height-1 bigger-200"> 4 </span>
+                       <span  v-on:click="tojtlist()" class="line-height-1 bigger-200"> {{jtcount}} </span>
+
                     <br/>
                     <span class="line-height-1 smaller-75"> 江豚报警数据 </span>
                   </td>
@@ -130,6 +131,8 @@ export default {
       errorCount:0,
       KvMap:[],
       shjcount:0,
+      KvMapjt:[],
+      jtcount:0,
 
     }
   },
@@ -140,6 +143,7 @@ export default {
       _this.$router.push("/login");
     }
     _this.getAlljcsjByDept();//水环境监测
+    _this.getAlljtByDept();//江豚预警
 
     let userInfo = Tool.getLoginUser();
     _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterData/findAll/' + userInfo.deptcode).then((response)=>{
@@ -151,13 +155,23 @@ export default {
     })
     if(Tool.isEmpty(_this.heightMax)){
       let h = document.documentElement.clientHeight || document.body.clientHeight;
-      _this.heightMax = h*0.6-50;
+      _this.heightMax = h*0.6-70;
     }
 
     _this.deptMap = Tool.getDeptUser();
     _this.findDeviceInfo();
 
   }, methods: {
+    toshjlist (){
+         let _this = this;
+          _this.$router.push("/mobile/shjlist");
+        },
+
+    tojtlist (){
+      let _this = this;
+      _this.$router.push("/mobile/jtlist");
+    },
+
 
     /**
      *  welcome 水环境数据监测
@@ -173,6 +187,26 @@ export default {
                  count = count +key.value;
                }
           _this.shjcount = count;
+          SessionStorage.set(MSHJMAP,_this.KvMap);
+        }
+      })
+    },
+
+    /**
+     *江豚预警
+     */
+    getAlljtByDept() {
+      let _this = this;
+      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/mobile/getAlljtByDept').then((res)=>{
+        let response = res.data;
+        _this.KvMapjt = response.content;
+        if(!Tool.isEmpty(_this.KvMapjt)){
+          let count =0;
+          for(let key of _this.KvMapjt){
+            count = count +key.value;
+          }
+          _this.jtcount = count;
+          SessionStorage.set(MJTMAP,_this.KvMapjt);
 
         }
       })

@@ -30,5 +30,5 @@ public interface WaterEquipmentMapper {
 
     int updateByPrimaryKey(WaterEquipment record);
 
-    List<PieChartDto> getPieChart();
+    List<PieChartDto> getPieChart(WaterEquipmentExample example);
 }
