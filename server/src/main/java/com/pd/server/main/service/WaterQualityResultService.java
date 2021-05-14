@@ -79,8 +79,8 @@ public class WaterQualityResultService {
     }
 
 
-    public List<WaterQualityResultDto> getLatestDate(){
-        List<WaterQualityResult>  listdata = waterQualityResultMapper.getLatestDate();
+    public List<WaterQualityResultDto> getLatestDate(WaterQualityResultExample waterQualityResultExample){
+        List<WaterQualityResult>  listdata = waterQualityResultMapper.getLatestDate(waterQualityResultExample);
         List<WaterQualityResultDto> list = CopyUtil.copyList(listdata, WaterQualityResultDto.class);
         return   list;
 
@@ -92,6 +92,9 @@ public class WaterQualityResultService {
     }
 
 
-
-
+    public List<WaterQualityResultDto> getthisDeptjxsj(WaterQualityResultExample waterQualityResultExample) {
+        List<WaterQualityResult> listdata   =   waterQualityResultMapper.getthisDeptjxsj(waterQualityResultExample);
+        List<WaterQualityResultDto> list = CopyUtil.copyList(listdata, WaterQualityResultDto.class);
+        return   list;
+    }
 }

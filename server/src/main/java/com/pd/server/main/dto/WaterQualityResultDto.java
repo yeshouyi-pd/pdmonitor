@@ -80,6 +80,17 @@ public class WaterQualityResultDto extends PageDto{
 
     private String chooseTimeType;
 
+    private String sbmc;
+
+    public String getSbmc() {
+        return sbmc;
+    }
+
+    public void setSbmc(String sbmc) {
+        this.sbmc = sbmc;
+    }
+
+
     public String getId() {
         return id;
     }

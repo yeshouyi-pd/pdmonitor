@@ -118,6 +118,7 @@ public class WaterEquipmentController  extends BaseWxController {
         WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
         WaterEquipmentExample.Criteria ca = waterEquipmentExample.createCriteria();
         ca.andGpsIsNotNull();
+        ca.andDeptcodeIn(getUpdeptcode(""));
         List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(waterEquipmentExample);
         List<WaterEquipmentDto> waterEquipmentDtoList = CopyUtil.copyList(waterEquipmentList, WaterEquipmentDto.class);
         responseDto.setContent(waterEquipmentDtoList);

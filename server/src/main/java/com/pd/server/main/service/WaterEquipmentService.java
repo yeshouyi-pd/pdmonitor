@@ -100,7 +100,7 @@ public class WaterEquipmentService {
         waterEquipmentMapper.deleteByPrimaryKey(id);
     }
 
-    public List<PieChartDto> getPieChart() {
-       return waterEquipmentMapper.getPieChart();
+    public List<PieChartDto> getPieChart(WaterEquipmentExample example) {
+       return waterEquipmentMapper.getPieChart(example);
     }
 }

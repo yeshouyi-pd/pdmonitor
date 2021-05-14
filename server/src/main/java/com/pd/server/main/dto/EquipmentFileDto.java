@@ -32,6 +32,36 @@ public class EquipmentFileDto extends PageDto{
         @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date createTime;
 
+    private String deptcode;
+
+    private String sbmc;
+
+    private  PlayDto playDto;
+
+    public PlayDto getPlayDto() {
+        return playDto;
+    }
+
+    public void setPlayDto(PlayDto playDto) {
+        this.playDto = playDto;
+    }
+
+    public String getSbmc() {
+        return sbmc;
+    }
+
+    public void setSbmc(String sbmc) {
+        this.sbmc = sbmc;
+    }
+
+    public String getDeptcode() {
+        return deptcode;
+    }
+
+    public void setDeptcode(String deptcode) {
+        this.deptcode = deptcode;
+    }
+
     private boolean hasAudio;//图片是否有对应的音频
 
     public String getId() {

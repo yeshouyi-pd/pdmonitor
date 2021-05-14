@@ -2,6 +2,9 @@ package com.pd.monitor.controller;
 
 
 import com.pd.monitor.wx.conf.BaseWxController;
+import com.pd.server.main.domain.EquipmentFileExample;
+import com.pd.server.main.domain.WaterEquipmentExample;
+import com.pd.server.main.domain.WaterQualityResultExample;
 import com.pd.server.main.dto.*;
 import com.pd.server.main.service.EquipmentFileService;
 import com.pd.server.main.service.WaterEquipmentService;
@@ -9,6 +12,7 @@ import com.pd.server.main.service.WaterQualityResultService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -48,8 +52,18 @@ public class WelcomeController  extends BaseWxController{
     @GetMapping("/getLatestDate")
     public ResponseDto getLatestDate() {
         ResponseDto responseDto = new ResponseDto();
-        List<WaterQualityResultDto>  list  =  waterQualityResultService.getLatestDate();
-        responseDto.setContent(list);
+        LoginUserDto user   = getRequestHeader();
+        if(null != user) {
+            if (!StringUtils.isEmpty(user.getDeptcode())) {
+                List<String> listdept = getUpdeptcode(user.getDeptcode());
+                WaterQualityResultExample waterQualityResultExample = new WaterQualityResultExample();
+                WaterQualityResultExample.Criteria  waterQualityResultca = waterQualityResultExample.createCriteria();
+                waterQualityResultca.andSm1In(listdept);
+                List<WaterQualityResultDto>  list  =  waterQualityResultService.getLatestDate(waterQualityResultExample);
+                responseDto.setContent(list);
+            }
+        }
+
         return responseDto;
     }
 
@@ -59,8 +73,17 @@ public class WelcomeController  extends BaseWxController{
     @GetMapping("/getWarningDate")
     public ResponseDto getWarningDate() {
         ResponseDto responseDto = new ResponseDto();
-        List<WelcomeKvDto>  list  =  equipmentFileService.getWarningDate();
-        responseDto.setContent(list);
+        LoginUserDto user   = getRequestHeader();
+        if(null != user) {
+            if (!StringUtils.isEmpty(user.getDeptcode())) {
+                List<String> listdept = getUpdeptcode(user.getDeptcode());
+                EquipmentFileExample equipmentFileExample = new EquipmentFileExample();
+                EquipmentFileExample.Criteria  equipmentFileExampleca = equipmentFileExample.createCriteria();
+                equipmentFileExampleca.andDeptcodeIn(listdept);
+                List<WelcomeKvDto>  list  =  equipmentFileService.getWarningDate(equipmentFileExample);
+                responseDto.setContent(list);
+            }
+        }
         return responseDto;
     }
 
@@ -72,7 +95,10 @@ public class WelcomeController  extends BaseWxController{
     @GetMapping("/getPieChart")
     public ResponseDto getPieChart() {
         ResponseDto responseDto = new ResponseDto();
-        List<PieChartDto>  list  =  waterEquipmentService.getPieChart();
+        WaterEquipmentExample example = new WaterEquipmentExample();
+        WaterEquipmentExample.Criteria ca = example.createCriteria();
+        ca.andDeptcodeIn(getUpdeptcode(""));
+        List<PieChartDto>  list  =  waterEquipmentService.getPieChart(example);
         List<PieChartDto> newlit = new ArrayList<PieChartDto>();
         if(!CollectionUtils.isEmpty(list)){
             for(PieChartDto  vo :list){
