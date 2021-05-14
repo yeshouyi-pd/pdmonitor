@@ -164,12 +164,21 @@ export default {
   }, methods: {
     toshjlist (){
          let _this = this;
-          _this.$router.push("/mobile/shjlist");
+      if(_this.shjcount > 1){
+        Toast.warning("暂无相关数据")
+      }else{
+        _this.$router.push("/mobile/shjlist");
+      }
         },
 
     tojtlist (){
       let _this = this;
-      _this.$router.push("/mobile/jtlist");
+      if(_this.jtcount < 1){
+        Toast.warning("暂无相关数据")
+      }else{
+        _this.$router.push("/mobile/jtlist");
+      }
+
     },
 
 
