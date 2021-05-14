@@ -296,13 +296,13 @@
   </select>
   <select id="statisticsAlarmNums" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultMap="StatisticsResultMap">
     select
-    sbbh,rq bjsj,count(*) alarmNum
+    sbbh,rq bjsj,count(*) alarmNum, xs, fz, deptcode
     from equipment_file
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
-    group by sbbh, rq
-    order by rq desc
+    group by sbbh, rq, xs, fz, deptcode
+    order by rq desc,xs desc, fz desc
   </select>
 
   <select id="getWarningDate"  resultMap="BaseResultMapKV" parameterType="com.pd.server.main.domain.EquipmentFileExample">
