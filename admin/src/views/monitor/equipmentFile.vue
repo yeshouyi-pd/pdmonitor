@@ -31,7 +31,7 @@
                       采集时间：
                     </td>
                     <td style="width: 25%;">
-                      <Times v-bind:startTime="startTime" v-bind:endTime="endTime"></Times>
+                      <time-range-picker v-bind:startTime="startTime" v-bind:endTime="endTime"></time-range-picker>
                     </td>
                     <td colspan="2" class="text-center">
                       <button type="button" v-on:click="list(1)" class="btn btn-sm btn-info btn-round" style="margin-right: 10px;">
@@ -95,9 +95,9 @@
 </template>
 <script>
 import Pagination from "../../components/pagination";
-import Times from "../../components/time";
+import TimeRangePicker from "../../components/timeRangePicker";
 export default {
-  components: {Pagination,Times},
+  components: {Pagination,TimeRangePicker},
   name: "equipment-file",
   data: function (){
     return {

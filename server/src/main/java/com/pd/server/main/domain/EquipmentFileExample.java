@@ -346,7 +346,7 @@ public class EquipmentFileExample {
         }
 
         public Criteria andCjsjGreaterThanOrEqualTo(String value) {
-            addCriterion("DATE_FORMAT(cjsj,'%Y-%m-%d') >=", value, "cjsj");
+            addCriterion("DATE_FORMAT(cjsj,'%Y-%m-%d %H:%i') >=", value, "cjsj");
             return (Criteria) this;
         }
 
@@ -362,7 +362,7 @@ public class EquipmentFileExample {
         }
 
         public Criteria andCjsjLessThanOrEqualTo(String value) {
-            addCriterion("DATE_FORMAT(cjsj,'%Y-%m-%d') <=", value, "cjsj");
+            addCriterion("DATE_FORMAT(cjsj,'%Y-%m-%d %H:%i') <=", value, "cjsj");
             return (Criteria) this;
         }
 

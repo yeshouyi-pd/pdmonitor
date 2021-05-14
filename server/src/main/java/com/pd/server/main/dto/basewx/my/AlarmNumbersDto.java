@@ -1,6 +1,8 @@
 package com.pd.server.main.dto.basewx.my;
 
-public class AlarmNumbersDto {
+import com.pd.server.main.dto.PageDto;
+
+public class AlarmNumbersDto extends PageDto {
 
     private String sbbh;//设备编号
 
@@ -13,10 +15,6 @@ public class AlarmNumbersDto {
     private String deptcode;//所属监测点
 
     private Integer alarmNum;//报警次数
-
-    private String stime;//开始时间
-
-    private String etime;//结束时间
 
     public String getSbbh() {
         return sbbh;
@@ -66,19 +64,4 @@ public class AlarmNumbersDto {
         this.alarmNum = alarmNum;
     }
 
-    public String getStime() {
-        return stime;
-    }
-
-    public void setStime(String stime) {
-        this.stime = stime;
-    }
-
-    public String getEtime() {
-        return etime;
-    }
-
-    public void setEtime(String etime) {
-        this.etime = etime;
-    }
 }

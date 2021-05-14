@@ -146,21 +146,4 @@ return responseDto;
         return responseDto;
     }
 
-    /**
-     * 获取所有业务类型
-     */
-    @GetMapping("/getAllYwlx")
-    public ResponseDto getAllYwlx() {
-        ResponseDto responseDto = new ResponseDto();
-        Map<String, Map<String, String>> nmap = new LinkedHashMap<String, Map<String, String>>();
-        Map<String, Map<String, String>> all =(Map<String, Map<String, String>>)redisTemplate.opsForValue().get(RedisCode.CODESET);
-        nmap.put("CODE_JDC_YWLX",all.get(CodeType.CODE_JDC_YWLX));
-        nmap.put("CODE_JSR_YWLX",all.get(CodeType.CODE_JSR_YWLX));
-        nmap.put("CODE_WF_YWLX",all.get(CodeType.CODE_WF_YWLX));
-        nmap.put("CODE_XX_DEPTTYPE",all.get(CodeType.CODE_XX_DEPTTYPE));
-        responseDto.setContent(nmap);
-        return responseDto;
-    }
-
-
 }

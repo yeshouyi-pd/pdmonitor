@@ -15,10 +15,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -52,14 +49,20 @@ public class WaterQualityResultController {
         ca.andCreateTimeEqualTo(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd"));
         example.setOrderByClause(" create_time ");
         List<WaterQualityResult> list = waterQualityResultService.findByExample(example);
-        List<List<String>> result = new ArrayList<>();
-        for(WaterQualityResult entity : list){
-            List<String> obj = new ArrayList<>();
-            obj.add(DateUtil.getFormatDate(entity.getCreateTime(),"yyyy-MM-dd HH:mm:ss"));
-            obj.add(entity.getDataResult());
-            result.add(obj);
+        Map<String, List<WaterQualityResult>> map = list.stream().collect(Collectors.groupingBy(WaterQualityResult::getJcxm));
+        Map<String, List<List<String>>> resultMap = new HashMap<>();
+        for(String key:map.keySet()){
+            List<WaterQualityResult> jcxmList = map.get(key);
+            List<List<String>> innerList = new ArrayList<>();
+            for(WaterQualityResult entity : jcxmList){
+                List<String> obj = new ArrayList<>();
+                obj.add(DateUtil.getFormatDate(entity.getCreateTime(),"yyyy-MM-dd HH:mm:ss"));
+                obj.add(entity.getDataResult());
+                innerList.add(obj);
+            }
+            resultMap.put(key,innerList);
         }
-        responseDto.setContent(result);
+        responseDto.setContent(resultMap);
         return responseDto;
     }
 

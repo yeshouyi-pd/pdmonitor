@@ -43,4 +43,18 @@ public class CodeSetUtilController extends BaseWxController {
         responseDto.setContent(map);
         return responseDto;
     }
+
+    /**
+     * 获取机构类别
+     * @return
+     */
+    @GetMapping("/getJglb")
+    public ResponseDto getJglb(){
+        ResponseDto responseDto = new ResponseDto();
+        Map<String,String> map = new LinkedHashMap<String,String>();
+        Map<String, Map<String,String>>  allmap = (Map<String, Map<String, String>>) redisTemplate.opsForValue().get(RedisCode.CODESET);
+        map = allmap.get(CodeType.JGLB_CODE);
+        responseDto.setContent(map);
+        return responseDto;
+    }
 }
