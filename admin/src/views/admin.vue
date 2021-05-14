@@ -16,7 +16,7 @@
                   <a href="index.html" class="navbar-brand">
                       <small>
                           <img style="height: 28px;margin-top: -8px;" src="/static/favicon.png"/>
-                          水环境动态监测系统v1.0
+                        水下声学实时预警系统v1.0
                       </small>
                   </a>
               </div>
@@ -147,7 +147,7 @@
                       <div class="row">
                           <div class="col-xs-12">
                               <!--子组件-->
-                               <router-view></router-view>
+                               <router-view v-if="isRouterAlive"></router-view>
                               <!-- PAGE CONTENT ENDS -->
                           </div><!-- /.col -->
                       </div><!-- /.row -->
@@ -184,7 +184,13 @@
                 loginUser:{},
                 resources:[],//菜单
                 showresources :[],//竖向菜单
+                isRouterAlive:true
             }
+        },
+        provide(){
+          return {
+            reload:this.reload
+          }
         },
         mounted:function(){//mounted初始化方法
             let _this = this; //this 变成本地变量  避坑
@@ -222,6 +228,13 @@
             }
         },
         methods:{
+            reload(){
+              let _this = this;
+              _this.isRouterAlive = false;
+              _this.$nextTick(function (){
+                _this.isRouterAlive = true;
+              })
+            },
             /**
              *横向菜单
              * 点击很想菜单动态加载数据

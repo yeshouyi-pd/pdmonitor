@@ -1,6 +1,9 @@
 package com.pd.monitor.controller;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.pd.server.config.RedisCode;
+import com.pd.server.main.domain.EquipmentFile;
 import com.pd.server.main.domain.EquipmentFileExample;
 import com.pd.server.main.domain.WaterEquipment;
 import com.pd.server.main.dto.EquipmentFileDto;
@@ -17,8 +20,11 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/admin/equipmentFile")
@@ -34,6 +40,34 @@ public class EquipmentFileController {
     @Resource
     private RedisTemplate redisTemplate;
 
+    @PostMapping("/statisticsAlarmNumsByMinute")
+    public ResponseDto statisticsAlarmNumsByMinute(@RequestBody AlarmNumbersDto entityDto){
+        ResponseDto responseDto = new ResponseDto();
+        EquipmentFileExample example = new EquipmentFileExample();
+        EquipmentFileExample.Criteria ca = example.createCriteria();
+        if(!StringUtils.isEmpty(entityDto.getSbbh())){
+            ca.andSbbhEqualTo(entityDto.getSbbh());
+        }
+        if(!StringUtils.isEmpty(entityDto.getDeptcode())){
+            ca.andDeptcodeEqualTo(entityDto.getDeptcode());
+        }
+        if(!StringUtils.isEmpty(entityDto.getStime())){
+            ca.andCjsjGreaterThanOrEqualTo(entityDto.getStime());
+        }
+        if(!StringUtils.isEmpty(entityDto.getEtime())){
+            ca.andCjsjLessThanOrEqualTo(entityDto.getEtime());
+        }
+        ca.andTpljLike("%png");
+        List<AlarmNumbersDto> lists = equipmentFileService.statisticsAlarmNums(example);
+        List<String> xAixsData = lists.stream().filter(Objects::nonNull).map(u->u.getBjsj()+" "+u.getXs()+":"+u.getFz()).collect(Collectors.toList());
+        List<Integer> yAixsData = lists.stream().filter(Objects::nonNull).map(u-> u.getAlarmNum()).collect(Collectors.toList());
+        Map<String, Object> map = new HashMap<>();
+        map.put("xAixsData",xAixsData);
+        map.put("yAixsData",yAixsData);
+        responseDto.setContent(map);
+        return responseDto;
+    }
+
     /**
      * 统计报警次数
      * @param alarmNumbersDto
@@ -42,26 +76,27 @@ public class EquipmentFileController {
     @PostMapping("/statisticsAlarmNums")
     public ResponseDto statisticsAlarmNums(@RequestBody AlarmNumbersDto alarmNumbersDto){
         ResponseDto responseDto = new ResponseDto();
+        PageHelper.startPage(alarmNumbersDto.getPage(), alarmNumbersDto.getSize());
         EquipmentFileExample example = new EquipmentFileExample();
         EquipmentFileExample.Criteria ca = example.createCriteria();
         if(!StringUtils.isEmpty(alarmNumbersDto.getSbbh())){
             ca.andSbbhEqualTo(alarmNumbersDto.getSbbh());
         }
         if(!StringUtils.isEmpty(alarmNumbersDto.getDeptcode())){
-            List<String> sbsns = waterEquipmentService.findSbsnByDeptcode(alarmNumbersDto.getDeptcode());
-            if(!StringUtils.isEmpty(sbsns)&&!sbsns.isEmpty()){
-                ca.andSbbhIn(sbsns);
-            }
+            ca.andDeptcodeEqualTo(alarmNumbersDto.getDeptcode());
         }
         if(!StringUtils.isEmpty(alarmNumbersDto.getStime())){
-            ca.andRqGreaterThanOrEqualTo(alarmNumbersDto.getStime());
+            ca.andCjsjGreaterThanOrEqualTo(alarmNumbersDto.getStime());
         }
         if(!StringUtils.isEmpty(alarmNumbersDto.getEtime())){
-            ca.andRqLessThanOrEqualTo(alarmNumbersDto.getEtime());
+            ca.andCjsjLessThanOrEqualTo(alarmNumbersDto.getEtime());
         }
         ca.andTpljLike("%png");
         List<AlarmNumbersDto> lists = equipmentFileService.statisticsAlarmNums(example);
-        responseDto.setContent(lists);
+        PageInfo<AlarmNumbersDto> pageInfo = new PageInfo<>(lists);
+        alarmNumbersDto.setTotal(pageInfo.getTotal());
+        alarmNumbersDto.setList(lists);
+        responseDto.setContent(alarmNumbersDto);
         return responseDto;
     }
 

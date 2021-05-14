@@ -20,6 +20,8 @@ import WaterNoiseImage from "./views/monitor/waterNoiseImage.vue"
 import EquipmentFile from "./views/monitor/equipmentFile.vue"
 import AlarmNumbers from "./views/monitor/alarmNumbers.vue"
 import Ywydxz from "../../wx/src/views/wx/ywyy/ywydxz.vue";
+import EquipmentFileMinute from "./views/monitor/equipmentFileMinute.vue";
+import EquipmentFileHour from "./views/monitor/equipmentFileHour.vue";
 
 import Mindex  from "./views/mobile/mindex.vue"
 
@@ -122,6 +124,18 @@ export default new Router({
             path: "monitor/alarmNumbers",
             name: "monitor/alarmNumbers",
             component: AlarmNumbers
+        },{
+            path: "monitor/alarmNumbers",
+            name: "monitor/alarmNumbers",
+            component: AlarmNumbers
+        },{
+            path: "monitor/equipmentFileMinute",
+            name: "monitor/equipmentFileMinute",
+            component: EquipmentFileMinute
+        },{
+            path: "monitor/equipmentFileHour",
+            name: "monitor/equipmentFileHour",
+            component: EquipmentFileHour
         }]
     }]
 })

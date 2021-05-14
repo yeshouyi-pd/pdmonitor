@@ -15,9 +15,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/admin/waterQualityAvg")
@@ -59,14 +58,20 @@ public class WaterQualityAvgController {
         }
         example.setOrderByClause(" create_time ");
         List<WaterQualityAvg> list = waterQualityAvgService.findByExample(example);
-        List<List<String>> result = new ArrayList<>();
-        for(WaterQualityAvg entity : list){
-            List<String> obj = new ArrayList<>();
-            obj.add(DateUtil.getFormatDate(entity.getCreateTime(),"yyyy-MM-dd"));
-            obj.add(entity.getDataResult());
-            result.add(obj);
+        Map<String, List<WaterQualityAvg>> map = list.stream().collect(Collectors.groupingBy(WaterQualityAvg::getJcxm));
+        Map<String, List<List<String>>> resultMap = new HashMap<>();
+        for(String key:map.keySet()){
+            List<WaterQualityAvg> jcxmList = map.get(key);
+            List<List<String>> innerList = new ArrayList<>();
+            for(WaterQualityAvg entity : jcxmList){
+                List<String> obj = new ArrayList<>();
+                obj.add(DateUtil.getFormatDate(entity.getCreateTime(),"yyyy-MM-dd"));
+                obj.add(entity.getDataResult());
+                innerList.add(obj);
+            }
+            resultMap.put(key,innerList);
         }
-        responseDto.setContent(result);
+        responseDto.setContent(resultMap);
         return responseDto;
     }
 
