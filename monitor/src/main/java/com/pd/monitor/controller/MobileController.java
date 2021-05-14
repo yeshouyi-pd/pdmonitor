@@ -101,13 +101,13 @@ public class MobileController  extends BaseWxController {
                 WaterQualityResultExample.Criteria  waterQualityResultca = waterQualityResultExample.createCriteria();
                 waterQualityResultca.andSm1EqualTo(waterQualityResultDto.getSm1());
                 List<WaterQualityResultDto>  list   = waterQualityResultService.getthisDeptjxsj(waterQualityResultExample);
-                Map<String,String> map  =   new HashMap<String,String>();
+                Map<String,String> map  =   new LinkedHashMap<String,String>();
                 if(!CollectionUtils.isEmpty(list)){
                     for(WaterQualityResultDto vo :list){
                         map.put(vo.getIp(),vo.getSbmc());
                     }
                 }
-                Map<String ,Object> remap = new HashMap<String ,Object>();
+                Map<String ,Object> remap = new LinkedHashMap<String ,Object>();
                 remap.put("list" ,list);
                 remap.put("map", map);
                 responseDto.setContent(remap);
@@ -135,7 +135,7 @@ public class MobileController  extends BaseWxController {
                 equipmentFileca.andDeptcodeEqualTo(equipmentFileDto.getDeptcode());
                 List<EquipmentFileDto>  list   = equipmentFileService.getthisDeptjxsjJT(equipmentFileExample);
                 List<EquipmentFileDto>  listenw   = new ArrayList<EquipmentFileDto>();
-                Map<String,String> map  =   new HashMap<String,String>();
+                Map<String,String> map  =   new LinkedHashMap<String,String>();
                 if(!CollectionUtils.isEmpty(list)){
                     for(EquipmentFileDto vo :list){
                         map.put(vo.getSbbh(),vo.getSbmc());
@@ -150,7 +150,7 @@ public class MobileController  extends BaseWxController {
 
                     }
                 }
-                Map<String ,Object> remap = new HashMap<String ,Object>();
+                Map<String ,Object> remap = new LinkedHashMap<String ,Object>();
                 remap.put("list" ,listenw);
                 remap.put("map", map);
                 responseDto.setContent(remap);
