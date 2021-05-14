@@ -10,6 +10,9 @@
     <result column="nf" jdbcType="VARCHAR" property="nf" />
     <result column="yf" jdbcType="VARCHAR" property="yf" />
     <result column="rq" jdbcType="VARCHAR" property="rq" />
+    <result column="xs" jdbcType="VARCHAR" property="xs" />
+    <result column="fz" jdbcType="VARCHAR" property="fz" />
+    <result column="deptcode" jdbcType="VARCHAR" property="deptcode" />
     <result column="sbmc" jdbcType="VARCHAR" property="sbmc" />
   </resultMap>
   <resultMap id="StatisticsResultMap" type="com.pd.server.main.dto.basewx.my.AlarmNumbersDto">
@@ -28,7 +31,6 @@
     <result column="key" jdbcType="VARCHAR" property="key" />
     <result column="value" jdbcType="VARCHAR" property="value" />
   </resultMap>
-
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -88,7 +90,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, sbbh, tplj, cjsj, create_time, nf, yf, rq
+    id, sbbh, tplj, cjsj, create_time, nf, yf, rq, xs, fz, deptcode
   </sql>
   <select id="selectByExample" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultMap="BaseResultMap">
     select
@@ -105,7 +107,7 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select
+    select 
     <include refid="Base_Column_List" />
     from equipment_file
     where id = #{id,jdbcType=VARCHAR}
@@ -121,11 +123,14 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.pd.server.main.domain.EquipmentFile">
-    insert into equipment_file (id, sbbh, tplj,
-      cjsj, create_time, nf, yf, rq)
-    values (#{id,jdbcType=VARCHAR}, #{sbbh,jdbcType=VARCHAR}, #{tplj,jdbcType=VARCHAR},
-      #{cjsj,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, #{nf,jdbcType=VARCHAR},
-      #{yf,jdbcType=VARCHAR}, #{rq,jdbcType=VARCHAR})
+    insert into equipment_file (id, sbbh, tplj, 
+      cjsj, create_time, nf, 
+      yf, rq, xs, fz, 
+      deptcode)
+    values (#{id,jdbcType=VARCHAR}, #{sbbh,jdbcType=VARCHAR}, #{tplj,jdbcType=VARCHAR}, 
+      #{cjsj,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, #{nf,jdbcType=VARCHAR}, 
+      #{yf,jdbcType=VARCHAR}, #{rq,jdbcType=VARCHAR}, #{xs,jdbcType=VARCHAR}, #{fz,jdbcType=VARCHAR}, 
+      #{deptcode,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.pd.server.main.domain.EquipmentFile">
     insert into equipment_file
@@ -154,6 +159,15 @@
       <if test="rq != null">
         rq,
       </if>
+      <if test="xs != null">
+        xs,
+      </if>
+      <if test="fz != null">
+        fz,
+      </if>
+      <if test="deptcode != null">
+        deptcode,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -179,6 +193,15 @@
       </if>
       <if test="rq != null">
         #{rq,jdbcType=VARCHAR},
+      </if>
+      <if test="xs != null">
+        #{xs,jdbcType=VARCHAR},
+      </if>
+      <if test="fz != null">
+        #{fz,jdbcType=VARCHAR},
+      </if>
+      <if test="deptcode != null">
+        #{deptcode,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -215,6 +238,15 @@
       <if test="record.rq != null">
         rq = #{record.rq,jdbcType=VARCHAR},
       </if>
+      <if test="record.xs != null">
+        xs = #{record.xs,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fz != null">
+        fz = #{record.fz,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deptcode != null">
+        deptcode = #{record.deptcode,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -229,7 +261,10 @@
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       nf = #{record.nf,jdbcType=VARCHAR},
       yf = #{record.yf,jdbcType=VARCHAR},
-      rq = #{record.rq,jdbcType=VARCHAR}
+      rq = #{record.rq,jdbcType=VARCHAR},
+      xs = #{record.xs,jdbcType=VARCHAR},
+      fz = #{record.fz,jdbcType=VARCHAR},
+      deptcode = #{record.deptcode,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -258,6 +293,15 @@
       <if test="rq != null">
         rq = #{rq,jdbcType=VARCHAR},
       </if>
+      <if test="xs != null">
+        xs = #{xs,jdbcType=VARCHAR},
+      </if>
+      <if test="fz != null">
+        fz = #{fz,jdbcType=VARCHAR},
+      </if>
+      <if test="deptcode != null">
+        deptcode = #{deptcode,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -269,7 +313,10 @@
       create_time = #{createTime,jdbcType=TIMESTAMP},
       nf = #{nf,jdbcType=VARCHAR},
       yf = #{yf,jdbcType=VARCHAR},
-      rq = #{rq,jdbcType=VARCHAR}
+      rq = #{rq,jdbcType=VARCHAR},
+      xs = #{xs,jdbcType=VARCHAR},
+      fz = #{fz,jdbcType=VARCHAR},
+      deptcode = #{deptcode,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
   <select id="selectAudioByExample" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultType="java.lang.String">
