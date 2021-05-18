@@ -335,6 +335,15 @@
     AND  TO_DAYS(cjsj) = TO_DAYS(NOW()) and  tplj LIKE '%.png'   ) b WHERE a.sbsn = b.sbbh ORDER BY b.sbbh  , b.cjsj DESC
   </select>
 
-
+  <select id="statisticsAlarmNumsByHour" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultMap="StatisticsResultMap">
+    select
+    sbbh,rq bjsj,count(*) alarmNum, xs, deptcode
+    from equipment_file
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    group by sbbh, rq, xs, deptcode
+    order by rq desc,xs desc
+  </select>
 
 </mapper>

@@ -47,4 +47,6 @@ public interface EquipmentFileMapper {
     List<KvIntDto> getAlljcsjByDept(EquipmentFileExample equipmentFileExample);
 
     List<EquipmentFile> getthisDeptjxsjJT(EquipmentFileExample equipmentFileExample);
+
+    List<AlarmNumbersDto> statisticsAlarmNumsByHour(EquipmentFileExample example);
 }
