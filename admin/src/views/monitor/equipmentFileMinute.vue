@@ -2,8 +2,48 @@
   <div style="display: flex">
     <div id="tree" class="ztree" :style="{height: heightMax + 'px', overflowY: 'auto', width:'20%', border:'1px solid #ccc'}"></div>
     <div :style="{height: heightMax + 'px',overflowY: 'auto', width:'78%', border: '1px solid #ccc', marginLeft: '1%'}">
-      <div id="echartOneHour"  style='height: 400px;margin-bottom: 30px;'></div>
-      <div id="echartEightHour"  style='height: 400px;margin-bottom: 30px;'></div>
+      <div>
+<!--        <div class="widget-body">-->
+<!--          <div class="widget-main">-->
+<!--            <form>-->
+<!--              <table style="font-size: 1.1em;width:80%" class="text-right" >-->
+<!--                <tbody>-->
+<!--                <tr>-->
+<!--                  <td>-->
+<!--                    <button type="button" v-on:click="exportFile()"   class="btn btn-sm btn-success btn-round">-->
+<!--                      <i class="ace-icon fa fa-book"></i>-->
+<!--                      导出-->
+<!--                    </button>-->
+<!--                  </td>-->
+<!--                </tr>-->
+<!--                </tbody>-->
+<!--              </table>-->
+<!--            </form>-->
+<!--          </div>-->
+<!--        </div>-->
+        <div id="echartOneHour"  style='height: 400px;'></div>
+      </div>
+      <div>
+<!--        <div class="widget-body">-->
+<!--          <div class="widget-main">-->
+<!--            <form>-->
+<!--              <table style="font-size: 1.1em;width:80%" class="text-right" >-->
+<!--                <tbody>-->
+<!--                <tr>-->
+<!--                  <td>-->
+<!--                    <button type="button" v-on:click="exportFile()"   class="btn btn-sm btn-success btn-round">-->
+<!--                      <i class="ace-icon fa fa-book"></i>-->
+<!--                      导出-->
+<!--                    </button>-->
+<!--                  </td>-->
+<!--                </tr>-->
+<!--                </tbody>-->
+<!--              </table>-->
+<!--            </form>-->
+<!--          </div>-->
+<!--        </div>-->
+        <div id="echartEightHour"  style='height: 400px;'></div>
+      </div>
       <div>
         <div class="widget-body">
           <div class="widget-main">
@@ -22,9 +62,13 @@
                       <i class="ace-icon fa fa-book"></i>
                       查询
                     </button>
-                    <button type="button" v-on:click="reloadPage()"   class="btn btn-sm btn-success btn-round">
+                    <button type="button" v-on:click="reloadPage()"   class="btn btn-sm btn-success btn-round" style="margin-right: 10px;">
                       <i class="ace-icon fa fa-refresh"></i>
                       重置
+                    </button>
+                    <button type="button" v-on:click="exportFile()"   class="btn btn-sm btn-success btn-round">
+                      <i class="ace-icon fa fa-book"></i>
+                      导出
                     </button>
                   </td>
                 </tr>
@@ -33,7 +77,7 @@
             </form>
           </div>
         </div>
-        <div id="echartDayHour"  style='height: 400px;margin-bottom: 30px;'></div>
+        <div id="echartDayHour"  style='height: 400px;'></div>
       </div>
     </div>
   </div>
@@ -57,12 +101,18 @@ export default {
     let _this = this;
     let h = document.documentElement.clientHeight || document.body.clientHeight;
     _this.heightMax = h*0.8-35;
-    _this.curDate = new Date(new Date().getTime()-3600000*24);
+    _this.curDate = new Date();
     _this.findMonitorEquipmentTreeByFile();
     _this.alarmNumbersDto2.stime=Tool.dateFormat("yyyy-MM-dd hh:mm",new Date(_this.curDate.getTime()-3600000*24));
     _this.alarmNumbersDto2.etime=Tool.dateFormat("yyyy-MM-dd hh:mm",_this.curDate);
   },
   methods: {
+    exportFile(){
+      let _this = this;
+      let paramsStr = "type=minute"+"&stime="+_this.alarmNumbersDto2.stime+"&etime="+_this.alarmNumbersDto2.etime+"&sbbh="+_this.curNode.code+"&deptcode="+Tool.getLoginUser().deptcode;
+      let url = process.env.VUE_APP_SERVER + '/monitor/export/exportEquipmentFile?'+paramsStr;
+      window.location.href = url;
+    },
     reloadPage(){
       let _this = this;
       _this.alarmNumbersDto2.stime=Tool.dateFormat("yyyy-MM-dd hh:mm",new Date(_this.curDate.getTime()-3600000*24));

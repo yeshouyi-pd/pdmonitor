@@ -20,10 +20,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.math.BigDecimal;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -61,6 +59,38 @@ public class EquipmentFileController {
         List<AlarmNumbersDto> lists = equipmentFileService.statisticsAlarmNums(example);
         List<String> xAixsData = lists.stream().filter(Objects::nonNull).map(u->u.getBjsj()+" "+u.getXs()+":"+u.getFz()).collect(Collectors.toList());
         List<Integer> yAixsData = lists.stream().filter(Objects::nonNull).map(u-> u.getAlarmNum()).collect(Collectors.toList());
+        Map<String, Object> map = new HashMap<>();
+        map.put("xAixsData",xAixsData);
+        map.put("yAixsData",yAixsData);
+        responseDto.setContent(map);
+        return responseDto;
+    }
+
+    @PostMapping("/statisticsAlarmNumsByHour")
+    public ResponseDto statisticsAlarmNumsByHour(@RequestBody AlarmNumbersDto entityDto){
+        ResponseDto responseDto = new ResponseDto();
+        EquipmentFileExample example = new EquipmentFileExample();
+        EquipmentFileExample.Criteria ca = example.createCriteria();
+        if(!StringUtils.isEmpty(entityDto.getSbbh())){
+            ca.andSbbhEqualTo(entityDto.getSbbh());
+        }
+        if(!StringUtils.isEmpty(entityDto.getDeptcode())){
+            ca.andDeptcodeEqualTo(entityDto.getDeptcode());
+        }
+        if(!StringUtils.isEmpty(entityDto.getStime())){
+            ca.andRqGreaterThanOrEqualTo(entityDto.getStime());
+        }
+        if(!StringUtils.isEmpty(entityDto.getEtime())){
+            ca.andRqLessThanOrEqualTo(entityDto.getEtime());
+        }
+        ca.andTpljLike("%png");
+        List<AlarmNumbersDto> lists = equipmentFileService.statisticsAlarmNumsByHour(example);
+        Optional<Integer> op = lists.stream().map(AlarmNumbersDto::getAlarmNum).reduce(Integer::sum);
+        List<String> xAixsData = lists.stream().filter(Objects::nonNull).map(u->u.getBjsj()+" "+u.getXs()).collect(Collectors.toList());
+        List<Double> yAixsData = new ArrayList<>();
+        if(op.get()!=null && op.get()!=0){
+            yAixsData = lists.stream().filter(Objects::nonNull).map(u-> div(u.getAlarmNum(),op.get(),4)*100).collect(Collectors.toList());
+        }
         Map<String, Object> map = new HashMap<>();
         map.put("xAixsData",xAixsData);
         map.put("yAixsData",yAixsData);
@@ -144,4 +174,20 @@ public class EquipmentFileController {
         return responseDto;
     }
 
+    /**
+     * 提供（相对）精确的除法运算。当发生除不尽的情况时，由scale参数指 定精度，以后的数字四舍五入。
+     * @param v1            被除数
+     * @param v2            除数
+     * @param scale         表示表示需要精确到小数点以后几位。
+     * @return 两个参数的商
+     */
+    public static double div(int v1, int v2, int scale) {
+        if (scale < 0) {
+            throw new IllegalArgumentException(
+                    "The scale must be a positive integer or zero");
+        }
+        BigDecimal b1 = new BigDecimal(Integer.toString(v1));
+        BigDecimal b2 = new BigDecimal(Integer.toString(v2));
+        return b1.divide(b2, scale, BigDecimal.ROUND_HALF_UP).doubleValue();
+    }
 }

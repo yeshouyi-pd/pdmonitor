@@ -1,20 +1,20 @@
 <template>
     <div class="main-container">
-        <img class="bgimg" src="/static/image/index1.jpg"/>
+        <img class="bgimg" src="/static/image/loginbg.jpg"/>
       <div :style="'padding-top:'+paddingsize+'%'"></div>
         <div class="main-content" >
           <div class="row">
-            <div class="col-sm-10 col-sm-offset-1">
+            <div class="col-sm-10" style="margin-left: 25%;">
 
               <div class="center">
                                   <span :style="'font-size:'+fontsize+'px'">
 <!--                                      <i class="ace-icon fa fa-leaf green"></i>-->
                                     <img :style="'height:'+imgsize+'px;margin-top: -10px;'" src="/static/favicon.png"/>
-                                      <span style="color: #D6F1FF">水下声学实时预警系统</span>
+                                      <span >水下声学实时预警系统</span>
                                   </span>
               </div>
 
-                    <div class="login-container">
+                    <div class="login-container" style="margin: 100px auto">
                         <div class="space-6"></div>
 
                         <div class="position-relative">
@@ -86,8 +86,22 @@
                         </div><!-- /.position-relative -->
                     </div>
                 </div><!-- /.col -->
+            <div class="col-xs-10" style="margin-top: 20px;margin-left: 15%;">
+                    <span>
+                      <i class="ace-icon fa fa-square blue"></i>
+                      <span class="logo-text-style">创新技术</span>
+                    </span>
+              <span style="margin-left: 20px;">
+                      <i class="ace-icon fa fa-square blue"></i>
+                      <span class="logo-text-style">实时平台</span>
+                    </span>
+              <span style="margin-left: 20px;">
+                      <i class="ace-icon fa fa-square blue"></i>
+                      <span class="logo-text-style">专业团队</span>
+                    </span>
+            </div>
             </div><!-- /.row -->
-          <div   class="position-relative-gs"><h6>专注自然生态  共建美丽中国</h6><h6>Tel：180 8600 2259</h6><h6>版本：v1.0</h6></div>
+          <div   class="position-relative-gs"><h5>专注自然生态 共建美丽中国&nbsp;&nbsp;v1.0</h5><h5>Tel：180 8600 2259</h5></div>
         </div><!-- /.main-content -->
     </div><!-- /.main-container -->
 </template>
@@ -104,7 +118,7 @@
                 isMobileflag:false,
                 fontsize:45,
                 imgsize: 51,
-                paddingsize:10,
+                paddingsize:6,
 
             }
         },
@@ -136,7 +150,7 @@
               _this.isMobileflag =false;
               _this.fontsize =45;
               _this.imgsize = 51;
-              _this.paddingsize=10;
+              _this.paddingsize=6;
             }
           },
             login(){//push跳转到某一个地址
@@ -219,11 +233,14 @@
         margin-left: 60%;
     }
     .position-relative-gs{
-      color: #fff;
       position: absolute;
       bottom: 30px;
-      left: 50%;
-      margin-left: -82px;
+      width: 100%;
       text-align: center;
+    }
+    .logo-text-style{
+      font-size: 20px;
+      font-weight: 500;
+      margin-left: 5px;
     }
 </style>
