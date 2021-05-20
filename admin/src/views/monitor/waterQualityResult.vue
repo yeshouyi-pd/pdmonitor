@@ -1,5 +1,53 @@
 <template>
   <div>
+    <div class="widget-box">
+      <div class="widget-header">
+        <h4 class="widget-title">列表监测查询</h4>
+      </div>
+      <div class="widget-body">
+        <div class="widget-main">
+          <form>
+            <table style="font-size: 1.1em;" class="text-right">
+              <tbody>
+              <tr>
+                <td style="width:8%">
+                  设备SN：
+                </td>
+                <td style="width: 10%">
+                  <input class="input-sm" type="text"  v-model="waterQualityResultDto.ip" style="width: 100%;"/>
+                </td>
+                <td style="width: 8%">
+                  监测项目：
+                </td>
+                <td style="width: 10%">
+                  <select v-model="waterQualityResultDto.jcxm" style="width: 100%;">
+                    <option value="">请选择</option>
+                    <option v-for="(key,value) in szjcx" :value="value">{{key}}</option>
+                  </select>
+                </td>
+                <td style="width:8%">
+                  创建时间：
+                </td>
+                <td style="width: 15%">
+                  <times v-bind:startTime="startTime" v-bind:endTime="endTime" end-id="qualityResultEId" start-id="qualityResultSId"></times>
+                </td>
+                <td style="width: 15%;" class="text-center">
+                  <button  type="button" v-on:click="list(1)" class="btn btn-sm  btn-info btn-round" style="margin:0px 10px;">
+                    <i class="ace-icon fa fa-book"></i>
+                    查询
+                  </button>
+                  <a href="javascript:location.replace(location.href);"  class="btn btn-sm   btn-success btn-round">
+                    <i class="ace-icon fa fa-refresh"></i>
+                    重置
+                  </a>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </form>
+        </div>
+      </div>
+    </div>
     <p>
       <button v-on:click="getRealtimeData()" class="btn btn-white btn-default btn-round">
         <i class="ace-icon fa fa-edit"></i>
@@ -156,12 +204,14 @@
 
 <script>
   import Pagination from "../../components/pagination";
+  import Times from "../../components/times";
   export default {
-    components: {Pagination},
+    components: {Pagination,Times},
     name: "monitor-waterQualityResult",
     data: function() {
       return {
         waterQualityResult: {},
+        waterQualityResultDto: {},
         waterQualityResults: [],
         waterDatas:[],
         szjcx:[],
@@ -179,6 +229,22 @@
       _this.getSzjcx();
     },
     methods: {
+      /**
+       *开始时间
+       */
+      startTime(rep){
+        let _this = this;
+        _this.waterQualityResultDto.stime = rep;
+        _this.$forceUpdate();
+      },
+      /**
+       *结束时间
+       */
+      endTime(rep){
+        let _this = this;
+        _this.waterQualityResultDto.etime = rep;
+        _this.$forceUpdate();
+      },
       getRealtimeData(){
         let _this = this;
         Loading.show();
@@ -222,10 +288,9 @@
       list(page) {
         let _this = this;
         Loading.show();
-        _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterQualityResult/list', {
-          page: page,
-          size: _this.$refs.pagination.size,
-        }).then((response)=>{
+        _this.waterQualityResultDto.page = page;
+        _this.waterQualityResultDto.size = _this.$refs.pagination.size;
+        _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterQualityResult/list', _this.waterQualityResultDto).then((response)=>{
           Loading.hide();
           let resp = response.data;
           _this.waterQualityResults = resp.content.list;
