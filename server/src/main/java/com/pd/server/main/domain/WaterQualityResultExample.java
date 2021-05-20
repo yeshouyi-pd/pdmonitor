@@ -690,6 +690,11 @@ public class WaterQualityResultExample {
             return (Criteria) this;
         }
 
+        public Criteria andCreateTimeGreaterThanOrEqualTo(String value) {
+            addCriterion("DATE_FORMAT(create_time,'%Y-%m-%d') >=", value, "createTime");
+            return (Criteria) this;
+        }
+
         public Criteria andCreateTimeLessThan(Date value) {
             addCriterion("create_time <", value, "createTime");
             return (Criteria) this;
@@ -697,6 +702,11 @@ public class WaterQualityResultExample {
 
         public Criteria andCreateTimeLessThanOrEqualTo(Date value) {
             addCriterion("create_time <=", value, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeLessThanOrEqualTo(String value) {
+            addCriterion("DATE_FORMAT(create_time,'%Y-%m-%d') <=", value, "createTime");
             return (Criteria) this;
         }
 

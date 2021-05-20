@@ -83,7 +83,8 @@ public class ExportFileController extends BaseWxController{
         HSSFSheet sheet = workbook.createSheet("报警时间");
         // 自适应列宽度
         sheet.autoSizeColumn(1, true);
-        sheet.setDefaultColumnWidth(8);
+        sheet.setDefaultColumnWidth(18);
+        sheet.setDefaultRowHeight((short)(40*10));
         // 添加表头行
         HSSFRow titileRow = sheet.createRow(0);//第1行
         HSSFCell headCell = titileRow.createCell(0);//第1行第1列

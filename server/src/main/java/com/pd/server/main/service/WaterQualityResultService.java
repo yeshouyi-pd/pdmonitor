@@ -32,9 +32,22 @@ public class WaterQualityResultService {
     /**
     * 列表查询
     */
-    public void list(PageDto pageDto) {
+    public void list(WaterQualityResultDto pageDto) {
         PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
         WaterQualityResultExample waterQualityResultExample = new WaterQualityResultExample();
+        WaterQualityResultExample.Criteria ca = waterQualityResultExample.createCriteria();
+        if(!StringUtils.isEmpty(pageDto.getIp())){
+            ca.andIpEqualTo(pageDto.getIp());
+        }
+        if(!StringUtils.isEmpty(pageDto.getJcxm())){
+            ca.andJcxmEqualTo(pageDto.getJcxm());
+        }
+        if(!StringUtils.isEmpty(pageDto.getStime())){
+            ca.andCreateTimeGreaterThanOrEqualTo(pageDto.getStime());
+        }
+        if(!StringUtils.isEmpty(pageDto.getEtime())){
+            ca.andCreateTimeLessThanOrEqualTo(pageDto.getEtime());
+        }
         waterQualityResultExample.setOrderByClause(" create_time desc");
         List<WaterQualityResult> waterQualityResultList = waterQualityResultMapper.selectByExample(waterQualityResultExample);
         PageInfo<WaterQualityResult> pageInfo = new PageInfo<>(waterQualityResultList);

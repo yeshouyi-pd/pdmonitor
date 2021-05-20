@@ -2,9 +2,9 @@
     <div class="main-container">
         <img class="bgimg" src="/static/image/loginbg.jpg"/>
       <div :style="'padding-top:'+paddingsize+'%'"></div>
-        <div class="main-content" >
-          <div class="row">
-            <div class="col-sm-10" style="margin-left: 25%;">
+        <div class="main-content" style="padding-left: 0px;padding-right: 0px;">
+          <div>
+            <div :class="isMobileflag?'col-sm-10':'col-sm-4'" :style="'margin-left:'+marginleft+'%;'">
 
               <div class="center">
                                   <span :style="'font-size:'+fontsize+'px'">
@@ -14,7 +14,7 @@
                                   </span>
               </div>
 
-                    <div class="login-container" style="margin: 100px auto">
+                    <div class="login-container" :style="'margin:'+margin+'px auto'">
                         <div class="space-6"></div>
 
                         <div class="position-relative">
@@ -86,7 +86,21 @@
                         </div><!-- /.position-relative -->
                     </div>
                 </div><!-- /.col -->
-            <div class="col-xs-10" style="margin-top: 20px;margin-left: 15%;">
+            <div v-if="isMobileflag" class="col-xs-10" style="margin-top: 10px;">
+                    <span>
+                      <i class="ace-icon fa fa-square blue"></i>
+                      <span style="margin-left: 10px;">创新技术</span>
+                    </span>
+              <span style="margin-left: 5px;">
+                      <i class="ace-icon fa fa-square blue"></i>
+                      <span style="margin-left: 10px;">实时平台</span>
+                    </span>
+              <span style="margin-left: 5px;">
+                      <i class="ace-icon fa fa-square blue"></i>
+                      <span style="margin-left: 10px;">专业团队</span>
+                    </span>
+            </div>
+            <div v-else class="col-xs-4" style="margin-top: 20px;margin-left: 15%;">
                     <span>
                       <i class="ace-icon fa fa-square blue"></i>
                       <span class="logo-text-style">创新技术</span>
@@ -119,7 +133,8 @@
                 fontsize:45,
                 imgsize: 51,
                 paddingsize:6,
-
+              marginleft:45,
+              margin:100
             }
         },
         mounted:function(){//mounted初始化方法
@@ -145,12 +160,38 @@
               _this.isMobileflag =true;
               _this.fontsize =27;
               _this.imgsize = 31;
-              _this.paddingsize=30;
+              _this.paddingsize=20;
+              _this.marginleft=0;
+              _this.margin=20;
             }else{
               _this.isMobileflag =false;
-              _this.fontsize =45;
               _this.imgsize = 51;
-              _this.paddingsize=6;
+              _this.marginleft=45;
+              if(window.screen.height<=720){
+                _this.margin=0;
+                _this.paddingsize=5;
+                _this.fontsize =38;
+              }else if(window.screen.height<=768){
+                _this.margin=10;
+                _this.paddingsize=5;
+                _this.fontsize =45;
+              }else if(window.screen.height<=800){
+                _this.margin=10;
+                _this.paddingsize=6;
+                _this.fontsize =45;
+              }else if(window.screen.height<=900){
+                _this.margin=50;
+                _this.paddingsize=6;
+                _this.fontsize =45;
+              }else if(window.screen.height<=1024){
+                _this.paddingsize=6;
+                _this.margin=100;
+                _this.fontsize =45;
+              }else if(window.screen.height<=1080){
+                _this.paddingsize=6;
+                _this.margin=120;
+                _this.fontsize =45;
+              }
             }
           },
             login(){//push跳转到某一个地址
@@ -219,6 +260,9 @@
 </script>
 
 <style scoped>
+.col-sm-4{
+  width: 55%;
+}
     .input-group-addon {
         padding: 0;
     }

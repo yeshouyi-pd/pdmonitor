@@ -43,21 +43,21 @@
                           </a>
 
                           <ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
-                              <li>
-                                  <a href="#">
-                                      <i class="ace-icon fa fa-cog"></i>
-                                      系统设置
-                                  </a>
-                              </li>
+<!--                              <li>-->
+<!--                                  <a href="#">-->
+<!--                                      <i class="ace-icon fa fa-cog"></i>-->
+<!--                                      系统设置-->
+<!--                                  </a>-->
+<!--                              </li>-->
 
-                              <li>
-                                  <a  href="profile.html">
-                                      <i class="ace-icon fa fa-user"></i>
-                                      个人信息
-                                  </a>
-                              </li>
+<!--                              <li>-->
+<!--                                  <a  href="profile.html">-->
+<!--                                      <i class="ace-icon fa fa-user"></i>-->
+<!--                                      个人信息-->
+<!--                                  </a>-->
+<!--                              </li>-->
 
-                              <li class="divider"></li>
+<!--                              <li class="divider"></li>-->
 
                               <li>
                                   <a v-on:click="logout()" href="#">

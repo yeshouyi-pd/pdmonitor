@@ -85,10 +85,10 @@ public class EquipmentFileController {
         }
         ca.andTpljLike("%png");
         List<AlarmNumbersDto> lists = equipmentFileService.statisticsAlarmNumsByHour(example);
-        Optional<Integer> op = lists.stream().map(AlarmNumbersDto::getAlarmNum).reduce(Integer::sum);
+        Optional<Integer> op = lists.stream().filter(Objects::nonNull).map(AlarmNumbersDto::getAlarmNum).reduce(Integer::sum);
         List<String> xAixsData = lists.stream().filter(Objects::nonNull).map(u->u.getBjsj()+" "+u.getXs()).collect(Collectors.toList());
         List<Double> yAixsData = new ArrayList<>();
-        if(op.get()!=null && op.get()!=0){
+        if(op.isPresent()){
             yAixsData = lists.stream().filter(Objects::nonNull).map(u-> div(u.getAlarmNum(),op.get(),4)*100).collect(Collectors.toList());
         }
         Map<String, Object> map = new HashMap<>();
