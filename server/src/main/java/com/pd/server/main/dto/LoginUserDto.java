@@ -23,6 +23,8 @@ public class LoginUserDto {
      */
     private String name;
 
+    private String password;
+
     private String deptcode;
 
     private String rode;
@@ -284,6 +286,14 @@ public class LoginUserDto {
 
     public void setJyw(String jyw) {
         this.jyw = jyw;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override
