@@ -38,6 +38,26 @@ private UserService userService;
 @Resource
 public RedisTemplate redisTemplate;
 
+    @PostMapping("/changePwd")
+    public ResponseDto changePwd(@RequestBody UserDto userDto) {
+        ResponseDto responseDto = new ResponseDto();
+        if(!StringUtils.isEmpty(userDto.getOldPwd())&&!StringUtils.isEmpty(userDto.getNewPwd())){
+            if(userDto.getPassword().equals(DigestUtils.md5DigestAsHex(userDto.getOldPwd().getBytes()))){
+                userDto.setPassword(DigestUtils.md5DigestAsHex(userDto.getNewPwd().getBytes()));
+                userService.updatePwd(userDto);
+                responseDto.setMessage("修改成功");
+            }else {
+                responseDto.setSuccess(false);
+                responseDto.setMessage("原密码输入错误，请重新输入");
+            }
+        }else {
+            responseDto.setSuccess(false);
+            responseDto.setMessage("参数错误");
+        }
+        return responseDto;
+    }
+
+
 /**
 * 列表查询
 */

@@ -349,7 +349,7 @@
       <include refid="Example_Where_Clause" />
     </if>
     group by sbbh, rq, xs, fz, deptcode
-    order by rq desc,xs desc, fz desc
+    order by rq,xs,fz
   </select>
 
   <select id="getWarningDate"  resultMap="BaseResultMapKV" parameterType="com.pd.server.main.domain.EquipmentFileExample">
@@ -390,7 +390,7 @@
       <include refid="Example_Where_Clause" />
     </if>
     group by sbbh, rq, xs, deptcode
-    order by rq desc,xs desc
+    order by rq,xs
   </select>
 
 </mapper>

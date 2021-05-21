@@ -56,8 +56,13 @@
 <!--                                      个人信息-->
 <!--                                  </a>-->
 <!--                              </li>-->
-
-<!--                              <li class="divider"></li>-->
+                            <li>
+                              <a  v-on:click="changePwd()">
+                                <i class="ace-icon fa fa-key"></i>
+                                修改密码
+                              </a>
+                            </li>
+                             <li class="divider"></li>
 
                               <li>
                                   <a v-on:click="logout()" href="#">
@@ -172,6 +177,36 @@
           </a>
       </div><!-- /.main-container -->
 
+    <div id="form-modal-pwd" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">修改密码</h4>
+          </div>
+          <div class="modal-body">
+            <form class="form-horizontal">
+              <div class="form-group">
+                <label class="col-sm-2 control-label">原密码</label>
+                <div class="col-sm-10">
+                  <input v-model="oldPwd" class="form-control">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">新密码</label>
+                <div class="col-sm-10">
+                  <input v-model="newPwd" class="form-control">
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button v-on:click="savePwd()" type="button" class="btn btn-primary">保存</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
   </div>
 
@@ -184,6 +219,8 @@
                 loginUser:{},
                 resources:[],//菜单
                 showresources :[],//竖向菜单
+              oldPwd:'',
+              newPwd:'',
                 isRouterAlive:true
             }
         },
@@ -235,6 +272,40 @@
                 _this.isRouterAlive = true;
               })
             },
+          changePwd(){
+            $("#form-modal-pwd").modal("show");
+          },
+          savePwd(){
+            let _this = this;
+            // 保存校验
+            if (1 != 1
+                || !Validator.require(_this.oldPwd, "原密码")
+                || !Validator.length(_this.oldPwd, "原密码", 1, 10)
+                || !Validator.require(_this.newPwd, "新密码")
+                || !Validator.length(_this.newPwd, "新密码", 1, 10)
+            ) {
+              return;
+            }
+            if(_this.oldPwd==_this.newPwd){
+              Toast.warning("新密码不能与原密码相同！");
+              return;
+            }
+            Loading.show();
+            _this.loginUser.oldPwd = hex_md5(_this.oldPwd +KEY);
+            _this.loginUser.newPwd = hex_md5(_this.newPwd +KEY);
+            _this.$ajax.post(process.env.VUE_APP_SERVER + '/system/admin/user/changePwd', _this.loginUser).then((response)=>{
+              Loading.hide();
+              let resp = response.data;
+              if (resp.success) {
+                Toast.success(resp.message);
+                $("#form-modal-pwd").modal("hide");
+                _this.$router.push("/login");
+              } else {
+                Toast.warning(resp.message);
+                return;
+              }
+            })
+          },
             /**
              *横向菜单
              * 点击很想菜单动态加载数据

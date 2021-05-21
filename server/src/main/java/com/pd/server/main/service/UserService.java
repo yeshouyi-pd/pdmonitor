@@ -77,6 +77,14 @@ private UserMapper userMapper;
     }
 
     /**
+     * 更新
+     */
+    public void updatePwd(UserDto userDto) {
+        User user = CopyUtil.copy(userDto, User.class);
+        userMapper.updateByPrimaryKeySelective(user);
+    }
+
+    /**
     * 新增
     */
     private void insert(User user) {
