@@ -122,7 +122,7 @@ public class EquipmentFileController {
             ca.andCjsjLessThanOrEqualTo(alarmNumbersDto.getEtime());
         }
         ca.andTpljLike("%png");
-        List<AlarmNumbersDto> lists = equipmentFileService.statisticsAlarmNums(example);
+        List<AlarmNumbersDto> lists = equipmentFileService.statisticsAlarmNumsByPage(example);
         PageInfo<AlarmNumbersDto> pageInfo = new PageInfo<>(lists);
         alarmNumbersDto.setTotal(pageInfo.getTotal());
         alarmNumbersDto.setList(lists);

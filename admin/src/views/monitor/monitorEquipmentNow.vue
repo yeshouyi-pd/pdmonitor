@@ -157,7 +157,7 @@ export default {
             symbolSize: 8,
             lineStyle: {
               color: '#5470C6',
-              width: 5
+              width: 2
             },
             // label: {
             //   show: true,
