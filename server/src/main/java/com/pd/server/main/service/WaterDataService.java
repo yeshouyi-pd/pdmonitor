@@ -41,6 +41,7 @@ public class WaterDataService {
             WaterDataExample waterDataExample = new WaterDataExample();
             WaterDataExample.Criteria ca = waterDataExample.createCriteria();
             ca.andCenterCodeEqualTo(waterDataDto.getCenterCode());
+            ca.andCenterNameEqualTo(waterDataDto.getCenterName());
             List<WaterData> waterDataList = waterDataMapper.selectByExample(waterDataExample);
             if (!CollectionUtils.isEmpty(waterDataList)) {
                 throw new BusinessException(BusinessExceptionCode.CENTER_CODE_EXIST);

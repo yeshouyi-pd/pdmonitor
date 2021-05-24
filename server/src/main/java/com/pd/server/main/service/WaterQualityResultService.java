@@ -32,10 +32,13 @@ public class WaterQualityResultService {
     /**
     * 列表查询
     */
-    public void list(WaterQualityResultDto pageDto) {
+    public void list(WaterQualityResultDto pageDto,List<String> lists) {
         PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
         WaterQualityResultExample waterQualityResultExample = new WaterQualityResultExample();
         WaterQualityResultExample.Criteria ca = waterQualityResultExample.createCriteria();
+        if(!StringUtils.isEmpty(lists)&&lists.size()>0){
+            ca.andSm1In(lists);
+        }
         if(!StringUtils.isEmpty(pageDto.getIp())){
             ca.andIpEqualTo(pageDto.getIp());
         }

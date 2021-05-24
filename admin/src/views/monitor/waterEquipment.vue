@@ -174,7 +174,7 @@
                       </div>
                     </div>
                     <div class="form-group">
-                      <label class="col-sm-2 control-label">*设备读取指令</label>
+                      <label class="col-sm-2 control-label">设备读取指令</label>
                       <div class="col-sm-4">
                         <input v-model="waterEquipment.dqzl" class="form-control">
                       </div>
@@ -437,7 +437,7 @@
                 || !Validator.length(_this.waterEquipment.centerCode, "所属数据中心", 1, 45)
                 // || !Validator.require(_this.waterEquipment.sblb, "设备类别")
                 || !Validator.length(_this.waterEquipment.sblb, "设备类别", 1, 45)
-                || !Validator.require(_this.waterEquipment.dqzl, "设备读取指令")
+                // || !Validator.require(_this.waterEquipment.dqzl, "设备读取指令")
                 || !Validator.length(_this.waterEquipment.dqzl, "设备读取指令", 1, 45)
                 // || !Validator.require(_this.waterEquipment.sbxh, "设备型号")
                 || !Validator.length(_this.waterEquipment.sbxh, "设备型号", 1, 45)

@@ -43,7 +43,7 @@ public class EquipmentFileService {
     /**
     * 列表查询
     */
-    public void list(EquipmentFileDto pageDto) {
+    public void list(EquipmentFileDto pageDto, List<String> list) {
         EquipmentFileExample audioExample = new EquipmentFileExample();
         EquipmentFileExample.Criteria audioCa = audioExample.createCriteria();
         audioCa.andTpljLike("%wav");
@@ -51,6 +51,9 @@ public class EquipmentFileService {
         PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
         EquipmentFileExample equipmentFileExample = new EquipmentFileExample();
         EquipmentFileExample.Criteria ca = equipmentFileExample.createCriteria();
+        if(!StringUtils.isEmpty(list)&&list.size()>0){
+            ca.andDeptcodeIn(list);
+        }
         if(!StringUtils.isEmpty(pageDto.getStime())){
             ca.andCjsjGreaterThanOrEqualTo(pageDto.getStime());
         }
