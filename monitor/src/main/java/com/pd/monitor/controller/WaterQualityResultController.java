@@ -1,8 +1,10 @@
 package com.pd.monitor.controller;
 
+import com.pd.monitor.wx.conf.BaseWxController;
 import com.pd.server.main.domain.WaterEquipment;
 import com.pd.server.main.domain.WaterQualityResult;
 import com.pd.server.main.domain.WaterQualityResultExample;
+import com.pd.server.main.dto.LoginUserDto;
 import com.pd.server.main.dto.WaterQualityResultDto;
 import com.pd.server.main.dto.ResponseDto;
 import com.pd.server.main.service.WaterEquipmentService;
@@ -20,7 +22,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/admin/waterQualityResult")
-public class WaterQualityResultController {
+public class WaterQualityResultController extends BaseWxController {
 
     private static final Logger LOG = LoggerFactory.getLogger(WaterQualityResultController.class);
     public static final String BUSINESS_NAME = "监测点设备管理";
@@ -34,9 +36,14 @@ public class WaterQualityResultController {
     @PostMapping("/findWaterQualityResultByDay")
     public ResponseDto findWaterQualityResultByDay(@RequestBody WaterQualityResultDto pageDto){
         ResponseDto responseDto = new ResponseDto();
+        LoginUserDto user = getRequestHeader();
+        List<String> lists = getUpdeptcode(user.getDeptcode());
         WaterEquipment waterEquipment = waterEquipmentService.findById(pageDto.getDeviceId());
         WaterQualityResultExample example = new WaterQualityResultExample();
         WaterQualityResultExample.Criteria ca = example.createCriteria();
+        if(!StringUtils.isEmpty(lists)&&lists.size()>0){
+            ca.andSm1In(lists);
+        }
         if(!StringUtils.isEmpty(waterEquipment)&&!StringUtils.isEmpty(waterEquipment.getCenterCode())){
             ca.andDatacenterEqualTo(waterEquipment.getCenterCode());
         }
@@ -72,7 +79,9 @@ public class WaterQualityResultController {
     @PostMapping("/list")
     public ResponseDto list(@RequestBody WaterQualityResultDto pageDto) {
         ResponseDto responseDto = new ResponseDto();
-        waterQualityResultService.list(pageDto);
+        LoginUserDto user = getRequestHeader();
+        List<String> lists = getUpdeptcode(user.getDeptcode());
+        waterQualityResultService.list(pageDto, lists);
         responseDto.setContent(pageDto);
         return responseDto;
     }

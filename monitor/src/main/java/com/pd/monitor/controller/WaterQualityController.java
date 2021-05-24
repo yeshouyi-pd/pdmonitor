@@ -16,7 +16,7 @@ import javax.annotation.Resource;
 public class WaterQualityController {
 
     private static final Logger LOG = LoggerFactory.getLogger(WaterQualityController.class);
-    public static final String BUSINESS_NAME = "";
+    public static final String BUSINESS_NAME = "多项监测数据表";
 
     @Resource
     private WaterQualityService waterQualityService;

@@ -2,11 +2,13 @@ package com.pd.monitor.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.pd.monitor.wx.conf.BaseWxController;
 import com.pd.server.config.RedisCode;
 import com.pd.server.main.domain.EquipmentFile;
 import com.pd.server.main.domain.EquipmentFileExample;
 import com.pd.server.main.domain.WaterEquipment;
 import com.pd.server.main.dto.EquipmentFileDto;
+import com.pd.server.main.dto.LoginUserDto;
 import com.pd.server.main.dto.PageDto;
 import com.pd.server.main.dto.ResponseDto;
 import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
@@ -26,7 +28,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/admin/equipmentFile")
-public class EquipmentFileController {
+public class EquipmentFileController extends BaseWxController {
 
     private static final Logger LOG = LoggerFactory.getLogger(EquipmentFileController.class);
     public static final String BUSINESS_NAME = "水噪声图片";
@@ -41,8 +43,13 @@ public class EquipmentFileController {
     @PostMapping("/statisticsAlarmNumsByMinute")
     public ResponseDto statisticsAlarmNumsByMinute(@RequestBody AlarmNumbersDto entityDto){
         ResponseDto responseDto = new ResponseDto();
+        LoginUserDto user = getRequestHeader();
+        List<String> list = getUpdeptcode(user.getDeptcode());
         EquipmentFileExample example = new EquipmentFileExample();
         EquipmentFileExample.Criteria ca = example.createCriteria();
+        if(!StringUtils.isEmpty(list)&&list.size()>0){
+            ca.andDeptcodeIn(list);
+        }
         if(!StringUtils.isEmpty(entityDto.getSbbh())){
             ca.andSbbhEqualTo(entityDto.getSbbh());
         }
@@ -69,8 +76,13 @@ public class EquipmentFileController {
     @PostMapping("/statisticsAlarmNumsByHour")
     public ResponseDto statisticsAlarmNumsByHour(@RequestBody AlarmNumbersDto entityDto){
         ResponseDto responseDto = new ResponseDto();
+        LoginUserDto user = getRequestHeader();
+        List<String> list = getUpdeptcode(user.getDeptcode());
         EquipmentFileExample example = new EquipmentFileExample();
         EquipmentFileExample.Criteria ca = example.createCriteria();
+        if(!StringUtils.isEmpty(list)&&list.size()>0){
+            ca.andDeptcodeIn(list);
+        }
         if(!StringUtils.isEmpty(entityDto.getSbbh())){
             ca.andSbbhEqualTo(entityDto.getSbbh());
         }
@@ -106,9 +118,14 @@ public class EquipmentFileController {
     @PostMapping("/statisticsAlarmNums")
     public ResponseDto statisticsAlarmNums(@RequestBody AlarmNumbersDto alarmNumbersDto){
         ResponseDto responseDto = new ResponseDto();
+        LoginUserDto user = getRequestHeader();
+        List<String> list = getUpdeptcode(user.getDeptcode());
         PageHelper.startPage(alarmNumbersDto.getPage(), alarmNumbersDto.getSize());
         EquipmentFileExample example = new EquipmentFileExample();
         EquipmentFileExample.Criteria ca = example.createCriteria();
+        if(!StringUtils.isEmpty(list)&&list.size()>0){
+            ca.andDeptcodeIn(list);
+        }
         if(!StringUtils.isEmpty(alarmNumbersDto.getSbbh())){
             ca.andSbbhEqualTo(alarmNumbersDto.getSbbh());
         }
@@ -144,7 +161,9 @@ public class EquipmentFileController {
     @PostMapping("/list")
     public ResponseDto list(@RequestBody EquipmentFileDto pageDto) {
         ResponseDto responseDto = new ResponseDto();
-        equipmentFileService.list(pageDto);
+        LoginUserDto user = getRequestHeader();
+        List<String> list = getUpdeptcode(user.getDeptcode());
+        equipmentFileService.list(pageDto,list);
         responseDto.setContent(pageDto);
         return responseDto;
     }

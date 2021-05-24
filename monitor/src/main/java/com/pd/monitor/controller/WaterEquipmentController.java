@@ -45,11 +45,17 @@ public class WaterEquipmentController  extends BaseWxController {
     @GetMapping("/findMonitorEquipmentTreeByFile")
     public ResponseDto findMonitorEquipmentTreeByFile(){
         ResponseDto responseDto = new ResponseDto();
-        List<Dept> waterDataList = deptService.list(null);
+        DeptExample deptExample = new DeptExample();
+        DeptExample.Criteria deptca = deptExample.createCriteria();
+        LoginUserDto user = getRequestHeader();
+        List<String> list = getUpdeptcode(user.getDeptcode());
+        deptca.andDeptcodeIn(list);
+        List<Dept> waterDataList = deptService.list(deptExample);
         Map<String, String> map = waterDataList.stream().collect(Collectors.toMap(p -> p.getDeptcode(), p -> p.getDeptname()));
         WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
         WaterEquipmentExample.Criteria weCa = waterEquipmentExample.createCriteria();
         weCa.andSblbEqualTo("0001");
+        weCa.andDeptcodeIn(list);
         List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(waterEquipmentExample);
         Map<String,List<WaterEquipment>> deptcodeMap = waterEquipmentList.stream().collect(Collectors.groupingBy(WaterEquipment::getDeptcode));
         List<MonitorEquipmentDto> lists = new ArrayList<>();
@@ -80,11 +86,17 @@ public class WaterEquipmentController  extends BaseWxController {
     @GetMapping("/findMonitorEqupmentTree")
     public ResponseDto findMonitorEquipmentTree(){
         ResponseDto responseDto = new ResponseDto();
-        List<Dept> waterDataList = deptService.list(null);
+        DeptExample deptExample = new DeptExample();
+        DeptExample.Criteria deptca = deptExample.createCriteria();
+        LoginUserDto user = getRequestHeader();
+        List<String> list = getUpdeptcode(user.getDeptcode());
+        deptca.andDeptcodeIn(list);
+        List<Dept> waterDataList = deptService.list(deptExample);
         Map<String, String> map = waterDataList.stream().collect(Collectors.toMap(p -> p.getDeptcode(), p -> p.getDeptname()));
         WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
         WaterEquipmentExample.Criteria weCa = waterEquipmentExample.createCriteria();
         weCa.andSblbEqualTo("0002");
+        weCa.andDeptcodeIn(list);
         List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(waterEquipmentExample);
         Map<String,List<WaterEquipment>> deptcodeMap = waterEquipmentList.stream().collect(Collectors.groupingBy(WaterEquipment::getDeptcode));
         List<MonitorEquipmentDto> lists = new ArrayList<>();
@@ -115,10 +127,12 @@ public class WaterEquipmentController  extends BaseWxController {
     @PostMapping("/findAll")
     public ResponseDto findAll(@RequestBody WaterEquipmentDto waterEquipmentDto) {
         ResponseDto responseDto = new ResponseDto();
+        LoginUserDto user = getRequestHeader();
+        List<String> list = getUpdeptcode(user.getDeptcode());
         WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
         WaterEquipmentExample.Criteria ca = waterEquipmentExample.createCriteria();
         ca.andGpsIsNotNull();
-        ca.andDeptcodeIn(getUpdeptcode(""));
+        ca.andDeptcodeIn(list);
         List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(waterEquipmentExample);
         List<WaterEquipmentDto> waterEquipmentDtoList = CopyUtil.copyList(waterEquipmentList, WaterEquipmentDto.class);
         responseDto.setContent(waterEquipmentDtoList);
