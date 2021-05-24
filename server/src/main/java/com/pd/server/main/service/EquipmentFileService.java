@@ -32,6 +32,10 @@ public class EquipmentFileService {
         return equipmentFileMapper.statisticsAlarmNums(example);
     }
 
+    public List<AlarmNumbersDto> statisticsAlarmNumsByPage(EquipmentFileExample example){
+        return equipmentFileMapper.statisticsAlarmNumsByPage(example);
+    }
+
     public List<AlarmNumbersDto> statisticsAlarmNumsByHour(EquipmentFileExample example){
         return equipmentFileMapper.statisticsAlarmNumsByHour(example);
     }
