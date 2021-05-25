@@ -33,7 +33,7 @@
 
                       <li class="light-blue dropdown-modal">
                           <a data-toggle="dropdown" href="#" class="dropdown-toggle">
-                              <img class="nav-user-photo" src="../../public/ace/assets/images/avatars/user.jpg" alt="Jason's Photo" />
+<!--                              <img class="nav-user-photo" src="../../public/ace/assets/images/avatars/user.jpg" alt="Jason's Photo" />-->
                               <span class="user-info">
 									<small>欢迎您,</small>
 									{{loginUser.name}}
