@@ -56,9 +56,9 @@
 
     <div>
       <div style="display: flex;flex-wrap: wrap;margin-bottom: 30px;">
-        <div v-for="item in equipmentFiles" style="margin:20px;width: 150px;height: 250px;display: flex;flex-wrap: wrap;">
+        <div v-for="(item,index) in equipmentFiles" style="margin:20px;width: 150px;height: 250px;display: flex;flex-wrap: wrap;">
           <div style="text-align: center;width: 150px;">
-            <img :src="item.tplj" style="height: 200px;cursor: pointer;" v-on:click="checkImg(item)">
+            <img :src="item.tplj" style="height: 200px;cursor: pointer;" v-on:click="checkImg(item,index)">
           </div>
           <div style="margin: 0 auto;">{{item.sbbh}}</div>
           <div style="margin: 0 auto;">{{item.cjsj}}</div>
@@ -77,10 +77,48 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">查看原图</h4>
+            <h4 class="modal-title">查看图片</h4>
           </div>
-          <div class="modal-body" :style="{height:+maxHeight+'px',overflow:'auto'}">
-            <img :src="equipmentFile.tplj"/>
+          <div class="modal-body">
+<!--            <img :src="equipmentFile.tplj"/>-->
+            <div>
+              <button type="button" class="btn btn-white btn-default btn-round" v-on:click="showRealPic()">
+                查看原图
+              </button>
+              <span style="font-size: 18px;margin: 10px 20px;">设备sn：{{curSbsn}}</span>
+              <span style="font-size: 18px;">采集时间：{{curCjsj}}</span>
+            </div>
+            <div style="display: flex;">
+              <div style="text-align: left;margin: auto;">
+                <img v-on:click="beforePic()" v-show="curIndex!=0" src="../../../public/static/image/turnLeft.png"/>
+              </div>
+              <div style="text-align: center;">
+                <img :src="curTplj" :style="{height:+maxHeight-100+'px'}"/>
+              </div>
+              <div style="text-align: right;margin: auto;">
+                <img v-on:click="nextPic()" v-show="curIndex!=equipmentFiles.length-1" src="../../../public/static/image/turnRight.png"/>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-white btn-default btn-round" data-dismiss="modal">
+              <i class="ace-icon fa fa-times"></i>
+              关闭
+            </button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div id="img-modal-real" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">原图图片</h4>
+          </div>
+          <div class="modal-body" :style="{height:+maxHeight+'px',overflow:'auto',textAlign:'center'}">
+            <img :src="curTplj"/>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-white btn-default btn-round" data-dismiss="modal">
@@ -105,7 +143,11 @@ export default {
       equipmentFileDto:{},
       equipmentFile:{},
       maxHeight:'',
-      sbbhs:[]
+      sbbhs:[],
+      curIndex:0,
+      curTplj:'',
+      curSbsn:'',
+      curCjsj:''
     }
   },
   mounted() {
@@ -117,6 +159,25 @@ export default {
     _this.maxHeight = h*0.8;
   },
   methods: {
+    showRealPic(){
+      $("#img-modal-real").modal("show");
+    },
+    beforePic(){
+      let _this = this;
+      _this.curIndex = _this.curIndex-1;
+      _this.curTplj = _this.equipmentFiles[_this.curIndex].tplj;
+      _this.curSbsn = _this.equipmentFiles[_this.curIndex].sbbh;
+      _this.curCjsj = _this.equipmentFiles[_this.curIndex].cjsj;
+      _this.$forceUpdate();
+    },
+    nextPic(){
+      let _this = this;
+      _this.curIndex = _this.curIndex+1;
+      _this.curTplj = _this.equipmentFiles[_this.curIndex].tplj;
+      _this.curSbsn = _this.equipmentFiles[_this.curIndex].sbbh;
+      _this.curCjsj = _this.equipmentFiles[_this.curIndex].cjsj;
+      _this.$forceUpdate();
+    },
     /**
      *开始时间
      */
@@ -160,9 +221,14 @@ export default {
     /**
      * 查看原图
      */
-    checkImg(item){
+    checkImg(item,index){
       let _this = this;
+      _this.curIndex = index;
+      _this.curTplj = item.tplj;
+      _this.curSbsn = item.sbbh;
+      _this.curCjsj = item.cjsj;
       _this.equipmentFile = $.extend({}, item);
+      _this.$forceUpdate();
       $("#img-modal").modal("show");
     },
     /**

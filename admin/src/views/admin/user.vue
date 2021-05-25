@@ -254,7 +254,7 @@ export default {
       let _this = this;
       _this.getAllres();
       _this. getAllDept();
-      _this.$refs.pagination.size = 5;
+      _this.$refs.pagination.size = 10;
       _this.list(1);
       _this.getDeptTree();
       // sidebar激活样式方法一
