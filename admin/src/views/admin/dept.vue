@@ -257,14 +257,13 @@
                             <div class="form-group">
                                 <label class="col-sm-1 control-label">部门编号</label>
                                 <div class="col-sm-5">
-                                    <div class="row">
-                                        <div class="col-sm-8">
-                                            <input v-model="dept.deptcode"  v-bind:disabled="dept.id"  class="form-control">
-                                        </div>
-                                        <div  class="col-sm-2">
-                                            <button  v-on:click="openmap(dept.id,dept.deptname)" type="button" class="btn btn-success" >选择办事网点</button>
-                                        </div>
-                                    </div>
+                                  <input v-model="dept.deptcode"  v-bind:disabled="dept.id"  class="form-control">
+<!--                                    <div class="row">-->
+<!--                                        -->
+<!--&lt;!&ndash;                                        <div  class="col-sm-2">&ndash;&gt;-->
+<!--&lt;!&ndash;                                            <button  v-on:click="openmap(dept.id,dept.deptname)" type="button" class="btn btn-success" >选择办事网点</button>&ndash;&gt;-->
+<!--&lt;!&ndash;                                        </div>&ndash;&gt;-->
+<!--                                    </div>-->
                                 </div>
                                 <label class="col-sm-1 control-label">部门名称</label>
                                 <div class="col-sm-5">
