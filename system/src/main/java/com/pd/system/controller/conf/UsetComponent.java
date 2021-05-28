@@ -2,17 +2,19 @@ package com.pd.system.controller.conf;
 
 
 import com.pd.server.config.RedisCode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class UsetComponent {
+
     @Resource
     public RedisTemplate redisTemplate;
 
@@ -29,14 +31,22 @@ public class UsetComponent {
         Map<String,String> usermap = new HashMap<String,String>();
         if(null != userobject && userobject instanceof Map<?,?>){
             usermap = (Map<String, String>) userobject;
-            if(!CollectionUtils.isEmpty(usermap)){
-
-                for (Map.Entry<String, String> entry : usermap.entrySet()) {
+            if(!CollectionUtils.isEmpty(usermap)&&!CollectionUtils.isEmpty(usermap.entrySet())){
+                Iterator<Map.Entry<String, String>> iterator = usermap.entrySet().iterator();
+                while (iterator.hasNext()) {
+                    Map.Entry<String, String> entry = iterator.next();
                     Object object = redisTemplate.opsForValue().get(entry.getValue());
                     if(null == object){
-                        usermap.remove(entry.getKey());
+                        iterator.remove();
                     }
                 }
+//                Set<Map.Entry<String, String>> entrySet = usermap.entrySet();
+//                for (Map.Entry<String, String> entry : entrySet) {
+//                    Object object = redisTemplate.opsForValue().get(entry.getValue());
+//                    if(null == object){
+//                        usermap.remove(entry.getKey());
+//                    }
+//                }
                 redisTemplate.opsForValue().set(RedisCode.AllUSER, usermap);
             }
 
