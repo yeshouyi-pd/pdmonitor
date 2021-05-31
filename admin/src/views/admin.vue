@@ -22,6 +22,12 @@
               </div>
               <div class="navbar-buttons navbar-header pull-right" role="navigation">
                   <ul class="nav ace-nav">
+                    <li class="light-blue dropdown-modal" v-on:click="downloadOperationManual()">
+                        <a   class=" dropdown-toggle" style="cursor: pointer;">
+                          <font color="white">下载操作手册</font>
+                        </a>
+                    </li>
+
                       <li class="light-blue dropdown-modal">
                         <router-link to="/welcome">
                           <a   class=" dropdown-toggle" >
@@ -265,13 +271,16 @@
             }
         },
         methods:{
-            reload(){
-              let _this = this;
-              _this.isRouterAlive = false;
-              _this.$nextTick(function (){
-                _this.isRouterAlive = true;
-              })
-            },
+          downloadOperationManual(){
+            window.location.href = process.env.VUE_APP_SERVER + '/system/downloadfile/downloadLocal';
+          },
+          reload(){
+            let _this = this;
+            _this.isRouterAlive = false;
+            _this.$nextTick(function (){
+              _this.isRouterAlive = true;
+            })
+          },
           changePwd(){
             $("#form-modal-pwd").modal("show");
           },
