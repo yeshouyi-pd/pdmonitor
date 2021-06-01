@@ -115,7 +115,7 @@
                     </span>
             </div>
             </div><!-- /.row -->
-          <div   class="position-relative-gs"><h5>专注自然生态 共建美丽中国&nbsp;&nbsp;v1.0</h5><h5>Tel：180 8600 2259</h5></div>
+          <div   class="position-relative-gs"><img height="60px;" src="/static/image/loginButtom.png"/></div>
         </div><!-- /.main-content -->
     </div><!-- /.main-container -->
 </template>
