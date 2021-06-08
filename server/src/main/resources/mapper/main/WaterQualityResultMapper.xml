@@ -22,6 +22,7 @@
     <result column="ip" jdbcType="VARCHAR" property="ip" />
     <result column="datacenter" jdbcType="VARCHAR" property="datacenter" />
     <result column="jcxm" jdbcType="VARCHAR" property="jcxm" />
+    <result column="sm1" jdbcType="VARCHAR" property="sm1" />
     <result column="sumDataResult" jdbcType="DOUBLE" property="sumDataResult" />
     <result column="count" jdbcType="INTEGER" property="count" />
   </resultMap>
@@ -389,12 +390,12 @@
 
 
   <select id="selectAvgByExample" parameterType="com.pd.server.main.domain.WaterQualityResultExample" resultMap="AvgResultMap">
-    select ip,datacenter,jcxm,SUM(data_result) sumDataResult,COUNT(*) count
+    select ip,datacenter,jcxm,sm1,SUM(data_result) sumDataResult,COUNT(*) count
     from water_quality_result
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
-    GROUP BY ip,datacenter,jcxm
+    GROUP BY ip,datacenter,jcxm,sm1
   </select>
 
   <select id="getthisDeptjxsj" parameterType="com.pd.server.main.domain.WaterQualityResultExample" resultMap="BaseResultMap">

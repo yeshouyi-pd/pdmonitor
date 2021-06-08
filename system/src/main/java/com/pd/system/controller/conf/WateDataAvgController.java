@@ -13,6 +13,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -45,9 +46,10 @@ public class WateDataAvgController implements ApplicationContextAware {
             WaterQualityAvg entity = new WaterQualityAvg();
             entity.setId(UuidUtil.getShortUuid());
             entity.setCreateTime(DateUtil.toDate(DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(),-1),"yyyy-MM-dd"),"yyyy-MM-dd"));
-            entity.setDatacenter(dto.getDatacenter());
-            entity.setIp(dto.getIp());
-            entity.setJcxm(dto.getJcxm());
+            entity.setDatacenter(StringUtils.isEmpty(dto.getDatacenter())?"":dto.getDatacenter());
+            entity.setIp(StringUtils.isEmpty(dto.getIp())?"":dto.getIp());
+            entity.setJcxm(StringUtils.isEmpty(dto.getJcxm())?"":dto.getJcxm());
+            entity.setSm1(StringUtils.isEmpty(dto.getSm1())?"":dto.getSm1());
             if(dto.getCount()!=0){
                 entity.setDataResult(Double.toString(div(dto.getSumDataResult(),dto.getCount(),7)));
             }else {
