@@ -4,6 +4,8 @@ import com.pd.server.config.CodeType;
 import com.pd.server.config.RedisCode;
 import com.pd.server.main.dto.*;
 import com.pd.monitor.wx.conf.BaseWxController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +15,10 @@ import java.util.*;
 @RestController
 @RequestMapping("/CodeSetUtil")
 public class CodeSetUtilController extends BaseWxController {
+
+    private static final Logger LOG = LoggerFactory.getLogger(CodeSetUtilController.class);
+    public static final String BUSINESS_NAME = "获取配置信息";
+
     @Resource
     private RedisTemplate redisTemplate;
 

@@ -24,7 +24,7 @@ import java.util.List;
 public class WelcomeController  extends BaseWxController{
 
     private static final Logger LOG = LoggerFactory.getLogger(WelcomeController.class);
-
+    public static final String BUSINESS_NAME = "首页";
 
     /**
      * 水值监测数据
@@ -58,7 +58,9 @@ public class WelcomeController  extends BaseWxController{
                 List<String> listdept = getUpdeptcode(user.getDeptcode());
                 WaterQualityResultExample waterQualityResultExample = new WaterQualityResultExample();
                 WaterQualityResultExample.Criteria  waterQualityResultca = waterQualityResultExample.createCriteria();
-                waterQualityResultca.andSm1In(listdept);
+                if(!CollectionUtils.isEmpty(listdept)){
+                    waterQualityResultca.andSm1In(listdept);
+                }
                 List<WaterQualityResultDto>  list  =  waterQualityResultService.getLatestDate(waterQualityResultExample);
                 responseDto.setContent(list);
             }
@@ -79,7 +81,9 @@ public class WelcomeController  extends BaseWxController{
                 List<String> listdept = getUpdeptcode(user.getDeptcode());
                 EquipmentFileExample equipmentFileExample = new EquipmentFileExample();
                 EquipmentFileExample.Criteria  equipmentFileExampleca = equipmentFileExample.createCriteria();
-                equipmentFileExampleca.andDeptcodeIn(listdept);
+                if(!CollectionUtils.isEmpty(listdept)){
+                    equipmentFileExampleca.andDeptcodeIn(listdept);
+                }
                 List<WelcomeKvDto>  list  =  equipmentFileService.getWarningDate(equipmentFileExample);
                 responseDto.setContent(list);
             }
@@ -97,7 +101,10 @@ public class WelcomeController  extends BaseWxController{
         ResponseDto responseDto = new ResponseDto();
         WaterEquipmentExample example = new WaterEquipmentExample();
         WaterEquipmentExample.Criteria ca = example.createCriteria();
-        ca.andDeptcodeIn(getUpdeptcode(""));
+        List<String> listdept = getUpdeptcode("");
+        if(!CollectionUtils.isEmpty(listdept)){
+            ca.andDeptcodeIn(listdept);
+        }
         List<PieChartDto>  list  =  waterEquipmentService.getPieChart(example);
         List<PieChartDto> newlit = new ArrayList<PieChartDto>();
         if(!CollectionUtils.isEmpty(list)){
