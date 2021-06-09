@@ -129,7 +129,6 @@ public class WxRedisConfig implements CommandLineRunner {
      * 重载参数，刷新缓存调用
      */
     public static synchronized void reload() {
-        init_city();//加载省市县
         init_sbsnCenterCodeMap();//加载设备编号对应的监测点编号
     }
 
@@ -145,45 +144,6 @@ public class WxRedisConfig implements CommandLineRunner {
             return false;
         }
         return true;
-    }
-
-    public synchronized static boolean init_city(){
-        try {
-            Map<String, String> provincemap = selectPcode("0");
-            Map<String, Map<String, String>> map = new LinkedHashMap<String, Map<String, String>>();
-            Map<String, String> listcity = new LinkedHashMap<String, String>();
-            Map<String, String> listcounty = new LinkedHashMap<String, String>();
-            for (String key1:provincemap.keySet()) {
-                Map<String, String> mapcity = selectPcode(key1);
-                listcity.putAll(mapcity);
-                for(String key2:mapcity.keySet()){
-                    Map<String, String> mapcounty = selectPcode(key2);
-                    listcounty.putAll(mapcounty);
-                }
-            }
-            map.put("province_list", provincemap);
-            map.put("city_list", listcity);
-            map.put("county_list", listcounty);
-            String s = JSONObject.toJSONString(map);
-            JSONObject jsonObj = JSONObject.parseObject(s);
-            redisTstaticemplate.opsForValue().set(RedisCode.ADDRINFO, jsonObj);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
-    }
-
-    public static Map<String,String> selectPcode(String pcode){
-        AddrInfoExample example = new AddrInfoExample();
-        example.createCriteria().andPcodeEqualTo(pcode);
-        List<AddrInfo> addrInfos = addrInfostaticMapper.selectByExample(example);
-        Map<String,String> map = new LinkedHashMap<String, String>();
-        for (int i = 0; i < addrInfos.size(); i++) {
-            AddrInfo addrInfo = addrInfos.get(i);
-            map.put(addrInfo.getCode(),addrInfo.getName());
-        }
-        return map;
     }
 
 }

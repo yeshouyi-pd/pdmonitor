@@ -60,7 +60,10 @@ public class MqttClientTestXH implements ApplicationContextAware {
 //			true可以安全地使用内存持久性作为客户端断开连接时清除的所有状态
             mqttConnectOptions.setCleanSession(true);
 //			设置连接超时
-            mqttConnectOptions.setConnectionTimeout(30);
+            mqttConnectOptions.setConnectionTimeout(10);
+            mqttConnectOptions.setKeepAliveInterval(20);
+            //设置断开后重新连接
+            mqttConnectOptions.setAutomaticReconnect(true);
 //			设置持久化方式
             memoryPersistence = new MemoryPersistence();
             if(null != memoryPersistence && null != clientId) {
