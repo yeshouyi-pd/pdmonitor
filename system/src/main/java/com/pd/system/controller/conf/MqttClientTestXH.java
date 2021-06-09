@@ -6,6 +6,8 @@ import com.pd.server.main.dto.WaterQualityResultDto;
 import com.pd.server.main.service.WaterQualityResultService;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -15,6 +17,9 @@ import java.util.Date;
 import java.util.Map;
 
 public class MqttClientTestXH implements ApplicationContextAware {
+
+    private static final Logger LOG = LoggerFactory.getLogger(MqttClientTestXH.class);
+
     private static ApplicationContext applicationContext;
     public static org.eclipse.paho.client.mqttv3.MqttClient mqttClient = null;
     private static MemoryPersistence memoryPersistence = null;
@@ -74,16 +79,16 @@ public class MqttClientTestXH implements ApplicationContextAware {
                     e.printStackTrace();
                 }
             }else {
-                System.out.println("memoryPersistence对象为空");
+                LOG.info("memoryPersistence对象为空");
             }
         }else {
-            System.out.println("mqttConnectOptions对象为空");
+            LOG.info("mqttConnectOptions对象为空");
         }
         //设置连接和回调
         if(null != mqttClient) {
             if(!mqttClient.isConnected()) {
                 try {
-                    System.out.println("创建连接:" + mqttClient.isConnected());
+                    LOG.info("创建连接:" + mqttClient.isConnected());
                     mqttClient.connect(mqttConnectOptions);
                     //订阅消息
                     subTopic("test2");
@@ -95,7 +100,7 @@ public class MqttClientTestXH implements ApplicationContextAware {
                 }
             }
         }else {
-            System.out.println("mqttClient为空");
+            LOG.info("mqttClient为空");
         }
     }
 
@@ -109,7 +114,7 @@ public class MqttClientTestXH implements ApplicationContextAware {
                 e.printStackTrace();
             }
         }else {
-            System.out.println("mqttClient is error");
+            LOG.info("mqttClient is error");
         }
     }
 
@@ -117,17 +122,17 @@ public class MqttClientTestXH implements ApplicationContextAware {
         // 设置回调函数
         mqttClient.setCallback(new MqttCallback() {
             public void connectionLost(Throwable cause) {
-                System.out.println("connectionLost:"+cause.getMessage());
+                LOG.info("connectionLost:"+cause.getMessage());
             }
             public void messageArrived(String topic, MqttMessage message) throws Exception {
-                System.out.println("topic:"+topic);
-                System.out.println("Qos:"+message.getQos());
-                System.out.println("message content:"+encodeToString( message.getPayload(),type));
-                System.out.println(bytes2hex02(message.getPayload()));
+                LOG.info("topic:"+topic);
+                LOG.info("Qos:"+message.getQos());
+                LOG.info("message content:"+encodeToString( message.getPayload(),type));
+                LOG.info(bytes2hex02(message.getPayload()));
                 saveData(message);
             }
             public void deliveryComplete(IMqttDeliveryToken token) {
-                System.out.println("deliveryComplete---------"+ token.isComplete());
+                LOG.info("deliveryComplete---------"+ token.isComplete());
             }
         });
     }
@@ -142,7 +147,7 @@ public class MqttClientTestXH implements ApplicationContextAware {
         waterQualityResult.setDataOriginal(bytes2hex02(message.getPayload()));
         waterQualityResult.setCreateTime(new Date());
         waterQualityResult.setSm1(map.get(waterQualityResult.getIp()));
-        System.out.println(waterQualityResult.toString());
+        LOG.info(waterQualityResult.toString());
         WaterQualityResultService service = SpringUtil.getBean(WaterQualityResultService.class);
         service.save(waterQualityResult);
     }
@@ -158,7 +163,7 @@ public class MqttClientTestXH implements ApplicationContextAware {
                     MqttDeliveryToken publish = topic.publish(mqttMessage);
                     if(!publish.isComplete()){
                         publish.waitForCompletion();
-                        System.out.println("消息发送成功");
+                        LOG.info("消息发送成功");
                     }
                 } catch (MqttException e) {
                     // TODO Auto-generated catch block
@@ -234,10 +239,10 @@ public class MqttClientTestXH implements ApplicationContextAware {
                         e.printStackTrace();
                     }
                 }else {
-                    System.out.println("mqttConnectOptions is null");
+                    LOG.info("mqttConnectOptions is null");
                 }
             }else {
-                System.out.println("mqttClient is null or connect");
+                LOG.info("mqttClient is null or connect");
             }
         }else {
             init("subClient","benben","123456");

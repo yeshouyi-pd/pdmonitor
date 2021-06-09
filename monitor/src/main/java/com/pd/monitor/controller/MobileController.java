@@ -10,6 +10,8 @@ import com.pd.server.main.dto.*;
 import com.pd.server.main.service.EquipmentFileService;
 import com.pd.server.main.service.WaterEquipmentService;
 import com.pd.server.main.service.WaterQualityResultService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +22,8 @@ import java.util.*;
 @RestController
 @RequestMapping("/mobile")
 public class MobileController  extends BaseWxController {
-
+    private static final Logger LOG = LoggerFactory.getLogger(MobileController.class);
+    public static final String BUSINESS_NAME = "手机端";
 
     /**
      * 水值监测数据

@@ -22,8 +22,6 @@ public enum RedisCode {
 
     STATICPATH("staticpath"),//静态路径地址
 
-    ADDRINFO("addrinfo"),//静态路径地址
-
     AllUSER("alluser"),//所有用户
 
     SBSNCENTERCODE("sbsncentercode"),//设备sn对应的监测点
