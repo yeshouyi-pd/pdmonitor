@@ -55,7 +55,9 @@ public class MobileController  extends BaseWxController {
                List<String > listdept   =  getUpdeptcode(user.getDeptcode());
                 WaterQualityResultExample waterQualityResultExample = new WaterQualityResultExample();
                 WaterQualityResultExample.Criteria  waterQualityResultca = waterQualityResultExample.createCriteria();
-                waterQualityResultca.andSm1In(listdept);
+                if(!CollectionUtils.isEmpty(listdept)){
+                    waterQualityResultca.andSm1In(listdept);
+                }
                 List<KvIntDto>  list   = waterQualityResultService.getAlljcsjByDept(waterQualityResultExample);
                 responseDto.setContent(list);
             }
@@ -78,7 +80,9 @@ public class MobileController  extends BaseWxController {
                 List<String > listdept   =  getUpdeptcode(user.getDeptcode());
                 EquipmentFileExample equipmentFileExample = new EquipmentFileExample();
                 EquipmentFileExample.Criteria  equipmentFileExampleca = equipmentFileExample.createCriteria();
-                equipmentFileExampleca.andDeptcodeIn(listdept);
+                if(!CollectionUtils.isEmpty(listdept)){
+                    equipmentFileExampleca.andDeptcodeIn(listdept);
+                }
                 List<KvIntDto>  list   = equipmentFileService.getAlljcsjByDept(equipmentFileExample);
                 responseDto.setContent(list);
             }
