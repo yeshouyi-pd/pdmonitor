@@ -7,6 +7,7 @@ import com.pd.server.config.RedisCode;
 import com.pd.server.main.domain.EquipmentFile;
 import com.pd.server.main.domain.EquipmentFileExample;
 import com.pd.server.main.domain.WaterEquipment;
+import com.pd.server.main.domain.WaterEquipmentExample;
 import com.pd.server.main.dto.EquipmentFileDto;
 import com.pd.server.main.dto.LoginUserDto;
 import com.pd.server.main.dto.PageDto;
@@ -150,7 +151,10 @@ public class EquipmentFileController extends BaseWxController {
     @PostMapping("/findSbbh")
     public ResponseDto findSbbh(@RequestBody EquipmentFileDto equipmentFileDto){
         ResponseDto responseDto = new ResponseDto();
-        List<String> sbbhList = equipmentFileService.findSbbh(equipmentFileDto);
+        WaterEquipmentExample example = new WaterEquipmentExample();
+        WaterEquipmentExample.Criteria ca = example.createCriteria();
+        ca.andSblbEqualTo("0001");
+        List<String> sbbhList = waterEquipmentService.findSbbh(example);
         responseDto.setContent(sbbhList);
         return responseDto;
     }

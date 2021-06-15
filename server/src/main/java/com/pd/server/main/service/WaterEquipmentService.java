@@ -7,12 +7,9 @@ import com.pd.server.main.domain.WaterEquipmentExample;
 import com.pd.server.main.dto.LoginUserDto;
 import com.pd.server.main.dto.PieChartDto;
 import com.pd.server.main.dto.WaterEquipmentDto;
-import com.pd.server.main.dto.PageDto;
 import com.pd.server.main.mapper.WaterEquipmentMapper;
 import com.pd.server.util.CopyUtil;
 import com.pd.server.util.UuidUtil;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -28,6 +25,10 @@ public class WaterEquipmentService {
 
     @Resource
     private WaterEquipmentMapper waterEquipmentMapper;
+
+    public List<String> findSbbh(WaterEquipmentExample example){
+        return waterEquipmentMapper.selectSbbhByExample(example);
+    }
 
     public WaterEquipment findById(String id){
         return waterEquipmentMapper.selectByPrimaryKey(id);

@@ -1,5 +1,6 @@
 package com.pd.server.main.mapper;
 
+import com.pd.server.main.domain.EquipmentFileExample;
 import com.pd.server.main.domain.WaterEquipment;
 import com.pd.server.main.domain.WaterEquipmentExample;
 import java.util.List;
@@ -31,4 +32,6 @@ public interface WaterEquipmentMapper {
     int updateByPrimaryKey(WaterEquipment record);
 
     List<PieChartDto> getPieChart(WaterEquipmentExample example);
+
+    List<String> selectSbbhByExample(WaterEquipmentExample example);
 }

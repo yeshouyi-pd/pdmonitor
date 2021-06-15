@@ -12,6 +12,7 @@ public class MqttClientLoop {
     @Scheduled(cron = "0 0 0/1 * * ? ")
     public static void loop() {
         try{
+            LOG.info(">>>>>>>>>>>>>>请求数据开始<<<<<<<<<<<<<");
             MqttClientTestXH testXH = new MqttClientTestXH();
             testXH.type="temperature";
             byte[] message = {0x01,0x04,0x00,0x00,0x00,0x01,0x31, (byte) 0xCA};
