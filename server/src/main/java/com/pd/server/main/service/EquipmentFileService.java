@@ -24,7 +24,7 @@ public class EquipmentFileService {
     @Resource
     private EquipmentFileMapper equipmentFileMapper;
 
-    public List<String> findSbbh(EquipmentFileDto equipmentFileDto){
+    public List<String> findSbbh(EquipmentFileExample example){
         return equipmentFileMapper.selectSbbhByExample(null);
     }
 
