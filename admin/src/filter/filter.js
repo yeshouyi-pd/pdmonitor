@@ -208,6 +208,20 @@ let formatFileSize = (value) => {
     return result;
 };
 
+let optionNSArray = (list, key) =>  {
+    if (!list || !key) {
+        return "";
+    } else {
+        let result = "";
+        for (let i = 0; i < list.length; i++) {
+            if (key === list[i]["sbsn"]) {
+                result = list[i]["sbmc"];
+            }
+        }
+        return result;
+    }
+};
+
 export default {
     optionKV,
     formatSecond,
@@ -217,5 +231,6 @@ export default {
     formatDateTime,
     optionMapAndMapKV,
     optionCNArray,
-    optionWDArray
+    optionWDArray,
+    optionNSArray
 }

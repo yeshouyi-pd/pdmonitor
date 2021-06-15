@@ -19,12 +19,12 @@
                   <tbody>
                   <tr>
                     <td style="width: 15%;">
-                      设备编号：
+                      设备名称：
                     </td>
                     <td style="width: 15%;">
                       <select v-model="equipmentFileDto.sbbh" class="form-control" id="form-field-select-1">
                         <option value="" selected>请选择</option>
-                        <option v-for="item in sbbhs" :value="item">{{item}}</option>
+                        <option v-for="item in waterEquipments" :value="item.sbsn">{{item.sbmc}}</option>
                       </select>
                     </td>
                     <td style="width: 15%;">
@@ -60,7 +60,7 @@
           <div style="text-align: center;width: 150px;">
             <img :src="item.tplj" style="height: 200px;cursor: pointer;" v-on:click="checkImg(item,index)">
           </div>
-          <div style="margin: 0 auto;">{{item.sbbh}}</div>
+          <div style="margin: 0 auto;">{{waterEquipments|optionNSArray(item.sbbh)}}</div>
           <div style="margin: 0 auto;">{{item.cjsj}}</div>
           <div style="margin: 0 auto;" v-if="item.hasAudio">
             <button class="btn btn-white btn-default btn-round" style="margin: 0 auto;" v-on:click="downloadAudio(item)">
@@ -85,7 +85,7 @@
               <button type="button" class="btn btn-white btn-default btn-round" v-on:click="showRealPic()">
                 查看原图
               </button>
-              <span style="font-size: 18px;margin: 10px 20px;">设备sn：{{curSbsn}}</span>
+              <span style="font-size: 18px;margin: 10px 20px;">设备名称：{{waterEquipments|optionNSArray(curSbsn)}}</span>
               <span style="font-size: 18px;">采集时间：{{curCjsj}}</span>
             </div>
             <div style="display: flex;">
@@ -147,7 +147,8 @@ export default {
       curIndex:0,
       curTplj:'',
       curSbsn:'',
-      curCjsj:''
+      curCjsj:'',
+      waterEquipments:[]
     }
   },
   mounted() {
@@ -157,8 +158,17 @@ export default {
     _this.findSbbh();
     let h = document.documentElement.clientHeight || document.body.clientHeight;
     _this.maxHeight = h*0.8;
+    _this.findDeviceInfo();
   },
   methods: {
+    findDeviceInfo(){
+      let _this = this;
+      Loading.show();
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/findAll', {'sblb':'0001'}).then((response)=>{
+        Loading.hide();
+        _this.waterEquipments = response.data.content;
+      })
+    },
     showRealPic(){
       $("#img-modal-real").modal("show");
     },

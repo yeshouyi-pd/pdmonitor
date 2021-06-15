@@ -16,6 +16,7 @@ import com.pd.server.util.CopyUtil;
 import com.pd.server.util.ValidatorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,13 +50,17 @@ public class WaterEquipmentController  extends BaseWxController {
         DeptExample.Criteria deptca = deptExample.createCriteria();
         LoginUserDto user = getRequestHeader();
         List<String> list = getUpdeptcode(user.getDeptcode());
-        deptca.andDeptcodeIn(list);
+        if(!CollectionUtils.isEmpty(list)){
+            deptca.andDeptcodeIn(list);
+        }
         List<Dept> waterDataList = deptService.list(deptExample);
         Map<String, String> map = waterDataList.stream().collect(Collectors.toMap(p -> p.getDeptcode(), p -> p.getDeptname()));
         WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
         WaterEquipmentExample.Criteria weCa = waterEquipmentExample.createCriteria();
         weCa.andSblbEqualTo("0001");
-        weCa.andDeptcodeIn(list);
+        if(!CollectionUtils.isEmpty(list)){
+            weCa.andDeptcodeIn(list);
+        }
         List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(waterEquipmentExample);
         Map<String,List<WaterEquipment>> deptcodeMap = waterEquipmentList.stream().collect(Collectors.groupingBy(WaterEquipment::getDeptcode));
         List<MonitorEquipmentDto> lists = new ArrayList<>();
@@ -90,13 +95,17 @@ public class WaterEquipmentController  extends BaseWxController {
         DeptExample.Criteria deptca = deptExample.createCriteria();
         LoginUserDto user = getRequestHeader();
         List<String> list = getUpdeptcode(user.getDeptcode());
-        deptca.andDeptcodeIn(list);
+        if(!CollectionUtils.isEmpty(list)){
+            deptca.andDeptcodeIn(list);
+        }
         List<Dept> waterDataList = deptService.list(deptExample);
         Map<String, String> map = waterDataList.stream().collect(Collectors.toMap(p -> p.getDeptcode(), p -> p.getDeptname()));
         WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
         WaterEquipmentExample.Criteria weCa = waterEquipmentExample.createCriteria();
         weCa.andSblbEqualTo("0002");
-        weCa.andDeptcodeIn(list);
+        if (!CollectionUtils.isEmpty(list)){
+            weCa.andDeptcodeIn(list);
+        }
         List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(waterEquipmentExample);
         Map<String,List<WaterEquipment>> deptcodeMap = waterEquipmentList.stream().collect(Collectors.groupingBy(WaterEquipment::getDeptcode));
         List<MonitorEquipmentDto> lists = new ArrayList<>();
@@ -132,7 +141,12 @@ public class WaterEquipmentController  extends BaseWxController {
         WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
         WaterEquipmentExample.Criteria ca = waterEquipmentExample.createCriteria();
         ca.andGpsIsNotNull();
-        ca.andDeptcodeIn(list);
+        if(!CollectionUtils.isEmpty(list)){
+            ca.andDeptcodeIn(list);
+        }
+        if(!StringUtils.isEmpty(waterEquipmentDto.getSblb())){
+            ca.andSblbEqualTo(waterEquipmentDto.getSblb());
+        }
         List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(waterEquipmentExample);
         List<WaterEquipmentDto> waterEquipmentDtoList = CopyUtil.copyList(waterEquipmentList, WaterEquipmentDto.class);
         responseDto.setContent(waterEquipmentDtoList);
@@ -150,7 +164,9 @@ public class WaterEquipmentController  extends BaseWxController {
         PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
         WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
         WaterEquipmentExample.Criteria ca = waterEquipmentExample.createCriteria();
-        ca.andDeptcodeIn(list);
+        if(!CollectionUtils.isEmpty(list)){
+            ca.andDeptcodeIn(list);
+        }
         if(!StringUtils.isEmpty(pageDto.getSbsn())){
             ca.andSbsnEqualTo(pageDto.getSbsn());
         }
