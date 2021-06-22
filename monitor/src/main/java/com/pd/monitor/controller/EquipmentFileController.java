@@ -15,15 +15,19 @@ import com.pd.server.main.dto.ResponseDto;
 import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
 import com.pd.server.main.service.EquipmentFileService;
 import com.pd.server.main.service.WaterEquipmentService;
+import com.pd.server.util.DateUtil;
 import com.pd.server.util.ValidatorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -148,6 +152,77 @@ public class EquipmentFileController extends BaseWxController {
         return responseDto;
     }
 
+    /**
+     * 通过事件统计报警次数
+     * @param alarmNumbersDto
+     * @return
+     */
+    @PostMapping("/statisticsAlarmNumsByTime")
+    public ResponseDto statisticsAlarmNumsByTime(@RequestBody AlarmNumbersDto alarmNumbersDto) throws ParseException {
+        ResponseDto responseDto = new ResponseDto();
+        LoginUserDto user = getRequestHeader();
+        List<String> list = getUpdeptcode(user.getDeptcode());
+        EquipmentFileExample example = new EquipmentFileExample();
+        EquipmentFileExample.Criteria ca = example.createCriteria();
+        if(!StringUtils.isEmpty(list)&&list.size()>0){
+            ca.andDeptcodeIn(list);
+        }
+        if(!StringUtils.isEmpty(alarmNumbersDto.getSbbh())){
+            ca.andSbbhEqualTo(alarmNumbersDto.getSbbh());
+        }
+        if(!StringUtils.isEmpty(alarmNumbersDto.getDeptcode())){
+            ca.andDeptcodeEqualTo(alarmNumbersDto.getDeptcode());
+        }
+        if(!StringUtils.isEmpty(alarmNumbersDto.getStime())){
+            ca.andCjsjGreaterThanOrEqualTo(alarmNumbersDto.getStime());
+        }
+        if(!StringUtils.isEmpty(alarmNumbersDto.getEtime())){
+            ca.andCjsjLessThanOrEqualTo(alarmNumbersDto.getEtime());
+        }
+        ca.andTpljLike("%png");
+        List<AlarmNumbersDto> lists = equipmentFileService.statisticsAlarmNumsByPage(example);
+        List<AlarmNumbersDto> resultList = new ArrayList<>();
+        if(!CollectionUtils.isEmpty(lists)){
+            AlarmNumbersDto firstEntity = lists.get(0);
+            String curDateStr = firstEntity.getBjsj()+" "+firstEntity.getXs()+":"+firstEntity.getFz();
+            String lastDateStr = laterThreeMinute(curDateStr);
+            Integer bjsl = firstEntity.getAlarmNum();
+            for(int i=1;i<lists.size();i++){
+                AlarmNumbersDto entity = lists.get(i);
+                String nextDateStr = entity.getBjsj()+" "+entity.getXs()+":"+entity.getFz();
+                if(entity.getSbbh().equals(firstEntity.getSbbh())){
+                    if(isBetween(lastDateStr, nextDateStr, curDateStr)){
+                        bjsl = bjsl + entity.getAlarmNum();
+                    }else {
+                        AlarmNumbersDto result = new AlarmNumbersDto();
+                        result.setDeptcode(entity.getDeptcode());
+                        result.setSbbh(entity.getSbbh());
+                        result.setBjsj(curDateStr+" 至 "+lastDateStr);
+                        result.setAlarmNum(bjsl);
+                        resultList.add(result);
+                        firstEntity = entity;
+                        curDateStr = firstEntity.getBjsj()+" "+firstEntity.getXs()+":"+firstEntity.getFz();
+                        lastDateStr = laterThreeMinute(curDateStr);
+                        bjsl = firstEntity.getAlarmNum();
+                    }
+                }else {
+                    AlarmNumbersDto result = new AlarmNumbersDto();
+                    result.setDeptcode(firstEntity.getDeptcode());
+                    result.setSbbh(firstEntity.getSbbh());
+                    result.setBjsj(curDateStr+" 至 "+lastDateStr);
+                    result.setAlarmNum(bjsl);
+                    resultList.add(result);
+                    firstEntity = entity;
+                    curDateStr = firstEntity.getBjsj()+" "+firstEntity.getXs()+":"+firstEntity.getFz();
+                    lastDateStr = laterThreeMinute(curDateStr);
+                    bjsl = firstEntity.getAlarmNum();
+                }
+            }
+        }
+        responseDto.setContent(resultList);
+        return responseDto;
+    }
+
     @PostMapping("/findSbbh")
     public ResponseDto findSbbh(@RequestBody EquipmentFileDto equipmentFileDto){
         ResponseDto responseDto = new ResponseDto();
@@ -212,5 +287,25 @@ public class EquipmentFileController extends BaseWxController {
         BigDecimal b1 = new BigDecimal(Integer.toString(v1));
         BigDecimal b2 = new BigDecimal(Integer.toString(v2));
         return b1.divide(b2, scale, BigDecimal.ROUND_HALF_UP).doubleValue();
+    }
+
+    public static String laterThreeMinute(String curDateStr) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(sdf.parse(curDateStr));
+        calendar.add(Calendar.MINUTE, -2);// 3分钟之后的时间
+        Date beforeD = calendar.getTime();
+        String time = sdf.format(beforeD);
+        return time;
+    }
+
+    public static Boolean isBetween(String curDateStr, String nextDateStr, String lastDateStr){
+        Date curDate = DateUtil.toDate(curDateStr,"yyyy-MM-dd HH:mm");
+        Date nextDate = DateUtil.toDate(nextDateStr,"yyyy-MM-dd HH:mm");
+        Date lastDate = DateUtil.toDate(lastDateStr,"yyyy-MM-dd HH:mm");
+        if(curDate.getTime()<=nextDate.getTime()&&nextDate.getTime()<=lastDate.getTime()){
+            return true;
+        }
+        return false;
     }
 }

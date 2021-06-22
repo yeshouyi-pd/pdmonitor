@@ -22,7 +22,7 @@ import AlarmNumbers from "./views/monitor/alarmNumbers.vue"
 import Ywydxz from "../../wx/src/views/wx/ywyy/ywydxz.vue";
 import EquipmentFileMinute from "./views/monitor/equipmentFileMinute.vue";
 import EquipmentFileHour from "./views/monitor/equipmentFileHour.vue";
-
+import AlarmNumbersByTime from "./views/monitor/alarmNumbersByTime.vue"
 import Mindex  from "./views/mobile/mindex.vue"
 import Shjlist  from "./views/mobile/shjlist.vue"
 import Shjlistinfo  from "./views/mobile/shjlistinfo.vue"
@@ -152,6 +152,10 @@ export default new Router({
             path: "monitor/equipmentFileHour",
             name: "monitor/equipmentFileHour",
             component: EquipmentFileHour
+        },{
+            path: "monitor/alarmNumbersByTime",
+            name: "monitor/alarmNumbersByTime",
+            component: AlarmNumbersByTime
         }]
     }]
 })
