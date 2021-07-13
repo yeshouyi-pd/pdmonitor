@@ -359,7 +359,7 @@
       <include refid="Example_Where_Clause" />
     </if>
     group by sbbh, rq, xs, fz, deptcode
-    order by rq desc,xs desc,fz desc
+    order by rq,xs,fz
   </select>
   <select id="getWarningDate"  resultMap="BaseResultMapKV" parameterType="com.pd.server.main.domain.EquipmentFileExample">
     SELECT  b.`deptname`  , c.`text`  , c.`code` FROM     water_equipment a , dept  b , (

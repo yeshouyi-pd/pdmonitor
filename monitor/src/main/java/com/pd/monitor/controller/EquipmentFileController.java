@@ -191,7 +191,7 @@ public class EquipmentFileController extends BaseWxController {
                 AlarmNumbersDto entity = lists.get(i);
                 String nextDateStr = entity.getBjsj()+" "+entity.getXs()+":"+entity.getFz();
                 if(entity.getSbbh().equals(firstEntity.getSbbh())){
-                    if(isBetween(lastDateStr, nextDateStr, curDateStr)){
+                    if(isBetween(curDateStr, nextDateStr, lastDateStr)){
                         bjsl = bjsl + entity.getAlarmNum();
                     }else {
                         AlarmNumbersDto result = new AlarmNumbersDto();
@@ -216,6 +216,14 @@ public class EquipmentFileController extends BaseWxController {
                     curDateStr = firstEntity.getBjsj()+" "+firstEntity.getXs()+":"+firstEntity.getFz();
                     lastDateStr = laterThreeMinute(curDateStr);
                     bjsl = firstEntity.getAlarmNum();
+                }
+                if(i==lists.size()-1){
+                    AlarmNumbersDto result = new AlarmNumbersDto();
+                    result.setDeptcode(entity.getDeptcode());
+                    result.setSbbh(entity.getSbbh());
+                    result.setBjsj(curDateStr+" 至 "+lastDateStr);
+                    result.setAlarmNum(bjsl);
+                    resultList.add(result);
                 }
             }
         }
@@ -293,7 +301,7 @@ public class EquipmentFileController extends BaseWxController {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(sdf.parse(curDateStr));
-        calendar.add(Calendar.MINUTE, -2);// 3分钟之后的时间
+        calendar.add(Calendar.MINUTE, 2);// 3分钟之后的时间
         Date beforeD = calendar.getTime();
         String time = sdf.format(beforeD);
         return time;
