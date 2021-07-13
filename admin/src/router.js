@@ -19,7 +19,7 @@ import MonitorEquipmentHis from "./views/monitor/monitorEquipmentHis.vue"
 import WaterNoiseImage from "./views/monitor/waterNoiseImage.vue"
 import EquipmentFile from "./views/monitor/equipmentFile.vue"
 import AlarmNumbers from "./views/monitor/alarmNumbers.vue"
-import Ywydxz from "../../wx/src/views/wx/ywyy/ywydxz.vue";
+import AlarmEvent from "./views/monitor/alarmEvent.vue";
 import EquipmentFileMinute from "./views/monitor/equipmentFileMinute.vue";
 import EquipmentFileHour from "./views/monitor/equipmentFileHour.vue";
 import AlarmNumbersByTime from "./views/monitor/alarmNumbersByTime.vue"
@@ -156,6 +156,10 @@ export default new Router({
             path: "monitor/alarmNumbersByTime",
             name: "monitor/alarmNumbersByTime",
             component: AlarmNumbersByTime
+        },{
+            path: "monitor/alarmEvent",
+            name: "monitor/alarmEvent",
+            component: AlarmEvent
         }]
     }]
 })
