@@ -79,6 +79,11 @@ public class EquipmentFileService {
         pageDto.setList(equipmentFileDtoList);
     }
 
+    public List<EquipmentFile> listAll(EquipmentFileExample equipmentFileExample){
+        List<EquipmentFile> equipmentFileList = equipmentFileMapper.selectByExample(equipmentFileExample);
+        return equipmentFileList;
+    }
+
     /**
     * 保存，id有值时更新，无值时新增
     */
