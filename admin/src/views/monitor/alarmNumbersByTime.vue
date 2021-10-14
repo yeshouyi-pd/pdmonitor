@@ -49,6 +49,7 @@
             <th>设备sn</th>
             <th>报警时间</th>
             <th>报警次数</th>
+            <th>事件次数</th>
           </tr>
         </thead>
         <tbody>
@@ -58,6 +59,7 @@
             <td>{{item.sbbh}}</td>
             <td>{{item.bjsj}}</td>
             <td>{{item.alarmNum}}</td>
+            <td>1</td>
           </tr>
         </tbody>
       </table>

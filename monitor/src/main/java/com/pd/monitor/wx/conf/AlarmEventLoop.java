@@ -33,54 +33,56 @@ public class AlarmEventLoop extends BaseWxController {
 
     @Scheduled(cron = "0 0 1 * * ? ")
     public void loop() throws ParseException {
-        String beforeDateStr = DateTools.getFormatDate(DateUtil.getDaysLater(new Date(),-1),"yyyy-MM-dd");
+        String beforeDayStr = DateTools.getFormatDate(DateUtil.getDaysLater(new Date(),-1),"yyyy-MM-dd");
         EquipmentFileExample example = new EquipmentFileExample();
         EquipmentFileExample.Criteria ca = example.createCriteria();
-        ca.andCjsjGreaterThanOrEqualTo(beforeDateStr+" 00:00");
-        ca.andCjsjLessThanOrEqualTo(beforeDateStr+" 23:59");
+        ca.andCjsjGreaterThanOrEqualTo(beforeDayStr+" 00:00");
+        ca.andCjsjLessThanOrEqualTo(beforeDayStr+" 23:59");
         ca.andTpljLike("%png");
         List<AlarmNumbersDto> lists = equipmentFileService.statisticsAlarmNumsByPage(example);
         List<AlarmNumbersDto> resultList = new ArrayList<>();
         if(!CollectionUtils.isEmpty(lists)){
             AlarmNumbersDto firstEntity = lists.get(0);
             String curDateStr = firstEntity.getBjsj()+" "+firstEntity.getXs()+":"+firstEntity.getFz();
-            String lastDateStr = laterThreeMinute(curDateStr);
+            //String lastDateStr = laterThreeMinute(curDateStr);
             Integer bjsl = firstEntity.getAlarmNum();
             for(int i=1;i<lists.size();i++){
                 AlarmNumbersDto entity = lists.get(i);
+                AlarmNumbersDto beforeEntity = lists.get(i-1);
+                String beforeDateStr = beforeEntity.getBjsj()+" "+beforeEntity.getXs()+":"+beforeEntity.getFz();
                 String nextDateStr = entity.getBjsj()+" "+entity.getXs()+":"+entity.getFz();
                 if(entity.getSbbh().equals(firstEntity.getSbbh())){
-                    if(isBetween(curDateStr, nextDateStr, lastDateStr)){
+                    if(isOverThreeMinute(beforeDateStr, nextDateStr)){
                         bjsl = bjsl + entity.getAlarmNum();
                     }else {
                         AlarmNumbersDto result = new AlarmNumbersDto();
                         result.setDeptcode(entity.getDeptcode());
                         result.setSbbh(entity.getSbbh());
-                        result.setBjsj(curDateStr+" 至 "+lastDateStr);
+                        result.setBjsj(curDateStr+" 至 "+beforeDateStr);
                         result.setAlarmNum(bjsl);
                         resultList.add(result);
                         firstEntity = entity;
                         curDateStr = firstEntity.getBjsj()+" "+firstEntity.getXs()+":"+firstEntity.getFz();
-                        lastDateStr = laterThreeMinute(curDateStr);
+                        //lastDateStr = laterThreeMinute(curDateStr);
                         bjsl = firstEntity.getAlarmNum();
                     }
                 }else {
                     AlarmNumbersDto result = new AlarmNumbersDto();
                     result.setDeptcode(firstEntity.getDeptcode());
                     result.setSbbh(firstEntity.getSbbh());
-                    result.setBjsj(curDateStr+" 至 "+lastDateStr);
+                    result.setBjsj(curDateStr+" 至 "+beforeDateStr);
                     result.setAlarmNum(bjsl);
                     resultList.add(result);
                     firstEntity = entity;
                     curDateStr = firstEntity.getBjsj()+" "+firstEntity.getXs()+":"+firstEntity.getFz();
-                    lastDateStr = laterThreeMinute(curDateStr);
+                    //lastDateStr = laterThreeMinute(curDateStr);
                     bjsl = firstEntity.getAlarmNum();
                 }
                 if(i==lists.size()-1){
                     AlarmNumbersDto result = new AlarmNumbersDto();
                     result.setDeptcode(entity.getDeptcode());
                     result.setSbbh(entity.getSbbh());
-                    result.setBjsj(curDateStr+" 至 "+lastDateStr);
+                    result.setBjsj(curDateStr+" 至 "+nextDateStr);
                     result.setAlarmNum(bjsl);
                     resultList.add(result);
                 }
@@ -93,44 +95,18 @@ public class AlarmEventLoop extends BaseWxController {
             entity.setSbbh(alarmNumbersDto.getSbbh());
             entity.setEventTime(alarmNumbersDto.getBjsj());
             entity.setAlarmNum(alarmNumbersDto.getAlarmNum());
-            entity.setBjsj(beforeDateStr);
+            entity.setBjsj(beforeDayStr);
             entity.setXh(i+1);
             equipmentFileAlarmEventService.save(entity);
         }
     }
 
-    /**
-     * 提供（相对）精确的除法运算。当发生除不尽的情况时，由scale参数指 定精度，以后的数字四舍五入。
-     * @param v1            被除数
-     * @param v2            除数
-     * @param scale         表示表示需要精确到小数点以后几位。
-     * @return 两个参数的商
-     */
-    public double div(int v1, int v2, int scale) {
-        if (scale < 0) {
-            throw new IllegalArgumentException(
-                    "The scale must be a positive integer or zero");
-        }
-        BigDecimal b1 = new BigDecimal(Integer.toString(v1));
-        BigDecimal b2 = new BigDecimal(Integer.toString(v2));
-        return b1.divide(b2, scale, BigDecimal.ROUND_HALF_UP).doubleValue();
-    }
-
-    public String laterThreeMinute(String curDateStr) throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(sdf.parse(curDateStr));
-        calendar.add(Calendar.MINUTE, 2);// 3分钟之后的时间
-        Date beforeD = calendar.getTime();
-        String time = sdf.format(beforeD);
-        return time;
-    }
-
-    public Boolean isBetween(String curDateStr, String nextDateStr, String lastDateStr){
-        Date curDate = DateUtil.toDate(curDateStr,"yyyy-MM-dd HH:mm");
-        Date nextDate = DateUtil.toDate(nextDateStr,"yyyy-MM-dd HH:mm");
-        Date lastDate = DateUtil.toDate(lastDateStr,"yyyy-MM-dd HH:mm");
-        if(curDate.getTime()<=nextDate.getTime()&&nextDate.getTime()<=lastDate.getTime()){
+    public Boolean isOverThreeMinute(String curDateStr, String nextDateStr){
+        Date begin = DateUtil.toDate(curDateStr,"yyyy-MM-dd HH:mm");
+        Date end = DateUtil.toDate(nextDateStr,"yyyy-MM-dd HH:mm");
+        long between=(end.getTime()-begin.getTime())/1000;//除以1000是为了转换成秒
+        long minute=between%3600/60;
+        if(minute<=2){
             return true;
         }
         return false;

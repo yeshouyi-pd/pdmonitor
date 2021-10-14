@@ -185,43 +185,45 @@ public class EquipmentFileController extends BaseWxController {
         if(!CollectionUtils.isEmpty(lists)){
             AlarmNumbersDto firstEntity = lists.get(0);
             String curDateStr = firstEntity.getBjsj()+" "+firstEntity.getXs()+":"+firstEntity.getFz();
-            String lastDateStr = laterThreeMinute(curDateStr);
+            //String lastDateStr = laterThreeMinute(curDateStr);
             Integer bjsl = firstEntity.getAlarmNum();
             for(int i=1;i<lists.size();i++){
                 AlarmNumbersDto entity = lists.get(i);
+                AlarmNumbersDto beforeEntity = lists.get(i-1);
+                String beforeDateStr = beforeEntity.getBjsj()+" "+beforeEntity.getXs()+":"+beforeEntity.getFz();
                 String nextDateStr = entity.getBjsj()+" "+entity.getXs()+":"+entity.getFz();
                 if(entity.getSbbh().equals(firstEntity.getSbbh())){
-                    if(isBetween(curDateStr, nextDateStr, lastDateStr)){
+                    if(isOverThreeMinute(beforeDateStr, nextDateStr)){
                         bjsl = bjsl + entity.getAlarmNum();
                     }else {
                         AlarmNumbersDto result = new AlarmNumbersDto();
                         result.setDeptcode(entity.getDeptcode());
                         result.setSbbh(entity.getSbbh());
-                        result.setBjsj(curDateStr+" 至 "+lastDateStr);
+                        result.setBjsj(curDateStr+" 至 "+beforeDateStr);
                         result.setAlarmNum(bjsl);
                         resultList.add(result);
                         firstEntity = entity;
                         curDateStr = firstEntity.getBjsj()+" "+firstEntity.getXs()+":"+firstEntity.getFz();
-                        lastDateStr = laterThreeMinute(curDateStr);
+                        //lastDateStr = laterThreeMinute(curDateStr);
                         bjsl = firstEntity.getAlarmNum();
                     }
                 }else {
                     AlarmNumbersDto result = new AlarmNumbersDto();
                     result.setDeptcode(firstEntity.getDeptcode());
                     result.setSbbh(firstEntity.getSbbh());
-                    result.setBjsj(curDateStr+" 至 "+lastDateStr);
+                    result.setBjsj(curDateStr+" 至 "+beforeDateStr);
                     result.setAlarmNum(bjsl);
                     resultList.add(result);
                     firstEntity = entity;
                     curDateStr = firstEntity.getBjsj()+" "+firstEntity.getXs()+":"+firstEntity.getFz();
-                    lastDateStr = laterThreeMinute(curDateStr);
+                    //lastDateStr = laterThreeMinute(curDateStr);
                     bjsl = firstEntity.getAlarmNum();
                 }
                 if(i==lists.size()-1){
                     AlarmNumbersDto result = new AlarmNumbersDto();
                     result.setDeptcode(entity.getDeptcode());
                     result.setSbbh(entity.getSbbh());
-                    result.setBjsj(curDateStr+" 至 "+lastDateStr);
+                    result.setBjsj(curDateStr+" 至 "+nextDateStr);
                     result.setAlarmNum(bjsl);
                     resultList.add(result);
                 }
@@ -314,6 +316,24 @@ public class EquipmentFileController extends BaseWxController {
         if(curDate.getTime()<=nextDate.getTime()&&nextDate.getTime()<=lastDate.getTime()){
             return true;
         }
+        return false;
+    }
+
+    public Boolean isOverThreeMinute(String curDateStr, String nextDateStr){
+        Date begin = DateUtil.toDate(curDateStr,"yyyy-MM-dd HH:mm");
+        Date end = DateUtil.toDate(nextDateStr,"yyyy-MM-dd HH:mm");
+        long between=(end.getTime()-begin.getTime())/1000;//除以1000是为了转换成秒
+        long minute=between%3600/60;
+        if(minute<=2){
+            return true;
+        }
+        return false;
+    }
+
+    public Boolean isOverThreeMinute(String curDayStr, String nextDayStr, String finalDayStr){
+        Date curDay = DateUtil.toDate(curDayStr, "yyyy-MM-dd HH:mm");
+        Date nextDay = DateUtil.toDate(nextDayStr, "yyyy-MM-dd HH:mm");
+        Date finalDay = DateUtil.toDate(finalDayStr, "yyyy-MM-dd HH:mm");
         return false;
     }
 }

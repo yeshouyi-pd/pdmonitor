@@ -22,7 +22,7 @@
                       报警日期：
                     </td>
                     <td style="width: 20%">
-                      <times v-bind:startTime="startTime" v-bind:endTime="endTime"></times>
+                      <times v-bind:startTime="startTime" v-bind:endTime="endTime" start-id="alarmEventStartId" end-id="alarmEventEndId"></times>
                     </td>
                     <td style="width:10%">
                       设备sn：

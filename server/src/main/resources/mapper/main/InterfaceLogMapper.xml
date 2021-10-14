@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pd.server.main.mapper.InterfaceLogMapper">
+  <resultMap id="BaseResultMap" type="com.pd.server.main.domain.InterfaceLog">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="ip" jdbcType="VARCHAR" property="ip" />
+    <result column="qqsj" jdbcType="TIME" property="qqsj" />
+    <result column="qqry" jdbcType="VARCHAR" property="qqry" />
+    <result column="bz" jdbcType="VARCHAR" property="bz" />
+    <result column="bz1" jdbcType="VARCHAR" property="bz1" />
+    <result column="bz2" jdbcType="VARCHAR" property="bz2" />
+    <result column="bz3" jdbcType="VARCHAR" property="bz3" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.pd.server.main.domain.InterfaceLog">
+    <result column="qqcs" jdbcType="LONGVARCHAR" property="qqcs" />
+    <result column="fhsj" jdbcType="LONGVARCHAR" property="fhsj" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, ip, qqsj, qqry, bz, bz1, bz2, bz3
+  </sql>
+  <sql id="Blob_Column_List">
+    qqcs, fhsj
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.pd.server.main.domain.InterfaceLogExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from interface_log
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.pd.server.main.domain.InterfaceLogExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from interface_log
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from interface_log
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from interface_log
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pd.server.main.domain.InterfaceLogExample">
+    delete from interface_log
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pd.server.main.domain.InterfaceLog">
+    insert into interface_log (id, ip, qqsj, qqry, 
+      bz, bz1, bz2, bz3, 
+      qqcs, fhsj)
+    values (#{id,jdbcType=VARCHAR}, #{ip,jdbcType=VARCHAR}, #{qqsj,jdbcType=TIME}, #{qqry,jdbcType=VARCHAR}, 
+      #{bz,jdbcType=VARCHAR}, #{bz1,jdbcType=VARCHAR}, #{bz2,jdbcType=VARCHAR}, #{bz3,jdbcType=VARCHAR}, 
+      #{qqcs,jdbcType=LONGVARCHAR}, #{fhsj,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pd.server.main.domain.InterfaceLog">
+    insert into interface_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="ip != null">
+        ip,
+      </if>
+      <if test="qqsj != null">
+        qqsj,
+      </if>
+      <if test="qqry != null">
+        qqry,
+      </if>
+      <if test="bz != null">
+        bz,
+      </if>
+      <if test="bz1 != null">
+        bz1,
+      </if>
+      <if test="bz2 != null">
+        bz2,
+      </if>
+      <if test="bz3 != null">
+        bz3,
+      </if>
+      <if test="qqcs != null">
+        qqcs,
+      </if>
+      <if test="fhsj != null">
+        fhsj,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="ip != null">
+        #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="qqsj != null">
+        #{qqsj,jdbcType=TIME},
+      </if>
+      <if test="qqry != null">
+        #{qqry,jdbcType=VARCHAR},
+      </if>
+      <if test="bz != null">
+        #{bz,jdbcType=VARCHAR},
+      </if>
+      <if test="bz1 != null">
+        #{bz1,jdbcType=VARCHAR},
+      </if>
+      <if test="bz2 != null">
+        #{bz2,jdbcType=VARCHAR},
+      </if>
+      <if test="bz3 != null">
+        #{bz3,jdbcType=VARCHAR},
+      </if>
+      <if test="qqcs != null">
+        #{qqcs,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="fhsj != null">
+        #{fhsj,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pd.server.main.domain.InterfaceLogExample" resultType="java.lang.Long">
+    select count(*) from interface_log
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update interface_log
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ip != null">
+        ip = #{record.ip,jdbcType=VARCHAR},
+      </if>
+      <if test="record.qqsj != null">
+        qqsj = #{record.qqsj,jdbcType=TIME},
+      </if>
+      <if test="record.qqry != null">
+        qqry = #{record.qqry,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bz != null">
+        bz = #{record.bz,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bz1 != null">
+        bz1 = #{record.bz1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bz2 != null">
+        bz2 = #{record.bz2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bz3 != null">
+        bz3 = #{record.bz3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.qqcs != null">
+        qqcs = #{record.qqcs,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.fhsj != null">
+        fhsj = #{record.fhsj,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update interface_log
+    set id = #{record.id,jdbcType=VARCHAR},
+      ip = #{record.ip,jdbcType=VARCHAR},
+      qqsj = #{record.qqsj,jdbcType=TIME},
+      qqry = #{record.qqry,jdbcType=VARCHAR},
+      bz = #{record.bz,jdbcType=VARCHAR},
+      bz1 = #{record.bz1,jdbcType=VARCHAR},
+      bz2 = #{record.bz2,jdbcType=VARCHAR},
+      bz3 = #{record.bz3,jdbcType=VARCHAR},
+      qqcs = #{record.qqcs,jdbcType=LONGVARCHAR},
+      fhsj = #{record.fhsj,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update interface_log
+    set id = #{record.id,jdbcType=VARCHAR},
+      ip = #{record.ip,jdbcType=VARCHAR},
+      qqsj = #{record.qqsj,jdbcType=TIME},
+      qqry = #{record.qqry,jdbcType=VARCHAR},
+      bz = #{record.bz,jdbcType=VARCHAR},
+      bz1 = #{record.bz1,jdbcType=VARCHAR},
+      bz2 = #{record.bz2,jdbcType=VARCHAR},
+      bz3 = #{record.bz3,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pd.server.main.domain.InterfaceLog">
+    update interface_log
+    <set>
+      <if test="ip != null">
+        ip = #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="qqsj != null">
+        qqsj = #{qqsj,jdbcType=TIME},
+      </if>
+      <if test="qqry != null">
+        qqry = #{qqry,jdbcType=VARCHAR},
+      </if>
+      <if test="bz != null">
+        bz = #{bz,jdbcType=VARCHAR},
+      </if>
+      <if test="bz1 != null">
+        bz1 = #{bz1,jdbcType=VARCHAR},
+      </if>
+      <if test="bz2 != null">
+        bz2 = #{bz2,jdbcType=VARCHAR},
+      </if>
+      <if test="bz3 != null">
+        bz3 = #{bz3,jdbcType=VARCHAR},
+      </if>
+      <if test="qqcs != null">
+        qqcs = #{qqcs,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="fhsj != null">
+        fhsj = #{fhsj,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.pd.server.main.domain.InterfaceLog">
+    update interface_log
+    set ip = #{ip,jdbcType=VARCHAR},
+      qqsj = #{qqsj,jdbcType=TIME},
+      qqry = #{qqry,jdbcType=VARCHAR},
+      bz = #{bz,jdbcType=VARCHAR},
+      bz1 = #{bz1,jdbcType=VARCHAR},
+      bz2 = #{bz2,jdbcType=VARCHAR},
+      bz3 = #{bz3,jdbcType=VARCHAR},
+      qqcs = #{qqcs,jdbcType=LONGVARCHAR},
+      fhsj = #{fhsj,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pd.server.main.domain.InterfaceLog">
+    update interface_log
+    set ip = #{ip,jdbcType=VARCHAR},
+      qqsj = #{qqsj,jdbcType=TIME},
+      qqry = #{qqry,jdbcType=VARCHAR},
+      bz = #{bz,jdbcType=VARCHAR},
+      bz1 = #{bz1,jdbcType=VARCHAR},
+      bz2 = #{bz2,jdbcType=VARCHAR},
+      bz3 = #{bz3,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
