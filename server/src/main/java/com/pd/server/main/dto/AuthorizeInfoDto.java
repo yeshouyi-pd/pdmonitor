@@ -1,7 +1,7 @@
 package com.pd.server.main.dto;
 
 
-public class AuthorizeInfoDto {
+public class AuthorizeInfoDto extends PageDto{
 
     /**
     * 主键

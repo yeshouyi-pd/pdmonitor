@@ -26,7 +26,7 @@ public class AuthorizeInfoController extends BaseWxController {
     * 列表查询
     */
     @PostMapping("/list")
-    public ResponseDto list(@RequestBody PageDto pageDto) {
+    public ResponseDto list(@RequestBody AuthorizeInfoDto pageDto) {
         ResponseDto responseDto = new ResponseDto();
         authorizeInfoService.list(pageDto);
         responseDto.setContent(pageDto);

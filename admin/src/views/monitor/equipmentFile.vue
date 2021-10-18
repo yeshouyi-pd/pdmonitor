@@ -250,7 +250,7 @@ export default {
         Toast.warning("该图片没有对应的音频文件！");
         return;
       }
-      let paramsStr = "fileUrl="+obj.tplj.substring(0,obj.tplj.length-3)+"wav"+"&fileName="+obj.tplj.substring(obj.tplj.lastIndexOf("/")+1,obj.tplj.length-3)+"wav";
+      let paramsStr = "fileUrl="+obj.tplj.substring(0,obj.tplj.lastIndexOf("/")+1)+"&fileName="+obj.tplj.substring(obj.tplj.lastIndexOf("/")+1,obj.tplj.length-3)+"wav";
       let url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downAudioFile?'+paramsStr;
       console.log(url);
       window.location.href = url;

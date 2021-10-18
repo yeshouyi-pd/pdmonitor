@@ -1,13 +1,21 @@
 package com.pd.monitor.controller;
 
 import com.pd.monitor.wx.conf.BaseWxController;
+import com.pd.server.config.CodeType;
+import com.pd.server.config.RedisCode;
 import com.pd.server.main.domain.EquipmentFileExample;
+import com.pd.server.main.domain.WaterEquipment;
+import com.pd.server.main.domain.WaterEquipmentExample;
+import com.pd.server.main.dto.EquipmentFileAlarmEventDto;
 import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
+import com.pd.server.main.service.EquipmentFileAlarmEventService;
 import com.pd.server.main.service.EquipmentFileService;
+import com.pd.server.main.service.WaterEquipmentService;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +39,93 @@ public class ExportFileController extends BaseWxController{
 
     @Resource
     private EquipmentFileService equipmentFileService;
+    @Resource
+    private EquipmentFileAlarmEventService equipmentFileAlarmEventService;
+    @Resource
+    private RedisTemplate redisTemplate;
+    @Resource
+    private WaterEquipmentService waterEquipmentService;
+
+    /**
+     * 江豚报警按事件统计导出
+     */
+    @GetMapping("/exportByAlarmEvent")
+    public void exportByAlarmEvent(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String deptcode = request.getParameter("deptcode");
+        List<String> list = getUpdeptcode(deptcode);//获取部门属性
+        EquipmentFileAlarmEventDto pageDto = new EquipmentFileAlarmEventDto();
+        if(!StringUtils.isEmpty(request.getParameter("stime"))){
+            pageDto.setStime(request.getParameter("stime"));
+        }
+        if(!StringUtils.isEmpty(request.getParameter("etime"))){
+            pageDto.setEtime(request.getParameter("etime"));
+        }
+        if(!StringUtils.isEmpty(request.getParameter("sbbh"))){
+            pageDto.setSbbh(request.getParameter("sbbh"));
+        }
+        equipmentFileAlarmEventService.listStatistics(pageDto, list);
+        List<EquipmentFileAlarmEventDto> dataList = pageDto.getList();
+        //导出
+        HSSFWorkbook workbook = new HSSFWorkbook();
+        //设置公共单元格样式
+        HSSFCellStyle cellStyleCommon = workbook.createCellStyle();
+        cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_LEFT);
+        cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+        // 创建一个工作表
+        String fileName = "江豚报警统计(" + new Date().getTime() + ").xls";
+        HSSFSheet sheet = workbook.createSheet("按事件统计");
+        // 自适应列宽度
+        sheet.autoSizeColumn(1, true);
+        sheet.setDefaultColumnWidth(18);
+        sheet.setDefaultRowHeight((short)(40*10));
+        // 添加表头行
+        HSSFRow titleRow = sheet.createRow(0);//第1行
+        List<String> titleStrList = Arrays.asList("所属监测点","设备名称","设备sn","事件日期","事件次数");
+        for(int i=0;i<titleStrList.size();i++){
+            HSSFCell cell = titleRow.createCell(i);
+            cell.setCellValue(titleStrList.get(i));
+            cell.setCellStyle(cellStyleCommon);
+        }
+        Map<String,String> mapDept = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.DEPTCODENAME);
+        WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
+        WaterEquipmentExample.Criteria ca = waterEquipmentExample.createCriteria();
+        ca.andSblbEqualTo("0001");
+        List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(waterEquipmentExample);
+        Map<String, String> mapSbxh = waterEquipmentList.stream().collect(Collectors.toMap(p -> p.getSbsn(), p -> p.getSbmc()));
+        for(int i=0;i<dataList.size();i++){
+            EquipmentFileAlarmEventDto entity = dataList.get(i);
+            HSSFRow comRow = sheet.createRow(i+1);
+            HSSFCell comCell0 = comRow.createCell(0);
+            comCell0.setCellValue(mapDept.get(entity.getDeptcode()));
+            comCell0.setCellStyle(cellStyleCommon);
+            HSSFCell comCell1 = comRow.createCell(1);
+            comCell1.setCellValue(mapSbxh.get(entity.getSbbh()));
+            comCell1.setCellStyle(cellStyleCommon);
+            HSSFCell comCell2 = comRow.createCell(2);
+            comCell2.setCellValue(entity.getSbbh());
+            comCell2.setCellStyle(cellStyleCommon);
+            HSSFCell comCell3 = comRow.createCell(3);
+            comCell3.setCellValue(entity.getBjsj());
+            comCell3.setCellStyle(cellStyleCommon);
+            HSSFCell comCell4 = comRow.createCell(4);
+            comCell4.setCellValue(entity.getCounts());
+            comCell4.setCellStyle(cellStyleCommon);
+        }
+        response.setHeader("content-Type", "application/vnd.ms-excel");
+        // 下载文件的默认名称
+        String agent = request.getHeader("User-Agent");
+        if (agent.contains("MSIE") || agent.contains("Trident") || agent.contains("Edge")) {
+            response.setHeader("Content-Disposition",
+                    "attachment; filename=" + URLEncoder.encode(fileName, "UTF-8"));
+        } else {
+            response.setHeader("Content-Disposition",
+                    "attachment; filename=\"" + new String((fileName).getBytes("UTF-8"), "ISO-8859-1") + "\"");
+        }
+        response.setCharacterEncoding("utf-8");
+        ServletOutputStream out = response.getOutputStream();
+        workbook.write(out);
+        out.close();
+    }
 
     /**
      * 江豚报警按分钟统计导出

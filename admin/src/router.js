@@ -22,7 +22,9 @@ import AlarmNumbers from "./views/monitor/alarmNumbers.vue"
 import AlarmEvent from "./views/monitor/alarmEvent.vue";
 import EquipmentFileMinute from "./views/monitor/equipmentFileMinute.vue";
 import EquipmentFileHour from "./views/monitor/equipmentFileHour.vue";
-import AlarmNumbersByTime from "./views/monitor/alarmNumbersByTime.vue"
+import AlarmNumbersByTime from "./views/monitor/alarmNumbersByTime.vue";
+import AuthorizeInfo from "./views/monitor/authorizeInfo.vue";
+import InterfaceLog from "./views/monitor/interfaceLog.vue";
 import Mindex  from "./views/mobile/mindex.vue"
 import Shjlist  from "./views/mobile/shjlist.vue"
 import Shjlistinfo  from "./views/mobile/shjlistinfo.vue"
@@ -160,6 +162,14 @@ export default new Router({
             path: "monitor/alarmEvent",
             name: "monitor/alarmEvent",
             component: AlarmEvent
+        },{
+            path: "monitor/authorizeInfo",
+            name: "monitor/authorizeInfo",
+            component: AuthorizeInfo
+        },{
+            path: "monitor/interfaceLog",
+            name: "monitor/interfaceLog",
+            component: InterfaceLog
         }]
     }]
 })

@@ -24,10 +24,24 @@ public class InterfaceLogService {
     /**
     * 列表查询分页
     */
-    public void list(PageDto pageDto) {
-    PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
+    public void list(InterfaceLogDto pageDto) {
+        PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
         InterfaceLogExample interfaceLogExample = new InterfaceLogExample();
-        List<InterfaceLog> interfaceLogList = interfaceLogMapper.selectByExample(interfaceLogExample);
+        InterfaceLogExample.Criteria ca = interfaceLogExample.createCriteria();
+        if(!StringUtils.isEmpty(pageDto.getIp())){
+            ca.andIpEqualTo(pageDto.getIp());
+        }
+        if(!StringUtils.isEmpty(pageDto.getQqry())){
+            ca.andQqryEqualTo(pageDto.getQqry());
+        }
+        if(!StringUtils.isEmpty(pageDto.getStime())){
+            ca.andQqsjGreaterThanOrEqualTo(pageDto.getStime());
+        }
+        if(!StringUtils.isEmpty(pageDto.getEtime())){
+            ca.andQqsjLessThanOrEqualTo(pageDto.getEtime());
+        }
+        interfaceLogExample.setOrderByClause(" qqsj desc ");
+        List<InterfaceLog> interfaceLogList = interfaceLogMapper.selectByExampleWithBLOBs(interfaceLogExample);
         PageInfo<InterfaceLog> pageInfo = new PageInfo<>(interfaceLogList);
         pageDto.setTotal(pageInfo.getTotal());
         List<InterfaceLogDto> interfaceLogDtoList = CopyUtil.copyList(interfaceLogList, InterfaceLogDto.class);

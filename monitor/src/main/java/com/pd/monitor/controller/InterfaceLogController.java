@@ -26,7 +26,7 @@ public class InterfaceLogController extends BaseWxController {
     * 列表查询
     */
     @PostMapping("/list")
-    public ResponseDto list(@RequestBody PageDto pageDto) {
+    public ResponseDto list(@RequestBody InterfaceLogDto pageDto) {
         ResponseDto responseDto = new ResponseDto();
         interfaceLogService.list(pageDto);
         responseDto.setContent(pageDto);

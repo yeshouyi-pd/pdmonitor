@@ -24,9 +24,19 @@ public class AuthorizeInfoService {
     /**
     * 列表查询分页
     */
-    public void list(PageDto pageDto) {
-    PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
+    public void list(AuthorizeInfoDto pageDto) {
+        PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
         AuthorizeInfoExample authorizeInfoExample = new AuthorizeInfoExample();
+        AuthorizeInfoExample.Criteria ca = authorizeInfoExample.createCriteria();
+        if(!StringUtils.isEmpty(pageDto.getIp())){
+            ca.andIpLike("%"+pageDto.getIp()+"%");
+        }
+        if(!StringUtils.isEmpty(pageDto.getDwmc())){
+            ca.andDwmcEqualTo(pageDto.getDwmc());
+        }
+        if(!StringUtils.isEmpty(pageDto.getSbsn())){
+            ca.andSbsnEqualTo(pageDto.getSbsn());
+        }
         List<AuthorizeInfo> authorizeInfoList = authorizeInfoMapper.selectByExample(authorizeInfoExample);
         PageInfo<AuthorizeInfo> pageInfo = new PageInfo<>(authorizeInfoList);
         pageDto.setTotal(pageInfo.getTotal());

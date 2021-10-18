@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.pd.server.main.domain.InterfaceLog">
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="ip" jdbcType="VARCHAR" property="ip" />
-    <result column="qqsj" jdbcType="TIME" property="qqsj" />
+    <result column="qqsj" jdbcType="TIMESTAMP" property="qqsj" />
     <result column="qqry" jdbcType="VARCHAR" property="qqry" />
     <result column="bz" jdbcType="VARCHAR" property="bz" />
     <result column="bz1" jdbcType="VARCHAR" property="bz1" />
@@ -128,12 +128,14 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.pd.server.main.domain.InterfaceLog">
-    insert into interface_log (id, ip, qqsj, qqry, 
-      bz, bz1, bz2, bz3, 
-      qqcs, fhsj)
-    values (#{id,jdbcType=VARCHAR}, #{ip,jdbcType=VARCHAR}, #{qqsj,jdbcType=TIME}, #{qqry,jdbcType=VARCHAR}, 
-      #{bz,jdbcType=VARCHAR}, #{bz1,jdbcType=VARCHAR}, #{bz2,jdbcType=VARCHAR}, #{bz3,jdbcType=VARCHAR}, 
-      #{qqcs,jdbcType=LONGVARCHAR}, #{fhsj,jdbcType=LONGVARCHAR})
+    insert into interface_log (id, ip, qqsj, 
+      qqry, bz, bz1, bz2, 
+      bz3, qqcs, fhsj
+      )
+    values (#{id,jdbcType=VARCHAR}, #{ip,jdbcType=VARCHAR}, #{qqsj,jdbcType=TIMESTAMP}, 
+      #{qqry,jdbcType=VARCHAR}, #{bz,jdbcType=VARCHAR}, #{bz1,jdbcType=VARCHAR}, #{bz2,jdbcType=VARCHAR}, 
+      #{bz3,jdbcType=VARCHAR}, #{qqcs,jdbcType=LONGVARCHAR}, #{fhsj,jdbcType=LONGVARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.pd.server.main.domain.InterfaceLog">
     insert into interface_log
@@ -177,7 +179,7 @@
         #{ip,jdbcType=VARCHAR},
       </if>
       <if test="qqsj != null">
-        #{qqsj,jdbcType=TIME},
+        #{qqsj,jdbcType=TIMESTAMP},
       </if>
       <if test="qqry != null">
         #{qqry,jdbcType=VARCHAR},
@@ -218,7 +220,7 @@
         ip = #{record.ip,jdbcType=VARCHAR},
       </if>
       <if test="record.qqsj != null">
-        qqsj = #{record.qqsj,jdbcType=TIME},
+        qqsj = #{record.qqsj,jdbcType=TIMESTAMP},
       </if>
       <if test="record.qqry != null">
         qqry = #{record.qqry,jdbcType=VARCHAR},
@@ -250,7 +252,7 @@
     update interface_log
     set id = #{record.id,jdbcType=VARCHAR},
       ip = #{record.ip,jdbcType=VARCHAR},
-      qqsj = #{record.qqsj,jdbcType=TIME},
+      qqsj = #{record.qqsj,jdbcType=TIMESTAMP},
       qqry = #{record.qqry,jdbcType=VARCHAR},
       bz = #{record.bz,jdbcType=VARCHAR},
       bz1 = #{record.bz1,jdbcType=VARCHAR},
@@ -266,7 +268,7 @@
     update interface_log
     set id = #{record.id,jdbcType=VARCHAR},
       ip = #{record.ip,jdbcType=VARCHAR},
-      qqsj = #{record.qqsj,jdbcType=TIME},
+      qqsj = #{record.qqsj,jdbcType=TIMESTAMP},
       qqry = #{record.qqry,jdbcType=VARCHAR},
       bz = #{record.bz,jdbcType=VARCHAR},
       bz1 = #{record.bz1,jdbcType=VARCHAR},
@@ -283,7 +285,7 @@
         ip = #{ip,jdbcType=VARCHAR},
       </if>
       <if test="qqsj != null">
-        qqsj = #{qqsj,jdbcType=TIME},
+        qqsj = #{qqsj,jdbcType=TIMESTAMP},
       </if>
       <if test="qqry != null">
         qqry = #{qqry,jdbcType=VARCHAR},
@@ -312,7 +314,7 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.pd.server.main.domain.InterfaceLog">
     update interface_log
     set ip = #{ip,jdbcType=VARCHAR},
-      qqsj = #{qqsj,jdbcType=TIME},
+      qqsj = #{qqsj,jdbcType=TIMESTAMP},
       qqry = #{qqry,jdbcType=VARCHAR},
       bz = #{bz,jdbcType=VARCHAR},
       bz1 = #{bz1,jdbcType=VARCHAR},
@@ -325,7 +327,7 @@
   <update id="updateByPrimaryKey" parameterType="com.pd.server.main.domain.InterfaceLog">
     update interface_log
     set ip = #{ip,jdbcType=VARCHAR},
-      qqsj = #{qqsj,jdbcType=TIME},
+      qqsj = #{qqsj,jdbcType=TIMESTAMP},
       qqry = #{qqry,jdbcType=VARCHAR},
       bz = #{bz,jdbcType=VARCHAR},
       bz1 = #{bz1,jdbcType=VARCHAR},

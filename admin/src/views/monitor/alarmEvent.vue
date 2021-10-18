@@ -35,10 +35,14 @@
                         <i class="ace-icon fa fa-book"></i>
                         查询
                       </button>
-                      <a href="javascript:location.replace(location.href);"  class="btn btn-sm btn-success btn-round">
+                      <a href="javascript:location.replace(location.href);"  class="btn btn-sm btn-success btn-round" style="margin-right: 10px;">
                         <i class="ace-icon fa fa-refresh"></i>
                         重置
                       </a>
+                      <button type="button" v-on:click="exportExcel()" class="btn btn-sm btn-info btn-round">
+                        <i class="ace-icon fa fa-download"></i>
+                        导出
+                      </button>
                     </td>
                   </tr>
                   </tbody>
@@ -150,6 +154,22 @@ export default {
     _this.heightMax = h*0.8-150;
   },
   methods: {
+    exportExcel(){
+      let _this = this;
+      let paramsStr = "deptcode="+Tool.getLoginUser().deptcode;
+      if(Tool.isNotEmpty(_this.alarmEventDto.stime)){
+        paramsStr = paramsStr + "&stime="+_this.alarmEventDto.stime;
+      }
+      if(Tool.isNotEmpty(_this.alarmEventDto.etime)){
+        paramsStr = paramsStr + "&etime="+_this.alarmEventDto.etime;
+      }
+      if(Tool.isNotEmpty(_this.alarmEventDto.sbbh)){
+        paramsStr = paramsStr + "&sbbh="+_this.alarmEventDto.sbbh;
+      }
+      let url = process.env.VUE_APP_SERVER + '/monitor/export/exportByAlarmEvent?'+paramsStr;
+      console.log(url);
+      window.location.href = url;
+    },
     /**
      *开始时间
      */
