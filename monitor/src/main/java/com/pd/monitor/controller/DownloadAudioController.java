@@ -22,12 +22,16 @@ public class DownloadAudioController {
 
     @GetMapping("/downAudioFile")
     public void downAudioFile(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String remoteFileUrl = request.getParameter("fileUrl");
+        String fileUrl = request.getParameter("fileUrl");
         String fileName = request.getParameter("fileName");
+        System.out.println(fileUrl);
+        System.out.println(fileName);
+        String remoteFileUrl = java.net.URLEncoder.encode(fileName, "UTF-8").replace("+","%20");
         if (null == remoteFileUrl || remoteFileUrl.length() == 0) {
             throw new RuntimeException("remoteFileUrl is invalid!");
         }
-        URL url = new URL(remoteFileUrl);
+        System.out.println(fileUrl+remoteFileUrl);
+        URL url = new URL(fileUrl+remoteFileUrl);
         BufferedInputStream in = null;
         // URLConnection conn = url.openConnection();
         // in = new BufferedInputStream(conn.getInputStream());
@@ -35,6 +39,7 @@ public class DownloadAudioController {
         in = new BufferedInputStream(url.openStream());
         response.reset();
         response.setContentType("application/octet-stream");
+        fileName = new String(fileName.getBytes(), "ISO-8859-1");
         response.setHeader("Content-Disposition", "attachment; filename="+fileName);
         // 将网络输入流转换为输出流
         int i;

@@ -2,7 +2,6 @@ package com.pd.server.main.domain;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 public class InterfaceLogExample {
@@ -104,32 +103,6 @@ public class InterfaceLogExample {
                 throw new RuntimeException("Between values for " + property + " cannot be null");
             }
             criteria.add(new Criterion(condition, value1, value2));
-        }
-
-        protected void addCriterionForJDBCTime(String condition, Date value, String property) {
-            if (value == null) {
-                throw new RuntimeException("Value for " + property + " cannot be null");
-            }
-            addCriterion(condition, new java.sql.Time(value.getTime()), property);
-        }
-
-        protected void addCriterionForJDBCTime(String condition, List<Date> values, String property) {
-            if (values == null || values.size() == 0) {
-                throw new RuntimeException("Value list for " + property + " cannot be null or empty");
-            }
-            List<java.sql.Time> timeList = new ArrayList<java.sql.Time>();
-            Iterator<Date> iter = values.iterator();
-            while (iter.hasNext()) {
-                timeList.add(new java.sql.Time(iter.next().getTime()));
-            }
-            addCriterion(condition, timeList, property);
-        }
-
-        protected void addCriterionForJDBCTime(String condition, Date value1, Date value2, String property) {
-            if (value1 == null || value2 == null) {
-                throw new RuntimeException("Between values for " + property + " cannot be null");
-            }
-            addCriterion(condition, new java.sql.Time(value1.getTime()), new java.sql.Time(value2.getTime()), property);
         }
 
         public Criteria andIdIsNull() {
@@ -283,52 +256,67 @@ public class InterfaceLogExample {
         }
 
         public Criteria andQqsjEqualTo(Date value) {
-            addCriterionForJDBCTime("qqsj =", value, "qqsj");
+            addCriterion("qqsj =", value, "qqsj");
+            return (Criteria) this;
+        }
+
+        public Criteria andQqsjEqualTo(String value) {
+            addCriterion("DATE_FORMAT(qqsj,'%Y-%m-%d %H') =", value, "qqsj");
             return (Criteria) this;
         }
 
         public Criteria andQqsjNotEqualTo(Date value) {
-            addCriterionForJDBCTime("qqsj <>", value, "qqsj");
+            addCriterion("qqsj <>", value, "qqsj");
             return (Criteria) this;
         }
 
         public Criteria andQqsjGreaterThan(Date value) {
-            addCriterionForJDBCTime("qqsj >", value, "qqsj");
+            addCriterion("qqsj >", value, "qqsj");
             return (Criteria) this;
         }
 
         public Criteria andQqsjGreaterThanOrEqualTo(Date value) {
-            addCriterionForJDBCTime("qqsj >=", value, "qqsj");
+            addCriterion("qqsj >=", value, "qqsj");
+            return (Criteria) this;
+        }
+
+        public Criteria andQqsjGreaterThanOrEqualTo(String value) {
+            addCriterion("DATE_FORMAT(qqsj,'%Y-%m-%d') >=", value, "qqsj");
             return (Criteria) this;
         }
 
         public Criteria andQqsjLessThan(Date value) {
-            addCriterionForJDBCTime("qqsj <", value, "qqsj");
+            addCriterion("qqsj <", value, "qqsj");
             return (Criteria) this;
         }
 
         public Criteria andQqsjLessThanOrEqualTo(Date value) {
-            addCriterionForJDBCTime("qqsj <=", value, "qqsj");
+            addCriterion("qqsj <=", value, "qqsj");
+            return (Criteria) this;
+        }
+
+        public Criteria andQqsjLessThanOrEqualTo(String value) {
+            addCriterion("DATE_FORMAT(qqsj,'%Y-%m-%d') <=", value, "qqsj");
             return (Criteria) this;
         }
 
         public Criteria andQqsjIn(List<Date> values) {
-            addCriterionForJDBCTime("qqsj in", values, "qqsj");
+            addCriterion("qqsj in", values, "qqsj");
             return (Criteria) this;
         }
 
         public Criteria andQqsjNotIn(List<Date> values) {
-            addCriterionForJDBCTime("qqsj not in", values, "qqsj");
+            addCriterion("qqsj not in", values, "qqsj");
             return (Criteria) this;
         }
 
         public Criteria andQqsjBetween(Date value1, Date value2) {
-            addCriterionForJDBCTime("qqsj between", value1, value2, "qqsj");
+            addCriterion("qqsj between", value1, value2, "qqsj");
             return (Criteria) this;
         }
 
         public Criteria andQqsjNotBetween(Date value1, Date value2) {
-            addCriterionForJDBCTime("qqsj not between", value1, value2, "qqsj");
+            addCriterion("qqsj not between", value1, value2, "qqsj");
             return (Criteria) this;
         }
 

@@ -8,6 +8,7 @@ import com.pd.server.main.dto.ResponseDto;
 import com.pd.server.main.service.AuthorizeInfoService;
 import com.pd.server.main.service.EquipmentFileService;
 import com.pd.server.main.service.InterfaceLogService;
+import com.pd.server.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
@@ -119,6 +120,7 @@ public class DwjkController extends BaseWxController {
             InterfaceLogExample.Criteria logCa = interfaceLogExample.createCriteria();
             logCa.andQqryEqualTo(qqcs.get("dwmc").toString());
             logCa.andIpEqualTo(qqcs.get("ip").toString());
+            logCa.andQqsjEqualTo(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd HH"));
             List<InterfaceLog> list = interfaceLogService.listAll(interfaceLogExample);
             if(list.size()>=5){
                 responseDto.setCode("4000");

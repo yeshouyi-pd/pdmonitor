@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Date;
 
-public class InterfaceLogDto {
+public class InterfaceLogDto extends PageDto{
 
     /**
     * 主键
