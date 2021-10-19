@@ -186,7 +186,11 @@ public class ExportFileController extends BaseWxController{
         headCell.setCellValue("报警时间");
         headCell.setCellStyle(cellStyleCommon);
         HSSFCell headCell1 = titileRow.createCell(1);//第1行第2列
-        headCell1.setCellValue("报警次数");
+        if(type.equals("minute")){
+            headCell1.setCellValue("报警次数");
+        }else if(type.equals("hour")){
+            headCell1.setCellValue("占总侦测事件百分比");
+        }
         headCell1.setCellStyle(cellStyleCommon);
         for(int i=0;i<lists.size();i++){
             AlarmNumbersDto entity = lists.get(i);
