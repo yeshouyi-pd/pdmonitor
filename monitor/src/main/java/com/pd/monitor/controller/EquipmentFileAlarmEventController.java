@@ -6,6 +6,7 @@ import com.pd.server.main.dto.EquipmentFileAlarmEventDto;
 import com.pd.server.main.dto.LoginUserDto;
 import com.pd.server.main.dto.PageDto;
 import com.pd.server.main.dto.ResponseDto;
+import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
 import com.pd.server.main.service.EquipmentFileAlarmEventService;
 import com.pd.server.util.ValidatorUtil;
 import org.slf4j.Logger;
@@ -13,7 +14,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/admin/equipmentFileAlarmEvent")
@@ -24,6 +26,24 @@ public class EquipmentFileAlarmEventController extends BaseWxController {
 
     @Resource
     private EquipmentFileAlarmEventService equipmentFileAlarmEventService;
+
+    /**
+     * 图表查询
+     */
+    @PostMapping("/echartsAlarmData")
+    public ResponseDto echartsAlarmData(@RequestBody EquipmentFileAlarmEventDto entityDto){
+        ResponseDto responseDto = new ResponseDto();
+        LoginUserDto userDto = getRequestHeader();
+        List<String> list = getUpdeptcode(userDto.getDeptcode());
+        List<EquipmentFileAlarmEventDto> listall = equipmentFileAlarmEventService.listStatisticsAll(entityDto, list);
+        List<String> xAixsData = listall.stream().filter(Objects::nonNull).map(u->u.getBjsj()).collect(Collectors.toList());
+        List<Integer> yAixsData = listall.stream().filter(Objects::nonNull).map(u->u.getCounts()).collect(Collectors.toList());
+        Map<String,Object> resultMap = new HashMap<>();
+        resultMap.put("xAixsData",xAixsData);
+        resultMap.put("yAixsData",yAixsData);
+        responseDto.setContent(resultMap);
+        return responseDto;
+    }
 
     /**
      * 列表查询

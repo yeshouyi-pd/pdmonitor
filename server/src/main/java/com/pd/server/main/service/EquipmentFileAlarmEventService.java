@@ -75,11 +75,28 @@ public class EquipmentFileAlarmEventService {
         if(!StringUtils.isEmpty(pageDto.getEtime())){
             ca.andBjsjLessThanOrEqualTo(pageDto.getEtime());
         }
-        List<EquipmentFileAlarmEvent> equipmentFileAlarmEventList = equipmentFileAlarmEventMapper.statisticsByExample(equipmentFileAlarmEventExample);
-        PageInfo<EquipmentFileAlarmEvent> pageInfo = new PageInfo<>(equipmentFileAlarmEventList);
+        List<EquipmentFileAlarmEventDto> equipmentFileAlarmEventList = equipmentFileAlarmEventMapper.statisticsByExample(equipmentFileAlarmEventExample);
+        PageInfo<EquipmentFileAlarmEventDto> pageInfo = new PageInfo<>(equipmentFileAlarmEventList);
         pageDto.setTotal(pageInfo.getTotal());
-        List<EquipmentFileAlarmEventDto> equipmentFileAlarmEventDtoList = CopyUtil.copyList(equipmentFileAlarmEventList, EquipmentFileAlarmEventDto.class);
-        pageDto.setList(equipmentFileAlarmEventDtoList);
+        pageDto.setList(equipmentFileAlarmEventList);
+    }
+
+    public List<EquipmentFileAlarmEventDto> listStatisticsAll(EquipmentFileAlarmEventDto entityDto, List<String> list) {
+        EquipmentFileAlarmEventExample equipmentFileAlarmEventExample = new EquipmentFileAlarmEventExample();
+        EquipmentFileAlarmEventExample.Criteria ca = equipmentFileAlarmEventExample.createCriteria();
+        if(!StringUtils.isEmpty(list)&&list.size()>0){
+            ca.andDeptcodeIn(list);
+        }
+        if(!StringUtils.isEmpty(entityDto.getSbbh())){
+            ca.andSbbhEqualTo(entityDto.getSbbh());
+        }
+        if(!StringUtils.isEmpty(entityDto.getStime())){
+            ca.andBjsjGreaterThanOrEqualTo(entityDto.getStime());
+        }
+        if(!StringUtils.isEmpty(entityDto.getEtime())){
+            ca.andBjsjLessThanOrEqualTo(entityDto.getEtime());
+        }
+        return equipmentFileAlarmEventMapper.statisticsByExample(equipmentFileAlarmEventExample);
     }
 
     /**
