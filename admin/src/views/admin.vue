@@ -22,11 +22,19 @@
               </div>
               <div class="navbar-buttons navbar-header pull-right" role="navigation">
                   <ul class="nav ace-nav">
-                    <li class="light-blue dropdown-modal" v-on:click="downloadOperationManual()">
+                      <li class="light-blue dropdown-modal">
+                          <router-link to="/mobile/largemonitors">
+                              <a class=" dropdown-toggle" style="cursor: pointer;">
+                                  <font color="white">返回大屏</font>
+                              </a>
+                          </router-link>
+                      </li>
+
+                      <li class="light-blue dropdown-modal" v-on:click="downloadOperationManual()">
                         <a   class=" dropdown-toggle" style="cursor: pointer;">
                           <font color="white">下载操作手册</font>
                         </a>
-                    </li>
+                      </li>
 
                       <li class="light-blue dropdown-modal">
                         <router-link to="/welcome">
@@ -410,7 +418,7 @@
                             return true;
                         }
                     }
-
+                    return true;
                 }
                 return false;
             },

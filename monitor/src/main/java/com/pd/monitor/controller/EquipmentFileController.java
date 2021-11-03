@@ -15,6 +15,7 @@ import com.pd.server.main.dto.ResponseDto;
 import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
 import com.pd.server.main.service.EquipmentFileService;
 import com.pd.server.main.service.WaterEquipmentService;
+import com.pd.server.util.DateTools;
 import com.pd.server.util.DateUtil;
 import com.pd.server.util.ValidatorUtil;
 import org.slf4j.Logger;
@@ -254,6 +255,19 @@ public class EquipmentFileController extends BaseWxController {
         List<String> list = getUpdeptcode(user.getDeptcode());
         equipmentFileService.list(pageDto,list);
         responseDto.setContent(pageDto);
+        return responseDto;
+    }
+
+    @PostMapping("/listsbbh")
+    public ResponseDto listsbbh(@RequestBody EquipmentFileDto pageDto) {
+        ResponseDto responseDto = new ResponseDto();
+        EquipmentFileExample example = new EquipmentFileExample();
+        EquipmentFileExample.Criteria criteria = example.createCriteria();
+        criteria.andSbbhEqualTo(pageDto.getSbbh());
+        criteria.andCjsjGreaterThan(DateTools.toDate(DateTools.getFormatDate(new Date(),DateTools.yyyy_MM_dd),DateTools.yyyy_MM_dd));
+        criteria.andTpljLike("%.png");
+        List<EquipmentFile> equipmentFiles = equipmentFileService.listAll(example);
+        responseDto.setContent(equipmentFiles);
         return responseDto;
     }
 
