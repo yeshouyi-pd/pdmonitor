@@ -402,4 +402,15 @@
     order by rq,xs
   </select>
 
+  <select id="statisticsAlarmNumsByHourAndDP" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultMap="StatisticsResultMap">
+    select
+    rq bjsj,count(*) alarmNum, xs, deptcode
+    from equipment_file
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    group by rq, xs, deptcode
+    order by rq,xs
+  </select>
+
 </mapper>

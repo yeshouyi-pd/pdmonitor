@@ -1,8 +1,10 @@
 package com.pd.monitor.controller;
 
+import com.alibaba.fastjson.JSONArray;
 import com.pd.monitor.wx.conf.BaseWxController;
 import com.pd.server.config.CodeType;
 import com.pd.server.config.RedisCode;
+import com.pd.server.main.domain.EquipmentFileAlarmEvent;
 import com.pd.server.main.domain.EquipmentFileExample;
 import com.pd.server.main.domain.WaterEquipment;
 import com.pd.server.main.domain.WaterEquipmentExample;
@@ -11,6 +13,7 @@ import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
 import com.pd.server.main.service.EquipmentFileAlarmEventService;
 import com.pd.server.main.service.EquipmentFileService;
 import com.pd.server.main.service.WaterEquipmentService;
+import com.pd.server.util.CopyUtil;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.slf4j.Logger;
@@ -80,7 +83,7 @@ public class ExportFileController extends BaseWxController{
         sheet.setDefaultRowHeight((short)(40*10));
         // 添加表头行
         HSSFRow titleRow = sheet.createRow(0);//第1行
-        List<String> titleStrList = Arrays.asList("所属监测点","设备名称","设备sn","事件日期","事件次数");
+        List<String> titleStrList = Arrays.asList("所属监测点","设备名称","设备sn","事件日期","事件次数","事件发生时间集合");
         for(int i=0;i<titleStrList.size();i++){
             HSSFCell cell = titleRow.createCell(i);
             cell.setCellValue(titleStrList.get(i));
@@ -110,6 +113,12 @@ public class ExportFileController extends BaseWxController{
             HSSFCell comCell4 = comRow.createCell(4);
             comCell4.setCellValue(entity.getCounts());
             comCell4.setCellStyle(cellStyleCommon);
+            EquipmentFileAlarmEvent efae = CopyUtil.copy(entity,EquipmentFileAlarmEvent.class);
+            List<EquipmentFileAlarmEvent> detailAlarmTimes = equipmentFileAlarmEventService.detailByParam(efae);
+            List<String> eventTimes=  detailAlarmTimes.stream().filter(Objects::nonNull).map(EquipmentFileAlarmEvent::getEventTime).collect(Collectors.toList());
+            HSSFCell comCell5 = comRow.createCell(5);
+            comCell5.setCellValue(JSONArray.toJSONString(eventTimes));
+            comCell5.setCellStyle(cellStyleCommon);
         }
         response.setHeader("content-Type", "application/vnd.ms-excel");
         // 下载文件的默认名称

@@ -51,4 +51,6 @@ public interface EquipmentFileMapper {
     List<EquipmentFile> getthisDeptjxsjJT(EquipmentFileExample equipmentFileExample);
 
     List<AlarmNumbersDto> statisticsAlarmNumsByHour(EquipmentFileExample example);
+
+    List<AlarmNumbersDto> statisticsAlarmNumsByHourAndDP(EquipmentFileExample example);
 }
