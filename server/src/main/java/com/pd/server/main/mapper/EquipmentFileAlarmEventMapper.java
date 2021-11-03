@@ -3,6 +3,8 @@ package com.pd.server.main.mapper;
 import com.pd.server.main.domain.EquipmentFileAlarmEvent;
 import com.pd.server.main.domain.EquipmentFileAlarmEventExample;
 import java.util.List;
+
+import com.pd.server.main.dto.EquipmentFileAlarmEventDto;
 import org.apache.ibatis.annotations.Param;
 
 public interface EquipmentFileAlarmEventMapper {
@@ -28,5 +30,5 @@ public interface EquipmentFileAlarmEventMapper {
 
     int updateByPrimaryKey(EquipmentFileAlarmEvent record);
 
-    List<EquipmentFileAlarmEvent> statisticsByExample(EquipmentFileAlarmEventExample example);
+    List<EquipmentFileAlarmEventDto> statisticsByExample(EquipmentFileAlarmEventExample example);
 }

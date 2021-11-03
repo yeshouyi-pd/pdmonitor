@@ -40,6 +40,10 @@ public class EquipmentFileService {
         return equipmentFileMapper.statisticsAlarmNumsByHour(example);
     }
 
+    public List<AlarmNumbersDto> statisticsAlarmNumsByHourAndDP(EquipmentFileExample example){
+        return equipmentFileMapper.statisticsAlarmNumsByHourAndDP(example);
+    }
+
     /**
     * 列表查询
     */
