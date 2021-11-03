@@ -187,9 +187,7 @@ public class DateTools {
 	// ===================================================
 
 	public static void main(String[] args) {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmss");
-		String str = sdf.format(new Date());
-		System.out.println(str);
+		System.out.println(DateTools.toDate(DateTools.getFormatDate(new Date(),DateTools.yyyy_MM_dd),DateTools.yyyy_MM_dd));
 	}
 
 	/**

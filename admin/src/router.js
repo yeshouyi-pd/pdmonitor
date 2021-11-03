@@ -30,6 +30,8 @@ import Shjlist  from "./views/mobile/shjlist.vue"
 import Shjlistinfo  from "./views/mobile/shjlistinfo.vue"
 import Jtlist  from "./views/mobile/jtlist.vue"
 import Jtlistinfo  from "./views/mobile/jtlistinfo.vue"
+import Largemonitors  from "./views/mobile/largemonitors.vue"
+import Test  from "./views/mobile/test.vue"
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -68,13 +70,21 @@ export default new Router({
         path: "/mobile/jtlistinfo",
         component:Jtlistinfo
     },{
+        path: "/mobile/largemonlitors",
+        component: Largemonitors
+    },{
+            path: "/mobile/test",
+            component: Test
+        }
+    ,{
         path: "/",
         name:"admin",//为每一个路由都加上name属性，后续做通用的aidebar激活方法样式会用的
         component:Admin,
         meta: {//前端登录拦截 属性自定义
             loginRequire: true
         },
-        children:[{
+        children:[
+        {
             path: "welcome",
             name:"welcome",
             component:Welcome
@@ -171,5 +181,6 @@ export default new Router({
             name: "monitor/interfaceLog",
             component: InterfaceLog
         }]
+
     }]
 })

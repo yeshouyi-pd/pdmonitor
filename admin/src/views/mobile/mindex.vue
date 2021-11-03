@@ -1,354 +1,616 @@
 <template>
-  <div class="main-content" style="overflow: auto">
-    <div class="main-content-inner">
-      <div class="space-1"></div>
-       <div>
-						<span class="label label-primary arrowed-in-right label-lg">
-									<b>设备信息提醒</b>
-						</span>
-      </div>
-      <div class="space-6"></div>
-      <div class="row">
-        <div class="col-xs-4 col-sm-4 center">
-          <div class="center">
-						<span class="btn btn-app  btn-light no-hover" style="margin: 1px;width: 93%">
-                    <span class="line-height-1 bigger-200 blue"> {{ onLineCount+offLineCount+ errorCount}} </span>
-                      <br/>
-                    <span class="line-height-1 smaller-90">设备总数 </span>
-            </span>
-          </div>
+    <div style="height: 135%;border: 0px solid red;" class="data_bodey">
+        <remote-css href="/css/BigData.css" rel="stylesheet" type="text/css" />
+        <remote-css href="/css/index.css" rel="stylesheet" type="text/css" />
+        <remote-css href="/css/index01.css" rel="stylesheet" type="text/css" />
+        <remote-css href="/js/bstable/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <remote-css href="/js/bstable/css/bootstrap-table.css" rel="stylesheet" type="text/css" />
+        <remote-css href="/css/Security_operation.css" rel="stylesheet" type="text/css" />
+        <remote-css rel="stylesheet" href="/js/artDialog/skins/default.css" type="text/css"/>
+
+        <div class="index_nav" >
+            <ul style="height: 30px; margin-bottom: 0px;">
+                <!--<li class="l_left total_chose_fr nav_active">实时监测</li>-->
+                <router-link to="/welcome">
+                <li class="l_left total_chose_fr nav_active">主页</li>
+                </router-link>
+            </ul>
         </div>
+        <div class="index_tabs" >
+            <!--安防运作-->
+            <div class="inner" style="height: 109%;">
+                <div class="left_cage">
+                    <div class="dataAllBorder01 cage_cl" style="margin-top: 9% !important; height: 24%;">
+                        <video autoplay="autoplay" loop="loop" class="dataAllBorder02 video_cage">
+                            <source class="video" title="主监控位" src="/video/test_mv02.mov"/>
+                        </video>
+                    </div>
+                    <div class="dataAllBorder01 cage_cl" style="margin-top: 1.5% !important; height: 38%;">
+                        <div class="dataAllBorder02 video_cage">
+                            <img class="video_around" src="/video/video.jpg">
+                            <img class="video_around" src="/video/video.jpg">
+                            <img class="video_around" src="/video/video.jpg">
+                            <img class="video_around" src="/video/video.jpg">
+                        </div>
+                    </div>
+                    <div class="dataAll">
+                        <div class="dataAllBorder01">
+                            <div style="border: 0px solid red;" class="dataAllBorder02">
+                                <div class="map_title">折线分析图</div>
+                                <div id="container" style="height: 300px;width: 23%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--<div class="dataAllBorder01 cage_cl" style="margin-top: 1.5% !important; height: 32%; position: relative;">
+                        <div class="dataAllBorder02" style="padding: 1.2%; overflow: hidden">
+                            <div class="message_scroll_box">
+                                <div class="message_scroll">
+                                    <div class="scroll_top">
+                                        <span class="scroll_title">数据流量警示</span>
+                                        <span class="scroll_level scroll_level01">一级</span>
+                                        <a class="localize"></a>
+                                        <span class="scroll_timer">17-09-13/9:52</span>
+                                    </div>
+                                    <div class="msg_cage">
+                                        <a class="localize_title">下载大量视频</a>
+                                    </div>
+                                    <div class="msg_cage">
+                                        <a class="localize_msg">xxx视频网站</a>
+                                    </div>
+                                </div>
+                                <div class="message_scroll">
+                                    <div class="scroll_top">
+                                        <span class="scroll_title">数据流量警示</span>
+                                        <span class="scroll_level scroll_level03">二级</span>
+                                        <a class="localize"></a>
+                                        <span class="scroll_timer">17-09-13/9:52</span>
+                                    </div>
+                                    <div class="msg_cage">
+                                        <a class="localize_title">下载大量视频</a>
+                                    </div>
+                                    <div class="msg_cage">
+                                        <a class="localize_msg">xxx视频网站</a>
+                                    </div>
+                                </div>
+                                <div class="message_scroll">
+                                    <div class="scroll_top">
+                                        <span class="scroll_title">数据流量警示</span>
+                                        <span class="scroll_level scroll_level02">三级</span>
+                                        <a class="localize"></a>
+                                        <span class="scroll_timer">17-09-13/9:52</span>
+                                    </div>
+                                    <div class="msg_cage">
+                                        <a class="localize_title">下载大量视频</a>
+                                    </div>
+                                    <div class="msg_cage">
+                                        <a class="localize_msg">xxx视频网站</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>-->
+                </div>
 
-        <div class="col-xs-4 col-sm-4 center">
-          <div class="center">
-            <span class="btn btn-app  btn-success  no-hover" style="margin: 1px;width: 93%">
-                   <span class="line-height-1 bigger-200"> {{ onLineCount }} </span>
-                    <br/>
-                   <span class="line-height-1 smaller-90"> 正常设备 </span>
-            </span>
-          </div>
-        </div>
-
-        <div class="col-xs-4 col-sm-4 center">
-          <div class="center">
-            <span class="btn btn-app  btn-yellow  no-hover" style="margin: 1px ;width: 93%">
-                     <span class="line-height-1 bigger-200"> {{ offLineCount+ errorCount}} </span>
-                     <br/>
-                     <span class="line-height-1 smaller-90"> 异常设备 </span>
-            </span>
-          </div>
-        </div>
-      </div>
-
-
-      <div class="space-6"></div>
-      <div>
-        <span class="label label-primary arrowed-in-right label-lg">
-          <b>数据信息提醒</b>
-        </span>
-      </div>
-      <div class="space-6"></div>
-      <div class="row">
-        <div class="col-xs-6 col-sm-6">
-          <div class="center">
-            <span class="btn btn-app  btn-primary  no-hover" style="margin: 1px ; width: 95%">
-              <table style="width: 100%">
-                <tr>
-                  <td style="width: 20%">
-                    <div class="grid3">
-                      <img style="width: 30px;height: 30px;margin-left: 2px" src="../../../public/static/image/s.png">
-
+                <div class="center_cage">
+                    <div class="dataAllBorder01 cage_cl" style="margin-top: 3.5% !important; height: 62.7%; position: relative;">
+                        <div class="dataAllBorder02" style="position: relative; overflow: hidden;">
+                            <!--标题栏-->
+                            <div class="map_title_box" style="height: 6%">
+                                <div class="map_title_innerbox">
+                                    <div class="map_title">实时地图</div>
+                                </div>
+                            </div>
+                            <equipmentMap v-bind:height-max="740"></equipmentMap>
+                        </div>
                     </div>
 
-                  </td>
-                  <td style="width: 80%">
-                              <span  v-on:click="toshjlist()" class="line-height-1 bigger-200"> {{shjcount}} </span>
-                    <br/>
-                    <span class="line-height-1 smaller-75"> 水环境监测数据 </span>
-                  </td>
-                </tr>
-              </table>
-            </span>
-          </div>
-        </div>
-        <div class="col-xs-6 col-sm-6">
-          <div class="center">
-            <span class="btn btn-app  btn-pink no-hover" style="margin: 1px ; width: 95%">
-              <table style="width: 100%">
-                <tr>
-                  <td style="width: 20%">
-                   <div class="grid3">
-                      <img style="width: 30px;height: 30px;margin-left: 2px" src="../../../public/static/image/t.png">
-
+                    <div class="dataAllBorder01 cage_cl" style="margin-top: 0.6% !important; height: 32.1%;">
+                        <div class="dataAllBorder02" id="map_title_innerbox">
+                            <div class="map_title_box">
+                                <div class="map_title_innerbox">
+                                    <div class="map_title" style="background-image: url(/img/second_title.png);">分析数据</div>
+                                </div>
+                            </div>
+                            <div class="dataAllBorder01 cage_cl check_increase" style=" margin-top: 0.1% !important;height: 90%;">
+                                <div style="overflow-y:scroll;" class="dataAllBorder02 over_hide dataAllBorder20" id="over_hide">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                        <tr style="background: #395DC0;color: #FFFFFF;height: 30px;">
+                                            <th style="width: 25%;font-size: 16px;">监控点</th>
+                                            <th style="width: 25%;font-size: 16px;">设备编号</th>
+                                            <th style="width: 25%;font-size: 16px;">告警次数</th>
+                                            <th style="width: 25%;font-size: 16px;">操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="keval in kvMaps" style="text-align: left;background: #18468E;height: 30px;">
+                                                <td>{{ keval.deptname }}</td>
+                                                <td>
+                                                    {{keval.text}}
+                                                </td>
+                                                <td>
+                                                    <b class="green">{{keval.code}}</b>
+                                                </td>
+                                                <td>
+                                                    <button @click="jsmethod(keval.text)" class="btn btn-success">查看详细</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                  </td>
-                  <td style="width: 80%">
-                       <span  v-on:click="tojtlist()" class="line-height-1 bigger-200"> {{jtcount}} </span>
+                </div>
 
-                    <br/>
-                    <span class="line-height-1 smaller-75"> 江豚报警数据 </span>
-                  </td>
-                </tr>
-              </table>
-            </span>
-          </div>
+                <div class="right_cage">
+                    <!--顶部切换位置-->
+                    <div class="dataAllBorder01 cage_cl" style="margin-top: 9% !important; height: 24%">
+                        <div class="dataAllBorder02" id="cage_cl" >
+                            <div class="analysis">一天报警事件次数：</div>
+                            <ul class="data_show_box">
+                                <li class="data_cage">1</li>
+                                <li class="data_cage">0</li>
+                                <li class="data_cage">1</li>
+                            </ul>
+                            <div class="depart_number_box">
+                                <ul class="depart_number_cage" style="margin-bottom: 0px;">
+                                    <li class="depart_name">报警次数：</li>
+                                    <li class="depart_number">4,251</li>
+                                </ul>
+                                <ul class="depart_number_cage" style="margin-bottom: 0px;">
+                                    <li class="depart_name">事件次数：</li>
+                                    <li class="depart_number">24</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dataAllBorder01 cage_cl check_increase" style=" margin-top: 1.5% !important;">
+                        <!--切换01-->
+                        <div style="overflow-y:scroll;" class="dataAllBorder02 over_hide dataAllBorder20" id="over_hide">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr style="background: #395DC0;color: #FFFFFF;">
+                                    <th style="width: 20%;">设备编号</th>
+                                    <th style="width: 20%;">检验项目</th>
+                                    <th style="width: 20%;">检验结果</th>
+                                    <th style="width: 40%;">更新时间</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr v-for="item  in  waterQualityResults" style="text-align: left;background: #18468E;">
+                                    <td>{{ item.ip }}</td>
+                                    <td>
+                                        {{szjcx|optionMapKV(item.jcxm )}}
+                                    </td>
+                                    <td >
+                                        <div v-show="item.dataResult">
+                                            <b class="green">{{item.dataResult}}</b>{{JYXM_DW|optionKV(item.jcxm)}}
+                                        </div>
+                                    </td>
+                                    <td>{{item.createTime}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="dataAllBorder01 cage_cl check_decrease" style="margin-top: 1.5% !important; height: 32%; position: relative;">
+                        <div class="dataAllBorder02 over_hide" style="padding: 1.2%;">
+                            <div class="analysis">设备在线率</div>
+                            <div class="danger_contain_box">
+                                <div id="piechart-placeholder"></div>
+                                <ul class="danger_depart danger_depart01">
+                                    <li class="danger_ico" style="background-position-x: 0px"><i class="ace-icon fa fa-bar-chart-o fa-2x blue"></i></li>
+                                    <li class="data_name">总数</li>
+                                    <li class="data data01">{{ zs }}</li>
+                                    <li class="data data02"></li>
+                                </ul>
+                                <ul class="danger_depart danger_depart01">
+                                    <li class="danger_ico" style="background-position-x: 0px"><i class="ace-icon fa fa-check-square-o fa-2x green"></i></li>
+                                    <li class="data_name">在线</li>
+                                    <li class="data data01">{{ zc }}</li>
+                                    <li class="data data02"></li>
+                                </ul>
+                                <ul class="danger_depart danger_depart01">
+                                    <li class="danger_ico" style="background-position-x: 0px"><i class="ace-icon fa   fa-ban fa-2x  red"></i></li>
+                                    <li class="data_name">离线</li>
+                                    <li class="data data01">{{ lx }}</li>
+                                    <li class="data data02"></li>
+                                </ul>
+                                <ul class="danger_depart danger_depart01">
+                                    <li class="danger_ico" style="background-position-x: 0px"><i class="ace-icon fa fa-bolt fa-2x yellow"></i></li>
+                                    <li class="data_name">故障</li>
+                                    <li class="data data01">{{ gz }}</li>
+                                    <li class="data data02"></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div id="form-modal" class="modal fade" tabindex="-1" role="dialog">
+                <div class="modal-dialog" style="width: 50%;" role="document">
+                    <div class="modal-content" style="background: #395DC0;">
+                        <div style="float:left;width: 50%;overflow-y:scroll;">
+                            <div class="list-group" style="height: 500px;">
+                                <button v-for="(item,index) in equipmentFiles" type="button" @click="showRealPic(item.tplj)" style="background: #395DC0; color:#FEFEFF;cursor: pointer;" class="list-group-item">{{item.cjsj}}</button>
+                            </div>
+                        </div>
+                        <div style="float:left;width: 50%;">
+                            <div style="border: 0px solid red;text-align:center;">
+                                <img :src=srcpic style="height: 520px;width:50%;">
+                            </div>
+                        </div>
+                        <div class="clear"></div>
+                        <!--<div class="modal-header" style="background: #395DC0;">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">详细信息</h4>
+                        </div>
+                        <div class="modal-body" style="background: #395DC0;">
+                            <div style="display: flex;flex-wrap: wrap;margin-bottom: 30px;">
+                                <div v-for="(item,index) in equipmentFiles" style="margin:20px;width: 150px;height: 250px;display: flex;flex-wrap: wrap;">
+                                    &lt;!&ndash;<div style="text-align: center;width: 150px;">
+                                        <img :src="item.tplj" style="height: 200px;cursor: pointer;" v-on:click="checkImg(item,index)">
+                                    </div>&ndash;&gt;
+                                    <div style="margin: 0 auto;">{{item.sbbh}}</div>
+                                    <div style="margin: 0 auto;">{{item.cjsj}}</div>
+                                </div>
+                            </div>
+                        </div>-->
+                        <div class="modal-footer" style="background: #395DC0;">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+
         </div>
-      </div>
-      <div class="space-6"></div>
-      <div>
-        <span class="label label-primary arrowed-in-right label-lg">
-          <b>监测设备分布</b>
-        </span>
-      </div>
-      <div class="space-6"></div>
-
-      <div>
-        <div id="map-top" style="width: 115px;height: 80px;border: 1px solid #EEEEEE;position: absolute;left: 12px;z-index: 100;background-color: #fff;">
-          <div style="padding:5px 0px 5px 5px"><i class="fa fa-map-marker" style="color:#03C449;padding-right: 10px"></i>设备正常 {{onLineCount}}个</div>
-          <div style="padding:0px 0px 5px 5px"><i class="fa fa-map-marker" style="color:#555555;padding-right: 10px"></i>设备离线 {{offLineCount}}个</div>
-          <div style="padding:0px 0px 5px 5px"><i class="fa fa-map-marker" style="color:#B03A5B;padding-right: 10px"></i>设备故障 {{errorCount}}个</div>
-        </div>
-        <div id="map-wrap"  :style="{height: heightMax + 'px'}">
-          <!-- 这里以后是地图 -->
-        </div>
-      </div>
-
-
+        <!--<remote-js src="/js/echarts-all.js"></remote-js>
+        <remote-js src="/js/bstable/js/bootstrap.min.js"></remote-js>
+        <remote-js src="/js/bstable/js/bootstrap-table.js"></remote-js>
+        <remote-js type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=5ieMMexWmzB9jivTq6oCRX9j&callback"></remote-js>
+        <remote-js src="/js/Home_page.js"></remote-js>
+        <remote-js src="/js/jquery.js"></remote-js>
+        <remote-js src="/js/laydate.js"></remote-js>
+        <remote-js src="/js/index.js"></remote-js>
+        <remote-js type="text/javascript" src="/js/jquery.pagination.js"></remote-js>
+        <remote-js src="/js/Home_page.js"></remote-js>
+        <remote-js src="/js/artDialog/artDialog.js"></remote-js>-->
+        <!--<remote-js src="/js/bstable/js/bootstrap-table-zh-CN.min.js"></remote-js>-->
+        <!--<remote-js src="/js/artDialog/plugins/iframeTools.source.js"></remote-js>-->
     </div>
-  </div>
 </template>
 
 <script>
-export default {
-  name: "mindex",
-  data: function () {
-    return {
-      heightMax:'',
-      waterDatas:[],
-      deptMap:[],
-      onLineCount:0,
-      offLineCount:0,
-      errorCount:0,
-      KvMap:[],
-      shjcount:0,
-      KvMapjt:[],
-      jtcount:0,
-
-    }
-  },
-  mounted: function () {//mounted初始化方法
-    let _this = this; //this 变成本地变量  避坑
-    _this.loginUser = Tool.getLoginUser();
-    if (!_this.hasResourceRouter(_this.$route.name)) {
-      _this.$router.push("/login");
-    }
-    _this.getAlljcsjByDept();//水环境监测
-    _this.getAlljtByDept();//江豚预警
-
-    let userInfo = Tool.getLoginUser();
-    _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterData/findAll/' + userInfo.deptcode).then((response)=>{
-      let resp = response.data;
-      if (resp.success) {
-        _this.waterDatas = resp.content;
-        _this.$forceUpdate();
-      }
-    })
-    if(Tool.isEmpty(_this.heightMax)){
-      let h = document.documentElement.clientHeight || document.body.clientHeight;
-      _this.heightMax = h*0.6-70;
-    }
-
-    _this.deptMap = Tool.getDeptUser();
-    _this.findDeviceInfo();
-
-  }, methods: {
-    toshjlist (){
-         let _this = this;
-      if(_this.shjcount < 1){
-        Toast.warning("暂无相关数据")
-      }else{
-        _this.$router.push("/mobile/shjlist");
-      }
+    import EquipmentMap from "../monitor/equipmentMap";
+    export default {
+        components:{
+            EquipmentMap,
+            'remote-css': {
+                render(createElement) {
+                    return createElement('link', { attrs: { rel: 'stylesheet', href: this.href }});
+                },
+                props: {
+                    href: { type: String, required: true },
+                },
+            },
+            'remote-js': {
+                render(createElement) {
+                    return createElement('script', { attrs: { type: 'text/javascript', src: this.src }});
+                },
+                props: {
+                    src: { type: String, required: true },
+                },
+            },
         },
-
-    tojtlist (){
-      let _this = this;
-      if(_this.jtcount < 1){
-        Toast.warning("暂无相关数据")
-      }else{
-        _this.$router.push("/mobile/jtlist");
-      }
-
-    },
-
-
-    /**
-     *  welcome 水环境数据监测
-     */
-    getAlljcsjByDept() {
-      let _this = this;
-      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/mobile/getAlljcsjByDept').then((res)=>{
-        let response = res.data;
-        _this.KvMap = response.content;
-        if(!Tool.isEmpty(_this.KvMap)){
-               let count =0;
-               for(let key of _this.KvMap){
-                 count = count +key.value;
-               }
-          _this.shjcount = count;
-          SessionStorage.set(MSHJMAP,_this.KvMap);
-        }
-      })
-    },
-
-    /**
-     *江豚预警
-     */
-    getAlljtByDept() {
-      let _this = this;
-      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/mobile/getAlljtByDept').then((res)=>{
-        let response = res.data;
-        _this.KvMapjt = response.content;
-        if(!Tool.isEmpty(_this.KvMapjt)){
-          let count =0;
-          for(let key of _this.KvMapjt){
-            count = count +key.value;
-          }
-          _this.jtcount = count;
-          SessionStorage.set(MJTMAP,_this.KvMapjt);
-
-        }
-      })
-    },
-
-    /**
-     * 查找是否有权限
-     * @param router
-     */
-    hasResourceRouter(router) {
-      let _this = this;
-      let resources = Tool.getLoginUser().resources;
-      if (Tool.isEmpty(resources)) {
-        return false;
-      }
-      for (let i = 0; i < resources.length; i++) {
-        if (Tool.isEmpty(router)) {
-          return true;
-        } else {
-          if (router === resources[i].page) {
-            return true;
-          }
-        }
-
-      }
-      return false;
-    },    findDeviceInfo(){
-      let _this = this;
-      Loading.show();
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/findAll', {}).then((response)=>{
-        Loading.hide();
-        let devices = response.data.content;
-        let myData = [];
-        for(let i=0;i<devices.length;i++){
-          let value = devices[i].gps.split(",");
-          if(devices[i].sbzt=='1'){
-            _this.onLineCount++;
-            value.push(0);
-          }else if(devices[i].sbzt=='2'){
-            _this.offLineCount++;
-            value.push(100);
-          }else if(devices[i].sbzt=='3'){
-            _this.errorCount++;
-            value.push(200);
-          }
-          let obj = {
-            'name':devices[i].sbmc,
-            'value':value,
-            'deptcode':_this.optionMapKV(_this.deptMap,devices[i].deptcode),
-            'centerCode':_this.optionWDArray(_this.waterDatas,devices[i].centerCode)
-          }
-          myData.push(obj);
-        }
-        _this.initMap(myData);
-      })
-    },
-    initMap(myData){
-      let bmapChart = echarts.init(document.getElementById('map-wrap'));
-      // let myData = [
-      //   {name: '海门', value: [121.15, 31.89, 200], addr:'haimeijutidizhi'},
-      //   {name: '招远', value: [120.38, 37.35, 100], addr:''},
-      //   {name: '舟山', value: [122.207216, 29.985295, 0], addr:'zousanjutidizhi'},
-      // ]
-      let option = {
-        amap: {
-          center: [114.299945,30.593221],
-          zoom: 8,
-          roam: true, // 允许缩放
-        },
-        tooltip : {
-          trigger: 'item',
-          formatter: function(param){
-            return '设备名称：'+param.data.name+'</br>设备所属监测点：'+param.data.deptcode+'</br>设备所属数据中心：'+param.data.centerCode;
-          }
-        },
-        visualMap: {	// 视觉映射组件
-          type: 'continuous',
-          min: 0,
-          max: 200,
-          calculable: true,
-          inRange: {
-            color: ['#03C449','#555555','#B03A5B'],
-            symbol:['pin', 'pin', 'pin'],
-            symbolSize: [30,30,30]
-          }
-        },
-        series: [
-          {
-            type: 'scatter',
-            coordinateSystem: 'amap', // 坐标系使用amap高德地图
-            data: myData,
-            itemStyle: {
-              normal: {
-                color: "#fff",
-                shadowBlur: 10,
-                shadowColor: "#333"
-              }
+        name: "mindex",
+        data:function(){
+            return{
+                number:8,
+                waterQualityResults:[],
+                kvMaps:[],
+                count:{},
+                szjcx:[],
+                zs:0,
+                zc:0,
+                lx:0,
+                gz:0,
+                JYXM_DW:JYXM_DW,
+                Time:{},
+                equipmentFiles:[],
+                equipmentFileDto:{},
+                srcpic:'',
             }
-          }]
-      }
-      bmapChart.setOption(option);
-    },
-    optionMapKV(object, key){
-      if (!object || !key) {
-        return "";
-      } else {
-        let result = "";
-        for(let enums in object){
-          if (key === enums) {
-            result = object[enums];
-          }
-        }
-        return result;
-      }
-    },
-    optionWDArray(list, key){
-      if (!list || !key) {
-        return "";
-      } else {
-        let result = "";
-        for (let i = 0; i < list.length; i++) {
-          if (key === list[i]["centerCode"]) {
-            result = list[i]["centerName"];
-          }
-        }
-        return result;
-      }
+        },
+        mounted: function () {
+            let _this = this;
+            //_this.Echarts();
+            _this.getSzjcx();
+            _this.getPieChart();
+            _this.getLatestDate();
+            _this.TimeControl();
+            //_this.Interval();
+            _this.getWarningDate();
+            _this.getContainerDate();
+        },
+        methods: {
+            /**
+             * 图片查看
+             */
+            showRealPic(tplj){
+                let _this = this;
+                _this.srcpic = tplj;
+            },
+            /**
+             * 列表查询
+             */
+            listsbbh(sbbh) {
+                let _this = this;
+                Loading.show();
+                _this.equipmentFileDto.sbbh=sbbh;
+                _this.$forceUpdate();
+                _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFile/listsbbh',_this.equipmentFileDto).then((response)=>{
+                    Loading.hide();
+                    let resp = response.data;
+                    _this.equipmentFiles = resp.content;
+                    if(_this.equipmentFiles.length > 0){
+                        _this.srcpic = _this.equipmentFiles[0].tplj;
+                        console.log(_this.equipmentFiles[0].tplj);
+                    }
+                })
+            },
+            jsmethod(sbbh){
+                let _this = this;
+                _this.listsbbh(sbbh);
+                _this.$forceUpdate();
+                $("#form-modal").modal("show");
+            },
+            /**
+             *  折线图
+             */
+            getContainerDate() {
+                let dom = document.getElementById("container");
+                let myChart = echarts.init(dom);
+                let option;
+                option = {
+                    xAxis: {
+                        type: 'category',
+                        data: ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期天']
+                    },
+                    yAxis: {
+                        type: 'value'
+                    },
+                    series: [
+                        {
+                            data: [820, 932, 901, 934, 1290, 1330, 1320],
+                            type: 'line',
+                            smooth: true
+                        }
+                    ]
+                };
+                if (option && typeof option === 'object') {
+                    myChart.setOption(option);
+                }
+            },
+            /**
+             *  welcome 实时越限警告
+             */
+            getWarningDate() {
+                let _this = this;
+                _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getWarningDate').then((res)=>{
+                    let response = res.data;
+                    _this.kvMaps = response.content;
+                })
+            },
+            /**
+             * 数据滑动定时
+             */
+            Interval(){
+                let _this = this;
+                _this.Time = setInterval(_this.TimeControl,3300);    //开始定时
+                $(".message_scroll_box").mouseenter(function(){
+                    clearInterval(_this.Time);    //停止定时
+                }).mouseleave(function(){
+                    _this.Time = setInterval(_this.TimeControl,3500);    //再次定时
+                })
+            },
+            /**
+             * 数据滑动
+             */
+            TimeControl(){
+                $(".message_scroll_box").animate({marginTop:96},800,
+                    function(){
+                        $(".message_scroll_box").css({marginTop:0});    //把顶部的边界清零
+                        $(".message_scroll_box .message_scroll:first").before($(".message_scroll_box .message_scroll:last"));    //在第一个新闻后面插入最后一个新闻
+                    }
+                );
+            },
+            /**
+             * 获取水质检测项
+             */
+            getSzjcx(){
+                let _this = this;
+                _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/CodeSetUtil/getSzjcx', {
+                }).then((response)=>{
+                    let resp = response.data;
+                    _this.szjcx = resp.content;
+                })
+            },
+            /**
+             *  welcome 水质实时数据
+             */
+            getLatestDate() {
+                let _this = this;
+                _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getLatestDate').then((res)=>{
+                    let response = res.data;
+                    _this.waterQualityResults = response.content;
+                })
+            },
+            /**
+             *  welcome 饼状图 数据
+             */
+            getPieChart() {
+                let _this = this;
+                _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getPieChart').then((res)=>{
+                    let response = res.data;
+                    let data = response.content;
+                    _this.showPieChart(data);
+                    if(Tool.isNotEmpty(data)){
+                        let zss = 0;
+                        let zcs = 0;
+                        let lxs = 0;
+                        let gzs = 0;
+                        for (let i = 0;i <data.length ; i ++){
+                            zss = zss+data[i].data;
+                            if(data[i].color.includes("#68BC31")){
+                                zcs = data[i].data;
+                            }
+                            if(data[i].color.includes("#DA5430")){
+                                lxs = data[i].data;
+                            }
+                            if(data[i].color.includes("#FEE074")){
+                                gzs =data[i].data;
+                            }
+                        }
+                        _this.zs = zss;
+                        _this.zc = zcs;
+                        _this.lx = lxs;
+                        _this.gz = gzs;
+                    }
+
+                })
+            },
+            /**
+             * 饼状图
+             */
+            showPieChart(data){
+                let _this = this;
+                let placeholder = $('#piechart-placeholder').css({'width':'100%' , 'height':'100%'});
+                _this.drawPieChart(placeholder, data);
+                placeholder.data('chart', data);
+                placeholder.data('draw', _this.drawPieChart);
+                //pie chart tooltip example
+                let $tooltip = $("<div class='tooltip top in'><div class='tooltip-inner'></div></div>").hide().appendTo('body');
+                let previousPoint = null;
+                placeholder.on('plothover', function (event, pos, item) {
+                    if(item) {
+                        if (previousPoint != item.seriesIndex) {
+                            previousPoint = item.seriesIndex;
+                            let tip = item.series['label'] + " : " + item.series['percent']+'%';
+                            $tooltip.show().children(0).text(tip);
+                        }
+                        $tooltip.css({top:pos.pageY + 10, left:pos.pageX + 10});
+                    } else {
+                        $tooltip.hide();
+                        previousPoint = null;
+                    }
+                });
+
+            },
+            /**
+             * 饼状图base 方法
+             */
+            drawPieChart(placeholder, data, position) {
+                $.plot(placeholder, data, {
+                    series: {
+                        pie: {
+                            show: true,
+                            tilt: 0.8,
+                            highlight: {
+                                opacity: 0.25
+                            },
+                            stroke: {
+                                color: '#fff',
+                                width: 2
+                            },
+                            startAngle: 2
+                        }
+                    },
+                    legend: {
+                        show: true,
+                        position: position || "ne",
+                        labelBoxBorderColor: null,
+                        margin: [-30, 15]
+                    }
+                    ,
+                    grid: {
+                        hoverable: true,
+                        clickable: true
+                    }
+                })
+            },
+            getTable(){
+                let _this = this;
+                _this.$ajax.get(process.env.VUE_APP_SERVER + '/system/admin/dept/getAllDept').then((response)=>{
+                    let resp = response.data;
+                    if (resp.success) {
+                        console.log(1);
+                    }
+                })
+            },
+            Echarts() {
+                let myChart = echarts.init($("#container_huan")[0]);
+                let option = {
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: "{a} <br/>{b}: {c} ({d}%)"
+                    },
+                    legend: {
+                        orient: 'vertical',
+                        x: 'left',
+                        data:['民用爆炸','射钉器材','危化品','寄递物流','旅店'],
+                        textStyle:{
+                            color:"#e9ebee"
+                        }
+                    },
+                    series: [
+                        {
+                            name:'行业数据',
+                            type:'pie',
+                            center:['80%','50%'],
+                            radius: ['50%', '80%'],
+                            avoidLabelOverlap: false,
+                            label: {
+                                normal: {
+                                    show: false,
+                                    position: 'center'
+                                },
+                                emphasis: {
+                                    show: true,
+                                    textStyle: {
+                                        fontSize: '30',
+                                        fontWeight: 'bold'
+                                    }
+                                }
+                            },
+                            itemStyle: {
+                                normal: {
+                                    label: {
+                                        show: false
+                                    },
+                                    labelLine: {
+                                        show: false
+                                    }
+                                }
+                            },
+                            data:[
+                                {value:335, name:'民用爆炸'},
+                                {value:310, name:'射钉器材'},
+                                {value:234, name:'危化品'},
+                                {value:135, name:'寄递物流'},
+                                {value:1548, name:'旅店'}
+                            ]
+                        }
+                    ]
+                };
+                myChart.setOption(option);
+            },
+        },
     }
-
-
-  }
-
-}
 </script>
 
 <style scoped>

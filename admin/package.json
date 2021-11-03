@@ -11,8 +11,11 @@
   },
   "dependencies": {
     "axios": "^0.19.2",
+    "bootstrap-table": "^1.18.3",
     "core-js": "^3.6.5",
     "crypto-js": "^4.0.0",
+    "echarts": "^5.2.2",
+    "jquery": "^3.6.0",
     "viewerjs": "^1.9.0",
     "vue": "^2.6.11",
     "vue-aplayer": "^1.6.1",

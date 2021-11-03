@@ -233,9 +233,12 @@
 
                          //window.open("/welcome", "_self")
                       if(_this.isMobileflag){
-                        _this.$router.push("/mobile/mindex")
+                          alert(1);
+                            _this.$router.push("/mobile/mindex")
                       }else{
-                        _this.$router.push("/welcome")
+                          alert(2);
+                          _this.$router.push("/mobile/jtlist")
+                          //_this.$router.push("/welcome")
                       }
 
                     } else {
