@@ -55,6 +55,9 @@ export default new Router({
         path: "/login",
         component:Login
     },{
+        path: "/mobile/largemonlitors",
+        component: Largemonitors
+    },{
         path: "/mobile/mindex",
         component:Mindex
     },{
@@ -69,9 +72,6 @@ export default new Router({
     },{
         path: "/mobile/jtlistinfo",
         component:Jtlistinfo
-    },{
-        path: "/mobile/largemonlitors",
-        component: Largemonitors
     },{
             path: "/mobile/test",
             component: Test
