@@ -22,7 +22,7 @@
                 <div class="left_cage">
                     <div class="dataAllBorder01 cage_cl" style="margin-top: 9% !important; height: 24%;">
                         <video autoplay="autoplay" loop="loop" class="dataAllBorder02 video_cage">
-                            <source class="video" title="主监控位" src="/video/test_mv02.mov"/>
+                            <source class="video" title="主监控位" src="/video/11.mp4"/>
                         </video>
                     </div>
                     <div class="dataAllBorder01 cage_cl" style="margin-top: 1.5% !important; height: 38%;">
@@ -351,16 +351,31 @@
                     let myChart = echarts.init(dom);
                     let option;
                     option = {
+                        tooltip: {
+                            trigger: 'axis'
+                        },
                         xAxis: {
                             show: true,
                             type: 'category',
                             name: '日期',
-                            data: _this.xAixsData
+                            data: _this.xAixsData,
+                            axisLabel: {
+                                show: true,
+                                textStyle: {
+                                    color: '#FFFFFF'
+                                }
+                            },
                         },
                         yAxis: {
                             show: true,
                             type: 'value',
-                            name: '百分比'
+                            name: '百分比',
+                            axisLabel: {
+                                show: true,
+                                textStyle: {
+                                    color: '#FFFFFF'
+                                }
+                            },
                         },
                         series: [
                             {
@@ -461,7 +476,6 @@
                         _this.lx = lxs;
                         _this.gz = gzs;
                     }
-
                 })
             },
             /**
@@ -473,7 +487,6 @@
                 _this.drawPieChart(placeholder, data);
                 placeholder.data('chart', data);
                 placeholder.data('draw', _this.drawPieChart);
-                //pie chart tooltip example
                 let $tooltip = $("<div class='tooltip top in'><div class='tooltip-inner'></div></div>").hide().appendTo('body');
                 let previousPoint = null;
                 placeholder.on('plothover', function (event, pos, item) {
@@ -520,15 +533,6 @@
                     grid: {
                         hoverable: true,
                         clickable: true
-                    }
-                })
-            },
-            getTable(){
-                let _this = this;
-                _this.$ajax.get(process.env.VUE_APP_SERVER + '/system/admin/dept/getAllDept').then((response)=>{
-                    let resp = response.data;
-                    if (resp.success) {
-                        console.log(1);
                     }
                 })
             },
