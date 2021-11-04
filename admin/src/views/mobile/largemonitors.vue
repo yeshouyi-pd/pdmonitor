@@ -36,59 +36,11 @@
                     <div class="dataAll">
                         <div class="dataAllBorder01">
                             <div style="border: 0px solid red;" class="dataAllBorder02">
-                                <div class="map_title">折线分析图</div>
-                                <div id="container" style="height: 300px;width: 23%;"></div>
+                                <div class="map_title">江豚报警小时占比统计图</div>
+                                <div id="container" style="height: 300px;width: 100%;border: 0px solid red;"></div>
                             </div>
                         </div>
                     </div>
-                    <!--<div class="dataAllBorder01 cage_cl" style="margin-top: 1.5% !important; height: 32%; position: relative;">
-                        <div class="dataAllBorder02" style="padding: 1.2%; overflow: hidden">
-                            <div class="message_scroll_box">
-                                <div class="message_scroll">
-                                    <div class="scroll_top">
-                                        <span class="scroll_title">数据流量警示</span>
-                                        <span class="scroll_level scroll_level01">一级</span>
-                                        <a class="localize"></a>
-                                        <span class="scroll_timer">17-09-13/9:52</span>
-                                    </div>
-                                    <div class="msg_cage">
-                                        <a class="localize_title">下载大量视频</a>
-                                    </div>
-                                    <div class="msg_cage">
-                                        <a class="localize_msg">xxx视频网站</a>
-                                    </div>
-                                </div>
-                                <div class="message_scroll">
-                                    <div class="scroll_top">
-                                        <span class="scroll_title">数据流量警示</span>
-                                        <span class="scroll_level scroll_level03">二级</span>
-                                        <a class="localize"></a>
-                                        <span class="scroll_timer">17-09-13/9:52</span>
-                                    </div>
-                                    <div class="msg_cage">
-                                        <a class="localize_title">下载大量视频</a>
-                                    </div>
-                                    <div class="msg_cage">
-                                        <a class="localize_msg">xxx视频网站</a>
-                                    </div>
-                                </div>
-                                <div class="message_scroll">
-                                    <div class="scroll_top">
-                                        <span class="scroll_title">数据流量警示</span>
-                                        <span class="scroll_level scroll_level02">三级</span>
-                                        <a class="localize"></a>
-                                        <span class="scroll_timer">17-09-13/9:52</span>
-                                    </div>
-                                    <div class="msg_cage">
-                                        <a class="localize_title">下载大量视频</a>
-                                    </div>
-                                    <div class="msg_cage">
-                                        <a class="localize_msg">xxx视频网站</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>-->
                 </div>
 
                 <div class="center_cage">
@@ -237,7 +189,7 @@
                     <div class="modal-content" style="background: #395DC0;">
                         <div style="float:left;width: 50%;overflow-y:scroll;">
                             <div class="list-group" style="height: 500px;">
-                                <button v-for="(item,index) in equipmentFiles" type="button" @click="showRealPic(item.tplj)" style="background: #395DC0; color:#FEFEFF;cursor: pointer;" class="list-group-item">{{item.cjsj}}</button>
+                                <button v-for="(item,index) in equipmentFiles" type="button" @click="showRealPic(item.tplj)" style="background: #395DC0; color:#FEFEFF;cursor: pointer;border:1px solid #3490BA;" class="list-group-item">{{item.cjsj}}</button>
                             </div>
                         </div>
                         <div style="float:left;width: 50%;">
@@ -310,7 +262,6 @@
         name: "largemonitors",
         data:function(){
             return{
-                number:8,
                 waterQualityResults:[],
                 kvMaps:[],
                 count:{},
@@ -324,6 +275,10 @@
                 equipmentFiles:[],
                 equipmentFileDto:{},
                 srcpic:'',
+                containerDate:{},
+                alarmNumbersDto:{},
+                yAixsData:[],
+                xAixsData:[],
             }
         },
         mounted: function () {
@@ -373,28 +328,39 @@
              *  折线图
              */
             getContainerDate() {
-                let dom = document.getElementById("container");
-                let myChart = echarts.init(dom);
-                let option;
-                option = {
-                    xAxis: {
-                        type: 'category',
-                        data: ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期天']
-                    },
-                    yAxis: {
-                        type: 'value'
-                    },
-                    series: [
-                        {
-                            data: [820, 932, 901, 934, 1290, 1330, 1320],
-                            type: 'line',
-                            smooth: true
-                        }
-                    ]
-                };
-                if (option && typeof option === 'object') {
-                    myChart.setOption(option);
-                }
+                let _this = this;
+                _this.alarmNumbersDto.deptcode = Tool.getLoginUser().deptcode;
+                _this.alarmNumbersDto.stime = moment().subtract(70, "days").format('YYYY-MM-DD');
+                _this.alarmNumbersDto.etime = moment().subtract(-1, "days").format('YYYY-MM-DD');
+                _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFile/statisticsAlarmNumsByHourDP',_this.alarmNumbersDto).then((response)=>{
+                    let resp = response.data;
+                    _this.containerDate = resp.content;
+                    _this.yAixsData = _this.containerDate.yAixsData;
+                    _this.xAixsData = _this.containerDate.xAixsData;
+                    let dom = document.getElementById("container");
+                    let myChart = echarts.init(dom);
+                    let option;
+                    option = {
+                        xAxis: {
+                            type: 'category',
+                            data: _this.xAixsData
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: [
+                            {
+                                data: _this.yAixsData,
+                                type: 'line',
+                                smooth: true
+                            }
+                        ]
+                    };
+                    if (option && typeof option === 'object') {
+                        myChart.setOption(option);
+                    }
+                })
+
             },
             /**
              *  welcome 实时越限警告

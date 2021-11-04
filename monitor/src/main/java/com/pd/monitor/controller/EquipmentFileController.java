@@ -309,6 +309,7 @@ public class EquipmentFileController extends BaseWxController {
         criteria.andSbbhEqualTo(pageDto.getSbbh());
         criteria.andCjsjGreaterThan(DateTools.toDate(DateTools.getFormatDate(new Date(),DateTools.yyyy_MM_dd),DateTools.yyyy_MM_dd));
         criteria.andTpljLike("%.png");
+        example.setOrderByClause(" cjsj desc ");
         List<EquipmentFile> equipmentFiles = equipmentFileService.listAll(example);
         responseDto.setContent(equipmentFiles);
         return responseDto;

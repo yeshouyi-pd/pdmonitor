@@ -1,5 +1,7 @@
 package com.pd.server.main.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class EquipmentFile {
@@ -9,8 +11,10 @@ public class EquipmentFile {
 
     private String tplj;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date cjsj;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date createTime;
 
     private String nf;
