@@ -101,18 +101,16 @@
                         <div class="dataAllBorder02" id="cage_cl" >
                             <div class="analysis">一天报警事件次数：</div>
                             <ul class="data_show_box">
-                                <li class="data_cage">1</li>
-                                <li class="data_cage">0</li>
-                                <li class="data_cage">1</li>
+                                <li class="data_cage" v-for="item  in  alarmDatas.sum">{{item}}</li>
                             </ul>
                             <div class="depart_number_box">
                                 <ul class="depart_number_cage" style="margin-bottom: 0px;">
                                     <li class="depart_name">报警次数：</li>
-                                    <li class="depart_number">4,251</li>
+                                    <li class="depart_number">{{alarmDatas.num}}</li>
                                 </ul>
                                 <ul class="depart_number_cage" style="margin-bottom: 0px;">
                                     <li class="depart_name">事件次数：</li>
-                                    <li class="depart_number">24</li>
+                                    <li class="depart_number">{{alarmDatas.nnm}}</li>
                                 </ul>
                             </div>
                         </div>
@@ -279,11 +277,11 @@
                 alarmNumbersDto:{},
                 yAixsData:[],
                 xAixsData:[],
+                alarmDatas:{},
             }
         },
         mounted: function () {
             let _this = this;
-            //_this.Echarts();
             _this.getSzjcx();
             _this.getPieChart();
             _this.getLatestDate();
@@ -291,8 +289,20 @@
             //_this.Interval();
             _this.getWarningDate();
             _this.getContainerDate();
+            _this.TimeSum();
         },
         methods: {
+            TimeSum(){
+                let _this = this;
+                _this.alarmNumbersDto.deptcode = Tool.getLoginUser().deptcode;
+                _this.alarmNumbersDto.stime = moment().subtract(0, "days").format('YYYY-MM-DD');
+                _this.alarmNumbersDto.etime = moment().subtract(-1, "days").format('YYYY-MM-DD');
+                _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFile/statisticsAlarmNumsByTimeSum', _this.alarmNumbersDto).then((response) => {
+                    let resp = response.data;
+                    _this.alarmDatas = resp.content;
+                    console.log(_this.alarmDatas);
+                })
+            },
             /**
              * 图片查看
              */
@@ -314,7 +324,6 @@
                     _this.equipmentFiles = resp.content;
                     if(_this.equipmentFiles.length > 0){
                         _this.srcpic = _this.equipmentFiles[0].tplj;
-                        console.log(_this.equipmentFiles[0].tplj);
                     }
                 })
             },
@@ -330,7 +339,7 @@
             getContainerDate() {
                 let _this = this;
                 _this.alarmNumbersDto.deptcode = Tool.getLoginUser().deptcode;
-                _this.alarmNumbersDto.stime = moment().subtract(70, "days").format('YYYY-MM-DD');
+                _this.alarmNumbersDto.stime = moment().subtract(7, "days").format('YYYY-MM-DD');
                 _this.alarmNumbersDto.etime = moment().subtract(-1, "days").format('YYYY-MM-DD');
                 _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFile/statisticsAlarmNumsByHourDP',_this.alarmNumbersDto).then((response)=>{
                     let resp = response.data;
@@ -517,63 +526,6 @@
                         console.log(1);
                     }
                 })
-            },
-            Echarts() {
-                let myChart = echarts.init($("#container_huan")[0]);
-                let option = {
-                    tooltip: {
-                        trigger: 'item',
-                        formatter: "{a} <br/>{b}: {c} ({d}%)"
-                    },
-                    legend: {
-                        orient: 'vertical',
-                        x: 'left',
-                        data:['民用爆炸','射钉器材','危化品','寄递物流','旅店'],
-                        textStyle:{
-                            color:"#e9ebee"
-                        }
-                    },
-                    series: [
-                        {
-                            name:'行业数据',
-                            type:'pie',
-                            center:['80%','50%'],
-                            radius: ['50%', '80%'],
-                            avoidLabelOverlap: false,
-                            label: {
-                                normal: {
-                                    show: false,
-                                    position: 'center'
-                                },
-                                emphasis: {
-                                    show: true,
-                                    textStyle: {
-                                        fontSize: '30',
-                                        fontWeight: 'bold'
-                                    }
-                                }
-                            },
-                            itemStyle: {
-                                normal: {
-                                    label: {
-                                        show: false
-                                    },
-                                    labelLine: {
-                                        show: false
-                                    }
-                                }
-                            },
-                            data:[
-                                {value:335, name:'民用爆炸'},
-                                {value:310, name:'射钉器材'},
-                                {value:234, name:'危化品'},
-                                {value:135, name:'寄递物流'},
-                                {value:1548, name:'旅店'}
-                            ]
-                        }
-                    ]
-                };
-                myChart.setOption(option);
             },
         },
     }
