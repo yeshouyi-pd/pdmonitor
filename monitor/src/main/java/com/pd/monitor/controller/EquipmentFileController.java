@@ -277,6 +277,88 @@ public class EquipmentFileController extends BaseWxController {
         return responseDto;
     }
 
+    @PostMapping("/statisticsAlarmNumsByTimeSum")
+    public ResponseDto statisticsAlarmNumsByTimeSum(@RequestBody AlarmNumbersDto alarmNumbersDto) throws ParseException {
+        ResponseDto responseDto = new ResponseDto();
+        EquipmentFileExample example = new EquipmentFileExample();
+        EquipmentFileExample.Criteria ca = example.createCriteria();
+        ca.andDeptcodeEqualTo(alarmNumbersDto.getDeptcode());
+        if(!StringUtils.isEmpty(alarmNumbersDto.getSbbh())){
+            ca.andSbbhEqualTo(alarmNumbersDto.getSbbh());
+        }
+        if(!StringUtils.isEmpty(alarmNumbersDto.getDeptcode())){
+            ca.andDeptcodeEqualTo(alarmNumbersDto.getDeptcode());
+        }
+        if(!StringUtils.isEmpty(alarmNumbersDto.getStime())){
+            ca.andCjsjGreaterThanOrEqualTo(alarmNumbersDto.getStime());
+        }
+        if(!StringUtils.isEmpty(alarmNumbersDto.getEtime())){
+            ca.andCjsjLessThanOrEqualTo(alarmNumbersDto.getEtime());
+        }
+        ca.andTpljLike("%png");
+        List<AlarmNumbersDto> lists = equipmentFileService.statisticsAlarmNumsByPage(example);
+        List<AlarmNumbersDto> resultList = new ArrayList<>();
+        if(!CollectionUtils.isEmpty(lists)){
+            AlarmNumbersDto firstEntity = lists.get(0);
+            String curDateStr = firstEntity.getBjsj()+" "+firstEntity.getXs()+":"+firstEntity.getFz();
+            //String lastDateStr = laterThreeMinute(curDateStr);
+            Integer bjsl = firstEntity.getAlarmNum();
+            for(int i=1;i<lists.size();i++){
+                AlarmNumbersDto entity = lists.get(i);
+                AlarmNumbersDto beforeEntity = lists.get(i-1);
+                String beforeDateStr = beforeEntity.getBjsj()+" "+beforeEntity.getXs()+":"+beforeEntity.getFz();
+                String nextDateStr = entity.getBjsj()+" "+entity.getXs()+":"+entity.getFz();
+                if(entity.getSbbh().equals(firstEntity.getSbbh())){
+                    if(isOverThreeMinute(beforeDateStr, nextDateStr)){
+                        bjsl = bjsl + entity.getAlarmNum();
+                    }else {
+                        AlarmNumbersDto result = new AlarmNumbersDto();
+                        result.setDeptcode(entity.getDeptcode());
+                        result.setSbbh(entity.getSbbh());
+                        result.setBjsj(curDateStr+" 至 "+beforeDateStr);
+                        result.setAlarmNum(bjsl);
+                        resultList.add(result);
+                        firstEntity = entity;
+                        curDateStr = firstEntity.getBjsj()+" "+firstEntity.getXs()+":"+firstEntity.getFz();
+                        //lastDateStr = laterThreeMinute(curDateStr);
+                        bjsl = firstEntity.getAlarmNum();
+                    }
+                }else {
+                    AlarmNumbersDto result = new AlarmNumbersDto();
+                    result.setDeptcode(firstEntity.getDeptcode());
+                    result.setSbbh(firstEntity.getSbbh());
+                    result.setBjsj(curDateStr+" 至 "+beforeDateStr);
+                    result.setAlarmNum(bjsl);
+                    resultList.add(result);
+                    firstEntity = entity;
+                    curDateStr = firstEntity.getBjsj()+" "+firstEntity.getXs()+":"+firstEntity.getFz();
+                    //lastDateStr = laterThreeMinute(curDateStr);
+                    bjsl = firstEntity.getAlarmNum();
+                }
+                if(i==lists.size()-1){
+                    AlarmNumbersDto result = new AlarmNumbersDto();
+                    result.setDeptcode(entity.getDeptcode());
+                    result.setSbbh(entity.getSbbh());
+                    result.setBjsj(curDateStr+" 至 "+nextDateStr);
+                    result.setAlarmNum(bjsl);
+                    resultList.add(result);
+                }
+            }
+        }
+        Integer num = 0;
+        for (int i = 0; i < resultList.size(); i++) {
+            Integer alarmNum = resultList.get(i).getAlarmNum();
+            num = num + alarmNum;
+        }
+        Map<String,Object> map = new HashMap<String, Object>();
+        String sum = String.valueOf(num+resultList.size());
+        map.put("num",num);
+        map.put("nnm",resultList.size());
+        map.put("sum",sum.split(""));
+        responseDto.setContent(map);
+        return responseDto;
+    }
+
     @PostMapping("/findSbbh")
     public ResponseDto findSbbh(@RequestBody EquipmentFileDto equipmentFileDto){
         ResponseDto responseDto = new ResponseDto();
@@ -309,6 +391,7 @@ public class EquipmentFileController extends BaseWxController {
         criteria.andSbbhEqualTo(pageDto.getSbbh());
         criteria.andCjsjGreaterThan(DateTools.toDate(DateTools.getFormatDate(new Date(),DateTools.yyyy_MM_dd),DateTools.yyyy_MM_dd));
         criteria.andTpljLike("%.png");
+        example.setOrderByClause(" cjsj desc ");
         List<EquipmentFile> equipmentFiles = equipmentFileService.listAll(example);
         responseDto.setContent(equipmentFiles);
         return responseDto;
