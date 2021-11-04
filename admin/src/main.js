@@ -3,7 +3,15 @@ import App from './App.vue'
 import router from "./router"
 import axios from "axios";
 import filter from './filter/filter'
-
+import VueAMap from 'vue-amap';
+Vue.use(VueAMap);
+VueAMap.initAMapApiLoader({
+    key: '5a7e61d356499dc86719d0b4960a1ad8',
+    plugin: ['AMap.Geolocation', 'AMap.Autocomplete', 'AMap.CircleEditor'],
+    // 默认高德 sdk 版本为 1.4.4
+    v: '1.4.4',
+    uiVersion: '1.0.11'
+});
 Vue.config.productionTip = false
 Vue.prototype.$ajax = axios;//添加内置熟悉 Vue.prototype.xx 全局变量
 
