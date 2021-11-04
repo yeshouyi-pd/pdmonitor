@@ -36,7 +36,6 @@ export default {
   methods: {
     uploadFile () {
       let _this = this;
-      let formData = new window.FormData();
       let file = _this.$refs.file.files[0];
 
       console.log(JSON.stringify(file));
@@ -76,6 +75,13 @@ export default {
         Toast.warning("文件格式不正确！只支持上传：" + suffixs.join(","));
         $("#" + _this.inputId + "-input").val("");
         return;
+      }
+
+      if(file.size > 5*1024*1024*1024){
+        Toast.warning("单次文件上传不能超过5G");
+        $("#" + _this.inputId + "-input").val("");
+        return;
+
       }
 
       // 文件分片
@@ -139,17 +145,22 @@ export default {
       let shardTotal = param.shardTotal;
       let shardSize = param.shardSize;
       let fileShard = _this.getFileShard(shardIndex, shardSize);
-      // 将图片转为base64进行传输
-      let fileReader = new FileReader();
-
       Progress.show(parseInt((shardIndex - 1) * 100 / shardTotal));
-      fileReader.onload = function (e) {
-        let base64 = e.target.result;
-        // console.log("base64:", base64);
+      let formData = new window.FormData();
+      formData.append('shard', fileShard);
+      formData.append('shardIndex',  param.shardIndex);
+      formData.append('shardSize', param.shardSize);
+      formData.append('shardTotal', param.shardTotal);
+      formData.append('use', param.use);
+      formData.append('name', param.name);
+      formData.append('suffix', param.suffix);
+      formData.append('size', param.size);
+      formData.append('key', param.key);
 
-        param.shard = base64;
 
-        _this.$ajax.post(process.env.VUE_APP_SERVER + '/system/uploadfile/uploadbig', param).then((response) => {
+
+
+        _this.$ajax.post(process.env.VUE_APP_SERVER + '/system/uploadfile/uploadbig', formData).then((response) => {
           let resp = response.data;
           console.log("上传文件成功：", resp);
           Progress.show(parseInt(shardIndex * 100 / shardTotal));
@@ -163,8 +174,7 @@ export default {
             $("#" + _this.inputId + "-input").val("");
           }
         });
-      };
-      fileReader.readAsDataURL(fileShard);
+
     },
 
     getFileShard (shardIndex, shardSize) {
