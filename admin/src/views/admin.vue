@@ -23,7 +23,7 @@
               <div class="navbar-buttons navbar-header pull-right" role="navigation">
                   <ul class="nav ace-nav">
                       <li class="light-blue dropdown-modal">
-                          <router-link to="/mobile/largemonitors">
+                          <router-link to="/mobile/largemonlitors">
                               <a class=" dropdown-toggle" style="cursor: pointer;">
                                   <font color="white">返回大屏</font>
                               </a>

@@ -36,59 +36,11 @@
                     <div class="dataAll">
                         <div class="dataAllBorder01">
                             <div style="border: 0px solid red;" class="dataAllBorder02">
-                                <div class="map_title">折线分析图</div>
-                                <div id="container" style="height: 300px;width: 23%;"></div>
+                                <div class="map_title">江豚报警小时占比统计图</div>
+                                <div id="container" style="height: 300px;width: 100%;border: 0px solid red;"></div>
                             </div>
                         </div>
                     </div>
-                    <!--<div class="dataAllBorder01 cage_cl" style="margin-top: 1.5% !important; height: 32%; position: relative;">
-                        <div class="dataAllBorder02" style="padding: 1.2%; overflow: hidden">
-                            <div class="message_scroll_box">
-                                <div class="message_scroll">
-                                    <div class="scroll_top">
-                                        <span class="scroll_title">数据流量警示</span>
-                                        <span class="scroll_level scroll_level01">一级</span>
-                                        <a class="localize"></a>
-                                        <span class="scroll_timer">17-09-13/9:52</span>
-                                    </div>
-                                    <div class="msg_cage">
-                                        <a class="localize_title">下载大量视频</a>
-                                    </div>
-                                    <div class="msg_cage">
-                                        <a class="localize_msg">xxx视频网站</a>
-                                    </div>
-                                </div>
-                                <div class="message_scroll">
-                                    <div class="scroll_top">
-                                        <span class="scroll_title">数据流量警示</span>
-                                        <span class="scroll_level scroll_level03">二级</span>
-                                        <a class="localize"></a>
-                                        <span class="scroll_timer">17-09-13/9:52</span>
-                                    </div>
-                                    <div class="msg_cage">
-                                        <a class="localize_title">下载大量视频</a>
-                                    </div>
-                                    <div class="msg_cage">
-                                        <a class="localize_msg">xxx视频网站</a>
-                                    </div>
-                                </div>
-                                <div class="message_scroll">
-                                    <div class="scroll_top">
-                                        <span class="scroll_title">数据流量警示</span>
-                                        <span class="scroll_level scroll_level02">三级</span>
-                                        <a class="localize"></a>
-                                        <span class="scroll_timer">17-09-13/9:52</span>
-                                    </div>
-                                    <div class="msg_cage">
-                                        <a class="localize_title">下载大量视频</a>
-                                    </div>
-                                    <div class="msg_cage">
-                                        <a class="localize_msg">xxx视频网站</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>-->
                 </div>
 
                 <div class="center_cage">
@@ -149,18 +101,16 @@
                         <div class="dataAllBorder02" id="cage_cl" >
                             <div class="analysis">一天报警事件次数：</div>
                             <ul class="data_show_box">
-                                <li class="data_cage">1</li>
-                                <li class="data_cage">0</li>
-                                <li class="data_cage">1</li>
+                                <li class="data_cage" v-for="item  in  alarmDatas.sum">{{item}}</li>
                             </ul>
                             <div class="depart_number_box">
                                 <ul class="depart_number_cage" style="margin-bottom: 0px;">
                                     <li class="depart_name">报警次数：</li>
-                                    <li class="depart_number">4,251</li>
+                                    <li class="depart_number">{{alarmDatas.num}}</li>
                                 </ul>
                                 <ul class="depart_number_cage" style="margin-bottom: 0px;">
                                     <li class="depart_name">事件次数：</li>
-                                    <li class="depart_number">24</li>
+                                    <li class="depart_number">{{alarmDatas.nnm}}</li>
                                 </ul>
                             </div>
                         </div>
@@ -237,7 +187,7 @@
                     <div class="modal-content" style="background: #395DC0;">
                         <div style="float:left;width: 50%;overflow-y:scroll;">
                             <div class="list-group" style="height: 500px;">
-                                <button v-for="(item,index) in equipmentFiles" type="button" @click="showRealPic(item.tplj)" style="background: #395DC0; color:#FEFEFF;cursor: pointer;" class="list-group-item">{{item.cjsj}}</button>
+                                <button v-for="(item,index) in equipmentFiles" type="button" @click="showRealPic(item.tplj)" style="background: #395DC0; color:#FEFEFF;cursor: pointer;border:1px solid #3490BA;" class="list-group-item">{{item.cjsj}}</button>
                             </div>
                         </div>
                         <div style="float:left;width: 50%;">
@@ -310,7 +260,6 @@
         name: "largemonitors",
         data:function(){
             return{
-                number:8,
                 waterQualityResults:[],
                 kvMaps:[],
                 count:{},
@@ -324,11 +273,15 @@
                 equipmentFiles:[],
                 equipmentFileDto:{},
                 srcpic:'',
+                containerDate:{},
+                alarmNumbersDto:{},
+                yAixsData:[],
+                xAixsData:[],
+                alarmDatas:{},
             }
         },
         mounted: function () {
             let _this = this;
-            //_this.Echarts();
             _this.getSzjcx();
             _this.getPieChart();
             _this.getLatestDate();
@@ -336,8 +289,20 @@
             //_this.Interval();
             _this.getWarningDate();
             _this.getContainerDate();
+            _this.TimeSum();
         },
         methods: {
+            TimeSum(){
+                let _this = this;
+                _this.alarmNumbersDto.deptcode = Tool.getLoginUser().deptcode;
+                _this.alarmNumbersDto.stime = moment().subtract(0, "days").format('YYYY-MM-DD');
+                _this.alarmNumbersDto.etime = moment().subtract(-1, "days").format('YYYY-MM-DD');
+                _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFile/statisticsAlarmNumsByTimeSum', _this.alarmNumbersDto).then((response) => {
+                    let resp = response.data;
+                    _this.alarmDatas = resp.content;
+                    console.log(_this.alarmDatas);
+                })
+            },
             /**
              * 图片查看
              */
@@ -359,7 +324,6 @@
                     _this.equipmentFiles = resp.content;
                     if(_this.equipmentFiles.length > 0){
                         _this.srcpic = _this.equipmentFiles[0].tplj;
-                        console.log(_this.equipmentFiles[0].tplj);
                     }
                 })
             },
@@ -373,28 +337,39 @@
              *  折线图
              */
             getContainerDate() {
-                let dom = document.getElementById("container");
-                let myChart = echarts.init(dom);
-                let option;
-                option = {
-                    xAxis: {
-                        type: 'category',
-                        data: ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期天']
-                    },
-                    yAxis: {
-                        type: 'value'
-                    },
-                    series: [
-                        {
-                            data: [820, 932, 901, 934, 1290, 1330, 1320],
-                            type: 'line',
-                            smooth: true
-                        }
-                    ]
-                };
-                if (option && typeof option === 'object') {
-                    myChart.setOption(option);
-                }
+                let _this = this;
+                _this.alarmNumbersDto.deptcode = Tool.getLoginUser().deptcode;
+                _this.alarmNumbersDto.stime = moment().subtract(7, "days").format('YYYY-MM-DD');
+                _this.alarmNumbersDto.etime = moment().subtract(-1, "days").format('YYYY-MM-DD');
+                _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFile/statisticsAlarmNumsByHourDP',_this.alarmNumbersDto).then((response)=>{
+                    let resp = response.data;
+                    _this.containerDate = resp.content;
+                    _this.yAixsData = _this.containerDate.yAixsData;
+                    _this.xAixsData = _this.containerDate.xAixsData;
+                    let dom = document.getElementById("container");
+                    let myChart = echarts.init(dom);
+                    let option;
+                    option = {
+                        xAxis: {
+                            type: 'category',
+                            data: _this.xAixsData
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: [
+                            {
+                                data: _this.yAixsData,
+                                type: 'line',
+                                smooth: true
+                            }
+                        ]
+                    };
+                    if (option && typeof option === 'object') {
+                        myChart.setOption(option);
+                    }
+                })
+
             },
             /**
              *  welcome 实时越限警告
@@ -551,63 +526,6 @@
                         console.log(1);
                     }
                 })
-            },
-            Echarts() {
-                let myChart = echarts.init($("#container_huan")[0]);
-                let option = {
-                    tooltip: {
-                        trigger: 'item',
-                        formatter: "{a} <br/>{b}: {c} ({d}%)"
-                    },
-                    legend: {
-                        orient: 'vertical',
-                        x: 'left',
-                        data:['民用爆炸','射钉器材','危化品','寄递物流','旅店'],
-                        textStyle:{
-                            color:"#e9ebee"
-                        }
-                    },
-                    series: [
-                        {
-                            name:'行业数据',
-                            type:'pie',
-                            center:['80%','50%'],
-                            radius: ['50%', '80%'],
-                            avoidLabelOverlap: false,
-                            label: {
-                                normal: {
-                                    show: false,
-                                    position: 'center'
-                                },
-                                emphasis: {
-                                    show: true,
-                                    textStyle: {
-                                        fontSize: '30',
-                                        fontWeight: 'bold'
-                                    }
-                                }
-                            },
-                            itemStyle: {
-                                normal: {
-                                    label: {
-                                        show: false
-                                    },
-                                    labelLine: {
-                                        show: false
-                                    }
-                                }
-                            },
-                            data:[
-                                {value:335, name:'民用爆炸'},
-                                {value:310, name:'射钉器材'},
-                                {value:234, name:'危化品'},
-                                {value:135, name:'寄递物流'},
-                                {value:1548, name:'旅店'}
-                            ]
-                        }
-                    ]
-                };
-                myChart.setOption(option);
             },
         },
     }
