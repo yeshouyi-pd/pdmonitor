@@ -62,19 +62,31 @@ public class UploadFileController {
     }
 
     @RequestMapping("/uploadbig")
-    public ResponseDto uploadbig(@RequestBody FileDto fileDto) throws Exception {
-        LOG.info("上传文件开始");
-        String use = fileDto.getUse();
-        String key = fileDto.getKey();
-        String suffix = fileDto.getSuffix();
-        String shardBase64 = fileDto.getShard();
-        MultipartFile shard = Base64ToMultipartFile.base64ToMultipart(shardBase64);
+
+    public ResponseDto uploadbig(@RequestParam MultipartFile shard,
+                                 String use,
+                                 String name,
+                                 String suffix,
+                                 Integer size,
+                                 Integer shardIndex,
+                                 Integer shardSize,
+                                 Integer shardTotal,
+                                 String key) throws Exception {
+        //LOG.info("上传文件开始");
+
+        FileDto fileDto = new FileDto();
+        fileDto.setName(name);
+        fileDto.setSize(size);
+        fileDto.setSuffix(suffix);
+        fileDto.setUse(use);
+        fileDto.setShardIndex(shardIndex);
+        fileDto.setShardSize(shardSize);
+        fileDto.setShardTotal(shardTotal);
+        fileDto.setKey(key);
 
         String picStorePath = (String) redisTemplate.opsForValue().get(RedisCode.STATICPATH);//静态路径地址
         String basePath = picStorePath +use+File.separator+DateTools.getFormatDate(new Date(),"yyyyMM");
 
-        // 保存文件到本地
-        //FileUseEnum useEnum = FileUseEnum.getByCode(use);
 
         //如果文件夹不存在则创建
 
@@ -95,9 +107,9 @@ public class UploadFileController {
         String fullPath = basePath +File.separator+ localPath;
         File dest = new File(fullPath);
         shard.transferTo(dest);
-        LOG.info(dest.getAbsolutePath());
+        //LOG.info(dest.getAbsolutePath());
 
-        LOG.info("保存文件记录开始");
+        //LOG.info("保存文件记录开始");
         fileDto.setPath(use+File.separator+DateTools.getFormatDate(new Date(),"yyyyMM")+File.separator+path);
         fileService.save(fileDto);
 
@@ -113,7 +125,7 @@ public class UploadFileController {
 
     public void merge(FileDto fileDto) throws Exception {
         String picStorePath = (String) redisTemplate.opsForValue().get(RedisCode.STATICPATH);//静态路径地址
-        LOG.info("合并分片开始");
+        //LOG.info("合并分片开始");
         String path = fileDto.getPath(); //http://127.0.0.1:9000/file/f/course\6sfSqfOwzmik4A4icMYuUe.mp4
         path = path.replace("/system/f", ""); //course\6sfSqfOwzmik4A4icMYuUe.mp4
         Integer shardTotal = fileDto.getShardTotal();
@@ -139,30 +151,30 @@ public class UploadFileController {
                     fileInputStream.close();
                 }
                 outputStream.close();
-                LOG.info("IO流关闭");
+                //LOG.info("IO流关闭");
             } catch (Exception e) {
                 LOG.error("IO流关闭", e);
             }
         }
-        LOG.info("合并分片结束");
+        //LOG.info("合并分片结束");
 
         System.gc();
-        Thread.sleep(100);
+        Thread.sleep(300);
 
         // 删除分片
-        LOG.info("删除分片开始");
+        //LOG.info("删除分片开始");
         for (int i = 0; i < shardTotal; i++) {
             String filePath = picStorePath + path + "." + (i + 1);
             File file = new File(filePath);
             boolean result = file.delete();
-            LOG.info("删除{}，{}", filePath, result ? "成功" : "失败");
+            //LOG.info("删除{}，{}", filePath, result ? "成功" : "失败");
         }
-        LOG.info("删除分片结束");
+        //LOG.info("删除分片结束");
     }
 
     @GetMapping("/check/{key}")
     public ResponseDto check(@PathVariable String key) {
-        LOG.info("检查上传分片开始：{}", key);
+        //LOG.info("检查上传分片开始：{}", key);
         ResponseDto responseDto = new ResponseDto();
         FileDto fileDto = fileService.findByKey(key);
         if (fileDto != null) {
