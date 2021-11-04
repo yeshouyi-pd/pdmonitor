@@ -52,7 +52,7 @@
                                     <div class="map_title">实时地图</div>
                                 </div>
                             </div>
-                            <equipmentMap v-bind:height-max="740"></equipmentMap>
+                            <equipmentMap v-bind:height-max="520"></equipmentMap>
                         </div>
                     </div>
 
@@ -275,6 +275,7 @@
                 srcpic:'',
                 containerDate:{},
                 alarmNumbersDto:{},
+                alarmNumbersDto2:{},
                 yAixsData:[],
                 xAixsData:[],
                 alarmDatas:{},
@@ -338,10 +339,10 @@
              */
             getContainerDate() {
                 let _this = this;
-                _this.alarmNumbersDto.deptcode = Tool.getLoginUser().deptcode;
-                _this.alarmNumbersDto.stime = moment().subtract(7, "days").format('YYYY-MM-DD');
-                _this.alarmNumbersDto.etime = moment().subtract(-1, "days").format('YYYY-MM-DD');
-                _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFile/statisticsAlarmNumsByHourDP',_this.alarmNumbersDto).then((response)=>{
+                _this.alarmNumbersDto2.deptcode = Tool.getLoginUser().deptcode;
+                _this.alarmNumbersDto2.stime = moment().subtract(7, "days").format('YYYY-MM-DD');
+                _this.alarmNumbersDto2.etime = moment().subtract(-1, "days").format('YYYY-MM-DD');
+                _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFile/statisticsAlarmNumsByHourDP',_this.alarmNumbersDto2).then((response)=>{
                     let resp = response.data;
                     _this.containerDate = resp.content;
                     _this.yAixsData = _this.containerDate.yAixsData;
@@ -351,11 +352,15 @@
                     let option;
                     option = {
                         xAxis: {
+                            show: true,
                             type: 'category',
+                            name: '日期',
                             data: _this.xAixsData
                         },
                         yAxis: {
-                            type: 'value'
+                            show: true,
+                            type: 'value',
+                            name: '百分比'
                         },
                         series: [
                             {
