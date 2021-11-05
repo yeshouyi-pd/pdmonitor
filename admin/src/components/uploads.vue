@@ -26,9 +26,17 @@
           </div>
         </div>
         <div class="upload_warp_text" style="text-align: center">
-          <button type="button"  v-on:click="upload" class="btn btn-sm btn-info btn-round" style="margin-right: 10px;">
+          <button type="button"   v-show="show1" v-on:click="upload" class="btn btn-sm btn-info btn-round" style="margin-right: 10px;">
             <i class="ace-icon fa fa-upload"></i>
             上传
+          </button>
+          <button type="button"  v-show="show2" disabled="disabled" v-on:click="upload" class="btn btn-sm btn-info btn-round" style="margin-right: 10px;">
+            <i class="ace-icon fa fa-upload"></i>
+            上传
+          </button>
+          <button type="button"   v-on:click="refresh" class="btn btn-sm btn-success btn-round" style="margin-right: 10px;">
+            <i class="ace-icon fa fa-refresh"></i>
+            清空
           </button>
         </div>
       </div>
@@ -51,16 +59,30 @@
           return {
             imgList: [],
             size: 0,
-            thisdo:0
+            thisdo:0,
+            show1:true,
+            show2:false
           }
         },
         methods: {
+          refresh(){
+            let  _this = this;
+            _this.imgList = [];
+            _this.size= 0;
+            _this.thisdo=0;
+            _this.show1=true;
+            _this.show2=false;
+            this.$forceUpdate();
+
+          },
           upload(){
             let _this = this;
             if(Tool.isEmpty(_this.imgList)){
               Toast.warning("请选择要上传文件！")
               return;
             }
+             _this.show1=false;
+             _this.show2=true;
             _this.uploadFile(this.imgList[_this.thisdo].file);//初始传第一张
 
           },
@@ -76,18 +98,7 @@
             let suffixs = _this.suffixs;
             let fileName = file.name;
             let suffix = fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length).toLowerCase();
-            let validateSuffix = false;
-/*            for (let i = 0; i < suffixs.length; i++) {
-              if (suffixs[i].toLowerCase() === suffix) {
-                validateSuffix = true;
-                break;
-              }
-            }
-            if (!validateSuffix) {
-              Toast.warning("文件格式不正确！只支持上传：" + suffixs.join(","));
-              $("#" + _this.inputId + "-input").val("");
-              return;
-            }*/
+
 
             if(file.size > 5*1024*1024*1024){
               Toast.warning("单次文件上传不能超过5G");
@@ -96,7 +107,7 @@
             }
 
             // 文件分片
-            let shardSize = 10 * 1024 * 1024;    //以10MB为一个分片
+            let shardSize = 20 * 1024 * 1024;    //以10MB为一个分片
             let shardIndex = 1;		//分片索引，1表示第1个分片
             let size = file.size;
             let shardTotal = Math.ceil(size / shardSize); //总片数
@@ -131,10 +142,15 @@
                   _this.uploads(param,file);
                 } else if (obj.shardIndex === obj.shardTotal) {
                   // 已上传分片 = 分片总数，说明已全部上传完，上传下一个
+                  _this.imgList[_this.thisdo].file.src='/static/image/upload/sg.png';
+                  this.$forceUpdate();
                   if(_this.thisdo <  _this.imgList.length -1){
                     _this.thisdo = _this.thisdo +1;
                     _this.upload();
                   }else{
+                    _this.show1=true;
+                    _this.show2=false;
+                    _this.thisdo = 0;
                     Toast.success("上传完成！")
                   }
                 }  else {
@@ -169,9 +185,6 @@
             formData.append('size', param.size);
             formData.append('key', param.key);
 
-
-
-
             _this.$ajax.post(process.env.VUE_APP_SERVER + '/system/uploadfile/uploadbig', formData).then((response) => {
               let resp = response.data;
               console.log("上传文件成功：", resp);
@@ -182,11 +195,16 @@
                 _this.uploads(param,file);
               } else {
                 Progress.hide();
+                _this.imgList[_this.thisdo].file.src='/static/image/upload/sg.png';
+                this.$forceUpdate();
                 //传完后继续上传下一个
                 if(_this.thisdo <  _this.imgList.length -1){
                   _this.thisdo = _this.thisdo +1;
                  _this.upload();
                 }else{
+                  _this.show1=true;
+                  _this.show2=false;
+                  _this.thisdo = 0;
                   Toast.success("上传完成！")
                 }
               }
@@ -251,21 +269,12 @@
             //总大小
             this.size = this.size + file.size;
             //判断是否为图片文件
-            if (file.type.indexOf('image') == -1) {
+            let suffix =  file.name.substring( file.name.lastIndexOf(".") + 1,  file.name.length).toLowerCase();
+            if (suffix == 'mp4' || suffix=='wav' ) {
               file.src = '/static/image/upload/wenjian.png';
               this.imgList.push({
                 file
               });
-            } else {
-              let reader = new FileReader();
-              reader.vue = this;
-              reader.readAsDataURL(file);
-              reader.onload = function () {
-                file.src = this.result;
-                this.vue.imgList.push({
-                  file
-                });
-              }
             }
           },
           fileDel(index) {
