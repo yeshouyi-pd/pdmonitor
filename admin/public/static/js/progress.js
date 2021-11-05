@@ -1,5 +1,5 @@
 Progress = {
-  show: function (width) {
+  show: function (width,count) {
     let _this = this;
     _this.width = width;
     if ($("#progress-div").length > 0) {
@@ -18,7 +18,7 @@ Progress = {
         "    color: rgb(0, 0, 0);\n" +
         "    border: 3px solid rgb(170, 170, 170);\n" +
         "    background-color: rgb(255, 255, 255);\n" +
-        "    cursor: wait;\"><div class=\"progress pos-rel\" data-percent=\"" + width + "%\"><div class=\"progress-bar\"></div></div></div>";
+        "    cursor: wait;\"><div class=\"progress pos-rel\" data-percent=\"" + width + "%\"><div class=\"progress-bar\">正在上传第"+count+"张</div></div></div>";
       $("#progress-div").remove();
       $("body").append(progressDiv);
 
