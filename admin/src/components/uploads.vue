@@ -58,10 +58,12 @@
             <!--========================================  -->
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-white btn-default btn-round" data-dismiss="modal">
+            <button type="button" class="btn btn-sm btn-danger btn-round" data-dismiss="modal">
               <i class="ace-icon fa fa-times"></i>
               关闭
             </button>
+
+
           </div>
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
