@@ -130,13 +130,13 @@
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
-    <div class="form-group">
+<!--    <div class="form-group">
       <div class="col-sm-10">
         <Uploads    v-bind:suffixs="['mp4']"
                     v-bind:use="'1'"
                     v-bind:mainid="'1'" ></Uploads>
       </div>
-    </div>
+    </div>-->
   </div>
 </template>
 <script>
