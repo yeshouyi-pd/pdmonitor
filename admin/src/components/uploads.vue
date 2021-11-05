@@ -80,6 +80,9 @@
         use: {
           default: ""
         },
+        mainid: {
+          default: ""
+        },
       },
         data: function () {
           return {
@@ -130,7 +133,6 @@
             let fileName = file.name;
             let suffix = fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length).toLowerCase();
 
-
             if(file.size > 5*1024*1024*1024){
               Toast.warning("单次文件上传不能超过5G");
               return;
@@ -152,6 +154,7 @@
               'suffix': suffix,
               'size': file.size,
               'key': key62,
+              'mianid':_this.mainid,
 
             };
 
@@ -204,7 +207,7 @@
             let shardTotal = param.shardTotal;
             let shardSize = param.shardSize;
             let fileShard = _this.getFileShard(shardIndex, shardSize,file);
-            Progress.show(parseInt((shardIndex - 1) * 100 / shardTotal),_this.thisdo+1);
+            Progress.show(parseInt((shardIndex - 1) * 100 / shardTotal),parseInt(_this.thisdo+1));
             let formData = new window.FormData();
             formData.append('shard', fileShard);
             formData.append('shardIndex',  param.shardIndex);
@@ -215,20 +218,21 @@
             formData.append('suffix', param.suffix);
             formData.append('size', param.size);
             formData.append('key', param.key);
-
+            formData.append('mianid', param.mianid);
             _this.$ajax.post(process.env.VUE_APP_SERVER + '/system/uploadfile/uploadbig', formData).then((response) => {
               let resp = response.data;
               console.log("上传文件成功：", resp);
-              Progress.show(parseInt((shardIndex - 1) * 100 / shardTotal),_this.thisdo+1);
+              Progress.show(parseInt((shardIndex - 1) * 100 / shardTotal),parseInt(_this.thisdo+1));
               if (shardIndex < shardTotal) {
                 // 上传下一个分片
                 param.shardIndex = param.shardIndex + 1;
                 _this.uploads(param,file);
               } else {
-                Progress.hide();
+
                 _this.imgList[_this.thisdo].file.src='/static/image/upload/sg.png';
                 this.$forceUpdate();
                 //传完后继续上传下一个
+                Progress.hide();
                 if(_this.thisdo <  _this.imgList.length -1){
                   _this.thisdo = _this.thisdo +1;
                  _this.upload();

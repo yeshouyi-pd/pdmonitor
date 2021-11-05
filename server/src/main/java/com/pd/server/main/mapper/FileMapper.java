@@ -1,11 +1,9 @@
 package com.pd.server.main.mapper;
 
-
 import com.pd.server.main.domain.File;
 import com.pd.server.main.domain.FileExample;
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 public interface FileMapper {
     long countByExample(FileExample example);

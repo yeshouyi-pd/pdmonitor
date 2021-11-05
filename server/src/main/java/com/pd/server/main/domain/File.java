@@ -27,6 +27,12 @@ public class File {
 
     private String key;
 
+    private String mianid;
+
+    private String f1;
+
+    private String f2;
+
     public String getId() {
         return id;
     }
@@ -123,6 +129,30 @@ public class File {
         this.key = key;
     }
 
+    public String getMianid() {
+        return mianid;
+    }
+
+    public void setMianid(String mianid) {
+        this.mianid = mianid;
+    }
+
+    public String getF1() {
+        return f1;
+    }
+
+    public void setF1(String f1) {
+        this.f1 = f1;
+    }
+
+    public String getF2() {
+        return f2;
+    }
+
+    public void setF2(String f2) {
+        this.f2 = f2;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -141,6 +171,9 @@ public class File {
         sb.append(", shardSize=").append(shardSize);
         sb.append(", shardTotal=").append(shardTotal);
         sb.append(", key=").append(key);
+        sb.append(", mianid=").append(mianid);
+        sb.append(", f1=").append(f1);
+        sb.append(", f2=").append(f2);
         sb.append("]");
         return sb.toString();
     }
