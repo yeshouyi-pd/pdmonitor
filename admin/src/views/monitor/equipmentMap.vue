@@ -1,13 +1,34 @@
 <template>
-  <div>
+  <div style="width: 100%;height: 100%;">
     <div id="map-top" style="width: 115px;height: 80px;border: 1px solid #EEEEEE;position: absolute;left: 12px;z-index: 100;background-color: #fff;">
       <div style="padding:5px 0px 5px 5px"><i class="fa fa-map-marker" style="color:#03C449;padding-right: 10px"></i>设备正常 {{onLineCount}}个</div>
       <div style="padding:0px 0px 5px 5px"><i class="fa fa-map-marker" style="color:#555555;padding-right: 10px"></i>设备离线 {{offLineCount}}个</div>
       <div style="padding:0px 0px 5px 5px"><i class="fa fa-map-marker" style="color:#B03A5B;padding-right: 10px"></i>设备故障 {{errorCount}}个</div>
     </div>
     <div :style="{height: heightMax + 'px'}">
-      <div id="container" style="width:100%;height: 100%"></div>
+      <div id="containerMap" style="width:100%;height: 100%"></div>
     </div>
+
+    <div id="form-modal" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog" style="width: 50%;" role="document">
+        <div class="modal-content">
+          <div style="float:left;width: 50%;overflow-y:scroll;">
+            <div class="list-group" style="height: 500px;">
+              <button v-for="(item,index) in equipmentFiles" type="button" @click="showRealPic(item.tplj)" style="cursor: pointer;border:1px solid #3490BA;" class="list-group-item">{{item.cjsj}}</button>
+            </div>
+          </div>
+          <div style="float:left;width: 50%;">
+            <div style="border: 0px solid red;text-align:center;">
+              <img :src=srcpic style="height: 520px;width:50%;">
+            </div>
+          </div>
+          <div class="clear"></div>
+          <div class="modal-footer" style="background-color: #fff">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
   </div>
 </template>
 <script>
@@ -27,13 +48,14 @@ export default {
       offLineCount:0,
       errorCount:0,
       centerLoction:[114.299945,30.593221],
-      amap:''
+      amap:'',
+      equipmentFiles:[],
+      srcpic:''
     }
   },
   mounted() {
     let _this = this;
-
-    _this.amap = new AMap.Map('container', {
+    _this.amap = new AMap.Map('containerMap', {
       center: [114.299945,30.593221],
       resizeEnable: true,
       zoom: 5
@@ -87,6 +109,7 @@ export default {
             marker.content.push(devices[i].centerCode);
             marker.content.push(devices[i].sbmc);
             marker.content.push(devices[i].sbsn);
+            marker.content.push(devices[i].sblb);
             AMap.event.addListener(marker, 'click', function (e) {
               let infoWindow = new AMap.InfoWindow({
                 isCustom: true,  //使用自定义窗体
@@ -122,6 +145,7 @@ export default {
             marker.content.push(devices[i].centerCode);
             marker.content.push(devices[i].sbmc);
             marker.content.push(devices[i].sbsn);
+            marker.content.push(devices[i].sblb);
             //marker.on('click', _this.markerClick);
             //鼠标点击marker弹出自定义的信息窗体
             AMap.event.addListener(marker, 'click', function (e) {
@@ -160,9 +184,30 @@ export default {
       let middle = document.createElement("div");
       middle.className = "info-middle";
       middle.style.backgroundColor = 'white';
-      middle.innerHTML = "<div>所属监测点："+_this.optionMapKV(_this.deptMap,content[0])+"</div><div>所属数据中心："+_this.optionWDArray(_this.waterDatas,content[1])+"</div><div>设备名称："+content[2]+"</div><div>设备编号："+content[3]+"</div>";
-      info.appendChild(middle);
 
+      let middle1 = document.createElement("div");
+      middle1.innerHTML = "<div>所属监测点："+_this.optionMapKV(_this.deptMap,content[0])+"</div>";
+      middle.appendChild(middle1);
+      let middle2 = document.createElement("div");
+      middle2.innerHTML = "<div>所属数据中心："+_this.optionWDArray(_this.waterDatas,content[1])+"</div>";
+      middle.appendChild(middle2);
+      let middle3 = document.createElement("div");
+      middle3.innerHTML = "<div>设备名称："+content[2]+"</div>";
+      middle.appendChild(middle3);
+      if("0001"==content[4]){
+        let middle4 = document.createElement("div");
+        middle4.innerHTML = "<div class='"+content[3]+"' style='cursor: pointer;'>设备编号："+content[3]+"<span style='margin:0 10px;color: blue;' class='"+content[3]+"'>详情</span></div>";
+        middle4.addEventListener('click',function (e){
+          console.log(e.target.className);
+          _this.listsbbh(e.target.className);
+        })
+        middle.appendChild(middle4);
+      }else if("0002"==content[4]){
+        let middle4 = document.createElement("div");
+        middle4.innerHTML = "<div>设备编号："+content[3]+"</div>";
+        middle.appendChild(middle4);
+      }
+      info.appendChild(middle);
       // 定义底部内容
       let bottom = document.createElement("div");
       bottom.className = "info-bottom";
@@ -178,6 +223,35 @@ export default {
     closeInfoWindow() {
       let _this = this;
       _this.amap.clearInfoWindow();
+    },
+    /**
+     * 列表查询
+     */
+    listsbbh(sbbh) {
+      let _this = this;
+      Loading.show();
+      let obj = {};
+      obj.sbbh=sbbh;
+      _this.$forceUpdate();
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFile/listsbbh',obj).then((response)=>{
+        Loading.hide();
+        let resp = response.data;
+        _this.equipmentFiles = resp.content;
+        if(_this.equipmentFiles.length > 0){
+          _this.srcpic = _this.equipmentFiles[0].tplj;
+          _this.$forceUpdate();
+          $("#form-modal").modal("show");
+        }else {
+          Toast.warning("暂无数据");
+        }
+      })
+    },
+    /**
+     * 图片查看
+     */
+    showRealPic(tplj){
+      let _this = this;
+      _this.srcpic = tplj;
     },
     optionMapKV(object, key){
       if (!object || !key) {
