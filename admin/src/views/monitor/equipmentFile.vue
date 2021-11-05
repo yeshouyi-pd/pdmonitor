@@ -144,14 +144,23 @@
         </div>
       </div>
     </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">文件</label>
+      <div class="col-sm-10">
+        <Uploads    v-bind:suffixs="['mp4']"
+                    v-bind:use="'1'"></Uploads>
+
+      </div>
+    </div>
   </div>
 </template>
 <script>
 import Pagination from "../../components/pagination";
 import TimeRangePicker from "../../components/timeRangePicker";
 import BigFile from "../../components/big-file";
+import Uploads from "../../components/uploads";
 export default {
-  components: {Pagination,TimeRangePicker,BigFile},
+  components: {Pagination,TimeRangePicker,BigFile,Uploads},
   name: "equipment-file",
   data: function (){
     return {
