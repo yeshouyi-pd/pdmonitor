@@ -1,46 +1,72 @@
 <template>
   <div >
-    <div class="hello">
-      <div class="upload">
-        <div class="upload_warp">
-          <div class="upload_warp_left" @click="fileClick">
-            <img src="/static/image/upload/upload.png">
+    <button type="button" v-on:click="showupload" class="btn btn-sm btn-info btn-round" style="margin-right: 10px;">
+      <i class="ace-icon fa fa-upload"></i>
+      上传
+    </button>
+
+    <div id="updoad-modal" class="modal fade" tabindex="-1"  style="z-index: 1060"  role="dialog">
+      <div class="modal-dialog" style="width: 680px;height: auto" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">文件上传</h4>
           </div>
-          <div class="upload_warp_right" @drop="drop($event)" @dragenter="dragenter($event)" @dragover="dragover($event)">
-            或者将文件拖到此处
-          </div>
-        </div>
-        <div class="upload_warp_text">
-          选中{{imgList.length}}张文件，共{{bytesToSize(this.size)}}
-        </div>
-        <input @change="fileChange($event)" type="file" id="upload_file" multiple style="display: none"/>
-        <div class="upload_warp_img" v-show="imgList.length!=0">
-          <div class="upload_warp_img_div" v-for="(item,index) of imgList">
-            <div class="upload_warp_img_div_top">
-              <div class="upload_warp_img_div_text">
-                {{item.file.name}}
+          <div class="modal-body">
+            <!--========================================  -->
+            <div class="hello">
+              <div class="upload">
+                <div class="upload_warp">
+                  <div class="upload_warp_left" @click="fileClick">
+                    <img src="/static/image/upload/upload.png">
+                  </div>
+                  <div class="upload_warp_right" @drop="drop($event)" @dragenter="dragenter($event)" @dragover="dragover($event)">
+                    或者将文件拖到此处
+                  </div>
+                </div>
+                <div class="upload_warp_text">
+                  选中{{imgList.length}}张文件，共{{bytesToSize(this.size)}}
+                </div>
+                <input @change="fileChange($event)" type="file" id="upload_file" multiple style="display: none"/>
+                <div class="upload_warp_img" v-show="imgList.length!=0">
+                  <div class="upload_warp_img_div" v-for="(item,index) of imgList">
+                    <div class="upload_warp_img_div_top">
+                      <div class="upload_warp_img_div_text">
+                        {{item.file.name}}
+                      </div>
+                      <img src="/static/image/upload/del.png" class="upload_warp_img_div_del" @click="fileDel(index)">
+                    </div>
+                    <img :src="item.file.src">
+                  </div>
+                </div>
+                <div class="upload_warp_text" style="text-align: center">
+                  <button type="button"   v-show="show1" v-on:click="upload" class="btn btn-sm btn-info btn-round" style="margin-right: 10px;">
+                    <i class="ace-icon fa fa-upload"></i>
+                    上传
+                  </button>
+                  <button type="button"  v-show="show2" disabled="disabled" v-on:click="upload" class="btn btn-sm btn-info btn-round" style="margin-right: 10px;">
+                    <i class="ace-icon fa fa-upload"></i>
+                    上传
+                  </button>
+                  <button type="button"   v-on:click="refresh" class="btn btn-sm btn-success btn-round" style="margin-right: 10px;">
+                    <i class="ace-icon fa fa-refresh"></i>
+                    清空
+                  </button>
+                </div>
               </div>
-              <img src="/static/image/upload/del.png" class="upload_warp_img_div_del" @click="fileDel(index)">
             </div>
-            <img :src="item.file.src">
+            <!--========================================  -->
           </div>
-        </div>
-        <div class="upload_warp_text" style="text-align: center">
-          <button type="button"   v-show="show1" v-on:click="upload" class="btn btn-sm btn-info btn-round" style="margin-right: 10px;">
-            <i class="ace-icon fa fa-upload"></i>
-            上传
-          </button>
-          <button type="button"  v-show="show2" disabled="disabled" v-on:click="upload" class="btn btn-sm btn-info btn-round" style="margin-right: 10px;">
-            <i class="ace-icon fa fa-upload"></i>
-            上传
-          </button>
-          <button type="button"   v-on:click="refresh" class="btn btn-sm btn-success btn-round" style="margin-right: 10px;">
-            <i class="ace-icon fa fa-refresh"></i>
-            清空
-          </button>
-        </div>
-      </div>
-    </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-white btn-default btn-round" data-dismiss="modal">
+              <i class="ace-icon fa fa-times"></i>
+              关闭
+            </button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
   </div>
 </template>
 
@@ -65,6 +91,11 @@
           }
         },
         methods: {
+          showupload(){
+            let  _this = this;
+            $("#updoad-modal").modal("show");
+            _this.refresh();
+          },
           refresh(){
             let  _this = this;
             _this.imgList = [];
@@ -409,7 +440,6 @@
 
 .hello {
   width: 650px;
-  margin-left: 34%;
   text-align: center;
 }
 </style>
