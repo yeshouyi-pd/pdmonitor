@@ -32,6 +32,7 @@ import Jtlist  from "./views/mobile/jtlist.vue"
 import Jtlistinfo  from "./views/mobile/jtlistinfo.vue"
 import Largemonitors  from "./views/mobile/largemonitors.vue"
 import Test  from "./views/mobile/test.vue"
+import WaterProject from "./views/monitor/waterProject.vue";
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -180,6 +181,10 @@ export default new Router({
             path: "monitor/interfaceLog",
             name: "monitor/interfaceLog",
             component: InterfaceLog
+        },{
+            path: "monitor/waterProject",
+            name: "monitor/waterProject",
+            component: WaterProject
         }]
 
     }]
