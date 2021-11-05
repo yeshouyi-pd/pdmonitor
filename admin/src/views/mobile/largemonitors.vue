@@ -1,5 +1,5 @@
 <template>
-    <div style="height: 135%;border: 0px solid red;" class="data_bodey">
+    <div class="data_bodey">
         <remote-css href="/css/BigData.css" rel="stylesheet" type="text/css" />
         <remote-css href="/css/index.css" rel="stylesheet" type="text/css" />
         <remote-css href="/css/index01.css" rel="stylesheet" type="text/css" />
@@ -10,7 +10,6 @@
 
         <div class="index_nav" >
             <ul style="height: 30px; margin-bottom: 0px;">
-                <!--<li class="l_left total_chose_fr nav_active">实时监测</li>-->
                 <router-link to="/welcome">
                     <li class="l_left total_chose_fr nav_active">主页</li>
                 </router-link>
@@ -52,7 +51,7 @@
                                     <div class="map_title">实时地图</div>
                                 </div>
                             </div>
-                            <EquipmentAMap v-bind:height-max="520"></EquipmentAMap>
+                            <EquipmentAMap></EquipmentAMap>
                         </div>
                     </div>
 

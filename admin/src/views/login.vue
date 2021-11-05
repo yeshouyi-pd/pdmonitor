@@ -235,7 +235,7 @@
                       if(_this.isMobileflag){
                         _this.$router.push("/mobile/mindex")
                       }else{
-                          _this.$router.push("/mobile/largemonlitors")
+                          _this.$router.push("/mobile/largemonitors")
                           //_this.$router.push("/welcome")
                       }
 
