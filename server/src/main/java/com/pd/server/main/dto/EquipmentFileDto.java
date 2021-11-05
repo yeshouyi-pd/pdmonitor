@@ -1,7 +1,8 @@
 package com.pd.server.main.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
-        import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class EquipmentFileDto extends PageDto{
 
