@@ -49,6 +49,6 @@
 
         <!-- 请修改数据源位置  main主数据源  secondary 副数据源-->
         <!---  看上面部分  很关键 请选择数据源 -->
-        <table tableName="interface_log" domainObjectName="InterfaceLog"/>
+        <table tableName="water_equiplog" domainObjectName="WaterEquiplog"/>
     </context>
 </generatorConfiguration>

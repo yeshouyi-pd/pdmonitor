@@ -55,6 +55,12 @@ public class FileDto {
 
     private String key;
 
+    private String mianid;
+
+    private String f1;
+
+    private String f2;
+
     /**
      * base64
      */
@@ -164,24 +170,50 @@ public class FileDto {
         this.shard = shard;
     }
 
-    @Override
-    public String toString() {
-        final StringBuffer sb = new StringBuffer("FileDto{");
-        sb.append("id='").append(id).append('\'');
-        sb.append(", path='").append(path).append('\'');
-        sb.append(", name='").append(name).append('\'');
-        sb.append(", suffix='").append(suffix).append('\'');
-        sb.append(", size=").append(size);
-        sb.append(", use='").append(use).append('\'');
-        sb.append(", createdAt=").append(createdAt);
-        sb.append(", updatedAt=").append(updatedAt);
-        sb.append(", shardIndex=").append(shardIndex);
-        sb.append(", shardSize=").append(shardSize);
-        sb.append(", shardTotal=").append(shardTotal);
-        sb.append(", key='").append(key).append('\'');
-        sb.append(", shard='").append(shard).append('\'');
-        sb.append('}');
-        return sb.toString();
+    public String getMianid() {
+        return mianid;
     }
 
+    public void setMianid(String mianid) {
+        this.mianid = mianid;
+    }
+
+    public String getF1() {
+        return f1;
+    }
+
+    public void setF1(String f1) {
+        this.f1 = f1;
+    }
+
+    public String getF2() {
+        return f2;
+    }
+
+    public void setF2(String f2) {
+        this.f2 = f2;
+    }
+
+
+    @Override
+    public String toString() {
+        return "FileDto{" +
+                "id='" + id + '\'' +
+                ", path='" + path + '\'' +
+                ", name='" + name + '\'' +
+                ", suffix='" + suffix + '\'' +
+                ", size=" + size +
+                ", use='" + use + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", shardIndex=" + shardIndex +
+                ", shardSize=" + shardSize +
+                ", shardTotal=" + shardTotal +
+                ", key='" + key + '\'' +
+                ", mianid='" + mianid + '\'' +
+                ", f1='" + f1 + '\'' +
+                ", f2='" + f2 + '\'' +
+                ", shard='" + shard + '\'' +
+                '}';
+    }
 }
