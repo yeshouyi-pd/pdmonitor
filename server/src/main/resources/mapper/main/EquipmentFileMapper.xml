@@ -13,7 +13,16 @@
     <result column="xs" jdbcType="VARCHAR" property="xs" />
     <result column="fz" jdbcType="VARCHAR" property="fz" />
     <result column="deptcode" jdbcType="VARCHAR" property="deptcode" />
-    <result column="sbmc" jdbcType="VARCHAR" property="sbmc" />
+    <result column="xmbh" jdbcType="VARCHAR" property="xmbh" />
+    <result column="wjlx" jdbcType="VARCHAR" property="wjlx" />
+    <result column="jczl" jdbcType="VARCHAR" property="jczl" />
+    <result column="ly" jdbcType="VARCHAR" property="ly" />
+    <result column="sm1" jdbcType="VARCHAR" property="sm1" />
+    <result column="sm2" jdbcType="VARCHAR" property="sm2" />
+    <result column="sm3" jdbcType="VARCHAR" property="sm3" />
+    <result column="sm4" jdbcType="VARCHAR" property="sm4" />
+    <result column="sm5" jdbcType="VARCHAR" property="sm5" />
+    <result column="sm6" jdbcType="VARCHAR" property="sm6" />
   </resultMap>
   <resultMap id="StatisticsResultMap" type="com.pd.server.main.dto.basewx.my.AlarmNumbersDto">
     <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
@@ -90,7 +99,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, sbbh, tplj, cjsj, create_time, nf, yf, rq, xs, fz, deptcode
+    id, sbbh, tplj, cjsj, create_time, nf, yf, rq, xs, fz, deptcode, xmbh, wjlx, jczl, 
+    ly, sm1, sm2, sm3, sm4, sm5, sm6
   </sql>
   <select id="selectByExample" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultMap="BaseResultMap">
     select
@@ -126,11 +136,17 @@
     insert into equipment_file (id, sbbh, tplj, 
       cjsj, create_time, nf, 
       yf, rq, xs, fz, 
-      deptcode)
+      deptcode, xmbh, wjlx, 
+      jczl, ly, sm1, sm2, 
+      sm3, sm4, sm5, sm6
+      )
     values (#{id,jdbcType=VARCHAR}, #{sbbh,jdbcType=VARCHAR}, #{tplj,jdbcType=VARCHAR}, 
       #{cjsj,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, #{nf,jdbcType=VARCHAR}, 
       #{yf,jdbcType=VARCHAR}, #{rq,jdbcType=VARCHAR}, #{xs,jdbcType=VARCHAR}, #{fz,jdbcType=VARCHAR}, 
-      #{deptcode,jdbcType=VARCHAR})
+      #{deptcode,jdbcType=VARCHAR}, #{xmbh,jdbcType=VARCHAR}, #{wjlx,jdbcType=VARCHAR}, 
+      #{jczl,jdbcType=VARCHAR}, #{ly,jdbcType=VARCHAR}, #{sm1,jdbcType=VARCHAR}, #{sm2,jdbcType=VARCHAR}, 
+      #{sm3,jdbcType=VARCHAR}, #{sm4,jdbcType=VARCHAR}, #{sm5,jdbcType=VARCHAR}, #{sm6,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.pd.server.main.domain.EquipmentFile">
     insert into equipment_file
@@ -168,6 +184,36 @@
       <if test="deptcode != null">
         deptcode,
       </if>
+      <if test="xmbh != null">
+        xmbh,
+      </if>
+      <if test="wjlx != null">
+        wjlx,
+      </if>
+      <if test="jczl != null">
+        jczl,
+      </if>
+      <if test="ly != null">
+        ly,
+      </if>
+      <if test="sm1 != null">
+        sm1,
+      </if>
+      <if test="sm2 != null">
+        sm2,
+      </if>
+      <if test="sm3 != null">
+        sm3,
+      </if>
+      <if test="sm4 != null">
+        sm4,
+      </if>
+      <if test="sm5 != null">
+        sm5,
+      </if>
+      <if test="sm6 != null">
+        sm6,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -202,6 +248,36 @@
       </if>
       <if test="deptcode != null">
         #{deptcode,jdbcType=VARCHAR},
+      </if>
+      <if test="xmbh != null">
+        #{xmbh,jdbcType=VARCHAR},
+      </if>
+      <if test="wjlx != null">
+        #{wjlx,jdbcType=VARCHAR},
+      </if>
+      <if test="jczl != null">
+        #{jczl,jdbcType=VARCHAR},
+      </if>
+      <if test="ly != null">
+        #{ly,jdbcType=VARCHAR},
+      </if>
+      <if test="sm1 != null">
+        #{sm1,jdbcType=VARCHAR},
+      </if>
+      <if test="sm2 != null">
+        #{sm2,jdbcType=VARCHAR},
+      </if>
+      <if test="sm3 != null">
+        #{sm3,jdbcType=VARCHAR},
+      </if>
+      <if test="sm4 != null">
+        #{sm4,jdbcType=VARCHAR},
+      </if>
+      <if test="sm5 != null">
+        #{sm5,jdbcType=VARCHAR},
+      </if>
+      <if test="sm6 != null">
+        #{sm6,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -247,6 +323,36 @@
       <if test="record.deptcode != null">
         deptcode = #{record.deptcode,jdbcType=VARCHAR},
       </if>
+      <if test="record.xmbh != null">
+        xmbh = #{record.xmbh,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wjlx != null">
+        wjlx = #{record.wjlx,jdbcType=VARCHAR},
+      </if>
+      <if test="record.jczl != null">
+        jczl = #{record.jczl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ly != null">
+        ly = #{record.ly,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sm1 != null">
+        sm1 = #{record.sm1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sm2 != null">
+        sm2 = #{record.sm2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sm3 != null">
+        sm3 = #{record.sm3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sm4 != null">
+        sm4 = #{record.sm4,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sm5 != null">
+        sm5 = #{record.sm5,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sm6 != null">
+        sm6 = #{record.sm6,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -264,7 +370,17 @@
       rq = #{record.rq,jdbcType=VARCHAR},
       xs = #{record.xs,jdbcType=VARCHAR},
       fz = #{record.fz,jdbcType=VARCHAR},
-      deptcode = #{record.deptcode,jdbcType=VARCHAR}
+      deptcode = #{record.deptcode,jdbcType=VARCHAR},
+      xmbh = #{record.xmbh,jdbcType=VARCHAR},
+      wjlx = #{record.wjlx,jdbcType=VARCHAR},
+      jczl = #{record.jczl,jdbcType=VARCHAR},
+      ly = #{record.ly,jdbcType=VARCHAR},
+      sm1 = #{record.sm1,jdbcType=VARCHAR},
+      sm2 = #{record.sm2,jdbcType=VARCHAR},
+      sm3 = #{record.sm3,jdbcType=VARCHAR},
+      sm4 = #{record.sm4,jdbcType=VARCHAR},
+      sm5 = #{record.sm5,jdbcType=VARCHAR},
+      sm6 = #{record.sm6,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -302,6 +418,36 @@
       <if test="deptcode != null">
         deptcode = #{deptcode,jdbcType=VARCHAR},
       </if>
+      <if test="xmbh != null">
+        xmbh = #{xmbh,jdbcType=VARCHAR},
+      </if>
+      <if test="wjlx != null">
+        wjlx = #{wjlx,jdbcType=VARCHAR},
+      </if>
+      <if test="jczl != null">
+        jczl = #{jczl,jdbcType=VARCHAR},
+      </if>
+      <if test="ly != null">
+        ly = #{ly,jdbcType=VARCHAR},
+      </if>
+      <if test="sm1 != null">
+        sm1 = #{sm1,jdbcType=VARCHAR},
+      </if>
+      <if test="sm2 != null">
+        sm2 = #{sm2,jdbcType=VARCHAR},
+      </if>
+      <if test="sm3 != null">
+        sm3 = #{sm3,jdbcType=VARCHAR},
+      </if>
+      <if test="sm4 != null">
+        sm4 = #{sm4,jdbcType=VARCHAR},
+      </if>
+      <if test="sm5 != null">
+        sm5 = #{sm5,jdbcType=VARCHAR},
+      </if>
+      <if test="sm6 != null">
+        sm6 = #{sm6,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -316,7 +462,17 @@
       rq = #{rq,jdbcType=VARCHAR},
       xs = #{xs,jdbcType=VARCHAR},
       fz = #{fz,jdbcType=VARCHAR},
-      deptcode = #{deptcode,jdbcType=VARCHAR}
+      deptcode = #{deptcode,jdbcType=VARCHAR},
+      xmbh = #{xmbh,jdbcType=VARCHAR},
+      wjlx = #{wjlx,jdbcType=VARCHAR},
+      jczl = #{jczl,jdbcType=VARCHAR},
+      ly = #{ly,jdbcType=VARCHAR},
+      sm1 = #{sm1,jdbcType=VARCHAR},
+      sm2 = #{sm2,jdbcType=VARCHAR},
+      sm3 = #{sm3,jdbcType=VARCHAR},
+      sm4 = #{sm4,jdbcType=VARCHAR},
+      sm5 = #{sm5,jdbcType=VARCHAR},
+      sm6 = #{sm6,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
   <select id="selectAudioByExample" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultType="java.lang.String">
