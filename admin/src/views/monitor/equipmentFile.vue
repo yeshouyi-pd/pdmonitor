@@ -129,29 +129,23 @@
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
-    <div class="form-group">
-      <label class="col-sm-2 control-label">视频</label>
+
+<!--    <div class="form-group">
       <div class="col-sm-10">
-        <big-file v-bind:input-id="'video-upload'"
-                  v-bind:text="'上传大视频'"
-                  v-bind:suffixs="['mp4']"
-                  v-bind:use="'1'"
-                  v-bind:after-upload="afterUpload"></big-file>
-        <div v-show="video" class="row">
-          <div class="col-md-9">
-            <video v-bind:src="video" id="video" controls="controls"></video>
-          </div>
-        </div>
+        <Uploads    v-bind:suffixs="['mp4']"
+                    v-bind:use="'1'"
+                    v-bind:mainid="'1'" ></Uploads>
       </div>
-    </div>
+    </div>-->
   </div>
 </template>
 <script>
 import Pagination from "../../components/pagination";
 import TimeRangePicker from "../../components/timeRangePicker";
 import BigFile from "../../components/big-file";
+import Uploads from "../../components/uploads";
 export default {
-  components: {Pagination,TimeRangePicker,BigFile},
+  components: {Pagination,TimeRangePicker,BigFile,Uploads},
   name: "equipment-file",
   data: function (){
     return {
@@ -165,7 +159,6 @@ export default {
       curSbsn:'',
       curCjsj:'',
       waterEquipments:[],
-      video:"",
     }
   },
   mounted() {
@@ -178,12 +171,6 @@ export default {
     _this.findDeviceInfo();
   },
   methods: {
-    afterUpload(resp) {
-      let _this = this;
-      let video = resp.content.path;
-      _this.video = process.env.VUE_APP_SERVER+video;
-
-    },
     findDeviceInfo(){
       let _this = this;
       Loading.show();
