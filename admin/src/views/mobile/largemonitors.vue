@@ -32,12 +32,10 @@
                             <img class="video_around" src="/video/4.jpg">
                         </div>
                     </div>
-                    <div class="dataAll">
-                        <div class="dataAllBorder01">
-                            <div style="border: 0px solid red;" class="dataAllBorder02">
-                                <div class="map_title">江豚报警小时占比统计图</div>
-                                <div id="container" style="height: 300px;width: 100%;border: 0px solid red;"></div>
-                            </div>
+                    <div class="dataAllBorder01 cage_cl" style="margin-top: 1.5% !important; height: 32%">
+                        <div class="dataAllBorder02" >
+                            <div class="map_title">江豚报警小时占比统计图</div>
+                            <div id="container" style="height: 100%;width: 100%;border: 0px solid red;"></div>
                         </div>
                     </div>
                 </div>
