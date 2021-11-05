@@ -22,15 +22,15 @@
                 <div class="left_cage">
                     <div class="dataAllBorder01 cage_cl" style="margin-top: 9% !important; height: 24%;">
                         <video autoplay="autoplay" loop="loop" class="dataAllBorder02 video_cage">
-                            <source class="video" title="主监控位" src="/video/11.mp4"/>
+                            <source class="video" title="主监控位" src="/video/12.mp4"/>
                         </video>
                     </div>
                     <div class="dataAllBorder01 cage_cl" style="margin-top: 1.5% !important; height: 38%;">
                         <div class="dataAllBorder02 video_cage">
-                            <img class="video_around" src="/video/video.jpg">
-                            <img class="video_around" src="/video/video.jpg">
-                            <img class="video_around" src="/video/video.jpg">
-                            <img class="video_around" src="/video/video.jpg">
+                            <img class="video_around" src="/video/1.jpg">
+                            <img class="video_around" src="/video/2.jpg">
+                            <img class="video_around" src="/video/3.jpg">
+                            <img class="video_around" src="/video/4.jpg">
                         </div>
                     </div>
                     <div class="dataAll">
@@ -52,7 +52,7 @@
                                     <div class="map_title">实时地图</div>
                                 </div>
                             </div>
-                            <equipmentMap v-bind:height-max="520"></equipmentMap>
+                            <EquipmentAMap v-bind:height-max="520"></EquipmentAMap>
                         </div>
                     </div>
 
@@ -236,10 +236,10 @@
 </template>
 
 <script>
-    import EquipmentMap from "../monitor/equipmentMap";
+    import EquipmentAMap from "../monitor/equipmentAMap";
     export default {
         components:{
-            EquipmentMap,
+            EquipmentAMap,
             'remote-css': {
                 render(createElement) {
                     return createElement('link', { attrs: { rel: 'stylesheet', href: this.href }});
@@ -279,6 +279,7 @@
                 yAixsData:[],
                 xAixsData:[],
                 alarmDatas:{},
+                intervalId:null
             }
         },
         mounted: function () {
@@ -293,6 +294,31 @@
             _this.TimeSum();
         },
         methods: {
+            // 定时刷新数据函数
+            dataRefreh() {
+                let _this = this;
+                // 计时器正在进行中，退出函数
+                if (_this.intervalId != null) {
+                    return;
+                }
+                // 计时器为空，操作
+                _this.intervalId = setInterval(() => {
+                    console.log("刷新" + new Date());
+                    _this.getSzjcx();
+                    _this.getPieChart();
+                    _this.getLatestDate();
+                    _this.TimeControl();
+                    _this.getWarningDate();
+                    _this.getContainerDate();
+                    _this.TimeSum();
+                }, 600000);
+            },
+            // 停止定时器
+            clear() {
+                let _this = this;
+                clearInterval(_this.intervalId); //清除计时器
+                _this.intervalId = null; //设置为null
+            },
             TimeSum(){
                 let _this = this;
                 _this.alarmNumbersDto.deptcode = Tool.getLoginUser().deptcode;
@@ -537,6 +563,15 @@
                 })
             },
         },
+        created(){
+            let _this = this;
+            _this.dataRefreh();
+        },
+        destroyed(){
+            // 在页面销毁后，清除计时器
+            let _this = this;
+            _this.clear();
+        }
     }
 </script>
 

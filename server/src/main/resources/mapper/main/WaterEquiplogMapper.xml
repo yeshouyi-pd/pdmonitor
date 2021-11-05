@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pd.server.main.mapper.WaterEquiplogMapper">
+  <resultMap id="BaseResultMap" type="com.pd.server.main.domain.WaterEquiplog">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="msg" jdbcType="VARCHAR" property="msg" />
+    <result column="cjsj" jdbcType="TIMESTAMP" property="cjsj" />
+    <result column="reqMsg" jdbcType="VARCHAR" property="reqmsg" />
+    <result column="respMsg" jdbcType="VARCHAR" property="respmsg" />
+    <result column="sm1" jdbcType="VARCHAR" property="sm1" />
+    <result column="sm2" jdbcType="VARCHAR" property="sm2" />
+    <result column="sm3" jdbcType="VARCHAR" property="sm3" />
+    <result column="sm4" jdbcType="VARCHAR" property="sm4" />
+    <result column="sm5" jdbcType="VARCHAR" property="sm5" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, sbbh, code, msg, cjsj, reqMsg, respMsg, sm1, sm2, sm3, sm4, sm5
+  </sql>
+  <select id="selectByExample" parameterType="com.pd.server.main.domain.WaterEquiplogExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from water_equiplog
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from water_equiplog
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from water_equiplog
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pd.server.main.domain.WaterEquiplogExample">
+    delete from water_equiplog
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pd.server.main.domain.WaterEquiplog">
+    insert into water_equiplog (id, sbbh, code, 
+      msg, cjsj, reqMsg, 
+      respMsg, sm1, sm2, 
+      sm3, sm4, sm5)
+    values (#{id,jdbcType=VARCHAR}, #{sbbh,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
+      #{msg,jdbcType=VARCHAR}, #{cjsj,jdbcType=TIMESTAMP}, #{reqmsg,jdbcType=VARCHAR}, 
+      #{respmsg,jdbcType=VARCHAR}, #{sm1,jdbcType=VARCHAR}, #{sm2,jdbcType=VARCHAR}, 
+      #{sm3,jdbcType=VARCHAR}, #{sm4,jdbcType=VARCHAR}, #{sm5,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pd.server.main.domain.WaterEquiplog">
+    insert into water_equiplog
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="sbbh != null">
+        sbbh,
+      </if>
+      <if test="code != null">
+        code,
+      </if>
+      <if test="msg != null">
+        msg,
+      </if>
+      <if test="cjsj != null">
+        cjsj,
+      </if>
+      <if test="reqmsg != null">
+        reqMsg,
+      </if>
+      <if test="respmsg != null">
+        respMsg,
+      </if>
+      <if test="sm1 != null">
+        sm1,
+      </if>
+      <if test="sm2 != null">
+        sm2,
+      </if>
+      <if test="sm3 != null">
+        sm3,
+      </if>
+      <if test="sm4 != null">
+        sm4,
+      </if>
+      <if test="sm5 != null">
+        sm5,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="sbbh != null">
+        #{sbbh,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="msg != null">
+        #{msg,jdbcType=VARCHAR},
+      </if>
+      <if test="cjsj != null">
+        #{cjsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="reqmsg != null">
+        #{reqmsg,jdbcType=VARCHAR},
+      </if>
+      <if test="respmsg != null">
+        #{respmsg,jdbcType=VARCHAR},
+      </if>
+      <if test="sm1 != null">
+        #{sm1,jdbcType=VARCHAR},
+      </if>
+      <if test="sm2 != null">
+        #{sm2,jdbcType=VARCHAR},
+      </if>
+      <if test="sm3 != null">
+        #{sm3,jdbcType=VARCHAR},
+      </if>
+      <if test="sm4 != null">
+        #{sm4,jdbcType=VARCHAR},
+      </if>
+      <if test="sm5 != null">
+        #{sm5,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pd.server.main.domain.WaterEquiplogExample" resultType="java.lang.Long">
+    select count(*) from water_equiplog
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update water_equiplog
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sbbh != null">
+        sbbh = #{record.sbbh,jdbcType=VARCHAR},
+      </if>
+      <if test="record.code != null">
+        code = #{record.code,jdbcType=VARCHAR},
+      </if>
+      <if test="record.msg != null">
+        msg = #{record.msg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cjsj != null">
+        cjsj = #{record.cjsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.reqmsg != null">
+        reqMsg = #{record.reqmsg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.respmsg != null">
+        respMsg = #{record.respmsg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sm1 != null">
+        sm1 = #{record.sm1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sm2 != null">
+        sm2 = #{record.sm2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sm3 != null">
+        sm3 = #{record.sm3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sm4 != null">
+        sm4 = #{record.sm4,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sm5 != null">
+        sm5 = #{record.sm5,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update water_equiplog
+    set id = #{record.id,jdbcType=VARCHAR},
+      sbbh = #{record.sbbh,jdbcType=VARCHAR},
+      code = #{record.code,jdbcType=VARCHAR},
+      msg = #{record.msg,jdbcType=VARCHAR},
+      cjsj = #{record.cjsj,jdbcType=TIMESTAMP},
+      reqMsg = #{record.reqmsg,jdbcType=VARCHAR},
+      respMsg = #{record.respmsg,jdbcType=VARCHAR},
+      sm1 = #{record.sm1,jdbcType=VARCHAR},
+      sm2 = #{record.sm2,jdbcType=VARCHAR},
+      sm3 = #{record.sm3,jdbcType=VARCHAR},
+      sm4 = #{record.sm4,jdbcType=VARCHAR},
+      sm5 = #{record.sm5,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pd.server.main.domain.WaterEquiplog">
+    update water_equiplog
+    <set>
+      <if test="sbbh != null">
+        sbbh = #{sbbh,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null">
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="msg != null">
+        msg = #{msg,jdbcType=VARCHAR},
+      </if>
+      <if test="cjsj != null">
+        cjsj = #{cjsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="reqmsg != null">
+        reqMsg = #{reqmsg,jdbcType=VARCHAR},
+      </if>
+      <if test="respmsg != null">
+        respMsg = #{respmsg,jdbcType=VARCHAR},
+      </if>
+      <if test="sm1 != null">
+        sm1 = #{sm1,jdbcType=VARCHAR},
+      </if>
+      <if test="sm2 != null">
+        sm2 = #{sm2,jdbcType=VARCHAR},
+      </if>
+      <if test="sm3 != null">
+        sm3 = #{sm3,jdbcType=VARCHAR},
+      </if>
+      <if test="sm4 != null">
+        sm4 = #{sm4,jdbcType=VARCHAR},
+      </if>
+      <if test="sm5 != null">
+        sm5 = #{sm5,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pd.server.main.domain.WaterEquiplog">
+    update water_equiplog
+    set sbbh = #{sbbh,jdbcType=VARCHAR},
+      code = #{code,jdbcType=VARCHAR},
+      msg = #{msg,jdbcType=VARCHAR},
+      cjsj = #{cjsj,jdbcType=TIMESTAMP},
+      reqMsg = #{reqmsg,jdbcType=VARCHAR},
+      respMsg = #{respmsg,jdbcType=VARCHAR},
+      sm1 = #{sm1,jdbcType=VARCHAR},
+      sm2 = #{sm2,jdbcType=VARCHAR},
+      sm3 = #{sm3,jdbcType=VARCHAR},
+      sm4 = #{sm4,jdbcType=VARCHAR},
+      sm5 = #{sm5,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
