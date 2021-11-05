@@ -1,26 +1,36 @@
 package com.pd.monitor.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.pd.monitor.wx.conf.BaseWxController;
 import com.pd.monitor.wx.wxutlis.utils.ShjJsonConstant;
+import com.pd.server.config.SpringUtil;
+import com.pd.server.main.domain.InterfaceLog;
+import com.pd.server.main.mapper.InterfaceLogMapper;
 import com.pd.server.main.service.shj.AbstractScanRequest;
+import com.pd.server.util.UuidUtil;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/shj")
-public class ShjController {
+public class ShjController{
     private static final Logger LOG = LoggerFactory.getLogger(ShjController.class);
     public static final String BUSINESS_NAME = "水环境接口";
 
     private AbstractScanRequest dsjkRequest;
 
     @PostMapping(value = "execute", produces ="application/json;charset=UTF-8")
-    public JSONObject execute(@RequestBody String jsonParam) {
+    public JSONObject execute(@RequestBody String jsonParam, HttpServletRequest request) {
         LOG.info("================请求数据:"+jsonParam);
         JSONObject returnObject = new JSONObject();
         String methodname = "";
@@ -54,6 +64,16 @@ public class ShjController {
         } catch (Exception e){
             returnObject.put("returnCode", ShjJsonConstant.CODE_2001);
             returnObject.put("returnMsg", ShjJsonConstant.MSG_2001);
+        } finally {
+            InterfaceLogMapper interfaceLogMapper = SpringUtil.getBean(InterfaceLogMapper.class);
+            InterfaceLog log = new InterfaceLog();
+            log.setId(UuidUtil.getShortUuid());
+            log.setIp(request.getLocalAddr());
+            log.setQqcs(jsonParam);
+            log.setQqsj(new Date());
+            log.setQqry(methodname);
+            log.setFhsj(JSONObject.toJSONString(retJson(returnObject, methodname, data)));
+            interfaceLogMapper.insert(log);
         }
         return retJson(returnObject, methodname, data);
     }

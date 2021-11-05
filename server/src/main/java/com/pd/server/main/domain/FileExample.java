@@ -884,6 +884,216 @@ public class FileExample {
             addCriterion("`key` not between", value1, value2, "key");
             return (Criteria) this;
         }
+
+        public Criteria andMianidIsNull() {
+            addCriterion("mianid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMianidIsNotNull() {
+            addCriterion("mianid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMianidEqualTo(String value) {
+            addCriterion("mianid =", value, "mianid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMianidNotEqualTo(String value) {
+            addCriterion("mianid <>", value, "mianid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMianidGreaterThan(String value) {
+            addCriterion("mianid >", value, "mianid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMianidGreaterThanOrEqualTo(String value) {
+            addCriterion("mianid >=", value, "mianid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMianidLessThan(String value) {
+            addCriterion("mianid <", value, "mianid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMianidLessThanOrEqualTo(String value) {
+            addCriterion("mianid <=", value, "mianid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMianidLike(String value) {
+            addCriterion("mianid like", value, "mianid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMianidNotLike(String value) {
+            addCriterion("mianid not like", value, "mianid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMianidIn(List<String> values) {
+            addCriterion("mianid in", values, "mianid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMianidNotIn(List<String> values) {
+            addCriterion("mianid not in", values, "mianid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMianidBetween(String value1, String value2) {
+            addCriterion("mianid between", value1, value2, "mianid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMianidNotBetween(String value1, String value2) {
+            addCriterion("mianid not between", value1, value2, "mianid");
+            return (Criteria) this;
+        }
+
+        public Criteria andF1IsNull() {
+            addCriterion("f1 is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andF1IsNotNull() {
+            addCriterion("f1 is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andF1EqualTo(String value) {
+            addCriterion("f1 =", value, "f1");
+            return (Criteria) this;
+        }
+
+        public Criteria andF1NotEqualTo(String value) {
+            addCriterion("f1 <>", value, "f1");
+            return (Criteria) this;
+        }
+
+        public Criteria andF1GreaterThan(String value) {
+            addCriterion("f1 >", value, "f1");
+            return (Criteria) this;
+        }
+
+        public Criteria andF1GreaterThanOrEqualTo(String value) {
+            addCriterion("f1 >=", value, "f1");
+            return (Criteria) this;
+        }
+
+        public Criteria andF1LessThan(String value) {
+            addCriterion("f1 <", value, "f1");
+            return (Criteria) this;
+        }
+
+        public Criteria andF1LessThanOrEqualTo(String value) {
+            addCriterion("f1 <=", value, "f1");
+            return (Criteria) this;
+        }
+
+        public Criteria andF1Like(String value) {
+            addCriterion("f1 like", value, "f1");
+            return (Criteria) this;
+        }
+
+        public Criteria andF1NotLike(String value) {
+            addCriterion("f1 not like", value, "f1");
+            return (Criteria) this;
+        }
+
+        public Criteria andF1In(List<String> values) {
+            addCriterion("f1 in", values, "f1");
+            return (Criteria) this;
+        }
+
+        public Criteria andF1NotIn(List<String> values) {
+            addCriterion("f1 not in", values, "f1");
+            return (Criteria) this;
+        }
+
+        public Criteria andF1Between(String value1, String value2) {
+            addCriterion("f1 between", value1, value2, "f1");
+            return (Criteria) this;
+        }
+
+        public Criteria andF1NotBetween(String value1, String value2) {
+            addCriterion("f1 not between", value1, value2, "f1");
+            return (Criteria) this;
+        }
+
+        public Criteria andF2IsNull() {
+            addCriterion("f2 is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andF2IsNotNull() {
+            addCriterion("f2 is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andF2EqualTo(String value) {
+            addCriterion("f2 =", value, "f2");
+            return (Criteria) this;
+        }
+
+        public Criteria andF2NotEqualTo(String value) {
+            addCriterion("f2 <>", value, "f2");
+            return (Criteria) this;
+        }
+
+        public Criteria andF2GreaterThan(String value) {
+            addCriterion("f2 >", value, "f2");
+            return (Criteria) this;
+        }
+
+        public Criteria andF2GreaterThanOrEqualTo(String value) {
+            addCriterion("f2 >=", value, "f2");
+            return (Criteria) this;
+        }
+
+        public Criteria andF2LessThan(String value) {
+            addCriterion("f2 <", value, "f2");
+            return (Criteria) this;
+        }
+
+        public Criteria andF2LessThanOrEqualTo(String value) {
+            addCriterion("f2 <=", value, "f2");
+            return (Criteria) this;
+        }
+
+        public Criteria andF2Like(String value) {
+            addCriterion("f2 like", value, "f2");
+            return (Criteria) this;
+        }
+
+        public Criteria andF2NotLike(String value) {
+            addCriterion("f2 not like", value, "f2");
+            return (Criteria) this;
+        }
+
+        public Criteria andF2In(List<String> values) {
+            addCriterion("f2 in", values, "f2");
+            return (Criteria) this;
+        }
+
+        public Criteria andF2NotIn(List<String> values) {
+            addCriterion("f2 not in", values, "f2");
+            return (Criteria) this;
+        }
+
+        public Criteria andF2Between(String value1, String value2) {
+            addCriterion("f2 between", value1, value2, "f2");
+            return (Criteria) this;
+        }
+
+        public Criteria andF2NotBetween(String value1, String value2) {
+            addCriterion("f2 not between", value1, value2, "f2");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

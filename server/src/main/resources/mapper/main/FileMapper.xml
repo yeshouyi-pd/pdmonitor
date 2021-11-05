@@ -14,6 +14,9 @@
     <result column="shard_size" jdbcType="INTEGER" property="shardSize" />
     <result column="shard_total" jdbcType="INTEGER" property="shardTotal" />
     <result column="key" jdbcType="VARCHAR" property="key" />
+    <result column="mianid" jdbcType="VARCHAR" property="mianid" />
+    <result column="f1" jdbcType="VARCHAR" property="f1" />
+    <result column="f2" jdbcType="VARCHAR" property="f2" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -75,7 +78,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, `path`, `name`, suffix, `size`, `use`, created_at, updated_at, shard_index, shard_size, 
-    shard_total, `key`
+    shard_total, `key`, mianid, f1, f2
   </sql>
   <select id="selectByExample" parameterType="com.pd.server.main.domain.FileExample" resultMap="BaseResultMap">
     select
@@ -92,7 +95,7 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select
+    select 
     <include refid="Base_Column_List" />
     from file
     where id = #{id,jdbcType=CHAR}
@@ -108,14 +111,16 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.pd.server.main.domain.File">
-    insert into file (id, `path`, `name`,
-                      suffix, `size`, `use`, created_at,
-                      updated_at, shard_index, shard_size,
-                      shard_total, `key`)
-    values (#{id,jdbcType=CHAR}, #{path,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
-            #{suffix,jdbcType=VARCHAR}, #{size,jdbcType=INTEGER}, #{use,jdbcType=CHAR}, #{createdAt,jdbcType=TIMESTAMP},
-            #{updatedAt,jdbcType=TIMESTAMP}, #{shardIndex,jdbcType=INTEGER}, #{shardSize,jdbcType=INTEGER},
-            #{shardTotal,jdbcType=INTEGER}, #{key,jdbcType=VARCHAR})
+    insert into file (id, `path`, `name`, 
+      suffix, `size`, `use`, created_at, 
+      updated_at, shard_index, shard_size, 
+      shard_total, `key`, mianid, 
+      f1, f2)
+    values (#{id,jdbcType=CHAR}, #{path,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{suffix,jdbcType=VARCHAR}, #{size,jdbcType=INTEGER}, #{use,jdbcType=CHAR}, #{createdAt,jdbcType=TIMESTAMP}, 
+      #{updatedAt,jdbcType=TIMESTAMP}, #{shardIndex,jdbcType=INTEGER}, #{shardSize,jdbcType=INTEGER}, 
+      #{shardTotal,jdbcType=INTEGER}, #{key,jdbcType=VARCHAR}, #{mianid,jdbcType=VARCHAR}, 
+      #{f1,jdbcType=VARCHAR}, #{f2,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.pd.server.main.domain.File">
     insert into file
@@ -156,6 +161,15 @@
       <if test="key != null">
         `key`,
       </if>
+      <if test="mianid != null">
+        mianid,
+      </if>
+      <if test="f1 != null">
+        f1,
+      </if>
+      <if test="f2 != null">
+        f2,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -193,6 +207,15 @@
       </if>
       <if test="key != null">
         #{key,jdbcType=VARCHAR},
+      </if>
+      <if test="mianid != null">
+        #{mianid,jdbcType=VARCHAR},
+      </if>
+      <if test="f1 != null">
+        #{f1,jdbcType=VARCHAR},
+      </if>
+      <if test="f2 != null">
+        #{f2,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -241,6 +264,15 @@
       <if test="record.key != null">
         `key` = #{record.key,jdbcType=VARCHAR},
       </if>
+      <if test="record.mianid != null">
+        mianid = #{record.mianid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.f1 != null">
+        f1 = #{record.f1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.f2 != null">
+        f2 = #{record.f2,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -249,17 +281,20 @@
   <update id="updateByExample" parameterType="map">
     update file
     set id = #{record.id,jdbcType=CHAR},
-    `path` = #{record.path,jdbcType=VARCHAR},
-    `name` = #{record.name,jdbcType=VARCHAR},
-    suffix = #{record.suffix,jdbcType=VARCHAR},
-    `size` = #{record.size,jdbcType=INTEGER},
-    `use` = #{record.use,jdbcType=CHAR},
-    created_at = #{record.createdAt,jdbcType=TIMESTAMP},
-    updated_at = #{record.updatedAt,jdbcType=TIMESTAMP},
-    shard_index = #{record.shardIndex,jdbcType=INTEGER},
-    shard_size = #{record.shardSize,jdbcType=INTEGER},
-    shard_total = #{record.shardTotal,jdbcType=INTEGER},
-    `key` = #{record.key,jdbcType=VARCHAR}
+      `path` = #{record.path,jdbcType=VARCHAR},
+      `name` = #{record.name,jdbcType=VARCHAR},
+      suffix = #{record.suffix,jdbcType=VARCHAR},
+      `size` = #{record.size,jdbcType=INTEGER},
+      `use` = #{record.use,jdbcType=CHAR},
+      created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+      updated_at = #{record.updatedAt,jdbcType=TIMESTAMP},
+      shard_index = #{record.shardIndex,jdbcType=INTEGER},
+      shard_size = #{record.shardSize,jdbcType=INTEGER},
+      shard_total = #{record.shardTotal,jdbcType=INTEGER},
+      `key` = #{record.key,jdbcType=VARCHAR},
+      mianid = #{record.mianid,jdbcType=VARCHAR},
+      f1 = #{record.f1,jdbcType=VARCHAR},
+      f2 = #{record.f2,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -300,22 +335,34 @@
       <if test="key != null">
         `key` = #{key,jdbcType=VARCHAR},
       </if>
+      <if test="mianid != null">
+        mianid = #{mianid,jdbcType=VARCHAR},
+      </if>
+      <if test="f1 != null">
+        f1 = #{f1,jdbcType=VARCHAR},
+      </if>
+      <if test="f2 != null">
+        f2 = #{f2,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=CHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.pd.server.main.domain.File">
     update file
     set `path` = #{path,jdbcType=VARCHAR},
-        `name` = #{name,jdbcType=VARCHAR},
-        suffix = #{suffix,jdbcType=VARCHAR},
-        `size` = #{size,jdbcType=INTEGER},
-        `use` = #{use,jdbcType=CHAR},
-        created_at = #{createdAt,jdbcType=TIMESTAMP},
-        updated_at = #{updatedAt,jdbcType=TIMESTAMP},
-        shard_index = #{shardIndex,jdbcType=INTEGER},
-        shard_size = #{shardSize,jdbcType=INTEGER},
-        shard_total = #{shardTotal,jdbcType=INTEGER},
-        `key` = #{key,jdbcType=VARCHAR}
+      `name` = #{name,jdbcType=VARCHAR},
+      suffix = #{suffix,jdbcType=VARCHAR},
+      `size` = #{size,jdbcType=INTEGER},
+      `use` = #{use,jdbcType=CHAR},
+      created_at = #{createdAt,jdbcType=TIMESTAMP},
+      updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+      shard_index = #{shardIndex,jdbcType=INTEGER},
+      shard_size = #{shardSize,jdbcType=INTEGER},
+      shard_total = #{shardTotal,jdbcType=INTEGER},
+      `key` = #{key,jdbcType=VARCHAR},
+      mianid = #{mianid,jdbcType=VARCHAR},
+      f1 = #{f1,jdbcType=VARCHAR},
+      f2 = #{f2,jdbcType=VARCHAR}
     where id = #{id,jdbcType=CHAR}
   </update>
 </mapper>

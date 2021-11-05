@@ -48,6 +48,10 @@ public class ShjJsonConstant {
              * 设备文件
              */
             put("EquipmentFile", "com.pd.server.main.service.shj.EquipmentFileShjService");
+            /**
+             * 设备心跳包
+             */
+            put("WaterEquip", "com.pd.server.main.service.shj.WaterEquipShjService");
         }
     };
 
