@@ -150,6 +150,7 @@ public class UploadFileController {
                 if (fileInputStream != null) {
                     fileInputStream.close();
                 }
+                outputStream.flush();
                 outputStream.close();
                 //LOG.info("IO流关闭");
             } catch (Exception e) {
