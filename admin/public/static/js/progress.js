@@ -33,8 +33,7 @@ Progress = {
         "  height: 100%;\n" +
         "  top: 0px;\n" +
         "  left: 0px;\n" +
-        "  background-color: rgb(0, 0, 0);\n" +
-        "  opacity: 0.6;\n" +
+        "  opacity: 0.1;\n" +
         "  cursor: wait;\n" +
         "  position: fixed;\"></div>"));
       $(".progress-bar").width(width + "%");
