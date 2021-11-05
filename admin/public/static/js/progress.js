@@ -1,5 +1,5 @@
 Progress = {
-  show: function (width) {
+  show: function (width,count) {
     let _this = this;
     _this.width = width;
     if ($("#progress-div").length > 0) {
@@ -14,14 +14,16 @@ Progress = {
         "    top: 40%;\n" +
         "    left: 50%;\n" +
         "    text-align: center;\n" +
-        "    height: 45px;\n" +
+        "    height: 65px;\n" +
         "    color: rgb(0, 0, 0);\n" +
         "    border: 3px solid rgb(170, 170, 170);\n" +
         "    background-color: rgb(255, 255, 255);\n" +
-        "    cursor: wait;\"><div class=\"progress pos-rel\" data-percent=\"" + width + "%\"><div class=\"progress-bar\"></div></div></div>";
+        "    cursor: wait;\">" +
+          "正在上传第"+count+"张<div class=\"progress pos-rel\" data-percent=\"" + width + "%\">" +
+          "<div class=\"progress-bar\"></div>" +
+          "</div></div>";
       $("#progress-div").remove();
       $("body").append(progressDiv);
-
       // 背景遮罩
       $("body").append($("<div id=\"progress-overlay\" style=\"z-index: 10010;\n" +
         "  border: none;\n" +
@@ -31,8 +33,7 @@ Progress = {
         "  height: 100%;\n" +
         "  top: 0px;\n" +
         "  left: 0px;\n" +
-        "  background-color: rgb(0, 0, 0);\n" +
-        "  opacity: 0.6;\n" +
+        "  opacity: 0.1;\n" +
         "  cursor: wait;\n" +
         "  position: fixed;\"></div>"));
       $(".progress-bar").width(width + "%");
