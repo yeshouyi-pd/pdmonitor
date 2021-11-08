@@ -56,6 +56,10 @@ public class ShjJsonConstant {
              * 设备心跳包
              */
             put("WaterEquip", "com.pd.server.main.service.shj.WaterEquipShjService");
+            /**
+             * 非实时数据上传
+             */
+            put("WaterRawfile", "com.pd.server.main.service.shj.WaterRawfileShjService");
         }
     };
 
