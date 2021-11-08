@@ -4,6 +4,7 @@ import router from "./router"
 import axios from "axios";
 import filter from './filter/filter'
 import VueAMap from 'vue-amap';
+import Moment from 'moment';
 Vue.use(VueAMap);
 VueAMap.initAMapApiLoader({
     key: '5a7e61d356499dc86719d0b4960a1ad8',
@@ -14,7 +15,7 @@ VueAMap.initAMapApiLoader({
 });
 Vue.config.productionTip = false
 Vue.prototype.$ajax = axios;//添加内置熟悉 Vue.prototype.xx 全局变量
-
+Vue.prototype.moment = Moment;
 // 解决每次ajax请求，对应的sessionId不一致的问题
 axios.defaults.withCredentials = true;
 

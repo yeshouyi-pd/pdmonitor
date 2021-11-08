@@ -2,12 +2,9 @@ package com.pd.server.main.service.shj;
 
 import com.alibaba.fastjson.JSONObject;
 import com.pd.server.config.SpringUtil;
-import com.pd.server.main.domain.EquipmentRecord;
 import com.pd.server.main.domain.WaterEquiplog;
 import com.pd.server.main.domain.WaterEquipment;
 import com.pd.server.main.domain.WaterEquipmentExample;
-import com.pd.server.main.mapper.EquipmentRecordMapper;
-import com.pd.server.main.mapper.InterfaceLogMapper;
 import com.pd.server.main.mapper.WaterEquiplogMapper;
 import com.pd.server.main.mapper.WaterEquipmentMapper;
 import com.pd.server.util.UuidUtil;

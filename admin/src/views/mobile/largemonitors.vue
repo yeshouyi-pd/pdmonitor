@@ -184,7 +184,7 @@
                     <div class="modal-content" style="background: #395DC0;">
                         <div style="float:left;width: 50%;overflow-y:scroll;">
                             <div class="list-group" style="height: 500px;">
-                                <button v-for="(item,index) in equipmentFiles" type="button" @click="showRealPic(item.tplj)" style="background: #395DC0; color:#FEFEFF;cursor: pointer;border:1px solid #3490BA;" class="list-group-item">{{item.cjsj}}</button>
+                                <button v-for="(item,index) in equipmentFiles" type="button" @click="showRealPic(item.tplj)" style="background: #395DC0; color:#FEFEFF;cursor: pointer;border:1px solid #3490BA;" class="list-group-item">{{moment(item.cjsj).format("YYYY-MM-DD HH:mm:ss")}}</button>
                             </div>
                         </div>
                         <div style="float:left;width: 50%;">
