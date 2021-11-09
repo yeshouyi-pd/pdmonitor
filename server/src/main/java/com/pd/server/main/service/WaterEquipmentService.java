@@ -1,5 +1,7 @@
 package com.pd.server.main.service;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.pd.server.exception.BusinessException;
 import com.pd.server.exception.BusinessExceptionCode;
 import com.pd.server.main.domain.WaterEquipment;
@@ -25,6 +27,26 @@ public class WaterEquipmentService {
 
     @Resource
     private WaterEquipmentMapper waterEquipmentMapper;
+
+    public void listByPage(WaterEquipmentDto waterEquipmentDto){
+        PageHelper.startPage(waterEquipmentDto.getPage(),waterEquipmentDto.getSize());
+        WaterEquipmentExample example = new WaterEquipmentExample();
+        WaterEquipmentExample.Criteria ca = example.createCriteria();
+        if(!StringUtils.isEmpty(waterEquipmentDto.getSblb())){
+            ca.andSblbEqualTo(waterEquipmentDto.getSblb());
+        }
+        if(!StringUtils.isEmpty(waterEquipmentDto.getSbsn())){
+            ca.andSbsnEqualTo(waterEquipmentDto.getSbsn());
+        }
+        if(!StringUtils.isEmpty(waterEquipmentDto.getSbmc())){
+            ca.andSbmcEqualTo(waterEquipmentDto.getSbmc());
+        }
+        List<WaterEquipment> list = waterEquipmentMapper.selectByExample(example);
+        PageInfo<WaterEquipment> pageInfo = new PageInfo<>(list);
+        waterEquipmentDto.setTotal(pageInfo.getTotal());
+        List<WaterEquipmentDto> listDto = CopyUtil.copyList(list, WaterEquipmentDto.class);
+        waterEquipmentDto.setList(listDto);
+    }
 
     public List<String> findSbbh(WaterEquipmentExample example){
         return waterEquipmentMapper.selectSbbhByExample(example);

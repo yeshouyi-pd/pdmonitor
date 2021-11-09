@@ -2,8 +2,12 @@ package com.pd.monitor.controller;
 
 import com.pd.server.config.CodeType;
 import com.pd.server.config.RedisCode;
+import com.pd.server.main.domain.WaterEquipmentExample;
 import com.pd.server.main.dto.*;
 import com.pd.monitor.wx.conf.BaseWxController;
+import com.pd.server.main.service.DeptService;
+import com.pd.server.main.service.UserService;
+import com.pd.server.main.service.WaterEquipmentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -21,6 +25,60 @@ public class CodeSetUtilController extends BaseWxController {
 
     @Resource
     private RedisTemplate redisTemplate;
+
+    @Resource
+    private DeptService deptService;
+
+    @Resource
+    private UserService userService;
+
+    @Resource
+    private WaterEquipmentService waterEquipmentService;
+
+    /**
+     * 资源树查询
+     */
+    @GetMapping("/load-deptTree/{deptcode}")
+    public ResponseDto loadTree(@PathVariable String deptcode) {
+        ResponseDto responseDto = new ResponseDto();
+        List<String> deptcodestr =  getUpdeptcode(deptcode);
+        List<DeptDto>deptDtoList = deptService.loadTree(deptcodestr);
+        responseDto.setContent(deptDtoList);
+        return responseDto;
+    }
+
+    /**
+     * 查询所有部门
+     */
+    @GetMapping("/getAllDept")
+    public ResponseDto getAllDept() {
+        ResponseDto responseDto = new ResponseDto();
+        List<DeptDto>deptDtoList = deptService.getAllDept();
+        responseDto.setContent(deptDtoList);
+        return responseDto;
+    }
+
+    /**
+     * 分页查询所有人员
+     */
+    @PostMapping("/getAllUser")
+    public ResponseDto getAllUser(@RequestBody UserDto userDto) {
+        ResponseDto responseDto = new ResponseDto();
+        userService.list(userDto);
+        responseDto.setContent(userDto);
+        return responseDto;
+    }
+
+    /**
+     * 分页查询所有设备
+     */
+    @PostMapping("/getAllEuqipment")
+    public ResponseDto getAllEuqipment(@RequestBody WaterEquipmentDto waterEquipmentDto){
+        ResponseDto responseDto = new ResponseDto();
+        waterEquipmentService.listByPage(waterEquipmentDto);
+        responseDto.setContent(waterEquipmentDto);
+        return responseDto;
+    }
 
     /**
      * 获取水质检测项
@@ -50,8 +108,6 @@ public class CodeSetUtilController extends BaseWxController {
         return responseDto;
     }
 
-
-
     /**
      * 获取部门名称
      * @return
@@ -64,9 +120,6 @@ public class CodeSetUtilController extends BaseWxController {
         return responseDto;
     }
 
-
-
-
     /**
      * 获取机构类别
      * @return
@@ -77,6 +130,20 @@ public class CodeSetUtilController extends BaseWxController {
         Map<String,String> map = new LinkedHashMap<String,String>();
         Map<String, Map<String,String>>  allmap = (Map<String, Map<String, String>>) redisTemplate.opsForValue().get(RedisCode.CODESET);
         map = allmap.get(CodeType.JGLB_CODE);
+        responseDto.setContent(map);
+        return responseDto;
+    }
+
+    /**
+     * 获取项目用途
+     * @return
+     */
+    @GetMapping("/getXmyt")
+    public ResponseDto getXmyt(){
+        ResponseDto responseDto = new ResponseDto();
+        Map<String,String> map = new LinkedHashMap<String,String>();
+        Map<String, Map<String,String>>  allmap = (Map<String, Map<String, String>>) redisTemplate.opsForValue().get(RedisCode.CODESET);
+        map = allmap.get(CodeType.XMYT_CODE);
         responseDto.setContent(map);
         return responseDto;
     }

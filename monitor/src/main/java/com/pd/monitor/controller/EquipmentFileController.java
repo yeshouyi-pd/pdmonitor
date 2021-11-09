@@ -272,6 +272,14 @@ public class EquipmentFileController extends BaseWxController {
                     resultList.add(result);
                 }
             }
+            if(lists.size()==1){
+                AlarmNumbersDto result = new AlarmNumbersDto();
+                result.setDeptcode(firstEntity.getDeptcode());
+                result.setSbbh(firstEntity.getSbbh());
+                result.setBjsj(curDateStr+" 至 "+curDateStr);
+                result.setAlarmNum(bjsl);
+                resultList.add(result);
+            }
         }
         responseDto.setContent(resultList);
         return responseDto;
@@ -343,6 +351,14 @@ public class EquipmentFileController extends BaseWxController {
                     result.setAlarmNum(bjsl);
                     resultList.add(result);
                 }
+            }
+            if(lists.size()==1){
+                AlarmNumbersDto result = new AlarmNumbersDto();
+                result.setDeptcode(firstEntity.getDeptcode());
+                result.setSbbh(firstEntity.getSbbh());
+                result.setBjsj(curDateStr+" 至 "+curDateStr);
+                result.setAlarmNum(bjsl);
+                resultList.add(result);
             }
         }
         Integer num = 0;
@@ -438,41 +454,14 @@ public class EquipmentFileController extends BaseWxController {
         return df.format(v1 / v2);
     }
 
-    public static String laterThreeMinute(String curDateStr) throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(sdf.parse(curDateStr));
-        calendar.add(Calendar.MINUTE, 2);// 3分钟之后的时间
-        Date beforeD = calendar.getTime();
-        String time = sdf.format(beforeD);
-        return time;
-    }
-
-    public static Boolean isBetween(String curDateStr, String nextDateStr, String lastDateStr){
-        Date curDate = DateUtil.toDate(curDateStr,"yyyy-MM-dd HH:mm");
-        Date nextDate = DateUtil.toDate(nextDateStr,"yyyy-MM-dd HH:mm");
-        Date lastDate = DateUtil.toDate(lastDateStr,"yyyy-MM-dd HH:mm");
-        if(curDate.getTime()<=nextDate.getTime()&&nextDate.getTime()<=lastDate.getTime()){
-            return true;
-        }
-        return false;
-    }
-
     public Boolean isOverThreeMinute(String curDateStr, String nextDateStr){
         Date begin = DateUtil.toDate(curDateStr,"yyyy-MM-dd HH:mm");
         Date end = DateUtil.toDate(nextDateStr,"yyyy-MM-dd HH:mm");
-        long between=(end.getTime()-begin.getTime())/1000;//除以1000是为了转换成秒
-        long minute=between%3600/60;
+        long minute=(end.getTime()-begin.getTime())/(1000*60);//除以1000是为了转换成秒
         if(minute<=2){
             return true;
         }
         return false;
     }
 
-    public Boolean isOverThreeMinute(String curDayStr, String nextDayStr, String finalDayStr){
-        Date curDay = DateUtil.toDate(curDayStr, "yyyy-MM-dd HH:mm");
-        Date nextDay = DateUtil.toDate(nextDayStr, "yyyy-MM-dd HH:mm");
-        Date finalDay = DateUtil.toDate(finalDayStr, "yyyy-MM-dd HH:mm");
-        return false;
-    }
 }
