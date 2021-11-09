@@ -1,25 +1,35 @@
 package com.pd.monitor.controller;
 
-import com.pd.server.main.dto.WaterProjectDto;
-import com.pd.server.main.dto.PageDto;
-import com.pd.server.main.dto.ResponseDto;
+import com.pd.monitor.wx.conf.BaseWxController;
+import com.pd.server.main.domain.WaterProEquip;
+import com.pd.server.main.domain.WaterProUser;
+import com.pd.server.main.dto.*;
+import com.pd.server.main.service.WaterProEquipService;
+import com.pd.server.main.service.WaterProUserService;
 import com.pd.server.main.service.WaterProjectService;
 import com.pd.server.util.ValidatorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin/waterProject")
-public class WaterProjectController {
+public class WaterProjectController extends BaseWxController {
 
     private static final Logger LOG = LoggerFactory.getLogger(WaterProjectController.class);
     public static final String BUSINESS_NAME = "项目管理";
 
     @Resource
     private WaterProjectService waterProjectService;
+    @Resource
+    private WaterProUserService waterProUserService;
+    @Resource
+    private WaterProEquipService waterProEquipService;
 
     /**
     * 列表查询
@@ -51,8 +61,61 @@ public class WaterProjectController {
                 ValidatorUtil.length(waterProjectDto.getSm5(), "说明5", 1, 1024);
 
         ResponseDto responseDto = new ResponseDto();
-        waterProjectService.save(waterProjectDto);
-        responseDto.setContent(waterProjectDto);
+        try{
+            LoginUserDto loginUserDto = getRequestHeader();
+            if(StringUtils.isEmpty(waterProjectDto.getId())){
+                waterProjectDto.setCjr(loginUserDto.getLoginName());
+                waterProjectDto.setCjsj(new Date());
+            }else{
+                waterProjectDto.setGxsj(new Date());
+                List<WaterProUser> userList = waterProUserService.findByXmbh(waterProjectDto.getXmbh());
+                for(WaterProUser waterProUser : userList){
+                    waterProUserService.delete(waterProUser.getId());
+                }
+                List<WaterProEquip> equipList = waterProEquipService.findByXmbh(waterProjectDto.getXmbh());
+                for(WaterProEquip waterProEquip : equipList){
+                    waterProEquipService.delete(waterProEquip.getId());
+                }
+            }
+            waterProjectService.save(waterProjectDto);
+            //保存参与人员
+            WaterProUserDto waterProUserDto = new WaterProUserDto();
+            waterProUserDto.setCjr(loginUserDto.getLoginName());
+            waterProUserDto.setCjsj(waterProjectDto.getCjsj());
+            waterProjectDto.setGxsj(new Date());
+            waterProUserDto.setXmbh(waterProjectDto.getXmbh());
+            waterProUserDto.setUsercode(waterProjectDto.getFzr());
+            waterProUserDto.setIsboss("1");
+            waterProUserService.save(waterProUserDto);
+            String[] usercode = waterProjectDto.getUserCodes().split(",");
+            for(int i=0;i<usercode.length;i++){
+                if(!waterProjectDto.getFzr().equals(usercode[i])){
+                    WaterProUserDto entity = new WaterProUserDto();
+                    entity.setCjr(loginUserDto.getLoginName());
+                    entity.setCjsj(waterProjectDto.getCjsj());
+                    entity.setGxsj(new Date());
+                    entity.setXmbh(waterProjectDto.getXmbh());
+                    entity.setUsercode(usercode[i]);
+                    entity.setIsboss("0");
+                    waterProUserService.save(entity);
+                }
+            }
+            //保存参与设备
+            String[] sbsncode = waterProjectDto.getSbsnCodes().split(",");
+            for(int i=0;i<sbsncode.length;i++){
+                WaterProEquipDto entity = new WaterProEquipDto();
+                entity.setCjr(loginUserDto.getLoginName());
+                entity.setCjsj(waterProjectDto.getCjsj());
+                entity.setGxsj(new Date());
+                entity.setXmbh(waterProjectDto.getXmbh());
+                entity.setSbsn(sbsncode[i]);
+                waterProEquipService.save(entity);
+            }
+            responseDto.setContent(waterProjectDto);
+        }catch (Exception e){
+            responseDto.setSuccess(false);
+            responseDto.setMessage(e.getMessage());
+        }
         return responseDto;
     }
 

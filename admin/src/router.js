@@ -33,6 +33,8 @@ import Jtlistinfo  from "./views/mobile/jtlistinfo.vue"
 import Largemonitors  from "./views/mobile/largemonitors.vue"
 import Test  from "./views/mobile/test.vue"
 import WaterProject from "./views/monitor/waterProject.vue";
+import WaterProUser from "./views/monitor/waterProUser.vue";
+import WaterProEquip from "./views/monitor/waterProEquip.vue";
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -185,6 +187,14 @@ export default new Router({
             path: "monitor/waterProject",
             name: "monitor/waterProject",
             component: WaterProject
+        },{
+            path: "monitor/waterProUser",
+            name: "monitor/waterProUser",
+            component: WaterProUser
+        },{
+            path: "monitor/waterProEquip",
+            name: "monitor/waterProEquip",
+            component: WaterProEquip
         }]
 
     }]
