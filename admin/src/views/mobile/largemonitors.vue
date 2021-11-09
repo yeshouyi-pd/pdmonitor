@@ -95,19 +95,22 @@
                 <div class="right_cage">
                     <!--顶部切换位置-->
                     <div class="dataAllBorder01 cage_cl" style="margin-top: 9% !important; height: 24%">
-                        <div class="dataAllBorder02" id="cage_cl" >
-                            <div class="analysis">一天报警事件次数：</div>
-                            <ul class="data_show_box">
+                        <div class="dataAllBorder02" id="cage_cl" style="border: 0px solid red;padding-left: 10%;padding-top: 5%;">
+                            <div class="analysis">当日声学侦测次数：</div>
+                            <!--<ul class="data_show_box">
                                 <li class="data_cage" v-for="item  in  alarmDatas.sum">{{item}}</li>
-                            </ul>
+                            </ul>-->
                             <div class="depart_number_box">
                                 <ul class="depart_number_cage" style="margin-bottom: 0px;">
-                                    <li class="depart_name">报警次数：</li>
-                                    <li class="depart_number">{{alarmDatas.num}}</li>
+                                    <!--<li class="depart_name">报警次数：</li>-->
+                                    <li class="depart_number">{{alarmDatas.num}}次</li>
                                 </ul>
+                            </div>
+                            <div class="analysis">当日事件(群次)：</div>
+                            <div class="depart_number_box">
                                 <ul class="depart_number_cage" style="margin-bottom: 0px;">
-                                    <li class="depart_name">事件次数：</li>
-                                    <li class="depart_number">{{alarmDatas.nnm}}</li>
+                                    <!--<li class="depart_name">事件次数：</li>-->
+                                    <li class="depart_number">{{alarmDatas.nnm}}次</li>
                                 </ul>
                             </div>
                         </div>
