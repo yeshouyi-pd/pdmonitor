@@ -49,9 +49,17 @@ public class ShjJsonConstant {
              */
             put("EquipmentFile", "com.pd.server.main.service.shj.EquipmentFileShjService");
             /**
+             * 设备请求时间间隔
+             */
+            put("ReqInterval", "com.pd.server.main.service.shj.ReqIntervalShjService");
+            /**
              * 设备心跳包
              */
             put("WaterEquip", "com.pd.server.main.service.shj.WaterEquipShjService");
+            /**
+             * 非实时数据上传
+             */
+            put("WaterRawfile", "com.pd.server.main.service.shj.WaterRawfileShjService");
         }
     };
 

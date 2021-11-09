@@ -2,11 +2,11 @@ package com.pd.server.main.service.shj;
 
 import com.alibaba.fastjson.JSONObject;
 import com.pd.server.config.SpringUtil;
-import com.pd.server.main.domain.WaterEquiplog;
 import com.pd.server.main.domain.WaterEquipment;
 import com.pd.server.main.domain.WaterEquipmentExample;
-import com.pd.server.main.mapper.WaterEquiplogMapper;
+import com.pd.server.main.domain.WaterRawfile;
 import com.pd.server.main.mapper.WaterEquipmentMapper;
+import com.pd.server.main.mapper.WaterRawfileMapper;
 import com.pd.server.util.UuidUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -15,23 +15,22 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-public class WaterEquipShjService extends AbstractScanRequest{
+public class WaterRawfileShjService extends AbstractScanRequest{
 
     /**
-     * 设备心跳包
+     * 非实时数据上传
      * @param jsonParam
      * @return
      * @throws Exception
      */
     public String request(JSONObject jsonParam) throws Exception {
+        String xmbh = jsonParam.getString("xmbh");
         String sbbh = jsonParam.getString("sbbh");
-        String code = jsonParam.getString("code");
-        String msg = jsonParam.getString("msg");
-        if(StringUtils.isEmpty(sbbh)||StringUtils.isEmpty(code)){
+        String wjlj = jsonParam.getString("wjlj");
+        if(StringUtils.isEmpty(xmbh)||StringUtils.isEmpty(sbbh)||StringUtils.isEmpty(wjlj)){
             data = "参数错误";
             return data;
         }
-        WaterEquiplogMapper waterEquiplogMapper = SpringUtil.getBean(WaterEquiplogMapper.class);
         WaterEquipmentMapper waterEquipmentMapper = SpringUtil.getBean(WaterEquipmentMapper.class);
         WaterEquipmentExample example = new WaterEquipmentExample();
         example.createCriteria().andSbsnEqualTo(sbbh);
@@ -41,15 +40,18 @@ public class WaterEquipShjService extends AbstractScanRequest{
             return data;
         }
         try {
-            WaterEquiplog record = new WaterEquiplog();
+            WaterRawfileMapper waterRawfileMapper = SpringUtil.getBean(WaterRawfileMapper.class);
+            WaterRawfile record = new WaterRawfile();
             record.setId(UuidUtil.getShortUuid());
+            record.setXmbh(xmbh);
             record.setSbbh(sbbh);
-            record.setCode(code);
-            record.setMsg(msg);
-            record.setReqmsg(JSONObject.toJSONString(jsonParam));
+            record.setWjlj(wjlj);
+            String wjlx = wjlj.substring((wjlj.lastIndexOf(".") + 1));
+            record.setWjlx(wjlx);
             record.setCjsj(new Date());
-            record.setRespmsg("保存成功");
-            waterEquiplogMapper.insert(record);
+            record.setFxcs(0);
+            record.setZt("0");
+            waterRawfileMapper.insert(record);
             data = "保存成功";
         } catch (Exception e){
             data = "保存失败";
