@@ -351,7 +351,7 @@ public class EquipmentFileController extends BaseWxController {
             num = num + alarmNum;
         }
         Map<String,Object> map = new HashMap<String, Object>();
-        String sum = String.valueOf(num+resultList.size());
+        String sum = String.valueOf(resultList.size());
         map.put("num",num);
         map.put("nnm",resultList.size());
         map.put("sum",sum.split(""));
