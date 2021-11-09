@@ -1,5 +1,5 @@
 <template>
-    <div style="height: 135%;border: 0px solid red;" class="data_bodey">
+    <div class="data_bodey">
         <remote-css href="/css/BigData.css" rel="stylesheet" type="text/css" />
         <remote-css href="/css/index.css" rel="stylesheet" type="text/css" />
         <remote-css href="/css/index01.css" rel="stylesheet" type="text/css" />
@@ -10,7 +10,6 @@
 
         <div class="index_nav" >
             <ul style="height: 30px; margin-bottom: 0px;">
-                <!--<li class="l_left total_chose_fr nav_active">实时监测</li>-->
                 <router-link to="/welcome">
                     <li class="l_left total_chose_fr nav_active">主页</li>
                 </router-link>
@@ -33,12 +32,10 @@
                             <img class="video_around" src="/video/4.jpg">
                         </div>
                     </div>
-                    <div class="dataAll">
-                        <div class="dataAllBorder01">
-                            <div style="border: 0px solid red;" class="dataAllBorder02">
-                                <div class="map_title">江豚报警小时占比统计图</div>
-                                <div id="container" style="height: 300px;width: 100%;border: 0px solid red;"></div>
-                            </div>
+                    <div class="dataAllBorder01 cage_cl" style="margin-top: 1.5% !important; height: 32%">
+                        <div class="dataAllBorder02" >
+                            <div class="map_title">江豚报警小时占比统计图</div>
+                            <div id="container" style="height: 100%;width: 100%;border: 0px solid red;"></div>
                         </div>
                     </div>
                 </div>
@@ -52,7 +49,7 @@
                                     <div class="map_title">实时地图</div>
                                 </div>
                             </div>
-                            <EquipmentAMap v-bind:height-max="520"></EquipmentAMap>
+                            <EquipmentAMap></EquipmentAMap>
                         </div>
                     </div>
 
@@ -98,19 +95,22 @@
                 <div class="right_cage">
                     <!--顶部切换位置-->
                     <div class="dataAllBorder01 cage_cl" style="margin-top: 9% !important; height: 24%">
-                        <div class="dataAllBorder02" id="cage_cl" >
-                            <div class="analysis">一天报警事件次数：</div>
-                            <ul class="data_show_box">
+                        <div class="dataAllBorder02" id="cage_cl" style="border: 0px solid red;padding-left: 10%;padding-top: 5%;">
+                            <div class="analysis">当日声学侦测次数：</div>
+                            <!--<ul class="data_show_box">
                                 <li class="data_cage" v-for="item  in  alarmDatas.sum">{{item}}</li>
-                            </ul>
+                            </ul>-->
                             <div class="depart_number_box">
                                 <ul class="depart_number_cage" style="margin-bottom: 0px;">
-                                    <li class="depart_name">报警次数：</li>
-                                    <li class="depart_number">{{alarmDatas.num}}</li>
+                                    <!--<li class="depart_name">报警次数：</li>-->
+                                    <li class="depart_number">{{alarmDatas.num}}次</li>
                                 </ul>
+                            </div>
+                            <div class="analysis">当日事件(群次)：</div>
+                            <div class="depart_number_box">
                                 <ul class="depart_number_cage" style="margin-bottom: 0px;">
-                                    <li class="depart_name">事件次数：</li>
-                                    <li class="depart_number">{{alarmDatas.nnm}}</li>
+                                    <!--<li class="depart_name">事件次数：</li>-->
+                                    <li class="depart_number">{{alarmDatas.nnm}}次</li>
                                 </ul>
                             </div>
                         </div>
@@ -187,7 +187,7 @@
                     <div class="modal-content" style="background: #395DC0;">
                         <div style="float:left;width: 50%;overflow-y:scroll;">
                             <div class="list-group" style="height: 500px;">
-                                <button v-for="(item,index) in equipmentFiles" type="button" @click="showRealPic(item.tplj)" style="background: #395DC0; color:#FEFEFF;cursor: pointer;border:1px solid #3490BA;" class="list-group-item">{{item.cjsj}}</button>
+                                <button v-for="(item,index) in equipmentFiles" type="button" @click="showRealPic(item.tplj)" style="background: #395DC0; color:#FEFEFF;cursor: pointer;border:1px solid #3490BA;" class="list-group-item">{{moment(item.cjsj).format("YYYY-MM-DD HH:mm:ss")}}</button>
                             </div>
                         </div>
                         <div style="float:left;width: 50%;">
