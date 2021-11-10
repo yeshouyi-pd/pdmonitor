@@ -104,8 +104,7 @@ public class AlarmEventLoop extends BaseWxController {
     public Boolean isOverThreeMinute(String curDateStr, String nextDateStr){
         Date begin = DateUtil.toDate(curDateStr,"yyyy-MM-dd HH:mm");
         Date end = DateUtil.toDate(nextDateStr,"yyyy-MM-dd HH:mm");
-        long between=(end.getTime()-begin.getTime())/1000;//除以1000是为了转换成秒
-        long minute=between%3600/60;
+        long minute=(end.getTime()-begin.getTime())/(1000*60);//除以1000是为了转换成秒
         if(minute<=2){
             return true;
         }
