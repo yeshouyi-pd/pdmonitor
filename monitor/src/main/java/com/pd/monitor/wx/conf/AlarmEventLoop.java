@@ -87,6 +87,14 @@ public class AlarmEventLoop extends BaseWxController {
                     resultList.add(result);
                 }
             }
+            if(lists.size()==1){
+                AlarmNumbersDto result = new AlarmNumbersDto();
+                result.setDeptcode(firstEntity.getDeptcode());
+                result.setSbbh(firstEntity.getSbbh());
+                result.setBjsj(curDateStr+" 至 "+curDateStr);
+                result.setAlarmNum(bjsl);
+                resultList.add(result);
+            }
         }
         for(int i=0;i<resultList.size();i++){
             AlarmNumbersDto alarmNumbersDto = resultList.get(i);
