@@ -435,7 +435,7 @@
                 || !Validator.length(_this.waterEquipment.deptcode, "所属监测点", 1, 45)
                 || !Validator.require(_this.waterEquipment.centerCode, "所属数据中心")
                 || !Validator.length(_this.waterEquipment.centerCode, "所属数据中心", 1, 45)
-                // || !Validator.require(_this.waterEquipment.sblb, "设备类别")
+                || !Validator.require(_this.waterEquipment.sblb, "设备类别")
                 || !Validator.length(_this.waterEquipment.sblb, "设备类别", 1, 45)
                 // || !Validator.require(_this.waterEquipment.dqzl, "设备读取指令")
                 || !Validator.length(_this.waterEquipment.dqzl, "设备读取指令", 1, 45)

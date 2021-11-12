@@ -675,6 +675,11 @@ public class WaterQualityResultExample {
             return (Criteria) this;
         }
 
+        public Criteria andCreateTimeEqualTo(String value,String type) {
+            addCriterion("DATE_FORMAT(create_time,'"+type+"') =", value, "createTime");
+            return (Criteria) this;
+        }
+
         public Criteria andCreateTimeNotEqualTo(Date value) {
             addCriterion("create_time <>", value, "createTime");
             return (Criteria) this;
