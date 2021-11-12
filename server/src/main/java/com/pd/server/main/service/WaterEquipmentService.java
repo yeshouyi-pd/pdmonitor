@@ -126,4 +126,8 @@ public class WaterEquipmentService {
     public List<PieChartDto> getPieChart(WaterEquipmentExample example) {
        return waterEquipmentMapper.getPieChart(example);
     }
+
+    public void updateZt(WaterEquipment waterEquipment){
+        waterEquipmentMapper.updateByPrimaryKeySelective(waterEquipment);
+    }
 }
