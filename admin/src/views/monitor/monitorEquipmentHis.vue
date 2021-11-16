@@ -52,7 +52,7 @@ export default {
   methods:{
     findMonitorEqupmentTree(){
       let _this = this;
-      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/findMonitorEqupmentTree').then((res) => {
+      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/findMonitorEqupmentTree/'+Tool.getLoginUser().xmbh).then((res) => {
         let response = res.data;
         _this.trees = response.content;
         // 初始化树

@@ -2,11 +2,10 @@ package com.pd.monitor.wx.conf;
 
 import com.alibaba.fastjson.JSONObject;
 import com.pd.server.config.RedisCode;
-import com.pd.server.main.domain.AddrInfo;
-import com.pd.server.main.domain.AddrInfoExample;
-import com.pd.server.main.domain.WaterEquipment;
+import com.pd.server.main.domain.*;
 import com.pd.server.main.mapper.AddrInfoMapper;
 import com.pd.server.main.mapper.WaterEquipmentMapper;
+import com.pd.server.main.mapper.WaterProjectMapper;
 import com.pd.server.util.DateTools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +13,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -52,6 +52,8 @@ public class WxRedisConfig implements CommandLineRunner {
 
     public static WaterEquipmentMapper waterEquipmentstaticMapper;
 
+    public static WaterProjectMapper waterprojectstaticMapper;
+
     @Resource
     private RedisTemplate redisTemplate;
 
@@ -61,11 +63,15 @@ public class WxRedisConfig implements CommandLineRunner {
     @Resource
     private WaterEquipmentMapper waterEquipmentMapper;
 
+    @Resource
+    private WaterProjectMapper waterProjectMapper;
+
     @PostConstruct
     protected void init() {
         redisTstaticemplate = redisTemplate;
         addrInfostaticMapper = addrInfoMapper;
         waterEquipmentstaticMapper = waterEquipmentMapper;
+        waterprojectstaticMapper = waterProjectMapper;
     }
 
 
@@ -82,6 +88,7 @@ public class WxRedisConfig implements CommandLineRunner {
      */
     public static synchronized void reload() {
         init_sbsnCenterCodeMap();//加载设备编号对应的监测点编号
+        init_waterProject();//加载项目缓存
     }
 
     public synchronized static boolean init_sbsnCenterCodeMap(){
@@ -98,4 +105,26 @@ public class WxRedisConfig implements CommandLineRunner {
         return true;
     }
 
+
+    /**
+     * 加载项目缓存
+     */
+    public synchronized static boolean init_waterProject(){
+        try {
+            WaterProjectExample example = new WaterProjectExample();
+            WaterProjectExample.Criteria ca = example.createCriteria();
+            List<WaterProject> list = waterprojectstaticMapper.selectByExample(example);
+            if(!CollectionUtils.isEmpty(list)){
+                Map<String, String>  map = new LinkedHashMap<String,String>();
+                for(WaterProject vo : list){
+                    map.put(vo.getXmbh(),vo.getXmmc());
+                }
+                redisTstaticemplate.opsForValue().set(RedisCode.PROJECTCODENAME, map);//将参数信息写入redis缓存
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
 }

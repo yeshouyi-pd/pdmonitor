@@ -21,6 +21,10 @@ public enum RedisCode {
     AllUSER("alluser"),//所有用户
 
     SBSNCENTERCODE("sbsncentercode"),//设备sn对应的监测点
+
+    PROJECTCODENAME("project_code_name"),//项目信息缓存
+
+    PROJECTSBSNS("project_sbsbs"),//项目编号对应的设备sn信息
     ;
 
     private String desc;

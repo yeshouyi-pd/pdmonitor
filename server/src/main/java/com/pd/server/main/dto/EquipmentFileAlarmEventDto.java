@@ -55,6 +55,8 @@ public class EquipmentFileAlarmEventDto extends PageDto{
 
     private int counts;
 
+    private String xmbh;
+
     public String getId() {
         return id;
     }
@@ -141,6 +143,14 @@ public class EquipmentFileAlarmEventDto extends PageDto{
 
     public void setCounts(int counts) {
         this.counts = counts;
+    }
+
+    public String getXmbh() {
+        return xmbh;
+    }
+
+    public void setXmbh(String xmbh) {
+        this.xmbh = xmbh;
     }
 
     @Override

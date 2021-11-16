@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -161,7 +162,10 @@ return responseDto;
         loginUserDto.setDeptmap(mapdept);
         Map<String ,String> mapuser = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.USERCODENAME);
         loginUserDto.setUsermap(mapuser);
+        Map<String, List<String>> mapxmbhsbsns = (Map<String, List<String>>) redisTemplate.opsForValue().get(RedisCode.PROJECTSBSNS);
+        loginUserDto.setXmbhsbsns(mapxmbhsbsns);
         redisTemplate.opsForValue().set(token, JSON.toJSONString(loginUserDto), 3600, TimeUnit.SECONDS);
+
          //request.getSession().setAttribute(Constants.LOGIN_USER,loginUserDto);
         responseDto.setContent(loginUserDto);
         return responseDto;

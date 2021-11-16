@@ -1,6 +1,7 @@
 package com.pd.monitor.controller;
 
 import com.pd.monitor.wx.conf.BaseWxController;
+import com.pd.monitor.wx.conf.WxRedisConfig;
 import com.pd.server.main.domain.WaterProEquip;
 import com.pd.server.main.domain.WaterProUser;
 import com.pd.server.main.dto.*;
@@ -111,6 +112,7 @@ public class WaterProjectController extends BaseWxController {
                 entity.setSbsn(sbsncode[i]);
                 waterProEquipService.save(entity);
             }
+            WxRedisConfig.init_waterProject();
             responseDto.setContent(waterProjectDto);
         }catch (Exception e){
             responseDto.setSuccess(false);

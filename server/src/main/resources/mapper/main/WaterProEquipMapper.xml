@@ -317,4 +317,8 @@
       sm6 = #{sm6,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
+  <select id="findSbsnByXmbh" parameterType="java.lang.String" resultType="java.lang.String">
+    select sbsn from water_pro_equip
+    where xmbh = #{xmbh,jdbcType=VARCHAR}
+  </select>
 </mapper>

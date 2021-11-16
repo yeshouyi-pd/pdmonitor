@@ -1,0 +1,61 @@
+<template>
+  <div>
+    <div style="display: flex;flex-direction: row;flex-wrap: wrap;">
+      <button style="margin: 30px;border-radius: 50px;" class="btn-info" v-for="item in xmbhs" v-on:click="toWelcome(item)">
+        <div style="display: flex;flex-direction: column;padding: 50px;">
+          <img src="/static/favicon.png"/>
+          <span style="margin-top: 20px;font-size: 30px;">{{xmbhMap|optionMapKV(item)}}</span>
+        </div>
+      </button>
+    </div>
+  </div>
+</template>
+<script>
+export default {
+  name: "choose-project",
+  data: function (){
+    return {
+      user:'',
+      xmbhs:[],
+      xmbhMap:{}
+    }
+  },
+  mounted() {
+    let _this = this;
+    _this.user = Tool.getLoginUser();
+    _this.$forceUpdate();
+    _this.getXmbhAndXmmc();
+    _this.getWaterProjects();
+  },
+  methods: {
+    toWelcome(xmbh){
+      let _this = this;
+      console.log(xmbh);
+      _this.user.xmbh = xmbh;
+      _this.$forceUpdate();
+      Tool.setLoginUser(_this.user);
+      _this.$router.push("/welcome");
+    },
+    getXmbhAndXmmc(){
+      let _this = this;
+      Loading.show();
+      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/CodeSetUtil/getXmbhAndXmmc').then((response)=>{
+        Loading.hide();
+        let resp = response.data;
+        _this.xmbhMap = resp.content;
+        _this.$forceUpdate();
+      })
+    },
+    getWaterProjects(){
+      let _this = this;
+      Loading.show();
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/CodeSetUtil/findWaterProjectAllByExample', {"usercode":_this.user.loginName}).then((response)=>{
+        Loading.hide();
+        let resp = response.data;
+        _this.xmbhs = resp.content;
+        _this.$forceUpdate();
+      })
+    }
+  }
+}
+</script>

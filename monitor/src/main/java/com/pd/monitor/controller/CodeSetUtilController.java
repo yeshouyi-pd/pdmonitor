@@ -2,12 +2,9 @@ package com.pd.monitor.controller;
 
 import com.pd.server.config.CodeType;
 import com.pd.server.config.RedisCode;
-import com.pd.server.main.domain.WaterEquipmentExample;
 import com.pd.server.main.dto.*;
 import com.pd.monitor.wx.conf.BaseWxController;
-import com.pd.server.main.service.DeptService;
-import com.pd.server.main.service.UserService;
-import com.pd.server.main.service.WaterEquipmentService;
+import com.pd.server.main.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -34,6 +31,9 @@ public class CodeSetUtilController extends BaseWxController {
 
     @Resource
     private WaterEquipmentService waterEquipmentService;
+
+    @Resource
+    private WaterProUserService waterProUserService;
 
     /**
      * 资源树查询
@@ -77,6 +77,17 @@ public class CodeSetUtilController extends BaseWxController {
         ResponseDto responseDto = new ResponseDto();
         waterEquipmentService.listByPage(waterEquipmentDto);
         responseDto.setContent(waterEquipmentDto);
+        return responseDto;
+    }
+
+    /**
+     * 根据usercode查询所有的项目
+     */
+    @PostMapping("/findWaterProjectAllByExample")
+    public ResponseDto findWaterProjectAllByExample(@RequestBody WaterProUserDto waterProUserDto){
+        ResponseDto responseDto = new ResponseDto();
+        List<String> xmbhLists = waterProUserService.findXmbhByUsercode(waterProUserDto.getUsercode());
+        responseDto.setContent(xmbhLists);
         return responseDto;
     }
 
@@ -144,6 +155,17 @@ public class CodeSetUtilController extends BaseWxController {
         Map<String,String> map = new LinkedHashMap<String,String>();
         Map<String, Map<String,String>>  allmap = (Map<String, Map<String, String>>) redisTemplate.opsForValue().get(RedisCode.CODESET);
         map = allmap.get(CodeType.XMYT_CODE);
+        responseDto.setContent(map);
+        return responseDto;
+    }
+
+    /**
+     * 获取项目编号对应的项目名称
+     */
+    @GetMapping("/getXmbhAndXmmc")
+    public ResponseDto getXmbhAndXmmc(){
+        ResponseDto responseDto = new ResponseDto();
+        Map<String,String> map = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.PROJECTCODENAME);
         responseDto.setContent(map);
         return responseDto;
     }

@@ -239,7 +239,7 @@ export default {
     },
     exportExcel(){
       let _this = this;
-      let paramsStr = "deptcode="+Tool.getLoginUser().deptcode;
+      let paramsStr = "deptcode="+Tool.getLoginUser().deptcode+"&xmbh="+Tool.getLoginUser().xmbh;
       if(Tool.isNotEmpty(_this.alarmEventDto.stime)){
         paramsStr = paramsStr + "&stime="+_this.alarmEventDto.stime;
       }
@@ -272,7 +272,7 @@ export default {
     findDeviceInfo(){
       let _this = this;
       Loading.show();
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/findAll', {'sblb':'0001'}).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/findAll', {'sblb':'0001','xmbh':Tool.getLoginUser().xmbh}).then((response)=>{
         Loading.hide();
         _this.waterEquipments = response.data.content;
       })
@@ -285,6 +285,7 @@ export default {
       Loading.show();
       _this.alarmEventDto.page = page;
       _this.alarmEventDto.size = _this.$refs.pagination.size;
+      _this.alarmEventDto.xmbh=Tool.getLoginUser().xmbh;
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileAlarmEvent/statistics', _this.alarmEventDto).then((response) => {
         Loading.hide();
         let resp = response.data;
@@ -313,7 +314,7 @@ export default {
     },
     findMonitorEquipmentTreeByFile(){
       let _this = this;
-      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/findMonitorEquipmentTreeByFile').then((res) => {
+      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/findMonitorEquipmentTreeByFile/'+Tool.getLoginUser().xmbh).then((res) => {
         let response = res.data;
         _this.trees = response.content;
         // 初始化树
@@ -360,6 +361,7 @@ export default {
       obj.sbbh = _this.curNode.code;
       obj.stime = _this.stime;
       obj.etime = _this.etime;
+      obj.xmbh = Tool.getLoginUser().xmbh;
       _this.$forceUpdate();
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileAlarmEvent/echartsAlarmData',obj).then((response)=>{
         Loading.hide();

@@ -82,6 +82,8 @@ public class WaterQualityResultDto extends PageDto{
 
     private String sbmc;
 
+    private String xmbh;
+
     public String getSbmc() {
         return sbmc;
     }
@@ -217,6 +219,14 @@ public class WaterQualityResultDto extends PageDto{
 
     public void setChooseTimeType(String chooseTimeType) {
         this.chooseTimeType = chooseTimeType;
+    }
+
+    public String getXmbh() {
+        return xmbh;
+    }
+
+    public void setXmbh(String xmbh) {
+        this.xmbh = xmbh;
     }
 
     @Override

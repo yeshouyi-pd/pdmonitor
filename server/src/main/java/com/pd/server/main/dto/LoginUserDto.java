@@ -80,6 +80,8 @@ public class LoginUserDto {
 
     private Map<String,String> usermap;//所有用户
 
+    private Map<String,List<String>> xmbhsbsns;//项目编号对应的所有的设备编号
+
     public String getId() {
         return id;
     }
@@ -294,6 +296,14 @@ public class LoginUserDto {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Map<String, List<String>> getXmbhsbsns() {
+        return xmbhsbsns;
+    }
+
+    public void setXmbhsbsns(Map<String, List<String>> xmbhsbsns) {
+        this.xmbhsbsns = xmbhsbsns;
     }
 
     @Override

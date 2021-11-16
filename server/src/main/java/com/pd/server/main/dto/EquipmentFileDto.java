@@ -39,6 +39,8 @@ public class EquipmentFileDto extends PageDto{
 
     private  PlayDto playDto;
 
+    private String xmbh;
+
     public PlayDto getPlayDto() {
         return playDto;
     }
@@ -111,6 +113,14 @@ public class EquipmentFileDto extends PageDto{
 
     public void setHasAudio(boolean hasAudio) {
         this.hasAudio = hasAudio;
+    }
+
+    public String getXmbh() {
+        return xmbh;
+    }
+
+    public void setXmbh(String xmbh) {
+        this.xmbh = xmbh;
     }
 
     @Override

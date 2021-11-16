@@ -12,6 +12,7 @@ import com.pd.server.util.UuidUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
@@ -32,7 +33,7 @@ public class WaterQualityResultService {
     /**
     * 列表查询
     */
-    public void list(WaterQualityResultDto pageDto,List<String> lists) {
+    public void list(WaterQualityResultDto pageDto,List<String> lists, List<String> sbsns) {
         PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
         WaterQualityResultExample waterQualityResultExample = new WaterQualityResultExample();
         WaterQualityResultExample.Criteria ca = waterQualityResultExample.createCriteria();
@@ -50,6 +51,9 @@ public class WaterQualityResultService {
         }
         if(!StringUtils.isEmpty(pageDto.getEtime())){
             ca.andCreateTimeLessThanOrEqualTo(pageDto.getEtime());
+        }
+        if(!CollectionUtils.isEmpty(sbsns)){
+            ca.andIpIn(sbsns);
         }
         waterQualityResultExample.setOrderByClause(" create_time desc");
         List<WaterQualityResult> waterQualityResultList = waterQualityResultMapper.selectByExample(waterQualityResultExample);
