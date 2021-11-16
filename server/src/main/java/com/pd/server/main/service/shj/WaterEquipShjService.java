@@ -2,9 +2,8 @@ package com.pd.server.main.service.shj;
 
 import com.alibaba.fastjson.JSONObject;
 import com.pd.server.config.SpringUtil;
-import com.pd.server.main.domain.WaterEquiplog;
-import com.pd.server.main.domain.WaterEquipment;
-import com.pd.server.main.domain.WaterEquipmentExample;
+import com.pd.server.main.domain.*;
+import com.pd.server.main.mapper.AttrMapper;
 import com.pd.server.main.mapper.WaterEquiplogMapper;
 import com.pd.server.main.mapper.WaterEquipmentMapper;
 import com.pd.server.util.UuidUtil;
@@ -33,6 +32,7 @@ public class WaterEquipShjService extends AbstractScanRequest{
         }
         WaterEquiplogMapper waterEquiplogMapper = SpringUtil.getBean(WaterEquiplogMapper.class);
         WaterEquipmentMapper waterEquipmentMapper = SpringUtil.getBean(WaterEquipmentMapper.class);
+        AttrMapper attrMapper = SpringUtil.getBean(AttrMapper.class);
         WaterEquipmentExample example = new WaterEquipmentExample();
         example.createCriteria().andSbsnEqualTo(sbbh);
         List<WaterEquipment> listWater = waterEquipmentMapper.selectByExample(example);
@@ -50,7 +50,14 @@ public class WaterEquipShjService extends AbstractScanRequest{
             record.setCjsj(new Date());
             record.setRespmsg("保存成功");
             waterEquiplogMapper.insert(record);
-            data = "保存成功";
+            AttrExample attrExample = new AttrExample();
+            attrExample.createCriteria().andAttrcodeEqualTo("reqinterval");
+            List<Attr> list = attrMapper.selectByExample(attrExample);
+            if(list.size() == 0){
+                data = "60";
+            }else{
+                data = list.get(0).getAttrkey();
+            }
         } catch (Exception e){
             data = "保存失败";
             e.printStackTrace();
