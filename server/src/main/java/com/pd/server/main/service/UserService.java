@@ -40,40 +40,40 @@ private UserMapper userMapper;
      * 列表查询
      */
     public void list(UserDto userDto) {
-    PageHelper.startPage(userDto.getPage(), userDto.getSize());
-    UserExample userExample = new UserExample();
-    if(null != userDto){
-        UserExample.Criteria ca = userExample.createCriteria();
-        if(!StringUtils.isEmpty(userDto.getLoginName())){
-            ca.andLoginNameEqualTo(userDto.getLoginName());
+        PageHelper.startPage(userDto.getPage(), userDto.getSize());
+        UserExample userExample = new UserExample();
+        if(null != userDto){
+            UserExample.Criteria ca = userExample.createCriteria();
+            if(!StringUtils.isEmpty(userDto.getLoginName())){
+                ca.andLoginNameEqualTo(userDto.getLoginName());
+            }
+            if(!StringUtils.isEmpty(userDto.getName())){
+                ca.andNameLike("%"+userDto.getName()+"%");
+            }
+            if(!StringUtils.isEmpty(userDto.getZt())){
+                ca.andZtEqualTo(userDto.getZt());
+            }
+            if(!StringUtils.isEmpty(userDto.getRode())){
+                ca.andRodeEqualTo(userDto.getRode());
+            }
         }
-        if(!StringUtils.isEmpty(userDto.getName())){
-            ca.andNameLike("%"+userDto.getName()+"%");
-        }
-        if(!StringUtils.isEmpty(userDto.getZt())){
-            ca.andZtEqualTo(userDto.getZt());
-        }
-        if(!StringUtils.isEmpty(userDto.getRode())){
-            ca.andRodeEqualTo(userDto.getRode());
-        }
-    }
-    List<User> userList = userMapper.selectByExample(userExample);
-    PageInfo<User> pageInfo = new PageInfo<>(userList);
-    userDto.setTotal(pageInfo.getTotal());
-    List<UserDto> userDtoList = CopyUtil.copyList(userList, UserDto.class);
-    userDto.setList(userDtoList);
+        List<User> userList = userMapper.selectByExample(userExample);
+        PageInfo<User> pageInfo = new PageInfo<>(userList);
+        userDto.setTotal(pageInfo.getTotal());
+        List<UserDto> userDtoList = CopyUtil.copyList(userList, UserDto.class);
+        userDto.setList(userDtoList);
     }
 
     /**
     * 保存，id有值时更新，无值时新增
     */
     public void save(UserDto userDto) {
-    User user = CopyUtil.copy(userDto, User.class);
-    if (StringUtils.isEmpty(userDto.getId())) {
-    this.insert(user);
-    } else {
-    this.update(user);
-    }
+        User user = CopyUtil.copy(userDto, User.class);
+        if (StringUtils.isEmpty(userDto.getId())) {
+            this.insert(user);
+        } else {
+            this.update(user);
+        }
     }
 
     /**
@@ -88,12 +88,12 @@ private UserMapper userMapper;
     * 新增
     */
     private void insert(User user) {
-    user.setId(UuidUtil.getShortUuid());
+        user.setId(UuidUtil.getShortUuid());
         User userDb = this.selectByLoginName(user.getLoginName());
         if (userDb != null) {
             throw new BusinessException(BusinessExceptionCode.USER_LOGIN_NAME_EXIST);
         }
-    userMapper.insert(user);
+        userMapper.insert(user);
     }
 
     /**

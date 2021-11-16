@@ -51,12 +51,6 @@ public class WaterProjectService {
     public void save(WaterProjectDto waterProjectDto) {
         WaterProject waterProject = CopyUtil.copy(waterProjectDto, WaterProject.class);
         if (StringUtils.isEmpty(waterProjectDto.getId())) {
-            WaterProjectExample example = new WaterProjectExample();
-            WaterProjectExample.Criteria ca = example.createCriteria();
-            ca.andXmbhEqualTo(waterProjectDto.getXmbh());
-            if(!CollectionUtils.isEmpty(waterProjectMapper.selectByExample(example))){
-                throw  new BusinessException(BusinessExceptionCode.PROJECT_CODE_EXIST);
-            }
             this.insert(waterProject);
         } else {
             this.update(waterProject);
@@ -67,7 +61,13 @@ public class WaterProjectService {
     * 新增
     */
     private void insert(WaterProject waterProject) {
-                Date now = new Date();
+        Date now = new Date();
+        WaterProjectExample example = new WaterProjectExample();
+        WaterProjectExample.Criteria ca = example.createCriteria();
+        ca.andXmbhEqualTo(waterProject.getXmbh());
+        if(!CollectionUtils.isEmpty(waterProjectMapper.selectByExample(example))){
+            throw  new BusinessException(BusinessExceptionCode.PROJECT_CODE_EXIST);
+        }
         waterProject.setId(UuidUtil.getShortUuid());
         waterProjectMapper.insert(waterProject);
     }

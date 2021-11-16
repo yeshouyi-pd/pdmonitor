@@ -87,7 +87,7 @@
       <thead>
       <tr>
         <th>账号</th>
-        <th>姓名</th>
+        <th>用户名称</th>
         <th>部门</th>
         <th>角色</th>
         <th>操作</th>
@@ -253,7 +253,7 @@ export default {
     mounted: function() {
       let _this = this;
       _this.getAllres();
-      _this. getAllDept();
+      _this.getAllDept();
       _this.$refs.pagination.size = 10;
       _this.list(1);
       _this.getDeptTree();
@@ -353,7 +353,8 @@ export default {
         if (1 != 1
                 || !Validator.require(_this.user.loginName, "登陆名")
                 || !Validator.length(_this.user.loginName, "登陆名", 1, 50)
-                || !Validator.length(_this.user.name, "昵称", 1, 50)
+                || !Validator.length(_this.user.name, "用户名称", 1, 50)
+                || !Validator.require(_this.user.name, "用户名称")
                 || (!Validator.require(_this.user.password, "密码") && Tool.isEmpty(_this.user.id))
 
         ) {
