@@ -43,6 +43,15 @@ public class WaterEquipmentService {
         return sbsns;
     }
 
+    public List<String> findSbsnByDeptcodes(List<String> deptcodes){
+        WaterEquipmentExample example = new WaterEquipmentExample();
+        WaterEquipmentExample.Criteria ca = example.createCriteria();
+        ca.andDeptcodeIn(deptcodes);
+        List<WaterEquipment> lists = waterEquipmentMapper.selectByExample(example);
+        List<String> sbsns = lists.stream().filter(Objects::nonNull).map(WaterEquipment::getSbsn).collect(Collectors.toList());
+        return sbsns;
+    }
+
     /**
     * 列表查询
     */

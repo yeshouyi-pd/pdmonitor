@@ -30,8 +30,9 @@ public class ReqIntervalShjService extends AbstractScanRequest{
         List<Attr> list = attrMapper.selectByExample(example);
         if(list.size() == 0){
             data = "60";
+        }else{
+            data = list.get(0).getAttrkey();
         }
-        data = list.get(0).getAttrkey();
         return data;
     }
 
