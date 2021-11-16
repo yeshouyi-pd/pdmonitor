@@ -29,7 +29,7 @@
                                 <div style="float: left;width:12.5%;height:140px;" align="center">
                                     <div style="width:93%;height:130px;position:relative;top:10px;border:3px solid #FF0000;border-radius:5px;">
                                         <div style="width:96%;height:120px;position:relative;top:2px;border:2px solid #FF0000;border-radius:2px;">
-                                            <div style="color: #FF0000;position:relative;top:6px;">
+                                            <div style="color: #FF0000;position:relative;top:10px;">
                                                 <p style="font-size: 18px;font-weight: bolder;">{{state.sbsn}}</p>
                                                 <p style="font-size: 18px;font-weight: bold;">设备异常</p>
                                                 <p style="font-size: 10px;">{{state.sbmc}}</p>
