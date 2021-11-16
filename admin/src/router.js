@@ -35,6 +35,8 @@ import Test  from "./views/mobile/test.vue"
 import WaterProject from "./views/monitor/waterProject.vue";
 import WaterState from "./views/monitor/waterState.vue"
 import WaterEquiplog from "./views/monitor/waterEquiplog.vue"
+import WaterProUser from "./views/monitor/waterProUser.vue";
+import WaterProEquip from "./views/monitor/waterProEquip.vue";
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -195,6 +197,14 @@ export default new Router({
             path: "monitor/waterEquiplog",
             name:"monitor/waterEquiplog",
             component:WaterEquiplog
+        },{
+            path: "monitor/waterProUser",
+            name: "monitor/waterProUser",
+            component: WaterProUser
+        },{
+            path: "monitor/waterProEquip",
+            name: "monitor/waterProEquip",
+            component: WaterProEquip
         }]
 
     }]

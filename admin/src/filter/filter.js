@@ -109,6 +109,19 @@ let optionWDArray = (list, key) =>  {
         return result;
     }
 };
+let optionDCNArray = (list, key) =>  {
+    if (!list || !key) {
+        return "";
+    } else {
+        let result = "";
+        for (let i = 0; i < list.length; i++) {
+            if (key === list[i]["deptcode"]) {
+                result = list[i]["deptname"];
+            }
+        }
+        return result;
+    }
+};
 /**
  * 时长格式化
  */
@@ -232,5 +245,6 @@ export default {
     optionMapAndMapKV,
     optionCNArray,
     optionWDArray,
-    optionNSArray
+    optionNSArray,
+    optionDCNArray
 }
