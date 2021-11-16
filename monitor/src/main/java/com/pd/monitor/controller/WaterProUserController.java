@@ -3,7 +3,6 @@ package com.pd.monitor.controller;
 import com.pd.server.main.domain.WaterProUser;
 import com.pd.server.main.domain.WaterProUserExample;
 import com.pd.server.main.dto.WaterProUserDto;
-import com.pd.server.main.dto.PageDto;
 import com.pd.server.main.dto.ResponseDto;
 import com.pd.server.main.service.WaterProUserService;
 import com.pd.server.util.ValidatorUtil;
@@ -81,6 +80,9 @@ public class WaterProUserController {
         }
         if(!StringUtils.isEmpty(waterProUserDto.getIsboss())){
             ca.andIsbossEqualTo(waterProUserDto.getIsboss());
+        }
+        if(!StringUtils.isEmpty(waterProUserDto.getUsercode())){
+            ca.andUsercodeEqualTo(waterProUserDto.getUsercode());
         }
         List<WaterProUser> lists = waterProUserService.selectByExample(example);
         responseDto.setContent(lists);

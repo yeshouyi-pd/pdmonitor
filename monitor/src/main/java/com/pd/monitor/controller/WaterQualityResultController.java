@@ -13,6 +13,7 @@ import com.pd.server.util.DateUtil;
 import com.pd.server.util.ValidatorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -81,7 +82,13 @@ public class WaterQualityResultController extends BaseWxController {
         ResponseDto responseDto = new ResponseDto();
         LoginUserDto user = getRequestHeader();
         List<String> lists = getUpdeptcode(user.getDeptcode());
-        waterQualityResultService.list(pageDto, lists);
+        List<String> sbsns = new ArrayList<>();
+        if(!StringUtils.isEmpty(pageDto.getXmbh())){
+            if(!CollectionUtils.isEmpty(user.getXmbhsbsns().get(pageDto.getXmbh()))){
+                sbsns = user.getXmbhsbsns().get(pageDto.getXmbh());
+            }
+        }
+        waterQualityResultService.list(pageDto, lists, sbsns);
         responseDto.setContent(pageDto);
         return responseDto;
     }

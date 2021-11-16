@@ -12,6 +12,7 @@ import com.pd.server.util.UuidUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
@@ -47,7 +48,7 @@ public class EquipmentFileService {
     /**
     * 列表查询
     */
-    public void list(EquipmentFileDto pageDto, List<String> list) {
+    public void list(EquipmentFileDto pageDto, List<String> list, LoginUserDto user) {
         EquipmentFileExample audioExample = new EquipmentFileExample();
         EquipmentFileExample.Criteria audioCa = audioExample.createCriteria();
         audioCa.andTpljLike("%wav");
@@ -66,6 +67,11 @@ public class EquipmentFileService {
         }
         if(!StringUtils.isEmpty(pageDto.getSbbh())){
             ca.andSbbhEqualTo(pageDto.getSbbh());//
+        }
+        if(!StringUtils.isEmpty(pageDto.getXmbh())){
+            if(!CollectionUtils.isEmpty(user.getXmbhsbsns().get(pageDto.getXmbh()))){
+                ca.andSbbhIn(user.getXmbhsbsns().get(pageDto.getXmbh()));
+            }
         }
         ca.andTpljLike("%png");
         equipmentFileExample.setOrderByClause(" cjsj desc ");

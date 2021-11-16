@@ -22,6 +22,10 @@ public class WaterProEquipService {
     @Resource
     private WaterProEquipMapper waterProEquipMapper;
 
+    public List<String> findSbsnByXmbh(String xmbh){
+        return waterProEquipMapper.findSbsnByXmbh(xmbh);
+    }
+
     public List<WaterProEquip> findByXmbh(String xmbh){
         WaterProEquipExample waterProEquipExample = new WaterProEquipExample();
         waterProEquipExample.createCriteria().andXmbhEqualTo(xmbh);

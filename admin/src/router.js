@@ -35,6 +35,7 @@ import Test  from "./views/mobile/test.vue"
 import WaterProject from "./views/monitor/waterProject.vue";
 import WaterProUser from "./views/monitor/waterProUser.vue";
 import WaterProEquip from "./views/monitor/waterProEquip.vue";
+import ChooseProject from "./views/admin/chooseProject.vue"
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -60,6 +61,10 @@ export default new Router({
     },{
         path: "/mobile/largemonitors",
         component: Largemonitors
+    },{
+        path: "/admin/chooseProject",
+        name: "/admin/chooseProject",
+        component: ChooseProject
     },{
         path: "/mobile/mindex",
         component:Mindex

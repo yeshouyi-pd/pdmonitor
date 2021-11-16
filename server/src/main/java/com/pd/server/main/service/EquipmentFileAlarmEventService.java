@@ -11,6 +11,7 @@ import com.pd.server.util.UuidUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
@@ -59,7 +60,7 @@ public class EquipmentFileAlarmEventService {
     /**
      * 列表查询
      */
-    public void listStatistics(EquipmentFileAlarmEventDto pageDto, List<String> list) {
+    public void listStatistics(EquipmentFileAlarmEventDto pageDto, List<String> list, List<String> sbsns) {
         PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
         EquipmentFileAlarmEventExample equipmentFileAlarmEventExample = new EquipmentFileAlarmEventExample();
         EquipmentFileAlarmEventExample.Criteria ca = equipmentFileAlarmEventExample.createCriteria();
@@ -74,6 +75,9 @@ public class EquipmentFileAlarmEventService {
         }
         if(!StringUtils.isEmpty(pageDto.getEtime())){
             ca.andBjsjLessThanOrEqualTo(pageDto.getEtime());
+        }
+        if(!CollectionUtils.isEmpty(sbsns)){
+            ca.andSbbhIn(sbsns);
         }
         List<EquipmentFileAlarmEventDto> equipmentFileAlarmEventList = equipmentFileAlarmEventMapper.statisticsByExample(equipmentFileAlarmEventExample);
         PageInfo<EquipmentFileAlarmEventDto> pageInfo = new PageInfo<>(equipmentFileAlarmEventList);

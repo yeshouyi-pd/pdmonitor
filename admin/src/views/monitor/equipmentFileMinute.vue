@@ -137,7 +137,7 @@ export default {
     },
     findMonitorEquipmentTreeByFile(){
       let _this = this;
-      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/findMonitorEquipmentTreeByFile').then((res) => {
+      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/findMonitorEquipmentTreeByFile/'+Tool.getLoginUser().xmbh).then((res) => {
         let response = res.data;
         _this.trees = response.content;
         // 初始化树

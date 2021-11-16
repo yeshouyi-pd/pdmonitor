@@ -56,6 +56,7 @@ public class ExportFileController extends BaseWxController{
     public void exportByAlarmEvent(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String deptcode = request.getParameter("deptcode");
         List<String> list = getUpdeptcode(deptcode);//获取部门属性
+        List<String> sbsns = new ArrayList<>();
         EquipmentFileAlarmEventDto pageDto = new EquipmentFileAlarmEventDto();
         if(!StringUtils.isEmpty(request.getParameter("stime"))){
             pageDto.setStime(request.getParameter("stime"));
@@ -66,7 +67,11 @@ public class ExportFileController extends BaseWxController{
         if(!StringUtils.isEmpty(request.getParameter("sbbh"))){
             pageDto.setSbbh(request.getParameter("sbbh"));
         }
-        equipmentFileAlarmEventService.listStatistics(pageDto, list);
+        if(!StringUtils.isEmpty(request.getParameter("xmbh"))){
+            Map<String, List<String>> mapXmbhsbsn = (Map<String, List<String>>) redisTemplate.opsForValue().get(RedisCode.PROJECTSBSNS);
+            sbsns = mapXmbhsbsn.get(request.getParameter("xmbh"));
+        }
+        equipmentFileAlarmEventService.listStatistics(pageDto, list, sbsns);
         List<EquipmentFileAlarmEventDto> dataList = pageDto.getList();
         //导出
         HSSFWorkbook workbook = new HSSFWorkbook();

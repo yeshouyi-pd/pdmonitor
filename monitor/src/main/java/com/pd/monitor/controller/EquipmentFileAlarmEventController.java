@@ -11,6 +11,7 @@ import com.pd.server.main.service.EquipmentFileAlarmEventService;
 import com.pd.server.util.ValidatorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -35,6 +36,7 @@ public class EquipmentFileAlarmEventController extends BaseWxController {
         ResponseDto responseDto = new ResponseDto();
         LoginUserDto userDto = getRequestHeader();
         List<String> list = getUpdeptcode(userDto.getDeptcode());
+
         List<EquipmentFileAlarmEventDto> listall = equipmentFileAlarmEventService.listStatisticsAll(entityDto, list);
         List<String> xAixsData = listall.stream().filter(Objects::nonNull).map(u->u.getBjsj()).collect(Collectors.toList());
         List<Integer> yAixsData = listall.stream().filter(Objects::nonNull).map(u->u.getCounts()).collect(Collectors.toList());
@@ -77,7 +79,11 @@ public class EquipmentFileAlarmEventController extends BaseWxController {
         ResponseDto responseDto = new ResponseDto();
         LoginUserDto userDto = getRequestHeader();
         List<String> list = getUpdeptcode(userDto.getDeptcode());
-        equipmentFileAlarmEventService.listStatistics(pageDto, list);
+        List<String> sbsns = new ArrayList<>();
+        if(!StringUtils.isEmpty(pageDto.getXmbh())){
+            sbsns = userDto.getXmbhsbsns().get(pageDto.getXmbh());
+        }
+        equipmentFileAlarmEventService.listStatistics(pageDto, list, sbsns);
         responseDto.setContent(pageDto);
         return responseDto;
     }

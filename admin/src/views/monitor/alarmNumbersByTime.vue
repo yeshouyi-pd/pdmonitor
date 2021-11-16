@@ -96,7 +96,7 @@ export default {
     findDeviceInfo(){
       let _this = this;
       Loading.show();
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/findAll', {'sblb':'0001'}).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/findAll', {'sblb':'0001','xmbh':Tool.getLoginUser().xmbh}).then((response)=>{
         Loading.hide();
         _this.waterEquipments = response.data.content;
       })
@@ -120,6 +120,7 @@ export default {
     list(page){
       let _this = this;
       Loading.show();
+      _this.alarmNumbersDto.xmbh = Tool.getLoginUser().xmbh;
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFile/statisticsAlarmNumsByTime', _this.alarmNumbersDto).then((response) => {
         Loading.hide();
         let resp = response.data;

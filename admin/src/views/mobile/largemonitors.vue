@@ -10,7 +10,7 @@
 
         <div class="index_nav" >
             <ul style="height: 30px; margin-bottom: 0px;">
-                <router-link to="/welcome">
+                <router-link to="/admin/chooseProject">
                     <li class="l_left total_chose_fr nav_active">主页</li>
                 </router-link>
             </ul>

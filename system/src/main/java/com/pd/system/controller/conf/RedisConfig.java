@@ -5,10 +5,7 @@ import com.pd.server.config.CodeType;
 import com.pd.server.config.RedisCode;
 import com.pd.server.main.dto.KvIntDto;
 import com.pd.server.main.domain.*;
-import com.pd.server.main.mapper.AttrMapper;
-import com.pd.server.main.mapper.CodesetMapper;
-import com.pd.server.main.mapper.DeptMapper;
-import com.pd.server.main.mapper.UserMapper;
+import com.pd.server.main.mapper.*;
 import com.pd.server.main.mapper.my.MyDeptMapper;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -21,9 +18,7 @@ import org.springframework.util.CollectionUtils;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * rddis 缓存工具
@@ -48,6 +43,8 @@ public class RedisConfig  implements CommandLineRunner {
 
     public  static AttrMapper  attrstaticMapper;
 
+    public static WaterProEquipMapper waterProEquipStaticMapper;
+
     @Resource
     private RedisTemplate redisTemplate;
 
@@ -66,6 +63,9 @@ public class RedisConfig  implements CommandLineRunner {
     @Resource
     private AttrMapper attrMapper;
 
+    @Resource
+    private WaterProEquipMapper waterProEquipMapper;
+
     @PostConstruct
     protected void init() {
         CodesetstaticMapper = codesetMapper;
@@ -74,6 +74,7 @@ public class RedisConfig  implements CommandLineRunner {
         UserstaticMapper = userMapper;
         myDeptstaticMapper =myDeptMapper;
         attrstaticMapper =attrMapper;
+        waterProEquipStaticMapper = waterProEquipMapper;
     }
 
 
@@ -93,6 +94,37 @@ public class RedisConfig  implements CommandLineRunner {
         init_code();//加载部门缓存
         init_dept();//加载部门
         init_user();//加载用户缓存
+        init_xmbhsbsn();//加载项目编号对应的设备编号
+    }
+
+    /**
+     * 加载项目编号对应的设备编号
+     */
+    public synchronized static boolean init_xmbhsbsn(){
+        try {
+            WaterProEquipExample example  = new  WaterProEquipExample();
+            WaterProEquipExample.Criteria ca = example.createCriteria();
+            List<WaterProEquip> list = waterProEquipStaticMapper.selectByExample(example);
+            if(!CollectionUtils.isEmpty(list)){
+                Map<String, List<String>>  map = new LinkedHashMap<String,List<String>>();
+                for(WaterProEquip vo  :list){
+                    if(map.containsKey(vo.getXmbh())){
+                        List<String> sbsns = map.get(vo.getXmbh());
+                        sbsns.add(vo.getSbsn());
+                        map.put(vo.getXmbh(),sbsns);
+                    }else {
+                        List<String> sbsns = new ArrayList<>();
+                        sbsns.add(vo.getSbsn());
+                        map.put(vo.getXmbh(),sbsns);
+                    }
+                }
+                redisTstaticemplate.opsForValue().set(RedisCode.PROJECTSBSNS, map);//将参数信息写入redis缓存
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     /**

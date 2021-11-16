@@ -88,6 +88,56 @@ public class WaterEquipmentController  extends BaseWxController {
     /**
      * 监测点数据中心树
      */
+    @GetMapping("/findMonitorEquipmentTreeByFile/{xmbh}")
+    public ResponseDto findMonitorEquipmentTreeByFile(@PathVariable String xmbh){
+        ResponseDto responseDto = new ResponseDto();
+        DeptExample deptExample = new DeptExample();
+        DeptExample.Criteria deptca = deptExample.createCriteria();
+        LoginUserDto user = getRequestHeader();
+        List<String> list = getUpdeptcode(user.getDeptcode());
+        if(!CollectionUtils.isEmpty(list)){
+            deptca.andDeptcodeIn(list);
+        }
+        List<Dept> waterDataList = deptService.list(deptExample);
+        Map<String, String> map = waterDataList.stream().collect(Collectors.toMap(p -> p.getDeptcode(), p -> p.getDeptname()));
+        WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
+        WaterEquipmentExample.Criteria weCa = waterEquipmentExample.createCriteria();
+        weCa.andSblbEqualTo("0001");
+        if(!CollectionUtils.isEmpty(list)){
+            weCa.andDeptcodeIn(list);
+        }
+        if(!StringUtils.isEmpty(xmbh)){
+            if(!CollectionUtils.isEmpty(user.getXmbhsbsns().get(xmbh))){
+                weCa.andSbsnIn(user.getXmbhsbsns().get(xmbh));
+            }
+        }
+        List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(waterEquipmentExample);
+        Map<String,List<WaterEquipment>> deptcodeMap = waterEquipmentList.stream().collect(Collectors.groupingBy(WaterEquipment::getDeptcode));
+        List<MonitorEquipmentDto> lists = new ArrayList<>();
+        for(String key : deptcodeMap.keySet()){
+            MonitorEquipmentDto entity = new MonitorEquipmentDto();
+            List<MonitorEquipmentDto> childrenList = new ArrayList<>();
+            entity.setName(map.get(key));
+            entity.setCode(key);
+            entity.setType("1");
+            entity.setChildren(childrenList);
+            List<WaterEquipment> waterEquipments = deptcodeMap.get(key);
+            for(WaterEquipment item : waterEquipments){
+                MonitorEquipmentDto obj = new MonitorEquipmentDto();
+                obj.setName(item.getSbmc()+"("+item.getSbsn()+")");
+                obj.setCode(item.getSbsn());
+                obj.setType("2");
+                childrenList.add(obj);
+            }
+            lists.add(entity);
+        }
+        responseDto.setContent(lists);
+        return responseDto;
+    }
+
+    /**
+     * 监测点数据中心树
+     */
     @GetMapping("/findMonitorEqupmentTree")
     public ResponseDto findMonitorEquipmentTree(){
         ResponseDto responseDto = new ResponseDto();
@@ -131,6 +181,56 @@ public class WaterEquipmentController  extends BaseWxController {
     }
 
     /**
+     * 监测点数据中心树
+     */
+    @GetMapping("/findMonitorEqupmentTree/{xmbh}")
+    public ResponseDto findMonitorEquipmentTree(@PathVariable String xmbh){
+        ResponseDto responseDto = new ResponseDto();
+        DeptExample deptExample = new DeptExample();
+        DeptExample.Criteria deptca = deptExample.createCriteria();
+        LoginUserDto user = getRequestHeader();
+        List<String> list = getUpdeptcode(user.getDeptcode());
+        if(!CollectionUtils.isEmpty(list)){
+            deptca.andDeptcodeIn(list);
+        }
+        List<Dept> waterDataList = deptService.list(deptExample);
+        Map<String, String> map = waterDataList.stream().collect(Collectors.toMap(p -> p.getDeptcode(), p -> p.getDeptname()));
+        WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
+        WaterEquipmentExample.Criteria weCa = waterEquipmentExample.createCriteria();
+        weCa.andSblbEqualTo("0002");
+        if (!CollectionUtils.isEmpty(list)){
+            weCa.andDeptcodeIn(list);
+        }
+        if(!StringUtils.isEmpty(xmbh)){
+            if(!CollectionUtils.isEmpty(user.getXmbhsbsns().get(xmbh))){
+                weCa.andSbsnIn(user.getXmbhsbsns().get(xmbh));
+            }
+        }
+        List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(waterEquipmentExample);
+        Map<String,List<WaterEquipment>> deptcodeMap = waterEquipmentList.stream().collect(Collectors.groupingBy(WaterEquipment::getDeptcode));
+        List<MonitorEquipmentDto> lists = new ArrayList<>();
+        for(String key : deptcodeMap.keySet()){
+            MonitorEquipmentDto entity = new MonitorEquipmentDto();
+            List<MonitorEquipmentDto> childrenList = new ArrayList<>();
+            entity.setName(map.get(key));
+            entity.setCode(key);
+            entity.setType("1");
+            entity.setChildren(childrenList);
+            List<WaterEquipment> waterEquipments = deptcodeMap.get(key);
+            for(WaterEquipment item : waterEquipments){
+                MonitorEquipmentDto obj = new MonitorEquipmentDto();
+                obj.setName(item.getSbmc()+"("+item.getSbsn()+")");
+                obj.setCode(item.getId());
+                obj.setType("2");
+                childrenList.add(obj);
+            }
+            lists.add(entity);
+        }
+        responseDto.setContent(lists);
+        return responseDto;
+    }
+
+    /**
      * 列表查询
      */
     @PostMapping("/findAll")
@@ -146,6 +246,11 @@ public class WaterEquipmentController  extends BaseWxController {
         }
         if(!StringUtils.isEmpty(waterEquipmentDto.getSblb())){
             ca.andSblbEqualTo(waterEquipmentDto.getSblb());
+        }
+        if(!StringUtils.isEmpty(waterEquipmentDto.getXmbh())){
+            if(!CollectionUtils.isEmpty(user.getXmbhsbsns().get(waterEquipmentDto.getXmbh()))){
+                ca.andSbsnIn(user.getXmbhsbsns().get(waterEquipmentDto.getXmbh()));
+            }
         }
         List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(waterEquipmentExample);
         List<WaterEquipmentDto> waterEquipmentDtoList = CopyUtil.copyList(waterEquipmentList, WaterEquipmentDto.class);
@@ -172,6 +277,11 @@ public class WaterEquipmentController  extends BaseWxController {
         }
         if(!StringUtils.isEmpty(pageDto.getSblb())){
             ca.andSblbEqualTo(pageDto.getSblb());
+        }
+        if(!StringUtils.isEmpty(pageDto.getXmbh())){
+            if(!CollectionUtils.isEmpty(loginUserDto.getXmbhsbsns().get(pageDto.getXmbh()))){
+                ca.andSbsnIn(loginUserDto.getXmbhsbsns().get(pageDto.getXmbh()));
+            }
         }
         List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(waterEquipmentExample);
         PageInfo<WaterEquipment> pageInfo = new PageInfo<>(waterEquipmentList);
@@ -214,9 +324,6 @@ public class WaterEquipmentController  extends BaseWxController {
                 ValidatorUtil.length(waterEquipmentDto.getBz(), "备注", 1, 2000);
                 ValidatorUtil.length(waterEquipmentDto.getCreateBy(), "创建人", 1, 128);
                 ValidatorUtil.length(waterEquipmentDto.getUpdateBy(), "更新人", 1, 128);
-                ValidatorUtil.length(waterEquipmentDto.getSm1(), "", 1, 450);
-                ValidatorUtil.length(waterEquipmentDto.getSm2(), "", 1, 450);
-                ValidatorUtil.length(waterEquipmentDto.getSm3(), "", 1, 450);
 
         ResponseDto responseDto = new ResponseDto();
         LoginUserDto loginUserDto = getRequestHeader();

@@ -27,4 +27,6 @@ public interface WaterProEquipMapper {
     int updateByPrimaryKeySelective(WaterProEquip record);
 
     int updateByPrimaryKey(WaterProEquip record);
+
+    List<String> findSbsnByXmbh(String xmbh);
 }

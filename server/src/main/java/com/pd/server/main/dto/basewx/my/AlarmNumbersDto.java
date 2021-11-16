@@ -16,6 +16,8 @@ public class AlarmNumbersDto extends PageDto {
 
     private Integer alarmNum;//报警次数
 
+    private String xmbh;
+
     public String getSbbh() {
         return sbbh;
     }
@@ -64,4 +66,11 @@ public class AlarmNumbersDto extends PageDto {
         this.alarmNum = alarmNum;
     }
 
+    public String getXmbh() {
+        return xmbh;
+    }
+
+    public void setXmbh(String xmbh) {
+        this.xmbh = xmbh;
+    }
 }

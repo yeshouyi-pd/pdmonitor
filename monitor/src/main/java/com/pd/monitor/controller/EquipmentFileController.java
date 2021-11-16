@@ -187,6 +187,11 @@ public class EquipmentFileController extends BaseWxController {
         if(!StringUtils.isEmpty(alarmNumbersDto.getEtime())){
             ca.andCjsjLessThanOrEqualTo(alarmNumbersDto.getEtime());
         }
+        if(!StringUtils.isEmpty(alarmNumbersDto.getXmbh())){
+            if(!CollectionUtils.isEmpty(user.getXmbhsbsns().get(alarmNumbersDto.getXmbh()))){
+                ca.andSbbhIn(user.getXmbhsbsns().get(alarmNumbersDto.getXmbh()));
+            }
+        }
         ca.andTpljLike("%png");
         List<AlarmNumbersDto> lists = equipmentFileService.statisticsAlarmNumsByPage(example);
         PageInfo<AlarmNumbersDto> pageInfo = new PageInfo<>(lists);
@@ -222,6 +227,11 @@ public class EquipmentFileController extends BaseWxController {
         }
         if(!StringUtils.isEmpty(alarmNumbersDto.getEtime())){
             ca.andCjsjLessThanOrEqualTo(alarmNumbersDto.getEtime());
+        }
+        if(!StringUtils.isEmpty(alarmNumbersDto.getXmbh())){
+            if(!CollectionUtils.isEmpty(user.getXmbhsbsns().get(alarmNumbersDto.getXmbh()))){
+                ca.andSbbhIn(user.getXmbhsbsns().get(alarmNumbersDto.getXmbh()));
+            }
         }
         ca.andTpljLike("%png");
         List<AlarmNumbersDto> lists = equipmentFileService.statisticsAlarmNumsByPage(example);
@@ -378,9 +388,15 @@ public class EquipmentFileController extends BaseWxController {
     @PostMapping("/findSbbh")
     public ResponseDto findSbbh(@RequestBody EquipmentFileDto equipmentFileDto){
         ResponseDto responseDto = new ResponseDto();
+        LoginUserDto user = getRequestHeader();
         WaterEquipmentExample example = new WaterEquipmentExample();
         WaterEquipmentExample.Criteria ca = example.createCriteria();
         ca.andSblbEqualTo("0001");
+        if(!StringUtils.isEmpty(equipmentFileDto.getXmbh())){
+            if(!CollectionUtils.isEmpty(user.getXmbhsbsns().get(equipmentFileDto.getXmbh()))){
+                ca.andSbsnIn(user.getXmbhsbsns().get(equipmentFileDto.getXmbh()));
+            }
+        }
         List<String> sbbhList = waterEquipmentService.findSbbh(example);
         responseDto.setContent(sbbhList);
         return responseDto;
@@ -394,7 +410,7 @@ public class EquipmentFileController extends BaseWxController {
         ResponseDto responseDto = new ResponseDto();
         LoginUserDto user = getRequestHeader();
         List<String> list = getUpdeptcode(user.getDeptcode());
-        equipmentFileService.list(pageDto,list);
+        equipmentFileService.list(pageDto,list,user);
         responseDto.setContent(pageDto);
         return responseDto;
     }

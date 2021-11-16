@@ -278,7 +278,7 @@ export default {
      */
     getLatestDate() {
       let _this = this;
-      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getLatestDate').then((res)=>{
+      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getLatestDate/'+Tool.getLoginUser().xmbh).then((res)=>{
         let response = res.data;
         _this.waterQualityResults = response.content;
       })
@@ -289,7 +289,7 @@ export default {
      */
     getWarningDate() {
       let _this = this;
-      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getWarningDate').then((res)=>{
+      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getWarningDate/'+Tool.getLoginUser().xmbh).then((res)=>{
         let response = res.data;
         _this.kvMaps = response.content;
       })
@@ -299,7 +299,7 @@ export default {
      */
     getPieChart() {
       let _this = this;
-      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getPieChart').then((res)=>{
+      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getPieChart/'+Tool.getLoginUser().xmbh).then((res)=>{
         let response = res.data;
         let data = response.content;
         _this.showPieChart(data);
