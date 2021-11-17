@@ -172,6 +172,12 @@ public class FileController   extends BaseWxController {
     @PostMapping("/fileAndFileinfo")
     public ResponseDto fileAndFileinfo(@RequestBody FileDto fileDto){
         ResponseDto responseDto = new ResponseDto();
+        LoginUserDto loginUserDto = getRequestHeader();
+        String usercode = loginUserDto.getLoginName();
+        if(StringUtils.isBlank(usercode)){
+            throw new WxStrException("登录超时！请重新登录");
+        }
+        fileDto.setUsercode(usercode);
         List<FileAndFileinfoDto> query = myFileMapper.query(fileDto);
         responseDto.setContent(query);
         return responseDto;
