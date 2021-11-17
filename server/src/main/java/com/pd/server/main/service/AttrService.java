@@ -1,5 +1,6 @@
 package com.pd.server.main.service;
 
+import com.pd.server.config.SpringUtil;
 import com.pd.server.main.domain.Attr;
 import com.pd.server.main.domain.AttrExample;
 import com.pd.server.main.dto.AttrDto;
@@ -22,6 +23,22 @@ public class AttrService {
 
     @Resource
     private AttrMapper attrMapper;
+
+    /**
+     * 根据code查询key
+     * @param attrcode
+     * @return
+     */
+    public String findByAttrKey(String attrcode){
+        AttrMapper attrMapper = SpringUtil.getBean(AttrMapper.class);
+        AttrExample example = new AttrExample();
+        example.createCriteria().andAttrcodeEqualTo(attrcode);
+        List<Attr> list = attrMapper.selectByExample(example);
+        if(list.size() > 0){
+            return list.get(0).getAttrkey();
+        }
+        return null;
+    }
 
     /**
      * 列表查询

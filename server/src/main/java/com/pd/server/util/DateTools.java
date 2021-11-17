@@ -219,5 +219,23 @@ public class DateTools {
        return Integer.parseInt(String.valueOf(between_days));           
     }
 
+	/**
+	 * 计算两个时间的分钟差
+	 * @param endDate
+	 * @param nowDate
+	 * @return
+	 */
+	public static String getDatePoor(Date endDate, Date nowDate) {
+		try {
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			long d1 = df.parse(df.format(nowDate)).getTime();
+			long d2 = df.parse(df.format(endDate)).getTime();
+			long diff=(d2-d1)/1000/60;
+			return String.valueOf(diff);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return "0";
+	}
 
 }
