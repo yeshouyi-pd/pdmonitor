@@ -352,7 +352,7 @@ public class WaterEquipmentController  extends BaseWxController {
      * @return
      */
     @PostMapping("/getWaterState")
-    public ResponseDto getWaterState(){
+    public ResponseDto getWaterState(@RequestBody WaterEquipmentDto pageDto){
         ResponseDto responseDto = new ResponseDto();
         LoginUserDto loginUserDto = getRequestHeader();
         List<String> list = getUpdeptcode(loginUserDto.getDeptcode());
@@ -361,17 +361,21 @@ public class WaterEquipmentController  extends BaseWxController {
         if(!CollectionUtils.isEmpty(list)){
             ca.andDeptcodeIn(list);
         }
+        if(!StringUtils.isEmpty(pageDto.getXmbh())){
+            if(!CollectionUtils.isEmpty(loginUserDto.getXmbhsbsns().get(pageDto.getXmbh()))){
+                ca.andSbsnIn(loginUserDto.getXmbhsbsns().get(pageDto.getXmbh()));
+            }
+        }
         List<WaterEquipment> zclist = new ArrayList<WaterEquipment>();
         List<WaterEquipment> yclist = new ArrayList<WaterEquipment>();
         Map<String,List<WaterEquipment>> map = new HashMap<String,List<WaterEquipment>>();
         List<WaterEquipment> waterList = waterEquipmentService.list(example);
-        String reqinterval = attrService.findByAttrKey("reqinterval");
         for (int i = 0; i < waterList.size(); i++) {
-            WaterEquiplog log = waterEquiplogService.findBySbbh(waterList.get(i).getSbsn());
-            if(null != log && log.getCode().equals("1") && Long.parseLong(DateTools.getDatePoor(new Date(), log.getCjsj())) < Long.parseLong(reqinterval)){
-                zclist.add(waterList.get(i));
+            WaterEquipment equipment = waterList.get(i);
+            if("1".equals(equipment.getSbzt())){
+                zclist.add(equipment);
             }else{
-                yclist.add(waterList.get(i));
+                yclist.add(equipment);
             }
         }
         map.put("zclist",zclist);
