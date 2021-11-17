@@ -48,7 +48,8 @@
     <div class="modal-body">
       <div class="row">
         <!-- 选择 项目部分 -->
-        <div class="col-md-7">
+        <div class="col-md-4">
+          <font color="red"> [请选择对应项目操作]</font>
           <div class="widget-main">
             <!-- 选择DIV -->
             <div class="content container-fluid">
@@ -70,7 +71,7 @@
         <!-- 选择 设备 -->
         <div class="col-md-5"   v-show="show">
           <font color="red"> [选择对应设备后上传]</font>
-          <table id="simple-table"  class="table table-striped table-bordered table-hover">
+          <table id="simple-table"  class="table table-striped table-bordered table-hover" style="margin-top: 30px">
             <thead >
             <tr >
               <td   style="text-align: center;font-size: 15px;font-weight: bold;color: #0B61A4" colspan="5"> 项目名称：{{xmbhMap|optionMapKV(checkxmbh)}}</td>
