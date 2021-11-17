@@ -128,7 +128,7 @@ public class FileController   extends BaseWxController {
             WaterProjectExample example = new WaterProjectExample();
             WaterProjectExample.Criteria ca =  example.createCriteria();
             ca.andXmmcLike("%"+wterProject.getXmmc().trim()+"%");
-            List<WaterProject> waterProjects = waterProjectService.selectByExample(new WaterProjectExample());
+            List<WaterProject> waterProjects = waterProjectService.selectByExample(example);
             if(!CollectionUtils.isEmpty(waterProjects)){
                 for (WaterProject vo :waterProjects){
                     liststr.add(vo.getXmbh());
