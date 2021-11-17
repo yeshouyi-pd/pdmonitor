@@ -10,11 +10,12 @@
         <result column="shard_total" jdbcType="INTEGER" property="shardTotal" />
         <result column="xmbh" jdbcType="VARCHAR" property="xmbh" />
         <result column="sbsn" jdbcType="VARCHAR" property="sbsn" />
+        <result column="f1" jdbcType="VARCHAR" property="f1" />
     </resultMap>
 
     <!--  部门上下级关联拆线呢-->
     <select id="query"   parameterType="com.pd.server.main.dto.FileDto"  resultMap="BaseResultMap">
-        SELECT  DISTINCT a.id, a.`path`,a.`name` ,a.`created_at`,a.`shard_index`,a.`shard_total`,b.`xmbh`,b.`sbsn`  FROM  `file` a , `fileinfo` b WHERE a.`f1` = b.`xmbh` AND a.`f2` = b.`sbsn`
+        SELECT  DISTINCT a.id, a.`path`,a.`name` ,a.`created_at`,a.`shard_index`,a.`shard_total`,b.`xmbh`,b.`sbsn` ,b.`f1` FROM  `file` a , `fileinfo` b WHERE a.`key` = b.`key`
         AND b.`xmbh` = #{record.f1,jdbcType=VARCHAR} AND b.`sbsn`=#{record.f2,jdbcType=VARCHAR}
     </select>
 
