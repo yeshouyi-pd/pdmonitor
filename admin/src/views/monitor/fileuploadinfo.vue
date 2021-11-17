@@ -68,45 +68,53 @@
           </div>
         </div>
         <!-- 选择 设备 -->
-        <div class="col-md-5">
-          <table id="simple-table"   class="table table-striped table-bordered table-hover">
+        <div class="col-md-5"   v-show="show">
+          <font color="red"> [选择对应设备后上传]</font>
+          <table id="simple-table"  class="table table-striped table-bordered table-hover">
             <thead >
             <tr >
-              <td   style="text-align: center;font-size: 15px;font-weight: bold;color: #0B61A4" colspan="4"> 项目名称：{{xmbhMap|optionMapKV(checkxmbh)}}</td>
+              <td   style="text-align: center;font-size: 15px;font-weight: bold;color: #0B61A4" colspan="5"> 项目名称：{{xmbhMap|optionMapKV(checkxmbh)}}</td>
             </tr>
             <tr>
-              <th style="width: 5%;">序号</th>
-              <th style="width: 10%;">设备名称</th>
-              <th style="width: 10%;">设备编号</th>
-              <th style="width: 10%;">操作</th>
+              <th style="width: 8%;">序号</th>
+              <th style="width:5%">选择</th>
+              <th style="width: 40%;">设备名称</th>
+              <th style="width: 25%;">设备编号</th>
+              <th style="width: 20%;">操作</th>
             </tr>
             </thead>
             <tbody>
            <tr v-for="(equip,index) in waterProEquip">
-              <td>{{index +1}}</td>
+             <td>{{index +1}}</td>
+             <td style="width: 5px">
+               <div class="radio">
+                 <label>
+                   <input name="checksb" type="radio"  :value="equip.sbsn"  v-on:click="showsb" v-model="checksbsn" class="ace" />
+                   <span class="lbl"></span>
+                 </label>
+               </div>
+             </td>
              <td>{{xmmcMap|optionMapKV(equip.sbsn)}}</td>
              <td>{{equip.sbsn}}</td>
              <td >
                <div class="upload_warp_text" style="text-align: center">
-                 <div class="row">
-                   <div class="col-md-4">
                      <button type="button" class="btn btn-sm btn-success btn-round" style="margin-right: 10px;">
                        <i class="ace-icon fa fa-book"></i>
                        查询
                      </button>
-                   </div>
-                   <div class="col-md-4">
-                     <Uploads    v-bind:suffixs="['mp4','wav']"
-                                 v-bind:use="'1'"
-                                 v-bind:f1="checkxmbh"
-                                 v-bind:f2="equip.sbsn"
-                     ></Uploads>
-
-                   </div>
-                 </div>
 
                </div>
              </td>
+
+            </tr>
+            <tr   style="text-align: center" v-show="showupload">
+              <td colspan="5">
+                <Uploads    v-bind:suffixs="['mp4','wav']"
+                            v-bind:use="'1'"
+                            v-bind:f1="checkxmbh"
+                            v-bind:f2="checksbsn"
+                ></Uploads>
+              </td>
 
             </tr>
             </tbody>
@@ -119,8 +127,9 @@
 </template>
 <script>
 import Uploads from "../../components/uploads";
+import File from "@/components/file";
 export default {
-  components: {Uploads},
+  components: {File, Uploads},
   name: "fileuploadinfo",
   data: function (){
     return {
@@ -131,7 +140,10 @@ export default {
       xmmcMap:{},
       waterProEquip:[],
       checkxmmcMap:[],
-      checkxmbh:[],
+      checkxmbh:'',
+      checksbsn:'',
+      show :false,
+      showupload:false
 
     }
   },
@@ -141,9 +153,17 @@ export default {
 
   },
   methods: {
+    showsb(){
+      let _this = this;
+      _this.showupload=true;
+
+    },
     changeTab(index,item){
       let _this = this;
       _this.active = index;
+      _this.show = true;
+      _this.showupload=false;
+      _this.checksbsn='';
       Loading.show();
       _this.checkxmbh = item.xmbh;
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/file/queryEquip', {xmbh:item.xmbh}).then((response) => {

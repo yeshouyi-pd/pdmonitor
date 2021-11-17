@@ -116,10 +116,19 @@ export default {
     },
     upload(){
       let _this = this;
+      if(Tool.isEmpty(_this.f1)){
+        Toast.warning("请选择上传项目！")
+        return;
+      }
+      if(Tool.isEmpty(_this.f2)){
+        Toast.warning("请选择相应设备！")
+        return;
+      }
       if(Tool.isEmpty(_this.imgList)){
         Toast.warning("请选择要上传文件！")
         return;
       }
+
       _this.show1=false;
       _this.show2=true;
       _this.uploadFile(this.imgList[_this.thisdo].file);//初始传第一张
@@ -180,6 +189,7 @@ export default {
             console.log("没有找到文件记录，从分片1开始上传");
             _this.uploads(param,file);
           } else if (obj.shardIndex === obj.shardTotal) {
+            _this.savefileinfo(param);
             // 已上传分片 = 分片总数，说明已全部上传完，上传下一个
             _this.imgList[_this.thisdo].file.src='/static/image/upload/sg.png';
             this.$forceUpdate();
@@ -192,6 +202,8 @@ export default {
               _this.thisdo = 0;
               Toast.success("上传完成！")
             }
+            //=============业务部分
+
           }  else {
             param.shardIndex = obj.shardIndex + 1;
             console.log("找到文件记录，从分片" + param.shardIndex + "开始上传");
@@ -259,6 +271,19 @@ export default {
       let end = Math.min(file.size, start + shardSize); //当前分片结束位置
       let fileShard = file.slice(start, end); //从文件中截取当前的分片数据
       return fileShard;
+    },
+
+
+    /**
+     * 业务部分
+     * @param param
+     */
+    savefileinfo(param){
+      let _this = this;
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/system/uploadfile/savefileinfo', param).then((response)=>{
+
+      })
+
     },
 
 
