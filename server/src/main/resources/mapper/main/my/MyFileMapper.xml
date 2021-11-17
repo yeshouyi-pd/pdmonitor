@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pd.server.main.mapper.my.MyFileMapper">
+    <resultMap id="BaseResultMap" type="com.pd.server.main.dto.FileAndFileinfoDto">
+        <id column="id" jdbcType="CHAR" property="id" />
+        <result column="path" jdbcType="VARCHAR" property="path" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
+        <result column="shard_index" jdbcType="INTEGER" property="shardIndex" />
+        <result column="shard_total" jdbcType="INTEGER" property="shardTotal" />
+        <result column="xmbh" jdbcType="VARCHAR" property="xmbh" />
+        <result column="sbsn" jdbcType="VARCHAR" property="sbsn" />
+    </resultMap>
+
+    <!--  部门上下级关联拆线呢-->
+    <select id="query"   parameterType="com.pd.server.main.dto.FileDto"  resultMap="BaseResultMap">
+        SELECT  DISTINCT a.id, a.`path`,a.`name` ,a.`created_at`,a.`shard_index`,a.`shard_total`,b.`xmbh`,b.`sbsn`  FROM  `file` a , `fileinfo` b WHERE a.`f1` = b.`xmbh` AND a.`f2` = b.`sbsn`
+        AND b.`xmbh` = #{record.f1,jdbcType=VARCHAR} AND b.`sbsn`=#{record.f2,jdbcType=VARCHAR}
+    </select>
+
+
+
+</mapper>
