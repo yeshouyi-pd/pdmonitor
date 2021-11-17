@@ -144,7 +144,7 @@
                 <th style="width: 10%;">上传状态</th>
                 <th style="width: 10%;">上传时间</th>
                 <th style="width: 10%;">上传人</th>
-                <th style="width: 10%;">操作</th>
+                <th style="width: 10%;">分析状态</th>
               </tr>
               </thead>
               <tbody>
@@ -156,18 +156,9 @@
                 <td>{{fileinfo.sbsn}}</td>
                 <td >{{fileinfo.name }}</td>
                 <td >{{fileinfo.createdAt }}</td>
-                <td v-show="fileinfo.shardIndex == fileinfo.shardTotal">
-                   上传完成
-                </td>
-                <td v-show="fileinfo.shardIndex != fileinfo.shardTotal">
-                  未上传完成
-                </td>
+                <td >{{fileinfo.shardIndex == fileinfo.shardTotal ? '上传完成':'未上传完成' }}</td>
                 <td >{{fileinfo.f1 }}</td>
-
-                <td >
-
-                </td>
-
+                <td >{{fileinfo.f2 =='1' ? '已分析':'未分析' }}</td>
               </tr>
               </tbody>
             </table>
