@@ -66,6 +66,8 @@ public class WaterEquiplogDto extends PageDto{
     */
     private String sm5;
 
+    private String xmbh;
+
     public String getId() {
         return id;
     }
@@ -162,6 +164,13 @@ public class WaterEquiplogDto extends PageDto{
         this.sm5 = sm5;
     }
 
+    public String getXmbh() {
+        return xmbh;
+    }
+
+    public void setXmbh(String xmbh) {
+        this.xmbh = xmbh;
+    }
 
     @Override
     public String toString() {
