@@ -66,6 +66,9 @@ public class FileDto {
      */
     private String shard;
 
+    private  String usercode;
+
+
     public String getId() {
         return id;
     }
@@ -194,6 +197,14 @@ public class FileDto {
         this.f2 = f2;
     }
 
+
+    public String getUsercode() {
+        return usercode;
+    }
+
+    public void setUsercode(String usercode) {
+        this.usercode = usercode;
+    }
 
     @Override
     public String toString() {

@@ -16,7 +16,7 @@
     <!--  部门上下级关联拆线呢-->
     <select id="query"   parameterType="com.pd.server.main.dto.FileDto"  resultMap="BaseResultMap">
         SELECT  DISTINCT a.id, a.`path`,a.`name` ,a.`created_at`,a.`shard_index`,a.`shard_total`,b.`xmbh`,b.`sbsn` ,b.`f1` FROM  `file` a , `fileinfo` b WHERE a.`key` = b.`key`
-        AND b.`xmbh` = #{record.f1,jdbcType=VARCHAR} AND b.`sbsn`=#{record.f2,jdbcType=VARCHAR}
+        AND b.`xmbh` = #{record.f1,jdbcType=VARCHAR} AND b.`sbsn`=#{record.f2,jdbcType=VARCHAR} AND   B.`f1` = #{record.usercode,jdbcType=VARCHAR}
     </select>
 
 
