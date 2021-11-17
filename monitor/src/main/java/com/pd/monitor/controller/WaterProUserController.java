@@ -1,7 +1,9 @@
 package com.pd.monitor.controller;
 
+import com.pd.monitor.wx.conf.BaseWxController;
 import com.pd.server.main.domain.WaterProUser;
 import com.pd.server.main.domain.WaterProUserExample;
+import com.pd.server.main.dto.LoginUserDto;
 import com.pd.server.main.dto.WaterProUserDto;
 import com.pd.server.main.dto.ResponseDto;
 import com.pd.server.main.service.WaterProUserService;
@@ -16,7 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/admin/waterProUser")
-public class WaterProUserController {
+public class WaterProUserController extends BaseWxController {
 
     private static final Logger LOG = LoggerFactory.getLogger(WaterProUserController.class);
     public static final String BUSINESS_NAME = "项目人员表";
@@ -30,7 +32,9 @@ public class WaterProUserController {
     @PostMapping("/list")
     public ResponseDto list(@RequestBody WaterProUserDto pageDto) {
         ResponseDto responseDto = new ResponseDto();
-        waterProUserService.list(pageDto);
+        LoginUserDto loginUserDto = getRequestHeader();
+        List<String> xmbhs = waterProUserService.findXmbhByUsercode(loginUserDto.getLoginName());
+        waterProUserService.list(pageDto, xmbhs);
         responseDto.setContent(pageDto);
         return responseDto;
     }

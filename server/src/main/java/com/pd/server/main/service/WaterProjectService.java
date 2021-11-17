@@ -15,8 +15,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
-import java.util.List;
-        import java.util.Date;
+import java.util.*;
 
 @Service
 public class WaterProjectService {
@@ -32,7 +31,7 @@ public class WaterProjectService {
     /**
     * 列表查询
     */
-    public void list(WaterProjectDto pageDto) {
+    public void list(WaterProjectDto pageDto, List<String> xmbhs) {
     PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
         WaterProjectExample waterProjectExample = new WaterProjectExample();
         WaterProjectExample.Criteria ca = waterProjectExample.createCriteria();
@@ -41,6 +40,9 @@ public class WaterProjectService {
         }
         if(!StringUtils.isEmpty(pageDto.getXmmc())){
             ca.andXmmcEqualTo(pageDto.getXmmc());
+        }
+        if(!CollectionUtils.isEmpty(xmbhs)){
+            ca.andXmbhIn(xmbhs);
         }
         waterProjectExample.setOrderByClause(" cjsj desc ");
         List<WaterProject> waterProjectList = waterProjectMapper.selectByExample(waterProjectExample);

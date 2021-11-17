@@ -5,6 +5,7 @@ import com.pd.server.config.RedisCode;
 import com.pd.server.main.domain.*;
 import com.pd.server.main.mapper.AddrInfoMapper;
 import com.pd.server.main.mapper.WaterEquipmentMapper;
+import com.pd.server.main.mapper.WaterProEquipMapper;
 import com.pd.server.main.mapper.WaterProjectMapper;
 import com.pd.server.util.DateTools;
 import org.slf4j.Logger;
@@ -19,6 +20,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,6 +56,8 @@ public class WxRedisConfig implements CommandLineRunner {
 
     public static WaterProjectMapper waterprojectstaticMapper;
 
+    public static WaterProEquipMapper waterProEquipStaticMapper;
+
     @Resource
     private RedisTemplate redisTemplate;
 
@@ -66,12 +70,16 @@ public class WxRedisConfig implements CommandLineRunner {
     @Resource
     private WaterProjectMapper waterProjectMapper;
 
+    @Resource
+    private WaterProEquipMapper waterProEquipMapper;
+
     @PostConstruct
     protected void init() {
         redisTstaticemplate = redisTemplate;
         addrInfostaticMapper = addrInfoMapper;
         waterEquipmentstaticMapper = waterEquipmentMapper;
         waterprojectstaticMapper = waterProjectMapper;
+        waterProEquipStaticMapper = waterProEquipMapper;
     }
 
 
@@ -89,6 +97,7 @@ public class WxRedisConfig implements CommandLineRunner {
     public static synchronized void reload() {
         init_sbsnCenterCodeMap();//加载设备编号对应的监测点编号
         init_waterProject();//加载项目缓存
+        init_xmbhsbsn();//加载项目编号对应的设备编号
     }
 
     public synchronized static boolean init_sbsnCenterCodeMap(){
@@ -127,4 +136,35 @@ public class WxRedisConfig implements CommandLineRunner {
         }
         return true;
     }
+
+    /**
+     * 加载项目编号对应的设备编号
+     */
+    public synchronized static boolean init_xmbhsbsn(){
+        try {
+            WaterProEquipExample example  = new  WaterProEquipExample();
+            WaterProEquipExample.Criteria ca = example.createCriteria();
+            List<WaterProEquip> list = waterProEquipStaticMapper.selectByExample(example);
+            if(!CollectionUtils.isEmpty(list)){
+                Map<String, List<String>>  map = new LinkedHashMap<String,List<String>>();
+                for(WaterProEquip vo  :list){
+                    if(map.containsKey(vo.getXmbh())){
+                        List<String> sbsns = map.get(vo.getXmbh());
+                        sbsns.add(vo.getSbsn());
+                        map.put(vo.getXmbh(),sbsns);
+                    }else {
+                        List<String> sbsns = new ArrayList<>();
+                        sbsns.add(vo.getSbsn());
+                        map.put(vo.getXmbh(),sbsns);
+                    }
+                }
+                redisTstaticemplate.opsForValue().set(RedisCode.PROJECTSBSNS, map);//将参数信息写入redis缓存
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
 }
