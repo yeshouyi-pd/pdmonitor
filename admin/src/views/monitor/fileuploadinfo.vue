@@ -87,16 +87,24 @@
              <td>{{xmmcMap|optionMapKV(equip.sbsn)}}</td>
              <td>{{equip.sbsn}}</td>
              <td >
-               <div class="hidden-sm hidden-xs btn-group">
-                 <button  type="button" v-on:click="list()" class="btn btn-sm  btn-success btn-round">
-                   <i class="ace-icon fa fa-book"></i>
-                   查询
-                 </button>
-                 &nbsp;&nbsp;&nbsp;&nbsp;
-                 <button  type="button" v-on:click="uploadinfo(checkxmbh,equip.sbsn)" class="btn btn-sm  btn-primary btn-round">
-                   <i class="ace-icon fa fa-upload"></i>
-                   上传
-                 </button>
+               <div class="upload_warp_text" style="text-align: center">
+                 <div class="row">
+                   <div class="col-md-4">
+                     <button type="button" class="btn btn-sm btn-success btn-round" style="margin-right: 10px;">
+                       <i class="ace-icon fa fa-book"></i>
+                       查询
+                     </button>
+                   </div>
+                   <div class="col-md-4">
+                     <Uploads    v-bind:suffixs="['mp4','wav']"
+                                 v-bind:use="'1'"
+                                 v-bind:f1="checkxmbh"
+                                 v-bind:f2="equip.sbsn"
+                     ></Uploads>
+
+                   </div>
+                 </div>
+
                </div>
              </td>
 
@@ -110,7 +118,9 @@
   </div>
 </template>
 <script>
+import Uploads from "../../components/uploads";
 export default {
+  components: {Uploads},
   name: "fileuploadinfo",
   data: function (){
     return {
@@ -131,11 +141,6 @@ export default {
 
   },
   methods: {
-    uploadinfo(xmbh,sbsn){
-      let _this = this;
-      alert(xmbh+"===="+sbsn)
-
-    },
     changeTab(index,item){
       let _this = this;
       _this.active = index;
