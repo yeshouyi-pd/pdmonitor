@@ -203,6 +203,7 @@
         Loading.show();
         _this.waterEquiplogDto.page = page;
         _this.waterEquiplogDto.size = _this.$refs.pagination.size;
+        _this.waterEquiplogDto.xmbh = Tool.getLoginUser().xmbh;
         _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterEquiplog/list', _this.waterEquiplogDto).then((response)=>{
           Loading.hide();
           let resp = response.data;

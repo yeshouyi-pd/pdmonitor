@@ -39,12 +39,12 @@ public class WaterEquiplogController extends BaseWxController {
     public ResponseDto list(@RequestBody WaterEquiplogDto pageDto) {
         ResponseDto responseDto = new ResponseDto();
         LoginUserDto loginUserDto = getRequestHeader();
-        List<String> list = getUpdeptcode(loginUserDto.getDeptcode());
         WaterEquiplogExample example = new WaterEquiplogExample();
         WaterEquiplogExample.Criteria ca = example.createCriteria();
-        List<String> sbsns = waterEquipmentService.findSbsnByDeptcodes(list);
-        if(!CollectionUtils.isEmpty(sbsns)){
-            ca.andSbbhIn(sbsns);
+        if(!StringUtils.isEmpty(pageDto.getXmbh())){
+            if(!CollectionUtils.isEmpty(loginUserDto.getXmbhsbsns().get(pageDto.getXmbh()))){
+                ca.andSbbhIn(loginUserDto.getXmbhsbsns().get(pageDto.getXmbh()));
+            }
         }
         if(!StringUtils.isEmpty(pageDto.getSbbh())){
             ca.andSbbhEqualTo(pageDto.getSbbh());

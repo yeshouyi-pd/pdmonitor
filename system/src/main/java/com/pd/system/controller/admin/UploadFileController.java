@@ -2,9 +2,14 @@ package com.pd.system.controller.admin;
 
 import com.alibaba.fastjson.JSON;
 import com.pd.server.config.RedisCode;
+import com.pd.server.main.domain.Fileinfo;
+import com.pd.server.main.domain.FileinfoExample;
+import com.pd.server.main.dto.FileAndFileinfoDto;
 import com.pd.server.main.dto.FileDto;
 import com.pd.server.main.dto.ResponseDto;
+import com.pd.server.main.mapper.my.MyFileMapper;
 import com.pd.server.main.service.FileService;
+import com.pd.server.main.service.FileinfoService;
 import com.pd.server.util.Base64ToMultipartFile;
 import com.pd.server.util.DateTools;
 import com.pd.server.util.UuidUtil;
@@ -22,6 +27,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 @RequestMapping("/uploadfile")
 @RestController
@@ -37,6 +43,16 @@ public class UploadFileController {
 
     @Resource
     private FileService fileService;
+
+    @Resource
+    private FileinfoService fileinfoService;
+
+
+
+
+
+
+
 
 
 
@@ -72,7 +88,8 @@ public class UploadFileController {
                                  Integer shardSize,
                                  Integer shardTotal,
                                  String key,
-                                 String mianid) throws Exception {
+                                 String f1,
+                                 String f2) throws Exception {
         //LOG.info("上传文件开始");
 
         FileDto fileDto = new FileDto();
@@ -84,7 +101,8 @@ public class UploadFileController {
         fileDto.setShardSize(shardSize);
         fileDto.setShardTotal(shardTotal);
         fileDto.setKey(key);
-        fileDto.setMianid(mianid);
+        fileDto.setF1(f1);
+        fileDto.setF2(f2);
 
         String picStorePath = (String) redisTemplate.opsForValue().get(RedisCode.STATICPATH);//静态路径地址
         String basePath = picStorePath +use+File.separator+DateTools.getFormatDate(new Date(),"yyyyMM");
@@ -145,6 +163,16 @@ public class UploadFileController {
                     outputStream.write(byt, 0, len);
                 }
             }
+            //==================
+            Fileinfo vo = new Fileinfo();
+            vo.setKey(fileDto.getKey());
+            vo.setXmbh(fileDto.getF1());
+            vo.setSbsn(fileDto.getF2());
+            vo.setCjsj(new Date());
+            fileinfoService.insert(vo);
+            //==================
+
+
         } catch (IOException e) {
             LOG.error("分片合并异常", e);
         } finally {
@@ -186,6 +214,32 @@ public class UploadFileController {
         responseDto.setContent(fileDto);
         return responseDto;
     }
+    @PostMapping("/savefileinfo")
+    public ResponseDto savefileinfo(@RequestBody  FileDto fileDto){
+        ResponseDto responseDto = new ResponseDto();
+        FileinfoExample example = new FileinfoExample();
+        FileinfoExample.Criteria ca = example.createCriteria();
+        ca.andXmbhEqualTo(fileDto.getF1());
+        ca.andSbsnEqualTo(fileDto.getF2());
+        ca.andKeyEqualTo(fileDto.getKey());
+        int count = fileinfoService.querycount(example);
+        Fileinfo vo = new Fileinfo();
+        vo.setKey(fileDto.getKey());
+        vo.setXmbh(fileDto.getF1());
+        vo.setSbsn(fileDto.getF2());
+        vo.setCjsj(new Date());
+        if(count > 0){
+            //修改
+            fileinfoService.updates(vo ,example);
+        }else{
+            //添加
+            fileinfoService.insert(vo);
+        }
+
+        return responseDto;
+    }
+
+
 
 }
 

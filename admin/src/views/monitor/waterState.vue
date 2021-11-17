@@ -53,6 +53,7 @@
             return {
                 zcStates:[],
                 ycStates:[],
+                waterEquipmentDto:{},
             }
         },
         mounted: function() {
@@ -65,7 +66,8 @@
              */
             getWaterState(){
                 let _this = this;
-                _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/getWaterState').then((res) => {
+                _this.waterEquipmentDto.xmbh = Tool.getLoginUser().xmbh;
+                _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/getWaterState',_this.waterEquipmentDto).then((res) => {
                     let response = res.data;
                     _this.zcStates = response.content.zclist;
                     _this.ycStates = response.content.yclist;
