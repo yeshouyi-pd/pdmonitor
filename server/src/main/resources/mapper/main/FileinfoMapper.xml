@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pd.server.main.mapper.FileinfoMapper">
+  <resultMap id="BaseResultMap" type="com.pd.server.main.domain.Fileinfo">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="key" jdbcType="VARCHAR" property="key" />
+    <result column="xmbh" jdbcType="VARCHAR" property="xmbh" />
+    <result column="sbsn" jdbcType="VARCHAR" property="sbsn" />
+    <result column="f1" jdbcType="VARCHAR" property="f1" />
+    <result column="f2" jdbcType="VARCHAR" property="f2" />
+    <result column="cjsj" jdbcType="TIMESTAMP" property="cjsj" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, `key`, xmbh, sbsn, f1, f2, cjsj
+  </sql>
+  <select id="selectByExample" parameterType="com.pd.server.main.domain.FileinfoExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from fileinfo
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from fileinfo
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from fileinfo
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pd.server.main.domain.FileinfoExample">
+    delete from fileinfo
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pd.server.main.domain.Fileinfo">
+    insert into fileinfo (id, `key`, xmbh, 
+      sbsn, f1, f2, cjsj
+      )
+    values (#{id,jdbcType=VARCHAR}, #{key,jdbcType=VARCHAR}, #{xmbh,jdbcType=VARCHAR}, 
+      #{sbsn,jdbcType=VARCHAR}, #{f1,jdbcType=VARCHAR}, #{f2,jdbcType=VARCHAR}, #{cjsj,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.pd.server.main.domain.Fileinfo">
+    insert into fileinfo
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="key != null">
+        `key`,
+      </if>
+      <if test="xmbh != null">
+        xmbh,
+      </if>
+      <if test="sbsn != null">
+        sbsn,
+      </if>
+      <if test="f1 != null">
+        f1,
+      </if>
+      <if test="f2 != null">
+        f2,
+      </if>
+      <if test="cjsj != null">
+        cjsj,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="key != null">
+        #{key,jdbcType=VARCHAR},
+      </if>
+      <if test="xmbh != null">
+        #{xmbh,jdbcType=VARCHAR},
+      </if>
+      <if test="sbsn != null">
+        #{sbsn,jdbcType=VARCHAR},
+      </if>
+      <if test="f1 != null">
+        #{f1,jdbcType=VARCHAR},
+      </if>
+      <if test="f2 != null">
+        #{f2,jdbcType=VARCHAR},
+      </if>
+      <if test="cjsj != null">
+        #{cjsj,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pd.server.main.domain.FileinfoExample" resultType="java.lang.Long">
+    select count(*) from fileinfo
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update fileinfo
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.key != null">
+        `key` = #{record.key,jdbcType=VARCHAR},
+      </if>
+      <if test="record.xmbh != null">
+        xmbh = #{record.xmbh,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sbsn != null">
+        sbsn = #{record.sbsn,jdbcType=VARCHAR},
+      </if>
+      <if test="record.f1 != null">
+        f1 = #{record.f1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.f2 != null">
+        f2 = #{record.f2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cjsj != null">
+        cjsj = #{record.cjsj,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update fileinfo
+    set id = #{record.id,jdbcType=VARCHAR},
+      `key` = #{record.key,jdbcType=VARCHAR},
+      xmbh = #{record.xmbh,jdbcType=VARCHAR},
+      sbsn = #{record.sbsn,jdbcType=VARCHAR},
+      f1 = #{record.f1,jdbcType=VARCHAR},
+      f2 = #{record.f2,jdbcType=VARCHAR},
+      cjsj = #{record.cjsj,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pd.server.main.domain.Fileinfo">
+    update fileinfo
+    <set>
+      <if test="key != null">
+        `key` = #{key,jdbcType=VARCHAR},
+      </if>
+      <if test="xmbh != null">
+        xmbh = #{xmbh,jdbcType=VARCHAR},
+      </if>
+      <if test="sbsn != null">
+        sbsn = #{sbsn,jdbcType=VARCHAR},
+      </if>
+      <if test="f1 != null">
+        f1 = #{f1,jdbcType=VARCHAR},
+      </if>
+      <if test="f2 != null">
+        f2 = #{f2,jdbcType=VARCHAR},
+      </if>
+      <if test="cjsj != null">
+        cjsj = #{cjsj,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pd.server.main.domain.Fileinfo">
+    update fileinfo
+    set `key` = #{key,jdbcType=VARCHAR},
+      xmbh = #{xmbh,jdbcType=VARCHAR},
+      sbsn = #{sbsn,jdbcType=VARCHAR},
+      f1 = #{f1,jdbcType=VARCHAR},
+      f2 = #{f2,jdbcType=VARCHAR},
+      cjsj = #{cjsj,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

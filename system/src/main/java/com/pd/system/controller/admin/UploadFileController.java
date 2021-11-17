@@ -2,9 +2,12 @@ package com.pd.system.controller.admin;
 
 import com.alibaba.fastjson.JSON;
 import com.pd.server.config.RedisCode;
+import com.pd.server.main.domain.Fileinfo;
+import com.pd.server.main.domain.FileinfoExample;
 import com.pd.server.main.dto.FileDto;
 import com.pd.server.main.dto.ResponseDto;
 import com.pd.server.main.service.FileService;
+import com.pd.server.main.service.FileinfoService;
 import com.pd.server.util.Base64ToMultipartFile;
 import com.pd.server.util.DateTools;
 import com.pd.server.util.UuidUtil;
@@ -37,6 +40,9 @@ public class UploadFileController {
 
     @Resource
     private FileService fileService;
+
+    @Resource
+    private FileinfoService fileinfoService;
 
 
 
@@ -147,6 +153,16 @@ public class UploadFileController {
                     outputStream.write(byt, 0, len);
                 }
             }
+            //==================
+            Fileinfo vo = new Fileinfo();
+            vo.setKey(fileDto.getKey());
+            vo.setXmbh(fileDto.getF1());
+            vo.setSbsn(fileDto.getF2());
+            vo.setCjsj(new Date());
+            fileinfoService.insert(vo);
+            //==================
+
+
         } catch (IOException e) {
             LOG.error("分片合并异常", e);
         } finally {
@@ -186,6 +202,30 @@ public class UploadFileController {
             fileDto.setPath("/system/f/" + fileDto.getPath());
         }
         responseDto.setContent(fileDto);
+        return responseDto;
+    }
+    @PostMapping("/savefileinfo")
+    public ResponseDto savefileinfo(@RequestBody  FileDto fileDto){
+        ResponseDto responseDto = new ResponseDto();
+        FileinfoExample example = new FileinfoExample();
+        FileinfoExample.Criteria ca = example.createCriteria();
+        ca.andXmbhEqualTo(fileDto.getF1());
+        ca.andSbsnEqualTo(fileDto.getF2());
+        ca.andKeyEqualTo(fileDto.getKey());
+        int count = fileinfoService.querycount(example);
+        Fileinfo vo = new Fileinfo();
+        vo.setKey(fileDto.getKey());
+        vo.setXmbh(fileDto.getF1());
+        vo.setSbsn(fileDto.getF2());
+        vo.setCjsj(new Date());
+        if(count > 0){
+            //修改
+            fileinfoService.updates(vo ,example);
+        }else{
+            //添加
+            fileinfoService.insert(vo);
+        }
+
         return responseDto;
     }
 
