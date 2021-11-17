@@ -24,6 +24,11 @@ public class WaterProjectService {
     @Resource
     private WaterProjectMapper waterProjectMapper;
 
+
+    public List<WaterProject> selectByExample(WaterProjectExample waterProjectExample){
+        return   waterProjectMapper.selectByExample(waterProjectExample);
+    }
+
     /**
     * 列表查询
     */
