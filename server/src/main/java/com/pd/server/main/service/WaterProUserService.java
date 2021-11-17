@@ -10,6 +10,7 @@ import com.pd.server.util.UuidUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
@@ -39,7 +40,7 @@ public class WaterProUserService {
     /**
     * 列表查询
     */
-    public void list(WaterProUserDto pageDto) {
+    public void list(WaterProUserDto pageDto,List<String> xmbhs) {
         PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
         WaterProUserExample waterProUserExample = new WaterProUserExample();
         WaterProUserExample.Criteria ca = waterProUserExample.createCriteria();
@@ -48,6 +49,9 @@ public class WaterProUserService {
         }
         if(!StringUtils.isEmpty(pageDto.getUsercode())){
             ca.andUsercodeEqualTo(pageDto.getUsercode());
+        }
+        if(!CollectionUtils.isEmpty(xmbhs)){
+            ca.andXmbhIn(xmbhs);
         }
         waterProUserExample.setOrderByClause(" cjsj desc ");
         List<WaterProUser> waterProUserList = waterProUserMapper.selectByExample(waterProUserExample);

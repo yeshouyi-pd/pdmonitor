@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/admin/waterProject")
@@ -38,7 +39,9 @@ public class WaterProjectController extends BaseWxController {
     @PostMapping("/list")
     public ResponseDto list(@RequestBody WaterProjectDto pageDto) {
         ResponseDto responseDto = new ResponseDto();
-        waterProjectService.list(pageDto);
+        LoginUserDto loginUserDto = getRequestHeader();
+        List<String> xmbhs = waterProUserService.findXmbhByUsercode(loginUserDto.getLoginName());
+        waterProjectService.list(pageDto,xmbhs);
         responseDto.setContent(pageDto);
         return responseDto;
     }
@@ -88,18 +91,24 @@ public class WaterProjectController extends BaseWxController {
             waterProUserDto.setUsercode(waterProjectDto.getFzr());
             waterProUserDto.setIsboss("1");
             waterProUserService.save(waterProUserDto);
+            WaterProUserDto waterProUserDto1 = new WaterProUserDto();
+            waterProUserDto1.setCjr(loginUserDto.getLoginName());
+            waterProUserDto1.setCjsj(waterProjectDto.getCjsj());
+            waterProUserDto1.setGxsj(new Date());
+            waterProUserDto1.setXmbh(waterProjectDto.getXmbh());
+            waterProUserDto1.setUsercode(loginUserDto.getLoginName());
+            waterProUserDto1.setIsboss("2");
+            waterProUserService.save(waterProUserDto1);
             String[] usercode = waterProjectDto.getUserCodes().split(",");
             for(int i=0;i<usercode.length;i++){
-                if(!waterProjectDto.getFzr().equals(usercode[i])){
-                    WaterProUserDto entity = new WaterProUserDto();
-                    entity.setCjr(loginUserDto.getLoginName());
-                    entity.setCjsj(waterProjectDto.getCjsj());
-                    entity.setGxsj(new Date());
-                    entity.setXmbh(waterProjectDto.getXmbh());
-                    entity.setUsercode(usercode[i]);
-                    entity.setIsboss("0");
-                    waterProUserService.save(entity);
-                }
+                WaterProUserDto entity = new WaterProUserDto();
+                entity.setCjr(loginUserDto.getLoginName());
+                entity.setCjsj(waterProjectDto.getCjsj());
+                entity.setGxsj(new Date());
+                entity.setXmbh(waterProjectDto.getXmbh());
+                entity.setUsercode(usercode[i]);
+                entity.setIsboss("0");
+                waterProUserService.save(entity);
             }
             //保存参与设备
             String[] sbsncode = waterProjectDto.getSbsnCodes().split(",");
@@ -113,6 +122,7 @@ public class WaterProjectController extends BaseWxController {
                 waterProEquipService.save(entity);
             }
             WxRedisConfig.init_waterProject();
+            WxRedisConfig.init_xmbhsbsn();
             responseDto.setContent(waterProjectDto);
         }catch (Exception e){
             responseDto.setSuccess(false);
