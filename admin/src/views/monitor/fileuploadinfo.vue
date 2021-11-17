@@ -98,7 +98,7 @@
              <td>{{equip.sbsn}}</td>
              <td >
                <div class="upload_warp_text" style="text-align: center">
-                     <button type="button" class="btn btn-sm btn-success btn-round" style="margin-right: 10px;">
+                     <button type="button" class="btn btn-sm btn-success btn-round" style="margin-right: 10px;" v-on:click="queryfile(checkxmbh,equip.sbsn)" >
                        <i class="ace-icon fa fa-book"></i>
                        查询
                      </button>
@@ -123,6 +123,28 @@
       </div>
     </div>
 
+    <!-- 上传文件查看维护 -->
+    <div id="form-modal" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog" style="width: 60%;height: auto" role="document">
+        <div class="modal-content" >
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">上传查看</h4>
+          </div>
+          <div class="modal-body">
+
+            {{fileAndFileinfo}}
+
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
   </div>
 </template>
 <script>
@@ -143,7 +165,8 @@ export default {
       checkxmbh:'',
       checksbsn:'',
       show :false,
-      showupload:false
+      showupload:false,
+      fileAndFileinfo:[]
 
     }
   },
@@ -153,6 +176,20 @@ export default {
 
   },
   methods: {
+    /**
+     * 查询上传摁键
+     */
+    queryfile(xmbh,sbsn){
+      let _this = this;
+      $("#form-modal").modal("show");
+      Loading.show();
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/file/fileAndFileinfo', {f1:xmbh,f2:sbsn}).then((response) => {
+        Loading.hide();
+        let resp = response.data;
+        _this.fileAndFileinfo = resp.content;
+      })
+
+    },
     showsb(){
       let _this = this;
       _this.showupload=true;

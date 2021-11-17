@@ -6,8 +6,11 @@ import com.pd.server.exception.BusinessException;
 import com.pd.server.exception.BusinessExceptionCode;
 import com.pd.server.exception.WxStrException;
 import com.pd.server.main.domain.*;
+import com.pd.server.main.dto.FileAndFileinfoDto;
+import com.pd.server.main.dto.FileDto;
 import com.pd.server.main.dto.LoginUserDto;
 import com.pd.server.main.dto.ResponseDto;
+import com.pd.server.main.mapper.my.MyFileMapper;
 import com.pd.server.main.service.WaterEquipmentService;
 import com.pd.server.main.service.WaterProEquipService;
 import com.pd.server.main.service.WaterProUserService;
@@ -61,6 +64,8 @@ public class FileController   extends BaseWxController {
 
 
 
+    @Resource
+    private MyFileMapper myFileMapper;
 
 
 
@@ -157,6 +162,19 @@ public class FileController   extends BaseWxController {
         responseDto.setContent(waterProEquips);
         return responseDto;
 
+    }
+
+    /**
+     * 查看上传文件信息
+     * @param fileDto
+     * @return
+     */
+    @PostMapping("/fileAndFileinfo")
+    public ResponseDto fileAndFileinfo(@RequestBody FileDto fileDto){
+        ResponseDto responseDto = new ResponseDto();
+        List<FileAndFileinfoDto> query = myFileMapper.query(fileDto);
+        responseDto.setContent(query);
+        return responseDto;
     }
 
 

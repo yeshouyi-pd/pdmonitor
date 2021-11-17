@@ -4,8 +4,10 @@ import com.alibaba.fastjson.JSON;
 import com.pd.server.config.RedisCode;
 import com.pd.server.main.domain.Fileinfo;
 import com.pd.server.main.domain.FileinfoExample;
+import com.pd.server.main.dto.FileAndFileinfoDto;
 import com.pd.server.main.dto.FileDto;
 import com.pd.server.main.dto.ResponseDto;
+import com.pd.server.main.mapper.my.MyFileMapper;
 import com.pd.server.main.service.FileService;
 import com.pd.server.main.service.FileinfoService;
 import com.pd.server.util.Base64ToMultipartFile;
@@ -25,6 +27,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 @RequestMapping("/uploadfile")
 @RestController
@@ -43,6 +46,13 @@ public class UploadFileController {
 
     @Resource
     private FileinfoService fileinfoService;
+
+
+
+
+
+
+
 
 
 
@@ -228,6 +238,8 @@ public class UploadFileController {
 
         return responseDto;
     }
+
+
 
 }
 
