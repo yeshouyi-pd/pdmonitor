@@ -3,16 +3,14 @@ package com.pd.monitor.controller;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.pd.monitor.wx.conf.BaseWxController;
-import com.pd.server.config.CodeType;
 import com.pd.server.main.domain.*;
 import com.pd.server.main.dto.LoginUserDto;
 import com.pd.server.main.dto.MonitorEquipmentDto;
 import com.pd.server.main.dto.WaterEquipmentDto;
 import com.pd.server.main.dto.ResponseDto;
-import com.pd.server.main.service.CodesetService;
-import com.pd.server.main.service.DeptService;
-import com.pd.server.main.service.WaterEquipmentService;
+import com.pd.server.main.service.*;
 import com.pd.server.util.CopyUtil;
+import com.pd.server.util.DateTools;
 import com.pd.server.util.ValidatorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,9 +19,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -39,6 +35,10 @@ public class WaterEquipmentController  extends BaseWxController {
     private DeptService deptService;
     @Resource
     private CodesetService codesetService;
+    @Resource
+    private WaterEquiplogService waterEquiplogService;
+    @Resource
+    private AttrService attrService;
 
     /**
      * 监测点数据中心树
@@ -346,5 +346,39 @@ public class WaterEquipmentController  extends BaseWxController {
         waterEquipmentService.delete(id);
         return responseDto;
     }
+
+    /**
+     * 获取设备状态
+     * @return
+     */
+    @PostMapping("/getWaterState")
+    public ResponseDto getWaterState(){
+        ResponseDto responseDto = new ResponseDto();
+        LoginUserDto loginUserDto = getRequestHeader();
+        List<String> list = getUpdeptcode(loginUserDto.getDeptcode());
+        WaterEquipmentExample example = new WaterEquipmentExample();
+        WaterEquipmentExample.Criteria ca = example.createCriteria();
+        if(!CollectionUtils.isEmpty(list)){
+            ca.andDeptcodeIn(list);
+        }
+        List<WaterEquipment> zclist = new ArrayList<WaterEquipment>();
+        List<WaterEquipment> yclist = new ArrayList<WaterEquipment>();
+        Map<String,List<WaterEquipment>> map = new HashMap<String,List<WaterEquipment>>();
+        List<WaterEquipment> waterList = waterEquipmentService.list(example);
+        String reqinterval = attrService.findByAttrKey("reqinterval");
+        for (int i = 0; i < waterList.size(); i++) {
+            WaterEquiplog log = waterEquiplogService.findBySbbh(waterList.get(i).getSbsn());
+            if(null != log && log.getCode().equals("1") && Long.parseLong(DateTools.getDatePoor(new Date(), log.getCjsj())) < Long.parseLong(reqinterval)){
+                zclist.add(waterList.get(i));
+            }else{
+                yclist.add(waterList.get(i));
+            }
+        }
+        map.put("zclist",zclist);
+        map.put("yclist",yclist);
+        responseDto.setContent(map);
+        return responseDto;
+    }
+
 
 }

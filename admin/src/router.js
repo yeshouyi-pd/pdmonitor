@@ -33,6 +33,8 @@ import Jtlistinfo  from "./views/mobile/jtlistinfo.vue"
 import Largemonitors  from "./views/mobile/largemonitors.vue"
 import Test  from "./views/mobile/test.vue"
 import WaterProject from "./views/monitor/waterProject.vue";
+import WaterState from "./views/monitor/waterState.vue"
+import WaterEquiplog from "./views/monitor/waterEquiplog.vue"
 import WaterProUser from "./views/monitor/waterProUser.vue";
 import WaterProEquip from "./views/monitor/waterProEquip.vue";
 import ChooseProject from "./views/admin/chooseProject.vue"
@@ -192,6 +194,14 @@ export default new Router({
             path: "monitor/waterProject",
             name: "monitor/waterProject",
             component: WaterProject
+        },{
+            path: "monitor/waterState",
+            name:"monitor/waterState",
+            component:WaterState
+        },{
+            path: "monitor/waterEquiplog",
+            name:"monitor/waterEquiplog",
+            component:WaterEquiplog
         },{
             path: "monitor/waterProUser",
             name: "monitor/waterProUser",
