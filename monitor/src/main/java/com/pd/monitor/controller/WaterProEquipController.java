@@ -5,11 +5,9 @@ import com.pd.server.main.domain.WaterProEquip;
 import com.pd.server.main.domain.WaterProEquipExample;
 import com.pd.server.main.domain.WaterProUser;
 import com.pd.server.main.domain.WaterProUserExample;
-import com.pd.server.main.dto.WaterProEquipDto;
-import com.pd.server.main.dto.PageDto;
-import com.pd.server.main.dto.ResponseDto;
-import com.pd.server.main.dto.WaterProUserDto;
+import com.pd.server.main.dto.*;
 import com.pd.server.main.service.WaterProEquipService;
+import com.pd.server.main.service.WaterProUserService;
 import com.pd.server.util.ValidatorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +26,8 @@ public class WaterProEquipController extends BaseWxController {
 
     @Resource
     private WaterProEquipService waterProEquipService;
+    @Resource
+    private WaterProUserService waterProUserService;
 
     /**
      * 通过项目编号查询
@@ -51,7 +51,9 @@ public class WaterProEquipController extends BaseWxController {
     @PostMapping("/list")
     public ResponseDto list(@RequestBody WaterProEquipDto pageDto) {
         ResponseDto responseDto = new ResponseDto();
-        waterProEquipService.list(pageDto);
+        LoginUserDto loginUserDto = getRequestHeader();
+        List<String> xmbhs = waterProUserService.findXmbhByUsercode(loginUserDto.getLoginName());
+        waterProEquipService.list(pageDto, xmbhs);
         responseDto.setContent(pageDto);
         return responseDto;
     }
