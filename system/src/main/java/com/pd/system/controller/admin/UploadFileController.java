@@ -72,7 +72,8 @@ public class UploadFileController {
                                  Integer shardSize,
                                  Integer shardTotal,
                                  String key,
-                                 String mianid) throws Exception {
+                                 String f1,
+                                 String f2) throws Exception {
         //LOG.info("上传文件开始");
 
         FileDto fileDto = new FileDto();
@@ -84,7 +85,8 @@ public class UploadFileController {
         fileDto.setShardSize(shardSize);
         fileDto.setShardTotal(shardTotal);
         fileDto.setKey(key);
-        fileDto.setMianid(mianid);
+        fileDto.setF1(f1);
+        fileDto.setF2(f2);
 
         String picStorePath = (String) redisTemplate.opsForValue().get(RedisCode.STATICPATH);//静态路径地址
         String basePath = picStorePath +use+File.separator+DateTools.getFormatDate(new Date(),"yyyyMM");
