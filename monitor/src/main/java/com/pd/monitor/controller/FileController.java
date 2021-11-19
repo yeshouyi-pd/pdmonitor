@@ -128,7 +128,7 @@ public class FileController   extends BaseWxController {
             WaterProjectExample example = new WaterProjectExample();
             WaterProjectExample.Criteria ca =  example.createCriteria();
             ca.andXmmcLike("%"+wterProject.getXmmc().trim()+"%");
-            List<WaterProject> waterProjects = waterProjectService.selectByExample(new WaterProjectExample());
+            List<WaterProject> waterProjects = waterProjectService.selectByExample(example);
             if(!CollectionUtils.isEmpty(waterProjects)){
                 for (WaterProject vo :waterProjects){
                     liststr.add(vo.getXmbh());
@@ -172,6 +172,12 @@ public class FileController   extends BaseWxController {
     @PostMapping("/fileAndFileinfo")
     public ResponseDto fileAndFileinfo(@RequestBody FileDto fileDto){
         ResponseDto responseDto = new ResponseDto();
+        LoginUserDto loginUserDto = getRequestHeader();
+        String usercode = loginUserDto.getLoginName();
+        if(StringUtils.isBlank(usercode)){
+            throw new WxStrException("登录超时！请重新登录");
+        }
+        fileDto.setUsercode(usercode);
         List<FileAndFileinfoDto> query = myFileMapper.query(fileDto);
         responseDto.setContent(query);
         return responseDto;

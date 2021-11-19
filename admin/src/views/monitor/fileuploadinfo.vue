@@ -48,7 +48,8 @@
     <div class="modal-body">
       <div class="row">
         <!-- 选择 项目部分 -->
-        <div class="col-md-7">
+        <div class="col-md-4">
+          <font color="red"> [请选择对应项目操作]</font>
           <div class="widget-main">
             <!-- 选择DIV -->
             <div class="content container-fluid">
@@ -70,7 +71,7 @@
         <!-- 选择 设备 -->
         <div class="col-md-5"   v-show="show">
           <font color="red"> [选择对应设备后上传]</font>
-          <table id="simple-table"  class="table table-striped table-bordered table-hover">
+          <table id="simple-table"  class="table table-striped table-bordered table-hover" style="margin-top: 30px">
             <thead >
             <tr >
               <td   style="text-align: center;font-size: 15px;font-weight: bold;color: #0B61A4" colspan="5"> 项目名称：{{xmbhMap|optionMapKV(checkxmbh)}}</td>
@@ -125,20 +126,50 @@
 
     <!-- 上传文件查看维护 -->
     <div id="form-modal" class="modal fade" tabindex="-1" role="dialog">
-      <div class="modal-dialog" style="width: 60%;height: auto" role="document">
+      <div class="modal-dialog" style="width: 60%;" role="document">
         <div class="modal-content" >
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">上传查看</h4>
+            <h4 class="modal-title">上传文件信息查看</h4>
           </div>
-          <div class="modal-body">
+          <div class="modal-body" style="height: 600px">
+            <table id="querytable"  class="table table-striped table-bordered table-hover">
+              <thead >
 
-            {{fileAndFileinfo}}
+              <tr>
+                <th style="width: 8%;">序号</th>
+                <th style="width: 10%;">项目名称</th>
+                <th style="width: 10%;">设备名称</th>
+                <th style="width: 10%;">设备编号</th>
+                <th style="width: 10%;">文件名称</th>
+                <th style="width: 10%;">上传状态</th>
+                <th style="width: 10%;">上传时间</th>
+                <th style="width: 10%;">上传人</th>
+                <th style="width: 10%;">分析状态</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr v-for="( fileinfo,index) in fileAndFileinfo">
+                <td>{{index +1}}</td>
+
+                <td>{{xmbhMap|optionMapKV(fileinfo.xmbh)}}</td>
+                <td>{{xmmcMap|optionMapKV(fileinfo.sbsn)}}</td>
+                <td>{{fileinfo.sbsn}}</td>
+                <td >{{fileinfo.name }}</td>
+                <td >{{fileinfo.createdAt }}</td>
+                <td >{{fileinfo.shardIndex == fileinfo.shardTotal ? '上传完成':'未上传完成' }}</td>
+                <td >{{fileinfo.f1 }}</td>
+                <td >{{fileinfo.f2 =='1' ? '已分析':'未分析' }}</td>
+              </tr>
+              </tbody>
+            </table>
+
+
 
 
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
 
           </div>
         </div><!-- /.modal-content -->

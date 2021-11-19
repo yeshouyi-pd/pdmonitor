@@ -35,6 +35,9 @@ public class FileAndFileinfoDto {
 
     private String  sbsn;
 
+    private String  f1;
+
+
     public String getId() {
         return id;
     }
@@ -95,7 +98,17 @@ public class FileAndFileinfoDto {
         return sbsn;
     }
 
+    public String getF1() {
+        return f1;
+    }
+
+    public void setF1(String f1) {
+        this.f1 = f1;
+    }
+
     public void setSbsn(String sbsn) {
         this.sbsn = sbsn;
     }
+
+
 }
