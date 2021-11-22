@@ -27,6 +27,10 @@ public class WaterProUserService {
         return waterProUserMapper.findXmbhByUsercode(usercode);
     }
 
+    public List<String> findXmbhByExample(WaterProUserExample example){
+        return waterProUserMapper.findXmbhByExample(example);
+    }
+
     public List<WaterProUser> findByXmbh(String xmbh){
         WaterProUserExample waterProUserExample = new WaterProUserExample();
         waterProUserExample.createCriteria().andXmbhEqualTo(xmbh);

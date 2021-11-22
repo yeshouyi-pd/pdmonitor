@@ -8,10 +8,7 @@ import com.pd.server.main.domain.EquipmentFile;
 import com.pd.server.main.domain.EquipmentFileExample;
 import com.pd.server.main.domain.WaterEquipment;
 import com.pd.server.main.domain.WaterEquipmentExample;
-import com.pd.server.main.dto.EquipmentFileDto;
-import com.pd.server.main.dto.LoginUserDto;
-import com.pd.server.main.dto.PageDto;
-import com.pd.server.main.dto.ResponseDto;
+import com.pd.server.main.dto.*;
 import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
 import com.pd.server.main.service.EquipmentFileService;
 import com.pd.server.main.service.WaterEquipmentService;
@@ -236,23 +233,38 @@ public class EquipmentFileController extends BaseWxController {
         ca.andTpljLike("%png");
         List<AlarmNumbersDto> lists = equipmentFileService.statisticsAlarmNumsByPage(example);
         List<AlarmNumbersDto> resultList = new ArrayList<>();
-        if(!CollectionUtils.isEmpty(lists)){
-            AlarmNumbersDto firstEntity = lists.get(0);
-            String curDateStr = firstEntity.getBjsj()+" "+firstEntity.getXs()+":"+firstEntity.getFz();
-            //String lastDateStr = laterThreeMinute(curDateStr);
-            Integer bjsl = firstEntity.getAlarmNum();
-            for(int i=1;i<lists.size();i++){
-                AlarmNumbersDto entity = lists.get(i);
-                AlarmNumbersDto beforeEntity = lists.get(i-1);
-                String beforeDateStr = beforeEntity.getBjsj()+" "+beforeEntity.getXs()+":"+beforeEntity.getFz();
-                String nextDateStr = entity.getBjsj()+" "+entity.getXs()+":"+entity.getFz();
-                if(entity.getSbbh().equals(firstEntity.getSbbh())){
-                    if(isOverThreeMinute(beforeDateStr, nextDateStr)){
-                        bjsl = bjsl + entity.getAlarmNum();
+        Map<String, List<AlarmNumbersDto>> mapList = lists.stream().collect(Collectors.groupingBy(AlarmNumbersDto::getSbbh));
+        for(String key : mapList.keySet()){
+            List<AlarmNumbersDto> listsTemp = mapList.get(key);
+            if(!CollectionUtils.isEmpty(listsTemp)){
+                AlarmNumbersDto firstEntity = listsTemp.get(0);
+                String curDateStr = firstEntity.getBjsj()+" "+firstEntity.getXs()+":"+firstEntity.getFz();
+                //String lastDateStr = laterThreeMinute(curDateStr);
+                Integer bjsl = firstEntity.getAlarmNum();
+                for(int i=1;i<listsTemp.size();i++){
+                    AlarmNumbersDto entity = listsTemp.get(i);
+                    AlarmNumbersDto beforeEntity = listsTemp.get(i-1);
+                    String beforeDateStr = beforeEntity.getBjsj()+" "+beforeEntity.getXs()+":"+beforeEntity.getFz();
+                    String nextDateStr = entity.getBjsj()+" "+entity.getXs()+":"+entity.getFz();
+                    if(entity.getSbbh().equals(firstEntity.getSbbh())){
+                        if(isOverThreeMinute(beforeDateStr, nextDateStr)){
+                            bjsl = bjsl + entity.getAlarmNum();
+                        }else {
+                            AlarmNumbersDto result = new AlarmNumbersDto();
+                            result.setDeptcode(entity.getDeptcode());
+                            result.setSbbh(entity.getSbbh());
+                            result.setBjsj(curDateStr+" 至 "+beforeDateStr);
+                            result.setAlarmNum(bjsl);
+                            resultList.add(result);
+                            firstEntity = entity;
+                            curDateStr = firstEntity.getBjsj()+" "+firstEntity.getXs()+":"+firstEntity.getFz();
+                            //lastDateStr = laterThreeMinute(curDateStr);
+                            bjsl = firstEntity.getAlarmNum();
+                        }
                     }else {
                         AlarmNumbersDto result = new AlarmNumbersDto();
-                        result.setDeptcode(entity.getDeptcode());
-                        result.setSbbh(entity.getSbbh());
+                        result.setDeptcode(firstEntity.getDeptcode());
+                        result.setSbbh(firstEntity.getSbbh());
                         result.setBjsj(curDateStr+" 至 "+beforeDateStr);
                         result.setAlarmNum(bjsl);
                         resultList.add(result);
@@ -261,34 +273,23 @@ public class EquipmentFileController extends BaseWxController {
                         //lastDateStr = laterThreeMinute(curDateStr);
                         bjsl = firstEntity.getAlarmNum();
                     }
-                }else {
+                    if(i==listsTemp.size()-1){
+                        AlarmNumbersDto result = new AlarmNumbersDto();
+                        result.setDeptcode(entity.getDeptcode());
+                        result.setSbbh(entity.getSbbh());
+                        result.setBjsj(curDateStr+" 至 "+nextDateStr);
+                        result.setAlarmNum(bjsl);
+                        resultList.add(result);
+                    }
+                }
+                if(listsTemp.size()==1){
                     AlarmNumbersDto result = new AlarmNumbersDto();
                     result.setDeptcode(firstEntity.getDeptcode());
                     result.setSbbh(firstEntity.getSbbh());
-                    result.setBjsj(curDateStr+" 至 "+beforeDateStr);
-                    result.setAlarmNum(bjsl);
-                    resultList.add(result);
-                    firstEntity = entity;
-                    curDateStr = firstEntity.getBjsj()+" "+firstEntity.getXs()+":"+firstEntity.getFz();
-                    //lastDateStr = laterThreeMinute(curDateStr);
-                    bjsl = firstEntity.getAlarmNum();
-                }
-                if(i==lists.size()-1){
-                    AlarmNumbersDto result = new AlarmNumbersDto();
-                    result.setDeptcode(entity.getDeptcode());
-                    result.setSbbh(entity.getSbbh());
-                    result.setBjsj(curDateStr+" 至 "+nextDateStr);
+                    result.setBjsj(curDateStr+" 至 "+curDateStr);
                     result.setAlarmNum(bjsl);
                     resultList.add(result);
                 }
-            }
-            if(lists.size()==1){
-                AlarmNumbersDto result = new AlarmNumbersDto();
-                result.setDeptcode(firstEntity.getDeptcode());
-                result.setSbbh(firstEntity.getSbbh());
-                result.setBjsj(curDateStr+" 至 "+curDateStr);
-                result.setAlarmNum(bjsl);
-                resultList.add(result);
             }
         }
         responseDto.setContent(resultList);
@@ -316,23 +317,38 @@ public class EquipmentFileController extends BaseWxController {
         ca.andTpljLike("%png");
         List<AlarmNumbersDto> lists = equipmentFileService.statisticsAlarmNumsByPage(example);
         List<AlarmNumbersDto> resultList = new ArrayList<>();
-        if(!CollectionUtils.isEmpty(lists)){
-            AlarmNumbersDto firstEntity = lists.get(0);
-            String curDateStr = firstEntity.getBjsj()+" "+firstEntity.getXs()+":"+firstEntity.getFz();
-            //String lastDateStr = laterThreeMinute(curDateStr);
-            Integer bjsl = firstEntity.getAlarmNum();
-            for(int i=1;i<lists.size();i++){
-                AlarmNumbersDto entity = lists.get(i);
-                AlarmNumbersDto beforeEntity = lists.get(i-1);
-                String beforeDateStr = beforeEntity.getBjsj()+" "+beforeEntity.getXs()+":"+beforeEntity.getFz();
-                String nextDateStr = entity.getBjsj()+" "+entity.getXs()+":"+entity.getFz();
-                if(entity.getSbbh().equals(firstEntity.getSbbh())){
-                    if(isOverThreeMinute(beforeDateStr, nextDateStr)){
-                        bjsl = bjsl + entity.getAlarmNum();
+        Map<String, List<AlarmNumbersDto>> mapList = lists.stream().collect(Collectors.groupingBy(AlarmNumbersDto::getSbbh));
+        for(String key : mapList.keySet()){
+            List<AlarmNumbersDto> listsTemp = mapList.get(key);
+            if(!CollectionUtils.isEmpty(listsTemp)){
+                AlarmNumbersDto firstEntity = listsTemp.get(0);
+                String curDateStr = firstEntity.getBjsj()+" "+firstEntity.getXs()+":"+firstEntity.getFz();
+                //String lastDateStr = laterThreeMinute(curDateStr);
+                Integer bjsl = firstEntity.getAlarmNum();
+                for(int i=1;i<listsTemp.size();i++){
+                    AlarmNumbersDto entity = listsTemp.get(i);
+                    AlarmNumbersDto beforeEntity = listsTemp.get(i-1);
+                    String beforeDateStr = beforeEntity.getBjsj()+" "+beforeEntity.getXs()+":"+beforeEntity.getFz();
+                    String nextDateStr = entity.getBjsj()+" "+entity.getXs()+":"+entity.getFz();
+                    if(entity.getSbbh().equals(firstEntity.getSbbh())){
+                        if(isOverThreeMinute(beforeDateStr, nextDateStr)){
+                            bjsl = bjsl + entity.getAlarmNum();
+                        }else {
+                            AlarmNumbersDto result = new AlarmNumbersDto();
+                            result.setDeptcode(entity.getDeptcode());
+                            result.setSbbh(entity.getSbbh());
+                            result.setBjsj(curDateStr+" 至 "+beforeDateStr);
+                            result.setAlarmNum(bjsl);
+                            resultList.add(result);
+                            firstEntity = entity;
+                            curDateStr = firstEntity.getBjsj()+" "+firstEntity.getXs()+":"+firstEntity.getFz();
+                            //lastDateStr = laterThreeMinute(curDateStr);
+                            bjsl = firstEntity.getAlarmNum();
+                        }
                     }else {
                         AlarmNumbersDto result = new AlarmNumbersDto();
-                        result.setDeptcode(entity.getDeptcode());
-                        result.setSbbh(entity.getSbbh());
+                        result.setDeptcode(firstEntity.getDeptcode());
+                        result.setSbbh(firstEntity.getSbbh());
                         result.setBjsj(curDateStr+" 至 "+beforeDateStr);
                         result.setAlarmNum(bjsl);
                         resultList.add(result);
@@ -341,34 +357,23 @@ public class EquipmentFileController extends BaseWxController {
                         //lastDateStr = laterThreeMinute(curDateStr);
                         bjsl = firstEntity.getAlarmNum();
                     }
-                }else {
+                    if(i==listsTemp.size()-1){
+                        AlarmNumbersDto result = new AlarmNumbersDto();
+                        result.setDeptcode(entity.getDeptcode());
+                        result.setSbbh(entity.getSbbh());
+                        result.setBjsj(curDateStr+" 至 "+nextDateStr);
+                        result.setAlarmNum(bjsl);
+                        resultList.add(result);
+                    }
+                }
+                if(listsTemp.size()==1){
                     AlarmNumbersDto result = new AlarmNumbersDto();
                     result.setDeptcode(firstEntity.getDeptcode());
                     result.setSbbh(firstEntity.getSbbh());
-                    result.setBjsj(curDateStr+" 至 "+beforeDateStr);
-                    result.setAlarmNum(bjsl);
-                    resultList.add(result);
-                    firstEntity = entity;
-                    curDateStr = firstEntity.getBjsj()+" "+firstEntity.getXs()+":"+firstEntity.getFz();
-                    //lastDateStr = laterThreeMinute(curDateStr);
-                    bjsl = firstEntity.getAlarmNum();
-                }
-                if(i==lists.size()-1){
-                    AlarmNumbersDto result = new AlarmNumbersDto();
-                    result.setDeptcode(entity.getDeptcode());
-                    result.setSbbh(entity.getSbbh());
-                    result.setBjsj(curDateStr+" 至 "+nextDateStr);
+                    result.setBjsj(curDateStr+" 至 "+curDateStr);
                     result.setAlarmNum(bjsl);
                     resultList.add(result);
                 }
-            }
-            if(lists.size()==1){
-                AlarmNumbersDto result = new AlarmNumbersDto();
-                result.setDeptcode(firstEntity.getDeptcode());
-                result.setSbbh(firstEntity.getSbbh());
-                result.setBjsj(curDateStr+" 至 "+curDateStr);
-                result.setAlarmNum(bjsl);
-                resultList.add(result);
             }
         }
         Integer num = 0;

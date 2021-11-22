@@ -322,4 +322,14 @@
     from water_pro_user
     where usercode = #{usercode,jdbcType=VARCHAR}
   </select>
+  <select id="findXmbhByExample" parameterType="com.pd.server.main.domain.WaterProUserExample" resultType="java.lang.String">
+    select distinct xmbh
+    from water_pro_user
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
 </mapper>

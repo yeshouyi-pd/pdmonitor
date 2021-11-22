@@ -2,9 +2,12 @@ package com.pd.monitor.controller;
 
 import com.pd.server.config.CodeType;
 import com.pd.server.config.RedisCode;
+import com.pd.server.main.domain.WaterProUserExample;
+import com.pd.server.main.domain.WaterProjectExample;
 import com.pd.server.main.dto.*;
 import com.pd.monitor.wx.conf.BaseWxController;
 import com.pd.server.main.service.*;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -86,7 +89,12 @@ public class CodeSetUtilController extends BaseWxController {
     @PostMapping("/findWaterProjectAllByExample")
     public ResponseDto findWaterProjectAllByExample(@RequestBody WaterProUserDto waterProUserDto){
         ResponseDto responseDto = new ResponseDto();
-        List<String> xmbhLists = waterProUserService.findXmbhByUsercode(waterProUserDto.getUsercode());
+        WaterProUserExample example = new WaterProUserExample();
+        WaterProUserExample.Criteria ca = example.createCriteria();
+        if(!StringUtils.isEmpty(waterProUserDto.getUsercode())){
+            ca.andUsercodeEqualTo(waterProUserDto.getUsercode());
+        }
+        List<String> xmbhLists = waterProUserService.findXmbhByExample(example);
         responseDto.setContent(xmbhLists);
         return responseDto;
     }
