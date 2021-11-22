@@ -26,6 +26,10 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 
 /**
@@ -143,11 +147,16 @@ public class FileController   extends BaseWxController {
         }
         waterProUserExample.setOrderByClause(" cjsj desc");
         List<WaterProUser> waterProUsers = waterProUserService.selectByExample(waterProUserExample);
+        waterProUsers.stream().filter(distinctByKey(WaterProUser::getXmbh)).collect(Collectors.toList());
         responseDto.setContent(waterProUsers);
         return responseDto;
 
     }
 
+    private <T> Predicate<T> distinctByKey(Function<? super T, Object> keyExtractor) {
+        Map<Object, Boolean> concurrentHashMap = new ConcurrentHashMap<>();
+        return t -> concurrentHashMap.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
+    }
 
     /**
      * 查询设备 -- 根据项目

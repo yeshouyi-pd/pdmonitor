@@ -239,7 +239,12 @@ export default {
     },
     exportExcel(){
       let _this = this;
-      let paramsStr = "deptcode="+Tool.getLoginUser().deptcode+"&xmbh="+Tool.getLoginUser().xmbh;
+      let paramsStr = "";
+      if("460100"==Tool.getLoginUser().deptcode){
+        paramsStr = "deptcode="+Tool.getLoginUser().deptcode;
+      }else{
+        paramsStr = "deptcode="+Tool.getLoginUser().deptcode+"&xmbh="+Tool.getLoginUser().xmbh;
+      }
       if(Tool.isNotEmpty(_this.alarmEventDto.stime)){
         paramsStr = paramsStr + "&stime="+_this.alarmEventDto.stime;
       }
@@ -272,7 +277,13 @@ export default {
     findDeviceInfo(){
       let _this = this;
       Loading.show();
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/findAll', {'sblb':'0001','xmbh':Tool.getLoginUser().xmbh}).then((response)=>{
+      let data = {};
+      if("460100"==Tool.getLoginUser().deptcode){
+        data = {'sblb':'0001'};
+      }else{
+        data = {'sblb':'0001','xmbh':Tool.getLoginUser().xmbh};
+      }
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/findAll', data).then((response)=>{
         Loading.hide();
         _this.waterEquipments = response.data.content;
       })
@@ -285,7 +296,9 @@ export default {
       Loading.show();
       _this.alarmEventDto.page = page;
       _this.alarmEventDto.size = _this.$refs.pagination.size;
-      _this.alarmEventDto.xmbh=Tool.getLoginUser().xmbh;
+      if("460100"!=Tool.getLoginUser().deptcode){
+        _this.alarmEventDto.xmbh=Tool.getLoginUser().xmbh;
+      }
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileAlarmEvent/statistics', _this.alarmEventDto).then((response) => {
         Loading.hide();
         let resp = response.data;
@@ -314,7 +327,13 @@ export default {
     },
     findMonitorEquipmentTreeByFile(){
       let _this = this;
-      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/findMonitorEquipmentTreeByFile/'+Tool.getLoginUser().xmbh).then((res) => {
+      let url = "";
+      if("460100"==Tool.getLoginUser().deptcode){
+        url = process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/findMonitorEquipmentTreeByFile';
+      }else{
+        url = process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/findMonitorEquipmentTreeByFile/'+Tool.getLoginUser().xmbh;
+      }
+      _this.$ajax.get(url).then((res) => {
         let response = res.data;
         _this.trees = response.content;
         // 初始化树
@@ -361,7 +380,9 @@ export default {
       obj.sbbh = _this.curNode.code;
       obj.stime = _this.stime;
       obj.etime = _this.etime;
-      obj.xmbh = Tool.getLoginUser().xmbh;
+      if("460100"!=Tool.getLoginUser().deptcode){
+        obj.xmbh = Tool.getLoginUser().xmbh;
+      }
       _this.$forceUpdate();
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileAlarmEvent/echartsAlarmData',obj).then((response)=>{
         Loading.hide();

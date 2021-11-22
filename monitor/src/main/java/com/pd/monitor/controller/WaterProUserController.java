@@ -14,6 +14,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -33,7 +34,10 @@ public class WaterProUserController extends BaseWxController {
     public ResponseDto list(@RequestBody WaterProUserDto pageDto) {
         ResponseDto responseDto = new ResponseDto();
         LoginUserDto loginUserDto = getRequestHeader();
-        List<String> xmbhs = waterProUserService.findXmbhByUsercode(loginUserDto.getLoginName());
+        List<String> xmbhs = new ArrayList<>();
+        if(!"460100".equals(loginUserDto.getDeptcode())){
+            xmbhs = waterProUserService.findXmbhByUsercode(loginUserDto.getLoginName());
+        }
         waterProUserService.list(pageDto, xmbhs);
         responseDto.setContent(pageDto);
         return responseDto;

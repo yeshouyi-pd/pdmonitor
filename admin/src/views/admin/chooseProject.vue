@@ -49,7 +49,11 @@ export default {
     getWaterProjects(){
       let _this = this;
       Loading.show();
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/CodeSetUtil/findWaterProjectAllByExample', {"usercode":_this.user.loginName}).then((response)=>{
+      let data = {};
+      if("460100"!=Tool.getLoginUser().deptcode){
+        data = {"usercode":_this.user.loginName};
+      }
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/CodeSetUtil/findWaterProjectAllByExample', data).then((response)=>{
         Loading.hide();
         let resp = response.data;
         _this.xmbhs = resp.content;
