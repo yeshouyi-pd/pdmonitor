@@ -290,7 +290,9 @@
         Loading.show();
         _this.waterQualityResultDto.page = page;
         _this.waterQualityResultDto.size = _this.$refs.pagination.size;
-        _this.waterQualityResultDto.xmbh = Tool.getLoginUser().xmbh;
+        if("460100"!=Tool.getLoginUser().deptcode){
+          _this.waterQualityResultDto.xmbh = Tool.getLoginUser().xmbh;
+        }
         _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterQualityResult/list', _this.waterQualityResultDto).then((response)=>{
           Loading.hide();
           let resp = response.data;
