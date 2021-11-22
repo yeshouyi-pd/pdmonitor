@@ -318,7 +318,7 @@
     where id = #{id,jdbcType=VARCHAR}
   </update>
   <select id="findXmbhByUsercode" parameterType="java.lang.String" resultType="java.lang.String">
-    select xmbh
+    select distinct xmbh
     from water_pro_user
     where usercode = #{usercode,jdbcType=VARCHAR}
   </select>

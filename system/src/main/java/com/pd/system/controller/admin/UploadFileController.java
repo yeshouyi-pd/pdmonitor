@@ -2,17 +2,25 @@ package com.pd.system.controller.admin;
 
 import com.alibaba.fastjson.JSON;
 import com.pd.server.config.RedisCode;
+import com.pd.server.exception.WxStrException;
+import com.pd.server.main.domain.Fileinfo;
+import com.pd.server.main.domain.FileinfoExample;
+import com.pd.server.main.dto.FileAndFileinfoDto;
 import com.pd.server.main.dto.FileDto;
+import com.pd.server.main.dto.LoginUserDto;
 import com.pd.server.main.dto.ResponseDto;
+import com.pd.server.main.mapper.my.MyFileMapper;
 import com.pd.server.main.service.FileService;
+import com.pd.server.main.service.FileinfoService;
 import com.pd.server.util.Base64ToMultipartFile;
 import com.pd.server.util.DateTools;
 import com.pd.server.util.UuidUtil;
+import com.pd.system.controller.conf.BaseController;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,10 +30,11 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 @RequestMapping("/uploadfile")
 @RestController
-public class UploadFileController {
+public class UploadFileController  extends BaseController {
 
     private static final Logger LOG = LoggerFactory.getLogger(UploadFileController.class);
 
@@ -37,6 +46,16 @@ public class UploadFileController {
 
     @Resource
     private FileService fileService;
+
+    @Resource
+    private FileinfoService fileinfoService;
+
+
+
+
+
+
+
 
 
 
@@ -72,7 +91,8 @@ public class UploadFileController {
                                  Integer shardSize,
                                  Integer shardTotal,
                                  String key,
-                                 String mianid) throws Exception {
+                                 String f1,
+                                 String f2) throws Exception {
         //LOG.info("上传文件开始");
 
         FileDto fileDto = new FileDto();
@@ -84,8 +104,6 @@ public class UploadFileController {
         fileDto.setShardSize(shardSize);
         fileDto.setShardTotal(shardTotal);
         fileDto.setKey(key);
-        fileDto.setMianid(mianid);
-
         String picStorePath = (String) redisTemplate.opsForValue().get(RedisCode.STATICPATH);//静态路径地址
         String basePath = picStorePath +use+File.separator+DateTools.getFormatDate(new Date(),"yyyyMM");
 
@@ -117,6 +135,8 @@ public class UploadFileController {
 
         ResponseDto responseDto = new ResponseDto();
         fileDto.setPath("/system/f/"+use+File.separator+DateTools.getFormatDate(new Date(),"yyyyMM")+ File.separator+path);
+        fileDto.setF1(f1);
+        fileDto.setF2(f2);
         responseDto.setContent(fileDto);
 
         if (fileDto.getShardIndex().equals(fileDto.getShardTotal())) {
@@ -145,6 +165,20 @@ public class UploadFileController {
                     outputStream.write(byt, 0, len);
                 }
             }
+            //==================
+
+            LoginUserDto loginUserDto = getRequestHeader();
+            String usercode = loginUserDto.getLoginName();
+            Fileinfo vo = new Fileinfo();
+            vo.setKey(fileDto.getKey());
+            vo.setXmbh(fileDto.getF1());
+            vo.setSbsn(fileDto.getF2());
+            vo.setCjsj(new Date());
+            vo.setF1(usercode);
+            fileinfoService.insert(vo);
+            //==================
+
+
         } catch (IOException e) {
             LOG.error("分片合并异常", e);
         } finally {
@@ -186,6 +220,35 @@ public class UploadFileController {
         responseDto.setContent(fileDto);
         return responseDto;
     }
+    @PostMapping("/savefileinfo")
+    public ResponseDto savefileinfo(@RequestBody  FileDto fileDto){
+        ResponseDto responseDto = new ResponseDto();
+        LoginUserDto loginUserDto = getRequestHeader();
+        String usercode = loginUserDto.getLoginName();
+        FileinfoExample example = new FileinfoExample();
+        FileinfoExample.Criteria ca = example.createCriteria();
+        ca.andXmbhEqualTo(fileDto.getF1());
+        ca.andSbsnEqualTo(fileDto.getF2());
+        ca.andKeyEqualTo(fileDto.getKey());
+        int count = fileinfoService.querycount(example);
+        Fileinfo vo = new Fileinfo();
+        vo.setKey(fileDto.getKey());
+        vo.setXmbh(fileDto.getF1());
+        vo.setSbsn(fileDto.getF2());
+        vo.setCjsj(new Date());
+        vo.setF1(usercode);
+        if(count > 0){
+            //修改
+            fileinfoService.updates(vo ,example);
+        }else{
+            //添加
+            fileinfoService.insert(vo);
+        }
+
+        return responseDto;
+    }
+
+
 
 }
 
