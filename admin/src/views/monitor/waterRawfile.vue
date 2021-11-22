@@ -40,6 +40,9 @@
             <button v-on:click="del(waterRawfile.id)" class="btn btn-xs btn-danger">
               <i class="ace-icon fa fa-trash-o bigger-120"></i>
             </button>
+              <button v-on:click="downloadAudio(waterRawfile.wjlj)" class="btn btn-xs btn-info">
+                  <i class="ace-icon fa fa-download bigger-120"></i>
+              </button>
           </div>
         </td>
       </tr>
@@ -229,7 +232,14 @@
             }
           })
         });
-      }
+      },
+        /**
+         * 下载文件
+         */
+        downloadAudio(wjlj){
+            let url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downloadFile?wjlj='+wjlj;
+            window.location.href = url;
+        }
     }
   }
 </script>
