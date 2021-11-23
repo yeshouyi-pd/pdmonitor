@@ -39,7 +39,8 @@ import WaterProUser from "./views/monitor/waterProUser.vue";
 import WaterProEquip from "./views/monitor/waterProEquip.vue";
 import ChooseProject from "./views/admin/chooseProject.vue"
 import WaterRawfile from "./views/monitor/waterRawfile.vue";
-import Fleuploadinfo from "./views/monitor/fileuploadinfo.vue"
+import Fleuploadinfo from "./views/monitor/fileuploadinfo.vue";
+import CameraInfo from "./views/monitor/cameraInfo.vue";
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -220,7 +221,11 @@ export default new Router({
             path: "monitor/fileuploadinfo",
             name: "monitor/fileuploadinfo",
             component: Fleuploadinfo
-            }]
+        },{
+            path: "monitor/cameraInfo",
+            name: "monitor/cameraInfo",
+            component: CameraInfo
+        }]
 
     }]
 })
