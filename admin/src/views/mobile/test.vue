@@ -91,24 +91,32 @@
         },
         mounted:function(){
             let _this = this;
-            _this.getDataCamera();
+            _this.getCamera();
         },
         methods: {
+            getQueryString(name) {
+                let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+                let r = window.location.search.substr(1).match(reg);
+                if (r != null) return unescape(r[2]);
+                return null;
+            },
             // 获取摄像头数据
-            getDataCamera() {
+            getCamera() {
                 let _this = this;
-                _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/cameraInfo/getDataCamera',{
-                    sbsn:'NO0202011200006',
+                _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/cameraInfo/getCamera',{
+                    id:_this.getQueryString("id"),
                 }).then((res)=>{
                     let response = res.data;
                     _this.camera = response.content;
-                    $("#loginip").val(_this.camera.ip);
-                    $("#port").val(_this.camera.port);
-                    $("#username").val(_this.camera.username);
-                    $("#password").val(_this.camera.camerapws);
-                    setTimeout(function () {
-                        _this.clickLogin();
-                    }, 1000);
+                    if(Tool.isNotEmpty(_this.camera)){
+                        $("#loginip").val(_this.camera.ip);
+                        $("#port").val(_this.camera.port);
+                        $("#username").val(_this.camera.username);
+                        $("#password").val(_this.camera.camerapws);
+                        setTimeout(function () {
+                            _this.clickLogin();
+                        }, 1000);
+                    }
                 })
             },
             // 登录

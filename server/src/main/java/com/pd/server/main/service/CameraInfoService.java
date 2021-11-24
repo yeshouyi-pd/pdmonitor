@@ -22,14 +22,19 @@ public class CameraInfoService {
     @Resource
     private CameraInfoMapper cameraInfoMapper;
 
-    public CameraInfo findBySbsn(String sbsn){
+    public List<CameraInfo> findByDeptcode(String deptcode){
         CameraInfoExample example = new CameraInfoExample();
-        example.createCriteria().andSbsnEqualTo(sbsn);
+        CameraInfoExample.Criteria ca = example.createCriteria();
+        ca.andDeptcodeEqualTo(deptcode);
+        ca.andSm1EqualTo("1");
         List<CameraInfo> cameraInfoList = cameraInfoMapper.selectByExample(example);
-        if(cameraInfoList.size() > 0){
-            return cameraInfoList.get(0);
-        }
-        return null;
+        return cameraInfoList;
+    }
+
+    public CameraInfo findByID(String id){
+        CameraInfoExample example = new CameraInfoExample();
+        CameraInfo info = cameraInfoMapper.selectByPrimaryKey(id);
+        return info;
     }
 
     /**

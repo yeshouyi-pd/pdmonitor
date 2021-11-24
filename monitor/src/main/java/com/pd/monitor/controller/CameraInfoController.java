@@ -109,12 +109,23 @@ public class CameraInfoController extends BaseWxController {
         return responseDto;
     }
 
+
     @PostMapping("/getDataCamera")
     public ResponseDto getDataCamera(@RequestBody String data) {
         ResponseDto responseDto = new ResponseDto();
         JSONObject jsonObject = JSONObject.parseObject(data);
-        String sbsn = jsonObject.getString("sbsn");
-        CameraInfo info = cameraInfoService.findBySbsn(sbsn);
+        String deptcode = jsonObject.getString("deptcode");
+        List<CameraInfo> list = cameraInfoService.findByDeptcode(deptcode);
+        responseDto.setContent(list);
+        return responseDto;
+    }
+
+    @PostMapping("/getCamera")
+    public ResponseDto getCamera(@RequestBody String data) {
+        ResponseDto responseDto = new ResponseDto();
+        JSONObject jsonObject = JSONObject.parseObject(data);
+        String id = jsonObject.getString("id");
+        CameraInfo info = cameraInfoService.findByID(id);
         responseDto.setContent(info);
         return responseDto;
     }
