@@ -21,13 +21,13 @@
                 <div class="left_cage">
                     <div class="dataAllBorder01 cage_cl" style="margin-top: 9% !important; height: 24%;">
                         <video autoplay="autoplay" loop="loop" class="dataAllBorder02 video_cage">
-                            <source class="video" title="主监控位" src="/video/121.mp4"/>
+                            <source class="video" title="主监控位" src="/video/12.mp4"/>
                         </video>
                     </div>
                     <div class="dataAllBorder01 cage_cl" style="margin-top: 1.5% !important; height: 38%;">
                         <div class="dataAllBorder02 video_cage">
                             <div v-for="(item,index) in cameras"  class="video_around" style="border: 0px solid red;">
-                                <iframe width="200px;" height="163px;" :src="'/mobile/test?id='+item.id" frameborder="0"></iframe>
+                                <iframe v-if="index < 4" width="200px;" height="163px;" :src="'/mobile/test?id='+item.id" frameborder="0"></iframe>
                             </div>
                         </div>
                     </div>
