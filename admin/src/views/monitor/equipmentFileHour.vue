@@ -101,7 +101,13 @@ export default {
     },
     findMonitorEquipmentTreeByFile(){
       let _this = this;
-      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/findMonitorEquipmentTreeByFile/'+Tool.getLoginUser().xmbh).then((res) => {
+      let url = "";
+      if("460100"==Tool.getLoginUser().deptcode){
+        url = process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/findMonitorEquipmentTreeByFile';
+      }else{
+        url = process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/findMonitorEquipmentTreeByFile/'+Tool.getLoginUser().xmbh;
+      }
+      _this.$ajax.get(url).then((res) => {
         let response = res.data;
         _this.trees = response.content;
         // 初始化树

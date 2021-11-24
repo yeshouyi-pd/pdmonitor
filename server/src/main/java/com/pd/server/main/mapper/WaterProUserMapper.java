@@ -29,4 +29,6 @@ public interface WaterProUserMapper {
     int updateByPrimaryKey(WaterProUser record);
 
     List<String> findXmbhByUsercode(String usercode);
+
+    List<String> findXmbhByExample(WaterProUserExample example);
 }

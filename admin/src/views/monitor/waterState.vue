@@ -66,7 +66,9 @@
              */
             getWaterState(){
                 let _this = this;
-                _this.waterEquipmentDto.xmbh = Tool.getLoginUser().xmbh;
+                if("460100"!=Tool.getLoginUser().deptcode){
+                  _this.waterEquipmentDto.xmbh = Tool.getLoginUser().xmbh;
+                }
                 _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/getWaterState',_this.waterEquipmentDto).then((res) => {
                     let response = res.data;
                     _this.zcStates = response.content.zclist;
