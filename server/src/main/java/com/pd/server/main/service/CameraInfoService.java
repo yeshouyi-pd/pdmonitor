@@ -22,6 +22,16 @@ public class CameraInfoService {
     @Resource
     private CameraInfoMapper cameraInfoMapper;
 
+    public CameraInfo findBySbsn(String sbsn){
+        CameraInfoExample example = new CameraInfoExample();
+        example.createCriteria().andSbsnEqualTo(sbsn);
+        List<CameraInfo> cameraInfoList = cameraInfoMapper.selectByExample(example);
+        if(cameraInfoList.size() > 0){
+            return cameraInfoList.get(0);
+        }
+        return null;
+    }
+
     /**
     * 列表查询
     */

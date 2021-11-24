@@ -10,9 +10,9 @@
 
         <div class="index_nav" >
             <ul style="height: 30px; margin-bottom: 0px;">
-                <router-link to="/admin/chooseProject">
-                    <li class="l_left total_chose_fr nav_active">主页</li>
-                </router-link>
+                <!--<router-link to="/admin/chooseProject">-->
+                    <li @click="chooseProject" class="l_left total_chose_fr nav_active">主页</li>
+                <!--</router-link>-->
             </ul>
         </div>
         <div class="index_tabs" >
@@ -21,15 +21,14 @@
                 <div class="left_cage">
                     <div class="dataAllBorder01 cage_cl" style="margin-top: 9% !important; height: 24%;">
                         <video autoplay="autoplay" loop="loop" class="dataAllBorder02 video_cage">
-                            <source class="video" title="主监控位" src="/video/12.mp4"/>
+                            <source class="video" title="主监控位" src="/video/121.mp4"/>
                         </video>
                     </div>
                     <div class="dataAllBorder01 cage_cl" style="margin-top: 1.5% !important; height: 38%;">
                         <div class="dataAllBorder02 video_cage">
-                            <img class="video_around" src="/video/1.jpg">
-                            <img class="video_around" src="/video/2.jpg">
-                            <img class="video_around" src="/video/3.jpg">
-                            <img class="video_around" src="/video/4.jpg">
+                            <div  class="video_around" style="border: 0px solid red;">
+                                <iframe width="200px;" height="163px;" src="/mobile/test" frameborder="0"></iframe>
+                            </div>
                         </div>
                     </div>
                     <div class="dataAllBorder01 cage_cl" style="margin-top: 1.5% !important; height: 32%">
@@ -294,6 +293,9 @@
             _this.TimeSum();
         },
         methods: {
+            chooseProject(){
+                window.location.href = "/admin/chooseProject";
+            },
             // 定时刷新数据函数
             dataRefreh() {
                 let _this = this;
