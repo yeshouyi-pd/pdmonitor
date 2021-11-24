@@ -26,8 +26,8 @@
                     </div>
                     <div class="dataAllBorder01 cage_cl" style="margin-top: 1.5% !important; height: 38%;">
                         <div class="dataAllBorder02 video_cage">
-                            <div  class="video_around" style="border: 0px solid red;">
-                                <iframe width="200px;" height="163px;" src="/mobile/test" frameborder="0"></iframe>
+                            <div v-for="(item,index) in cameras"  class="video_around" style="border: 0px solid red;">
+                                <iframe width="200px;" height="163px;" :src="'/mobile/test?id='+item.id" frameborder="0"></iframe>
                             </div>
                         </div>
                     </div>
@@ -48,7 +48,7 @@
                                     <div class="map_title">实时地图</div>
                                 </div>
                             </div>
-                            <EquipmentAMap></EquipmentAMap>
+                            <!--<EquipmentAMap></EquipmentAMap>-->
                         </div>
                     </div>
 
@@ -278,11 +278,13 @@
                 yAixsData:[],
                 xAixsData:[],
                 alarmDatas:{},
-                intervalId:null
+                intervalId:null,
+                cameras:[],
             }
         },
         mounted: function () {
             let _this = this;
+            _this.getDataCamera();
             _this.getSzjcx();
             _this.getPieChart();
             _this.getLatestDate();
@@ -295,6 +297,16 @@
         methods: {
             chooseProject(){
                 window.location.href = "/admin/chooseProject";
+            },
+            // 获取摄像头数据
+            getDataCamera() {
+                let _this = this;
+                _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/cameraInfo/getDataCamera',{
+                    deptcode:Tool.getLoginUser().deptcode,
+                }).then((res)=>{
+                    let response = res.data;
+                    _this.cameras = response.content;
+                })
             },
             // 定时刷新数据函数
             dataRefreh() {
