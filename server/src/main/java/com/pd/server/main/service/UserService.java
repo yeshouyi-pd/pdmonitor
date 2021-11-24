@@ -100,7 +100,6 @@ private UserMapper userMapper;
     * 更新
     */
     private void update(User user) {
-        user.setPassword(null);
         userMapper.updateByPrimaryKeySelective(user);
     }
 
