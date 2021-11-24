@@ -7,7 +7,7 @@
       <div class="widget-body">
         <div class="widget-main">
           <form>
-            <table style="font-size: 1.1em;width:80%" class="text-right">
+            <table style="font-size: 1.1em;width:100%" class="text-right">
               <tbody>
               <tr>
                 <td style="width:10%">
@@ -22,7 +22,7 @@
                 <td style="width: 15%">
                   <input class="form-control" type="text"  v-model="waterEquipmentDto.sbsn"/>
                 </td>
-                <td colspan="2" class="text-center">
+                <td style="width: 30%;" class="text-center">
                   <button  type="button" v-on:click="listEquipment(1)" class="btn btn-sm  btn-info btn-round" style="margin-right: 10px;">
                     <i class="ace-icon fa fa-book"></i>
                     查询

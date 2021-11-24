@@ -174,7 +174,13 @@ export default {
     findDeviceInfo(){
       let _this = this;
       Loading.show();
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/findAll', {'sblb':'0001','xmbh':Tool.getLoginUser().xmbh}).then((response)=>{
+      let data = {};
+      if("460100"==Tool.getLoginUser().deptcode){
+        data = {'sblb':'0001'};
+      }else{
+        data = {'sblb':'0001','xmbh':Tool.getLoginUser().xmbh};
+      }
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/findAll', data).then((response)=>{
         Loading.hide();
         _this.waterEquipments = response.data.content;
       })
@@ -222,7 +228,9 @@ export default {
       Loading.show();
       _this.equipmentFileDto.page=page;
       _this.equipmentFileDto.size=_this.$refs.pagination.size;
-      _this.equipmentFileDto.xmbh=Tool.getLoginUser().xmbh;
+      if("460100"!=Tool.getLoginUser().deptcode){
+        _this.equipmentFileDto.xmbh=Tool.getLoginUser().xmbh;
+      }
       _this.$forceUpdate();
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFile/list',_this.equipmentFileDto).then((response)=>{
         Loading.hide();
@@ -233,7 +241,11 @@ export default {
     },
     findSbbh(){
       let _this = this;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFile/findSbbh', {'xmbh':Tool.getLoginUser().xmbh}).then((response)=>{
+      let data = {};
+      if("460100"!=Tool.getLoginUser().deptcode){
+        data = {'xmbh':Tool.getLoginUser().xmbh};
+      }
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFile/findSbbh', data).then((response)=>{
         Loading.hide();
         let resp = response.data;
         _this.sbbhs = resp.content;

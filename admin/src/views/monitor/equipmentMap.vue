@@ -81,7 +81,11 @@ export default {
     findDeviceInfo(){
       let _this = this;
       Loading.show();
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/findAll', {'xmbh':Tool.getLoginUser().xmbh}).then((response)=>{
+      let data = {};
+      if("460100"!=Tool.getLoginUser().deptcode){
+        data = {'xmbh':Tool.getLoginUser().xmbh};
+      }
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/findAll', data).then((response)=>{
         Loading.hide();
         let devices = response.data.content;
         for(let i=0;i<devices.length;i++){

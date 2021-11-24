@@ -3,16 +3,15 @@ package com.pd.monitor.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
-import java.net.URLEncoder;
 
 @RestController
 @RequestMapping("/download/audio")
@@ -37,6 +36,32 @@ public class DownloadAudioController {
         // in = new BufferedInputStream(conn.getInputStream());
         // 这和上面两句一样的效果
         in = new BufferedInputStream(url.openStream());
+        response.reset();
+        response.setContentType("application/octet-stream");
+        fileName = new String(fileName.getBytes(), "ISO-8859-1");
+        response.setHeader("Content-Disposition", "attachment; filename="+fileName);
+        // 将网络输入流转换为输出流
+        int i;
+        while ((i = in.read()) != -1) {
+            response.getOutputStream().write(i);
+        }
+        in.close();
+        response.getOutputStream().close();
+    }
+
+    /**
+     * 下载文件
+     * @param request
+     * @param response
+     * @throws IOException
+     */
+    @GetMapping("/downloadFile")
+    public void downloadFile(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String wjlj = request.getParameter("wjlj");
+        System.out.println(wjlj);
+        String fileName = wjlj.substring(wjlj.lastIndexOf("/")+1);
+        BufferedInputStream in = null;
+        in = new BufferedInputStream(new FileInputStream(wjlj));
         response.reset();
         response.setContentType("application/octet-stream");
         fileName = new String(fileName.getBytes(), "ISO-8859-1");
