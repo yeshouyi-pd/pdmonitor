@@ -1,5 +1,6 @@
 package com.pd.monitor.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.pd.monitor.wx.conf.BaseWxController;
@@ -105,6 +106,16 @@ public class CameraInfoController extends BaseWxController {
     public ResponseDto delete(@PathVariable String id) {
         ResponseDto responseDto = new ResponseDto();
         cameraInfoService.delete(id);
+        return responseDto;
+    }
+
+    @PostMapping("/getDataCamera")
+    public ResponseDto getDataCamera(@RequestBody String data) {
+        ResponseDto responseDto = new ResponseDto();
+        JSONObject jsonObject = JSONObject.parseObject(data);
+        String sbsn = jsonObject.getString("sbsn");
+        CameraInfo info = cameraInfoService.findBySbsn(sbsn);
+        responseDto.setContent(info);
         return responseDto;
     }
 
