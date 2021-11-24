@@ -48,7 +48,7 @@
                                     <div class="map_title">实时地图</div>
                                 </div>
                             </div>
-                            <!--<EquipmentAMap></EquipmentAMap>-->
+                            <EquipmentAMap></EquipmentAMap>
                         </div>
                     </div>
 
