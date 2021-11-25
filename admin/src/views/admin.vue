@@ -38,6 +38,12 @@
                           </router-link>
                       </li>
 
+                      <li class="light-blue dropdown-modal" v-on:click="downloadVideo()">
+                          <a   class=" dropdown-toggle" style="cursor: pointer;">
+                              <font color="white">下载监控插件</font>
+                          </a>
+                      </li>
+
                       <li class="light-blue dropdown-modal" v-on:click="downloadOperationManual()">
                         <a   class=" dropdown-toggle" style="cursor: pointer;">
                           <font color="white">下载操作手册</font>
@@ -289,6 +295,9 @@
         methods:{
           downloadOperationManual(){
             window.location.href = process.env.VUE_APP_SERVER + '/system/downloadfile/downloadLocal';
+          },
+          downloadVideo(){
+              window.location.href = process.env.VUE_APP_SERVER + '/system/downloadfile/downloadVideo';
           },
           reload(){
             let _this = this;
