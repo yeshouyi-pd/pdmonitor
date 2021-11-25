@@ -1,71 +1,68 @@
 <template>
     <div>
         <div style="width: 200px;height: 163px;" id="divPlugin" class="plugin"></div>
-        <fieldset style="display: none;" class="login">
-            <legend>登录</legend>
-            <table cellpadding="0" cellspacing="3" border="0">
-                <tr>
-                    <td class="tt">IP地址</td>
-                    <td><input id="loginip" type="text" class="txt" value="" /></td>
-                    <td class="tt">端口号</td>
-                    <td><input id="port" type="text" class="txt" value="" /></td>
-                </tr>
-                <tr>
-                    <td class="tt">用户名</td>
-                    <td><input id="username" type="text" class="txt" value="" /></td>
-                    <td class="tt">密码</td>
-                    <td><input id="password" type="password" class="txt" value="" /></td>
-                </tr>
-                <tr>
-                    <td class="tt">设备端口</td>
-                    <td colspan="2"><input id="deviceport" type="text" class="txt" />（可选参数）</td>
-                    <td>
-                        窗口分割数&nbsp;
-                        <select class="sel2" @change="changeWndNum(this.value)">
-                            <option value="1" selected>1x1</option>
-                            <option value="2">2x2</option>
-                            <option value="3">3x3</option>
-                            <option value="4">4x4</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="tt">RTSP端口</td>
-                    <td colspan="3"><input id="rtspport" type="text" class="txt" />（可选参数）</td>
-                </tr>
-                <tr>
-                    <td colspan="4">
-                        <input type="button" class="btn" value="登录" @click="clickLogin()" />
-                        <input type="button" class="btn" value="退出" @click="clickLogout()" />
-                    </td>
-                </tr>
-                <tr>
-                    <td class="tt">已登录设备</td>
-                    <td>
-                        <select id="ip" class="sel" @change="getChannelInfo(),getDevicePort()"></select>
-                    </td>
-                    <td class="tt">通道列表</td>
-                    <td>
-                        <select id="channels" class="sel"></select>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="tt">码流类型</td>
-                    <td>
-                        <select id="streamtype" class="sel">
-                            <option value="1">主码流</option>
-                            <option value="2">子码流</option>
-                            <option value="3">第三码流</option>
-                            <option value="4">转码码流</option>
-                        </select>
-                    </td>
-                    <td>
-                        <input type="button" class="btn" value="开始预览" @click="clickStartRealPlay()" />
-                        <input type="button" class="btn" value="停止预览" @click="clickStopRealPlay()" />
-                    </td>
-                </tr>
-            </table>
-        </fieldset>
+        <table style="display: none;" cellpadding="0" cellspacing="3" border="0">
+            <tr>
+                <td class="tt">IP地址</td>
+                <td><input id="loginip" type="text" class="txt" value="" /></td>
+                <td class="tt">端口号</td>
+                <td><input id="port" type="text" class="txt" value="" /></td>
+            </tr>
+            <tr>
+                <td class="tt">用户名</td>
+                <td><input id="username" type="text" class="txt" value="" /></td>
+                <td class="tt">密码</td>
+                <td><input id="password" type="password" class="txt" value="" /></td>
+            </tr>
+            <tr>
+                <td class="tt">设备端口</td>
+                <td colspan="2"><input id="deviceport" type="text" class="txt" />（可选参数）</td>
+                <td>
+                    窗口分割数&nbsp;
+                    <select class="sel2" @change="changeWndNum(this.value)">
+                        <option value="1" selected>1x1</option>
+                        <option value="2">2x2</option>
+                        <option value="3">3x3</option>
+                        <option value="4">4x4</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="tt">RTSP端口</td>
+                <td colspan="3"><input id="rtspport" type="text" class="txt" />（可选参数）</td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <input type="button" class="btn" value="登录" @click="clickLogin()" />
+                    <input type="button" class="btn" value="退出" @click="clickLogout()" />
+                </td>
+            </tr>
+            <tr>
+                <td class="tt">已登录设备</td>
+                <td>
+                    <select id="ip" class="sel" @change="getChannelInfo(),getDevicePort()"></select>
+                </td>
+                <td class="tt">通道列表</td>
+                <td>
+                    <select id="channels" class="sel"></select>
+                </td>
+            </tr>
+            <tr>
+                <td class="tt">码流类型</td>
+                <td>
+                    <select id="streamtype" class="sel">
+                        <option value="1">主码流</option>
+                        <option value="2">子码流</option>
+                        <option value="3">第三码流</option>
+                        <option value="4">转码码流</option>
+                    </select>
+                </td>
+                <td>
+                    <input type="button" class="btn" value="开始预览" @click="clickStartRealPlay()" />
+                    <input type="button" class="btn" value="停止预览" @click="clickStopRealPlay()" />
+                </td>
+            </tr>
+        </table>
         <remote-js id="videonode" src="/hk/codebase/webVideoCtrl.js"></remote-js>
         <remote-js src="/hk/cn/videoiframe.js"></remote-js>
     </div>
