@@ -152,7 +152,7 @@
                 <th>设备sn</th>
                 <th>事件发生时间</th>
                 <th>事件次数</th>
-                <th>报警次数</th>
+                <th>出现次数</th>
               </tr>
               </thead>
               <tbody>

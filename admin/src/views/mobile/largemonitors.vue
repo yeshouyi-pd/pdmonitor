@@ -33,7 +33,7 @@
                     </div>
                     <div class="dataAllBorder01 cage_cl" style="margin-top: 1.5% !important; height: 32%">
                         <div class="dataAllBorder02" >
-                            <div class="map_title">江豚报警小时占比统计图</div>
+                            <div class="map_title">江豚出现小时占比统计图</div>
                             <div id="container" style="height: 100%;width: 100%;border: 0px solid red;"></div>
                         </div>
                     </div>
@@ -101,7 +101,7 @@
                             </ul>-->
                             <div class="depart_number_box">
                                 <ul class="depart_number_cage" style="margin-bottom: 0px;">
-                                    <!--<li class="depart_name">报警次数：</li>-->
+                                    <!--<li class="depart_name">出现次数：</li>-->
                                     <li class="depart_number">{{alarmDatas.num}}次</li>
                                 </ul>
                             </div>

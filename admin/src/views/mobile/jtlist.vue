@@ -4,7 +4,7 @@
     <div class="space-1"></div>
     <div>
 						<span class="label label-primary arrowed-in-right label-lg">
-									<b>江豚报警数据</b>
+									<b>江豚出现数据</b>
 						</span>
     </div>
       <div class="space-6"></div>
