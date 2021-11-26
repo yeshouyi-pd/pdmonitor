@@ -78,7 +78,7 @@ public class EquipmentFileController extends BaseWxController {
     }
 
     /**
-     * 大屏展示，根据部门，查询所有设备的报警占比
+     * 大屏展示，根据部门，查询所有设备的出现占比
      * @param entityDto
      * @return
      */
@@ -157,7 +157,7 @@ public class EquipmentFileController extends BaseWxController {
     }
 
     /**
-     * 统计报警次数
+     * 统计出现次数
      * @param alarmNumbersDto
      * @return
      */
@@ -199,7 +199,7 @@ public class EquipmentFileController extends BaseWxController {
     }
 
     /**
-     * 通过事件统计报警次数
+     * 通过事件统计出现次数
      * @param alarmNumbersDto
      * @return
      */

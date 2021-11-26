@@ -97,7 +97,7 @@ public class EquipmentFileAlarmEventController extends BaseWxController {
                 ValidatorUtil.length(equipmentFileAlarmEventDto.getDeptcode(), "部门", 1, 36);
                 ValidatorUtil.length(equipmentFileAlarmEventDto.getSbbh(), "设备唯一标识", 1, 50);
                 ValidatorUtil.length(equipmentFileAlarmEventDto.getEventTime(), "事件时间", 1, 100);
-                ValidatorUtil.length(equipmentFileAlarmEventDto.getBjsj(), "报警时间", 1, 50);
+                ValidatorUtil.length(equipmentFileAlarmEventDto.getBjsj(), "出现时间", 1, 50);
                 ValidatorUtil.length(equipmentFileAlarmEventDto.getSm1(), "", 1, 50);
                 ValidatorUtil.length(equipmentFileAlarmEventDto.getSm2(), "", 1, 50);
                 ValidatorUtil.length(equipmentFileAlarmEventDto.getSm3(), "", 1, 50);
