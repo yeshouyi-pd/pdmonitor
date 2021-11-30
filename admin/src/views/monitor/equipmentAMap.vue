@@ -40,10 +40,10 @@
                     _this.$forceUpdate();
                 }
             })
-            if(Tool.isEmpty(_this.heightMax)){
-                let h = document.documentElement.clientHeight || document.body.clientHeight;
-                _this.heightMax = h*0.8-20;
-            }
+            // if(Tool.isEmpty(_this.heightMax)){
+            //     let h = document.documentElement.clientHeight || document.body.clientHeight;
+            //     _this.heightMax = h*0.8-20;
+            // }
 
             _this.deptMap = Tool.getDeptUser();
             _this.findDeviceInfo();

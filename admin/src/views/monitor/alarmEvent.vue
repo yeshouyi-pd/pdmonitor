@@ -442,7 +442,7 @@ export default {
         },
         series: [
           {
-            type: 'line',
+            type: 'bar',
             smooth: 0.6,
             symbolSize: 8,
             lineStyle: {

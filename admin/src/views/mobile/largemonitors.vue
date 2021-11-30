@@ -32,8 +32,8 @@
                         </div>
                     </div>
                     <div class="dataAllBorder01 cage_cl" style="margin-top: 1.5% !important; height: 32%">
-                        <div class="dataAllBorder02" >
-                            <div class="map_title">江豚出现小时占比统计图</div>
+                        <div class="dataAllBorder02"  style="height: 100%;width: 100%">
+                            <div class="map_title">鲸豚出现事件统计图</div>
                             <div id="container" style="height: 100%;width: 100%;border: 0px solid red;"></div>
                         </div>
                     </div>
@@ -48,7 +48,7 @@
                                     <div class="map_title">实时地图</div>
                                 </div>
                             </div>
-                            <EquipmentAMap></EquipmentAMap>
+                            <EquipmentAMap v-bind:height-max="heightMax"></EquipmentAMap>
                         </div>
                     </div>
 
@@ -280,6 +280,7 @@
                 alarmDatas:{},
                 intervalId:null,
                 cameras:[],
+                heightMax:''
             }
         },
         mounted: function () {
@@ -293,6 +294,8 @@
             _this.getWarningDate();
             _this.getContainerDate();
             _this.TimeSum();
+            let h = document.documentElement.clientHeight || document.body.clientHeight;
+            _this.heightMax = h*0.8-20;
         },
         methods: {
             chooseProject(){
@@ -381,8 +384,8 @@
                 let _this = this;
                 _this.alarmNumbersDto2.deptcode = Tool.getLoginUser().deptcode;
                 _this.alarmNumbersDto2.stime = moment().subtract(7, "days").format('YYYY-MM-DD');
-                _this.alarmNumbersDto2.etime = moment().subtract(-1, "days").format('YYYY-MM-DD');
-                _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFile/statisticsAlarmNumsByHourDP',_this.alarmNumbersDto2).then((response)=>{
+                _this.alarmNumbersDto2.etime = moment().subtract(1, "days").format('YYYY-MM-DD');
+                _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileAlarmEvent/echartsAlarmDataByDp',_this.alarmNumbersDto2).then((response)=>{
                     let resp = response.data;
                     _this.containerDate = resp.content;
                     _this.yAixsData = _this.containerDate.yAixsData;
@@ -409,7 +412,7 @@
                         yAxis: {
                             show: true,
                             type: 'value',
-                            name: '百分比',
+                            name: '事件次数',
                             axisLabel: {
                                 show: true,
                                 textStyle: {
@@ -420,13 +423,15 @@
                         series: [
                             {
                                 data: _this.yAixsData,
-                                type: 'line',
+                                type: 'bar',
                                 smooth: true
                             }
                         ]
                     };
                     if (option && typeof option === 'object') {
+                      _this.$nextTick(function () {
                         myChart.setOption(option);
+                      })
                     }
                 })
 
