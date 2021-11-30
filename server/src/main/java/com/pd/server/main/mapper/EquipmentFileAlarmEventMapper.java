@@ -31,4 +31,7 @@ public interface EquipmentFileAlarmEventMapper {
     int updateByPrimaryKey(EquipmentFileAlarmEvent record);
 
     List<EquipmentFileAlarmEventDto> statisticsByExample(EquipmentFileAlarmEventExample example);
+
+    List<EquipmentFileAlarmEventDto> statisticsByExampleOnlyDept(EquipmentFileAlarmEventExample example);
+
 }
