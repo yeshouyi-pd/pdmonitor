@@ -2,6 +2,7 @@ package com.pd.monitor.controller;
 
 
 import com.pd.monitor.wx.conf.BaseWxController;
+import com.pd.server.main.domain.EquipmentFile;
 import com.pd.server.main.domain.EquipmentFileExample;
 import com.pd.server.main.domain.WaterEquipmentExample;
 import com.pd.server.main.domain.WaterQualityResultExample;
@@ -9,6 +10,7 @@ import com.pd.server.main.dto.*;
 import com.pd.server.main.service.EquipmentFileService;
 import com.pd.server.main.service.WaterEquipmentService;
 import com.pd.server.main.service.WaterQualityResultService;
+import com.pd.server.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
@@ -16,8 +18,11 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/welcome")
@@ -42,6 +47,84 @@ public class WelcomeController  extends BaseWxController{
     @Resource
     private WaterEquipmentService waterEquipmentService;
 
+    /**
+     * 大屏 捕食行为
+     */
+    @PostMapping("/predationStatistics")
+    public ResponseDto predationStatistics(@RequestBody EquipmentFileDto equipmentFileDto){
+        ResponseDto responseDto = new ResponseDto();
+        List<Map<String,Object>> resultList = new ArrayList<>();
+        LoginUserDto user = getRequestHeader();
+        List<String> list = getUpdeptcode(user.getDeptcode());
+        //查询出最近100条出现次数
+        EquipmentFileExample example = new EquipmentFileExample();
+        EquipmentFileExample.Criteria ca = example.createCriteria();
+        if(!StringUtils.isEmpty(list)&&list.size()>0){
+            ca.andDeptcodeIn(list);
+        }
+        if(!StringUtils.isEmpty(equipmentFileDto.getDeptcode())){
+            ca.andDeptcodeEqualTo(equipmentFileDto.getDeptcode());
+        }
+        if(!StringUtils.isEmpty(equipmentFileDto.getSbbh())){
+            ca.andSbbhEqualTo(equipmentFileDto.getSbbh());
+        }
+        ca.andTpljLike("%png%");
+        ca.andTpljNotLike("%predation%");
+        example.setOrderByClause(" cjsj desc ");
+        List<EquipmentFile> allList = equipmentFileService.listBylimit(example);
+        if(!CollectionUtils.isEmpty(allList)){
+            //结束时间
+            EquipmentFile endEntity = allList.get(0);
+            //开始时间
+            EquipmentFile startEntity = allList.get(allList.size()-1);
+            EquipmentFileExample example1 = new EquipmentFileExample();
+            EquipmentFileExample.Criteria ca1 = example1.createCriteria();
+            if(!StringUtils.isEmpty(list)&&list.size()>0){
+                ca1.andDeptcodeIn(list);
+            }
+            if(!StringUtils.isEmpty(equipmentFileDto.getDeptcode())){
+                ca1.andDeptcodeEqualTo(equipmentFileDto.getDeptcode());
+            }
+            if(!StringUtils.isEmpty(equipmentFileDto.getSbbh())){
+                ca1.andSbbhEqualTo(equipmentFileDto.getSbbh());
+            }
+            if(!StringUtils.isEmpty(startEntity.getCjsj())){
+                ca1.andCjsjGreaterThanOrEqualTo(DateUtil.getFormatDate(startEntity.getCjsj(),"yyyy-MM-dd HH:mm:ss"),"%Y-%m-%d %H:%i:%s");
+            }
+            if(!StringUtils.isEmpty(endEntity.getCjsj())){
+                ca1.andCjsjLessThanOrEqualTo(DateUtil.getFormatDate(endEntity.getCjsj(),"yyyy-MM-dd HH:mm:ss"),"%Y-%m-%d %H:%i:%s");
+            }
+            ca1.andTpljLike("%png%");
+            ca1.andTpljLike("%predation%");
+            List<EquipmentFile> predationList = equipmentFileService.listAll(example1);
+            Map<String,Object> resultMap = new HashMap<>();
+            resultMap.put("name", "捕食行为");
+            resultMap.put("value",predationList.size());
+            resultList.add(resultMap);
+            Map<String,Object> resultMap1 = new HashMap<>();
+            resultMap1.put("name", "江豚出现");
+            resultMap1.put("value",allList.size()-predationList.size());
+            resultList.add(resultMap1);
+        }
+        responseDto.setContent(resultList);
+        return responseDto;
+    }
+
+    /**
+     * 计算结果百分比，保留2位小数
+     *
+     * @param v1 除数
+     * @param v2 被除数
+     * @return
+     */
+    private static String calculateResultOfPercent(double v1, double v2) {
+        if (v2 == 0) {
+            return "0%";
+        }
+
+        DecimalFormat df = new DecimalFormat("#.##");
+        return df.format(v1 / v2);
+    }
 
     /**
      *  welcome 水质实时数据

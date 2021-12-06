@@ -143,6 +143,10 @@ public class EquipmentFileService {
         List<EquipmentFile> list  = equipmentFileMapper.getthisDeptjxsjJT(equipmentFileExample);
         List<EquipmentFileDto> equipmentFileDtoList = CopyUtil.copyList(list , EquipmentFileDto.class);
         return equipmentFileDtoList;
+    }
+
+    public List<EquipmentFile> listBylimit(EquipmentFileExample equipmentFileExample) {
+        return equipmentFileMapper.listBylimit(equipmentFileExample);
 
     }
 }
