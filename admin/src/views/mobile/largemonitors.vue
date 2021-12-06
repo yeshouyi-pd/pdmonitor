@@ -117,7 +117,7 @@
 
                     <div class="dataAllBorder01 cage_cl check_increase" style=" margin-top: 1.5% !important;">
                         <!--切换01-->
-                        <div style="overflow-y:scroll;" class="dataAllBorder02 over_hide dataAllBorder20" id="over_hide">
+                        <div style="overflow-y:scroll;" class="dataAllBorder02 over_hide dataAllBorder20" id="over_hide2">
                             <table class="table table-bordered">
                                 <thead>
                                 <tr style="background: #395DC0;color: #FFFFFF;">
@@ -146,34 +146,34 @@
                     </div>
 
                     <div class="dataAllBorder01 cage_cl check_decrease" style="margin-top: 1.5% !important; height: 32%; position: relative;">
-                        <div class="dataAllBorder02 over_hide" style="padding: 1.2%;">
-                            <div class="analysis">设备在线率</div>
-                            <div class="danger_contain_box">
-                                <div id="piechart-placeholder"></div>
-                                <ul class="danger_depart danger_depart01">
-                                    <li class="danger_ico" style="background-position-x: 0px"><i class="ace-icon fa fa-bar-chart-o fa-2x blue"></i></li>
-                                    <li class="data_name">总数</li>
-                                    <li class="data data01">{{ zs }}</li>
-                                    <li class="data data02"></li>
-                                </ul>
-                                <ul class="danger_depart danger_depart01">
-                                    <li class="danger_ico" style="background-position-x: 0px"><i class="ace-icon fa fa-check-square-o fa-2x green"></i></li>
-                                    <li class="data_name">在线</li>
-                                    <li class="data data01">{{ zc }}</li>
-                                    <li class="data data02"></li>
-                                </ul>
-                                <ul class="danger_depart danger_depart01">
-                                    <li class="danger_ico" style="background-position-x: 0px"><i class="ace-icon fa   fa-ban fa-2x  red"></i></li>
-                                    <li class="data_name">离线</li>
-                                    <li class="data data01">{{ lx }}</li>
-                                    <li class="data data02"></li>
-                                </ul>
-                                <ul class="danger_depart danger_depart01">
-                                    <li class="danger_ico" style="background-position-x: 0px"><i class="ace-icon fa fa-bolt fa-2x yellow"></i></li>
-                                    <li class="data_name">故障</li>
-                                    <li class="data data01">{{ gz }}</li>
-                                    <li class="data data02"></li>
-                                </ul>
+                        <div class="dataAllBorder02 over_hide" style="padding: 1.2%;width: 100%;height: 100%;">
+                            <div class="analysis">捕食行为</div>
+                            <div class="danger_contain_box" style="width: 100%;height: 100%;">
+                                <div id="piechart-placeholder" style="width: 100%;height: 80%;"></div>
+<!--                                <ul class="danger_depart danger_depart01">-->
+<!--                                    <li class="danger_ico" style="background-position-x: 0px"><i class="ace-icon fa fa-bar-chart-o fa-2x blue"></i></li>-->
+<!--                                    <li class="data_name">总数</li>-->
+<!--                                    <li class="data data01">{{ zs }}</li>-->
+<!--                                    <li class="data data02"></li>-->
+<!--                                </ul>-->
+<!--                                <ul class="danger_depart danger_depart01">-->
+<!--                                    <li class="danger_ico" style="background-position-x: 0px"><i class="ace-icon fa fa-check-square-o fa-2x green"></i></li>-->
+<!--                                    <li class="data_name">在线</li>-->
+<!--                                    <li class="data data01">{{ zc }}</li>-->
+<!--                                    <li class="data data02"></li>-->
+<!--                                </ul>-->
+<!--                                <ul class="danger_depart danger_depart01">-->
+<!--                                    <li class="danger_ico" style="background-position-x: 0px"><i class="ace-icon fa   fa-ban fa-2x  red"></i></li>-->
+<!--                                    <li class="data_name">离线</li>-->
+<!--                                    <li class="data data01">{{ lx }}</li>-->
+<!--                                    <li class="data data02"></li>-->
+<!--                                </ul>-->
+<!--                                <ul class="danger_depart danger_depart01">-->
+<!--                                    <li class="danger_ico" style="background-position-x: 0px"><i class="ace-icon fa fa-bolt fa-2x yellow"></i></li>-->
+<!--                                    <li class="data_name">故障</li>-->
+<!--                                    <li class="data data01">{{ gz }}</li>-->
+<!--                                    <li class="data data02"></li>-->
+<!--                                </ul>-->
                             </div>
                         </div>
                     </div>
@@ -494,34 +494,90 @@
              *  welcome 饼状图 数据
              */
             getPieChart() {
-                let _this = this;
-                _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getPieChart').then((res)=>{
-                    let response = res.data;
-                    let data = response.content;
-                    _this.showPieChart(data);
-                    if(Tool.isNotEmpty(data)){
-                        let zss = 0;
-                        let zcs = 0;
-                        let lxs = 0;
-                        let gzs = 0;
-                        for (let i = 0;i <data.length ; i ++){
-                            zss = zss+data[i].data;
-                            if(data[i].color.includes("#68BC31")){
-                                zcs = data[i].data;
-                            }
-                            if(data[i].color.includes("#DA5430")){
-                                lxs = data[i].data;
-                            }
-                            if(data[i].color.includes("#FEE074")){
-                                gzs =data[i].data;
-                            }
+              let _this = this;
+              _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/welcome/predationStatistics',{}).then((res)=>{
+                _this.initPieEChart(res.data.content);
+              })
+                // _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getPieChart').then((res)=>{
+                //     let response = res.data;
+                //     let data = response.content;
+                //     _this.showPieChart(data);
+                //     if(Tool.isNotEmpty(data)){
+                //         let zss = 0;
+                //         let zcs = 0;
+                //         let lxs = 0;
+                //         let gzs = 0;
+                //         for (let i = 0;i <data.length ; i ++){
+                //             zss = zss+data[i].data;
+                //             if(data[i].color.includes("#68BC31")){
+                //                 zcs = data[i].data;
+                //             }
+                //             if(data[i].color.includes("#DA5430")){
+                //                 lxs = data[i].data;
+                //             }
+                //             if(data[i].color.includes("#FEE074")){
+                //                 gzs =data[i].data;
+                //             }
+                //         }
+                //         _this.zs = zss;
+                //         _this.zc = zcs;
+                //         _this.lx = lxs;
+                //         _this.gz = gzs;
+                //     }
+                // })
+            },
+            initPieEChart(data){
+              let _this = this;
+              let dom = document.getElementById("piechart-placeholder");
+              let myPieChart = echarts.init(dom);
+              let option;
+              option = {
+                tooltip: {
+                  trigger: 'item',
+                  formatter: '{b}: ({d}%)'
+                },
+                // legend: {
+                //   data: [
+                //     '捕食行为',
+                //     '江豚出现'
+                //   ]
+                // },
+                series: [
+                  {
+                    type: 'pie',
+                    // labelLine: {
+                    //   length: 30
+                    // },
+                    label: {
+                      formatter: ' {b|{b}：} {per|{d}%}  ',
+                      backgroundColor: '#F6F8FC',
+                      borderColor: '#8C8D8E',
+                      borderWidth: 1,
+                      borderRadius: 4,
+                      rich: {
+                        b: {
+                          color: '#4C5058',
+                          fontSize: 14,
+                          fontWeight: 'bold',
+                          lineHeight: 33
+                        },
+                        per: {
+                          color: '#fff',
+                          backgroundColor: '#4C5058',
+                          padding: [3, 4],
+                          borderRadius: 4
                         }
-                        _this.zs = zss;
-                        _this.zc = zcs;
-                        _this.lx = lxs;
-                        _this.gz = gzs;
-                    }
+                      }
+                    },
+                    data: data
+                  }
+                ]
+              };
+              if (option && typeof option === 'object') {
+                _this.$nextTick(function () {
+                  myPieChart.setOption(option);
                 })
+              }
             },
             /**
              * 饼状图
