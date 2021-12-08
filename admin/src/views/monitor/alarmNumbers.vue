@@ -20,7 +20,7 @@
                   设备sn：
                 </td>
                 <td style="width: 10%">
-                  <input class="input-sm" type="text"  v-model="alarmNumbersDto.sbbh"/>
+                  <input class="form-control" type="text"  v-model="alarmNumbersDto.sbbh"/>
                 </td>
                 <td colspan="2" class="text-center">
                   <button type="button" v-on:click="list(1)" class="btn btn-sm btn-info btn-round" style="margin-right: 10px;">

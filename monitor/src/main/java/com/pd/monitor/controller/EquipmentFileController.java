@@ -296,6 +296,12 @@ public class EquipmentFileController extends BaseWxController {
         return responseDto;
     }
 
+    /**
+     * 当日出现次数、事件、捕食次数
+     * @param alarmNumbersDto
+     * @return
+     * @throws ParseException
+     */
     @PostMapping("/statisticsAlarmNumsByTimeSum")
     public ResponseDto statisticsAlarmNumsByTimeSum(@RequestBody AlarmNumbersDto alarmNumbersDto) throws ParseException {
         ResponseDto responseDto = new ResponseDto();
@@ -309,13 +315,14 @@ public class EquipmentFileController extends BaseWxController {
             ca.andDeptcodeEqualTo(alarmNumbersDto.getDeptcode());
         }
         if(!StringUtils.isEmpty(alarmNumbersDto.getStime())){
-            ca.andCjsjGreaterThanOrEqualTo(alarmNumbersDto.getStime());
+            ca.andRqGreaterThanOrEqualTo(alarmNumbersDto.getStime());
         }
         if(!StringUtils.isEmpty(alarmNumbersDto.getEtime())){
-            ca.andCjsjLessThanOrEqualTo(alarmNumbersDto.getEtime());
+            ca.andRqLessThanOrEqualTo(alarmNumbersDto.getEtime());
         }
         ca.andTpljLike("%png");
         List<AlarmNumbersDto> lists = equipmentFileService.statisticsAlarmNumsByPage(example);
+        List<EquipmentFile> allList = equipmentFileService.listAll(example);
         List<AlarmNumbersDto> resultList = new ArrayList<>();
         Map<String, List<AlarmNumbersDto>> mapList = lists.stream().collect(Collectors.groupingBy(AlarmNumbersDto::getSbbh));
         for(String key : mapList.keySet()){
@@ -381,11 +388,13 @@ public class EquipmentFileController extends BaseWxController {
             Integer alarmNum = resultList.get(i).getAlarmNum();
             num = num + alarmNum;
         }
+        List<EquipmentFile> predationList = allList.stream().filter(entity -> entity.getTplj().contains("predation")).collect(Collectors.toList());
         Map<String,Object> map = new HashMap<String, Object>();
         String sum = String.valueOf(resultList.size());
         map.put("num",num);
         map.put("nnm",resultList.size());
         map.put("sum",sum.split(""));
+        map.put("bnum",predationList.size());
         responseDto.setContent(map);
         return responseDto;
     }

@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/welcome")
@@ -68,44 +69,23 @@ public class WelcomeController  extends BaseWxController{
         if(!StringUtils.isEmpty(equipmentFileDto.getSbbh())){
             ca.andSbbhEqualTo(equipmentFileDto.getSbbh());
         }
+        if(!StringUtils.isEmpty(equipmentFileDto.getXmbh())){
+            if(!CollectionUtils.isEmpty(user.getXmbhsbsns().get(equipmentFileDto.getXmbh()))){
+                ca.andSbbhIn(user.getXmbhsbsns().get(equipmentFileDto.getXmbh()));
+            }
+        }
         ca.andTpljLike("%png%");
-        ca.andTpljNotLike("%predation%");
         example.setOrderByClause(" cjsj desc ");
         List<EquipmentFile> allList = equipmentFileService.listBylimit(example);
-        if(!CollectionUtils.isEmpty(allList)){
-            //结束时间
-            EquipmentFile endEntity = allList.get(0);
-            //开始时间
-            EquipmentFile startEntity = allList.get(allList.size()-1);
-            EquipmentFileExample example1 = new EquipmentFileExample();
-            EquipmentFileExample.Criteria ca1 = example1.createCriteria();
-            if(!StringUtils.isEmpty(list)&&list.size()>0){
-                ca1.andDeptcodeIn(list);
-            }
-            if(!StringUtils.isEmpty(equipmentFileDto.getDeptcode())){
-                ca1.andDeptcodeEqualTo(equipmentFileDto.getDeptcode());
-            }
-            if(!StringUtils.isEmpty(equipmentFileDto.getSbbh())){
-                ca1.andSbbhEqualTo(equipmentFileDto.getSbbh());
-            }
-            if(!StringUtils.isEmpty(startEntity.getCjsj())){
-                ca1.andCjsjGreaterThanOrEqualTo(DateUtil.getFormatDate(startEntity.getCjsj(),"yyyy-MM-dd HH:mm:ss"),"%Y-%m-%d %H:%i:%s");
-            }
-            if(!StringUtils.isEmpty(endEntity.getCjsj())){
-                ca1.andCjsjLessThanOrEqualTo(DateUtil.getFormatDate(endEntity.getCjsj(),"yyyy-MM-dd HH:mm:ss"),"%Y-%m-%d %H:%i:%s");
-            }
-            ca1.andTpljLike("%png%");
-            ca1.andTpljLike("%predation%");
-            List<EquipmentFile> predationList = equipmentFileService.listAll(example1);
-            Map<String,Object> resultMap = new HashMap<>();
-            resultMap.put("name", "捕食行为");
-            resultMap.put("value",predationList.size());
-            resultList.add(resultMap);
-            Map<String,Object> resultMap1 = new HashMap<>();
-            resultMap1.put("name", "江豚出现");
-            resultMap1.put("value",allList.size()-predationList.size());
-            resultList.add(resultMap1);
-        }
+        List<EquipmentFile> predationList = allList.stream().filter(entity -> entity.getTplj().contains("predation")).collect(Collectors.toList());
+        Map<String,Object> resultMap = new HashMap<>();
+        resultMap.put("name", "捕食行为");
+        resultMap.put("value",predationList.size());
+        resultList.add(resultMap);
+        Map<String,Object> resultMap1 = new HashMap<>();
+        resultMap1.put("name", "江豚出现");
+        resultMap1.put("value",allList.size());
+        resultList.add(resultMap1);
         responseDto.setContent(resultList);
         return responseDto;
     }

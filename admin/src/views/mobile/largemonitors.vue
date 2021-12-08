@@ -95,23 +95,24 @@
                     <!--顶部切换位置-->
                     <div class="dataAllBorder01 cage_cl" style="margin-top: 9% !important; height: 24%">
                         <div class="dataAllBorder02" id="cage_cl" style="border: 0px solid red;padding-left: 10%;padding-top: 5%;">
-                            <div class="analysis">当日声学侦测次数：</div>
+                            <div class="analysis">当日声学侦测次数：{{alarmDatas.num}}次</div>
                             <!--<ul class="data_show_box">
                                 <li class="data_cage" v-for="item  in  alarmDatas.sum">{{item}}</li>
                             </ul>-->
-                            <div class="depart_number_box">
-                                <ul class="depart_number_cage" style="margin-bottom: 0px;">
-                                    <!--<li class="depart_name">出现次数：</li>-->
-                                    <li class="depart_number">{{alarmDatas.num}}次</li>
-                                </ul>
-                            </div>
-                            <div class="analysis">当日事件(群次)：</div>
-                            <div class="depart_number_box">
-                                <ul class="depart_number_cage" style="margin-bottom: 0px;">
-                                    <!--<li class="depart_name">事件次数：</li>-->
-                                    <li class="depart_number">{{alarmDatas.nnm}}次</li>
-                                </ul>
-                            </div>
+<!--                            <div class="depart_number_box">-->
+<!--                                <ul class="depart_number_cage" style="margin-bottom: 0px;">-->
+<!--                                    &lt;!&ndash;<li class="depart_name">出现次数：</li>&ndash;&gt;-->
+<!--                                    <li class="depart_number">{{alarmDatas.num}}次</li>-->
+<!--                                </ul>-->
+<!--                            </div>-->
+                            <div class="analysis" style="margin: 20px 0;">当日事件(群次)：{{alarmDatas.nnm}}次</div>
+<!--                            <div class="depart_number_box">-->
+<!--                                <ul class="depart_number_cage" style="margin-bottom: 0px;">-->
+<!--                                    &lt;!&ndash;<li class="depart_name">事件次数：</li>&ndash;&gt;-->
+<!--                                    <li class="depart_number">{{alarmDatas.nnm}}次</li>-->
+<!--                                </ul>-->
+<!--                            </div>-->
+                            <div class="analysis">当日捕食次数：{{alarmDatas.bnum}}次</div>
                         </div>
                     </div>
 
@@ -147,33 +148,33 @@
 
                     <div class="dataAllBorder01 cage_cl check_decrease" style="margin-top: 1.5% !important; height: 32%; position: relative;">
                         <div class="dataAllBorder02 over_hide" style="padding: 1.2%;width: 100%;height: 100%;">
-                            <div class="analysis">捕食行为</div>
-                            <div class="danger_contain_box" style="width: 100%;height: 100%;">
-                                <div id="piechart-placeholder" style="width: 100%;height: 80%;"></div>
-<!--                                <ul class="danger_depart danger_depart01">-->
-<!--                                    <li class="danger_ico" style="background-position-x: 0px"><i class="ace-icon fa fa-bar-chart-o fa-2x blue"></i></li>-->
-<!--                                    <li class="data_name">总数</li>-->
-<!--                                    <li class="data data01">{{ zs }}</li>-->
-<!--                                    <li class="data data02"></li>-->
-<!--                                </ul>-->
-<!--                                <ul class="danger_depart danger_depart01">-->
-<!--                                    <li class="danger_ico" style="background-position-x: 0px"><i class="ace-icon fa fa-check-square-o fa-2x green"></i></li>-->
-<!--                                    <li class="data_name">在线</li>-->
-<!--                                    <li class="data data01">{{ zc }}</li>-->
-<!--                                    <li class="data data02"></li>-->
-<!--                                </ul>-->
-<!--                                <ul class="danger_depart danger_depart01">-->
-<!--                                    <li class="danger_ico" style="background-position-x: 0px"><i class="ace-icon fa   fa-ban fa-2x  red"></i></li>-->
-<!--                                    <li class="data_name">离线</li>-->
-<!--                                    <li class="data data01">{{ lx }}</li>-->
-<!--                                    <li class="data data02"></li>-->
-<!--                                </ul>-->
-<!--                                <ul class="danger_depart danger_depart01">-->
-<!--                                    <li class="danger_ico" style="background-position-x: 0px"><i class="ace-icon fa fa-bolt fa-2x yellow"></i></li>-->
-<!--                                    <li class="data_name">故障</li>-->
-<!--                                    <li class="data data01">{{ gz }}</li>-->
-<!--                                    <li class="data data02"></li>-->
-<!--                                </ul>-->
+                            <div class="analysis">设备在线率</div>
+                            <div class="danger_contain_box">
+                                <div id="piechart-placeholder"></div>
+                                <ul class="danger_depart danger_depart01">
+                                    <li class="danger_ico" style="background-position-x: 0px"><i class="ace-icon fa fa-bar-chart-o fa-2x blue"></i></li>
+                                    <li class="data_name">总数</li>
+                                    <li class="data data01">{{ zs }}</li>
+                                    <li class="data data02"></li>
+                                </ul>
+                                <ul class="danger_depart danger_depart01">
+                                    <li class="danger_ico" style="background-position-x: 0px"><i class="ace-icon fa fa-check-square-o fa-2x green"></i></li>
+                                    <li class="data_name">在线</li>
+                                    <li class="data data01">{{ zc }}</li>
+                                    <li class="data data02"></li>
+                                </ul>
+                                <ul class="danger_depart danger_depart01">
+                                    <li class="danger_ico" style="background-position-x: 0px"><i class="ace-icon fa   fa-ban fa-2x  red"></i></li>
+                                    <li class="data_name">离线</li>
+                                    <li class="data data01">{{ lx }}</li>
+                                    <li class="data data02"></li>
+                                </ul>
+                                <ul class="danger_depart danger_depart01">
+                                    <li class="danger_ico" style="background-position-x: 0px"><i class="ace-icon fa fa-bolt fa-2x yellow"></i></li>
+                                    <li class="data_name">故障</li>
+                                    <li class="data data01">{{ gz }}</li>
+                                    <li class="data data02"></li>
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -340,7 +341,7 @@
                 let _this = this;
                 _this.alarmNumbersDto.deptcode = Tool.getLoginUser().deptcode;
                 _this.alarmNumbersDto.stime = moment().subtract(0, "days").format('YYYY-MM-DD');
-                _this.alarmNumbersDto.etime = moment().subtract(-1, "days").format('YYYY-MM-DD');
+                _this.alarmNumbersDto.etime = moment().subtract(0, "days").format('YYYY-MM-DD');
                 _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFile/statisticsAlarmNumsByTimeSum', _this.alarmNumbersDto).then((response) => {
                     let resp = response.data;
                     _this.alarmDatas = resp.content;
@@ -495,36 +496,36 @@
              */
             getPieChart() {
               let _this = this;
-              _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/welcome/predationStatistics',{}).then((res)=>{
-                _this.initPieEChart(res.data.content);
-              })
-                // _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getPieChart').then((res)=>{
-                //     let response = res.data;
-                //     let data = response.content;
-                //     _this.showPieChart(data);
-                //     if(Tool.isNotEmpty(data)){
-                //         let zss = 0;
-                //         let zcs = 0;
-                //         let lxs = 0;
-                //         let gzs = 0;
-                //         for (let i = 0;i <data.length ; i ++){
-                //             zss = zss+data[i].data;
-                //             if(data[i].color.includes("#68BC31")){
-                //                 zcs = data[i].data;
-                //             }
-                //             if(data[i].color.includes("#DA5430")){
-                //                 lxs = data[i].data;
-                //             }
-                //             if(data[i].color.includes("#FEE074")){
-                //                 gzs =data[i].data;
-                //             }
-                //         }
-                //         _this.zs = zss;
-                //         _this.zc = zcs;
-                //         _this.lx = lxs;
-                //         _this.gz = gzs;
-                //     }
-                // })
+              // _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/welcome/predationStatistics',{}).then((res)=>{
+              //   _this.initPieEChart(res.data.content);
+              // })
+                _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getPieChart').then((res)=>{
+                    let response = res.data;
+                    let data = response.content;
+                    _this.showPieChart(data);
+                    if(Tool.isNotEmpty(data)){
+                        let zss = 0;
+                        let zcs = 0;
+                        let lxs = 0;
+                        let gzs = 0;
+                        for (let i = 0;i <data.length ; i ++){
+                            zss = zss+data[i].data;
+                            if(data[i].color.includes("#68BC31")){
+                                zcs = data[i].data;
+                            }
+                            if(data[i].color.includes("#DA5430")){
+                                lxs = data[i].data;
+                            }
+                            if(data[i].color.includes("#FEE074")){
+                                gzs =data[i].data;
+                            }
+                        }
+                        _this.zs = zss;
+                        _this.zc = zcs;
+                        _this.lx = lxs;
+                        _this.gz = gzs;
+                    }
+                })
             },
             initPieEChart(data){
               let _this = this;
@@ -624,13 +625,13 @@
                             startAngle: 2
                         }
                     },
-                    legend: {
-                        show: true,
-                        position: position || "ne",
-                        labelBoxBorderColor: null,
-                        margin: [-30, 15]
-                    }
-                    ,
+                    // legend: {
+                    //     show: true,
+                    //     position: position || "ne",
+                    //     labelBoxBorderColor: null,
+                    //     margin: [-30, 15]
+                    // }
+                    // ,
                     grid: {
                         hoverable: true,
                         clickable: true
