@@ -147,6 +147,9 @@ public class EquipmentFileService {
 
     public List<EquipmentFile> listBylimit(EquipmentFileExample equipmentFileExample) {
         return equipmentFileMapper.listBylimit(equipmentFileExample);
+    }
 
+    public List<AlarmNumbersDto> groupByRq(EquipmentFileExample example){
+        return equipmentFileMapper.groupByRq(example);
     }
 }

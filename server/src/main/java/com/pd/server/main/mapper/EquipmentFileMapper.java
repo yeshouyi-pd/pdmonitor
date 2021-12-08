@@ -24,6 +24,8 @@ public interface EquipmentFileMapper {
 
     EquipmentFile selectByPrimaryKey(String id);
 
+    EquipmentFile selectLastOneBySbbh(String sbbh);
+
     int updateByExampleSelective(@Param("record") EquipmentFile record, @Param("example") EquipmentFileExample example);
 
     int updateByExample(@Param("record") EquipmentFile record, @Param("example") EquipmentFileExample example);
@@ -51,4 +53,6 @@ public interface EquipmentFileMapper {
     List<AlarmNumbersDto> statisticsAlarmNumsByHourAndDP(EquipmentFileExample example);
 
     List<EquipmentFile> listBylimit(EquipmentFileExample example);
+
+    List<AlarmNumbersDto> groupByRq(EquipmentFileExample example);
 }
