@@ -103,6 +103,24 @@ public class EquipmentFileAlarmEventService {
         return equipmentFileAlarmEventMapper.statisticsByExample(equipmentFileAlarmEventExample);
     }
 
+    public List<EquipmentFileAlarmEventDto> listStatisticsAllByDp(EquipmentFileAlarmEventDto entityDto, List<String> list) {
+        EquipmentFileAlarmEventExample equipmentFileAlarmEventExample = new EquipmentFileAlarmEventExample();
+        EquipmentFileAlarmEventExample.Criteria ca = equipmentFileAlarmEventExample.createCriteria();
+        if(!StringUtils.isEmpty(list)&&list.size()>0){
+            ca.andDeptcodeIn(list);
+        }
+        if(!StringUtils.isEmpty(entityDto.getDeptcode())){
+            ca.andDeptcodeEqualTo(entityDto.getDeptcode());
+        }
+        if(!StringUtils.isEmpty(entityDto.getStime())){
+            ca.andBjsjGreaterThanOrEqualTo(entityDto.getStime());
+        }
+        if(!StringUtils.isEmpty(entityDto.getEtime())){
+            ca.andBjsjLessThanOrEqualTo(entityDto.getEtime());
+        }
+        return equipmentFileAlarmEventMapper.statisticsByExampleOnlyDept(equipmentFileAlarmEventExample);
+    }
+
     /**
     * 保存，id有值时更新，无值时新增
     */

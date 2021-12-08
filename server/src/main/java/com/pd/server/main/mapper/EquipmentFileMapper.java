@@ -49,4 +49,6 @@ public interface EquipmentFileMapper {
     List<AlarmNumbersDto> statisticsAlarmNumsByHour(EquipmentFileExample example);
 
     List<AlarmNumbersDto> statisticsAlarmNumsByHourAndDP(EquipmentFileExample example);
+
+    List<EquipmentFile> listBylimit(EquipmentFileExample example);
 }

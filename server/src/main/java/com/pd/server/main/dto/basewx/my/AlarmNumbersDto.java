@@ -6,15 +6,15 @@ public class AlarmNumbersDto extends PageDto {
 
     private String sbbh;//设备编号
 
-    private String bjsj;//报警时间
+    private String bjsj;//出现时间
 
-    private String xs;//报警小时
+    private String xs;//出现小时
 
-    private String fz;//报警分钟
+    private String fz;//出现分钟
 
     private String deptcode;//所属监测点
 
-    private Integer alarmNum;//报警次数
+    private Integer alarmNum;//出现次数
 
     private String xmbh;
 

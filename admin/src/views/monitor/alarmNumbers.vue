@@ -2,7 +2,7 @@
   <div>
     <div class="widget-box">
       <div class="widget-header">
-        <h4 class="widget-title">报警次数查询</h4>
+        <h4 class="widget-title">出现次数查询</h4>
       </div>
       <div class="widget-body">
         <div class="widget-main">
@@ -11,7 +11,7 @@
               <tbody>
               <tr>
                 <td style="width:10%">
-                  报警日期：
+                  出现日期：
                 </td>
                 <td style="width: 25%">
                   <time-range-picker v-bind:startTime="startTime" v-bind:endTime="endTime"></time-range-picker>
@@ -47,8 +47,8 @@
             <th>监测点</th>
             <th>设备名称</th>
             <th>设备sn</th>
-            <th>报警时间</th>
-            <th>报警次数</th>
+            <th>出现时间</th>
+            <th>出现次数</th>
           </tr>
         </thead>
         <tbody>
