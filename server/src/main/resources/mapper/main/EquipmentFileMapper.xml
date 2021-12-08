@@ -568,5 +568,19 @@
     group by rq, xs, deptcode
     order by rq,xs
   </select>
-
+  <select id="listBylimit" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from equipment_file
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+      limit 100
+  </select>
 </mapper>
