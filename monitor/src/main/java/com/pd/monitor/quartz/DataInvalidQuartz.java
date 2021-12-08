@@ -45,7 +45,7 @@ public class DataInvalidQuartz {
         for (int i = 0; i < waterList.size(); i++) {
             WaterEquipment equipment = waterList.get(i);
             WaterEquiplog log = waterEquiplogService.findBySbbh(equipment.getSbsn());
-            if(null != log && log.getCode().equals("1") && Long.parseLong(DateTools.getDatePoor(new Date(), log.getCjsj())) < Long.parseLong(reqinterval)){
+            if(null != log && log.getCode().equals("1") && Long.parseLong(DateTools.getDatePoorS(new Date(), log.getCjsj())) < Long.parseLong(reqinterval)){
                 equipment.setSbzt("1");
             }else{
                 equipment.setSbzt("3");
