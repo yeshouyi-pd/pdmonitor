@@ -187,7 +187,8 @@ public class DateTools {
 	// ===================================================
 
 	public static void main(String[] args) {
-		System.out.println(DateTools.toDate(DateTools.getFormatDate(new Date(),DateTools.yyyy_MM_dd),DateTools.yyyy_MM_dd));
+		System.out.println(DateTools.getDatePoorS(DateTools.toDate("2021-12-8 10:30:00",DateTools.yyyy_MM_dd_HH_mm_ss),DateTools.toDate("2021-12-8 10:00:00",DateTools.yyyy_MM_dd_HH_mm_ss)));
+		System.out.println(DateTools.getDatePoor(DateTools.toDate("2021-12-8 10:30:00",DateTools.yyyy_MM_dd_HH_mm_ss),DateTools.toDate("2021-12-8 10:00:00",DateTools.yyyy_MM_dd_HH_mm_ss)));
 	}
 
 	/**
@@ -231,6 +232,25 @@ public class DateTools {
 			long d1 = df.parse(df.format(nowDate)).getTime();
 			long d2 = df.parse(df.format(endDate)).getTime();
 			long diff=(d2-d1)/1000/60;
+			return String.valueOf(diff);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return "0";
+	}
+
+	/**
+	 * 计算两个时间的秒钟差
+	 * @param endDate
+	 * @param nowDate
+	 * @return
+	 */
+	public static String getDatePoorS(Date endDate, Date nowDate) {
+		try {
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			long d1 = df.parse(df.format(nowDate)).getTime();
+			long d2 = df.parse(df.format(endDate)).getTime();
+			long diff=(d2-d1)/1000;
 			return String.valueOf(diff);
 		} catch (ParseException e) {
 			e.printStackTrace();
