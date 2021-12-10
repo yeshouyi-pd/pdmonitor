@@ -25,7 +25,7 @@ public class DownloadFileController {
     @GetMapping ("/downloadLocal")
     public void downloadLocal(HttpServletResponse response) throws FileNotFoundException, UnsupportedEncodingException {
         // 下载本地文件
-        String fileName = "水下声学实时预警系统管理手册.pdf".toString(); // 文件的默认保存名
+        String fileName = "水生哺乳类智慧监测平台管理手册.pdf".toString(); // 文件的默认保存名
         // 读到流中
         String storePath = (String) redisTemplate.opsForValue().get(RedisCode.STATICPATH);//静态路径地址
         InputStream inStream = new FileInputStream(storePath+"operationManual"+ File.separator+fileName);// 文件的存放路径
