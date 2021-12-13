@@ -73,6 +73,9 @@ public class EquipmentFileService {
                 ca.andSbbhIn(user.getXmbhsbsns().get(pageDto.getXmbh()));
             }
         }
+        if(!StringUtils.isEmpty(pageDto.getTplj())&&"predation".equals(pageDto.getTplj())){
+            ca.andTpljLike("%predation%");
+        }
         ca.andTpljLike("%png");
         equipmentFileExample.setOrderByClause(" cjsj desc ");
         List<EquipmentFile> equipmentFileList = equipmentFileMapper.selectByExample(equipmentFileExample);
