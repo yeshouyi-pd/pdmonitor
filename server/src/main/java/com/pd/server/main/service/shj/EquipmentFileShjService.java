@@ -77,7 +77,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
             entity.setCreateTime(new Date());
             AttrService attrService = SpringUtil.getBean(AttrService.class);
             String predationsbsn = attrService.findByAttrKey("predationsbsn");
-            if(predationsbsn.contains(sbbh)&&!tplj.contains("predation")){
+            if(predationsbsn.contains(sbbh)&&!tplj.contains("predation")&&tplj.contains("png")){
                 //RedisTemplate redisTemplate = SpringUtil.getBean(RedisTemplate.class);
                 //南方海洋-判断是否是雾报(前后三分钟都没有报警的数据是雾报数据，雾报数据不保存)
                 EquipmentFile beforeEntity = new EquipmentFile();
