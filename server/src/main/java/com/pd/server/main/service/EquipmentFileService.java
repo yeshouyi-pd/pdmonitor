@@ -155,4 +155,8 @@ public class EquipmentFileService {
     public List<AlarmNumbersDto> groupByRq(EquipmentFileExample example){
         return equipmentFileMapper.groupByRq(example);
     }
+
+    public EquipmentFile selectLastOneBySbbh(String sbbh) {
+        return equipmentFileMapper.selectLastOneBySbbh(sbbh);
+    }
 }
