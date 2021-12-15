@@ -1,26 +1,27 @@
 package com.pd.monitor.wx.conf;
 
-import com.pd.server.main.domain.EquipmentFileAlarmEvent;
+import com.alibaba.fastjson.JSONObject;
+import com.pd.server.config.SpringUtil;
+import com.pd.server.main.domain.EquipmentFile;
 import com.pd.server.main.domain.EquipmentFileExample;
 import com.pd.server.main.dto.EquipmentFileAlarmEventDto;
-import com.pd.server.main.dto.LoginUserDto;
 import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
+import com.pd.server.main.mapper.EquipmentFileMapper;
+import com.pd.server.main.service.AttrService;
 import com.pd.server.main.service.EquipmentFileAlarmEventService;
 import com.pd.server.main.service.EquipmentFileService;
 import com.pd.server.util.DateTools;
 import com.pd.server.util.DateUtil;
-import com.pd.server.util.DateUtils;
-import com.pd.server.util.UuidUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
-import java.math.BigDecimal;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -31,7 +32,16 @@ public class AlarmEventLoop extends BaseWxController {
     private EquipmentFileService equipmentFileService;
     @Resource
     private EquipmentFileAlarmEventService equipmentFileAlarmEventService;
+    @Resource
+    private AttrService attrService;
+    @Resource
+    private RedisTemplate  redisTemplate;
+    @Resource
+    private EquipmentFileMapper equipmentFileMapper;
 
+    /**
+     * 统计昨天鲸豚事件
+     */
     @Scheduled(cron = "0 0 1 * * ? ")
     public void loop() throws ParseException {
         String beforeDayStr = DateTools.getFormatDate(DateUtil.getDaysLater(new Date(),-1),"yyyy-MM-dd");
@@ -119,6 +129,39 @@ public class AlarmEventLoop extends BaseWxController {
         Date end = DateUtil.toDate(nextDateStr,"yyyy-MM-dd HH:mm");
         long minute=(end.getTime()-begin.getTime())/(1000*60);//除以1000是为了转换成秒
         if(minute<=2){
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 将缓存中存储的数据写入数据库，然后再做统计
+     */
+    @Scheduled(cron = "0 05 0 * * ? ")
+    public void loopTemplate(){
+        String predationsbsn = attrService.findByAttrKey("predationsbsn");
+        String[] arr = predationsbsn.split(",");
+        System.out.println("arr"+arr);
+        for(String sbbh : arr){
+            if(!StringUtils.isEmpty(redisTemplate.opsForValue().get(sbbh))){
+                String entityJson = (String) redisTemplate.opsForValue().get(sbbh);
+                System.out.println("entityJson"+entityJson);
+                EquipmentFile entity = JSONObject.parseObject(entityJson, EquipmentFile.class);
+                EquipmentFile lastFile = equipmentFileService.selectLastOneBySbbh(sbbh);
+                if(!StringUtils.isEmpty(entity.getCjsj())&&!StringUtils.isEmpty(lastFile.getCjsj())&&isOverMinute(DateUtil.getFormatDate(lastFile.getCjsj(),"yyyy-MM-dd HH:mm:ss"),DateUtil.getFormatDate(entity.getCjsj(),"yyyy-MM-dd HH:mm:ss"))){
+                    equipmentFileMapper.insert(entity);
+                    redisTemplate.delete(sbbh);
+                }
+            }
+        }
+    }
+
+    public  Boolean isOverMinute(String curDateStr, String nextDateStr){
+        Date begin = DateUtil.toDate(curDateStr,"yyyy-MM-dd HH:mm");
+        Date end = DateUtil.toDate(nextDateStr,"yyyy-MM-dd HH:mm");
+        long minute=(end.getTime()-begin.getTime())/(1000*60);//除以1000是为了转换成秒
+        String predationInterval = attrService.findByAttrKey("predationInterval");
+        if(minute<=Integer.parseInt(predationInterval)){
             return true;
         }
         return false;
