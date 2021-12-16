@@ -46,9 +46,9 @@ public class DataInvalidQuartz {
             WaterEquipment equipment = waterList.get(i);
             WaterEquiplog log = waterEquiplogService.findBySbbh(equipment.getSbsn());
             if(null != log && log.getCode().equals("1") && Long.parseLong(DateTools.getDatePoorS(new Date(), log.getCjsj())) < Long.parseLong(reqinterval)){
-                equipment.setSbzt("1");
+                equipment.setSbzt("1");//正常
             }else{
-                equipment.setSbzt("3");
+                equipment.setSbzt("2");//离线
             }
             waterEquipmentService.updateZt(equipment);
         }
