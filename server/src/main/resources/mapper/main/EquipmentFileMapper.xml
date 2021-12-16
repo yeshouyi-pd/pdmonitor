@@ -126,7 +126,7 @@
     select
     <include refid="Base_Column_List" />
     from equipment_file
-    where sbbh = #{sbbh,jdbcType=VARCHAR}
+    where sbbh = #{sbbh,jdbcType=VARCHAR}  and  tplj LIKE '%.png'
     order by cjsj desc limit 1
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
