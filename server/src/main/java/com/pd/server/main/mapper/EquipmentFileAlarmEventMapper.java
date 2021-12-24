@@ -32,6 +32,8 @@ public interface EquipmentFileAlarmEventMapper {
 
     List<EquipmentFileAlarmEventDto> statisticsByExample(EquipmentFileAlarmEventExample example);
 
+    List<EquipmentFileAlarmEventDto> statisticsByExampleASC(EquipmentFileAlarmEventExample example);
+
     List<EquipmentFileAlarmEventDto> statisticsByExampleOnlyDept(EquipmentFileAlarmEventExample example);
 
 }

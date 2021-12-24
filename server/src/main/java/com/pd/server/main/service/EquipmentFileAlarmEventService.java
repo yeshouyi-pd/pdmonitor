@@ -23,6 +23,10 @@ public class EquipmentFileAlarmEventService {
     @Resource
     private EquipmentFileAlarmEventMapper equipmentFileAlarmEventMapper;
 
+    public long alarmCount(EquipmentFileAlarmEventExample example){
+        return equipmentFileAlarmEventMapper.countByExample(example);
+    }
+
     public List<EquipmentFileAlarmEvent> detailByParam(EquipmentFileAlarmEvent entity){
         EquipmentFileAlarmEventExample equipmentFileAlarmEventExample = new EquipmentFileAlarmEventExample();
         EquipmentFileAlarmEventExample.Criteria ca = equipmentFileAlarmEventExample.createCriteria();
@@ -100,7 +104,7 @@ public class EquipmentFileAlarmEventService {
         if(!StringUtils.isEmpty(entityDto.getEtime())){
             ca.andBjsjLessThanOrEqualTo(entityDto.getEtime());
         }
-        return equipmentFileAlarmEventMapper.statisticsByExample(equipmentFileAlarmEventExample);
+        return equipmentFileAlarmEventMapper.statisticsByExampleASC(equipmentFileAlarmEventExample);
     }
 
     public List<EquipmentFileAlarmEventDto> listStatisticsAllByDp(EquipmentFileAlarmEventDto entityDto, List<String> list) {

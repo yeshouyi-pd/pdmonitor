@@ -240,6 +240,10 @@ export default {
         xAxis: {
           show: true,
           name: xAxisName,
+          nameTextStyle: {
+            fontWeight: "bolder",
+            fontSize: 20
+          },
           nameLocation:'center',
           type: 'category',
           nameGap: 40,
@@ -259,7 +263,7 @@ export default {
         },
         yAxis: {
           show: true,
-          name: "预警次数",
+          name: "出现次数",
           type: 'value',
           nameGap: 30,
           boundaryGap: [0, '30%'],
