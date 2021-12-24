@@ -50,7 +50,7 @@ public class ExportFileController extends BaseWxController{
     private WaterEquipmentService waterEquipmentService;
 
     /**
-     * 江豚报警按事件统计导出
+     * 江豚出现按事件统计导出
      */
     @GetMapping("/exportByAlarmEvent")
     public void exportByAlarmEvent(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -80,7 +80,7 @@ public class ExportFileController extends BaseWxController{
         cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_LEFT);
         cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
         // 创建一个工作表
-        String fileName = "江豚报警统计(" + new Date().getTime() + ").xls";
+        String fileName = "江豚出现统计(" + new Date().getTime() + ").xls";
         HSSFSheet sheet = workbook.createSheet("按事件统计");
         // 自适应列宽度
         sheet.autoSizeColumn(1, true);
@@ -142,7 +142,7 @@ public class ExportFileController extends BaseWxController{
     }
 
     /**
-     * 江豚报警按分钟统计导出
+     * 江豚出现按分钟统计导出
      */
     @GetMapping("/exportEquipmentFile")
     public void exportEquipmentFile(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -188,8 +188,8 @@ public class ExportFileController extends BaseWxController{
         cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_LEFT);
         cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
         // 创建一个工作表
-        String fileName = "江豚报警统计(" + new Date().getTime() + ").xls";
-        HSSFSheet sheet = workbook.createSheet("报警时间");
+        String fileName = "江豚出现统计(" + new Date().getTime() + ").xls";
+        HSSFSheet sheet = workbook.createSheet("出现时间");
         // 自适应列宽度
         sheet.autoSizeColumn(1, true);
         sheet.setDefaultColumnWidth(18);
@@ -197,11 +197,11 @@ public class ExportFileController extends BaseWxController{
         // 添加表头行
         HSSFRow titileRow = sheet.createRow(0);//第1行
         HSSFCell headCell = titileRow.createCell(0);//第1行第1列
-        headCell.setCellValue("报警时间");
+        headCell.setCellValue("出现时间");
         headCell.setCellStyle(cellStyleCommon);
         HSSFCell headCell1 = titileRow.createCell(1);//第1行第2列
         if(type.equals("minute")){
-            headCell1.setCellValue("报警次数");
+            headCell1.setCellValue("出现次数");
         }else if(type.equals("hour")){
             headCell1.setCellValue("占总侦测事件百分比");
         }

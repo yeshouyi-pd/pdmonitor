@@ -36,8 +36,25 @@ public class EquipmentFileAlarmEventController extends BaseWxController {
         ResponseDto responseDto = new ResponseDto();
         LoginUserDto userDto = getRequestHeader();
         List<String> list = getUpdeptcode(userDto.getDeptcode());
-
         List<EquipmentFileAlarmEventDto> listall = equipmentFileAlarmEventService.listStatisticsAll(entityDto, list);
+        List<String> xAixsData = listall.stream().filter(Objects::nonNull).map(u->u.getBjsj()).collect(Collectors.toList());
+        List<Integer> yAixsData = listall.stream().filter(Objects::nonNull).map(u->u.getCounts()).collect(Collectors.toList());
+        Map<String,Object> resultMap = new HashMap<>();
+        resultMap.put("xAixsData",xAixsData);
+        resultMap.put("yAixsData",yAixsData);
+        responseDto.setContent(resultMap);
+        return responseDto;
+    }
+
+    /**
+     * 图表查询
+     */
+    @PostMapping("/echartsAlarmDataByDp")
+    public ResponseDto echartsAlarmDataByDp(@RequestBody EquipmentFileAlarmEventDto entityDto){
+        ResponseDto responseDto = new ResponseDto();
+        LoginUserDto userDto = getRequestHeader();
+        List<String> list = getUpdeptcode(userDto.getDeptcode());
+        List<EquipmentFileAlarmEventDto> listall = equipmentFileAlarmEventService.listStatisticsAllByDp(entityDto, list);
         List<String> xAixsData = listall.stream().filter(Objects::nonNull).map(u->u.getBjsj()).collect(Collectors.toList());
         List<Integer> yAixsData = listall.stream().filter(Objects::nonNull).map(u->u.getCounts()).collect(Collectors.toList());
         Map<String,Object> resultMap = new HashMap<>();
@@ -97,7 +114,7 @@ public class EquipmentFileAlarmEventController extends BaseWxController {
                 ValidatorUtil.length(equipmentFileAlarmEventDto.getDeptcode(), "部门", 1, 36);
                 ValidatorUtil.length(equipmentFileAlarmEventDto.getSbbh(), "设备唯一标识", 1, 50);
                 ValidatorUtil.length(equipmentFileAlarmEventDto.getEventTime(), "事件时间", 1, 100);
-                ValidatorUtil.length(equipmentFileAlarmEventDto.getBjsj(), "报警时间", 1, 50);
+                ValidatorUtil.length(equipmentFileAlarmEventDto.getBjsj(), "出现时间", 1, 50);
                 ValidatorUtil.length(equipmentFileAlarmEventDto.getSm1(), "", 1, 50);
                 ValidatorUtil.length(equipmentFileAlarmEventDto.getSm2(), "", 1, 50);
                 ValidatorUtil.length(equipmentFileAlarmEventDto.getSm3(), "", 1, 50);

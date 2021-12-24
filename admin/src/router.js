@@ -41,6 +41,7 @@ import ChooseProject from "./views/admin/chooseProject.vue"
 import WaterRawfile from "./views/monitor/waterRawfile.vue";
 import Fleuploadinfo from "./views/monitor/fileuploadinfo.vue";
 import CameraInfo from "./views/monitor/cameraInfo.vue";
+import PredationNum from "./views/monitor/predationNum.vue";
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -225,6 +226,10 @@ export default new Router({
             path: "monitor/cameraInfo",
             name: "monitor/cameraInfo",
             component: CameraInfo
+        },{
+            path: "monitor/predationNum",
+            name: "monitor/predationNum",
+            component: PredationNum
         }]
 
     }]

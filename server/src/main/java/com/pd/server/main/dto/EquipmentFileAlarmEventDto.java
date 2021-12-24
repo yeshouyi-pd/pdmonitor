@@ -24,17 +24,17 @@ public class EquipmentFileAlarmEventDto extends PageDto{
     private String eventTime;
 
     /**
-    * 报警次数
+    * 出现次数
     */
     private Integer alarmNum;
 
     /**
-    * 报警时间
+    * 出现时间
     */
     private String bjsj;
 
     /**
-    * 报警时间排序
+    * 出现时间排序
     */
     private Integer xh;
 

@@ -5,6 +5,7 @@ import com.pd.monitor.wx.conf.BaseWxController;
 import com.pd.server.main.domain.*;
 import com.pd.server.main.dto.InterfaceLogDto;
 import com.pd.server.main.dto.ResponseDto;
+import com.pd.server.main.service.AttrService;
 import com.pd.server.main.service.AuthorizeInfoService;
 import com.pd.server.main.service.EquipmentFileService;
 import com.pd.server.main.service.InterfaceLogService;
@@ -36,6 +37,8 @@ public class DwjkController extends BaseWxController {
     private AuthorizeInfoService authorizeInfoService;
     @Resource
     private EquipmentFileService equipmentFileService;
+    @Resource
+    private AttrService attrService;
 
     /**
      * 江豚图片查询
@@ -122,7 +125,8 @@ public class DwjkController extends BaseWxController {
             logCa.andIpEqualTo(qqcs.get("ip").toString());
             logCa.andQqsjEqualTo(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd HH"));
             List<InterfaceLog> list = interfaceLogService.listAll(interfaceLogExample);
-            if(list.size()>=5){
+            String reqNum = attrService.findByAttrKey("reqNum");
+            if(list.size()>=Integer.parseInt(reqNum)){
                 responseDto.setCode("4000");
                 responseDto.setContent("该时段请求次数已达上限，请稍后重试！");
                 interfaceLog.setFhsj(JSONObject.toJSONString(responseDto));
