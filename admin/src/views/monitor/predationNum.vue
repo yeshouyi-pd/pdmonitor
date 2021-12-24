@@ -27,10 +27,14 @@
                     <i class="ace-icon fa fa-book"></i>
                     查询
                   </button>
-                  <a href="javascript:location.replace(location.href);"  class="btn btn-sm   btn-success btn-round">
+                  <a href="javascript:location.replace(location.href);"  class="btn btn-sm   btn-success btn-round" style="margin-right: 10px;">
                     <i class="ace-icon fa fa-refresh"></i>
                     重置
                   </a>
+                  <button type="button" v-on:click="exportExcel()" class="btn btn-sm btn-info btn-round">
+                    <i class="ace-icon fa fa-download"></i>
+                    导出
+                  </button>
                 </td>
               </tr>
               </tbody>
@@ -44,12 +48,13 @@
       <table id="simple-table" class="table  table-bordered table-hover">
         <thead>
           <tr>
-            <th>监测点</th>
-            <th>设备名称</th>
+            <th>所属机构</th>
+            <th>检测点</th>
             <th>设备sn</th>
             <th>捕食日期</th>
             <th>鲸豚出现次数</th>
             <th>鲸豚捕食次数</th>
+            <th>鲸豚事件次数</th>
           </tr>
         </thead>
         <tbody>
@@ -60,6 +65,7 @@
             <td>{{predationNum.cjsj}}</td>
             <td>{{predationNum.alarmNum}}</td>
             <td>{{predationNum.predationNum}}</td>
+            <td>{{predationNum.sm1}}</td>
           </tr>
         </tbody>
       </table>
@@ -95,6 +101,27 @@
       // this.$parent.activeSidebar("monitor-predationNum-sidebar");
     },
     methods: {
+      exportExcel(){
+        let _this = this;
+        let paramsStr = "";
+        if("460100"==Tool.getLoginUser().deptcode){
+          paramsStr = "deptcode="+Tool.getLoginUser().deptcode;
+        }else{
+          paramsStr = "deptcode="+Tool.getLoginUser().deptcode+"&xmbh="+Tool.getLoginUser().xmbh;
+        }
+        if(Tool.isNotEmpty(_this.predationNumDto.stime)){
+          paramsStr = paramsStr + "&stime="+_this.predationNumDto.stime;
+        }
+        if(Tool.isNotEmpty(_this.predationNumDto.etime)){
+          paramsStr = paramsStr + "&etime="+_this.predationNumDto.etime;
+        }
+        if(Tool.isNotEmpty(_this.predationNumDto.sbbh)){
+          paramsStr = paramsStr + "&sbbh="+_this.predationNumDto.sbbh;
+        }
+        let url = process.env.VUE_APP_SERVER + '/monitor/export/exportByPredationNum?'+paramsStr;
+        console.log(url);
+        window.location.href = url;
+      },
       findDeviceInfo(){
         let _this = this;
         Loading.show();

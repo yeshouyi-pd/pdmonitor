@@ -3,13 +3,16 @@ package com.pd.monitor.wx.conf;
 import com.alibaba.fastjson.JSONObject;
 import com.pd.server.config.SpringUtil;
 import com.pd.server.main.domain.EquipmentFile;
+import com.pd.server.main.domain.EquipmentFileAlarmEventExample;
 import com.pd.server.main.domain.EquipmentFileExample;
 import com.pd.server.main.dto.EquipmentFileAlarmEventDto;
+import com.pd.server.main.dto.PredationNumDto;
 import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
 import com.pd.server.main.mapper.EquipmentFileMapper;
 import com.pd.server.main.service.AttrService;
 import com.pd.server.main.service.EquipmentFileAlarmEventService;
 import com.pd.server.main.service.EquipmentFileService;
+import com.pd.server.main.service.PredationNumService;
 import com.pd.server.util.DateTools;
 import com.pd.server.util.DateUtil;
 import org.slf4j.Logger;
@@ -22,6 +25,7 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -38,17 +42,18 @@ public class AlarmEventLoop extends BaseWxController {
     private RedisTemplate  redisTemplate;
     @Resource
     private EquipmentFileMapper equipmentFileMapper;
+    @Resource
+    private PredationNumService predationNumService;
 
     /**
-     * 统计昨天鲸豚事件
+     * 统计昨天鲸豚事件,及鲸豚捕食次数
      */
     @Scheduled(cron = "0 0 1 * * ? ")
     public void loop() throws ParseException {
         String beforeDayStr = DateTools.getFormatDate(DateUtil.getDaysLater(new Date(),-1),"yyyy-MM-dd");
         EquipmentFileExample example = new EquipmentFileExample();
         EquipmentFileExample.Criteria ca = example.createCriteria();
-        ca.andCjsjGreaterThanOrEqualTo(beforeDayStr+" 00:00");
-        ca.andCjsjLessThanOrEqualTo(beforeDayStr+" 23:59");
+        ca.andRqEqualTo(beforeDayStr);
         ca.andTpljLike("%png");
         List<AlarmNumbersDto> lists = equipmentFileService.statisticsAlarmNums(example);
         Map<String, List<AlarmNumbersDto>> mapList = lists.stream().collect(Collectors.groupingBy(AlarmNumbersDto::getSbbh));
@@ -122,6 +127,36 @@ public class AlarmEventLoop extends BaseWxController {
                 equipmentFileAlarmEventService.save(entity);
             }
         }
+        List<AlarmNumbersDto> allList = equipmentFileService.groupByRq(example);
+        for(AlarmNumbersDto alarmNumbersDto : allList){
+            //捕食次数
+            EquipmentFileExample example1 = new EquipmentFileExample();
+            EquipmentFileExample.Criteria ca1 = example1.createCriteria();
+            ca1.andRqEqualTo(beforeDayStr);
+            ca1.andTpljLike("%png");
+            ca1.andTpljLike("%predation%");
+            if(!StringUtils.isEmpty(alarmNumbersDto.getDeptcode())){
+                ca1.andDeptcodeEqualTo(alarmNumbersDto.getDeptcode());
+            }
+            ca1.andSbbhEqualTo(alarmNumbersDto.getSbbh());
+            List<EquipmentFile> predationList = equipmentFileService.listAll(example1);
+            PredationNumDto dto = new PredationNumDto();
+            dto.setPredationNum(predationList.size());
+            dto.setAlarmNum(alarmNumbersDto.getAlarmNum());
+            dto.setCjsj(DateUtil.toDate(beforeDayStr,"yyyy-MM-dd"));
+            dto.setSbbh(alarmNumbersDto.getSbbh());
+            if(!StringUtils.isEmpty(alarmNumbersDto.getDeptcode())){
+                dto.setDeptcode(alarmNumbersDto.getDeptcode());
+            }
+            EquipmentFileAlarmEventExample eventExample = new EquipmentFileAlarmEventExample();
+            EquipmentFileAlarmEventExample.Criteria eventCa = eventExample.createCriteria();
+            eventCa.andSbbhEqualTo(alarmNumbersDto.getSbbh());
+            eventCa.andBjsjEqualTo(beforeDayStr);
+            long alarmCount = equipmentFileAlarmEventService.alarmCount(eventExample);
+            dto.setSm1(StringUtils.isEmpty(alarmCount)?"0":Long.toString(alarmCount));
+            predationNumService.save(dto);
+        }
+
     }
 
     public static Boolean isOverThreeMinute(String curDateStr, String nextDateStr){

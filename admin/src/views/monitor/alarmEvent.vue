@@ -75,12 +75,12 @@
         <table id="simple-table" class="table  table-bordered table-hover">
           <thead>
           <tr>
-            <th>所属监测点</th>
-            <th>设备名称</th>
+            <th>所属机构</th>
+            <th>监测点</th>
             <th>设备sn</th>
             <th>事件日期</th>
             <th>事件次数</th>
-            <th>操作</th>
+            <th>备注</th>
           </tr>
           </thead>
           <tbody>

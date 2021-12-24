@@ -204,6 +204,10 @@ export default {
         xAxis: {
           show: true,
           name: xAxisName,
+          nameTextStyle: {
+            fontWeight: "bolder",
+            fontSize: 20
+          },
           nameLocation:'center',
           type: 'category',
           nameGap: 40,
@@ -236,7 +240,7 @@ export default {
         },
         series: [
           {
-            type: 'line',
+            type: 'bar',
             smooth: 0.6,
             symbolSize: 8,
             lineStyle: {
