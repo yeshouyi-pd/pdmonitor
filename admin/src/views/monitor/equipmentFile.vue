@@ -15,7 +15,7 @@
           <div class="widget-body">
             <div class="widget-main">
               <form>
-                <table style="font-size: 1.1em;width:80%" class="text-right" >
+                <table style="font-size: 1.1em;width:100%" class="text-right" >
                   <tbody>
                   <tr>
                     <td style="width: 15%;">
@@ -33,7 +33,17 @@
                     <td style="width: 25%;">
                       <time-range-picker v-bind:startTime="startTime" v-bind:endTime="endTime"></time-range-picker>
                     </td>
-                    <td colspan="2" class="text-center">
+                    <td style="width: 15%;">
+                      类型：
+                    </td>
+                    <td style="width: 15%;">
+                      <select v-model="equipmentFileDto.tplj" class="form-control" id="form-field-select-2">
+                        <option value="" selected>请选择</option>
+                        <option value="png">出现</option>
+                        <option value="predation">捕食</option>
+                      </select>
+                    </td>
+                    <td  style="width: 25%;" class="text-center">
                       <button type="button" v-on:click="list(1)" class="btn btn-sm btn-info btn-round" style="margin-right: 10px;">
                         <i class="ace-icon fa fa-book"></i>
                         查询

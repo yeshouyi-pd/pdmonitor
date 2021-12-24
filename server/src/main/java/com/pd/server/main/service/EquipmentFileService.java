@@ -73,6 +73,9 @@ public class EquipmentFileService {
                 ca.andSbbhIn(user.getXmbhsbsns().get(pageDto.getXmbh()));
             }
         }
+        if(!StringUtils.isEmpty(pageDto.getTplj())&&"predation".equals(pageDto.getTplj())){
+            ca.andTpljLike("%predation%");
+        }
         ca.andTpljLike("%png");
         equipmentFileExample.setOrderByClause(" cjsj desc ");
         List<EquipmentFile> equipmentFileList = equipmentFileMapper.selectByExample(equipmentFileExample);
@@ -143,6 +146,17 @@ public class EquipmentFileService {
         List<EquipmentFile> list  = equipmentFileMapper.getthisDeptjxsjJT(equipmentFileExample);
         List<EquipmentFileDto> equipmentFileDtoList = CopyUtil.copyList(list , EquipmentFileDto.class);
         return equipmentFileDtoList;
+    }
 
+    public List<EquipmentFile> listBylimit(EquipmentFileExample equipmentFileExample) {
+        return equipmentFileMapper.listBylimit(equipmentFileExample);
+    }
+
+    public List<AlarmNumbersDto> groupByRq(EquipmentFileExample example){
+        return equipmentFileMapper.groupByRq(example);
+    }
+
+    public EquipmentFile selectLastOneBySbbh(String sbbh) {
+        return equipmentFileMapper.selectLastOneBySbbh(sbbh);
     }
 }

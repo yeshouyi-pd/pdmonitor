@@ -22,6 +22,21 @@ public class CameraInfoService {
     @Resource
     private CameraInfoMapper cameraInfoMapper;
 
+    public List<CameraInfo> findByDeptcode(String deptcode){
+        CameraInfoExample example = new CameraInfoExample();
+        CameraInfoExample.Criteria ca = example.createCriteria();
+        ca.andDeptcodeEqualTo(deptcode);
+        ca.andSm1EqualTo("1");
+        List<CameraInfo> cameraInfoList = cameraInfoMapper.selectByExample(example);
+        return cameraInfoList;
+    }
+
+    public CameraInfo findByID(String id){
+        CameraInfoExample example = new CameraInfoExample();
+        CameraInfo info = cameraInfoMapper.selectByPrimaryKey(id);
+        return info;
+    }
+
     /**
     * 列表查询
     */

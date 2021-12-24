@@ -95,6 +95,39 @@ public class RedisConfig  implements CommandLineRunner {
         init_dept();//加载部门
         init_user();//加载用户缓存
         init_xmbhsbsn();//加载项目编号对应的设备编号
+        init_attr();//加载系统参数
+    }
+
+    /**
+     * 加载系统参数  系统静态路径
+     */
+    public  synchronized static boolean init_attr() {
+        try {
+
+            List<Attr>  list = attrstaticMapper.selectByExample(new AttrExample());
+            if(!CollectionUtils.isEmpty(list)){
+                Map<String, String>  map = new LinkedHashMap<String,String>();
+                for(Attr attr  :list){
+                    map.put(attr.getAttrcode(),attr.getAttrkey());
+                }
+                redisTstaticemplate.opsForValue().set(RedisCode.ATTRECODEKEY, map);//将参数信息写入redis缓存
+
+                String   macos = System.getProperties().getProperty("os.name");// 获取系统操作类型
+                String picStorePath ;
+                if (macos.toLowerCase().contains("windows")) {
+                    picStorePath= map.get("pathwindows");
+                } else {
+                    picStorePath= map.get("pathliunx");
+                }
+                redisTstaticemplate.opsForValue().set(RedisCode.STATICPATH, picStorePath);//静态路径地址
+
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+
     }
 
     /**

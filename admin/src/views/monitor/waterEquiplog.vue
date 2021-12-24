@@ -2,7 +2,7 @@
   <div>
       <div class="widget-box">
           <div class="widget-header">
-              <h4 class="widget-title">设备管理查询</h4>
+              <h4 class="widget-title">设备心跳包查询</h4>
           </div>
           <div class="widget-body">
               <div class="widget-main">

@@ -10,9 +10,9 @@
 
         <div class="index_nav" >
             <ul style="height: 30px; margin-bottom: 0px;">
-                <router-link to="/admin/chooseProject">
-                    <li class="l_left total_chose_fr nav_active">主页</li>
-                </router-link>
+                <!--<router-link to="/admin/chooseProject">-->
+                    <li @click="chooseProject" class="l_left total_chose_fr nav_active">主页</li>
+                <!--</router-link>-->
             </ul>
         </div>
         <div class="index_tabs" >
@@ -26,15 +26,14 @@
                     </div>
                     <div class="dataAllBorder01 cage_cl" style="margin-top: 1.5% !important; height: 38%;">
                         <div class="dataAllBorder02 video_cage">
-                            <img class="video_around" src="/video/1.jpg">
-                            <img class="video_around" src="/video/2.jpg">
-                            <img class="video_around" src="/video/3.jpg">
-                            <img class="video_around" src="/video/4.jpg">
+                            <div v-for="(item,index) in cameras"  class="video_around" style="border: 0px solid red;">
+                                <iframe v-if="index < 4" width="200px;" height="163px;" :src="'/mobile/test?id='+item.id" frameborder="0"></iframe>
+                            </div>
                         </div>
                     </div>
                     <div class="dataAllBorder01 cage_cl" style="margin-top: 1.5% !important; height: 32%">
-                        <div class="dataAllBorder02" >
-                            <div class="map_title">江豚报警小时占比统计图</div>
+                        <div class="dataAllBorder02"  style="height: 100%;width: 100%">
+                            <div class="map_title">鲸豚出现事件统计图</div>
                             <div id="container" style="height: 100%;width: 100%;border: 0px solid red;"></div>
                         </div>
                     </div>
@@ -49,7 +48,7 @@
                                     <div class="map_title">实时地图</div>
                                 </div>
                             </div>
-                            <EquipmentAMap></EquipmentAMap>
+                            <EquipmentAMap v-bind:height-max="heightMax"></EquipmentAMap>
                         </div>
                     </div>
 
@@ -96,29 +95,30 @@
                     <!--顶部切换位置-->
                     <div class="dataAllBorder01 cage_cl" style="margin-top: 9% !important; height: 24%">
                         <div class="dataAllBorder02" id="cage_cl" style="border: 0px solid red;padding-left: 10%;padding-top: 5%;">
-                            <div class="analysis">当日声学侦测次数：</div>
+                            <div class="analysis">当日声学侦测次数：{{alarmDatas.num}}次</div>
                             <!--<ul class="data_show_box">
                                 <li class="data_cage" v-for="item  in  alarmDatas.sum">{{item}}</li>
                             </ul>-->
-                            <div class="depart_number_box">
-                                <ul class="depart_number_cage" style="margin-bottom: 0px;">
-                                    <!--<li class="depart_name">报警次数：</li>-->
-                                    <li class="depart_number">{{alarmDatas.num}}次</li>
-                                </ul>
-                            </div>
-                            <div class="analysis">当日事件(群次)：</div>
-                            <div class="depart_number_box">
-                                <ul class="depart_number_cage" style="margin-bottom: 0px;">
-                                    <!--<li class="depart_name">事件次数：</li>-->
-                                    <li class="depart_number">{{alarmDatas.nnm}}次</li>
-                                </ul>
-                            </div>
+<!--                            <div class="depart_number_box">-->
+<!--                                <ul class="depart_number_cage" style="margin-bottom: 0px;">-->
+<!--                                    &lt;!&ndash;<li class="depart_name">出现次数：</li>&ndash;&gt;-->
+<!--                                    <li class="depart_number">{{alarmDatas.num}}次</li>-->
+<!--                                </ul>-->
+<!--                            </div>-->
+                            <div class="analysis" style="margin: 20px 0;">当日事件(群次)：{{alarmDatas.nnm}}次</div>
+<!--                            <div class="depart_number_box">-->
+<!--                                <ul class="depart_number_cage" style="margin-bottom: 0px;">-->
+<!--                                    &lt;!&ndash;<li class="depart_name">事件次数：</li>&ndash;&gt;-->
+<!--                                    <li class="depart_number">{{alarmDatas.nnm}}次</li>-->
+<!--                                </ul>-->
+<!--                            </div>-->
+                            <div class="analysis">当日捕食次数：{{alarmDatas.bnum}}次</div>
                         </div>
                     </div>
 
                     <div class="dataAllBorder01 cage_cl check_increase" style=" margin-top: 1.5% !important;">
                         <!--切换01-->
-                        <div style="overflow-y:scroll;" class="dataAllBorder02 over_hide dataAllBorder20" id="over_hide">
+                        <div style="overflow-y:scroll;" class="dataAllBorder02 over_hide dataAllBorder20" id="over_hide2">
                             <table class="table table-bordered">
                                 <thead>
                                 <tr style="background: #395DC0;color: #FFFFFF;">
@@ -147,7 +147,7 @@
                     </div>
 
                     <div class="dataAllBorder01 cage_cl check_decrease" style="margin-top: 1.5% !important; height: 32%; position: relative;">
-                        <div class="dataAllBorder02 over_hide" style="padding: 1.2%;">
+                        <div class="dataAllBorder02 over_hide" style="padding: 1.2%;width: 100%;height: 100%;">
                             <div class="analysis">设备在线率</div>
                             <div class="danger_contain_box">
                                 <div id="piechart-placeholder"></div>
@@ -279,11 +279,14 @@
                 yAixsData:[],
                 xAixsData:[],
                 alarmDatas:{},
-                intervalId:null
+                intervalId:null,
+                cameras:[],
+                heightMax:''
             }
         },
         mounted: function () {
             let _this = this;
+            _this.getDataCamera();
             _this.getSzjcx();
             _this.getPieChart();
             _this.getLatestDate();
@@ -292,8 +295,23 @@
             _this.getWarningDate();
             _this.getContainerDate();
             _this.TimeSum();
+            let h = document.documentElement.clientHeight || document.body.clientHeight;
+            _this.heightMax = h*0.8-20;
         },
         methods: {
+            chooseProject(){
+                window.location.href = "/admin/chooseProject";
+            },
+            // 获取摄像头数据
+            getDataCamera() {
+                let _this = this;
+                _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/cameraInfo/getDataCamera',{
+                    deptcode:Tool.getLoginUser().deptcode,
+                }).then((res)=>{
+                    let response = res.data;
+                    _this.cameras = response.content;
+                })
+            },
             // 定时刷新数据函数
             dataRefreh() {
                 let _this = this;
@@ -323,7 +341,7 @@
                 let _this = this;
                 _this.alarmNumbersDto.deptcode = Tool.getLoginUser().deptcode;
                 _this.alarmNumbersDto.stime = moment().subtract(0, "days").format('YYYY-MM-DD');
-                _this.alarmNumbersDto.etime = moment().subtract(-1, "days").format('YYYY-MM-DD');
+                _this.alarmNumbersDto.etime = moment().subtract(0, "days").format('YYYY-MM-DD');
                 _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFile/statisticsAlarmNumsByTimeSum', _this.alarmNumbersDto).then((response) => {
                     let resp = response.data;
                     _this.alarmDatas = resp.content;
@@ -367,8 +385,8 @@
                 let _this = this;
                 _this.alarmNumbersDto2.deptcode = Tool.getLoginUser().deptcode;
                 _this.alarmNumbersDto2.stime = moment().subtract(7, "days").format('YYYY-MM-DD');
-                _this.alarmNumbersDto2.etime = moment().subtract(-1, "days").format('YYYY-MM-DD');
-                _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFile/statisticsAlarmNumsByHourDP',_this.alarmNumbersDto2).then((response)=>{
+                _this.alarmNumbersDto2.etime = moment().subtract(1, "days").format('YYYY-MM-DD');
+                _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileAlarmEvent/echartsAlarmDataByDp',_this.alarmNumbersDto2).then((response)=>{
                     let resp = response.data;
                     _this.containerDate = resp.content;
                     _this.yAixsData = _this.containerDate.yAixsData;
@@ -395,7 +413,7 @@
                         yAxis: {
                             show: true,
                             type: 'value',
-                            name: '百分比',
+                            name: '事件次数',
                             axisLabel: {
                                 show: true,
                                 textStyle: {
@@ -406,13 +424,15 @@
                         series: [
                             {
                                 data: _this.yAixsData,
-                                type: 'line',
+                                type: 'bar',
                                 smooth: true
                             }
                         ]
                     };
                     if (option && typeof option === 'object') {
+                      _this.$nextTick(function () {
                         myChart.setOption(option);
+                      })
                     }
                 })
 
@@ -475,7 +495,10 @@
              *  welcome 饼状图 数据
              */
             getPieChart() {
-                let _this = this;
+              let _this = this;
+              // _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/welcome/predationStatistics',{}).then((res)=>{
+              //   _this.initPieEChart(res.data.content);
+              // })
                 _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getPieChart').then((res)=>{
                     let response = res.data;
                     let data = response.content;
@@ -503,6 +526,59 @@
                         _this.gz = gzs;
                     }
                 })
+            },
+            initPieEChart(data){
+              let _this = this;
+              let dom = document.getElementById("piechart-placeholder");
+              let myPieChart = echarts.init(dom);
+              let option;
+              option = {
+                tooltip: {
+                  trigger: 'item',
+                  formatter: '{b}: ({d}%)'
+                },
+                // legend: {
+                //   data: [
+                //     '捕食行为',
+                //     '江豚出现'
+                //   ]
+                // },
+                series: [
+                  {
+                    type: 'pie',
+                    // labelLine: {
+                    //   length: 30
+                    // },
+                    label: {
+                      formatter: ' {b|{b}：} {per|{d}%}  ',
+                      backgroundColor: '#F6F8FC',
+                      borderColor: '#8C8D8E',
+                      borderWidth: 1,
+                      borderRadius: 4,
+                      rich: {
+                        b: {
+                          color: '#4C5058',
+                          fontSize: 14,
+                          fontWeight: 'bold',
+                          lineHeight: 33
+                        },
+                        per: {
+                          color: '#fff',
+                          backgroundColor: '#4C5058',
+                          padding: [3, 4],
+                          borderRadius: 4
+                        }
+                      }
+                    },
+                    data: data
+                  }
+                ]
+              };
+              if (option && typeof option === 'object') {
+                _this.$nextTick(function () {
+                  myPieChart.setOption(option);
+                })
+              }
             },
             /**
              * 饼状图
@@ -549,13 +625,13 @@
                             startAngle: 2
                         }
                     },
-                    legend: {
-                        show: true,
-                        position: position || "ne",
-                        labelBoxBorderColor: null,
-                        margin: [-30, 15]
-                    }
-                    ,
+                    // legend: {
+                    //     show: true,
+                    //     position: position || "ne",
+                    //     labelBoxBorderColor: null,
+                    //     margin: [-30, 15]
+                    // }
+                    // ,
                     grid: {
                         hoverable: true,
                         clickable: true
