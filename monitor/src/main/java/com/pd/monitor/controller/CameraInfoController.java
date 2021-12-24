@@ -30,6 +30,7 @@ public class CameraInfoController extends BaseWxController {
     private static final Logger LOG = LoggerFactory.getLogger(CameraInfoController.class);
     public static final String BUSINESS_NAME = "设备相机配置表";
 
+
     @Resource
     private CameraInfoService cameraInfoService;
 
