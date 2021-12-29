@@ -18,7 +18,7 @@
                 <table style="font-size: 1.1em;width:100%" class="text-right" >
                   <tbody>
                   <tr>
-                    <td style="width: 15%;">
+                    <td style="width: 10%;">
                       设备名称：
                     </td>
                     <td style="width: 15%;">
@@ -27,13 +27,13 @@
                         <option v-for="item in waterEquipments" :value="item.sbsn">{{item.sbmc}}</option>
                       </select>
                     </td>
-                    <td style="width: 15%;">
+                    <td style="width: 10%;">
                       采集时间：
                     </td>
                     <td style="width: 25%;">
                       <time-range-picker v-bind:startTime="startTime" v-bind:endTime="endTime"></time-range-picker>
                     </td>
-                    <td style="width: 15%;">
+                    <td style="width: 10%;">
                       类型：
                     </td>
                     <td style="width: 15%;">

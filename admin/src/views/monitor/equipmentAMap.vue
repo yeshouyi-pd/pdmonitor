@@ -162,7 +162,7 @@
                 let middle = document.createElement("div");
                 middle.className = "info-middle";
                 middle.style.backgroundColor = 'white';
-                middle.innerHTML = "<div>所属监测点："+_this.optionMapKV(_this.deptMap,content[0])+"</div><div>所属数据中心："+_this.optionWDArray(_this.waterDatas,content[1])+"</div><div>设备名称："+content[2]+"</div><div>设备编号："+content[3]+"</div>";
+                middle.innerHTML = "<div>所属机构："+_this.optionMapKV(_this.deptMap,content[0])+"</div><div>设备点位："+content[2]+"</div><div>设备编号："+content[3]+"</div>";
                 info.appendChild(middle);
 
                 // 定义底部内容
