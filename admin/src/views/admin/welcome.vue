@@ -171,7 +171,7 @@
                                         <div class="widget-main no-padding" style="height:325px;text-align: left" >
 
                                           <div class="space-6"></div>
-                                          <div id="piechart-placeholder"></div>
+                                          <div id="piechart-placeholder" style="height: 250px"></div>
 
                                           <div class="hr hr8 hr-double"></div>
 
@@ -299,10 +299,23 @@ export default {
      */
     getPieChart() {
       let _this = this;
-      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getPieChart/'+Tool.getLoginUser().xmbh).then((res)=>{
+      let alarmNumbersDto = {};
+      let url = process.env.VUE_APP_SERVER + '/monitor/welcome/getPieChart';
+      if("460100"!=Tool.getLoginUser().deptcode){
+        alarmNumbersDto.deptcode = Tool.getLoginUser().deptcode;
+        url = process.env.VUE_APP_SERVER + '/monitor/welcome/getPieChart/'+Tool.getLoginUser().xmbh;
+      }
+      alarmNumbersDto.stime = moment().subtract(0, "days").format('YYYY-MM-DD');
+      alarmNumbersDto.etime = moment().subtract(0, "days").format('YYYY-MM-DD');
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFile/statisticsAlarmNumsByTimeSum', alarmNumbersDto).then((response) => {
+        let resp = response.data;
+        console.log(resp.content);
+        _this.initPieEChart(resp.content);
+      });
+      _this.$ajax.get(url).then((res)=>{
         let response = res.data;
         let data = response.content;
-        _this.showPieChart(data);
+        //_this.showPieChart(data);
         if(Tool.isNotEmpty(data)){
           let zss = 0;
           let zcs = 0;
@@ -327,6 +340,43 @@ export default {
         }
 
       })
+    },
+    initPieEChart(data){
+      let _this = this;
+      let option = {
+        tooltip: {
+          trigger: 'item',
+          formatter: '{b} : {c} ({d}%)'
+        },
+        legend: {
+          orient: 'vertical',
+          left: 'left'
+        },
+        series: [
+          {
+            name: 'Access From',
+            type: 'pie',
+            radius: '50%',
+            data: [
+              { value: data.num, name: '侦测次数' },
+              { value: data.bnum, name: '捕食次数' }
+            ],
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+              }
+            }
+          }
+        ]
+      };
+      let pieChart = echarts.init(document.getElementById('piechart-placeholder'));
+      if (option && typeof option === 'object') {
+        _this.$nextTick(function () {
+          pieChart.setOption(option);
+        })
+      }
     },
     /**
      * 获取水质检测项

@@ -307,7 +307,11 @@ public class EquipmentFileController extends BaseWxController {
         ResponseDto responseDto = new ResponseDto();
         EquipmentFileExample example = new EquipmentFileExample();
         EquipmentFileExample.Criteria ca = example.createCriteria();
-        ca.andDeptcodeEqualTo(alarmNumbersDto.getDeptcode());
+        LoginUserDto userDto = getRequestHeader();
+        List<String> deptList = getUpdeptcode(userDto.getDeptcode());
+        if(!CollectionUtils.isEmpty(deptList)){
+            ca.andDeptcodeIn(deptList);
+        }
         if(!StringUtils.isEmpty(alarmNumbersDto.getSbbh())){
             ca.andSbbhEqualTo(alarmNumbersDto.getSbbh());
         }

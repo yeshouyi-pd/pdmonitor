@@ -190,13 +190,13 @@ export default {
       middle.style.backgroundColor = 'white';
 
       let middle1 = document.createElement("div");
-      middle1.innerHTML = "<div>所属监测点："+_this.optionMapKV(_this.deptMap,content[0])+"</div>";
+      middle1.innerHTML = "<div>所属机构："+_this.optionMapKV(_this.deptMap,content[0])+"</div>";
       middle.appendChild(middle1);
-      let middle2 = document.createElement("div");
-      middle2.innerHTML = "<div>所属数据中心："+_this.optionWDArray(_this.waterDatas,content[1])+"</div>";
-      middle.appendChild(middle2);
+      // let middle2 = document.createElement("div");
+      // middle2.innerHTML = "<div>所属数据中心："+_this.optionWDArray(_this.waterDatas,content[1])+"</div>";
+      // middle.appendChild(middle2);
       let middle3 = document.createElement("div");
-      middle3.innerHTML = "<div>设备名称："+content[2]+"</div>";
+      middle3.innerHTML = "<div>设备点位："+content[2]+"</div>";
       middle.appendChild(middle3);
       if("0001"==content[4]){
         let middle4 = document.createElement("div");

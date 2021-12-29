@@ -13,6 +13,7 @@ import com.pd.server.main.service.EquipmentFileService;
 import com.pd.server.main.service.PredationNumService;
 import com.pd.server.main.service.WaterEquipmentService;
 import com.pd.server.util.CopyUtil;
+import com.pd.server.util.DateUtil;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.slf4j.Logger;
@@ -74,6 +75,7 @@ public class ExportFileController extends BaseWxController{
             Map<String, List<String>> mapXmbhsbsn = (Map<String, List<String>>) redisTemplate.opsForValue().get(RedisCode.PROJECTSBSNS);
             ca.andSbbhIn( mapXmbhsbsn.get(request.getParameter("xmbh")));
         }
+        example.setOrderByClause(" cjsj desc ");
         List<PredationNum> dataList = predationNumService.list(example);
         //导出
         HSSFWorkbook workbook = new HSSFWorkbook();
@@ -115,7 +117,7 @@ public class ExportFileController extends BaseWxController{
             comCell2.setCellValue(entity.getSbbh());
             comCell2.setCellStyle(cellStyleCommon);
             HSSFCell comCell3 = comRow.createCell(3);
-            comCell3.setCellValue(entity.getCjsj());
+            comCell3.setCellValue(DateUtil.getFormatDate(entity.getCjsj(),"yyyy-MM-dd"));
             comCell3.setCellStyle(cellStyleCommon);
             HSSFCell comCell4 = comRow.createCell(4);
             comCell4.setCellValue(entity.getAlarmNum());
