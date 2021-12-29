@@ -66,7 +66,7 @@
                                         <tr style="background: #395DC0;color: #FFFFFF;height: 30px;">
                                             <th style="width: 25%;font-size: 16px;">监控点</th>
                                             <th style="width: 25%;font-size: 16px;">设备编号</th>
-                                            <th style="width: 25%;font-size: 16px;">告警次数</th>
+                                            <th style="width: 25%;font-size: 16px;">出现次数</th>
                                             <th style="width: 25%;font-size: 16px;">操作</th>
                                         </tr>
                                         </thead>
@@ -339,7 +339,9 @@
             },
             TimeSum(){
                 let _this = this;
-                _this.alarmNumbersDto.deptcode = Tool.getLoginUser().deptcode;
+                if("460100"!=Tool.getLoginUser().deptcode){
+                  _this.alarmNumbersDto.deptcode = Tool.getLoginUser().deptcode;
+                }
                 _this.alarmNumbersDto.stime = moment().subtract(0, "days").format('YYYY-MM-DD');
                 _this.alarmNumbersDto.etime = moment().subtract(0, "days").format('YYYY-MM-DD');
                 _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFile/statisticsAlarmNumsByTimeSum', _this.alarmNumbersDto).then((response) => {
