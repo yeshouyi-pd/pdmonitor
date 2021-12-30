@@ -147,7 +147,7 @@ public class FileController   extends BaseWxController {
         }
         waterProUserExample.setOrderByClause(" cjsj desc");
         List<WaterProUser> waterProUsers = waterProUserService.selectByExample(waterProUserExample);
-        waterProUsers.stream().filter(distinctByKey(WaterProUser::getXmbh)).collect(Collectors.toList());
+        waterProUsers = waterProUsers.stream().filter(distinctByKey(WaterProUser::getXmbh)).collect(Collectors.toList());
         responseDto.setContent(waterProUsers);
         return responseDto;
 
