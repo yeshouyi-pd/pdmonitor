@@ -6,6 +6,7 @@ import com.pd.server.main.domain.*;
 import com.pd.server.main.dto.EquipmentFileDto;
 import com.pd.server.main.dto.InterfaceLogDto;
 import com.pd.server.main.dto.ResponseDto;
+import com.pd.server.main.dto.basewx.my.EquipmentFileDwjkDto;
 import com.pd.server.main.service.AttrService;
 import com.pd.server.main.service.AuthorizeInfoService;
 import com.pd.server.main.service.EquipmentFileService;
@@ -140,7 +141,7 @@ public class DwjkController extends BaseWxController {
             fileCa.andSbbhEqualTo(qqcs.get("sbsn").toString());
             fileCa.andRqEqualTo(qqcs.get("cjrq").toString());
             List<EquipmentFile> equipmentFiles = equipmentFileService.listAll(fileExample);
-            List<EquipmentFileDto> equipmentFilesDto = CopyUtil.copyList(equipmentFiles,EquipmentFileDto.class);
+            List<EquipmentFileDwjkDto> equipmentFilesDto = CopyUtil.copyList(equipmentFiles, EquipmentFileDwjkDto.class);
             responseDto.setCode("0000");
             responseDto.setContent(equipmentFilesDto);
             interfaceLog.setFhsj(JSONObject.toJSONString(responseDto));
