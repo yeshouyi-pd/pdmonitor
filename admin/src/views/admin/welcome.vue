@@ -134,7 +134,7 @@
                                 </th>
 
                                 <th class="hidden-480">
-                                  <i class="ace-icon fa  fa-book blue"></i>告警次数
+                                  <i class="ace-icon fa  fa-book blue"></i>出现次数
                                 </th>
                               </tr>
                               </thead>
