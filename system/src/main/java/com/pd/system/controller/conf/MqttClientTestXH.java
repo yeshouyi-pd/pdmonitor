@@ -127,9 +127,13 @@ public class MqttClientTestXH implements ApplicationContextAware {
             public void messageArrived(String topic, MqttMessage message) throws Exception {
                 LOG.info("topic:"+topic);
                 LOG.info("Qos:"+message.getQos());
-                LOG.info("message content:"+encodeToString( message.getPayload(),type));
-                LOG.info(bytes2hex02(message.getPayload()));
-                saveData(message);
+                byte[] payload = message.getPayload();
+                String ip = bytes2hex02(payload).substring(0,4);
+                String dataResult = encodeToString(payload,type);
+                String dataOriginal = bytes2hex02(payload);
+                LOG.info("message content:"+dataResult);
+                LOG.info(dataOriginal);
+                saveData(ip,dataResult,dataOriginal);
             }
             public void deliveryComplete(IMqttDeliveryToken token) {
                 LOG.info("deliveryComplete---------"+ token.isComplete());
@@ -137,19 +141,24 @@ public class MqttClientTestXH implements ApplicationContextAware {
         });
     }
 
-    public static void saveData(MqttMessage message){
-        Map<String,String> map = (Map<String, String>) RedisConfig.redisTstaticemplate.opsForValue().get(RedisCode.SBSNCENTERCODE);
-        WaterQualityResultDto waterQualityResult = new WaterQualityResultDto();
-        waterQualityResult.setIp(bytes2hex02(message.getPayload()).substring(0,4));
-        waterQualityResult.setDatacenter("tcp://47.244.23.44");
-        waterQualityResult.setJcxm(type);
-        waterQualityResult.setDataResult(encodeToString(message.getPayload(),type));
-        waterQualityResult.setDataOriginal(bytes2hex02(message.getPayload()));
-        waterQualityResult.setCreateTime(new Date());
-        waterQualityResult.setSm1(map.get(waterQualityResult.getIp()));
-        LOG.info(waterQualityResult.toString());
-        WaterQualityResultService service = SpringUtil.getBean(WaterQualityResultService.class);
-        service.save(waterQualityResult);
+    public static void saveData(String ip,String dataResult,String dataOriginal){
+        try{
+            LOG.info("进来了");
+            Map<String,String> map = (Map<String, String>) RedisConfig.redisTstaticemplate.opsForValue().get(RedisCode.SBSNCENTERCODE);
+            WaterQualityResultDto waterQualityResult = new WaterQualityResultDto();
+            waterQualityResult.setIp(ip);
+            waterQualityResult.setDatacenter("tcp://47.244.23.44");
+            waterQualityResult.setJcxm(type);
+            waterQualityResult.setDataResult(dataResult);
+            waterQualityResult.setDataOriginal(dataOriginal);
+            waterQualityResult.setCreateTime(new Date());
+            waterQualityResult.setSm1(map.get(waterQualityResult.getIp()));
+            LOG.info(waterQualityResult.toString());
+            WaterQualityResultService service = SpringUtil.getBean(WaterQualityResultService.class);
+            service.save(waterQualityResult);
+        }catch (Exception e){
+            LOG.info(e.getMessage());
+        }
     }
 
     //	发布消息
