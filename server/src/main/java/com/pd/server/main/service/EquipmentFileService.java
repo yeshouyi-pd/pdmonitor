@@ -77,6 +77,28 @@ public class EquipmentFileService {
             ca.andTpljLike("%predation%");
         }
         ca.andTpljLike("%png");
+        EquipmentFileExample.Criteria caor = equipmentFileExample.or();
+        if(!StringUtils.isEmpty(list)&&list.size()>0){
+            caor.andDeptcodeIn(list);
+        }
+        if(!StringUtils.isEmpty(pageDto.getStime())){
+            caor.andCjsjGreaterThanOrEqualTo(pageDto.getStime());
+        }
+        if(!StringUtils.isEmpty(pageDto.getEtime())){
+            caor.andCjsjLessThanOrEqualTo(pageDto.getEtime());
+        }
+        if(!StringUtils.isEmpty(pageDto.getSbbh())){
+            caor.andSbbhEqualTo(pageDto.getSbbh());//
+        }
+        if(!StringUtils.isEmpty(pageDto.getXmbh())){
+            if(!CollectionUtils.isEmpty(user.getXmbhsbsns().get(pageDto.getXmbh()))){
+                caor.andSbbhIn(user.getXmbhsbsns().get(pageDto.getXmbh()));
+            }
+        }
+        if(!StringUtils.isEmpty(pageDto.getTplj())&&"predation".equals(pageDto.getTplj())){
+            caor.andTpljLike("%predation%");
+        }
+        caor.andTpljLike("%jpg");
         equipmentFileExample.setOrderByClause(" cjsj desc ");
         List<EquipmentFile> equipmentFileList = equipmentFileMapper.selectByExample(equipmentFileExample);
         PageInfo<EquipmentFile> pageInfo = new PageInfo<>(equipmentFileList);
