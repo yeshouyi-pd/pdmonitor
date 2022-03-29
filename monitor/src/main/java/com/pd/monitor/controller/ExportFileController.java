@@ -257,6 +257,14 @@ public class ExportFileController extends BaseWxController{
             ca.andDeptcodeIn(list);
         }
         ca.andTpljLike("%png");
+        EquipmentFileExample.Criteria caor = example.or();
+        if(!StringUtils.isEmpty(sbbh)){
+            caor.andSbbhEqualTo(sbbh);
+        }
+        if(!StringUtils.isEmpty(deptcode)){
+            caor.andDeptcodeIn(list);
+        }
+        caor.andTpljLike("%jpg");
         List<AlarmNumbersDto> lists = new ArrayList<>();
         Optional<Integer> op = null;
         if(type.equals("minute")){

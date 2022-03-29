@@ -67,6 +67,23 @@ public class EquipmentFileController extends BaseWxController {
             ca.andCjsjLessThanOrEqualTo(entityDto.getEtime());
         }
         ca.andTpljLike("%png");
+        EquipmentFileExample.Criteria caor = example.or();
+        if(!StringUtils.isEmpty(list)&&list.size()>0){
+            caor.andDeptcodeIn(list);
+        }
+        if(!StringUtils.isEmpty(entityDto.getSbbh())){
+            caor.andSbbhEqualTo(entityDto.getSbbh());
+        }
+        if(!StringUtils.isEmpty(entityDto.getDeptcode())){
+            caor.andDeptcodeEqualTo(entityDto.getDeptcode());
+        }
+        if(!StringUtils.isEmpty(entityDto.getStime())){
+            caor.andCjsjGreaterThanOrEqualTo(entityDto.getStime());
+        }
+        if(!StringUtils.isEmpty(entityDto.getEtime())){
+            caor.andCjsjLessThanOrEqualTo(entityDto.getEtime());
+        }
+        caor.andTpljLike("%jpg");
         List<AlarmNumbersDto> lists = equipmentFileService.statisticsAlarmNums(example);
         List<String> xAixsData = lists.stream().filter(Objects::nonNull).map(u->u.getBjsj()+" "+u.getXs()+":"+u.getFz()).collect(Collectors.toList());
         List<Integer> yAixsData = lists.stream().filter(Objects::nonNull).map(u-> u.getAlarmNum()).collect(Collectors.toList());
@@ -105,6 +122,23 @@ public class EquipmentFileController extends BaseWxController {
             ca.andRqLessThanOrEqualTo(entityDto.getEtime());
         }
         ca.andTpljLike("%png");
+        EquipmentFileExample.Criteria caor = example.or();
+        if(!StringUtils.isEmpty(list)&&list.size()>0){
+            caor.andDeptcodeIn(list);
+        }
+        if(!StringUtils.isEmpty(entityDto.getSbbh())){
+            caor.andSbbhEqualTo(entityDto.getSbbh());
+        }
+        if(!StringUtils.isEmpty(entityDto.getDeptcode())){
+            caor.andDeptcodeEqualTo(entityDto.getDeptcode());
+        }
+        if(!StringUtils.isEmpty(entityDto.getStime())){
+            caor.andRqGreaterThanOrEqualTo(entityDto.getStime());
+        }
+        if(!StringUtils.isEmpty(entityDto.getEtime())){
+            caor.andRqLessThanOrEqualTo(entityDto.getEtime());
+        }
+        caor.andTpljLike("%jpg");
         List<AlarmNumbersDto> lists = equipmentFileService.statisticsAlarmNumsByHourAndDP(example);
         Optional<Integer> op = lists.stream().filter(Objects::nonNull).map(AlarmNumbersDto::getAlarmNum).reduce(Integer::sum);
         List<String> xAixsData = lists.stream().filter(Objects::nonNull).map(u->u.getBjsj()+" "+u.getXs()).collect(Collectors.toList());
@@ -142,6 +176,23 @@ public class EquipmentFileController extends BaseWxController {
             ca.andRqLessThanOrEqualTo(entityDto.getEtime());
         }
         ca.andTpljLike("%png");
+        EquipmentFileExample.Criteria caor = example.or();
+        if(!StringUtils.isEmpty(list)&&list.size()>0){
+            caor.andDeptcodeIn(list);
+        }
+        if(!StringUtils.isEmpty(entityDto.getSbbh())){
+            caor.andSbbhEqualTo(entityDto.getSbbh());
+        }
+        if(!StringUtils.isEmpty(entityDto.getDeptcode())){
+            caor.andDeptcodeEqualTo(entityDto.getDeptcode());
+        }
+        if(!StringUtils.isEmpty(entityDto.getStime())){
+            caor.andRqGreaterThanOrEqualTo(entityDto.getStime());
+        }
+        if(!StringUtils.isEmpty(entityDto.getEtime())){
+            caor.andRqLessThanOrEqualTo(entityDto.getEtime());
+        }
+        caor.andTpljLike("%jpg");
         List<AlarmNumbersDto> lists = equipmentFileService.statisticsAlarmNumsByHour(example);
         Optional<Integer> op = lists.stream().filter(Objects::nonNull).map(AlarmNumbersDto::getAlarmNum).reduce(Integer::sum);
         List<String> xAixsData = lists.stream().filter(Objects::nonNull).map(u->u.getBjsj()+" "+u.getXs()).collect(Collectors.toList());
@@ -190,6 +241,28 @@ public class EquipmentFileController extends BaseWxController {
             }
         }
         ca.andTpljLike("%png");
+        EquipmentFileExample.Criteria caor = example.or();
+        if(!StringUtils.isEmpty(list)&&list.size()>0){
+            caor.andDeptcodeIn(list);
+        }
+        if(!StringUtils.isEmpty(alarmNumbersDto.getSbbh())){
+            caor.andSbbhEqualTo(alarmNumbersDto.getSbbh());
+        }
+        if(!StringUtils.isEmpty(alarmNumbersDto.getDeptcode())){
+            caor.andDeptcodeEqualTo(alarmNumbersDto.getDeptcode());
+        }
+        if(!StringUtils.isEmpty(alarmNumbersDto.getStime())){
+            caor.andCjsjGreaterThanOrEqualTo(alarmNumbersDto.getStime());
+        }
+        if(!StringUtils.isEmpty(alarmNumbersDto.getEtime())){
+            caor.andCjsjLessThanOrEqualTo(alarmNumbersDto.getEtime());
+        }
+        if(!StringUtils.isEmpty(alarmNumbersDto.getXmbh())){
+            if(!CollectionUtils.isEmpty(user.getXmbhsbsns().get(alarmNumbersDto.getXmbh()))){
+                caor.andSbbhIn(user.getXmbhsbsns().get(alarmNumbersDto.getXmbh()));
+            }
+        }
+        caor.andTpljLike("%jpg");
         List<AlarmNumbersDto> lists = equipmentFileService.statisticsAlarmNumsByPage(example);
         PageInfo<AlarmNumbersDto> pageInfo = new PageInfo<>(lists);
         alarmNumbersDto.setTotal(pageInfo.getTotal());
@@ -231,6 +304,28 @@ public class EquipmentFileController extends BaseWxController {
             }
         }
         ca.andTpljLike("%png");
+        EquipmentFileExample.Criteria caor = example.or();
+        if(!StringUtils.isEmpty(list)&&list.size()>0){
+            caor.andDeptcodeIn(list);
+        }
+        if(!StringUtils.isEmpty(alarmNumbersDto.getSbbh())){
+            caor.andSbbhEqualTo(alarmNumbersDto.getSbbh());
+        }
+        if(!StringUtils.isEmpty(alarmNumbersDto.getDeptcode())){
+            caor.andDeptcodeEqualTo(alarmNumbersDto.getDeptcode());
+        }
+        if(!StringUtils.isEmpty(alarmNumbersDto.getStime())){
+            caor.andCjsjGreaterThanOrEqualTo(alarmNumbersDto.getStime());
+        }
+        if(!StringUtils.isEmpty(alarmNumbersDto.getEtime())){
+            caor.andCjsjLessThanOrEqualTo(alarmNumbersDto.getEtime());
+        }
+        if(!StringUtils.isEmpty(alarmNumbersDto.getXmbh())){
+            if(!CollectionUtils.isEmpty(user.getXmbhsbsns().get(alarmNumbersDto.getXmbh()))){
+                caor.andSbbhIn(user.getXmbhsbsns().get(alarmNumbersDto.getXmbh()));
+            }
+        }
+        caor.andTpljLike("%jpg");
         List<AlarmNumbersDto> lists = equipmentFileService.statisticsAlarmNumsByPage(example);
         List<AlarmNumbersDto> resultList = new ArrayList<>();
         Map<String, List<AlarmNumbersDto>> mapList = lists.stream().collect(Collectors.groupingBy(AlarmNumbersDto::getSbbh));
@@ -325,6 +420,23 @@ public class EquipmentFileController extends BaseWxController {
             ca.andRqLessThanOrEqualTo(alarmNumbersDto.getEtime());
         }
         ca.andTpljLike("%png");
+        EquipmentFileExample.Criteria caor = example.or();
+        if(!CollectionUtils.isEmpty(deptList)){
+            caor.andDeptcodeIn(deptList);
+        }
+        if(!StringUtils.isEmpty(alarmNumbersDto.getSbbh())){
+            caor.andSbbhEqualTo(alarmNumbersDto.getSbbh());
+        }
+        if(!StringUtils.isEmpty(alarmNumbersDto.getDeptcode())){
+            caor.andDeptcodeEqualTo(alarmNumbersDto.getDeptcode());
+        }
+        if(!StringUtils.isEmpty(alarmNumbersDto.getStime())){
+            caor.andRqGreaterThanOrEqualTo(alarmNumbersDto.getStime());
+        }
+        if(!StringUtils.isEmpty(alarmNumbersDto.getEtime())){
+            caor.andRqLessThanOrEqualTo(alarmNumbersDto.getEtime());
+        }
+        caor.andTpljLike("%jpg");
         List<AlarmNumbersDto> lists = equipmentFileService.statisticsAlarmNumsByPage(example);
         List<EquipmentFile> allList = equipmentFileService.listAll(example);
         List<AlarmNumbersDto> resultList = new ArrayList<>();
@@ -441,6 +553,10 @@ public class EquipmentFileController extends BaseWxController {
         criteria.andSbbhEqualTo(pageDto.getSbbh());
         criteria.andCjsjGreaterThan(DateTools.toDate(DateTools.getFormatDate(new Date(),DateTools.yyyy_MM_dd),DateTools.yyyy_MM_dd));
         criteria.andTpljLike("%.png");
+        EquipmentFileExample.Criteria caor = example.or();
+        caor.andSbbhEqualTo(pageDto.getSbbh());
+        caor.andCjsjGreaterThan(DateTools.toDate(DateTools.getFormatDate(new Date(),DateTools.yyyy_MM_dd),DateTools.yyyy_MM_dd));
+        caor.andTpljLike("%.jpg");
         example.setOrderByClause(" cjsj desc ");
         List<EquipmentFile> equipmentFiles = equipmentFileService.listAll(example);
         responseDto.setContent(equipmentFiles);

@@ -66,9 +66,9 @@
 
     <div>
       <div style="display: flex;flex-wrap: wrap;margin-bottom: 30px;">
-        <div v-for="(item,index) in equipmentFiles" style="margin:20px;width: 150px;height: 250px;display: flex;flex-wrap: wrap;">
-          <div style="text-align: center;width: 150px;">
-            <img :src="item.tplj" style="height: 200px;cursor: pointer;" v-on:click="checkImg(item,index)">
+        <div v-for="(item,index) in equipmentFiles" style="margin:20px;width: 150px;height: 250px;text-align: center;">
+          <div style="text-align: center;width: 100px;margin: 0 auto;">
+            <img :src="item.tplj" style="width: 100px;height: 200px;cursor: pointer;" v-on:click="checkImg(item,index)">
           </div>
           <div style="margin: 0 auto;">{{waterEquipments|optionNSArray(item.sbbh)}}</div>
           <div style="margin: 0 auto;">{{item.cjsj}}</div>
@@ -102,7 +102,7 @@
               <div style="text-align: left;margin: auto;">
                 <img v-on:click="beforePic()" v-show="curIndex!=0" src="../../../public/static/image/turnLeft.png"/>
               </div>
-              <div style="text-align: center;">
+              <div style="text-align: center;width: 500px;overflow-x: auto;">
                 <img :src="curTplj" :style="{height:+maxHeight-100+'px'}"/>
               </div>
               <div style="text-align: right;margin: auto;">
