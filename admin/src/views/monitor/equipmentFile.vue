@@ -121,7 +121,7 @@
     </div><!-- /.modal -->
 
     <div id="img-modal-real" class="modal fade" tabindex="-1" role="dialog">
-      <div class="modal-dialog" role="document" style="width: 55%">
+      <div class="modal-dialog" role="document" style="width: 95%">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
