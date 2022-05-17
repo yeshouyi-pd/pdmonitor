@@ -41,6 +41,8 @@ public class EquipmentFileDto extends PageDto{
 
     private String xmbh;
 
+    private String txtSrc;
+
     public PlayDto getPlayDto() {
         return playDto;
     }
@@ -121,6 +123,14 @@ public class EquipmentFileDto extends PageDto{
 
     public void setXmbh(String xmbh) {
         this.xmbh = xmbh;
+    }
+
+    public String getTxtSrc() {
+        return txtSrc;
+    }
+
+    public void setTxtSrc(String txtSrc) {
+        this.txtSrc = txtSrc;
     }
 
     @Override
