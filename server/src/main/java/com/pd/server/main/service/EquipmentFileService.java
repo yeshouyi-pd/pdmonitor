@@ -51,7 +51,7 @@ public class EquipmentFileService {
     public void list(EquipmentFileDto pageDto, List<String> list, LoginUserDto user) {
         EquipmentFileExample audioExample = new EquipmentFileExample();
         EquipmentFileExample.Criteria audioCa = audioExample.createCriteria();
-        audioCa.andTpljLike("%wav");
+        audioCa.andTpljLike("%txt");
         List<String> audioFileList = equipmentFileMapper.selectAudioByExample(audioExample);
         PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
         EquipmentFileExample equipmentFileExample = new EquipmentFileExample();
@@ -105,10 +105,18 @@ public class EquipmentFileService {
         pageDto.setTotal(pageInfo.getTotal());
         List<EquipmentFileDto> equipmentFileDtoList = CopyUtil.copyList(equipmentFileList, EquipmentFileDto.class);
         for(EquipmentFileDto item : equipmentFileDtoList){
-            if(audioFileList.contains(item.getTplj().substring(0,item.getTplj().length()-3)+"wav")){
-                item.setHasAudio(true);
-            }else{
-                item.setHasAudio(false);
+//            if(audioFileList.contains(item.getTplj().substring(0,item.getTplj().length()-3)+"wav")){
+//                item.setHasAudio(true);
+//            }else{
+//                item.setHasAudio(false);
+//            }
+            for(String str : audioFileList){
+                if(str.contains(item.getTplj().substring(0,item.getTplj().length()-4))){
+                    item.setHasAudio(true);
+                    item.setTxtSrc(str);
+                }else{
+                    item.setHasAudio(false);
+                }
             }
         }
         pageDto.setList(equipmentFileDtoList);

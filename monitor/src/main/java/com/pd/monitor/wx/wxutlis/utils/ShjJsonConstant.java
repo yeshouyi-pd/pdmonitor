@@ -60,6 +60,22 @@ public class ShjJsonConstant {
              * 非实时数据上传
              */
             put("WaterRawfile", "com.pd.server.main.service.shj.WaterRawfileShjService");
+            /**
+             * 群次数据回传
+             */
+            put("GroupEvent", "com.pd.server.main.service.shj.GroupEventShjService");
+            /**
+             * 指针数据回传（每秒）
+             */
+            put("PointerSecond", "com.pd.server.main.service.shj.PointerSecondShjService");
+            /**
+             * 指针数据回传（每天）
+             */
+            put("PointerDay", "com.pd.server.main.service.shj.PointerDayShjService");
+            /**
+             * 设备监测数据回传
+             */
+
         }
     };
 

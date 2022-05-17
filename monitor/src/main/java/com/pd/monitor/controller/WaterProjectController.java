@@ -125,7 +125,7 @@ public class WaterProjectController extends BaseWxController {
                 entity.setSbsn(sbsncode[i]);
                 waterProEquipService.save(entity);
             }
-            WxRedisConfig.init_waterProject();
+            //WxRedisConfig.init_waterProject();
             WxRedisConfig.init_xmbhsbsn();
             responseDto.setContent(waterProjectDto);
         }catch (Exception e){

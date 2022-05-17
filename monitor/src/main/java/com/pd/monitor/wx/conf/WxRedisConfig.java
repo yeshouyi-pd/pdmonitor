@@ -18,8 +18,6 @@ import org.springframework.util.CollectionUtils;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -96,7 +94,6 @@ public class WxRedisConfig implements CommandLineRunner {
      */
     public static synchronized void reload() {
         init_sbsnCenterCodeMap();//加载设备编号对应的监测点编号
-        init_waterProject();//加载项目缓存
         init_xmbhsbsn();//加载项目编号对应的设备编号
     }
 
@@ -115,27 +112,7 @@ public class WxRedisConfig implements CommandLineRunner {
     }
 
 
-    /**
-     * 加载项目缓存
-     */
-    public synchronized static boolean init_waterProject(){
-        try {
-            WaterProjectExample example = new WaterProjectExample();
-            WaterProjectExample.Criteria ca = example.createCriteria();
-            List<WaterProject> list = waterprojectstaticMapper.selectByExample(example);
-            if(!CollectionUtils.isEmpty(list)){
-                Map<String, String>  map = new LinkedHashMap<String,String>();
-                for(WaterProject vo : list){
-                    map.put(vo.getXmbh(),vo.getXmmc());
-                }
-                redisTstaticemplate.opsForValue().set(RedisCode.PROJECTCODENAME, map);//将参数信息写入redis缓存
-            }
-        }catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
-    }
+
 
     /**
      * 加载项目编号对应的设备编号

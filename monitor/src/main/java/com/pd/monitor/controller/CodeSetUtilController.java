@@ -3,6 +3,7 @@ package com.pd.monitor.controller;
 import com.pd.server.config.CodeType;
 import com.pd.server.config.RedisCode;
 import com.pd.server.main.domain.WaterProUserExample;
+import com.pd.server.main.domain.WaterProject;
 import com.pd.server.main.domain.WaterProjectExample;
 import com.pd.server.main.dto.*;
 import com.pd.monitor.wx.conf.BaseWxController;
@@ -37,6 +38,9 @@ public class CodeSetUtilController extends BaseWxController {
 
     @Resource
     private WaterProUserService waterProUserService;
+
+    @Resource
+    private WaterProjectService waterProjectService;
 
     /**
      * 资源树查询
@@ -173,7 +177,14 @@ public class CodeSetUtilController extends BaseWxController {
     @GetMapping("/getXmbhAndXmmc")
     public ResponseDto getXmbhAndXmmc(){
         ResponseDto responseDto = new ResponseDto();
-        Map<String,String> map = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.PROJECTCODENAME);
+//        Map<String,String> map = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.PROJECTCODENAME);
+        WaterProjectExample example = new WaterProjectExample();
+        WaterProjectExample.Criteria ca = example.createCriteria();
+        List<WaterProject> list = waterProjectService.selectByExample(example);
+        Map<String, String>  map = new LinkedHashMap<String,String>();
+        for(WaterProject vo : list){
+            map.put(vo.getXmbh(),vo.getXmmc());
+        }
         responseDto.setContent(map);
         return responseDto;
     }
