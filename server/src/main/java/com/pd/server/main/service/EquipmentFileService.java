@@ -110,12 +110,12 @@ public class EquipmentFileService {
 //            }else{
 //                item.setHasAudio(false);
 //            }
+            item.setHasAudio(false);
             for(String str : audioFileList){
                 if(str.contains(item.getTplj().substring(0,item.getTplj().length()-4))){
                     item.setHasAudio(true);
                     item.setTxtSrc(str);
-                }else{
-                    item.setHasAudio(false);
+                    break;
                 }
             }
         }
