@@ -29,7 +29,8 @@
       <!--  zTree jquery树插件  -->
       <link rel="stylesheet" href="<%= BASE_URL %>zTree_v3/css/zTreeStyle/zTreeStyle.css" type="text/css">
       <!--  富文本编辑器  -->
-      <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.15/dist/summernote.min.css" rel="stylesheet">
+      <link href="<%= BASE_URL %>cdn/summernot/summernote.css" rel="stylesheet">
+
       <!--  自定义CSS  -->
       <link rel="stylesheet" href="<%= BASE_URL %>static/css/style.css" type="text/css">
 
@@ -109,7 +110,7 @@
 
       <script src="<%= BASE_URL %>jquery-photo-gallery/jquery.photo.gallery.js"></script>
       <!--  确认框和提示框  -->
-      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+      <script src="<%= BASE_URL %>cdn/sweetalert2@9.js"></script>
       <script src="<%= BASE_URL %>static/js/toast.js"></script>
       <script src="<%= BASE_URL %>static/js/confirm.js"></script>
 
@@ -130,7 +131,7 @@
       <script src="<%= BASE_URL %>zTree_v3/js/jquery.ztree.core.min.js"></script>
       <script src="<%= BASE_URL %>zTree_v3/js/jquery.ztree.excheck.min.js"></script>
       <!--  富文本编辑器  -->
-      <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.15/dist/summernote.min.js"></script>
+      <script src="<%= BASE_URL %>cdn/summernot/summernote.min.js"></script>
 
       <!--  md5工具类  -->
       <script src="<%= BASE_URL %>static/js/md5.js"></script>
@@ -141,7 +142,7 @@
       <script type="text/javascript"
               src="https://webapi.amap.com/maps?v=1.4.15&key=5a7e61d356499dc86719d0b4960a1ad8&plugin=AMap.Geolocation,AMap.Autocomplete,AMap.CircleEditor"></script>
 
-      <script src="https://cdn.bootcss.com/crypto-js/3.1.9-1/crypto-js.min.js"></script>
+      <script src="<%= BASE_URL %>cdn/crypto-js.min.js"></script>
 
       <!-- 打印 -->
       <script src="<%= BASE_URL %>ace/assets/js/jquery.jqprint-0.3.js"></script>
