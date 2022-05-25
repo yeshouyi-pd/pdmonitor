@@ -29,6 +29,7 @@ public class PointerSecondShjService extends AbstractScanRequest {
         dto.setCjsj(DateUtil.toDate(jsonParam.getString("cjsj"),"yyyy-MM-dd HH:mm:ss"));
         dto.setCreateTime(new Date());
         service.save(dto);
+        data = "保存成功";
         return data;
     }
 
