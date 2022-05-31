@@ -4,6 +4,7 @@ import com.pd.server.main.domain.PointerSecond;
 import com.pd.server.main.domain.PointerSecondExample;
 import com.pd.server.main.dto.PointerSecondDto;
 import com.pd.server.main.dto.PageDto;
+import com.pd.server.main.dto.basewx.my.PointerCommenDto;
 import com.pd.server.main.mapper.PointerSecondMapper;
 import com.pd.server.util.CopyUtil;
 import com.pd.server.util.UuidUtil;
@@ -22,11 +23,15 @@ public class PointerSecondService {
     @Resource
     private PointerSecondMapper pointerSecondMapper;
 
+    public List<PointerCommenDto> selectAll(PointerSecondExample example){
+        return pointerSecondMapper.selectAll(example);
+    }
+
     /**
     * 列表查询
     */
     public void list(PageDto pageDto) {
-    PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
+        PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
         PointerSecondExample pointerSecondExample = new PointerSecondExample();
         List<PointerSecond> pointerSecondList = pointerSecondMapper.selectByExample(pointerSecondExample);
         PageInfo<PointerSecond> pageInfo = new PageInfo<>(pointerSecondList);

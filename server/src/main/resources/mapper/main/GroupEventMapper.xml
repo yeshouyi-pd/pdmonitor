@@ -12,6 +12,7 @@
     <result column="bz1" jdbcType="VARCHAR" property="bz1" />
     <result column="bz2" jdbcType="VARCHAR" property="bz2" />
     <result column="bz3" jdbcType="VARCHAR" property="bz3" />
+    <result column="deptcode" jdbcType="VARCHAR" property="deptcode" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.pd.server.main.domain.GroupEvent">
     <result column="zcfwj" jdbcType="LONGVARCHAR" property="zcfwj" />
@@ -75,7 +76,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, sbbh, kssj, jssj, cjsj, sm, bz, bz1, bz2, bz3
+    id, sbbh, kssj, jssj, cjsj, sm, bz, bz1, bz2, bz3, deptcode
   </sql>
   <sql id="Blob_Column_List">
     zcfwj
@@ -132,11 +133,11 @@
     insert into group_event (id, sbbh, kssj, 
       jssj, cjsj, sm, 
       bz, bz1, bz2, bz3, 
-      zcfwj)
+      deptcode, zcfwj)
     values (#{id,jdbcType=VARCHAR}, #{sbbh,jdbcType=VARCHAR}, #{kssj,jdbcType=TIMESTAMP}, 
       #{jssj,jdbcType=TIMESTAMP}, #{cjsj,jdbcType=TIMESTAMP}, #{sm,jdbcType=VARCHAR}, 
       #{bz,jdbcType=VARCHAR}, #{bz1,jdbcType=VARCHAR}, #{bz2,jdbcType=VARCHAR}, #{bz3,jdbcType=VARCHAR}, 
-      #{zcfwj,jdbcType=LONGVARCHAR})
+      #{deptcode,jdbcType=VARCHAR}, #{zcfwj,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.pd.server.main.domain.GroupEvent">
     insert into group_event
@@ -170,6 +171,9 @@
       </if>
       <if test="bz3 != null">
         bz3,
+      </if>
+      <if test="deptcode != null">
+        deptcode,
       </if>
       <if test="zcfwj != null">
         zcfwj,
@@ -205,6 +209,9 @@
       </if>
       <if test="bz3 != null">
         #{bz3,jdbcType=VARCHAR},
+      </if>
+      <if test="deptcode != null">
+        #{deptcode,jdbcType=VARCHAR},
       </if>
       <if test="zcfwj != null">
         #{zcfwj,jdbcType=LONGVARCHAR},
@@ -250,6 +257,9 @@
       <if test="record.bz3 != null">
         bz3 = #{record.bz3,jdbcType=VARCHAR},
       </if>
+      <if test="record.deptcode != null">
+        deptcode = #{record.deptcode,jdbcType=VARCHAR},
+      </if>
       <if test="record.zcfwj != null">
         zcfwj = #{record.zcfwj,jdbcType=LONGVARCHAR},
       </if>
@@ -270,6 +280,7 @@
       bz1 = #{record.bz1,jdbcType=VARCHAR},
       bz2 = #{record.bz2,jdbcType=VARCHAR},
       bz3 = #{record.bz3,jdbcType=VARCHAR},
+      deptcode = #{record.deptcode,jdbcType=VARCHAR},
       zcfwj = #{record.zcfwj,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -286,7 +297,8 @@
       bz = #{record.bz,jdbcType=VARCHAR},
       bz1 = #{record.bz1,jdbcType=VARCHAR},
       bz2 = #{record.bz2,jdbcType=VARCHAR},
-      bz3 = #{record.bz3,jdbcType=VARCHAR}
+      bz3 = #{record.bz3,jdbcType=VARCHAR},
+      deptcode = #{record.deptcode,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -321,6 +333,9 @@
       <if test="bz3 != null">
         bz3 = #{bz3,jdbcType=VARCHAR},
       </if>
+      <if test="deptcode != null">
+        deptcode = #{deptcode,jdbcType=VARCHAR},
+      </if>
       <if test="zcfwj != null">
         zcfwj = #{zcfwj,jdbcType=LONGVARCHAR},
       </if>
@@ -338,6 +353,7 @@
       bz1 = #{bz1,jdbcType=VARCHAR},
       bz2 = #{bz2,jdbcType=VARCHAR},
       bz3 = #{bz3,jdbcType=VARCHAR},
+      deptcode = #{deptcode,jdbcType=VARCHAR},
       zcfwj = #{zcfwj,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -351,7 +367,8 @@
       bz = #{bz,jdbcType=VARCHAR},
       bz1 = #{bz1,jdbcType=VARCHAR},
       bz2 = #{bz2,jdbcType=VARCHAR},
-      bz3 = #{bz3,jdbcType=VARCHAR}
+      bz3 = #{bz3,jdbcType=VARCHAR},
+      deptcode = #{deptcode,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

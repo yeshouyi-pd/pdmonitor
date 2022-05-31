@@ -4,6 +4,7 @@ import com.pd.server.main.domain.PointerDay;
 import com.pd.server.main.domain.PointerDayExample;
 import com.pd.server.main.dto.PointerDayDto;
 import com.pd.server.main.dto.PageDto;
+import com.pd.server.main.dto.basewx.my.PointerCommenDto;
 import com.pd.server.main.mapper.PointerDayMapper;
 import com.pd.server.util.CopyUtil;
 import com.pd.server.util.UuidUtil;
@@ -21,6 +22,10 @@ public class PointerDayService {
 
     @Resource
     private PointerDayMapper pointerDayMapper;
+
+    public List<PointerCommenDto> selectAll(PointerDayExample example){
+        return pointerDayMapper.selectAll(example);
+    }
 
     /**
     * 列表查询

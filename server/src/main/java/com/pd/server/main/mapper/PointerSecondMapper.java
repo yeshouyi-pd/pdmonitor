@@ -3,6 +3,8 @@ package com.pd.server.main.mapper;
 import com.pd.server.main.domain.PointerSecond;
 import com.pd.server.main.domain.PointerSecondExample;
 import java.util.List;
+
+import com.pd.server.main.dto.basewx.my.PointerCommenDto;
 import org.apache.ibatis.annotations.Param;
 
 public interface PointerSecondMapper {
@@ -17,6 +19,8 @@ public interface PointerSecondMapper {
     int insertSelective(PointerSecond record);
 
     List<PointerSecond> selectByExample(PointerSecondExample example);
+
+    List<PointerCommenDto> selectAll(PointerSecondExample example);
 
     PointerSecond selectByPrimaryKey(String id);
 

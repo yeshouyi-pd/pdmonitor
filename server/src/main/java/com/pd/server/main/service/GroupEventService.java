@@ -25,14 +25,8 @@ public class GroupEventService {
     /**
     * 列表查询
     */
-    public void list(PageDto pageDto) {
-    PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
-        GroupEventExample groupEventExample = new GroupEventExample();
-        List<GroupEvent> groupEventList = groupEventMapper.selectByExample(groupEventExample);
-        PageInfo<GroupEvent> pageInfo = new PageInfo<>(groupEventList);
-        pageDto.setTotal(pageInfo.getTotal());
-        List<GroupEventDto> groupEventDtoList = CopyUtil.copyList(groupEventList, GroupEventDto.class);
-        pageDto.setList(groupEventDtoList);
+    public List<GroupEvent> list(GroupEventExample example) {
+        return groupEventMapper.selectByExampleWithBLOBs(example);
     }
 
     /**
