@@ -19,7 +19,8 @@ public class PointerSecondShjService extends AbstractScanRequest {
      */
     public String request(JSONObject jsonParam) throws Exception {
 
-        if(StringUtils.isEmpty(jsonParam.getString("decibelValue")) || StringUtils.isEmpty(jsonParam.getString("cjsj"))){
+        if(StringUtils.isEmpty(jsonParam.getString("decibelValue")) || StringUtils.isEmpty(jsonParam.getString("cjsj"))
+                || StringUtils.isEmpty(jsonParam.getString("sm"))){
             data = "参数错误";
             return data;
         }
@@ -27,6 +28,7 @@ public class PointerSecondShjService extends AbstractScanRequest {
         PointerSecondDto dto = new PointerSecondDto();
         dto.setDecibelValue(jsonParam.getString("decibelValue"));
         dto.setCjsj(DateUtil.toDate(jsonParam.getString("cjsj"),"yyyy-MM-dd HH:mm:ss"));
+        dto.setSm(jsonParam.getString("sm"));
         dto.setCreateTime(new Date());
         service.save(dto);
         data = "保存成功";

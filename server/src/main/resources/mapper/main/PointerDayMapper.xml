@@ -12,6 +12,18 @@
     <result column="bz2" jdbcType="VARCHAR" property="bz2" />
     <result column="bz3" jdbcType="VARCHAR" property="bz3" />
   </resultMap>
+  <resultMap id="OtherResultMap" type="com.pd.server.main.dto.basewx.my.PointerCommenDto">
+    <result column="id" jdbcType="VARCHAR" property="id" />
+    <result column="decibel_value" jdbcType="VARCHAR" property="decibelValue" />
+    <result column="cjsj" jdbcType="TIMESTAMP" property="cjsj" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="sm" jdbcType="VARCHAR" property="sm" />
+    <result column="bz" jdbcType="VARCHAR" property="bz" />
+    <result column="bz1" jdbcType="VARCHAR" property="bz1" />
+    <result column="bz2" jdbcType="VARCHAR" property="bz2" />
+    <result column="bz3" jdbcType="VARCHAR" property="bz3" />
+    <result column="create_time_max" jdbcType="TIMESTAMP" property="createTimeMax"  />
+  </resultMap>
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -86,6 +98,20 @@
     <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
+  </select>
+  <select id="selectAll" parameterType="com.pd.server.main.domain.PointerDayExample" resultMap="OtherResultMap">
+    SELECT
+    max.*,
+    MAX( max.cjsj ) create_time_max
+    FROM
+    ( SELECT DISTINCT ( id ), decibel_value, cjsj, create_time, sm
+    FROM pointer_day
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    ORDER BY cjsj DESC ) max
+    GROUP BY
+    sm;
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 

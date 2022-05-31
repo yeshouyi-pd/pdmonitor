@@ -23,6 +23,8 @@ public class GroupEvent {
 
     private String bz3;
 
+    private String deptcode;
+
     private String zcfwj;
 
     public String getId() {
@@ -105,6 +107,14 @@ public class GroupEvent {
         this.bz3 = bz3;
     }
 
+    public String getDeptcode() {
+        return deptcode;
+    }
+
+    public void setDeptcode(String deptcode) {
+        this.deptcode = deptcode;
+    }
+
     public String getZcfwj() {
         return zcfwj;
     }
@@ -129,6 +139,7 @@ public class GroupEvent {
         sb.append(", bz1=").append(bz1);
         sb.append(", bz2=").append(bz2);
         sb.append(", bz3=").append(bz3);
+        sb.append(", deptcode=").append(deptcode);
         sb.append(", zcfwj=").append(zcfwj);
         sb.append("]");
         return sb.toString();

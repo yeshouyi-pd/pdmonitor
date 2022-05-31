@@ -3,6 +3,8 @@ package com.pd.server.main.mapper;
 import com.pd.server.main.domain.PointerDay;
 import com.pd.server.main.domain.PointerDayExample;
 import java.util.List;
+
+import com.pd.server.main.dto.basewx.my.PointerCommenDto;
 import org.apache.ibatis.annotations.Param;
 
 public interface PointerDayMapper {
@@ -17,6 +19,8 @@ public interface PointerDayMapper {
     int insertSelective(PointerDay record);
 
     List<PointerDay> selectByExample(PointerDayExample example);
+
+    List<PointerCommenDto> selectAll(PointerDayExample example);
 
     PointerDay selectByPrimaryKey(String id);
 

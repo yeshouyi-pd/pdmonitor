@@ -1,9 +1,11 @@
 package com.pd.server.main.dto;
 
         import java.util.Date;
+        import java.util.List;
+
         import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class GroupEventDto {
+public class GroupEventDto extends PageDto{
 
     /**
     * 主键
@@ -39,6 +41,11 @@ public class GroupEventDto {
     private Date cjsj;
 
     /**
+     * 监测点（部门）
+     */
+    private String deptcode;
+
+    /**
     * 说明
     */
     private String sm;
@@ -62,6 +69,12 @@ public class GroupEventDto {
     * 备注字段
     */
     private String bz3;
+
+    private String zcts;
+
+    private List<String> zcList;
+
+    private String xmbh;
 
     public String getId() {
         return id;
@@ -111,6 +124,14 @@ public class GroupEventDto {
         this.cjsj = cjsj;
     }
 
+    public String getDeptcode() {
+        return deptcode;
+    }
+
+    public void setDeptcode(String deptcode) {
+        this.deptcode = deptcode;
+    }
+
     public String getSm() {
         return sm;
     }
@@ -151,6 +172,29 @@ public class GroupEventDto {
         this.bz3 = bz3;
     }
 
+    public String getZcts() {
+        return zcts;
+    }
+
+    public void setZcts(String zcts) {
+        this.zcts = zcts;
+    }
+
+    public List<String> getZcList() {
+        return zcList;
+    }
+
+    public void setZcList(List<String> zcList) {
+        this.zcList = zcList;
+    }
+
+    public String getXmbh() {
+        return xmbh;
+    }
+
+    public void setXmbh(String xmbh) {
+        this.xmbh = xmbh;
+    }
 
     @Override
     public String toString() {
@@ -164,6 +208,7 @@ public class GroupEventDto {
             sb.append(", jssj=").append(jssj);
             sb.append(", zcfwj=").append(zcfwj);
             sb.append(", cjsj=").append(cjsj);
+            sb.append(", deptcode=").append(deptcode);
             sb.append(", sm=").append(sm);
             sb.append(", bz=").append(bz);
             sb.append(", bz1=").append(bz1);

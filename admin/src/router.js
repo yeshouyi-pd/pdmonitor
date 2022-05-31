@@ -42,6 +42,9 @@ import WaterRawfile from "./views/monitor/waterRawfile.vue";
 import Fleuploadinfo from "./views/monitor/fileuploadinfo.vue";
 import CameraInfo from "./views/monitor/cameraInfo.vue";
 import PredationNum from "./views/monitor/predationNum.vue";
+import GroupEvent from "./views/monitor/groupEvent.vue";
+import PointerSecond from "./views/monitor/pointerSecond.vue";
+import PointerDay from "./views/monitor/pointerDay.vue";
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -230,6 +233,18 @@ export default new Router({
             path: "monitor/predationNum",
             name: "monitor/predationNum",
             component: PredationNum
+        },{
+            path: "monitor/groupEvent",
+            name: "monitor/groupEvent",
+            component: GroupEvent
+        },{
+            path: "monitor/pointerSecond",
+            name: "monitor/pointerSecond",
+            component: PointerSecond
+        },{
+            path: "monitor/pointerDay",
+            name: "monitor/pointerDay",
+            component: PointerDay
         }]
 
     }]
