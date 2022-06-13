@@ -51,8 +51,11 @@ public class EquipmentFileService {
     public void list(EquipmentFileDto pageDto, List<String> list, LoginUserDto user) {
         EquipmentFileExample audioExample = new EquipmentFileExample();
         EquipmentFileExample.Criteria audioCa = audioExample.createCriteria();
-        audioCa.andTpljLike("%txt");
+        audioCa.andTpljLike("%wav");
         List<String> audioFileList = equipmentFileMapper.selectAudioByExample(audioExample);
+        EquipmentFileExample example = new EquipmentFileExample();
+        example.createCriteria().andTpljLike("%txt");
+        List<String> txtFileList = equipmentFileMapper.selectAudioByExample(example);
         PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
         EquipmentFileExample equipmentFileExample = new EquipmentFileExample();
         EquipmentFileExample.Criteria ca = equipmentFileExample.createCriteria();
@@ -105,15 +108,15 @@ public class EquipmentFileService {
         pageDto.setTotal(pageInfo.getTotal());
         List<EquipmentFileDto> equipmentFileDtoList = CopyUtil.copyList(equipmentFileList, EquipmentFileDto.class);
         for(EquipmentFileDto item : equipmentFileDtoList){
-//            if(audioFileList.contains(item.getTplj().substring(0,item.getTplj().length()-3)+"wav")){
-//                item.setHasAudio(true);
-//            }else{
-//                item.setHasAudio(false);
-//            }
-            item.setHasAudio(false);
-            for(String str : audioFileList){
+            if(audioFileList.contains(item.getTplj().substring(0,item.getTplj().length()-3)+"wav")){
+                item.setHasAudio(true);
+            }else{
+                item.setHasAudio(false);
+            }
+            item.setHasTxt(false);
+            for(String str : txtFileList){
                 if(str.contains(item.getTplj().substring(0,item.getTplj().length()-4))){
-                    item.setHasAudio(true);
+                    item.setHasTxt(true);
                     item.setTxtSrc(str);
                     break;
                 }
