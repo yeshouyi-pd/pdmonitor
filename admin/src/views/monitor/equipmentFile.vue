@@ -66,7 +66,7 @@
 
     <div>
       <div style="display: flex;flex-wrap: wrap;margin-bottom: 30px;">
-        <div v-for="(item,index) in equipmentFiles" style="margin:20px;width: 150px;height: 250px;text-align: center;">
+        <div v-for="(item,index) in equipmentFiles" style="margin:20px;width: 150px;height: 280px;text-align: center;">
           <div style="text-align: center;width: 100px;margin: 0 auto;">
             <img :src="item.tplj" style="width: 100px;height: 200px;cursor: pointer;" v-on:click="checkImg(item,index)">
           </div>
