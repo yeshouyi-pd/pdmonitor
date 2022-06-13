@@ -43,6 +43,8 @@ public class EquipmentFileDto extends PageDto{
 
     private String txtSrc;
 
+    private boolean hasTxt;
+
     public PlayDto getPlayDto() {
         return playDto;
     }
@@ -131,6 +133,14 @@ public class EquipmentFileDto extends PageDto{
 
     public void setTxtSrc(String txtSrc) {
         this.txtSrc = txtSrc;
+    }
+
+    public boolean getHasTxt() {
+        return hasTxt;
+    }
+
+    public void setHasTxt(boolean hasTxt) {
+        this.hasTxt = hasTxt;
     }
 
     @Override

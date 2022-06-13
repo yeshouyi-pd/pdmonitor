@@ -74,7 +74,12 @@
           <div style="margin: 0 auto;">{{item.cjsj}}</div>
           <div style="margin: 0 auto;" v-if="item.hasAudio">
             <button class="btn btn-white btn-default btn-round" style="margin: 0 auto;" v-on:click="downloadAudio(item)">
-              <i class="ace-icon fa fa-volume-down red2">发声头数</i>
+              <i class="ace-icon fa fa-volume-down red2">下载音频</i>
+            </button>
+          </div>
+          <div style="margin: 0 auto;" v-if="item.hasTxt">
+            <button class="btn btn-white btn-default btn-round" style="margin: 0 auto;" v-on:click="downloadTxt(item)">
+              <i class="ace-icon fa fa-volume-down red2">发现头数</i>
             </button>
           </div>
         </div>
@@ -278,13 +283,21 @@ export default {
      * 下载音频
      */
     downloadAudio(obj){
-      console.log(obj.txtSrc.substring(obj.txtSrc.lastIndexOf("/")+1,obj.txtSrc.length));
+      //console.log(obj.txtSrc.substring(obj.txtSrc.lastIndexOf("/")+1,obj.txtSrc.length));
       let _this = this;
       if(!obj.hasAudio){
         Toast.warning("该图片没有对应的音频文件！");
         return;
       }
-      //let paramsStr = "fileUrl="+obj.tplj.substring(0,obj.tplj.lastIndexOf("/")+1)+"&fileName="+obj.tplj.substring(obj.tplj.lastIndexOf("/")+1,obj.tplj.length-3)+"wav";
+      let paramsStr = "fileUrl="+obj.tplj.substring(0,obj.tplj.lastIndexOf("/")+1)+"&fileName="+obj.tplj.substring(obj.tplj.lastIndexOf("/")+1,obj.tplj.length-3)+"wav";
+      //let paramsStr = "fileUrl="+obj.tplj.substring(0,obj.tplj.lastIndexOf("/")+1)+"&fileName="+obj.txtSrc.substring(obj.txtSrc.lastIndexOf("/")+1,obj.txtSrc.length);
+      let url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downAudioFile?'+paramsStr;
+      console.log(url);
+      window.location.href = url;
+    },
+    downloadTxt(obj){
+      console.log(obj.txtSrc.substring(obj.txtSrc.lastIndexOf("/")+1,obj.txtSrc.length));
+      let _this = this;
       let paramsStr = "fileUrl="+obj.tplj.substring(0,obj.tplj.lastIndexOf("/")+1)+"&fileName="+obj.txtSrc.substring(obj.txtSrc.lastIndexOf("/")+1,obj.txtSrc.length);
       let url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downAudioFile?'+paramsStr;
       console.log(url);
