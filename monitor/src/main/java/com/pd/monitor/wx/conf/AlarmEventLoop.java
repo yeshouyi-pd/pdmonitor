@@ -54,10 +54,6 @@ public class AlarmEventLoop extends BaseWxController {
         EquipmentFileExample example = new EquipmentFileExample();
         EquipmentFileExample.Criteria ca = example.createCriteria();
         ca.andRqEqualTo(beforeDayStr);
-        ca.andTpljLike("%png");
-        EquipmentFileExample.Criteria caor = example.or();
-        caor.andRqEqualTo(beforeDayStr);
-        caor.andTpljLike("%jpg");
         List<AlarmNumbersDto> lists = equipmentFileService.statisticsAlarmNums(example);
         Map<String, List<AlarmNumbersDto>> mapList = lists.stream().collect(Collectors.groupingBy(AlarmNumbersDto::getSbbh));
         for(String key : mapList.keySet()){
@@ -136,12 +132,8 @@ public class AlarmEventLoop extends BaseWxController {
             EquipmentFileExample example1 = new EquipmentFileExample();
             EquipmentFileExample.Criteria ca1 = example1.createCriteria();
             ca1.andRqEqualTo(beforeDayStr);
-            ca1.andTpljLike("%png");
             ca1.andTpljLike("%predation%");
-            EquipmentFileExample.Criteria caor1 = example1.or();
-            caor1.andRqEqualTo(beforeDayStr);
-            caor1.andTpljLike("%jpg");
-            caor1.andTpljLike("%predation%");
+            ca1.andTpljLike("%txt%");
             if(!StringUtils.isEmpty(alarmNumbersDto.getDeptcode())){
                 ca1.andDeptcodeEqualTo(alarmNumbersDto.getDeptcode());
             }
