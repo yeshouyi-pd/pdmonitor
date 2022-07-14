@@ -39,7 +39,7 @@
                     <td style="width: 15%;">
                       <select v-model="equipmentFileDto.tplj" class="form-control" id="form-field-select-2">
                         <option value="" selected>请选择</option>
-                        <option value="png">出现</option>
+                        <option value="txt">出现</option>
                         <option value="predation">捕食</option>
                       </select>
                     </td>

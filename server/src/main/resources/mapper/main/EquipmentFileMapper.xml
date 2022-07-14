@@ -126,7 +126,7 @@
     select
     <include refid="Base_Column_List" />
     from equipment_file
-    where sbbh = #{sbbh,jdbcType=VARCHAR}  and  tplj LIKE '%.png'
+    where sbbh = #{sbbh,jdbcType=VARCHAR}  and  (tplj LIKE '%.png' or tplj LIKE '%.jpg' or tplj LIKE '%.txt')
     order by cjsj desc limit 1
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
@@ -511,6 +511,7 @@
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
+    AND tplj LIKE '%.txt'
     group by sbbh, rq, xs, fz, deptcode
     order by sbbh, rq, xs, fz, deptcode
   </select>
@@ -521,6 +522,7 @@
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
+    AND tplj LIKE '%.txt'
     group by sbbh, rq, xs, fz, deptcode
     order by sbbh, rq, xs, fz, deptcode
   </select>
@@ -530,7 +532,7 @@
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
-    and   TO_DAYS(cjsj) = TO_DAYS(NOW())  AND (tplj LIKE '%.png' or tplj LIKE '%.jpg') GROUP BY sbbh ) c  WHERE a.sbsn = c.text AND  a.deptcode = b.deptcode
+    and   TO_DAYS(cjsj) = TO_DAYS(NOW())  AND tplj LIKE '%.txt' GROUP BY sbbh ) c  WHERE a.sbsn = c.text AND  a.deptcode = b.deptcode
   </select>
 
 
@@ -540,7 +542,7 @@
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
-    and   TO_DAYS(cjsj) = TO_DAYS(NOW())  and  (tplj LIKE '%.png' or tplj LIKE '%.jpg')  GROUP  BY  deptcode
+    and   TO_DAYS(cjsj) = TO_DAYS(NOW())  and  tplj LIKE '%.txt'  GROUP  BY  deptcode
 
   </select>
 
@@ -551,7 +553,7 @@
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
-    AND  TO_DAYS(cjsj) = TO_DAYS(NOW()) and  (tplj LIKE '%.png' or tplj LIKE '%.jpg')   ) b WHERE a.sbsn = b.sbbh ORDER BY b.sbbh  , b.cjsj DESC
+    AND  TO_DAYS(cjsj) = TO_DAYS(NOW()) and  tplj LIKE '%.txt'  ) b WHERE a.sbsn = b.sbbh ORDER BY b.sbbh  , b.cjsj DESC
   </select>
 
   <select id="statisticsAlarmNumsByHour" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultMap="StatisticsResultMap">
@@ -561,6 +563,7 @@
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
+    AND tplj LIKE '%.txt'
     group by sbbh, rq, xs, deptcode
     order by rq,xs
   </select>
@@ -572,6 +575,7 @@
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
+    AND tplj LIKE '%.txt'
     group by rq, xs, deptcode
     order by rq,xs
   </select>
@@ -597,6 +601,7 @@
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
+    AND tplj LIKE '%.txt'
     group by sbbh, rq, deptcode
     order by sbbh, rq, deptcode
   </select>
