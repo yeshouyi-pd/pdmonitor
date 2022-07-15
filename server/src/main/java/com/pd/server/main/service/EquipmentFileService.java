@@ -51,10 +51,51 @@ public class EquipmentFileService {
     public void list(EquipmentFileDto pageDto, List<String> list, LoginUserDto user) {
         EquipmentFileExample audioExample = new EquipmentFileExample();
         EquipmentFileExample.Criteria audioCa = audioExample.createCriteria();
+        if(!StringUtils.isEmpty(list)&&list.size()>0){
+            audioCa.andDeptcodeIn(list);
+        }
+        if(!StringUtils.isEmpty(pageDto.getStime())){
+            audioCa.andCjsjGreaterThanOrEqualTo(pageDto.getStime());
+        }
+        if(!StringUtils.isEmpty(pageDto.getEtime())){
+            audioCa.andCjsjLessThanOrEqualTo(pageDto.getEtime());
+        }
+        if(!StringUtils.isEmpty(pageDto.getSbbh())){
+            audioCa.andSbbhEqualTo(pageDto.getSbbh());//
+        }
+        if(!StringUtils.isEmpty(pageDto.getXmbh())){
+            if(!CollectionUtils.isEmpty(user.getXmbhsbsns().get(pageDto.getXmbh()))){
+                audioCa.andSbbhIn(user.getXmbhsbsns().get(pageDto.getXmbh()));
+            }
+        }
+        if(!StringUtils.isEmpty(pageDto.getTplj())&&"predation".equals(pageDto.getTplj())){
+            audioCa.andTpljLike("%predation%");
+        }
         audioCa.andTpljLike("%wav");
         List<String> audioFileList = equipmentFileMapper.selectAudioByExample(audioExample);
         EquipmentFileExample example = new EquipmentFileExample();
-        example.createCriteria().andTpljLike("%jpg");
+        EquipmentFileExample.Criteria txtCa = audioExample.createCriteria();
+        if(!StringUtils.isEmpty(list)&&list.size()>0){
+            txtCa.andDeptcodeIn(list);
+        }
+        if(!StringUtils.isEmpty(pageDto.getStime())){
+            txtCa.andCjsjGreaterThanOrEqualTo(pageDto.getStime());
+        }
+        if(!StringUtils.isEmpty(pageDto.getEtime())){
+            txtCa.andCjsjLessThanOrEqualTo(pageDto.getEtime());
+        }
+        if(!StringUtils.isEmpty(pageDto.getSbbh())){
+            txtCa.andSbbhEqualTo(pageDto.getSbbh());//
+        }
+        if(!StringUtils.isEmpty(pageDto.getXmbh())){
+            if(!CollectionUtils.isEmpty(user.getXmbhsbsns().get(pageDto.getXmbh()))){
+                txtCa.andSbbhIn(user.getXmbhsbsns().get(pageDto.getXmbh()));
+            }
+        }
+        if(!StringUtils.isEmpty(pageDto.getTplj())&&"predation".equals(pageDto.getTplj())){
+            txtCa.andTpljLike("%predation%");
+        }
+        txtCa.andTpljLike("%jpg");
         List<String> txtFileList = equipmentFileMapper.selectAudioByExample(example);
         PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
         EquipmentFileExample equipmentFileExample = new EquipmentFileExample();

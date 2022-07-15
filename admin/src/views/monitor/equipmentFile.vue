@@ -39,7 +39,6 @@
                     <td style="width: 15%;">
                       <select v-model="equipmentFileDto.tplj" class="form-control" id="form-field-select-2">
                         <option value="" selected>请选择</option>
-                        <option value="txt">出现</option>
                         <option value="predation">捕食</option>
                       </select>
                     </td>
@@ -66,7 +65,7 @@
 
     <div>
       <div style="display: flex;flex-wrap: wrap;margin-bottom: 30px;">
-        <div v-for="(item,index) in equipmentFiles" style="margin:20px;width: 150px;height: 300px;text-align: center;">
+        <div v-for="(item,index) in equipmentFiles" style="margin:20px;width: 150px;height: 310px;text-align: center;">
           <div style="text-align: center;width: 100px;margin: 0 auto;" v-if="item.hasTxt">
             <img v-if="item.hasTxt" :src="item.txtSrc" style="width: 100px;height: 200px;cursor: pointer;" v-on:click="checkImg(item,index)">
           </div>
@@ -181,6 +180,9 @@ export default {
   },
   mounted() {
     let _this = this;
+    let curDate = new Date();
+    _this.equipmentFileDto.stime=Tool.dateFormat("yyyy-MM-dd",new Date(curDate.getTime()-3600000*24*6));
+    _this.equipmentFileDto.etime=Tool.dateFormat("yyyy-MM-dd",curDate);
     _this.$refs.pagination.size = 24;
     _this.list(1);
     _this.findSbbh();
