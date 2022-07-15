@@ -54,7 +54,7 @@ public class EquipmentFileService {
         audioCa.andTpljLike("%wav");
         List<String> audioFileList = equipmentFileMapper.selectAudioByExample(audioExample);
         EquipmentFileExample example = new EquipmentFileExample();
-        example.createCriteria().andTpljLike("%txt");
+        example.createCriteria().andTpljLike("%jpg");
         List<String> txtFileList = equipmentFileMapper.selectAudioByExample(example);
         PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
         EquipmentFileExample equipmentFileExample = new EquipmentFileExample();
@@ -76,14 +76,11 @@ public class EquipmentFileService {
                 ca.andSbbhIn(user.getXmbhsbsns().get(pageDto.getXmbh()));
             }
         }
-        if(StringUtils.isEmpty(pageDto.getTplj())){
-            ca.andTpljLike("%png");
-        }else if(!StringUtils.isEmpty(pageDto.getTplj())&&"predation".equals(pageDto.getTplj())){
+        if(!StringUtils.isEmpty(pageDto.getTplj())&&"predation".equals(pageDto.getTplj())){
             ca.andTpljLike("%predation%");
             ca.andTpljLike("%txt");
-        }else if(!StringUtils.isEmpty(pageDto.getTplj())&&"txt".equals(pageDto.getTplj())){
-            ca.andTpljLike("%txt");
         }
+        ca.andTpljLike("%txt");
         equipmentFileExample.setOrderByClause(" cjsj desc ");
         List<EquipmentFile> equipmentFileList = equipmentFileMapper.selectByExample(equipmentFileExample);
         PageInfo<EquipmentFile> pageInfo = new PageInfo<>(equipmentFileList);
