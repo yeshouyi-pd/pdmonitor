@@ -180,9 +180,9 @@ export default {
   },
   mounted() {
     let _this = this;
-    let curDate = new Date();
-    _this.equipmentFileDto.stime=Tool.dateFormat("yyyy-MM-dd",new Date(curDate.getTime()-3600000*24*6));
-    _this.equipmentFileDto.etime=Tool.dateFormat("yyyy-MM-dd",curDate);
+    // let curDate = new Date();
+    // _this.equipmentFileDto.stime=Tool.dateFormat("yyyy-MM-dd",new Date(curDate.getTime()-3600000*24*6));
+    // _this.equipmentFileDto.etime=Tool.dateFormat("yyyy-MM-dd",curDate);
     _this.$refs.pagination.size = 24;
     _this.list(1);
     _this.findSbbh();

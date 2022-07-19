@@ -56,17 +56,16 @@ public class EquipmentFileService {
         }
         if(!StringUtils.isEmpty(pageDto.getStime())){
             audioCa.andCjsjGreaterThanOrEqualTo(pageDto.getStime());
+        }else{
+            audioCa.andCjsjGreaterThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(),-6),"yyyy-MM-dd"),"%Y-%m-%d");
         }
         if(!StringUtils.isEmpty(pageDto.getEtime())){
             audioCa.andCjsjLessThanOrEqualTo(pageDto.getEtime());
+        }else{
+            audioCa.andCjsjLessThanOrEqualTo(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd"),"%Y-%m-%d");
         }
         if(!StringUtils.isEmpty(pageDto.getSbbh())){
             audioCa.andSbbhEqualTo(pageDto.getSbbh());//
-        }
-        if(!StringUtils.isEmpty(pageDto.getXmbh())){
-            if(!CollectionUtils.isEmpty(user.getXmbhsbsns().get(pageDto.getXmbh()))){
-                audioCa.andSbbhIn(user.getXmbhsbsns().get(pageDto.getXmbh()));
-            }
         }
         if(!StringUtils.isEmpty(pageDto.getTplj())&&"predation".equals(pageDto.getTplj())){
             audioCa.andTpljLike("%predation%");
@@ -74,23 +73,22 @@ public class EquipmentFileService {
         audioCa.andTpljLike("%wav");
         List<String> audioFileList = equipmentFileMapper.selectAudioByExample(audioExample);
         EquipmentFileExample example = new EquipmentFileExample();
-        EquipmentFileExample.Criteria txtCa = audioExample.createCriteria();
+        EquipmentFileExample.Criteria txtCa = example.createCriteria();
         if(!StringUtils.isEmpty(list)&&list.size()>0){
             txtCa.andDeptcodeIn(list);
         }
         if(!StringUtils.isEmpty(pageDto.getStime())){
             txtCa.andCjsjGreaterThanOrEqualTo(pageDto.getStime());
+        }else{
+            txtCa.andCjsjGreaterThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(),-6),"yyyy-MM-dd"),"%Y-%m-%d");
         }
         if(!StringUtils.isEmpty(pageDto.getEtime())){
             txtCa.andCjsjLessThanOrEqualTo(pageDto.getEtime());
+        }else{
+            txtCa.andCjsjLessThanOrEqualTo(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd"),"%Y-%m-%d");
         }
         if(!StringUtils.isEmpty(pageDto.getSbbh())){
             txtCa.andSbbhEqualTo(pageDto.getSbbh());//
-        }
-        if(!StringUtils.isEmpty(pageDto.getXmbh())){
-            if(!CollectionUtils.isEmpty(user.getXmbhsbsns().get(pageDto.getXmbh()))){
-                txtCa.andSbbhIn(user.getXmbhsbsns().get(pageDto.getXmbh()));
-            }
         }
         if(!StringUtils.isEmpty(pageDto.getTplj())&&"predation".equals(pageDto.getTplj())){
             txtCa.andTpljLike("%predation%");
