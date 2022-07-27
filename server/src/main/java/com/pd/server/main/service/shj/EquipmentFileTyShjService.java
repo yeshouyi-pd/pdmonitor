@@ -34,39 +34,46 @@ public class EquipmentFileTyShjService extends AbstractScanRequest{
             data = "参数错误";
             return data;
         }
-        EquipmentFileMapper equipmentFileMapper = SpringUtil.getBean(EquipmentFileMapper.class);
-        EquipmentFileExample exampleFile = new EquipmentFileExample();
-        EquipmentFileExample.Criteria caFile = exampleFile.createCriteria();
-        caFile.andTpljEqualTo(tplj);
-        caFile.andSbbhEqualTo(sbbh);
-        List<EquipmentFile> comment = equipmentFileMapper.selectByExample(exampleFile);
-        if(comment==null || comment.isEmpty()){
-            EquipmentFile entity = new EquipmentFile();
-            entity.setId(UuidUtil.getShortUuid());
-            entity.setSbbh(sbbh);
-            entity.setTplj(tplj);
-            entity.setCjsj(DateUtil.toDate(cjsj,"yyyy-MM-dd HH:mm:ss"));
-            entity.setNf(DateUtil.getFormatDate(entity.getCjsj(),"yyyy"));
-            entity.setYf(DateUtil.getFormatDate(entity.getCjsj(),"yyyy-MM"));
-            entity.setRq(DateUtil.getFormatDate(entity.getCjsj(),"yyyy-MM-dd"));
-            entity.setXs(DateUtil.getFormatDate(entity.getCjsj(),"HH"));
-            entity.setFz(DateUtil.getFormatDate(entity.getCjsj(),"mm"));
-            entity.setLy("1");//实时数据
-            entity.setSm1(sm1);
-            WaterEquipmentMapper waterEquipmentMapper = SpringUtil.getBean(WaterEquipmentMapper.class);
-            WaterEquipmentExample example = new WaterEquipmentExample();
-            WaterEquipmentExample.Criteria ca = example.createCriteria();
-            ca.andSbsnEqualTo(sbbh);
-            List<WaterEquipment> lists = waterEquipmentMapper.selectByExample(example);
-            if(!StringUtils.isEmpty(lists)&&lists.size()>0&&!StringUtils.isEmpty(lists.get(0).getDeptcode())){
-                entity.setDeptcode(lists.get(0).getDeptcode());
+        try {
+            JSONObject obj = JSONObject.parseObject(sm1);
+            EquipmentFileMapper equipmentFileMapper = SpringUtil.getBean(EquipmentFileMapper.class);
+            EquipmentFileExample exampleFile = new EquipmentFileExample();
+            EquipmentFileExample.Criteria caFile = exampleFile.createCriteria();
+            caFile.andTpljEqualTo(tplj);
+            caFile.andSbbhEqualTo(sbbh);
+            List<EquipmentFile> comment = equipmentFileMapper.selectByExample(exampleFile);
+            if(comment==null || comment.isEmpty()){
+                EquipmentFile entity = new EquipmentFile();
+                entity.setId(UuidUtil.getShortUuid());
+                entity.setSbbh(sbbh);
+                entity.setTplj(tplj);
+                entity.setCjsj(DateUtil.toDate(cjsj,"yyyy-MM-dd HH:mm:ss"));
+                entity.setNf(DateUtil.getFormatDate(entity.getCjsj(),"yyyy"));
+                entity.setYf(DateUtil.getFormatDate(entity.getCjsj(),"yyyy-MM"));
+                entity.setRq(DateUtil.getFormatDate(entity.getCjsj(),"yyyy-MM-dd"));
+                entity.setXs(DateUtil.getFormatDate(entity.getCjsj(),"HH"));
+                entity.setFz(DateUtil.getFormatDate(entity.getCjsj(),"mm"));
+                entity.setLy("1");//实时数据
+                entity.setSm1(sm1);
+                entity.setSm2(obj.getString("jd")+","+obj.getString("wd"));
+                WaterEquipmentMapper waterEquipmentMapper = SpringUtil.getBean(WaterEquipmentMapper.class);
+                WaterEquipmentExample example = new WaterEquipmentExample();
+                WaterEquipmentExample.Criteria ca = example.createCriteria();
+                ca.andSbsnEqualTo(sbbh);
+                List<WaterEquipment> lists = waterEquipmentMapper.selectByExample(example);
+                if(!StringUtils.isEmpty(lists)&&lists.size()>0&&!StringUtils.isEmpty(lists.get(0).getDeptcode())){
+                    entity.setDeptcode(lists.get(0).getDeptcode());
+                }
+                entity.setCreateTime(new Date());
+                equipmentFileMapper.insert(entity);
+                data="保存成功";
+                return data;
+            }else {
+                data="该图片已保存过";
+                return data;
             }
-            entity.setCreateTime(new Date());
-            equipmentFileMapper.insert(entity);
-            data="保存成功";
-            return data;
-        }else {
-            data="该图片已保存过";
+        }catch (Exception e){
+            data="数据解析出错";
             return data;
         }
     }
