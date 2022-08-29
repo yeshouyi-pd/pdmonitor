@@ -101,7 +101,7 @@
     </if>
   </select>
   <select id="selectDwByExample" parameterType="com.pd.server.main.domain.EquipmentFileAlarmEventExample" resultMap="DwResultMap">
-    select id,event_time as eventTime,alarm_num as alarmNum,xh
+    select id,event_time,alarm_num,xh
     from equipment_file_alarm_event
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
