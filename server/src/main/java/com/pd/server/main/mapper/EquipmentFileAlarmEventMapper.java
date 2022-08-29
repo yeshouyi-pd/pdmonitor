@@ -5,6 +5,7 @@ import com.pd.server.main.domain.EquipmentFileAlarmEventExample;
 import java.util.List;
 
 import com.pd.server.main.dto.EquipmentFileAlarmEventDto;
+import com.pd.server.main.dto.basewx.my.EquipmentFileAlarmEventDwDto;
 import org.apache.ibatis.annotations.Param;
 
 public interface EquipmentFileAlarmEventMapper {
@@ -19,6 +20,8 @@ public interface EquipmentFileAlarmEventMapper {
     int insertSelective(EquipmentFileAlarmEvent record);
 
     List<EquipmentFileAlarmEvent> selectByExample(EquipmentFileAlarmEventExample example);
+
+    List<EquipmentFileAlarmEventDwDto> selectDwByExample(EquipmentFileAlarmEventExample example);
 
     EquipmentFileAlarmEvent selectByPrimaryKey(String id);
 
