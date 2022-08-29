@@ -6,6 +6,7 @@ import com.pd.server.main.domain.*;
 import com.pd.server.main.dto.EquipmentFileDto;
 import com.pd.server.main.dto.InterfaceLogDto;
 import com.pd.server.main.dto.ResponseDto;
+import com.pd.server.main.dto.basewx.my.EquipmentFileAlarmEventDwDto;
 import com.pd.server.main.dto.basewx.my.EquipmentFileDwjkDto;
 import com.pd.server.main.dto.basewx.my.PredationNumDwDto;
 import com.pd.server.main.service.*;
@@ -15,6 +16,7 @@ import com.pd.server.util.DateUtil;
 import com.pd.server.util.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -46,6 +48,8 @@ public class DwjkController extends BaseWxController {
     private AttrService attrService;
     @Resource
     private PredationNumService predationNumService;
+    @Resource
+    private EquipmentFileAlarmEventService equipmentFileAlarmEventService;
 
     /**
      * 江豚图片查询
@@ -325,8 +329,17 @@ public class DwjkController extends BaseWxController {
             ca.andSbbhEqualTo(qqcs.getString("sbsn"));
             ca.andCjsjEqualTo(qqcs.getString("cjrq"),"%Y-%m-%d");
             List<PredationNumDwDto> list = predationNumService.listDw(example);
+            EquipmentFileAlarmEventExample eventExample = new EquipmentFileAlarmEventExample();
+            EquipmentFileAlarmEventExample.Criteria eventCa = eventExample.createCriteria();
+            eventCa.andSbbhEqualTo(qqcs.getString("sbsn"));
+            eventCa.andBjsjEqualTo(qqcs.getString("cjrq"),"%Y-%m-%d");
+            eventExample.setOrderByClause(" xh ");
+            List<EquipmentFileAlarmEventDwDto> detailList = equipmentFileAlarmEventService.selectDwByExample(eventExample);
+            if(!CollectionUtils.isEmpty(list)){
+                list.get(0).setDetailList(detailList);
+            }
             responseDto.setCode("0000");
-            responseDto.setContent(list);
+            responseDto.setContent(CollectionUtils.isEmpty(list)?"":list.get(0));
             interfaceLog.setFhsj(JSONObject.toJSONString(responseDto));
             interfaceLogService.save(interfaceLog);
         }

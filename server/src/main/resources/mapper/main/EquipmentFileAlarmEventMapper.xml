@@ -19,6 +19,12 @@
     <result column="bjsj" jdbcType="VARCHAR" property="bjsj" />
     <result column="counts" jdbcType="INTEGER" property="counts" />
   </resultMap>
+  <resultMap id="DwResultMap" type="com.pd.server.main.dto.basewx.my.EquipmentFileAlarmEventDwDto">
+    <result column="id" jdbcType="VARCHAR" property="id" />
+    <result column="event_time" jdbcType="VARCHAR" property="eventTime" />
+    <result column="alarm_num" jdbcType="INTEGER" property="alarmNum" />
+    <result column="xh" jdbcType="INTEGER" property="xh" />
+  </resultMap>
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -86,6 +92,16 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
+    from equipment_file_alarm_event
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectDwByExample" parameterType="com.pd.server.main.domain.EquipmentFileAlarmEventExample" resultMap="DwResultMap">
+    select id,event_time as eventTime,alarm_num as alarmNum,xh
     from equipment_file_alarm_event
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />

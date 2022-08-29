@@ -3,8 +3,7 @@ package com.pd.server.main.service;
 import com.pd.server.main.domain.EquipmentFileAlarmEvent;
 import com.pd.server.main.domain.EquipmentFileAlarmEventExample;
 import com.pd.server.main.dto.EquipmentFileAlarmEventDto;
-import com.pd.server.main.dto.LoginUserDto;
-import com.pd.server.main.dto.PageDto;
+import com.pd.server.main.dto.basewx.my.EquipmentFileAlarmEventDwDto;
 import com.pd.server.main.mapper.EquipmentFileAlarmEventMapper;
 import com.pd.server.util.CopyUtil;
 import com.pd.server.util.UuidUtil;
@@ -22,6 +21,10 @@ public class EquipmentFileAlarmEventService {
 
     @Resource
     private EquipmentFileAlarmEventMapper equipmentFileAlarmEventMapper;
+
+    public List<EquipmentFileAlarmEventDwDto> selectDwByExample(EquipmentFileAlarmEventExample example){
+        return equipmentFileAlarmEventMapper.selectDwByExample(example);
+    }
 
     public long alarmCount(EquipmentFileAlarmEventExample example){
         return equipmentFileAlarmEventMapper.countByExample(example);

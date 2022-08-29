@@ -97,7 +97,7 @@
     </if>
   </select>
   <select id="selectDwByExample" parameterType="com.pd.server.main.domain.PredationNumExample" resultMap="DwResultMap">
-    select id as id,alarm_num as cxcs,predation_num as bscs,sm1 as sjcs
+    select id,alarm_num as cxcs,predation_num as bscs,sm1 as sjcs
     from predation_num
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />

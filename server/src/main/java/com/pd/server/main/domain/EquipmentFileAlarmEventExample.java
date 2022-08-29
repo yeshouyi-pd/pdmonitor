@@ -459,6 +459,11 @@ public class EquipmentFileAlarmEventExample {
             return (Criteria) this;
         }
 
+        public Criteria andBjsjEqualTo(String value, String type) {
+            addCriterion("DATE_FORMAT(bjsj,'"+type+"') =", value, "bjsj");
+            return (Criteria) this;
+        }
+
         public Criteria andBjsjNotEqualTo(String value) {
             addCriterion("bjsj <>", value, "bjsj");
             return (Criteria) this;
