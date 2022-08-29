@@ -10,7 +10,7 @@
                                   <span :style="'font-size:'+fontsize+'px'">
 <!--                                      <i class="ace-icon fa fa-leaf green"></i>-->
                                     <img :style="'height:'+imgsize+'px;margin-top: -10px;'" src="/static/favicon.png"/>
-                                      <span >水生哺乳类智慧监测平台</span>
+                                      <span >齿鲸类实时声学分析预警系统</span>
                                   </span>
               </div>
 

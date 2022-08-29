@@ -2,11 +2,9 @@ package com.pd.server.main.service.shj;
 
 import com.alibaba.fastjson.JSONObject;
 import com.pd.server.config.SpringUtil;
-import com.pd.server.main.domain.EquipmentFile;
-import com.pd.server.main.domain.EquipmentFileExample;
-import com.pd.server.main.domain.WaterEquipment;
-import com.pd.server.main.domain.WaterEquipmentExample;
+import com.pd.server.main.domain.*;
 import com.pd.server.main.mapper.EquipmentFileMapper;
+import com.pd.server.main.mapper.EquipmentFileTodayMapper;
 import com.pd.server.main.mapper.WaterEquipmentMapper;
 import com.pd.server.main.service.AttrService;
 import com.pd.server.util.DateUtil;
@@ -49,6 +47,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
         }
         //Map<String,String> map = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.SBSNCENTERCODE);
         EquipmentFileMapper equipmentFileMapper = SpringUtil.getBean(EquipmentFileMapper.class);
+        EquipmentFileTodayMapper todayMapper = SpringUtil.getBean(EquipmentFileTodayMapper.class);
         EquipmentFileExample exampleFile = new EquipmentFileExample();
         EquipmentFileExample.Criteria caFile = exampleFile.createCriteria();
         caFile.andTpljEqualTo(tplj);
@@ -87,11 +86,13 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                     beforeEntity = JSONObject.parseObject(entityJson,EquipmentFile.class);
                     if(!StringUtils.isEmpty(beforeEntity.getCjsj())&&isOverThreeMinute(DateUtil.getFormatDate(beforeEntity.getCjsj(),"yyyy-MM-dd HH:mm:ss"),cjsj)){
                         equipmentFileMapper.insert(beforeEntity);
+                        todayMapper.insert(beforeEntity);
                         redisTstaticemplate.opsForValue().set(sbbh, JSONObject.toJSONString(entity));
                     }else{
                         EquipmentFile lastFile = equipmentFileMapper.selectLastOneBySbbh(sbbh);
                         if(!StringUtils.isEmpty(beforeEntity.getCjsj())&&!StringUtils.isEmpty(lastFile.getCjsj())&&isOverThreeMinute(DateUtil.getFormatDate(lastFile.getCjsj(),"yyyy-MM-dd HH:mm:ss"),DateUtil.getFormatDate(beforeEntity.getCjsj(),"yyyy-MM-dd HH:mm:ss"))){
                             equipmentFileMapper.insert(beforeEntity);
+                            todayMapper.insert(beforeEntity);
                         }
                         redisTstaticemplate.opsForValue().set(sbbh, JSONObject.toJSONString(entity));
                     }
@@ -101,6 +102,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                 data="保存成功";
             }else {
                 equipmentFileMapper.insert(entity);
+                todayMapper.insert(entity);
                 data="保存成功";
             }
             return data;

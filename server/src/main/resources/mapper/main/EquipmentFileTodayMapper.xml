@@ -1,25 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.pd.server.main.mapper.PredationNumMapper">
-  <resultMap id="BaseResultMap" type="com.pd.server.main.domain.PredationNum">
+<mapper namespace="com.pd.server.main.mapper.EquipmentFileTodayMapper">
+  <resultMap id="BaseResultMap" type="com.pd.server.main.domain.EquipmentFileToday">
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
+    <result column="tplj" jdbcType="VARCHAR" property="tplj" />
     <result column="cjsj" jdbcType="TIMESTAMP" property="cjsj" />
-    <result column="alarm_num" jdbcType="INTEGER" property="alarmNum" />
-    <result column="predation_num" jdbcType="INTEGER" property="predationNum" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="nf" jdbcType="VARCHAR" property="nf" />
+    <result column="yf" jdbcType="VARCHAR" property="yf" />
+    <result column="rq" jdbcType="VARCHAR" property="rq" />
+    <result column="xs" jdbcType="VARCHAR" property="xs" />
+    <result column="fz" jdbcType="VARCHAR" property="fz" />
     <result column="deptcode" jdbcType="VARCHAR" property="deptcode" />
     <result column="xmbh" jdbcType="VARCHAR" property="xmbh" />
+    <result column="wjlx" jdbcType="VARCHAR" property="wjlx" />
+    <result column="jczl" jdbcType="VARCHAR" property="jczl" />
+    <result column="ly" jdbcType="VARCHAR" property="ly" />
     <result column="sm1" jdbcType="VARCHAR" property="sm1" />
     <result column="sm2" jdbcType="VARCHAR" property="sm2" />
     <result column="sm3" jdbcType="VARCHAR" property="sm3" />
     <result column="sm4" jdbcType="VARCHAR" property="sm4" />
     <result column="sm5" jdbcType="VARCHAR" property="sm5" />
-  </resultMap>
-  <resultMap id="DwResultMap" type="com.pd.server.main.dto.basewx.my.PredationNumDwDto">
-    <result column="id" jdbcType="VARCHAR" property="id" />
-    <result column="cxcs" jdbcType="INTEGER" property="cxcs" />
-    <result column="bscs" jdbcType="INTEGER" property="bscs" />
-    <result column="sjcs" jdbcType="INTEGER" property="sjcs" />
+    <result column="sm6" jdbcType="VARCHAR" property="sm6" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -80,25 +83,16 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, sbbh, cjsj, alarm_num, predation_num, deptcode, xmbh, sm1, sm2, sm3, sm4, sm5
+    id, sbbh, tplj, cjsj, create_time, nf, yf, rq, xs, fz, deptcode, xmbh, wjlx, jczl, 
+    ly, sm1, sm2, sm3, sm4, sm5, sm6
   </sql>
-  <select id="selectByExample" parameterType="com.pd.server.main.domain.PredationNumExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.pd.server.main.domain.EquipmentFileTodayExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from predation_num
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null">
-      order by ${orderByClause}
-    </if>
-  </select>
-  <select id="selectDwByExample" parameterType="com.pd.server.main.domain.PredationNumExample" resultMap="DwResultMap">
-    select id as id,alarm_num as cxcs,predation_num as bscs,sm1 as sjcs
-    from predation_num
+    from equipment_file_today
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -109,31 +103,37 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from predation_num
+    from equipment_file_today
     where id = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    delete from predation_num
+    delete from equipment_file_today
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.pd.server.main.domain.PredationNumExample">
-    delete from predation_num
+  <delete id="deleteByExample" parameterType="com.pd.server.main.domain.EquipmentFileTodayExample">
+    delete from equipment_file_today
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.pd.server.main.domain.PredationNum">
-    insert into predation_num (id, sbbh, cjsj, 
-      alarm_num, predation_num, deptcode, 
-      xmbh, sm1, sm2, sm3, 
-      sm4, sm5)
-    values (#{id,jdbcType=VARCHAR}, #{sbbh,jdbcType=VARCHAR}, #{cjsj,jdbcType=TIMESTAMP}, 
-      #{alarmNum,jdbcType=INTEGER}, #{predationNum,jdbcType=INTEGER}, #{deptcode,jdbcType=VARCHAR}, 
-      #{xmbh,jdbcType=VARCHAR}, #{sm1,jdbcType=VARCHAR}, #{sm2,jdbcType=VARCHAR}, #{sm3,jdbcType=VARCHAR}, 
-      #{sm4,jdbcType=VARCHAR}, #{sm5,jdbcType=VARCHAR})
+  <insert id="insert" parameterType="com.pd.server.main.domain.EquipmentFile">
+    insert into equipment_file_today (id, sbbh, tplj, 
+      cjsj, create_time, nf, 
+      yf, rq, xs, fz, 
+      deptcode, xmbh, wjlx, 
+      jczl, ly, sm1, sm2, 
+      sm3, sm4, sm5, sm6
+      )
+    values (#{id,jdbcType=VARCHAR}, #{sbbh,jdbcType=VARCHAR}, #{tplj,jdbcType=VARCHAR}, 
+      #{cjsj,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, #{nf,jdbcType=VARCHAR}, 
+      #{yf,jdbcType=VARCHAR}, #{rq,jdbcType=VARCHAR}, #{xs,jdbcType=VARCHAR}, #{fz,jdbcType=VARCHAR}, 
+      #{deptcode,jdbcType=VARCHAR}, #{xmbh,jdbcType=VARCHAR}, #{wjlx,jdbcType=VARCHAR}, 
+      #{jczl,jdbcType=VARCHAR}, #{ly,jdbcType=VARCHAR}, #{sm1,jdbcType=VARCHAR}, #{sm2,jdbcType=VARCHAR}, 
+      #{sm3,jdbcType=VARCHAR}, #{sm4,jdbcType=VARCHAR}, #{sm5,jdbcType=VARCHAR}, #{sm6,jdbcType=VARCHAR}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="com.pd.server.main.domain.PredationNum">
-    insert into predation_num
+  <insert id="insertSelective" parameterType="com.pd.server.main.domain.EquipmentFileToday">
+    insert into equipment_file_today
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
@@ -141,20 +141,44 @@
       <if test="sbbh != null">
         sbbh,
       </if>
+      <if test="tplj != null">
+        tplj,
+      </if>
       <if test="cjsj != null">
         cjsj,
       </if>
-      <if test="alarmNum != null">
-        alarm_num,
+      <if test="createTime != null">
+        create_time,
       </if>
-      <if test="predationNum != null">
-        predation_num,
+      <if test="nf != null">
+        nf,
+      </if>
+      <if test="yf != null">
+        yf,
+      </if>
+      <if test="rq != null">
+        rq,
+      </if>
+      <if test="xs != null">
+        xs,
+      </if>
+      <if test="fz != null">
+        fz,
       </if>
       <if test="deptcode != null">
         deptcode,
       </if>
       <if test="xmbh != null">
         xmbh,
+      </if>
+      <if test="wjlx != null">
+        wjlx,
+      </if>
+      <if test="jczl != null">
+        jczl,
+      </if>
+      <if test="ly != null">
+        ly,
       </if>
       <if test="sm1 != null">
         sm1,
@@ -171,6 +195,9 @@
       <if test="sm5 != null">
         sm5,
       </if>
+      <if test="sm6 != null">
+        sm6,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -179,20 +206,44 @@
       <if test="sbbh != null">
         #{sbbh,jdbcType=VARCHAR},
       </if>
+      <if test="tplj != null">
+        #{tplj,jdbcType=VARCHAR},
+      </if>
       <if test="cjsj != null">
         #{cjsj,jdbcType=TIMESTAMP},
       </if>
-      <if test="alarmNum != null">
-        #{alarmNum,jdbcType=INTEGER},
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="predationNum != null">
-        #{predationNum,jdbcType=INTEGER},
+      <if test="nf != null">
+        #{nf,jdbcType=VARCHAR},
+      </if>
+      <if test="yf != null">
+        #{yf,jdbcType=VARCHAR},
+      </if>
+      <if test="rq != null">
+        #{rq,jdbcType=VARCHAR},
+      </if>
+      <if test="xs != null">
+        #{xs,jdbcType=VARCHAR},
+      </if>
+      <if test="fz != null">
+        #{fz,jdbcType=VARCHAR},
       </if>
       <if test="deptcode != null">
         #{deptcode,jdbcType=VARCHAR},
       </if>
       <if test="xmbh != null">
         #{xmbh,jdbcType=VARCHAR},
+      </if>
+      <if test="wjlx != null">
+        #{wjlx,jdbcType=VARCHAR},
+      </if>
+      <if test="jczl != null">
+        #{jczl,jdbcType=VARCHAR},
+      </if>
+      <if test="ly != null">
+        #{ly,jdbcType=VARCHAR},
       </if>
       <if test="sm1 != null">
         #{sm1,jdbcType=VARCHAR},
@@ -209,16 +260,19 @@
       <if test="sm5 != null">
         #{sm5,jdbcType=VARCHAR},
       </if>
+      <if test="sm6 != null">
+        #{sm6,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.pd.server.main.domain.PredationNumExample" resultType="java.lang.Long">
-    select count(*) from predation_num
+  <select id="countByExample" parameterType="com.pd.server.main.domain.EquipmentFileTodayExample" resultType="java.lang.Long">
+    select count(*) from equipment_file_today
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update predation_num
+    update equipment_file_today
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=VARCHAR},
@@ -226,20 +280,44 @@
       <if test="record.sbbh != null">
         sbbh = #{record.sbbh,jdbcType=VARCHAR},
       </if>
+      <if test="record.tplj != null">
+        tplj = #{record.tplj,jdbcType=VARCHAR},
+      </if>
       <if test="record.cjsj != null">
         cjsj = #{record.cjsj,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.alarmNum != null">
-        alarm_num = #{record.alarmNum,jdbcType=INTEGER},
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.predationNum != null">
-        predation_num = #{record.predationNum,jdbcType=INTEGER},
+      <if test="record.nf != null">
+        nf = #{record.nf,jdbcType=VARCHAR},
+      </if>
+      <if test="record.yf != null">
+        yf = #{record.yf,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rq != null">
+        rq = #{record.rq,jdbcType=VARCHAR},
+      </if>
+      <if test="record.xs != null">
+        xs = #{record.xs,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fz != null">
+        fz = #{record.fz,jdbcType=VARCHAR},
       </if>
       <if test="record.deptcode != null">
         deptcode = #{record.deptcode,jdbcType=VARCHAR},
       </if>
       <if test="record.xmbh != null">
         xmbh = #{record.xmbh,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wjlx != null">
+        wjlx = #{record.wjlx,jdbcType=VARCHAR},
+      </if>
+      <if test="record.jczl != null">
+        jczl = #{record.jczl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ly != null">
+        ly = #{record.ly,jdbcType=VARCHAR},
       </if>
       <if test="record.sm1 != null">
         sm1 = #{record.sm1,jdbcType=VARCHAR},
@@ -256,49 +334,85 @@
       <if test="record.sm5 != null">
         sm5 = #{record.sm5,jdbcType=VARCHAR},
       </if>
+      <if test="record.sm6 != null">
+        sm6 = #{record.sm6,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update predation_num
+    update equipment_file_today
     set id = #{record.id,jdbcType=VARCHAR},
       sbbh = #{record.sbbh,jdbcType=VARCHAR},
+      tplj = #{record.tplj,jdbcType=VARCHAR},
       cjsj = #{record.cjsj,jdbcType=TIMESTAMP},
-      alarm_num = #{record.alarmNum,jdbcType=INTEGER},
-      predation_num = #{record.predationNum,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      nf = #{record.nf,jdbcType=VARCHAR},
+      yf = #{record.yf,jdbcType=VARCHAR},
+      rq = #{record.rq,jdbcType=VARCHAR},
+      xs = #{record.xs,jdbcType=VARCHAR},
+      fz = #{record.fz,jdbcType=VARCHAR},
       deptcode = #{record.deptcode,jdbcType=VARCHAR},
       xmbh = #{record.xmbh,jdbcType=VARCHAR},
+      wjlx = #{record.wjlx,jdbcType=VARCHAR},
+      jczl = #{record.jczl,jdbcType=VARCHAR},
+      ly = #{record.ly,jdbcType=VARCHAR},
       sm1 = #{record.sm1,jdbcType=VARCHAR},
       sm2 = #{record.sm2,jdbcType=VARCHAR},
       sm3 = #{record.sm3,jdbcType=VARCHAR},
       sm4 = #{record.sm4,jdbcType=VARCHAR},
-      sm5 = #{record.sm5,jdbcType=VARCHAR}
+      sm5 = #{record.sm5,jdbcType=VARCHAR},
+      sm6 = #{record.sm6,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.pd.server.main.domain.PredationNum">
-    update predation_num
+  <update id="updateByPrimaryKeySelective" parameterType="com.pd.server.main.domain.EquipmentFileToday">
+    update equipment_file_today
     <set>
       <if test="sbbh != null">
         sbbh = #{sbbh,jdbcType=VARCHAR},
       </if>
+      <if test="tplj != null">
+        tplj = #{tplj,jdbcType=VARCHAR},
+      </if>
       <if test="cjsj != null">
         cjsj = #{cjsj,jdbcType=TIMESTAMP},
       </if>
-      <if test="alarmNum != null">
-        alarm_num = #{alarmNum,jdbcType=INTEGER},
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="predationNum != null">
-        predation_num = #{predationNum,jdbcType=INTEGER},
+      <if test="nf != null">
+        nf = #{nf,jdbcType=VARCHAR},
+      </if>
+      <if test="yf != null">
+        yf = #{yf,jdbcType=VARCHAR},
+      </if>
+      <if test="rq != null">
+        rq = #{rq,jdbcType=VARCHAR},
+      </if>
+      <if test="xs != null">
+        xs = #{xs,jdbcType=VARCHAR},
+      </if>
+      <if test="fz != null">
+        fz = #{fz,jdbcType=VARCHAR},
       </if>
       <if test="deptcode != null">
         deptcode = #{deptcode,jdbcType=VARCHAR},
       </if>
       <if test="xmbh != null">
         xmbh = #{xmbh,jdbcType=VARCHAR},
+      </if>
+      <if test="wjlx != null">
+        wjlx = #{wjlx,jdbcType=VARCHAR},
+      </if>
+      <if test="jczl != null">
+        jczl = #{jczl,jdbcType=VARCHAR},
+      </if>
+      <if test="ly != null">
+        ly = #{ly,jdbcType=VARCHAR},
       </if>
       <if test="sm1 != null">
         sm1 = #{sm1,jdbcType=VARCHAR},
@@ -315,22 +429,34 @@
       <if test="sm5 != null">
         sm5 = #{sm5,jdbcType=VARCHAR},
       </if>
+      <if test="sm6 != null">
+        sm6 = #{sm6,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.pd.server.main.domain.PredationNum">
-    update predation_num
+  <update id="updateByPrimaryKey" parameterType="com.pd.server.main.domain.EquipmentFileToday">
+    update equipment_file_today
     set sbbh = #{sbbh,jdbcType=VARCHAR},
+      tplj = #{tplj,jdbcType=VARCHAR},
       cjsj = #{cjsj,jdbcType=TIMESTAMP},
-      alarm_num = #{alarmNum,jdbcType=INTEGER},
-      predation_num = #{predationNum,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      nf = #{nf,jdbcType=VARCHAR},
+      yf = #{yf,jdbcType=VARCHAR},
+      rq = #{rq,jdbcType=VARCHAR},
+      xs = #{xs,jdbcType=VARCHAR},
+      fz = #{fz,jdbcType=VARCHAR},
       deptcode = #{deptcode,jdbcType=VARCHAR},
       xmbh = #{xmbh,jdbcType=VARCHAR},
+      wjlx = #{wjlx,jdbcType=VARCHAR},
+      jczl = #{jczl,jdbcType=VARCHAR},
+      ly = #{ly,jdbcType=VARCHAR},
       sm1 = #{sm1,jdbcType=VARCHAR},
       sm2 = #{sm2,jdbcType=VARCHAR},
       sm3 = #{sm3,jdbcType=VARCHAR},
       sm4 = #{sm4,jdbcType=VARCHAR},
-      sm5 = #{sm5,jdbcType=VARCHAR}
+      sm5 = #{sm5,jdbcType=VARCHAR},
+      sm6 = #{sm6,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

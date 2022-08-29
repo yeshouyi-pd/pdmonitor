@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pd.server.main.mapper.EventCameraInfoMapper">
+  <resultMap id="BaseResultMap" type="com.pd.server.main.domain.EventCameraInfo">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="ip" jdbcType="VARCHAR" property="ip" />
+    <result column="port" jdbcType="INTEGER" property="port" />
+    <result column="tdh" jdbcType="INTEGER" property="tdh" />
+    <result column="zh" jdbcType="VARCHAR" property="zh" />
+    <result column="mm" jdbcType="VARCHAR" property="mm" />
+    <result column="kssj" jdbcType="TIMESTAMP" property="kssj" />
+    <result column="jssj" jdbcType="TIMESTAMP" property="jssj" />
+    <result column="zt" jdbcType="VARCHAR" property="zt" />
+    <result column="sjid" jdbcType="VARCHAR" property="sjid" />
+    <result column="sbsn" jdbcType="VARCHAR" property="sbsn" />
+    <result column="deptcode" jdbcType="VARCHAR" property="deptcode" />
+    <result column="bz" jdbcType="VARCHAR" property="bz" />
+    <result column="sm" jdbcType="VARCHAR" property="sm" />
+    <result column="sm1" jdbcType="VARCHAR" property="sm1" />
+    <result column="sm2" jdbcType="VARCHAR" property="sm2" />
+    <result column="sm3" jdbcType="VARCHAR" property="sm3" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, ip, port, tdh, zh, mm, kssj, jssj, zt, sjid, sbsn, deptcode, bz, sm, sm1, sm2, 
+    sm3
+  </sql>
+  <select id="selectByExample" parameterType="com.pd.server.main.domain.EventCameraInfoExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from event_camera_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from event_camera_info
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from event_camera_info
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pd.server.main.domain.EventCameraInfoExample">
+    delete from event_camera_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pd.server.main.domain.EventCameraInfo">
+    insert into event_camera_info (id, ip, port, 
+      tdh, zh, mm, kssj, 
+      jssj, zt, sjid, sbsn, 
+      deptcode, bz, sm, sm1, 
+      sm2, sm3)
+    values (#{id,jdbcType=VARCHAR}, #{ip,jdbcType=VARCHAR}, #{port,jdbcType=INTEGER}, 
+      #{tdh,jdbcType=INTEGER}, #{zh,jdbcType=VARCHAR}, #{mm,jdbcType=VARCHAR}, #{kssj,jdbcType=TIMESTAMP}, 
+      #{jssj,jdbcType=TIMESTAMP}, #{zt,jdbcType=VARCHAR}, #{sjid,jdbcType=VARCHAR}, #{sbsn,jdbcType=VARCHAR}, 
+      #{deptcode,jdbcType=VARCHAR}, #{bz,jdbcType=VARCHAR}, #{sm,jdbcType=VARCHAR}, #{sm1,jdbcType=VARCHAR}, 
+      #{sm2,jdbcType=VARCHAR}, #{sm3,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pd.server.main.domain.EventCameraInfo">
+    insert into event_camera_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="ip != null">
+        ip,
+      </if>
+      <if test="port != null">
+        port,
+      </if>
+      <if test="tdh != null">
+        tdh,
+      </if>
+      <if test="zh != null">
+        zh,
+      </if>
+      <if test="mm != null">
+        mm,
+      </if>
+      <if test="kssj != null">
+        kssj,
+      </if>
+      <if test="jssj != null">
+        jssj,
+      </if>
+      <if test="zt != null">
+        zt,
+      </if>
+      <if test="sjid != null">
+        sjid,
+      </if>
+      <if test="sbsn != null">
+        sbsn,
+      </if>
+      <if test="deptcode != null">
+        deptcode,
+      </if>
+      <if test="bz != null">
+        bz,
+      </if>
+      <if test="sm != null">
+        sm,
+      </if>
+      <if test="sm1 != null">
+        sm1,
+      </if>
+      <if test="sm2 != null">
+        sm2,
+      </if>
+      <if test="sm3 != null">
+        sm3,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="ip != null">
+        #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="port != null">
+        #{port,jdbcType=INTEGER},
+      </if>
+      <if test="tdh != null">
+        #{tdh,jdbcType=INTEGER},
+      </if>
+      <if test="zh != null">
+        #{zh,jdbcType=VARCHAR},
+      </if>
+      <if test="mm != null">
+        #{mm,jdbcType=VARCHAR},
+      </if>
+      <if test="kssj != null">
+        #{kssj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="jssj != null">
+        #{jssj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="zt != null">
+        #{zt,jdbcType=VARCHAR},
+      </if>
+      <if test="sjid != null">
+        #{sjid,jdbcType=VARCHAR},
+      </if>
+      <if test="sbsn != null">
+        #{sbsn,jdbcType=VARCHAR},
+      </if>
+      <if test="deptcode != null">
+        #{deptcode,jdbcType=VARCHAR},
+      </if>
+      <if test="bz != null">
+        #{bz,jdbcType=VARCHAR},
+      </if>
+      <if test="sm != null">
+        #{sm,jdbcType=VARCHAR},
+      </if>
+      <if test="sm1 != null">
+        #{sm1,jdbcType=VARCHAR},
+      </if>
+      <if test="sm2 != null">
+        #{sm2,jdbcType=VARCHAR},
+      </if>
+      <if test="sm3 != null">
+        #{sm3,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pd.server.main.domain.EventCameraInfoExample" resultType="java.lang.Long">
+    select count(*) from event_camera_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update event_camera_info
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ip != null">
+        ip = #{record.ip,jdbcType=VARCHAR},
+      </if>
+      <if test="record.port != null">
+        port = #{record.port,jdbcType=INTEGER},
+      </if>
+      <if test="record.tdh != null">
+        tdh = #{record.tdh,jdbcType=INTEGER},
+      </if>
+      <if test="record.zh != null">
+        zh = #{record.zh,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mm != null">
+        mm = #{record.mm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.kssj != null">
+        kssj = #{record.kssj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.jssj != null">
+        jssj = #{record.jssj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.zt != null">
+        zt = #{record.zt,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sjid != null">
+        sjid = #{record.sjid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sbsn != null">
+        sbsn = #{record.sbsn,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deptcode != null">
+        deptcode = #{record.deptcode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bz != null">
+        bz = #{record.bz,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sm != null">
+        sm = #{record.sm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sm1 != null">
+        sm1 = #{record.sm1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sm2 != null">
+        sm2 = #{record.sm2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sm3 != null">
+        sm3 = #{record.sm3,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update event_camera_info
+    set id = #{record.id,jdbcType=VARCHAR},
+      ip = #{record.ip,jdbcType=VARCHAR},
+      port = #{record.port,jdbcType=INTEGER},
+      tdh = #{record.tdh,jdbcType=INTEGER},
+      zh = #{record.zh,jdbcType=VARCHAR},
+      mm = #{record.mm,jdbcType=VARCHAR},
+      kssj = #{record.kssj,jdbcType=TIMESTAMP},
+      jssj = #{record.jssj,jdbcType=TIMESTAMP},
+      zt = #{record.zt,jdbcType=VARCHAR},
+      sjid = #{record.sjid,jdbcType=VARCHAR},
+      sbsn = #{record.sbsn,jdbcType=VARCHAR},
+      deptcode = #{record.deptcode,jdbcType=VARCHAR},
+      bz = #{record.bz,jdbcType=VARCHAR},
+      sm = #{record.sm,jdbcType=VARCHAR},
+      sm1 = #{record.sm1,jdbcType=VARCHAR},
+      sm2 = #{record.sm2,jdbcType=VARCHAR},
+      sm3 = #{record.sm3,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pd.server.main.domain.EventCameraInfo">
+    update event_camera_info
+    <set>
+      <if test="ip != null">
+        ip = #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="port != null">
+        port = #{port,jdbcType=INTEGER},
+      </if>
+      <if test="tdh != null">
+        tdh = #{tdh,jdbcType=INTEGER},
+      </if>
+      <if test="zh != null">
+        zh = #{zh,jdbcType=VARCHAR},
+      </if>
+      <if test="mm != null">
+        mm = #{mm,jdbcType=VARCHAR},
+      </if>
+      <if test="kssj != null">
+        kssj = #{kssj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="jssj != null">
+        jssj = #{jssj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="zt != null">
+        zt = #{zt,jdbcType=VARCHAR},
+      </if>
+      <if test="sjid != null">
+        sjid = #{sjid,jdbcType=VARCHAR},
+      </if>
+      <if test="sbsn != null">
+        sbsn = #{sbsn,jdbcType=VARCHAR},
+      </if>
+      <if test="deptcode != null">
+        deptcode = #{deptcode,jdbcType=VARCHAR},
+      </if>
+      <if test="bz != null">
+        bz = #{bz,jdbcType=VARCHAR},
+      </if>
+      <if test="sm != null">
+        sm = #{sm,jdbcType=VARCHAR},
+      </if>
+      <if test="sm1 != null">
+        sm1 = #{sm1,jdbcType=VARCHAR},
+      </if>
+      <if test="sm2 != null">
+        sm2 = #{sm2,jdbcType=VARCHAR},
+      </if>
+      <if test="sm3 != null">
+        sm3 = #{sm3,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pd.server.main.domain.EventCameraInfo">
+    update event_camera_info
+    set ip = #{ip,jdbcType=VARCHAR},
+      port = #{port,jdbcType=INTEGER},
+      tdh = #{tdh,jdbcType=INTEGER},
+      zh = #{zh,jdbcType=VARCHAR},
+      mm = #{mm,jdbcType=VARCHAR},
+      kssj = #{kssj,jdbcType=TIMESTAMP},
+      jssj = #{jssj,jdbcType=TIMESTAMP},
+      zt = #{zt,jdbcType=VARCHAR},
+      sjid = #{sjid,jdbcType=VARCHAR},
+      sbsn = #{sbsn,jdbcType=VARCHAR},
+      deptcode = #{deptcode,jdbcType=VARCHAR},
+      bz = #{bz,jdbcType=VARCHAR},
+      sm = #{sm,jdbcType=VARCHAR},
+      sm1 = #{sm1,jdbcType=VARCHAR},
+      sm2 = #{sm2,jdbcType=VARCHAR},
+      sm3 = #{sm3,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

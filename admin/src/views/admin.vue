@@ -16,7 +16,7 @@
                   <a href="index.html" class="navbar-brand">
                       <small>
                           <img style="height: 28px;margin-top: -8px;" src="/static/favicon.png"/>
-                        水生哺乳类智慧监测平台v1.0
+                        齿鲸类实时声学分析预警系统V1.0
                       </small>
                   </a>
               </div>

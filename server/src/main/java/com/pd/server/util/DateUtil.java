@@ -203,7 +203,7 @@ public class DateUtil {
         String str = sdf.format(new Date());
         System.out.println(sdf.format(getNextDay(new Date())));
         System.out.println(sdf.format(getYearBefore(new Date())));
-
+        System.out.println(sdf.format(getMinutesLater(new Date(),-5)));
     }
 
     /**
@@ -297,6 +297,20 @@ public class DateUtil {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(date);
         calendar.add(calendar.DAY_OF_YEAR, count);
+        return calendar.getTime();
+    }
+
+    public static Date getHoursLater(Date date,int count){
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(date);
+        calendar.add(calendar.HOUR_OF_DAY, count);
+        return calendar.getTime();
+    }
+
+    public static Date getMinutesLater(Date date,int count){
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(date);
+        calendar.add(calendar.MINUTE, count);
         return calendar.getTime();
     }
 

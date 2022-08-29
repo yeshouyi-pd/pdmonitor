@@ -137,6 +137,11 @@ public class EquipmentFileAlarmEventService {
         }
     }
 
+    public void insert(EquipmentFileAlarmEventDto equipmentFileAlarmEventDto){
+        EquipmentFileAlarmEvent equipmentFileAlarmEvent = CopyUtil.copy(equipmentFileAlarmEventDto, EquipmentFileAlarmEvent.class);
+        equipmentFileAlarmEventMapper.insert(equipmentFileAlarmEvent);
+    }
+
     /**
     * 新增
     */

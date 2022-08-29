@@ -4,6 +4,7 @@ import com.pd.server.main.domain.PredationNum;
 import com.pd.server.main.domain.PredationNumExample;
 import com.pd.server.main.dto.PredationNumDto;
 import com.pd.server.main.dto.PageDto;
+import com.pd.server.main.dto.basewx.my.PredationNumDwDto;
 import com.pd.server.main.mapper.PredationNumMapper;
 import com.pd.server.util.CopyUtil;
 import com.pd.server.util.UuidUtil;
@@ -27,6 +28,13 @@ public class PredationNumService {
     */
     public List<PredationNum> list(PredationNumExample example) {
         return predationNumMapper.selectByExample(example);
+    }
+
+    /**
+     * 列表查询
+     */
+    public List<PredationNumDwDto> listDw(PredationNumExample example) {
+        return predationNumMapper.selectDwByExample(example);
     }
 
     /**
