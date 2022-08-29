@@ -31,6 +31,12 @@ public class CameraInfoService {
         return cameraInfoList;
     }
 
+    public List<CameraInfo> findBySbbh(String sbsn){
+        CameraInfoExample example = new CameraInfoExample();
+        example.createCriteria().andSbsnEqualTo(sbsn);
+        return cameraInfoMapper.selectByExample(example);
+    }
+
     public CameraInfo findByID(String id){
         CameraInfoExample example = new CameraInfoExample();
         CameraInfo info = cameraInfoMapper.selectByPrimaryKey(id);

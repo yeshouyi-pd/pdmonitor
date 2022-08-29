@@ -68,7 +68,7 @@
             <th>端口号</th>
             <th>摄像头用户名</th>
             <th>摄像头密码</th>
-            <th>设备端口</th>
+            <th>通道号</th>
             <th>所属DVR的IP</th>
             <th>是否大屏显示</th>
             <th>操作</th>
@@ -157,7 +157,7 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-2 control-label">设备端口</label>
+                <label class="col-sm-2 control-label">通道号</label>
                 <div class="col-sm-4">
                   <input v-model="cameraInfo.sbdk" class="form-control">
                 </div>
@@ -398,8 +398,8 @@
                 || !Validator.checkisNaN(_this.cameraInfo.port, "端口号")
                 || !Validator.require(_this.cameraInfo.username, "摄像头用户名")
                 || !Validator.require(_this.cameraInfo.camerapws, "摄像头密码")
-                || !Validator.require(_this.cameraInfo.sbdk, "设备端口")
-                || !Validator.checkisNaN(_this.cameraInfo.sbdk, "设备端口")
+                || !Validator.require(_this.cameraInfo.sbdk, "通道号")
+                || !Validator.checkisNaN(_this.cameraInfo.sbdk, "通道号")
         ) {
           return;
         }

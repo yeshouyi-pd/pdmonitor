@@ -3,6 +3,8 @@ package com.pd.server.main.mapper;
 import com.pd.server.main.domain.PredationNum;
 import com.pd.server.main.domain.PredationNumExample;
 import java.util.List;
+
+import com.pd.server.main.dto.basewx.my.PredationNumDwDto;
 import org.apache.ibatis.annotations.Param;
 
 public interface PredationNumMapper {
@@ -17,6 +19,8 @@ public interface PredationNumMapper {
     int insertSelective(PredationNum record);
 
     List<PredationNum> selectByExample(PredationNumExample example);
+
+    List<PredationNumDwDto> selectDwByExample(PredationNumExample example);
 
     PredationNum selectByPrimaryKey(String id);
 

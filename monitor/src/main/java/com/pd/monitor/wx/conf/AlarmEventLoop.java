@@ -1,20 +1,16 @@
 package com.pd.monitor.wx.conf;
 
 import com.alibaba.fastjson.JSONObject;
-import com.pd.server.config.SpringUtil;
-import com.pd.server.main.domain.EquipmentFile;
-import com.pd.server.main.domain.EquipmentFileAlarmEventExample;
-import com.pd.server.main.domain.EquipmentFileExample;
+import com.pd.server.main.domain.*;
 import com.pd.server.main.dto.EquipmentFileAlarmEventDto;
+import com.pd.server.main.dto.EventCameraInfoDto;
 import com.pd.server.main.dto.PredationNumDto;
 import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
 import com.pd.server.main.mapper.EquipmentFileMapper;
-import com.pd.server.main.service.AttrService;
-import com.pd.server.main.service.EquipmentFileAlarmEventService;
-import com.pd.server.main.service.EquipmentFileService;
-import com.pd.server.main.service.PredationNumService;
+import com.pd.server.main.service.*;
 import com.pd.server.util.DateTools;
 import com.pd.server.util.DateUtil;
+import com.pd.server.util.UuidUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -25,7 +21,6 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -44,6 +39,10 @@ public class AlarmEventLoop extends BaseWxController {
     private EquipmentFileMapper equipmentFileMapper;
     @Resource
     private PredationNumService predationNumService;
+    @Resource
+    private CameraInfoService cameraInfoService;
+    @Resource
+    private EventCameraInfoService eventCameraInfoService;
 
     /**
      * 统计昨天鲸豚事件,及鲸豚捕食次数
@@ -117,13 +116,16 @@ public class AlarmEventLoop extends BaseWxController {
             for(int i=0;i<resultList.size();i++){
                 AlarmNumbersDto alarmNumbersDto = resultList.get(i);
                 EquipmentFileAlarmEventDto entity = new EquipmentFileAlarmEventDto();
+                entity.setId(UuidUtil.getShortUuid());
                 entity.setDeptcode(alarmNumbersDto.getDeptcode());
                 entity.setSbbh(alarmNumbersDto.getSbbh());
                 entity.setEventTime(alarmNumbersDto.getBjsj());
                 entity.setAlarmNum(alarmNumbersDto.getAlarmNum());
                 entity.setBjsj(beforeDayStr);
                 entity.setXh(i+1);
-                equipmentFileAlarmEventService.save(entity);
+                equipmentFileAlarmEventService.insert(entity);
+                //将信息写入事件相机表中，以便于做切片
+                saveEventCameraInfo(entity, key);
             }
         }
         List<AlarmNumbersDto> allList = equipmentFileService.groupByRq(example);
@@ -156,6 +158,35 @@ public class AlarmEventLoop extends BaseWxController {
             predationNumService.save(dto);
         }
 
+    }
+
+    public void saveEventCameraInfo(EquipmentFileAlarmEventDto entity, String key){
+        String[] arr = entity.getEventTime().split(" 至 ");
+        String kssj = arr[0]+":00";
+        String jssj = arr[1]+":00";
+        if(kssj.equals(jssj)){
+            jssj = DateUtil.getFormatDate(DateUtil.getMinutesLater(DateUtil.toDate(jssj,"yyyy-MM-dd HH:mm:ss"),1),"yyyy-MM-dd HH:mm:ss");
+        }
+        //通过设备编号查询相机信息
+        List<CameraInfo> list = cameraInfoService.findBySbbh(key);
+        if(!CollectionUtils.isEmpty(list)){
+            for (CameraInfo cameraInfo : list){
+                EventCameraInfoDto info = new EventCameraInfoDto();
+                info.setIp(cameraInfo.getIp());
+                info.setPort(cameraInfo.getPort());
+                info.setTdh(cameraInfo.getSbdk());
+                info.setZh(cameraInfo.getUsername());
+                info.setMm(cameraInfo.getCamerapws());
+                info.setKssj(DateUtil.toDate(kssj,"yyyy-MM-dd HH:mm:ss"));
+                info.setJssj(DateUtil.toDate(jssj,"yyyy-MM-dd HH:mm:ss"));
+                info.setSjid(entity.getId());
+                info.setSbsn(entity.getSbbh());
+                info.setDeptcode(entity.getDeptcode());
+                eventCameraInfoService.save(info);
+            }
+        }else {
+            LOG.error("设备编号:"+key+",没有查询到对于的相机信息");
+        }
     }
 
     public static Boolean isOverThreeMinute(String curDateStr, String nextDateStr){
