@@ -64,6 +64,8 @@
           <tr>
             <th>设备sn</th>
             <th>所属机构</th>
+            <th>摄像头编号</th>
+            <th>摄像头名称</th>
             <th>摄像头IP</th>
             <th>端口号</th>
             <th>摄像头用户名</th>
@@ -78,6 +80,9 @@
           <tr v-for="cameraInfo in cameraInfos">
             <td>{{cameraInfo.sbsn}}</td>
             <td>{{alldept|optionDCNArray(cameraInfo.deptcode)}}</td>
+            <td>{{cameraInfo.sm2}}</td>
+            <td>{{cameraInfo.sm3}}</td>
+            <td>{{cameraInfo.ip}}</td>
             <td>{{cameraInfo.ip}}</td>
             <td>{{cameraInfo.port}}</td>
             <td>{{cameraInfo.username}}</td>
@@ -134,6 +139,16 @@
                       <button  v-on:click="chencktreeid()" type="button" class="btn btn-success" >选择部门</button>
                     </div>
                   </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">摄像头编号</label>
+                <div class="col-sm-4">
+                  <input v-model="cameraInfo.sm2" class="form-control" v-bind:disabled="cameraInfo.id">
+                </div>
+                <label class="col-sm-2 control-label">摄像头名称</label>
+                <div class="col-sm-4">
+                  <input v-model="cameraInfo.sm3" class="form-control" v-bind:disabled="cameraInfo.id">
                 </div>
               </div>
               <div class="form-group">
@@ -400,6 +415,8 @@
                 || !Validator.require(_this.cameraInfo.camerapws, "摄像头密码")
                 || !Validator.require(_this.cameraInfo.sbdk, "通道号")
                 || !Validator.checkisNaN(_this.cameraInfo.sbdk, "通道号")
+                || !Validator.require(_this.cameraInfo.sm2, "摄像头编号")
+                || !Validator.require(_this.cameraInfo.sm3, "摄像头名称")
         ) {
           return;
         }

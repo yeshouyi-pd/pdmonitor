@@ -11,14 +11,9 @@ public class EventCameraInfoDto {
     private String id;
 
     /**
-    * ip
+    * 所属DVR的IP
     */
-    private String ip;
-
-    /**
-    * 端口
-    */
-    private Integer port;
+    private String dvrip;
 
     /**
     * 通道号
@@ -26,14 +21,9 @@ public class EventCameraInfoDto {
     private Integer tdh;
 
     /**
-    * 账号
+    * 摄像头编号
     */
-    private String zh;
-
-    /**
-    * 密码
-    */
-    private String mm;
+    private String sxtbh;
 
     /**
     * 开始时间
@@ -51,6 +41,11 @@ public class EventCameraInfoDto {
     * 状态
     */
     private String zt;
+
+    /**
+    * 播放地址
+    */
+    private String dz;
 
     /**
     * 事件id(equipment_file_alarm_event表中的id)
@@ -100,20 +95,12 @@ public class EventCameraInfoDto {
         this.id = id;
     }
 
-    public String getIp() {
-        return ip;
+    public String getDvrip() {
+        return dvrip;
     }
 
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
-
-    public Integer getPort() {
-        return port;
-    }
-
-    public void setPort(Integer port) {
-        this.port = port;
+    public void setDvrip(String dvrip) {
+        this.dvrip = dvrip;
     }
 
     public Integer getTdh() {
@@ -124,20 +111,12 @@ public class EventCameraInfoDto {
         this.tdh = tdh;
     }
 
-    public String getZh() {
-        return zh;
+    public String getSxtbh() {
+        return sxtbh;
     }
 
-    public void setZh(String zh) {
-        this.zh = zh;
-    }
-
-    public String getMm() {
-        return mm;
-    }
-
-    public void setMm(String mm) {
-        this.mm = mm;
+    public void setSxtbh(String sxtbh) {
+        this.sxtbh = sxtbh;
     }
 
     public Date getKssj() {
@@ -162,6 +141,14 @@ public class EventCameraInfoDto {
 
     public void setZt(String zt) {
         this.zt = zt;
+    }
+
+    public String getDz() {
+        return dz;
+    }
+
+    public void setDz(String dz) {
+        this.dz = dz;
     }
 
     public String getSjid() {
@@ -236,14 +223,13 @@ public class EventCameraInfoDto {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
             sb.append(", id=").append(id);
-            sb.append(", ip=").append(ip);
-            sb.append(", port=").append(port);
+            sb.append(", dvrip=").append(dvrip);
             sb.append(", tdh=").append(tdh);
-            sb.append(", zh=").append(zh);
-            sb.append(", mm=").append(mm);
+            sb.append(", sxtbh=").append(sxtbh);
             sb.append(", kssj=").append(kssj);
             sb.append(", jssj=").append(jssj);
             sb.append(", zt=").append(zt);
+            sb.append(", dz=").append(dz);
             sb.append(", sjid=").append(sjid);
             sb.append(", sbsn=").append(sbsn);
             sb.append(", deptcode=").append(deptcode);

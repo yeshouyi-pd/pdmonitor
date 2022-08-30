@@ -38,10 +38,10 @@ public class EventCameraInfoController {
     @PostMapping("/save")
     public ResponseDto save(@RequestBody EventCameraInfoDto eventCameraInfoDto) {
         // 保存校验
-                ValidatorUtil.length(eventCameraInfoDto.getIp(), "ip", 1, 255);
-                ValidatorUtil.length(eventCameraInfoDto.getZh(), "账号", 1, 255);
-                ValidatorUtil.length(eventCameraInfoDto.getMm(), "密码", 1, 255);
+                ValidatorUtil.length(eventCameraInfoDto.getDvrip(), "所属DVR的IP", 1, 255);
+                ValidatorUtil.length(eventCameraInfoDto.getSxtbh(), "摄像头编号", 1, 255);
                 ValidatorUtil.length(eventCameraInfoDto.getZt(), "状态", 1, 10);
+                ValidatorUtil.length(eventCameraInfoDto.getDz(), "播放地址", 1, 255);
                 ValidatorUtil.length(eventCameraInfoDto.getSjid(), "事件id(equipment_file_alarm_event表中的id)", 1, 50);
                 ValidatorUtil.length(eventCameraInfoDto.getSbsn(), "设备编号", 1, 255);
                 ValidatorUtil.length(eventCameraInfoDto.getDeptcode(), "部门编号", 1, 255);
