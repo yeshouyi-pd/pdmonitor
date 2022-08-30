@@ -3,14 +3,13 @@
 <mapper namespace="com.pd.server.main.mapper.EventCameraInfoMapper">
   <resultMap id="BaseResultMap" type="com.pd.server.main.domain.EventCameraInfo">
     <id column="id" jdbcType="VARCHAR" property="id" />
-    <result column="ip" jdbcType="VARCHAR" property="ip" />
-    <result column="port" jdbcType="INTEGER" property="port" />
+    <result column="dvrip" jdbcType="VARCHAR" property="dvrip" />
     <result column="tdh" jdbcType="INTEGER" property="tdh" />
-    <result column="zh" jdbcType="VARCHAR" property="zh" />
-    <result column="mm" jdbcType="VARCHAR" property="mm" />
+    <result column="sxtbh" jdbcType="VARCHAR" property="sxtbh" />
     <result column="kssj" jdbcType="TIMESTAMP" property="kssj" />
     <result column="jssj" jdbcType="TIMESTAMP" property="jssj" />
     <result column="zt" jdbcType="VARCHAR" property="zt" />
+    <result column="dz" jdbcType="VARCHAR" property="dz" />
     <result column="sjid" jdbcType="VARCHAR" property="sjid" />
     <result column="sbsn" jdbcType="VARCHAR" property="sbsn" />
     <result column="deptcode" jdbcType="VARCHAR" property="deptcode" />
@@ -79,7 +78,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, ip, port, tdh, zh, mm, kssj, jssj, zt, sjid, sbsn, deptcode, bz, sm, sm1, sm2, 
+    id, dvrip, tdh, sxtbh, kssj, jssj, zt, dz, sjid, sbsn, deptcode, bz, sm, sm1, sm2, 
     sm3
   </sql>
   <select id="selectByExample" parameterType="com.pd.server.main.domain.EventCameraInfoExample" resultMap="BaseResultMap">
@@ -113,14 +112,14 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.pd.server.main.domain.EventCameraInfo">
-    insert into event_camera_info (id, ip, port, 
-      tdh, zh, mm, kssj, 
-      jssj, zt, sjid, sbsn, 
+    insert into event_camera_info (id, dvrip, tdh, 
+      sxtbh, kssj, jssj, 
+      zt, dz, sjid, sbsn, 
       deptcode, bz, sm, sm1, 
       sm2, sm3)
-    values (#{id,jdbcType=VARCHAR}, #{ip,jdbcType=VARCHAR}, #{port,jdbcType=INTEGER}, 
-      #{tdh,jdbcType=INTEGER}, #{zh,jdbcType=VARCHAR}, #{mm,jdbcType=VARCHAR}, #{kssj,jdbcType=TIMESTAMP}, 
-      #{jssj,jdbcType=TIMESTAMP}, #{zt,jdbcType=VARCHAR}, #{sjid,jdbcType=VARCHAR}, #{sbsn,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=VARCHAR}, #{dvrip,jdbcType=VARCHAR}, #{tdh,jdbcType=INTEGER}, 
+      #{sxtbh,jdbcType=VARCHAR}, #{kssj,jdbcType=TIMESTAMP}, #{jssj,jdbcType=TIMESTAMP}, 
+      #{zt,jdbcType=VARCHAR}, #{dz,jdbcType=VARCHAR}, #{sjid,jdbcType=VARCHAR}, #{sbsn,jdbcType=VARCHAR}, 
       #{deptcode,jdbcType=VARCHAR}, #{bz,jdbcType=VARCHAR}, #{sm,jdbcType=VARCHAR}, #{sm1,jdbcType=VARCHAR}, 
       #{sm2,jdbcType=VARCHAR}, #{sm3,jdbcType=VARCHAR})
   </insert>
@@ -130,20 +129,14 @@
       <if test="id != null">
         id,
       </if>
-      <if test="ip != null">
-        ip,
-      </if>
-      <if test="port != null">
-        port,
+      <if test="dvrip != null">
+        dvrip,
       </if>
       <if test="tdh != null">
         tdh,
       </if>
-      <if test="zh != null">
-        zh,
-      </if>
-      <if test="mm != null">
-        mm,
+      <if test="sxtbh != null">
+        sxtbh,
       </if>
       <if test="kssj != null">
         kssj,
@@ -153,6 +146,9 @@
       </if>
       <if test="zt != null">
         zt,
+      </if>
+      <if test="dz != null">
+        dz,
       </if>
       <if test="sjid != null">
         sjid,
@@ -183,20 +179,14 @@
       <if test="id != null">
         #{id,jdbcType=VARCHAR},
       </if>
-      <if test="ip != null">
-        #{ip,jdbcType=VARCHAR},
-      </if>
-      <if test="port != null">
-        #{port,jdbcType=INTEGER},
+      <if test="dvrip != null">
+        #{dvrip,jdbcType=VARCHAR},
       </if>
       <if test="tdh != null">
         #{tdh,jdbcType=INTEGER},
       </if>
-      <if test="zh != null">
-        #{zh,jdbcType=VARCHAR},
-      </if>
-      <if test="mm != null">
-        #{mm,jdbcType=VARCHAR},
+      <if test="sxtbh != null">
+        #{sxtbh,jdbcType=VARCHAR},
       </if>
       <if test="kssj != null">
         #{kssj,jdbcType=TIMESTAMP},
@@ -206,6 +196,9 @@
       </if>
       <if test="zt != null">
         #{zt,jdbcType=VARCHAR},
+      </if>
+      <if test="dz != null">
+        #{dz,jdbcType=VARCHAR},
       </if>
       <if test="sjid != null">
         #{sjid,jdbcType=VARCHAR},
@@ -245,20 +238,14 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=VARCHAR},
       </if>
-      <if test="record.ip != null">
-        ip = #{record.ip,jdbcType=VARCHAR},
-      </if>
-      <if test="record.port != null">
-        port = #{record.port,jdbcType=INTEGER},
+      <if test="record.dvrip != null">
+        dvrip = #{record.dvrip,jdbcType=VARCHAR},
       </if>
       <if test="record.tdh != null">
         tdh = #{record.tdh,jdbcType=INTEGER},
       </if>
-      <if test="record.zh != null">
-        zh = #{record.zh,jdbcType=VARCHAR},
-      </if>
-      <if test="record.mm != null">
-        mm = #{record.mm,jdbcType=VARCHAR},
+      <if test="record.sxtbh != null">
+        sxtbh = #{record.sxtbh,jdbcType=VARCHAR},
       </if>
       <if test="record.kssj != null">
         kssj = #{record.kssj,jdbcType=TIMESTAMP},
@@ -268,6 +255,9 @@
       </if>
       <if test="record.zt != null">
         zt = #{record.zt,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dz != null">
+        dz = #{record.dz,jdbcType=VARCHAR},
       </if>
       <if test="record.sjid != null">
         sjid = #{record.sjid,jdbcType=VARCHAR},
@@ -301,14 +291,13 @@
   <update id="updateByExample" parameterType="map">
     update event_camera_info
     set id = #{record.id,jdbcType=VARCHAR},
-      ip = #{record.ip,jdbcType=VARCHAR},
-      port = #{record.port,jdbcType=INTEGER},
+      dvrip = #{record.dvrip,jdbcType=VARCHAR},
       tdh = #{record.tdh,jdbcType=INTEGER},
-      zh = #{record.zh,jdbcType=VARCHAR},
-      mm = #{record.mm,jdbcType=VARCHAR},
+      sxtbh = #{record.sxtbh,jdbcType=VARCHAR},
       kssj = #{record.kssj,jdbcType=TIMESTAMP},
       jssj = #{record.jssj,jdbcType=TIMESTAMP},
       zt = #{record.zt,jdbcType=VARCHAR},
+      dz = #{record.dz,jdbcType=VARCHAR},
       sjid = #{record.sjid,jdbcType=VARCHAR},
       sbsn = #{record.sbsn,jdbcType=VARCHAR},
       deptcode = #{record.deptcode,jdbcType=VARCHAR},
@@ -324,20 +313,14 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.pd.server.main.domain.EventCameraInfo">
     update event_camera_info
     <set>
-      <if test="ip != null">
-        ip = #{ip,jdbcType=VARCHAR},
-      </if>
-      <if test="port != null">
-        port = #{port,jdbcType=INTEGER},
+      <if test="dvrip != null">
+        dvrip = #{dvrip,jdbcType=VARCHAR},
       </if>
       <if test="tdh != null">
         tdh = #{tdh,jdbcType=INTEGER},
       </if>
-      <if test="zh != null">
-        zh = #{zh,jdbcType=VARCHAR},
-      </if>
-      <if test="mm != null">
-        mm = #{mm,jdbcType=VARCHAR},
+      <if test="sxtbh != null">
+        sxtbh = #{sxtbh,jdbcType=VARCHAR},
       </if>
       <if test="kssj != null">
         kssj = #{kssj,jdbcType=TIMESTAMP},
@@ -347,6 +330,9 @@
       </if>
       <if test="zt != null">
         zt = #{zt,jdbcType=VARCHAR},
+      </if>
+      <if test="dz != null">
+        dz = #{dz,jdbcType=VARCHAR},
       </if>
       <if test="sjid != null">
         sjid = #{sjid,jdbcType=VARCHAR},
@@ -377,14 +363,13 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.pd.server.main.domain.EventCameraInfo">
     update event_camera_info
-    set ip = #{ip,jdbcType=VARCHAR},
-      port = #{port,jdbcType=INTEGER},
+    set dvrip = #{dvrip,jdbcType=VARCHAR},
       tdh = #{tdh,jdbcType=INTEGER},
-      zh = #{zh,jdbcType=VARCHAR},
-      mm = #{mm,jdbcType=VARCHAR},
+      sxtbh = #{sxtbh,jdbcType=VARCHAR},
       kssj = #{kssj,jdbcType=TIMESTAMP},
       jssj = #{jssj,jdbcType=TIMESTAMP},
       zt = #{zt,jdbcType=VARCHAR},
+      dz = #{dz,jdbcType=VARCHAR},
       sjid = #{sjid,jdbcType=VARCHAR},
       sbsn = #{sbsn,jdbcType=VARCHAR},
       deptcode = #{deptcode,jdbcType=VARCHAR},

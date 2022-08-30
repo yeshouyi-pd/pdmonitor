@@ -1,5 +1,7 @@
 package com.pd.server.main.service;
 
+import com.pd.server.exception.BusinessException;
+import com.pd.server.exception.BusinessExceptionCode;
 import com.pd.server.main.domain.CameraInfo;
 import com.pd.server.main.domain.CameraInfoExample;
 import com.pd.server.main.dto.CameraInfoDto;
@@ -10,6 +12,7 @@ import com.pd.server.util.UuidUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
@@ -67,8 +70,13 @@ public class CameraInfoService {
     * 新增
     */
     private void insert(CameraInfo cameraInfo) {
-                Date now = new Date();
         cameraInfo.setId(UuidUtil.getShortUuid());
+        CameraInfoExample example = new CameraInfoExample();
+        example.createCriteria().andSm2EqualTo(cameraInfo.getSm2());
+        List<CameraInfo> list = cameraInfoMapper.selectByExample(example);
+        if (!CollectionUtils.isEmpty(list)) {
+            throw new BusinessException(BusinessExceptionCode.DEPT_CODE_EXIST);
+        }
         cameraInfoMapper.insert(cameraInfo);
     }
 

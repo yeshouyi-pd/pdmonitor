@@ -172,11 +172,9 @@ public class AlarmEventLoop extends BaseWxController {
         if(!CollectionUtils.isEmpty(list)){
             for (CameraInfo cameraInfo : list){
                 EventCameraInfoDto info = new EventCameraInfoDto();
-                info.setIp(cameraInfo.getIp());
-                info.setPort(cameraInfo.getPort());
+                info.setDvrip(cameraInfo.getDvrip());
                 info.setTdh(cameraInfo.getSbdk());
-                info.setZh(cameraInfo.getUsername());
-                info.setMm(cameraInfo.getCamerapws());
+                info.setSxtbh(cameraInfo.getSm2());
                 info.setKssj(DateUtil.toDate(kssj,"yyyy-MM-dd HH:mm:ss"));
                 info.setJssj(DateUtil.toDate(jssj,"yyyy-MM-dd HH:mm:ss"));
                 info.setSjid(entity.getId());

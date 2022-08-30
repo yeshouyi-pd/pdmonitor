@@ -22,12 +22,6 @@ public class EventCameraInfoService {
     @Resource
     private EventCameraInfoMapper eventCameraInfoMapper;
 
-    public List<EventCameraInfo> selectBySbbh(String sbbh){
-        EventCameraInfoExample eventCameraInfoExample = new EventCameraInfoExample();
-        eventCameraInfoExample.createCriteria().andSbsnEqualTo(sbbh);
-        return eventCameraInfoMapper.selectByExample(eventCameraInfoExample);
-    }
-
     /**
     * 列表查询
     */

@@ -5,21 +5,19 @@ import java.util.Date;
 public class EventCameraInfo {
     private String id;
 
-    private String ip;
-
-    private Integer port;
+    private String dvrip;
 
     private Integer tdh;
 
-    private String zh;
-
-    private String mm;
+    private String sxtbh;
 
     private Date kssj;
 
     private Date jssj;
 
     private String zt;
+
+    private String dz;
 
     private String sjid;
 
@@ -45,20 +43,12 @@ public class EventCameraInfo {
         this.id = id;
     }
 
-    public String getIp() {
-        return ip;
+    public String getDvrip() {
+        return dvrip;
     }
 
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
-
-    public Integer getPort() {
-        return port;
-    }
-
-    public void setPort(Integer port) {
-        this.port = port;
+    public void setDvrip(String dvrip) {
+        this.dvrip = dvrip;
     }
 
     public Integer getTdh() {
@@ -69,20 +59,12 @@ public class EventCameraInfo {
         this.tdh = tdh;
     }
 
-    public String getZh() {
-        return zh;
+    public String getSxtbh() {
+        return sxtbh;
     }
 
-    public void setZh(String zh) {
-        this.zh = zh;
-    }
-
-    public String getMm() {
-        return mm;
-    }
-
-    public void setMm(String mm) {
-        this.mm = mm;
+    public void setSxtbh(String sxtbh) {
+        this.sxtbh = sxtbh;
     }
 
     public Date getKssj() {
@@ -107,6 +89,14 @@ public class EventCameraInfo {
 
     public void setZt(String zt) {
         this.zt = zt;
+    }
+
+    public String getDz() {
+        return dz;
+    }
+
+    public void setDz(String dz) {
+        this.dz = dz;
     }
 
     public String getSjid() {
@@ -180,14 +170,13 @@ public class EventCameraInfo {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", ip=").append(ip);
-        sb.append(", port=").append(port);
+        sb.append(", dvrip=").append(dvrip);
         sb.append(", tdh=").append(tdh);
-        sb.append(", zh=").append(zh);
-        sb.append(", mm=").append(mm);
+        sb.append(", sxtbh=").append(sxtbh);
         sb.append(", kssj=").append(kssj);
         sb.append(", jssj=").append(jssj);
         sb.append(", zt=").append(zt);
+        sb.append(", dz=").append(dz);
         sb.append(", sjid=").append(sjid);
         sb.append(", sbsn=").append(sbsn);
         sb.append(", deptcode=").append(deptcode);

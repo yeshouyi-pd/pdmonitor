@@ -175,133 +175,73 @@ public class EventCameraInfoExample {
             return (Criteria) this;
         }
 
-        public Criteria andIpIsNull() {
-            addCriterion("ip is null");
+        public Criteria andDvripIsNull() {
+            addCriterion("dvrip is null");
             return (Criteria) this;
         }
 
-        public Criteria andIpIsNotNull() {
-            addCriterion("ip is not null");
+        public Criteria andDvripIsNotNull() {
+            addCriterion("dvrip is not null");
             return (Criteria) this;
         }
 
-        public Criteria andIpEqualTo(String value) {
-            addCriterion("ip =", value, "ip");
+        public Criteria andDvripEqualTo(String value) {
+            addCriterion("dvrip =", value, "dvrip");
             return (Criteria) this;
         }
 
-        public Criteria andIpNotEqualTo(String value) {
-            addCriterion("ip <>", value, "ip");
+        public Criteria andDvripNotEqualTo(String value) {
+            addCriterion("dvrip <>", value, "dvrip");
             return (Criteria) this;
         }
 
-        public Criteria andIpGreaterThan(String value) {
-            addCriterion("ip >", value, "ip");
+        public Criteria andDvripGreaterThan(String value) {
+            addCriterion("dvrip >", value, "dvrip");
             return (Criteria) this;
         }
 
-        public Criteria andIpGreaterThanOrEqualTo(String value) {
-            addCriterion("ip >=", value, "ip");
+        public Criteria andDvripGreaterThanOrEqualTo(String value) {
+            addCriterion("dvrip >=", value, "dvrip");
             return (Criteria) this;
         }
 
-        public Criteria andIpLessThan(String value) {
-            addCriterion("ip <", value, "ip");
+        public Criteria andDvripLessThan(String value) {
+            addCriterion("dvrip <", value, "dvrip");
             return (Criteria) this;
         }
 
-        public Criteria andIpLessThanOrEqualTo(String value) {
-            addCriterion("ip <=", value, "ip");
+        public Criteria andDvripLessThanOrEqualTo(String value) {
+            addCriterion("dvrip <=", value, "dvrip");
             return (Criteria) this;
         }
 
-        public Criteria andIpLike(String value) {
-            addCriterion("ip like", value, "ip");
+        public Criteria andDvripLike(String value) {
+            addCriterion("dvrip like", value, "dvrip");
             return (Criteria) this;
         }
 
-        public Criteria andIpNotLike(String value) {
-            addCriterion("ip not like", value, "ip");
+        public Criteria andDvripNotLike(String value) {
+            addCriterion("dvrip not like", value, "dvrip");
             return (Criteria) this;
         }
 
-        public Criteria andIpIn(List<String> values) {
-            addCriterion("ip in", values, "ip");
+        public Criteria andDvripIn(List<String> values) {
+            addCriterion("dvrip in", values, "dvrip");
             return (Criteria) this;
         }
 
-        public Criteria andIpNotIn(List<String> values) {
-            addCriterion("ip not in", values, "ip");
+        public Criteria andDvripNotIn(List<String> values) {
+            addCriterion("dvrip not in", values, "dvrip");
             return (Criteria) this;
         }
 
-        public Criteria andIpBetween(String value1, String value2) {
-            addCriterion("ip between", value1, value2, "ip");
+        public Criteria andDvripBetween(String value1, String value2) {
+            addCriterion("dvrip between", value1, value2, "dvrip");
             return (Criteria) this;
         }
 
-        public Criteria andIpNotBetween(String value1, String value2) {
-            addCriterion("ip not between", value1, value2, "ip");
-            return (Criteria) this;
-        }
-
-        public Criteria andPortIsNull() {
-            addCriterion("port is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPortIsNotNull() {
-            addCriterion("port is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPortEqualTo(Integer value) {
-            addCriterion("port =", value, "port");
-            return (Criteria) this;
-        }
-
-        public Criteria andPortNotEqualTo(Integer value) {
-            addCriterion("port <>", value, "port");
-            return (Criteria) this;
-        }
-
-        public Criteria andPortGreaterThan(Integer value) {
-            addCriterion("port >", value, "port");
-            return (Criteria) this;
-        }
-
-        public Criteria andPortGreaterThanOrEqualTo(Integer value) {
-            addCriterion("port >=", value, "port");
-            return (Criteria) this;
-        }
-
-        public Criteria andPortLessThan(Integer value) {
-            addCriterion("port <", value, "port");
-            return (Criteria) this;
-        }
-
-        public Criteria andPortLessThanOrEqualTo(Integer value) {
-            addCriterion("port <=", value, "port");
-            return (Criteria) this;
-        }
-
-        public Criteria andPortIn(List<Integer> values) {
-            addCriterion("port in", values, "port");
-            return (Criteria) this;
-        }
-
-        public Criteria andPortNotIn(List<Integer> values) {
-            addCriterion("port not in", values, "port");
-            return (Criteria) this;
-        }
-
-        public Criteria andPortBetween(Integer value1, Integer value2) {
-            addCriterion("port between", value1, value2, "port");
-            return (Criteria) this;
-        }
-
-        public Criteria andPortNotBetween(Integer value1, Integer value2) {
-            addCriterion("port not between", value1, value2, "port");
+        public Criteria andDvripNotBetween(String value1, String value2) {
+            addCriterion("dvrip not between", value1, value2, "dvrip");
             return (Criteria) this;
         }
 
@@ -365,143 +305,73 @@ public class EventCameraInfoExample {
             return (Criteria) this;
         }
 
-        public Criteria andZhIsNull() {
-            addCriterion("zh is null");
+        public Criteria andSxtbhIsNull() {
+            addCriterion("sxtbh is null");
             return (Criteria) this;
         }
 
-        public Criteria andZhIsNotNull() {
-            addCriterion("zh is not null");
+        public Criteria andSxtbhIsNotNull() {
+            addCriterion("sxtbh is not null");
             return (Criteria) this;
         }
 
-        public Criteria andZhEqualTo(String value) {
-            addCriterion("zh =", value, "zh");
+        public Criteria andSxtbhEqualTo(String value) {
+            addCriterion("sxtbh =", value, "sxtbh");
             return (Criteria) this;
         }
 
-        public Criteria andZhNotEqualTo(String value) {
-            addCriterion("zh <>", value, "zh");
+        public Criteria andSxtbhNotEqualTo(String value) {
+            addCriterion("sxtbh <>", value, "sxtbh");
             return (Criteria) this;
         }
 
-        public Criteria andZhGreaterThan(String value) {
-            addCriterion("zh >", value, "zh");
+        public Criteria andSxtbhGreaterThan(String value) {
+            addCriterion("sxtbh >", value, "sxtbh");
             return (Criteria) this;
         }
 
-        public Criteria andZhGreaterThanOrEqualTo(String value) {
-            addCriterion("zh >=", value, "zh");
+        public Criteria andSxtbhGreaterThanOrEqualTo(String value) {
+            addCriterion("sxtbh >=", value, "sxtbh");
             return (Criteria) this;
         }
 
-        public Criteria andZhLessThan(String value) {
-            addCriterion("zh <", value, "zh");
+        public Criteria andSxtbhLessThan(String value) {
+            addCriterion("sxtbh <", value, "sxtbh");
             return (Criteria) this;
         }
 
-        public Criteria andZhLessThanOrEqualTo(String value) {
-            addCriterion("zh <=", value, "zh");
+        public Criteria andSxtbhLessThanOrEqualTo(String value) {
+            addCriterion("sxtbh <=", value, "sxtbh");
             return (Criteria) this;
         }
 
-        public Criteria andZhLike(String value) {
-            addCriterion("zh like", value, "zh");
+        public Criteria andSxtbhLike(String value) {
+            addCriterion("sxtbh like", value, "sxtbh");
             return (Criteria) this;
         }
 
-        public Criteria andZhNotLike(String value) {
-            addCriterion("zh not like", value, "zh");
+        public Criteria andSxtbhNotLike(String value) {
+            addCriterion("sxtbh not like", value, "sxtbh");
             return (Criteria) this;
         }
 
-        public Criteria andZhIn(List<String> values) {
-            addCriterion("zh in", values, "zh");
+        public Criteria andSxtbhIn(List<String> values) {
+            addCriterion("sxtbh in", values, "sxtbh");
             return (Criteria) this;
         }
 
-        public Criteria andZhNotIn(List<String> values) {
-            addCriterion("zh not in", values, "zh");
+        public Criteria andSxtbhNotIn(List<String> values) {
+            addCriterion("sxtbh not in", values, "sxtbh");
             return (Criteria) this;
         }
 
-        public Criteria andZhBetween(String value1, String value2) {
-            addCriterion("zh between", value1, value2, "zh");
+        public Criteria andSxtbhBetween(String value1, String value2) {
+            addCriterion("sxtbh between", value1, value2, "sxtbh");
             return (Criteria) this;
         }
 
-        public Criteria andZhNotBetween(String value1, String value2) {
-            addCriterion("zh not between", value1, value2, "zh");
-            return (Criteria) this;
-        }
-
-        public Criteria andMmIsNull() {
-            addCriterion("mm is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andMmIsNotNull() {
-            addCriterion("mm is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andMmEqualTo(String value) {
-            addCriterion("mm =", value, "mm");
-            return (Criteria) this;
-        }
-
-        public Criteria andMmNotEqualTo(String value) {
-            addCriterion("mm <>", value, "mm");
-            return (Criteria) this;
-        }
-
-        public Criteria andMmGreaterThan(String value) {
-            addCriterion("mm >", value, "mm");
-            return (Criteria) this;
-        }
-
-        public Criteria andMmGreaterThanOrEqualTo(String value) {
-            addCriterion("mm >=", value, "mm");
-            return (Criteria) this;
-        }
-
-        public Criteria andMmLessThan(String value) {
-            addCriterion("mm <", value, "mm");
-            return (Criteria) this;
-        }
-
-        public Criteria andMmLessThanOrEqualTo(String value) {
-            addCriterion("mm <=", value, "mm");
-            return (Criteria) this;
-        }
-
-        public Criteria andMmLike(String value) {
-            addCriterion("mm like", value, "mm");
-            return (Criteria) this;
-        }
-
-        public Criteria andMmNotLike(String value) {
-            addCriterion("mm not like", value, "mm");
-            return (Criteria) this;
-        }
-
-        public Criteria andMmIn(List<String> values) {
-            addCriterion("mm in", values, "mm");
-            return (Criteria) this;
-        }
-
-        public Criteria andMmNotIn(List<String> values) {
-            addCriterion("mm not in", values, "mm");
-            return (Criteria) this;
-        }
-
-        public Criteria andMmBetween(String value1, String value2) {
-            addCriterion("mm between", value1, value2, "mm");
-            return (Criteria) this;
-        }
-
-        public Criteria andMmNotBetween(String value1, String value2) {
-            addCriterion("mm not between", value1, value2, "mm");
+        public Criteria andSxtbhNotBetween(String value1, String value2) {
+            addCriterion("sxtbh not between", value1, value2, "sxtbh");
             return (Criteria) this;
         }
 
@@ -692,6 +562,76 @@ public class EventCameraInfoExample {
 
         public Criteria andZtNotBetween(String value1, String value2) {
             addCriterion("zt not between", value1, value2, "zt");
+            return (Criteria) this;
+        }
+
+        public Criteria andDzIsNull() {
+            addCriterion("dz is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDzIsNotNull() {
+            addCriterion("dz is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDzEqualTo(String value) {
+            addCriterion("dz =", value, "dz");
+            return (Criteria) this;
+        }
+
+        public Criteria andDzNotEqualTo(String value) {
+            addCriterion("dz <>", value, "dz");
+            return (Criteria) this;
+        }
+
+        public Criteria andDzGreaterThan(String value) {
+            addCriterion("dz >", value, "dz");
+            return (Criteria) this;
+        }
+
+        public Criteria andDzGreaterThanOrEqualTo(String value) {
+            addCriterion("dz >=", value, "dz");
+            return (Criteria) this;
+        }
+
+        public Criteria andDzLessThan(String value) {
+            addCriterion("dz <", value, "dz");
+            return (Criteria) this;
+        }
+
+        public Criteria andDzLessThanOrEqualTo(String value) {
+            addCriterion("dz <=", value, "dz");
+            return (Criteria) this;
+        }
+
+        public Criteria andDzLike(String value) {
+            addCriterion("dz like", value, "dz");
+            return (Criteria) this;
+        }
+
+        public Criteria andDzNotLike(String value) {
+            addCriterion("dz not like", value, "dz");
+            return (Criteria) this;
+        }
+
+        public Criteria andDzIn(List<String> values) {
+            addCriterion("dz in", values, "dz");
+            return (Criteria) this;
+        }
+
+        public Criteria andDzNotIn(List<String> values) {
+            addCriterion("dz not in", values, "dz");
+            return (Criteria) this;
+        }
+
+        public Criteria andDzBetween(String value1, String value2) {
+            addCriterion("dz between", value1, value2, "dz");
+            return (Criteria) this;
+        }
+
+        public Criteria andDzNotBetween(String value1, String value2) {
+            addCriterion("dz not between", value1, value2, "dz");
             return (Criteria) this;
         }
 
