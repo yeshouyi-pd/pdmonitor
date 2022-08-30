@@ -65,15 +65,17 @@ public class ShjController{
             returnObject.put("returnCode", ShjJsonConstant.CODE_2001);
             returnObject.put("returnMsg", ShjJsonConstant.MSG_2001);
         } finally {
-            InterfaceLogMapper interfaceLogMapper = SpringUtil.getBean(InterfaceLogMapper.class);
-            InterfaceLog log = new InterfaceLog();
-            log.setId(UuidUtil.getShortUuid());
-            log.setIp(request.getLocalAddr());
-            log.setQqcs(jsonParam);
-            log.setQqsj(new Date());
-            log.setQqry(methodname);
-            log.setFhsj(JSONObject.toJSONString(retJson(returnObject, methodname, data)));
-            interfaceLogMapper.insert(log);
+            if(!"保存成功".equals(data)){
+                InterfaceLogMapper interfaceLogMapper = SpringUtil.getBean(InterfaceLogMapper.class);
+                InterfaceLog log = new InterfaceLog();
+                log.setId(UuidUtil.getShortUuid());
+                log.setIp(request.getLocalAddr());
+                log.setQqcs(jsonParam);
+                log.setQqsj(new Date());
+                log.setQqry(methodname);
+                log.setFhsj(JSONObject.toJSONString(retJson(returnObject, methodname, data)));
+                interfaceLogMapper.insert(log);
+            }
         }
         return retJson(returnObject, methodname, data);
     }
