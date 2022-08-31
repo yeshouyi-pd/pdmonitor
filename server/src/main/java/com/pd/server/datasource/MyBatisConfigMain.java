@@ -1,6 +1,6 @@
 package com.pd.server.datasource;
 
-import com.mysql.jdbc.jdbc2.optional.MysqlXADataSource;
+import com.mysql.cj.jdbc.MysqlXADataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -27,7 +27,7 @@ public class MyBatisConfigMain {
 	@Primary
 	@Bean(name = "mainDataSource")
 	public DataSource MainDataSource(DBConfigMain mainConfig) throws SQLException {
-		MysqlXADataSource  mainXaDataSource = new MysqlXADataSource();
+		MysqlXADataSource mainXaDataSource = new MysqlXADataSource();
 		mainXaDataSource.setURL(mainConfig.getUrl());
 		mainXaDataSource.setPassword(mainConfig.getPassword());
 		mainXaDataSource.setUser(mainConfig.getUsername());
