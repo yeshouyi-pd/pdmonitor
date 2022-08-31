@@ -1,6 +1,5 @@
-package com.pd.system.controller.conf;
+package com.pd.monitor.quartz;
 
-import com.pd.server.config.SpringUtil;
 import com.pd.server.main.domain.WaterQualityAvg;
 import com.pd.server.main.domain.WaterQualityResultExample;
 import com.pd.server.main.dto.WaterQualityAvgDto;
@@ -8,40 +7,36 @@ import com.pd.server.main.mapper.WaterQualityAvgMapper;
 import com.pd.server.main.mapper.WaterQualityResultMapper;
 import com.pd.server.util.DateUtil;
 import com.pd.server.util.UuidUtil;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
 
 @Component
-public class WateDataAvgController implements ApplicationContextAware {
+@EnableScheduling
+public class WaterDataAvgQuartz {
 
-    private static ApplicationContext applicationContext;
+    private static final Logger LOG = LoggerFactory.getLogger(WaterDataAvgQuartz.class);
 
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        if(WateDataAvgController.applicationContext == null) {
-            WateDataAvgController.applicationContext = applicationContext;
-        }
-    }
+    @Resource
+    private WaterQualityResultMapper mapper;
+    @Resource
+    private WaterQualityAvgMapper avgMapper;
 
-    public static void main(String args[]){
-        waterDataAvgSchedule();
-    }
-
-    @Scheduled(cron = "0 0 1 * * ? ")
-    public static void waterDataAvgSchedule(){
+    /* 每天凌晨3点开始计算水深，流速等平均值 */
+    @Scheduled(cron = "0 0 3 * * ? ")
+    public void waterDataAvgSchedule(){
         WaterQualityResultExample example = new WaterQualityResultExample();
         WaterQualityResultExample.Criteria ca = example.createCriteria();
         ca.andCreateTimeEqualTo(DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(),-1),"yyyy-MM-dd"));
-        WaterQualityResultMapper mapper = SpringUtil.getBean(WaterQualityResultMapper.class);
         List<WaterQualityAvgDto> list = mapper.selectAvgByExample(example);
-        WaterQualityAvgMapper avgMapper = SpringUtil.getBean(WaterQualityAvgMapper.class);
         for(WaterQualityAvgDto dto : list){
             WaterQualityAvg entity = new WaterQualityAvg();
             entity.setId(UuidUtil.getShortUuid());
@@ -66,7 +61,7 @@ public class WateDataAvgController implements ApplicationContextAware {
      * @param scale         表示表示需要精确到小数点以后几位。
      * @return 两个参数的商
      */
-    public static double div(Double v1, int v2, int scale) {
+    public double div(Double v1, int v2, int scale) {
         if (scale < 0) {
             throw new IllegalArgumentException(
                     "The scale must be a positive integer or zero");
