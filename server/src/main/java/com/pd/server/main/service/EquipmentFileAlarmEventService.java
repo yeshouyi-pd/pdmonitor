@@ -115,8 +115,7 @@ public class EquipmentFileAlarmEventService {
         EquipmentFileAlarmEventExample.Criteria ca = equipmentFileAlarmEventExample.createCriteria();
         if(!StringUtils.isEmpty(list)&&list.size()>0){
             ca.andDeptcodeIn(list);
-        }
-        if(!StringUtils.isEmpty(entityDto.getDeptcode())){
+        }else if(!StringUtils.isEmpty(entityDto.getDeptcode())){
             ca.andDeptcodeEqualTo(entityDto.getDeptcode());
         }
         if(!StringUtils.isEmpty(entityDto.getStime())){

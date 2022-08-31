@@ -1,10 +1,13 @@
 package com.pd.server.main.service;
 
 import com.pd.server.main.domain.EquipmentFile;
+import com.pd.server.main.domain.EquipmentFileExample;
 import com.pd.server.main.domain.EquipmentFileToday;
 import com.pd.server.main.domain.EquipmentFileTodayExample;
 import com.pd.server.main.dto.EquipmentFileTodayDto;
 import com.pd.server.main.dto.PageDto;
+import com.pd.server.main.dto.WelcomeKvDto;
+import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
 import com.pd.server.main.mapper.EquipmentFileTodayMapper;
 import com.pd.server.util.CopyUtil;
 import com.pd.server.util.UuidUtil;
@@ -22,6 +25,14 @@ public class EquipmentFileTodayService {
 
     @Resource
     private EquipmentFileTodayMapper equipmentFileTodayMapper;
+
+    public  List<WelcomeKvDto> getWarningDate(EquipmentFileExample equipmentFileExample){
+        return equipmentFileTodayMapper.getWarningDate(equipmentFileExample);
+    }
+
+    public List<AlarmNumbersDto> statisticsAlarmNumsByPage(EquipmentFileTodayExample example){
+        return equipmentFileTodayMapper.statisticsAlarmNumsByPage(example);
+    }
 
     public List<EquipmentFileToday> listAll(EquipmentFileTodayExample equipmentFileTodayExample){
         return equipmentFileTodayMapper.selectByExample(equipmentFileTodayExample);

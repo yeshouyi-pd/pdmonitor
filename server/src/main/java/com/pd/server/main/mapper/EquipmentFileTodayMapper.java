@@ -1,12 +1,21 @@
 package com.pd.server.main.mapper;
 
 import com.pd.server.main.domain.EquipmentFile;
+import com.pd.server.main.domain.EquipmentFileExample;
 import com.pd.server.main.domain.EquipmentFileToday;
 import com.pd.server.main.domain.EquipmentFileTodayExample;
 import java.util.List;
+
+import com.pd.server.main.dto.WelcomeKvDto;
+import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
 import org.apache.ibatis.annotations.Param;
 
 public interface EquipmentFileTodayMapper {
+
+    List<WelcomeKvDto> getWarningDate(EquipmentFileExample equipmentFileExample);
+
+    List<AlarmNumbersDto> statisticsAlarmNumsByPage(EquipmentFileTodayExample example);
+
     long countByExample(EquipmentFileTodayExample example);
 
     int deleteByExample(EquipmentFileTodayExample example);

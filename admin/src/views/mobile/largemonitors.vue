@@ -66,13 +66,13 @@
                                         <tr style="background: #395DC0;color: #FFFFFF;height: 30px;">
                                             <th style="width: 25%;font-size: 16px;">监控点</th>
                                             <th style="width: 25%;font-size: 16px;">设备编号</th>
-                                            <th style="width: 25%;font-size: 16px;">出现次数</th>
+                                            <th style="width: 25%;font-size: 16px;">声学侦测次数</th>
                                             <th style="width: 25%;font-size: 16px;">操作</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         <tr v-for="keval in kvMaps" style="text-align: left;background: #18468E;height: 30px;">
-                                            <td>{{ keval.deptname }}</td>
+                                            <td>{{ deptMap|optionMapKV(keval.deptcode) }}</td>
                                             <td>
                                                 {{keval.text}}
                                             </td>
@@ -281,11 +281,13 @@
                 alarmDatas:{},
                 intervalId:null,
                 cameras:[],
-                heightMax:''
+                heightMax:'',
+                deptMap:[]
             }
         },
         mounted: function () {
             let _this = this;
+            _this.deptMap = Tool.getDeptUser();
             _this.getDataCamera();
             _this.getSzjcx();
             _this.getPieChart();
@@ -344,7 +346,7 @@
                 }
                 _this.alarmNumbersDto.stime = moment().subtract(0, "days").format('YYYY-MM-DD');
                 _this.alarmNumbersDto.etime = moment().subtract(0, "days").format('YYYY-MM-DD');
-                _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFile/statisticsAlarmNumsByTimeSum', _this.alarmNumbersDto).then((response) => {
+                _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileToday/statisticsAlarmNumsByTimeSum', _this.alarmNumbersDto).then((response) => {
                     let resp = response.data;
                     _this.alarmDatas = resp.content;
                     console.log(_this.alarmDatas);
@@ -365,7 +367,7 @@
                 Loading.show();
                 _this.equipmentFileDto.sbbh=sbbh;
                 _this.$forceUpdate();
-                _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFile/listsbbh',_this.equipmentFileDto).then((response)=>{
+                _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileToday/listsbbh',_this.equipmentFileDto).then((response)=>{
                     Loading.hide();
                     let resp = response.data;
                     _this.equipmentFiles = resp.content;

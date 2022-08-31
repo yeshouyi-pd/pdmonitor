@@ -8,6 +8,7 @@ import com.pd.server.main.domain.WaterEquipmentExample;
 import com.pd.server.main.domain.WaterQualityResultExample;
 import com.pd.server.main.dto.*;
 import com.pd.server.main.service.EquipmentFileService;
+import com.pd.server.main.service.EquipmentFileTodayService;
 import com.pd.server.main.service.WaterEquipmentService;
 import com.pd.server.main.service.WaterQualityResultService;
 import com.pd.server.util.DateUtil;
@@ -47,6 +48,9 @@ public class WelcomeController  extends BaseWxController{
      */
     @Resource
     private WaterEquipmentService waterEquipmentService;
+
+    @Resource
+    private EquipmentFileTodayService equipmentFileTodayService;
 
     /**
      * 大屏 捕食行为
@@ -173,7 +177,7 @@ public class WelcomeController  extends BaseWxController{
                 if(!CollectionUtils.isEmpty(listdept)){
                     equipmentFileExampleca.andDeptcodeIn(listdept);
                 }
-                List<WelcomeKvDto>  list  =  equipmentFileService.getWarningDate(equipmentFileExample);
+                List<WelcomeKvDto>  list  =  equipmentFileTodayService.getWarningDate(equipmentFileExample);
                 responseDto.setContent(list);
             }
         }
