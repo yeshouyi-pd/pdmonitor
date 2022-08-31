@@ -1,25 +1,143 @@
 package com.pd.monitor.controller;
 
-import com.pd.server.main.dto.EquipmentFileTodayDto;
-import com.pd.server.main.dto.PageDto;
-import com.pd.server.main.dto.ResponseDto;
+import com.pd.monitor.wx.conf.BaseWxController;
+import com.pd.server.main.domain.EquipmentFile;
+import com.pd.server.main.domain.EquipmentFileExample;
+import com.pd.server.main.domain.EquipmentFileToday;
+import com.pd.server.main.domain.EquipmentFileTodayExample;
+import com.pd.server.main.dto.*;
+import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
 import com.pd.server.main.service.EquipmentFileTodayService;
+import com.pd.server.util.DateTools;
+import com.pd.server.util.DateUtil;
 import com.pd.server.util.ValidatorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.text.ParseException;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/admin/equipmentFileToday")
-public class EquipmentFileTodayController {
+public class EquipmentFileTodayController extends BaseWxController {
 
     private static final Logger LOG = LoggerFactory.getLogger(EquipmentFileTodayController.class);
     public static final String BUSINESS_NAME = "";
 
     @Resource
     private EquipmentFileTodayService equipmentFileTodayService;
+
+    /**
+     * 当日出现次数、事件、捕食次数
+     * @param alarmNumbersDto
+     * @return
+     * @throws ParseException
+     */
+    @PostMapping("/statisticsAlarmNumsByTimeSum")
+    public ResponseDto statisticsAlarmNumsByTimeSum(@RequestBody AlarmNumbersDto alarmNumbersDto) throws ParseException {
+        ResponseDto responseDto = new ResponseDto();
+        EquipmentFileTodayExample example = new EquipmentFileTodayExample();
+        EquipmentFileTodayExample.Criteria ca = example.createCriteria();
+        LoginUserDto userDto = getRequestHeader();
+        List<String> deptList = getUpdeptcode(userDto.getDeptcode());
+        if(!CollectionUtils.isEmpty(deptList)){
+            ca.andDeptcodeIn(deptList);
+        }
+        if(!StringUtils.isEmpty(alarmNumbersDto.getSbbh())){
+            ca.andSbbhEqualTo(alarmNumbersDto.getSbbh());
+        }
+        if(!StringUtils.isEmpty(alarmNumbersDto.getDeptcode())){
+            ca.andDeptcodeEqualTo(alarmNumbersDto.getDeptcode());
+        }
+        if(!StringUtils.isEmpty(alarmNumbersDto.getStime())){
+            ca.andRqGreaterThanOrEqualTo(alarmNumbersDto.getStime());
+        }
+        if(!StringUtils.isEmpty(alarmNumbersDto.getEtime())){
+            ca.andRqLessThanOrEqualTo(alarmNumbersDto.getEtime());
+        }
+        List<AlarmNumbersDto> lists = equipmentFileTodayService.statisticsAlarmNumsByPage(example);
+        ca.andTpljLike("%txt");
+        List<EquipmentFileToday> allList = equipmentFileTodayService.listAll(example);
+        List<AlarmNumbersDto> resultList = new ArrayList<>();
+        Map<String, List<AlarmNumbersDto>> mapList = lists.stream().collect(Collectors.groupingBy(AlarmNumbersDto::getSbbh));
+        for(String key : mapList.keySet()){
+            List<AlarmNumbersDto> listsTemp = mapList.get(key);
+            if(!CollectionUtils.isEmpty(listsTemp)){
+                AlarmNumbersDto firstEntity = listsTemp.get(0);
+                String curDateStr = firstEntity.getBjsj()+" "+firstEntity.getXs()+":"+firstEntity.getFz();
+                //String lastDateStr = laterThreeMinute(curDateStr);
+                Integer bjsl = firstEntity.getAlarmNum();
+                for(int i=1;i<listsTemp.size();i++){
+                    AlarmNumbersDto entity = listsTemp.get(i);
+                    AlarmNumbersDto beforeEntity = listsTemp.get(i-1);
+                    String beforeDateStr = beforeEntity.getBjsj()+" "+beforeEntity.getXs()+":"+beforeEntity.getFz();
+                    String nextDateStr = entity.getBjsj()+" "+entity.getXs()+":"+entity.getFz();
+                    if(entity.getSbbh().equals(firstEntity.getSbbh())){
+                        if(isOverThreeMinute(beforeDateStr, nextDateStr)){
+                            bjsl = bjsl + entity.getAlarmNum();
+                        }else {
+                            AlarmNumbersDto result = new AlarmNumbersDto();
+                            result.setDeptcode(entity.getDeptcode());
+                            result.setSbbh(entity.getSbbh());
+                            result.setBjsj(curDateStr+" 至 "+beforeDateStr);
+                            result.setAlarmNum(bjsl);
+                            resultList.add(result);
+                            firstEntity = entity;
+                            curDateStr = firstEntity.getBjsj()+" "+firstEntity.getXs()+":"+firstEntity.getFz();
+                            //lastDateStr = laterThreeMinute(curDateStr);
+                            bjsl = firstEntity.getAlarmNum();
+                        }
+                    }else {
+                        AlarmNumbersDto result = new AlarmNumbersDto();
+                        result.setDeptcode(firstEntity.getDeptcode());
+                        result.setSbbh(firstEntity.getSbbh());
+                        result.setBjsj(curDateStr+" 至 "+beforeDateStr);
+                        result.setAlarmNum(bjsl);
+                        resultList.add(result);
+                        firstEntity = entity;
+                        curDateStr = firstEntity.getBjsj()+" "+firstEntity.getXs()+":"+firstEntity.getFz();
+                        //lastDateStr = laterThreeMinute(curDateStr);
+                        bjsl = firstEntity.getAlarmNum();
+                    }
+                    if(i==listsTemp.size()-1){
+                        AlarmNumbersDto result = new AlarmNumbersDto();
+                        result.setDeptcode(entity.getDeptcode());
+                        result.setSbbh(entity.getSbbh());
+                        result.setBjsj(curDateStr+" 至 "+nextDateStr);
+                        result.setAlarmNum(bjsl);
+                        resultList.add(result);
+                    }
+                }
+                if(listsTemp.size()==1){
+                    AlarmNumbersDto result = new AlarmNumbersDto();
+                    result.setDeptcode(firstEntity.getDeptcode());
+                    result.setSbbh(firstEntity.getSbbh());
+                    result.setBjsj(curDateStr+" 至 "+curDateStr);
+                    result.setAlarmNum(bjsl);
+                    resultList.add(result);
+                }
+            }
+        }
+        Integer num = 0;
+        for (int i = 0; i < resultList.size(); i++) {
+            Integer alarmNum = resultList.get(i).getAlarmNum();
+            num = num + alarmNum;
+        }
+        List<EquipmentFileToday> predationList = allList.stream().filter(entity -> entity.getTplj().contains("predation")).collect(Collectors.toList());
+        Map<String,Object> map = new HashMap<String, Object>();
+        String sum = String.valueOf(resultList.size());
+        map.put("num",num);
+        map.put("nnm",resultList.size());
+        map.put("sum",sum.split(""));
+        map.put("bnum",predationList.size());
+        responseDto.setContent(map);
+        return responseDto;
+    }
 
     /**
     * 列表查询
@@ -29,6 +147,18 @@ public class EquipmentFileTodayController {
         ResponseDto responseDto = new ResponseDto();
         equipmentFileTodayService.list(pageDto);
         responseDto.setContent(pageDto);
+        return responseDto;
+    }
+
+    @PostMapping("/listsbbh")
+    public ResponseDto listsbbh(@RequestBody EquipmentFileDto pageDto) {
+        ResponseDto responseDto = new ResponseDto();
+        EquipmentFileTodayExample example = new EquipmentFileTodayExample();
+        EquipmentFileTodayExample.Criteria criteria = example.createCriteria();
+        criteria.andSbbhEqualTo(pageDto.getSbbh());
+        example.setOrderByClause(" cjsj desc ");
+        List<EquipmentFileToday> equipmentFiles = equipmentFileTodayService.listAll(example);
+        responseDto.setContent(equipmentFiles);
         return responseDto;
     }
 
@@ -73,4 +203,14 @@ public class EquipmentFileTodayController {
         return responseDto;
     }
 
+
+    public Boolean isOverThreeMinute(String curDateStr, String nextDateStr){
+        Date begin = DateUtil.toDate(curDateStr,"yyyy-MM-dd HH:mm");
+        Date end = DateUtil.toDate(nextDateStr,"yyyy-MM-dd HH:mm");
+        long minute=(end.getTime()-begin.getTime())/(1000*60);//除以1000是为了转换成秒
+        if(minute<=2){
+            return true;
+        }
+        return false;
+    }
 }
