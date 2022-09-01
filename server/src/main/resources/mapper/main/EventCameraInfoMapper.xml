@@ -380,4 +380,9 @@
       sm3 = #{sm3,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
+
+  <select id="selectByExamplerow" parameterType="com.pd.server.main.domain.EventCameraInfoExample" resultMap="BaseResultMap">
+    SELECT id, dvrip, tdh, sxtbh, kssj, jssj, zt, dz, sjid, sbsn, deptcode, bz, sm, sm1, sm2, sm3 FROM
+     event_camera_info WHERE ( zt  IS NULL  OR zt != '1') AND kssj IS NOT NULL AND jssj IS NOT NULL  ORDER BY kssj ASC LIMIT 10
+  </select>
 </mapper>
