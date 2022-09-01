@@ -143,6 +143,11 @@ public class EquipmentFileService {
         pageDto.setList(equipmentFileDtoList);
     }
 
+    public List<EquipmentFile> lists(EquipmentFileExample equipmentFileExample){
+        List<EquipmentFile> equipmentFileList = equipmentFileMapper.lists(equipmentFileExample);
+        return equipmentFileList;
+    }
+
     public List<EquipmentFile> listAll(EquipmentFileExample equipmentFileExample){
         List<EquipmentFile> equipmentFileList = equipmentFileMapper.selectByExample(equipmentFileExample);
         return equipmentFileList;

@@ -20,6 +20,8 @@ public interface EquipmentFileMapper {
 
     int insertSelective(EquipmentFile record);
 
+    List<EquipmentFile> lists(EquipmentFileExample example);
+
     List<EquipmentFile> selectByExample(EquipmentFileExample example);
 
     EquipmentFile selectByPrimaryKey(String id);

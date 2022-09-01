@@ -102,6 +102,21 @@
     id, sbbh, tplj, cjsj, create_time, nf, yf, rq, xs, fz, deptcode, xmbh, wjlx, jczl, 
     ly, sm1, sm2, sm3, sm4, sm5, sm6
   </sql>
+  <select id="lists" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from equipment_file
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    and tplj LIKE '%.txt'
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
   <select id="selectByExample" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultMap="BaseResultMap">
     select
     <if test="distinct">

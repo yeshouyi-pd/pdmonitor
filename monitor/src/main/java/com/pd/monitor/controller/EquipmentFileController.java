@@ -428,6 +428,40 @@ public class EquipmentFileController extends BaseWxController {
         return responseDto;
     }
 
+    @PostMapping("/lists")
+    public ResponseDto lists(@RequestBody EquipmentFileDto pageDto){
+        ResponseDto responseDto = new ResponseDto();
+        LoginUserDto user = getRequestHeader();
+        List<String> list = getUpdeptcode(user.getDeptcode());
+        PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
+        EquipmentFileExample equipmentFileExample = new EquipmentFileExample();
+        EquipmentFileExample.Criteria ca = equipmentFileExample.createCriteria();
+        if(!StringUtils.isEmpty(list)&&list.size()>0){
+            ca.andDeptcodeIn(list);
+        }
+        if(!StringUtils.isEmpty(pageDto.getStime())){
+            ca.andCjsjGreaterThanOrEqualTo(pageDto.getStime());
+        }
+        if(!StringUtils.isEmpty(pageDto.getEtime())){
+            ca.andCjsjLessThanOrEqualTo(pageDto.getEtime());
+        }
+        if(!StringUtils.isEmpty(pageDto.getSbbh())){
+            ca.andSbbhEqualTo(pageDto.getSbbh());//
+        }
+        if(!StringUtils.isEmpty(pageDto.getXmbh())){
+            if(!CollectionUtils.isEmpty(user.getXmbhsbsns().get(pageDto.getXmbh()))){
+                ca.andSbbhIn(user.getXmbhsbsns().get(pageDto.getXmbh()));
+            }
+        }
+        equipmentFileExample.setOrderByClause(" cjsj desc ");
+        List<EquipmentFile> lists = equipmentFileService.lists(equipmentFileExample);
+        PageInfo<EquipmentFile> pageInfo = new PageInfo<>(lists);
+        pageDto.setTotal(pageInfo.getTotal());
+        pageDto.setList(lists);
+        responseDto.setContent(pageDto);
+        return responseDto;
+    }
+
     @PostMapping("/listsbbh")
     public ResponseDto listsbbh(@RequestBody EquipmentFileDto pageDto) {
         ResponseDto responseDto = new ResponseDto();
