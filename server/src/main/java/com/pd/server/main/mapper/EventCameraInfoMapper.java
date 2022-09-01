@@ -27,4 +27,7 @@ public interface EventCameraInfoMapper {
     int updateByPrimaryKeySelective(EventCameraInfo record);
 
     int updateByPrimaryKey(EventCameraInfo record);
+
+    List<EventCameraInfo> selectByExamplerow();
+
 }
