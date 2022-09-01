@@ -59,8 +59,8 @@ public class EventCameraInfoService {
     /**
     * 更新
     */
-    private void update(EventCameraInfo eventCameraInfo) {
-        eventCameraInfoMapper.updateByPrimaryKey(eventCameraInfo);
+    public void update(EventCameraInfo eventCameraInfo) {
+        eventCameraInfoMapper.updateByPrimaryKeySelective(eventCameraInfo);
     }
 
     /**
@@ -69,5 +69,17 @@ public class EventCameraInfoService {
     public void delete(String id) {
         eventCameraInfoMapper.deleteByPrimaryKey(id);
     }
+
+    /**
+     * 需要切片的信息
+     * @return
+     */
+    public  List<EventCameraInfo>  getDownloadList(){
+        List<EventCameraInfo> eventCameraInfoList = eventCameraInfoMapper.selectByExamplerow();
+        return  eventCameraInfoList;
+
+    }
+
+
 
 }
