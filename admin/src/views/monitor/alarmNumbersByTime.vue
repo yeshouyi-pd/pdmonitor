@@ -17,12 +17,16 @@
                   <time-range-picker v-bind:startTime="startTime" v-bind:endTime="endTime" v-bind:svalue="curDateStr+' 00:00'" v-bind:evalue="curDateStr+' 23:59'"></time-range-picker>
                 </td>
                 <td style="width:10%">
-                  设备sn：
+                  设备名称：
                 </td>
-                <td style="width: 10%">
-                  <input class="form-control" type="text"  v-model="alarmNumbersDto.sbbh"/>
+                <td style="width: 20%">
+<!--                  <input class="form-control" type="text"  v-model="alarmNumbersDto.sbbh"/>-->
+                  <select v-model="alarmNumbersDto.sbbh" class="form-control" id="form-field-select-1">
+                    <option value="" selected>请选择</option>
+                    <option v-for="item in waterEquipments" :value="item.sbsn">{{item.sbmc}}</option>
+                  </select>
                 </td>
-                <td colspan="2" class="text-center">
+                <td style="width: 20%" class="text-center">
                   <button type="button" v-on:click="list(1)" class="btn btn-sm btn-info btn-round" style="margin-right: 10px;">
                     <i class="ace-icon fa fa-book"></i>
                     查询
@@ -98,9 +102,9 @@ export default {
       Loading.show();
       let data = {};
       if("460100"==Tool.getLoginUser().deptcode){
-        data = {'sblb':'0001'};
+        data = {'sblb':'0001','dqzl':'A1,A4'};
       }else{
-        data = {'sblb':'0001','xmbh':Tool.getLoginUser().xmbh};
+        data = {'sblb':'0001','dqzl':'A1,A4','xmbh':Tool.getLoginUser().xmbh};
       }
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/findAll', data).then((response)=>{
         Loading.hide();

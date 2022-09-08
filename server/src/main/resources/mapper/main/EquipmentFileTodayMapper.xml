@@ -28,6 +28,9 @@
     <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
     <result column="bjsj" jdbcType="VARCHAR" property="bjsj" />
     <result column="alarmNum" jdbcType="INTEGER" property="alarmNum" />
+    <result column="xs" jdbcType="VARCHAR" property="xs" />
+    <result column="fz" jdbcType="VARCHAR" property="fz" />
+    <result column="deptcode" jdbcType="VARCHAR" property="deptcode" />
   </resultMap>
   <resultMap id="BaseResultMapKV" type="com.pd.server.main.dto.WelcomeKvDto">
     <result column="deptcode" jdbcType="VARCHAR" property="deptcode" />
@@ -275,12 +278,38 @@
       </if>
     </trim>
   </insert>
+  <select id="countTsByExample" parameterType="com.pd.server.main.domain.EquipmentFileTodayExample" resultType="java.lang.Long">
+    select sum(sm4) from equipment_file_today
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
   <select id="getWarningDate"  resultMap="BaseResultMapKV" parameterType="com.pd.server.main.domain.EquipmentFileExample">
     SELECT sbbh  `text` ,COUNT(*)  `code` , deptcode  FROM   equipment_file
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
     and   TO_DAYS(cjsj) = TO_DAYS(NOW())  AND tplj LIKE '%.txt' GROUP BY sbbh, deptcode
+  </select>
+  <select id="groupByRq" parameterType="com.pd.server.main.domain.EquipmentFileTodayExample" resultMap="StatisticsResultMap">
+    select
+    sbbh,rq bjsj,count(*) alarmNum, deptcode
+    from equipment_file
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    group by sbbh, rq, deptcode
+    order by sbbh, rq, deptcode
+  </select>
+  <select id="statisticsAlarmNums" parameterType="com.pd.server.main.domain.EquipmentFileTodayExample" resultMap="StatisticsResultMap">
+    select
+    sbbh,rq bjsj,count(*) alarmNum, xs, fz, deptcode
+    from equipment_file
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    group by sbbh, rq, xs, fz, deptcode
+    order by sbbh, rq, xs, fz, deptcode
   </select>
   <select id="statisticsAlarmNumsByPage" parameterType="com.pd.server.main.domain.EquipmentFileTodayExample" resultMap="StatisticsResultMap">
     select

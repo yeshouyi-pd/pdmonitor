@@ -1,29 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.pd.server.main.mapper.EquipmentFileAlarmEventMapper">
-  <resultMap id="BaseResultMap" type="com.pd.server.main.domain.EquipmentFileAlarmEvent">
+<mapper namespace="com.pd.server.main.mapper.AppearNumbersMapper">
+  <resultMap id="BaseResultMap" type="com.pd.server.main.domain.AppearNumbers">
     <id column="id" jdbcType="VARCHAR" property="id" />
-    <result column="deptcode" jdbcType="VARCHAR" property="deptcode" />
     <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
-    <result column="event_time" jdbcType="VARCHAR" property="eventTime" />
-    <result column="alarm_num" jdbcType="INTEGER" property="alarmNum" />
     <result column="bjsj" jdbcType="VARCHAR" property="bjsj" />
-    <result column="xh" jdbcType="INTEGER" property="xh" />
+    <result column="alarmNum" jdbcType="INTEGER" property="alarmnum" />
+    <result column="xs" jdbcType="VARCHAR" property="xs" />
+    <result column="fz" jdbcType="VARCHAR" property="fz" />
+    <result column="deptcode" jdbcType="VARCHAR" property="deptcode" />
+    <result column="xmbh" jdbcType="VARCHAR" property="xmbh" />
+    <result column="sm" jdbcType="VARCHAR" property="sm" />
+    <result column="bz" jdbcType="VARCHAR" property="bz" />
     <result column="sm1" jdbcType="VARCHAR" property="sm1" />
     <result column="sm2" jdbcType="VARCHAR" property="sm2" />
     <result column="sm3" jdbcType="VARCHAR" property="sm3" />
-  </resultMap>
-  <resultMap id="StatisticsResultMap" type="com.pd.server.main.dto.EquipmentFileAlarmEventDto">
-    <result column="deptcode" jdbcType="VARCHAR" property="deptcode" />
-    <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
-    <result column="bjsj" jdbcType="VARCHAR" property="bjsj" />
-    <result column="counts" jdbcType="INTEGER" property="counts" />
-  </resultMap>
-  <resultMap id="DwResultMap" type="com.pd.server.main.dto.basewx.my.EquipmentFileAlarmEventDwDto">
-    <result column="id" jdbcType="VARCHAR" property="id" />
-    <result column="event_time" jdbcType="VARCHAR" property="eventTime" />
-    <result column="alarm_num" jdbcType="INTEGER" property="alarmNum" />
-    <result column="xh" jdbcType="INTEGER" property="xh" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -84,25 +75,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, deptcode, sbbh, event_time, alarm_num, bjsj, xh, sm1, sm2, sm3
+    id, sbbh, bjsj, alarmNum, xs, fz, deptcode, xmbh, sm, bz, sm1, sm2, sm3
   </sql>
-  <select id="selectByExample" parameterType="com.pd.server.main.domain.EquipmentFileAlarmEventExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.pd.server.main.domain.AppearNumbersExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from equipment_file_alarm_event
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null">
-      order by ${orderByClause}
-    </if>
-  </select>
-  <select id="selectDwByExample" parameterType="com.pd.server.main.domain.EquipmentFileAlarmEventExample" resultMap="DwResultMap">
-    select id,event_time,alarm_num,xh
-    from equipment_file_alarm_event
+    from appear_numbers
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -113,52 +94,61 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from equipment_file_alarm_event
+    from appear_numbers
     where id = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    delete from equipment_file_alarm_event
+    delete from appear_numbers
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.pd.server.main.domain.EquipmentFileAlarmEventExample">
-    delete from equipment_file_alarm_event
+  <delete id="deleteByExample" parameterType="com.pd.server.main.domain.AppearNumbersExample">
+    delete from appear_numbers
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.pd.server.main.domain.EquipmentFileAlarmEvent">
-    insert into equipment_file_alarm_event (id, deptcode, sbbh, 
-      event_time, alarm_num, bjsj, 
-      xh, sm1, sm2, sm3
-      )
-    values (#{id,jdbcType=VARCHAR}, #{deptcode,jdbcType=VARCHAR}, #{sbbh,jdbcType=VARCHAR}, 
-      #{eventTime,jdbcType=VARCHAR}, #{alarmNum,jdbcType=INTEGER}, #{bjsj,jdbcType=VARCHAR}, 
-      #{xh,jdbcType=INTEGER}, #{sm1,jdbcType=VARCHAR}, #{sm2,jdbcType=VARCHAR}, #{sm3,jdbcType=VARCHAR}
-      )
+  <insert id="insert" parameterType="com.pd.server.main.domain.AppearNumbers">
+    insert into appear_numbers (id, sbbh, bjsj, 
+      alarmNum, xs, fz, deptcode, 
+      xmbh, sm, bz, sm1, 
+      sm2, sm3)
+    values (#{id,jdbcType=VARCHAR}, #{sbbh,jdbcType=VARCHAR}, #{bjsj,jdbcType=VARCHAR}, 
+      #{alarmnum,jdbcType=INTEGER}, #{xs,jdbcType=VARCHAR}, #{fz,jdbcType=VARCHAR}, #{deptcode,jdbcType=VARCHAR}, 
+      #{xmbh,jdbcType=VARCHAR}, #{sm,jdbcType=VARCHAR}, #{bz,jdbcType=VARCHAR}, #{sm1,jdbcType=VARCHAR}, 
+      #{sm2,jdbcType=VARCHAR}, #{sm3,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.pd.server.main.domain.EquipmentFileAlarmEvent">
-    insert into equipment_file_alarm_event
+  <insert id="insertSelective" parameterType="com.pd.server.main.domain.AppearNumbers">
+    insert into appear_numbers
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
       </if>
-      <if test="deptcode != null">
-        deptcode,
-      </if>
       <if test="sbbh != null">
         sbbh,
-      </if>
-      <if test="eventTime != null">
-        event_time,
-      </if>
-      <if test="alarmNum != null">
-        alarm_num,
       </if>
       <if test="bjsj != null">
         bjsj,
       </if>
-      <if test="xh != null">
-        xh,
+      <if test="alarmnum != null">
+        alarmNum,
+      </if>
+      <if test="xs != null">
+        xs,
+      </if>
+      <if test="fz != null">
+        fz,
+      </if>
+      <if test="deptcode != null">
+        deptcode,
+      </if>
+      <if test="xmbh != null">
+        xmbh,
+      </if>
+      <if test="sm != null">
+        sm,
+      </if>
+      <if test="bz != null">
+        bz,
       </if>
       <if test="sm1 != null">
         sm1,
@@ -174,23 +164,32 @@
       <if test="id != null">
         #{id,jdbcType=VARCHAR},
       </if>
-      <if test="deptcode != null">
-        #{deptcode,jdbcType=VARCHAR},
-      </if>
       <if test="sbbh != null">
         #{sbbh,jdbcType=VARCHAR},
-      </if>
-      <if test="eventTime != null">
-        #{eventTime,jdbcType=VARCHAR},
-      </if>
-      <if test="alarmNum != null">
-        #{alarmNum,jdbcType=INTEGER},
       </if>
       <if test="bjsj != null">
         #{bjsj,jdbcType=VARCHAR},
       </if>
-      <if test="xh != null">
-        #{xh,jdbcType=INTEGER},
+      <if test="alarmnum != null">
+        #{alarmnum,jdbcType=INTEGER},
+      </if>
+      <if test="xs != null">
+        #{xs,jdbcType=VARCHAR},
+      </if>
+      <if test="fz != null">
+        #{fz,jdbcType=VARCHAR},
+      </if>
+      <if test="deptcode != null">
+        #{deptcode,jdbcType=VARCHAR},
+      </if>
+      <if test="xmbh != null">
+        #{xmbh,jdbcType=VARCHAR},
+      </if>
+      <if test="sm != null">
+        #{sm,jdbcType=VARCHAR},
+      </if>
+      <if test="bz != null">
+        #{bz,jdbcType=VARCHAR},
       </if>
       <if test="sm1 != null">
         #{sm1,jdbcType=VARCHAR},
@@ -203,41 +202,44 @@
       </if>
     </trim>
   </insert>
-  <select id="countTsByExample" parameterType="com.pd.server.main.domain.EquipmentFileAlarmEventExample" resultType="java.lang.Integer">
-    select sum(sm1) from equipment_file_alarm_event
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-  </select>
-  <select id="countByExample" parameterType="com.pd.server.main.domain.EquipmentFileAlarmEventExample" resultType="java.lang.Long">
-    select count(*) from equipment_file_alarm_event
+  <select id="countByExample" parameterType="com.pd.server.main.domain.AppearNumbersExample" resultType="java.lang.Long">
+    select count(*) from appear_numbers
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update equipment_file_alarm_event
+    update appear_numbers
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=VARCHAR},
       </if>
-      <if test="record.deptcode != null">
-        deptcode = #{record.deptcode,jdbcType=VARCHAR},
-      </if>
       <if test="record.sbbh != null">
         sbbh = #{record.sbbh,jdbcType=VARCHAR},
-      </if>
-      <if test="record.eventTime != null">
-        event_time = #{record.eventTime,jdbcType=VARCHAR},
-      </if>
-      <if test="record.alarmNum != null">
-        alarm_num = #{record.alarmNum,jdbcType=INTEGER},
       </if>
       <if test="record.bjsj != null">
         bjsj = #{record.bjsj,jdbcType=VARCHAR},
       </if>
-      <if test="record.xh != null">
-        xh = #{record.xh,jdbcType=INTEGER},
+      <if test="record.alarmnum != null">
+        alarmNum = #{record.alarmnum,jdbcType=INTEGER},
+      </if>
+      <if test="record.xs != null">
+        xs = #{record.xs,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fz != null">
+        fz = #{record.fz,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deptcode != null">
+        deptcode = #{record.deptcode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.xmbh != null">
+        xmbh = #{record.xmbh,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sm != null">
+        sm = #{record.sm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bz != null">
+        bz = #{record.bz,jdbcType=VARCHAR},
       </if>
       <if test="record.sm1 != null">
         sm1 = #{record.sm1,jdbcType=VARCHAR},
@@ -254,14 +256,17 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update equipment_file_alarm_event
+    update appear_numbers
     set id = #{record.id,jdbcType=VARCHAR},
-      deptcode = #{record.deptcode,jdbcType=VARCHAR},
       sbbh = #{record.sbbh,jdbcType=VARCHAR},
-      event_time = #{record.eventTime,jdbcType=VARCHAR},
-      alarm_num = #{record.alarmNum,jdbcType=INTEGER},
       bjsj = #{record.bjsj,jdbcType=VARCHAR},
-      xh = #{record.xh,jdbcType=INTEGER},
+      alarmNum = #{record.alarmnum,jdbcType=INTEGER},
+      xs = #{record.xs,jdbcType=VARCHAR},
+      fz = #{record.fz,jdbcType=VARCHAR},
+      deptcode = #{record.deptcode,jdbcType=VARCHAR},
+      xmbh = #{record.xmbh,jdbcType=VARCHAR},
+      sm = #{record.sm,jdbcType=VARCHAR},
+      bz = #{record.bz,jdbcType=VARCHAR},
       sm1 = #{record.sm1,jdbcType=VARCHAR},
       sm2 = #{record.sm2,jdbcType=VARCHAR},
       sm3 = #{record.sm3,jdbcType=VARCHAR}
@@ -269,26 +274,35 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.pd.server.main.domain.EquipmentFileAlarmEvent">
-    update equipment_file_alarm_event
+  <update id="updateByPrimaryKeySelective" parameterType="com.pd.server.main.domain.AppearNumbers">
+    update appear_numbers
     <set>
-      <if test="deptcode != null">
-        deptcode = #{deptcode,jdbcType=VARCHAR},
-      </if>
       <if test="sbbh != null">
         sbbh = #{sbbh,jdbcType=VARCHAR},
-      </if>
-      <if test="eventTime != null">
-        event_time = #{eventTime,jdbcType=VARCHAR},
-      </if>
-      <if test="alarmNum != null">
-        alarm_num = #{alarmNum,jdbcType=INTEGER},
       </if>
       <if test="bjsj != null">
         bjsj = #{bjsj,jdbcType=VARCHAR},
       </if>
-      <if test="xh != null">
-        xh = #{xh,jdbcType=INTEGER},
+      <if test="alarmnum != null">
+        alarmNum = #{alarmnum,jdbcType=INTEGER},
+      </if>
+      <if test="xs != null">
+        xs = #{xs,jdbcType=VARCHAR},
+      </if>
+      <if test="fz != null">
+        fz = #{fz,jdbcType=VARCHAR},
+      </if>
+      <if test="deptcode != null">
+        deptcode = #{deptcode,jdbcType=VARCHAR},
+      </if>
+      <if test="xmbh != null">
+        xmbh = #{xmbh,jdbcType=VARCHAR},
+      </if>
+      <if test="sm != null">
+        sm = #{sm,jdbcType=VARCHAR},
+      </if>
+      <if test="bz != null">
+        bz = #{bz,jdbcType=VARCHAR},
       </if>
       <if test="sm1 != null">
         sm1 = #{sm1,jdbcType=VARCHAR},
@@ -302,44 +316,20 @@
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.pd.server.main.domain.EquipmentFileAlarmEvent">
-    update equipment_file_alarm_event
-    set deptcode = #{deptcode,jdbcType=VARCHAR},
-      sbbh = #{sbbh,jdbcType=VARCHAR},
-      event_time = #{eventTime,jdbcType=VARCHAR},
-      alarm_num = #{alarmNum,jdbcType=INTEGER},
+  <update id="updateByPrimaryKey" parameterType="com.pd.server.main.domain.AppearNumbers">
+    update appear_numbers
+    set sbbh = #{sbbh,jdbcType=VARCHAR},
       bjsj = #{bjsj,jdbcType=VARCHAR},
-      xh = #{xh,jdbcType=INTEGER},
+      alarmNum = #{alarmnum,jdbcType=INTEGER},
+      xs = #{xs,jdbcType=VARCHAR},
+      fz = #{fz,jdbcType=VARCHAR},
+      deptcode = #{deptcode,jdbcType=VARCHAR},
+      xmbh = #{xmbh,jdbcType=VARCHAR},
+      sm = #{sm,jdbcType=VARCHAR},
+      bz = #{bz,jdbcType=VARCHAR},
       sm1 = #{sm1,jdbcType=VARCHAR},
       sm2 = #{sm2,jdbcType=VARCHAR},
       sm3 = #{sm3,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
-  <select id="statisticsByExample" parameterType="com.pd.server.main.domain.EquipmentFileAlarmEventExample" resultMap="StatisticsResultMap">
-    select sbbh,deptcode,bjsj,COUNT(*) counts
-    from equipment_file_alarm_event
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    GROUP BY sbbh,deptcode,bjsj
-    ORDER BY bjsj DESC
-  </select>
-  <select id="statisticsByExampleASC" parameterType="com.pd.server.main.domain.EquipmentFileAlarmEventExample" resultMap="StatisticsResultMap">
-    select sbbh,deptcode,bjsj,COUNT(*) counts
-    from equipment_file_alarm_event
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    GROUP BY sbbh,deptcode,bjsj
-    ORDER BY bjsj ASC
-  </select>
-  <select id="statisticsByExampleOnlyDept" parameterType="com.pd.server.main.domain.EquipmentFileAlarmEventExample" resultMap="StatisticsResultMap">
-    select deptcode,bjsj,COUNT(*) counts
-    from equipment_file_alarm_event
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    GROUP BY deptcode,bjsj
-    ORDER BY bjsj DESC
-  </select>
 </mapper>

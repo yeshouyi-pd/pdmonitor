@@ -252,6 +252,9 @@ public class WaterEquipmentController  extends BaseWxController {
                 ca.andSbsnIn(user.getXmbhsbsns().get(waterEquipmentDto.getXmbh()));
             }
         }
+        if(!StringUtils.isEmpty(waterEquipmentDto.getDqzl())){
+            ca.andDqzlIn(Arrays.asList(waterEquipmentDto.getDqzl().split(",")));
+        }
         List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(waterEquipmentExample);
         List<WaterEquipmentDto> waterEquipmentDtoList = CopyUtil.copyList(waterEquipmentList, WaterEquipmentDto.class);
         responseDto.setContent(waterEquipmentDtoList);
@@ -384,5 +387,16 @@ public class WaterEquipmentController  extends BaseWxController {
         return responseDto;
     }
 
-
+    /**
+     * 获取拖曳设备
+     */
+    @GetMapping("/getTyEquipment")
+    public ResponseDto getTyEquipment(){
+        ResponseDto responseDto = new ResponseDto();
+        WaterEquipmentExample example = new WaterEquipmentExample();
+        example.createCriteria().andSbsnLike("TY%");
+        List<WaterEquipment> list = waterEquipmentService.list(example);
+        responseDto.setContent(list);
+        return responseDto;
+    }
 }

@@ -428,6 +428,16 @@ public class EquipmentFileController extends BaseWxController {
         return responseDto;
     }
 
+    @PostMapping("/detail/{tpmc}")
+    public ResponseDto detail(@PathVariable String tpmc){
+        ResponseDto responseDto = new ResponseDto();
+        EquipmentFileExample example = new EquipmentFileExample();
+        example.createCriteria().andTpljLike("%"+tpmc+"%");
+        List<EquipmentFile> lists = equipmentFileService.listAll(example);
+        responseDto.setContent(lists);
+        return responseDto;
+    }
+
     @PostMapping("/lists")
     public ResponseDto lists(@RequestBody EquipmentFileDto pageDto){
         ResponseDto responseDto = new ResponseDto();
@@ -440,10 +450,10 @@ public class EquipmentFileController extends BaseWxController {
             ca.andDeptcodeIn(list);
         }
         if(!StringUtils.isEmpty(pageDto.getStime())){
-            ca.andCjsjGreaterThanOrEqualTo(pageDto.getStime());
+            ca.andRqGreaterThanOrEqualTo(pageDto.getStime());
         }
         if(!StringUtils.isEmpty(pageDto.getEtime())){
-            ca.andCjsjLessThanOrEqualTo(pageDto.getEtime());
+            ca.andRqLessThanOrEqualTo(pageDto.getEtime());
         }
         if(!StringUtils.isEmpty(pageDto.getSbbh())){
             ca.andSbbhEqualTo(pageDto.getSbbh());//

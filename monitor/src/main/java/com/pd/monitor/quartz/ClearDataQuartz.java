@@ -28,18 +28,9 @@ public class ClearDataQuartz {
     @Resource
     private WaterEquiplogService waterEquiplogService;
 
-    /* 每天凌晨两点开始清理数据 */
-    @Scheduled(cron = "0 0 2 * * ? ")
+    /* 每天凌晨6点开始清理数据 */
+    @Scheduled(cron = "0 0 6 * * ? ")
     public void clearData(){
-        /**
-         * EquipmentFileToday只保存当天数据，凌晨一点清除前一天的数据
-         */
-        EquipmentFileTodayExample example = new EquipmentFileTodayExample();
-        example.createCriteria().andRqEqualTo(DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(),-1),"yyyy-MM-dd"));
-        List<EquipmentFileToday> list = todayService.listAll(example);
-        for(EquipmentFileToday entity : list){
-            todayService.delete(entity.getId());
-        }
         /**
          * 清除6个月之前的日志数据(interface_log表)
          */

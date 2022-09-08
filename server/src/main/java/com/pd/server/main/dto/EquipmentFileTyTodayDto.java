@@ -1,52 +1,115 @@
-package com.pd.server.main.domain;
+package com.pd.server.main.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+        import java.util.Date;
+        import com.fasterxml.jackson.annotation.JsonFormat;
 
-import java.util.Date;
+public class EquipmentFileTyTodayDto {
 
-public class EquipmentFile {
+    /**
+    * 
+    */
     private String id;
 
+    /**
+    * 设备唯一标识
+    */
     private String sbbh;
 
+    /**
+    * 图片路径
+    */
     private String tplj;
 
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    /**
+    * 采集时间
+    */
+        @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date cjsj;
 
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    /**
+    * 创建时间
+    */
+        @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date createTime;
 
+    /**
+    * 采集年份
+    */
     private String nf;
 
+    /**
+    * 采集月份
+    */
     private String yf;
 
+    /**
+    * 采集日期
+    */
     private String rq;
 
+    /**
+    * 采集小时
+    */
     private String xs;
 
+    /**
+    * 采集分钟
+    */
     private String fz;
 
+    /**
+    * 部门
+    */
     private String deptcode;
 
+    /**
+    * 项目编号
+    */
     private String xmbh;
 
+    /**
+    * 报警文件类型1图片2音频3视频
+    */
     private String wjlx;
 
+    /**
+    * 监测种类1江豚2白海豚
+    */
     private String jczl;
 
+    /**
+    * 来源1实时数据采集2非实时数据分析
+    */
     private String ly;
 
+    /**
+    * 
+    */
     private String sm1;
 
+    /**
+    * 
+    */
     private String sm2;
 
+    /**
+    * 
+    */
     private String sm3;
 
+    /**
+    * 
+    */
     private String sm4;
 
+    /**
+    * 
+    */
     private String sm5;
 
+    /**
+    * 
+    */
     private String sm6;
 
     public String getId() {
@@ -217,34 +280,36 @@ public class EquipmentFile {
         this.sm6 = sm6;
     }
 
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", sbbh=").append(sbbh);
-        sb.append(", tplj=").append(tplj);
-        sb.append(", cjsj=").append(cjsj);
-        sb.append(", createTime=").append(createTime);
-        sb.append(", nf=").append(nf);
-        sb.append(", yf=").append(yf);
-        sb.append(", rq=").append(rq);
-        sb.append(", xs=").append(xs);
-        sb.append(", fz=").append(fz);
-        sb.append(", deptcode=").append(deptcode);
-        sb.append(", xmbh=").append(xmbh);
-        sb.append(", wjlx=").append(wjlx);
-        sb.append(", jczl=").append(jczl);
-        sb.append(", ly=").append(ly);
-        sb.append(", sm1=").append(sm1);
-        sb.append(", sm2=").append(sm2);
-        sb.append(", sm3=").append(sm3);
-        sb.append(", sm4=").append(sm4);
-        sb.append(", sm5=").append(sm5);
-        sb.append(", sm6=").append(sm6);
+            sb.append(", id=").append(id);
+            sb.append(", sbbh=").append(sbbh);
+            sb.append(", tplj=").append(tplj);
+            sb.append(", cjsj=").append(cjsj);
+            sb.append(", createTime=").append(createTime);
+            sb.append(", nf=").append(nf);
+            sb.append(", yf=").append(yf);
+            sb.append(", rq=").append(rq);
+            sb.append(", xs=").append(xs);
+            sb.append(", fz=").append(fz);
+            sb.append(", deptcode=").append(deptcode);
+            sb.append(", xmbh=").append(xmbh);
+            sb.append(", wjlx=").append(wjlx);
+            sb.append(", jczl=").append(jczl);
+            sb.append(", ly=").append(ly);
+            sb.append(", sm1=").append(sm1);
+            sb.append(", sm2=").append(sm2);
+            sb.append(", sm3=").append(sm3);
+            sb.append(", sm4=").append(sm4);
+            sb.append(", sm5=").append(sm5);
+            sb.append(", sm6=").append(sm6);
         sb.append("]");
         return sb.toString();
     }
+
 }

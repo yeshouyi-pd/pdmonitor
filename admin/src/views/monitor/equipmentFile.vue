@@ -70,7 +70,7 @@
             <img v-if="item.hasTxt" :src="item.txtSrc" style="width: 100px;height: 200px;cursor: pointer;" v-on:click="checkImg(item,index)">
           </div>
           <div style="margin: 0 auto;">{{waterEquipments|optionNSArray(item.sbbh)}}</div>
-          <div style="margin: 0 auto;">{{item.cjsj}}</div>
+<!--          <div style="margin: 0 auto;">{{item.cjsj}}</div>-->
           <div style="margin: 0 auto;word-wrap: break-word;">{{item.tplj.substring(item.tplj.lastIndexOf("/")+1,item.tplj.length)}}</div>
           <div style="margin: 0 auto;" v-if="item.hasAudio">
             <button class="btn btn-white btn-default btn-round" style="margin: 0 auto;" v-on:click="downloadAudio(item)">
@@ -196,9 +196,9 @@ export default {
       Loading.show();
       let data = {};
       if("460100"==Tool.getLoginUser().deptcode){
-        data = {'sblb':'0001'};
+        data = {'sblb':'0001','dqzl':'A1,A4'};
       }else{
-        data = {'sblb':'0001','xmbh':Tool.getLoginUser().xmbh};
+        data = {'sblb':'0001','dqzl':'A1,A4','xmbh':Tool.getLoginUser().xmbh};
       }
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/findAll', data).then((response)=>{
         Loading.hide();
