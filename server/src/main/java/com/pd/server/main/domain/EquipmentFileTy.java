@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Date;
 
-public class EquipmentFile {
+public class EquipmentFileTy {
     private String id;
 
     private String sbbh;

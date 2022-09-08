@@ -74,30 +74,42 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                 entity.setDeptcode(lists.get(0).getDeptcode());
             }
             entity.setCreateTime(new Date());
+            if(tplj.contains("predation")&&tplj.contains("txt")){
+                entity.setSm3("1");
+            }else if(tplj.contains("txt")){
+                if(tplj.substring(tplj.lastIndexOf("/")+1,tplj.lastIndexOf(".txt")).length()==19){
+                    entity.setSm3("1");
+                }else{
+                    entity.setSm3("2");
+                    //截取头数
+                    String ts = tplj.substring(tplj.lastIndexOf("/")+21,tplj.lastIndexOf(".txt"));
+                    entity.setSm4("0".equals(ts)?"1":ts);
+                }
+            }
             AttrService attrService = SpringUtil.getBean(AttrService.class);
             String predationsbsn = attrService.findByAttrKey("predationsbsn");
             if(predationsbsn.contains(sbbh)&&!tplj.contains("predation")&&tplj.contains("png")){
                 //RedisTemplate redisTemplate = SpringUtil.getBean(RedisTemplate.class);
                 //南方海洋-判断是否是雾报(前后三分钟都没有报警的数据是雾报数据，雾报数据不保存)
                 EquipmentFile beforeEntity = new EquipmentFile();
-                System.out.println(redisTstaticemplate.opsForValue().get(sbbh));
-                if(!StringUtils.isEmpty(redisTstaticemplate.opsForValue().get(sbbh))){
-                    String entityJson = (String) redisTstaticemplate.opsForValue().get(sbbh);
+                System.out.println(redisTstaticemplate.opsForValue().get(sbbh+"WB"));
+                if(!StringUtils.isEmpty(redisTstaticemplate.opsForValue().get(sbbh+"WB"))){
+                    String entityJson = (String) redisTstaticemplate.opsForValue().get(sbbh+"WB");
                     beforeEntity = JSONObject.parseObject(entityJson,EquipmentFile.class);
                     if(!StringUtils.isEmpty(beforeEntity.getCjsj())&&isOverThreeMinute(DateUtil.getFormatDate(beforeEntity.getCjsj(),"yyyy-MM-dd HH:mm:ss"),cjsj)){
                         equipmentFileMapper.insert(beforeEntity);
                         todayMapper.insert(beforeEntity);
-                        redisTstaticemplate.opsForValue().set(sbbh, JSONObject.toJSONString(entity));
+                        redisTstaticemplate.opsForValue().set(sbbh+"WB", JSONObject.toJSONString(entity));
                     }else{
                         EquipmentFile lastFile = equipmentFileMapper.selectLastOneBySbbh(sbbh);
                         if(!StringUtils.isEmpty(beforeEntity.getCjsj())&&!StringUtils.isEmpty(lastFile.getCjsj())&&isOverThreeMinute(DateUtil.getFormatDate(lastFile.getCjsj(),"yyyy-MM-dd HH:mm:ss"),DateUtil.getFormatDate(beforeEntity.getCjsj(),"yyyy-MM-dd HH:mm:ss"))){
                             equipmentFileMapper.insert(beforeEntity);
                             todayMapper.insert(beforeEntity);
                         }
-                        redisTstaticemplate.opsForValue().set(sbbh, JSONObject.toJSONString(entity));
+                        redisTstaticemplate.opsForValue().set(sbbh+"WB", JSONObject.toJSONString(entity));
                     }
                 }else{
-                    redisTstaticemplate.opsForValue().set(sbbh, JSONObject.toJSONString(entity));
+                    redisTstaticemplate.opsForValue().set(sbbh+"WB", JSONObject.toJSONString(entity));
                 }
                 data="保存成功";
             }else {
@@ -105,6 +117,9 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                 todayMapper.insert(entity);
                 data="保存成功";
             }
+            equipmentFileMapper.insert(entity);
+            todayMapper.insert(entity);
+            data="保存成功";
             return data;
         }else {
             data="该图片已保存过";

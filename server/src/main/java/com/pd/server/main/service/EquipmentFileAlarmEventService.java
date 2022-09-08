@@ -30,6 +30,10 @@ public class EquipmentFileAlarmEventService {
         return equipmentFileAlarmEventMapper.countByExample(example);
     }
 
+    public int countTsByExample(EquipmentFileAlarmEventExample example){
+        return equipmentFileAlarmEventMapper.countTsByExample(example);
+    }
+
     public List<EquipmentFileAlarmEvent> detailByParam(EquipmentFileAlarmEvent entity){
         EquipmentFileAlarmEventExample equipmentFileAlarmEventExample = new EquipmentFileAlarmEventExample();
         EquipmentFileAlarmEventExample.Criteria ca = equipmentFileAlarmEventExample.createCriteria();

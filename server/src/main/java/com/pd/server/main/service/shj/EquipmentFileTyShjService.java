@@ -2,11 +2,10 @@ package com.pd.server.main.service.shj;
 
 import com.alibaba.fastjson.JSONObject;
 import com.pd.server.config.SpringUtil;
-import com.pd.server.main.domain.EquipmentFile;
-import com.pd.server.main.domain.EquipmentFileExample;
-import com.pd.server.main.domain.WaterEquipment;
-import com.pd.server.main.domain.WaterEquipmentExample;
-import com.pd.server.main.mapper.EquipmentFileMapper;
+import com.pd.server.main.domain.*;
+import com.pd.server.main.mapper.EquipmentFileTyMapper;
+import com.pd.server.main.mapper.EquipmentFileTyTodayMapper;
+import com.pd.server.main.mapper.EquipmentTyEventMapper;
 import com.pd.server.main.mapper.WaterEquipmentMapper;
 import com.pd.server.util.DateUtil;
 import com.pd.server.util.UuidUtil;
@@ -36,14 +35,16 @@ public class EquipmentFileTyShjService extends AbstractScanRequest{
         }
         try {
             JSONObject obj = JSONObject.parseObject(sm1);
-            EquipmentFileMapper equipmentFileMapper = SpringUtil.getBean(EquipmentFileMapper.class);
-            EquipmentFileExample exampleFile = new EquipmentFileExample();
-            EquipmentFileExample.Criteria caFile = exampleFile.createCriteria();
+            EquipmentTyEventMapper equipmentTyEventMapper = SpringUtil.getBean(EquipmentTyEventMapper.class);
+            EquipmentFileTyMapper equipmentFileTyMapper = SpringUtil.getBean(EquipmentFileTyMapper.class);
+            EquipmentFileTyTodayMapper todayMapper = SpringUtil.getBean(EquipmentFileTyTodayMapper.class);
+            EquipmentFileTyExample exampleFile = new EquipmentFileTyExample();
+            EquipmentFileTyExample.Criteria caFile = exampleFile.createCriteria();
             caFile.andTpljEqualTo(tplj);
             caFile.andSbbhEqualTo(sbbh);
-            List<EquipmentFile> comment = equipmentFileMapper.selectByExample(exampleFile);
+            List<EquipmentFileTy> comment = equipmentFileTyMapper.selectByExample(exampleFile);
             if(comment==null || comment.isEmpty()){
-                EquipmentFile entity = new EquipmentFile();
+                EquipmentFileTy entity = new EquipmentFileTy();
                 entity.setId(UuidUtil.getShortUuid());
                 entity.setSbbh(sbbh);
                 entity.setTplj(tplj);
@@ -61,11 +62,29 @@ public class EquipmentFileTyShjService extends AbstractScanRequest{
                 WaterEquipmentExample.Criteria ca = example.createCriteria();
                 ca.andSbsnEqualTo(sbbh);
                 List<WaterEquipment> lists = waterEquipmentMapper.selectByExample(example);
+                String deptcode = "";
                 if(!StringUtils.isEmpty(lists)&&lists.size()>0&&!StringUtils.isEmpty(lists.get(0).getDeptcode())){
                     entity.setDeptcode(lists.get(0).getDeptcode());
+                    deptcode = lists.get(0).getDeptcode();
                 }
                 entity.setCreateTime(new Date());
-                equipmentFileMapper.insert(entity);
+                if(tplj.contains("A2")&&tplj.contains("txt")){
+                    String wjmc = tplj.substring(tplj.lastIndexOf("/")+1,tplj.lastIndexOf("_A2.txt"));
+                    entity.setSm3("3");
+                    EquipmentTyEvent tyEvent = new EquipmentTyEvent();
+                    tyEvent.setId(UuidUtil.getShortUuid());
+                    tyEvent.setSbbh(sbbh);
+                    tyEvent.setDeptcode(deptcode);
+                    String kssj = wjmc.substring(0,4)+"-"+wjmc.substring(5,7)+"-"+wjmc.substring(8,10)+" "+wjmc.substring(11,13)+":"+wjmc.substring(14,16)+":"+wjmc.substring(17,19);
+                    String jssj = wjmc.substring(20,24)+"-"+wjmc.substring(25,27)+"-"+wjmc.substring(28,30)+" "+wjmc.substring(31,33)+":"+wjmc.substring(34,36)+":"+wjmc.substring(37,39);
+                    tyEvent.setKssj(DateUtil.toDate(kssj,"yyyy-MM-dd HH:mm:ss"));
+                    tyEvent.setJssj(DateUtil.toDate(jssj,"yyyy-MM-dd HH:mm:ss"));
+                    tyEvent.setCjsj(DateUtil.toDate(cjsj,"yyyy-MM-dd HH:mm:ss"));
+                    tyEvent.setTs("0".equals(wjmc.substring(wjmc.lastIndexOf("_")+1))?"1":wjmc.substring(wjmc.lastIndexOf("_")+1));
+                    equipmentTyEventMapper.insert(tyEvent);
+                }
+                equipmentFileTyMapper.insert(entity);
+                todayMapper.save(entity);
                 data="保存成功";
                 return data;
             }else {

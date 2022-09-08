@@ -45,6 +45,10 @@ import PredationNum from "./views/monitor/predationNum.vue";
 import GroupEvent from "./views/monitor/groupEvent.vue";
 import PointerSecond from "./views/monitor/pointerSecond.vue";
 import PointerDay from "./views/monitor/pointerDay.vue";
+import EquipmentFileTable from "./views/monitor/equipmentFileTable.vue";
+import EquipmentFileTy from "./views/tydevice/equipmentFileTy.vue";
+import EquipmentFileTyTable from "./views/tydevice/equipmentFileTyTable.vue";
+import EquipmentTyEvent from "./views/tydevice/equipmentTyEvent.vue";
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -170,10 +174,6 @@ export default new Router({
             name: "monitor/alarmNumbers",
             component: AlarmNumbers
         },{
-            path: "monitor/alarmNumbers",
-            name: "monitor/alarmNumbers",
-            component: AlarmNumbers
-        },{
             path: "monitor/equipmentFileMinute",
             name: "monitor/equipmentFileMinute",
             component: EquipmentFileMinute
@@ -245,6 +245,22 @@ export default new Router({
             path: "monitor/pointerDay",
             name: "monitor/pointerDay",
             component: PointerDay
+        },{
+            path: "monitor/equipmentFileTable",
+            name: "monitor/equipmentFileTable",
+            component: EquipmentFileTable
+        },{
+            path: "tydevice/equipmentFileTy",
+            name: "tydevice/equipmentFileTy",
+            component: EquipmentFileTy
+        },{
+            path: "tydevice/equipmentFileTyTable",
+            name: "tydevice/equipmentFileTyTable",
+            component: EquipmentFileTyTable
+        },{
+            path: "tydevice/equipmentTyEvent",
+            name: "tydevice/equipmentTyEvent",
+            component: EquipmentTyEvent
         }]
 
     }]

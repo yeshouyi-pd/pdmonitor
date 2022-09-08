@@ -39,7 +39,7 @@ public class EquipmentFileAlarmEventDto extends PageDto{
     private Integer xh;
 
     /**
-    * 
+    * 头数
     */
     private String sm1;
 

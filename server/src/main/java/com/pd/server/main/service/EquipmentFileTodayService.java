@@ -26,8 +26,20 @@ public class EquipmentFileTodayService {
     @Resource
     private EquipmentFileTodayMapper equipmentFileTodayMapper;
 
+    public int countTsByExample(EquipmentFileTodayExample example){
+        return equipmentFileTodayMapper.countTsByExample(example);
+    }
+
     public  List<WelcomeKvDto> getWarningDate(EquipmentFileExample equipmentFileExample){
         return equipmentFileTodayMapper.getWarningDate(equipmentFileExample);
+    }
+
+    public List<AlarmNumbersDto> groupByRq(EquipmentFileTodayExample example){
+        return equipmentFileTodayMapper.groupByRq(example);
+    }
+
+    public List<AlarmNumbersDto> statisticsAlarmNums(EquipmentFileTodayExample example){
+        return equipmentFileTodayMapper.statisticsAlarmNums(example);
     }
 
     public List<AlarmNumbersDto> statisticsAlarmNumsByPage(EquipmentFileTodayExample example){

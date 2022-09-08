@@ -9,6 +9,9 @@ import com.pd.server.main.dto.basewx.my.EquipmentFileAlarmEventDwDto;
 import org.apache.ibatis.annotations.Param;
 
 public interface EquipmentFileAlarmEventMapper {
+
+    int countTsByExample(EquipmentFileAlarmEventExample example);
+
     long countByExample(EquipmentFileAlarmEventExample example);
 
     int deleteByExample(EquipmentFileAlarmEventExample example);

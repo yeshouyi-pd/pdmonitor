@@ -12,7 +12,13 @@ import org.apache.ibatis.annotations.Param;
 
 public interface EquipmentFileTodayMapper {
 
+    int countTsByExample(EquipmentFileTodayExample example);
+
     List<WelcomeKvDto> getWarningDate(EquipmentFileExample equipmentFileExample);
+
+    List<AlarmNumbersDto> groupByRq(EquipmentFileTodayExample example);
+
+    List<AlarmNumbersDto> statisticsAlarmNums(EquipmentFileTodayExample example);
 
     List<AlarmNumbersDto> statisticsAlarmNumsByPage(EquipmentFileTodayExample example);
 

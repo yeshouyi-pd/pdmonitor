@@ -38,16 +38,16 @@ methods: {
       minView : 1,
       forceParse : 0,
     }).on('hide',(ev) => {
-      let d =   Tool.checkTime($("#"+_this.idValue).val()
-          ,new Date().getFullYear()+"-"+(new Date().getMonth()+1)+"-"+new Date().getDate());//2020-12-03
-      if(!d){
-        //_this.cfDate($("#datepick").val());
-        _this.$emit('methodName',$("#"+_this.idValue).val());
-      }else {
-        $("#"+_this.idValue).val("");
-        Toast.warning("请选择时间大于今天！");
-      }
-
+      // let d =   Tool.checkTime($("#"+_this.idValue).val()
+      //     ,new Date().getFullYear()+"-"+(new Date().getMonth()+1)+"-"+new Date().getDate());//2020-12-03
+      // if(!d){
+      //   //_this.cfDate($("#datepick").val());
+      //   _this.$emit('methodName',$("#"+_this.idValue).val());
+      // }else {
+      //   $("#"+_this.idValue).val("");
+      //   Toast.warning("请选择时间大于今天！");
+      // }
+      _this.$emit('methodName',$("#"+_this.idValue).val());
 
     });
 
