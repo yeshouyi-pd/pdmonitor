@@ -60,7 +60,7 @@
             <td>{{deptMap|optionMapKV(item.deptcode)}}</td>
             <td>{{waterEquipments|optionNSArray(item.sbbh)}}</td>
             <td>{{item.sbbh}}</td>
-            <td>{{item.bjsj+" "+item.xs+":"+item.fz}}</td>
+            <td>{{item.fz}}</td>
             <td>{{item.alarmNum}}</td>
           </tr>
         </tbody>
@@ -130,7 +130,7 @@ export default {
       if("460100"!=Tool.getLoginUser().deptcode){
         _this.alarmNumbersDto.xmbh=Tool.getLoginUser().xmbh;
       }
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFile/statisticsAlarmNums', _this.alarmNumbersDto).then((response) => {
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/appearNumbers/list', _this.alarmNumbersDto).then((response) => {
         Loading.hide();
         let resp = response.data;
         _this.alarmDatas = resp.content.list;

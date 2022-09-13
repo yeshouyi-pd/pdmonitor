@@ -38,13 +38,9 @@ public class PredationNumController extends BaseWxController {
     public ResponseDto list(@RequestBody PredationNumDto pageDto) {
         ResponseDto responseDto = new ResponseDto();
         LoginUserDto userDto = getRequestHeader();
-        List<String> deptList = getUpdeptcode(userDto.getDeptcode());
         PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
         PredationNumExample example = new PredationNumExample();
         PredationNumExample.Criteria ca = example.createCriteria();
-        if(!CollectionUtils.isEmpty(deptList)){
-            ca.andDeptcodeIn(deptList);
-        }
         if(!StringUtils.isEmpty(pageDto.getXmbh())){
             if(!CollectionUtils.isEmpty(userDto.getXmbhsbsns().get(pageDto.getXmbh()))){
                 ca.andSbbhIn(userDto.getXmbhsbsns().get(pageDto.getXmbh()));

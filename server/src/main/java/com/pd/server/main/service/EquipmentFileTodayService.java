@@ -31,8 +31,8 @@ public class EquipmentFileTodayService {
         return equipmentFileTodayMapper.countTsByExample(example);
     }
 
-    public  List<WelcomeKvDto> getWarningDate(EquipmentFileExample equipmentFileExample){
-        return equipmentFileTodayMapper.getWarningDate(equipmentFileExample);
+    public  List<WelcomeKvDto> getWarningDate(EquipmentFileTodayExample equipmentFileTodayExample){
+        return equipmentFileTodayMapper.getWarningDate(equipmentFileTodayExample);
     }
 
     public List<AlarmNumbersDto> groupByRq(EquipmentFileTodayExample example){

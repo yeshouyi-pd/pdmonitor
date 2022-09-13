@@ -14,7 +14,7 @@
                   出现日期：
                 </td>
                 <td style="width: 25%">
-                  <time-range-picker v-bind:startTime="startTime" v-bind:endTime="endTime" v-bind:svalue="curDateStr+' 00:00'" v-bind:evalue="curDateStr+' 23:59'"></time-range-picker>
+                  <times v-bind:startTime="startTime" v-bind:endTime="endTime" start-id="eqstime" end-id="eqetime"></times>
                 </td>
                 <td style="width:10%">
                   设备名称：
@@ -61,19 +61,21 @@
             <td>{{deptMap|optionMapKV(item.deptcode)}}</td>
             <td>{{waterEquipments|optionNSArray(item.sbbh)}}</td>
             <td>{{item.sbbh}}</td>
-            <td>{{item.bjsj}}</td>
+            <td>{{item.eventTime}}</td>
             <td>{{item.alarmNum}}</td>
             <td>1</td>
           </tr>
         </tbody>
       </table>
     </div>
+    <pagination ref="pagination" v-bind:list="list" v-bind:itemCount="10"></pagination>
   </div>
 </template>
 <script>
-import TimeRangePicker from "../../components/timeRangePicker";
+import Times from "../../components/times";
+import Pagination from "../../components/pagination";
 export default {
-  components: {TimeRangePicker},
+  components: {Pagination,Times},
   name: "alarm-numbers-by-time",
   data: function (){
     return {
@@ -81,7 +83,6 @@ export default {
       deptMap:[],
       alarmDatas:[],
       waterEquipments:[],
-      curDateStr:'',
       maxHeight:''
     }
   },
@@ -90,11 +91,9 @@ export default {
     let h = document.documentElement.clientHeight || document.body.clientHeight;
     _this.maxHeight = h*0.8-120;
     _this.deptMap = Tool.getDeptUser();
-    _this.curDateStr = Tool.dateFormat("yyyy-MM-dd",new Date());
     _this.list(1);
+    _this.$refs.pagination.size = 10;
     _this.findDeviceInfo();
-    _this.alarmNumbersDto.stime = _this.curDateStr+" 00:00";
-    _this.alarmNumbersDto.etime = _this.curDateStr+" 23:59";
   },
   methods: {
     findDeviceInfo(){
@@ -133,10 +132,14 @@ export default {
       if("460100"!=Tool.getLoginUser().deptcode){
         _this.alarmNumbersDto.xmbh = Tool.getLoginUser().xmbh;
       }
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFile/statisticsAlarmNumsByTime', _this.alarmNumbersDto).then((response) => {
+      _this.alarmNumbersDto.page = page;
+      _this.alarmNumbersDto.size = _this.$refs.pagination.size;
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileAlarmEvent/list', _this.alarmNumbersDto).then((response) => {
         Loading.hide();
         let resp = response.data;
-        _this.alarmDatas = resp.content;
+        _this.alarmDatas = resp.content.list;
+        _this.$refs.pagination.render(page, resp.content.total);
+
       })
     }
   }

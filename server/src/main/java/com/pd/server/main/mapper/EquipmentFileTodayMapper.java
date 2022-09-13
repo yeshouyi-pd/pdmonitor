@@ -15,7 +15,7 @@ public interface EquipmentFileTodayMapper {
 
     int countTsByExample(EquipmentFileTodayExample example);
 
-    List<WelcomeKvDto> getWarningDate(EquipmentFileExample equipmentFileExample);
+    List<WelcomeKvDto> getWarningDate(EquipmentFileTodayExample example);
 
     List<AlarmNumbersDto> groupByRq(EquipmentFileTodayExample example);
 

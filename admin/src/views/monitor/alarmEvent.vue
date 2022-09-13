@@ -42,10 +42,14 @@
                         <times v-bind:startTime="startTime" v-bind:endTime="endTime" start-id="alarmEventStartId" end-id="alarmEventEndId"></times>
                       </td>
                       <td style="width:10%">
-                        设备sn：
+                        设备名称：
                       </td>
                       <td style="width: 20%">
-                        <input class="form-control" type="text"  v-model="alarmEventDto.sbbh"/>
+<!--                        <input class="form-control" type="text"  v-model="alarmEventDto.sbbh"/>-->
+                        <select v-model="alarmEventDto.sbbh" class="form-control" id="form-field-select-1">
+                          <option value="" selected>请选择</option>
+                          <option v-for="item in waterEquipments" :value="item.sbsn">{{item.sbmc}}</option>
+                        </select>
                       </td>
                       <td colspan="2" class="text-center">
                         <button type="button" v-on:click="list(1)" class="btn btn-sm btn-info btn-round" style="margin-right: 10px;">
@@ -88,8 +92,8 @@
             <td>{{deptMap|optionMapKV(alarmEvent.deptcode)}}</td>
             <td>{{waterEquipments|optionNSArray(alarmEvent.sbbh)}}</td>
             <td>{{alarmEvent.sbbh}}</td>
-            <td>{{alarmEvent.bjsj}}</td>
-            <td>{{alarmEvent.counts}}</td>
+            <td>{{alarmEvent.cjsj}}</td>
+            <td>{{alarmEvent.sm1}}</td>
             <td>
               <div class="hidden-sm hidden-xs btn-group">
                 <button v-on:click="details(alarmEvent)" class="btn btn-xs btn-info" title="详情">
@@ -279,9 +283,9 @@ export default {
       Loading.show();
       let data = {};
       if("460100"==Tool.getLoginUser().deptcode){
-        data = {'sblb':'0001'};
+        data = {'sblb':'0001','dqzl':'A1,A4'};
       }else{
-        data = {'sblb':'0001','xmbh':Tool.getLoginUser().xmbh};
+        data = {'sblb':'0001','dqzl':'A1,A4','xmbh':Tool.getLoginUser().xmbh};
       }
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/findAll', data).then((response)=>{
         Loading.hide();
@@ -299,7 +303,7 @@ export default {
       if("460100"!=Tool.getLoginUser().deptcode){
         _this.alarmEventDto.xmbh=Tool.getLoginUser().xmbh;
       }
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileAlarmEvent/statistics', _this.alarmEventDto).then((response) => {
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/predationNum/list', _this.alarmEventDto).then((response) => {
         Loading.hide();
         let resp = response.data;
         _this.alarmEvents = resp.content.list;
@@ -380,9 +384,6 @@ export default {
       obj.sbbh = _this.curNode.code;
       obj.stime = _this.stime;
       obj.etime = _this.etime;
-      if("460100"!=Tool.getLoginUser().deptcode){
-        obj.xmbh = Tool.getLoginUser().xmbh;
-      }
       _this.$forceUpdate();
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileAlarmEvent/echartsAlarmData',obj).then((response)=>{
         Loading.hide();

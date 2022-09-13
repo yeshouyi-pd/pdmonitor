@@ -51,7 +51,6 @@
           <th>所属机构</th>
           <th>检测点</th>
           <th>设备sn</th>
-<!--          <th>创建时间</th>-->
           <th>开始时间</th>
           <th>结束时间</th>
           <th>头数</th>
@@ -62,7 +61,6 @@
           <td>{{deptMap|optionMapKV(item.deptcode)}}</td>
           <td>{{waterEquipments|optionNSArray(item.sbbh)}}</td>
           <td>{{item.sbbh}}</td>
-<!--          <td>{{item.cjsj}}</td>-->
           <td>{{item.kssj}}</td>
           <td>{{item.jssj}}</td>
           <td>{{item.ts}}</td>
