@@ -31,7 +31,7 @@
                       采集时间：
                     </td>
                     <td style="width: 25%;">
-                      <time-range-picker v-bind:startTime="startTime" v-bind:endTime="endTime"></time-range-picker>
+                      <times v-bind:startTime="startTime" v-bind:endTime="endTime" start-id="eqstime" end-id="eqetime"></times>
                     </td>
                     <td style="width: 10%;">
                       类型：
@@ -157,11 +157,11 @@
 </template>
 <script>
 import Pagination from "../../components/pagination";
-import TimeRangePicker from "../../components/timeRangePicker";
+import Times from "../../components/times";
 import BigFile from "../../components/big-file";
 import Uploads from "../../components/uploads";
 export default {
-  components: {Pagination,TimeRangePicker,BigFile,Uploads},
+  components: {Pagination,Times,BigFile,Uploads},
   name: "equipment-file",
   data: function (){
     return {

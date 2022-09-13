@@ -2,10 +2,7 @@ package com.pd.monitor.controller;
 
 
 import com.pd.monitor.wx.conf.BaseWxController;
-import com.pd.server.main.domain.EquipmentFile;
-import com.pd.server.main.domain.EquipmentFileExample;
-import com.pd.server.main.domain.WaterEquipmentExample;
-import com.pd.server.main.domain.WaterQualityResultExample;
+import com.pd.server.main.domain.*;
 import com.pd.server.main.dto.*;
 import com.pd.server.main.service.EquipmentFileService;
 import com.pd.server.main.service.EquipmentFileTodayService;
@@ -172,13 +169,13 @@ public class WelcomeController  extends BaseWxController{
         if(null != user) {
             if (!StringUtils.isEmpty(user.getDeptcode())) {
                 List<String> listdept = getUpdeptcode(user.getDeptcode());
-                EquipmentFileExample equipmentFileExample = new EquipmentFileExample();
-                EquipmentFileExample.Criteria  equipmentFileExampleca = equipmentFileExample.createCriteria();
+                EquipmentFileTodayExample todayExample = new EquipmentFileTodayExample();
+                EquipmentFileTodayExample.Criteria  todayCa = todayExample.createCriteria();
                 if(!CollectionUtils.isEmpty(listdept)){
-                    equipmentFileExampleca.andDeptcodeIn(listdept);
+                    todayCa.andDeptcodeIn(listdept);
                 }
-                equipmentFileExampleca.andTxtlxEqualTo("1");
-                List<WelcomeKvDto>  list  =  equipmentFileTodayService.getWarningDate(equipmentFileExample);
+                todayCa.andTxtlxEqualTo("1");
+                List<WelcomeKvDto>  list  =  equipmentFileTodayService.getWarningDate(todayExample);
                 responseDto.setContent(list);
             }
         }

@@ -60,7 +60,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
             WaterEquipmentExample.Criteria ca = example.createCriteria();
             ca.andSbsnEqualTo(sbbh);
             List<WaterEquipment> lists = waterEquipmentMapper.selectByExample(example);
-            String deptcode = lists.get(0).getSbsn();
+            String deptcode = lists.get(0).getDeptcode();
             EquipmentFile entity = new EquipmentFile();
             entity.setId(UuidUtil.getShortUuid());
             entity.setSbbh(sbbh);

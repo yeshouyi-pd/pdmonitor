@@ -47,13 +47,8 @@ public class EquipmentFileController extends BaseWxController {
     @PostMapping("/statisticsAlarmNumsByMinute")
     public ResponseDto statisticsAlarmNumsByMinute(@RequestBody AlarmNumbersDto entityDto){
         ResponseDto responseDto = new ResponseDto();
-        LoginUserDto user = getRequestHeader();
-        List<String> list = getUpdeptcode(user.getDeptcode());
         EquipmentFileExample example = new EquipmentFileExample();
         EquipmentFileExample.Criteria ca = example.createCriteria();
-        if(!StringUtils.isEmpty(list)&&list.size()>0){
-            ca.andDeptcodeIn(list);
-        }
         if(!StringUtils.isEmpty(entityDto.getSbbh())){
             ca.andSbbhEqualTo(entityDto.getSbbh());
         }
@@ -61,55 +56,15 @@ public class EquipmentFileController extends BaseWxController {
             ca.andDeptcodeEqualTo(entityDto.getDeptcode());
         }
         if(!StringUtils.isEmpty(entityDto.getStime())){
-            ca.andCjsjGreaterThanOrEqualTo(entityDto.getStime());
+            ca.andFzGreaterThanOrEqualTo(entityDto.getStime());
         }
         if(!StringUtils.isEmpty(entityDto.getEtime())){
-            ca.andCjsjLessThanOrEqualTo(entityDto.getEtime());
+            ca.andFzLessThanOrEqualTo(entityDto.getEtime());
         }
+        ca.andTxtlxEqualTo("1");
         List<AlarmNumbersDto> lists = equipmentFileService.statisticsAlarmNums(example);
-        List<String> xAixsData = lists.stream().filter(Objects::nonNull).map(u->u.getBjsj()+" "+u.getXs()+":"+u.getFz()).collect(Collectors.toList());
+        List<String> xAixsData = lists.stream().filter(Objects::nonNull).map(u->u.getFz()).collect(Collectors.toList());
         List<Integer> yAixsData = lists.stream().filter(Objects::nonNull).map(u-> u.getAlarmNum()).collect(Collectors.toList());
-        Map<String, Object> map = new HashMap<>();
-        map.put("xAixsData",xAixsData);
-        map.put("yAixsData",yAixsData);
-        responseDto.setContent(map);
-        return responseDto;
-    }
-
-    /**
-     * 大屏展示，根据部门，查询所有设备的出现占比
-     * @param entityDto
-     * @return
-     */
-    @PostMapping("/statisticsAlarmNumsByHourDP")
-    public ResponseDto statisticsAlarmNumsByHourDP(@RequestBody AlarmNumbersDto entityDto){
-        ResponseDto responseDto = new ResponseDto();
-        LoginUserDto user = getRequestHeader();
-        List<String> list = getUpdeptcode(user.getDeptcode());
-        EquipmentFileExample example = new EquipmentFileExample();
-        EquipmentFileExample.Criteria ca = example.createCriteria();
-        if(!StringUtils.isEmpty(list)&&list.size()>0){
-            ca.andDeptcodeIn(list);
-        }
-        if(!StringUtils.isEmpty(entityDto.getSbbh())){
-            ca.andSbbhEqualTo(entityDto.getSbbh());
-        }
-        if(!StringUtils.isEmpty(entityDto.getDeptcode())){
-            ca.andDeptcodeEqualTo(entityDto.getDeptcode());
-        }
-        if(!StringUtils.isEmpty(entityDto.getStime())){
-            ca.andRqGreaterThanOrEqualTo(entityDto.getStime());
-        }
-        if(!StringUtils.isEmpty(entityDto.getEtime())){
-            ca.andRqLessThanOrEqualTo(entityDto.getEtime());
-        }
-        List<AlarmNumbersDto> lists = equipmentFileService.statisticsAlarmNumsByHourAndDP(example);
-        Optional<Integer> op = lists.stream().filter(Objects::nonNull).map(AlarmNumbersDto::getAlarmNum).reduce(Integer::sum);
-        List<String> xAixsData = lists.stream().filter(Objects::nonNull).map(u->u.getBjsj()+" "+u.getXs()).collect(Collectors.toList());
-        List<String> yAixsData = new ArrayList<>();
-        if(op.isPresent()){
-            yAixsData = lists.stream().filter(Objects::nonNull).map(u-> calculateResultOfPercent(u.getAlarmNum(),op.get())).collect(Collectors.toList());
-        }
         Map<String, Object> map = new HashMap<>();
         map.put("xAixsData",xAixsData);
         map.put("yAixsData",yAixsData);
@@ -120,13 +75,8 @@ public class EquipmentFileController extends BaseWxController {
     @PostMapping("/statisticsAlarmNumsByHour")
     public ResponseDto statisticsAlarmNumsByHour(@RequestBody AlarmNumbersDto entityDto){
         ResponseDto responseDto = new ResponseDto();
-        LoginUserDto user = getRequestHeader();
-        List<String> list = getUpdeptcode(user.getDeptcode());
         EquipmentFileExample example = new EquipmentFileExample();
         EquipmentFileExample.Criteria ca = example.createCriteria();
-        if(!StringUtils.isEmpty(list)&&list.size()>0){
-            ca.andDeptcodeIn(list);
-        }
         if(!StringUtils.isEmpty(entityDto.getSbbh())){
             ca.andSbbhEqualTo(entityDto.getSbbh());
         }
@@ -139,9 +89,10 @@ public class EquipmentFileController extends BaseWxController {
         if(!StringUtils.isEmpty(entityDto.getEtime())){
             ca.andRqLessThanOrEqualTo(entityDto.getEtime());
         }
+        ca.andTxtlxEqualTo("1");
         List<AlarmNumbersDto> lists = equipmentFileService.statisticsAlarmNumsByHour(example);
         Optional<Integer> op = lists.stream().filter(Objects::nonNull).map(AlarmNumbersDto::getAlarmNum).reduce(Integer::sum);
-        List<String> xAixsData = lists.stream().filter(Objects::nonNull).map(u->u.getBjsj()+" "+u.getXs()).collect(Collectors.toList());
+        List<String> xAixsData = lists.stream().filter(Objects::nonNull).map(u->u.getXs()).collect(Collectors.toList());
         List<String> yAixsData = new ArrayList<>();
         if(op.isPresent()){
             yAixsData = lists.stream().filter(Objects::nonNull).map(u-> calculateResultOfPercent(u.getAlarmNum(),op.get())).collect(Collectors.toList());
@@ -194,210 +145,6 @@ public class EquipmentFileController extends BaseWxController {
         return responseDto;
     }
 
-    /**
-     * 通过事件统计出现次数
-     * @param alarmNumbersDto
-     * @return
-     */
-    @PostMapping("/statisticsAlarmNumsByTime")
-    public ResponseDto statisticsAlarmNumsByTime(@RequestBody AlarmNumbersDto alarmNumbersDto) throws ParseException {
-        ResponseDto responseDto = new ResponseDto();
-        LoginUserDto user = getRequestHeader();
-        List<String> list = getUpdeptcode(user.getDeptcode());
-        EquipmentFileExample example = new EquipmentFileExample();
-        EquipmentFileExample.Criteria ca = example.createCriteria();
-        if(!StringUtils.isEmpty(list)&&list.size()>0){
-            ca.andDeptcodeIn(list);
-        }
-        if(!StringUtils.isEmpty(alarmNumbersDto.getSbbh())){
-            ca.andSbbhEqualTo(alarmNumbersDto.getSbbh());
-        }
-        if(!StringUtils.isEmpty(alarmNumbersDto.getDeptcode())){
-            ca.andDeptcodeEqualTo(alarmNumbersDto.getDeptcode());
-        }
-        if(!StringUtils.isEmpty(alarmNumbersDto.getStime())){
-            ca.andCjsjGreaterThanOrEqualTo(alarmNumbersDto.getStime());
-        }
-        if(!StringUtils.isEmpty(alarmNumbersDto.getEtime())){
-            ca.andCjsjLessThanOrEqualTo(alarmNumbersDto.getEtime());
-        }
-        if(!StringUtils.isEmpty(alarmNumbersDto.getXmbh())){
-            if(!CollectionUtils.isEmpty(user.getXmbhsbsns().get(alarmNumbersDto.getXmbh()))){
-                ca.andSbbhIn(user.getXmbhsbsns().get(alarmNumbersDto.getXmbh()));
-            }
-        }
-        List<AlarmNumbersDto> lists = equipmentFileService.statisticsAlarmNumsByPage(example);
-        List<AlarmNumbersDto> resultList = new ArrayList<>();
-        Map<String, List<AlarmNumbersDto>> mapList = lists.stream().collect(Collectors.groupingBy(AlarmNumbersDto::getSbbh));
-        for(String key : mapList.keySet()){
-            List<AlarmNumbersDto> listsTemp = mapList.get(key);
-            if(!CollectionUtils.isEmpty(listsTemp)){
-                AlarmNumbersDto firstEntity = listsTemp.get(0);
-                String curDateStr = firstEntity.getBjsj()+" "+firstEntity.getXs()+":"+firstEntity.getFz();
-                //String lastDateStr = laterThreeMinute(curDateStr);
-                Integer bjsl = firstEntity.getAlarmNum();
-                for(int i=1;i<listsTemp.size();i++){
-                    AlarmNumbersDto entity = listsTemp.get(i);
-                    AlarmNumbersDto beforeEntity = listsTemp.get(i-1);
-                    String beforeDateStr = beforeEntity.getBjsj()+" "+beforeEntity.getXs()+":"+beforeEntity.getFz();
-                    String nextDateStr = entity.getBjsj()+" "+entity.getXs()+":"+entity.getFz();
-                    if(entity.getSbbh().equals(firstEntity.getSbbh())){
-                        if(isOverThreeMinute(beforeDateStr, nextDateStr)){
-                            bjsl = bjsl + entity.getAlarmNum();
-                        }else {
-                            AlarmNumbersDto result = new AlarmNumbersDto();
-                            result.setDeptcode(entity.getDeptcode());
-                            result.setSbbh(entity.getSbbh());
-                            result.setBjsj(curDateStr+" 至 "+beforeDateStr);
-                            result.setAlarmNum(bjsl);
-                            resultList.add(result);
-                            firstEntity = entity;
-                            curDateStr = firstEntity.getBjsj()+" "+firstEntity.getXs()+":"+firstEntity.getFz();
-                            //lastDateStr = laterThreeMinute(curDateStr);
-                            bjsl = firstEntity.getAlarmNum();
-                        }
-                    }else {
-                        AlarmNumbersDto result = new AlarmNumbersDto();
-                        result.setDeptcode(firstEntity.getDeptcode());
-                        result.setSbbh(firstEntity.getSbbh());
-                        result.setBjsj(curDateStr+" 至 "+beforeDateStr);
-                        result.setAlarmNum(bjsl);
-                        resultList.add(result);
-                        firstEntity = entity;
-                        curDateStr = firstEntity.getBjsj()+" "+firstEntity.getXs()+":"+firstEntity.getFz();
-                        //lastDateStr = laterThreeMinute(curDateStr);
-                        bjsl = firstEntity.getAlarmNum();
-                    }
-                    if(i==listsTemp.size()-1){
-                        AlarmNumbersDto result = new AlarmNumbersDto();
-                        result.setDeptcode(entity.getDeptcode());
-                        result.setSbbh(entity.getSbbh());
-                        result.setBjsj(curDateStr+" 至 "+nextDateStr);
-                        result.setAlarmNum(bjsl);
-                        resultList.add(result);
-                    }
-                }
-                if(listsTemp.size()==1){
-                    AlarmNumbersDto result = new AlarmNumbersDto();
-                    result.setDeptcode(firstEntity.getDeptcode());
-                    result.setSbbh(firstEntity.getSbbh());
-                    result.setBjsj(curDateStr+" 至 "+curDateStr);
-                    result.setAlarmNum(bjsl);
-                    resultList.add(result);
-                }
-            }
-        }
-        responseDto.setContent(resultList);
-        return responseDto;
-    }
-
-    /**
-     * 当日出现次数、事件、捕食次数
-     * @param alarmNumbersDto
-     * @return
-     * @throws ParseException
-     */
-    @PostMapping("/statisticsAlarmNumsByTimeSum")
-    public ResponseDto statisticsAlarmNumsByTimeSum(@RequestBody AlarmNumbersDto alarmNumbersDto) throws ParseException {
-        ResponseDto responseDto = new ResponseDto();
-        EquipmentFileExample example = new EquipmentFileExample();
-        EquipmentFileExample.Criteria ca = example.createCriteria();
-        LoginUserDto userDto = getRequestHeader();
-        List<String> deptList = getUpdeptcode(userDto.getDeptcode());
-        if(!CollectionUtils.isEmpty(deptList)){
-            ca.andDeptcodeIn(deptList);
-        }
-        if(!StringUtils.isEmpty(alarmNumbersDto.getSbbh())){
-            ca.andSbbhEqualTo(alarmNumbersDto.getSbbh());
-        }
-        if(!StringUtils.isEmpty(alarmNumbersDto.getDeptcode())){
-            ca.andDeptcodeEqualTo(alarmNumbersDto.getDeptcode());
-        }
-        if(!StringUtils.isEmpty(alarmNumbersDto.getStime())){
-            ca.andRqGreaterThanOrEqualTo(alarmNumbersDto.getStime());
-        }
-        if(!StringUtils.isEmpty(alarmNumbersDto.getEtime())){
-            ca.andRqLessThanOrEqualTo(alarmNumbersDto.getEtime());
-        }
-        List<AlarmNumbersDto> lists = equipmentFileService.statisticsAlarmNumsByPage(example);
-        ca.andTpljLike("%txt");
-        List<EquipmentFile> allList = equipmentFileService.listAll(example);
-        List<AlarmNumbersDto> resultList = new ArrayList<>();
-        Map<String, List<AlarmNumbersDto>> mapList = lists.stream().collect(Collectors.groupingBy(AlarmNumbersDto::getSbbh));
-        for(String key : mapList.keySet()){
-            List<AlarmNumbersDto> listsTemp = mapList.get(key);
-            if(!CollectionUtils.isEmpty(listsTemp)){
-                AlarmNumbersDto firstEntity = listsTemp.get(0);
-                String curDateStr = firstEntity.getBjsj()+" "+firstEntity.getXs()+":"+firstEntity.getFz();
-                //String lastDateStr = laterThreeMinute(curDateStr);
-                Integer bjsl = firstEntity.getAlarmNum();
-                for(int i=1;i<listsTemp.size();i++){
-                    AlarmNumbersDto entity = listsTemp.get(i);
-                    AlarmNumbersDto beforeEntity = listsTemp.get(i-1);
-                    String beforeDateStr = beforeEntity.getBjsj()+" "+beforeEntity.getXs()+":"+beforeEntity.getFz();
-                    String nextDateStr = entity.getBjsj()+" "+entity.getXs()+":"+entity.getFz();
-                    if(entity.getSbbh().equals(firstEntity.getSbbh())){
-                        if(isOverThreeMinute(beforeDateStr, nextDateStr)){
-                            bjsl = bjsl + entity.getAlarmNum();
-                        }else {
-                            AlarmNumbersDto result = new AlarmNumbersDto();
-                            result.setDeptcode(entity.getDeptcode());
-                            result.setSbbh(entity.getSbbh());
-                            result.setBjsj(curDateStr+" 至 "+beforeDateStr);
-                            result.setAlarmNum(bjsl);
-                            resultList.add(result);
-                            firstEntity = entity;
-                            curDateStr = firstEntity.getBjsj()+" "+firstEntity.getXs()+":"+firstEntity.getFz();
-                            //lastDateStr = laterThreeMinute(curDateStr);
-                            bjsl = firstEntity.getAlarmNum();
-                        }
-                    }else {
-                        AlarmNumbersDto result = new AlarmNumbersDto();
-                        result.setDeptcode(firstEntity.getDeptcode());
-                        result.setSbbh(firstEntity.getSbbh());
-                        result.setBjsj(curDateStr+" 至 "+beforeDateStr);
-                        result.setAlarmNum(bjsl);
-                        resultList.add(result);
-                        firstEntity = entity;
-                        curDateStr = firstEntity.getBjsj()+" "+firstEntity.getXs()+":"+firstEntity.getFz();
-                        //lastDateStr = laterThreeMinute(curDateStr);
-                        bjsl = firstEntity.getAlarmNum();
-                    }
-                    if(i==listsTemp.size()-1){
-                        AlarmNumbersDto result = new AlarmNumbersDto();
-                        result.setDeptcode(entity.getDeptcode());
-                        result.setSbbh(entity.getSbbh());
-                        result.setBjsj(curDateStr+" 至 "+nextDateStr);
-                        result.setAlarmNum(bjsl);
-                        resultList.add(result);
-                    }
-                }
-                if(listsTemp.size()==1){
-                    AlarmNumbersDto result = new AlarmNumbersDto();
-                    result.setDeptcode(firstEntity.getDeptcode());
-                    result.setSbbh(firstEntity.getSbbh());
-                    result.setBjsj(curDateStr+" 至 "+curDateStr);
-                    result.setAlarmNum(bjsl);
-                    resultList.add(result);
-                }
-            }
-        }
-        Integer num = 0;
-        for (int i = 0; i < resultList.size(); i++) {
-            Integer alarmNum = resultList.get(i).getAlarmNum();
-            num = num + alarmNum;
-        }
-        List<EquipmentFile> predationList = allList.stream().filter(entity -> entity.getTplj().contains("predation")).collect(Collectors.toList());
-        Map<String,Object> map = new HashMap<String, Object>();
-        String sum = String.valueOf(resultList.size());
-        map.put("num",num);
-        map.put("nnm",resultList.size());
-        map.put("sum",sum.split(""));
-        map.put("bnum",predationList.size());
-        responseDto.setContent(map);
-        return responseDto;
-    }
-
     @PostMapping("/findSbbh")
     public ResponseDto findSbbh(@RequestBody EquipmentFileDto equipmentFileDto){
         ResponseDto responseDto = new ResponseDto();
@@ -443,13 +190,9 @@ public class EquipmentFileController extends BaseWxController {
     public ResponseDto lists(@RequestBody EquipmentFileDto pageDto){
         ResponseDto responseDto = new ResponseDto();
         LoginUserDto user = getRequestHeader();
-        List<String> list = getUpdeptcode(user.getDeptcode());
         PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
         EquipmentFileExample equipmentFileExample = new EquipmentFileExample();
         EquipmentFileExample.Criteria ca = equipmentFileExample.createCriteria();
-        if(!StringUtils.isEmpty(list)&&list.size()>0){
-            ca.andDeptcodeIn(list);
-        }
         if(!StringUtils.isEmpty(pageDto.getStime())){
             ca.andRqGreaterThanOrEqualTo(pageDto.getStime());
         }
@@ -464,6 +207,7 @@ public class EquipmentFileController extends BaseWxController {
                 ca.andSbbhIn(user.getXmbhsbsns().get(pageDto.getXmbh()));
             }
         }
+        ca.andTxtlxEqualTo("1");
         equipmentFileExample.setOrderByClause(" cjsj desc ");
         List<EquipmentFile> lists = equipmentFileService.lists(equipmentFileExample);
         PageInfo<EquipmentFile> pageInfo = new PageInfo<>(lists);
@@ -491,30 +235,6 @@ public class EquipmentFileController extends BaseWxController {
     */
     @PostMapping("/save")
     public ResponseDto save(@RequestBody EquipmentFileDto equipmentFileDto) {
-        // 保存校验
-                ValidatorUtil.length(equipmentFileDto.getSbbh(), "设备唯一标识", 1, 50);
-                ValidatorUtil.length(equipmentFileDto.getTplj(), "图片路径", 1, 500);
-                ValidatorUtil.length(equipmentFileDto.getNf(), "采集年份", 1, 20);
-                ValidatorUtil.length(equipmentFileDto.getYf(), "采集月份", 1, 20);
-                ValidatorUtil.length(equipmentFileDto.getRq(), "采集日期", 1, 20);
-                ValidatorUtil.length(equipmentFileDto.getXs(), "采集小时", 1, 20);
-                ValidatorUtil.length(equipmentFileDto.getFz(), "采集分钟", 1, 20);
-                ValidatorUtil.length(equipmentFileDto.getDeptcode(), "部门", 1, 36);
-                ValidatorUtil.length(equipmentFileDto.getXmbh(), "项目编号", 1, 36);
-                ValidatorUtil.length(equipmentFileDto.getWjlx(), "报警文件类型1图片2音频3文件", 1, 128);
-                ValidatorUtil.length(equipmentFileDto.getJczl(), "监测种类1江豚2白海豚", 1, 1);
-                ValidatorUtil.length(equipmentFileDto.getLy(), "来源1实时数据采集2非实时数据分析", 1, 1);
-                ValidatorUtil.length(equipmentFileDto.getSm1(), "坐标原数据", 1, 500);
-                ValidatorUtil.length(equipmentFileDto.getSm2(), "坐标信息", 1, 255);
-                ValidatorUtil.length(equipmentFileDto.getSm3(), "", 1, 255);
-                ValidatorUtil.length(equipmentFileDto.getSm4(), "", 1, 255);
-                ValidatorUtil.length(equipmentFileDto.getSm5(), "", 1, 255);
-                ValidatorUtil.length(equipmentFileDto.getSm6(), "", 1, 255);
-                ValidatorUtil.length(equipmentFileDto.getType(), "type，codeset表中的文件种类", 1, 50);
-                ValidatorUtil.length(equipmentFileDto.getTs(), "头数", 1, 10);
-                ValidatorUtil.length(equipmentFileDto.getTxtlx(), "txt文件类型", 1, 5);
-                ValidatorUtil.length(equipmentFileDto.getWjmc(), "文件名称截取，为了查询出对应的音频，文件，图片等数据", 1, 100);
-
         ResponseDto responseDto = new ResponseDto();
         equipmentFileService.save(equipmentFileDto);
         responseDto.setContent(equipmentFileDto);

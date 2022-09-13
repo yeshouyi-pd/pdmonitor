@@ -1,22 +1,32 @@
 package com.pd.monitor.controller;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.pd.monitor.wx.conf.BaseWxController;
+import com.pd.server.main.domain.AppearNumbers;
+import com.pd.server.main.domain.AppearNumbersExample;
 import com.pd.server.main.dto.AppearNumbersDto;
+import com.pd.server.main.dto.LoginUserDto;
 import com.pd.server.main.dto.PageDto;
 import com.pd.server.main.dto.ResponseDto;
 import com.pd.server.main.service.AppearNumbersService;
+import com.pd.server.util.CopyUtil;
 import com.pd.server.util.ValidatorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin/appearNumbers")
-public class AppearNumbersController {
+public class AppearNumbersController extends BaseWxController {
 
     private static final Logger LOG = LoggerFactory.getLogger(AppearNumbersController.class);
-    public static final String BUSINESS_NAME = "";
+    public static final String BUSINESS_NAME = "出现次数管理";
 
     @Resource
     private AppearNumbersService appearNumbersService;
@@ -25,9 +35,32 @@ public class AppearNumbersController {
     * 列表查询
     */
     @PostMapping("/list")
-    public ResponseDto list(@RequestBody PageDto pageDto) {
+    public ResponseDto list(@RequestBody AppearNumbersDto pageDto) {
         ResponseDto responseDto = new ResponseDto();
-        appearNumbersService.list(pageDto);
+        LoginUserDto userDto = getRequestHeader();
+        PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
+        AppearNumbersExample example = new AppearNumbersExample();
+        AppearNumbersExample.Criteria ca = example.createCriteria();
+        if(!StringUtils.isEmpty(pageDto.getStime())){
+            ca.andFzGreaterThanOrEqualTo(pageDto.getStime());
+        }
+        if(!StringUtils.isEmpty(pageDto.getEtime())){
+            ca.andFzLessThanOrEqualTo(pageDto.getEtime());
+        }
+        if(!StringUtils.isEmpty(pageDto.getSbbh())){
+            ca.andSbbhEqualTo(pageDto.getSbbh());
+        }
+        if(!StringUtils.isEmpty(pageDto.getXmbh())){
+            if(!CollectionUtils.isEmpty(userDto.getXmbhsbsns().get(pageDto.getXmbh()))){
+                ca.andSbbhIn(userDto.getXmbhsbsns().get(pageDto.getXmbh()));
+            }
+        }
+        example.setOrderByClause(" fz desc ");
+        List<AppearNumbers> appearNumbersList = appearNumbersService.list(example);
+        PageInfo<AppearNumbers> pageInfo = new PageInfo<>(appearNumbersList);
+        pageDto.setTotal(pageInfo.getTotal());
+        List<AppearNumbersDto> appearNumbersDtoList = CopyUtil.copyList(appearNumbersList, AppearNumbersDto.class);
+        pageDto.setList(appearNumbersDtoList);
         responseDto.setContent(pageDto);
         return responseDto;
     }

@@ -1,7 +1,7 @@
 package com.pd.server.main.dto;
 
 
-public class AppearNumbersDto {
+public class AppearNumbersDto extends PageDto{
 
     /**
     * 

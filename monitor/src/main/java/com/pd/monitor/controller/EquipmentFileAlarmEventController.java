@@ -1,16 +1,21 @@
 package com.pd.monitor.controller;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.pd.monitor.wx.conf.BaseWxController;
 import com.pd.server.main.domain.EquipmentFileAlarmEvent;
+import com.pd.server.main.domain.EquipmentFileAlarmEventExample;
 import com.pd.server.main.dto.EquipmentFileAlarmEventDto;
 import com.pd.server.main.dto.LoginUserDto;
 import com.pd.server.main.dto.PageDto;
 import com.pd.server.main.dto.ResponseDto;
 import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
 import com.pd.server.main.service.EquipmentFileAlarmEventService;
+import com.pd.server.util.CopyUtil;
 import com.pd.server.util.ValidatorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,9 +39,7 @@ public class EquipmentFileAlarmEventController extends BaseWxController {
     @PostMapping("/echartsAlarmData")
     public ResponseDto echartsAlarmData(@RequestBody EquipmentFileAlarmEventDto entityDto){
         ResponseDto responseDto = new ResponseDto();
-        LoginUserDto userDto = getRequestHeader();
-        List<String> list = getUpdeptcode(userDto.getDeptcode());
-        List<EquipmentFileAlarmEventDto> listall = equipmentFileAlarmEventService.listStatisticsAll(entityDto, list);
+        List<EquipmentFileAlarmEventDto> listall = equipmentFileAlarmEventService.listStatisticsAll(entityDto);
         List<String> xAixsData = listall.stream().filter(Objects::nonNull).map(u->u.getBjsj()).collect(Collectors.toList());
         List<Integer> yAixsData = listall.stream().filter(Objects::nonNull).map(u->u.getCounts()).collect(Collectors.toList());
         Map<String,Object> resultMap = new HashMap<>();
@@ -82,8 +85,28 @@ public class EquipmentFileAlarmEventController extends BaseWxController {
     public ResponseDto list(@RequestBody EquipmentFileAlarmEventDto pageDto) {
         ResponseDto responseDto = new ResponseDto();
         LoginUserDto userDto = getRequestHeader();
-        List<String> list = getUpdeptcode(userDto.getDeptcode());
-        equipmentFileAlarmEventService.list(pageDto, list);
+        PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
+        EquipmentFileAlarmEventExample example = new EquipmentFileAlarmEventExample();
+        EquipmentFileAlarmEventExample.Criteria ca = example.createCriteria();
+        if(!StringUtils.isEmpty(pageDto.getSbbh())){
+            ca.andSbbhEqualTo(pageDto.getSbbh());
+        }
+        if(!StringUtils.isEmpty(pageDto.getStime())){
+            ca.andBjsjGreaterThanOrEqualTo(pageDto.getStime());
+        }
+        if(!StringUtils.isEmpty(pageDto.getEtime())){
+            ca.andBjsjLessThanOrEqualTo(pageDto.getEtime());
+        }
+        if(!StringUtils.isEmpty(pageDto.getXmbh())){
+            if(!CollectionUtils.isEmpty(userDto.getXmbhsbsns().get(pageDto.getXmbh()))){
+                ca.andSbbhIn(userDto.getXmbhsbsns().get(pageDto.getXmbh()));
+            }
+        }
+        List<EquipmentFileAlarmEvent> equipmentFileAlarmEventList = equipmentFileAlarmEventService.list(example);
+        PageInfo<EquipmentFileAlarmEvent> pageInfo = new PageInfo<>(equipmentFileAlarmEventList);
+        pageDto.setTotal(pageInfo.getTotal());
+        List<EquipmentFileAlarmEventDto> equipmentFileAlarmEventDtoList = CopyUtil.copyList(equipmentFileAlarmEventList, EquipmentFileAlarmEventDto.class);
+        pageDto.setList(equipmentFileAlarmEventDtoList);
         responseDto.setContent(pageDto);
         return responseDto;
     }

@@ -58,6 +58,7 @@ public class WaterEquipmentController  extends BaseWxController {
         WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
         WaterEquipmentExample.Criteria weCa = waterEquipmentExample.createCriteria();
         weCa.andSblbEqualTo("0001");
+        weCa.andDqzlIn(Arrays.asList("A1","A4"));
         if(!CollectionUtils.isEmpty(list)){
             weCa.andDeptcodeIn(list);
         }

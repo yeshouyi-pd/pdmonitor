@@ -41,10 +41,6 @@ public class EquipmentFileService {
         return equipmentFileMapper.statisticsAlarmNumsByHour(example);
     }
 
-    public List<AlarmNumbersDto> statisticsAlarmNumsByHourAndDP(EquipmentFileExample example){
-        return equipmentFileMapper.statisticsAlarmNumsByHourAndDP(example);
-    }
-
     /**
     * 列表查询
     */
@@ -55,11 +51,6 @@ public class EquipmentFileService {
         EquipmentFileExample.Criteria txtCa = example.createCriteria();
         EquipmentFileExample equipmentFileExample = new EquipmentFileExample();
         EquipmentFileExample.Criteria ca = equipmentFileExample.createCriteria();
-        if(!StringUtils.isEmpty(list)&&list.size()>0){
-            audioCa.andDeptcodeIn(list);
-            txtCa.andDeptcodeIn(list);
-            ca.andDeptcodeIn(list);
-        }
         if(!StringUtils.isEmpty(pageDto.getStime())){
             audioCa.andRqGreaterThanOrEqualTo(pageDto.getStime());
             txtCa.andRqGreaterThanOrEqualTo(pageDto.getStime());
@@ -180,10 +171,6 @@ public class EquipmentFileService {
 
     public List<EquipmentFile> listBylimit(EquipmentFileExample equipmentFileExample) {
         return equipmentFileMapper.listBylimit(equipmentFileExample);
-    }
-
-    public List<AlarmNumbersDto> groupByRq(EquipmentFileExample example){
-        return equipmentFileMapper.groupByRq(example);
     }
 
     public EquipmentFile selectLastOneBySbbh(String sbbh) {

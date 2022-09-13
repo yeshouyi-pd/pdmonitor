@@ -24,14 +24,8 @@ public class AppearNumbersService {
     /**
     * 列表查询
     */
-    public void list(PageDto pageDto) {
-    PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
-        AppearNumbersExample appearNumbersExample = new AppearNumbersExample();
-        List<AppearNumbers> appearNumbersList = appearNumbersMapper.selectByExample(appearNumbersExample);
-        PageInfo<AppearNumbers> pageInfo = new PageInfo<>(appearNumbersList);
-        pageDto.setTotal(pageInfo.getTotal());
-        List<AppearNumbersDto> appearNumbersDtoList = CopyUtil.copyList(appearNumbersList, AppearNumbersDto.class);
-        pageDto.setList(appearNumbersDtoList);
+    public List<AppearNumbers> list(AppearNumbersExample example) {
+        return appearNumbersMapper.selectByExample(example);
     }
 
     /**

@@ -307,7 +307,7 @@ export default {
       }
       alarmNumbersDto.stime = moment().subtract(0, "days").format('YYYY-MM-DD');
       alarmNumbersDto.etime = moment().subtract(0, "days").format('YYYY-MM-DD');
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFile/statisticsAlarmNumsByTimeSum', alarmNumbersDto).then((response) => {
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileToday/statisticsAlarmNumsByTimeSum', alarmNumbersDto).then((response) => {
         let resp = response.data;
         console.log(resp.content);
         _this.initPieEChart(resp.content);

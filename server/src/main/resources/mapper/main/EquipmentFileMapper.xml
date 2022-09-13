@@ -546,7 +546,6 @@
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
-    and tplj LIKE '%.txt'
     <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
@@ -603,39 +602,33 @@
   </select>
 
   <select id="statisticsAlarmNumsByHour" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultMap="StatisticsResultMap">
-    select
-    sbbh,rq bjsj,count(*) alarmNum, xs, deptcode
+    select count(*) alarmNum, xs, deptcode
     from equipment_file
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
-    AND tplj LIKE '%.txt'
-    AND sbbh not like 'TY%'
-    group by sbbh, rq, xs, deptcode
+    group by xs, deptcode
     order by rq,xs
   </select>
 
   <select id="statisticsAlarmNumsByHourAndDP" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultMap="StatisticsResultMap">
-    select
-    rq bjsj,count(*) alarmNum, xs, deptcode
+    select count(*) alarmNum, xs, deptcode
     from equipment_file
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
-    AND tplj LIKE '%.txt'
-    AND sbbh not like 'TY%'
-    group by rq, xs, deptcode
-    order by rq,xs
+    group by xs, deptcode
+    order by xs
   </select>
   <select id="statisticsAlarmNums" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultMap="StatisticsResultMap">
     select
-    sbbh,rq bjsj,count(*) alarmNum, xs, fz, deptcode
+    sbbh,count(*) alarmNum, fz, deptcode
     from equipment_file
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
-    group by sbbh, rq, xs, fz, deptcode
-    order by sbbh, rq, xs, fz, deptcode
+    group by sbbh, fz, deptcode
+    order by sbbh, fz, deptcode
   </select>
   <select id="statisticsAlarmNumsByPage" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultMap="StatisticsResultMap">
     select

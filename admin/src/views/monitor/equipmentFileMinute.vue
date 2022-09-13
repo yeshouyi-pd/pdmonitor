@@ -3,45 +3,9 @@
     <div id="tree" class="ztree" :style="{height: heightMax + 'px', overflowY: 'auto', width:'20%', border:'1px solid #ccc'}"></div>
     <div :style="{height: heightMax + 'px',overflowY: 'auto', width:'78%', border: '1px solid #ccc', marginLeft: '1%'}">
       <div>
-<!--        <div class="widget-body">-->
-<!--          <div class="widget-main">-->
-<!--            <form>-->
-<!--              <table style="font-size: 1.1em;width:80%" class="text-right" >-->
-<!--                <tbody>-->
-<!--                <tr>-->
-<!--                  <td>-->
-<!--                    <button type="button" v-on:click="exportFile()"   class="btn btn-sm btn-success btn-round">-->
-<!--                      <i class="ace-icon fa fa-book"></i>-->
-<!--                      导出-->
-<!--                    </button>-->
-<!--                  </td>-->
-<!--                </tr>-->
-<!--                </tbody>-->
-<!--              </table>-->
-<!--            </form>-->
-<!--          </div>-->
-<!--        </div>-->
         <div id="echartOneHour"  style='height: 400px;'></div>
       </div>
       <div>
-<!--        <div class="widget-body">-->
-<!--          <div class="widget-main">-->
-<!--            <form>-->
-<!--              <table style="font-size: 1.1em;width:80%" class="text-right" >-->
-<!--                <tbody>-->
-<!--                <tr>-->
-<!--                  <td>-->
-<!--                    <button type="button" v-on:click="exportFile()"   class="btn btn-sm btn-success btn-round">-->
-<!--                      <i class="ace-icon fa fa-book"></i>-->
-<!--                      导出-->
-<!--                    </button>-->
-<!--                  </td>-->
-<!--                </tr>-->
-<!--                </tbody>-->
-<!--              </table>-->
-<!--            </form>-->
-<!--          </div>-->
-<!--        </div>-->
         <div id="echartEightHour"  style='height: 400px;'></div>
       </div>
       <div>

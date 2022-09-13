@@ -54,18 +54,8 @@ public class EquipmentFileAlarmEventService {
     /**
     * 列表查询
     */
-    public void list(EquipmentFileAlarmEventDto pageDto, List<String> list) {
-        PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
-        EquipmentFileAlarmEventExample equipmentFileAlarmEventExample = new EquipmentFileAlarmEventExample();
-        EquipmentFileAlarmEventExample.Criteria ca = equipmentFileAlarmEventExample.createCriteria();
-        if(!StringUtils.isEmpty(list)&&list.size()>0){
-            ca.andDeptcodeIn(list);
-        }
-        List<EquipmentFileAlarmEvent> equipmentFileAlarmEventList = equipmentFileAlarmEventMapper.selectByExample(equipmentFileAlarmEventExample);
-        PageInfo<EquipmentFileAlarmEvent> pageInfo = new PageInfo<>(equipmentFileAlarmEventList);
-        pageDto.setTotal(pageInfo.getTotal());
-        List<EquipmentFileAlarmEventDto> equipmentFileAlarmEventDtoList = CopyUtil.copyList(equipmentFileAlarmEventList, EquipmentFileAlarmEventDto.class);
-        pageDto.setList(equipmentFileAlarmEventDtoList);
+    public List<EquipmentFileAlarmEvent> list(EquipmentFileAlarmEventExample example) {
+        return equipmentFileAlarmEventMapper.selectByExample(example);
     }
 
     /**
@@ -96,12 +86,9 @@ public class EquipmentFileAlarmEventService {
         pageDto.setList(equipmentFileAlarmEventList);
     }
 
-    public List<EquipmentFileAlarmEventDto> listStatisticsAll(EquipmentFileAlarmEventDto entityDto, List<String> list) {
+    public List<EquipmentFileAlarmEventDto> listStatisticsAll(EquipmentFileAlarmEventDto entityDto) {
         EquipmentFileAlarmEventExample equipmentFileAlarmEventExample = new EquipmentFileAlarmEventExample();
         EquipmentFileAlarmEventExample.Criteria ca = equipmentFileAlarmEventExample.createCriteria();
-        if(!StringUtils.isEmpty(list)&&list.size()>0){
-            ca.andDeptcodeIn(list);
-        }
         if(!StringUtils.isEmpty(entityDto.getSbbh())){
             ca.andSbbhEqualTo(entityDto.getSbbh());
         }

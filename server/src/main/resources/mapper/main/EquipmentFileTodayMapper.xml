@@ -332,7 +332,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <select id="getWarningDate"  resultMap="BaseResultMapKV" parameterType="com.pd.server.main.domain.EquipmentFileExample">
+  <select id="getWarningDate"  resultMap="BaseResultMapKV" parameterType="com.pd.server.main.domain.EquipmentFileTodayExample">
     SELECT sbbh  `text` ,COUNT(*)  `code` , deptcode  FROM   equipment_file_today
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
