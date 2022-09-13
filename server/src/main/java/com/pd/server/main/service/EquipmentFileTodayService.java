@@ -4,6 +4,7 @@ import com.pd.server.main.domain.EquipmentFile;
 import com.pd.server.main.domain.EquipmentFileExample;
 import com.pd.server.main.domain.EquipmentFileToday;
 import com.pd.server.main.domain.EquipmentFileTodayExample;
+import com.pd.server.main.dto.AppearNumbersDto;
 import com.pd.server.main.dto.EquipmentFileTodayDto;
 import com.pd.server.main.dto.PageDto;
 import com.pd.server.main.dto.WelcomeKvDto;
@@ -81,8 +82,7 @@ public class EquipmentFileTodayService {
     private void insert(EquipmentFileToday equipmentFileToday) {
                 Date now = new Date();
         equipmentFileToday.setId(UuidUtil.getShortUuid());
-        EquipmentFile equipmentFile = CopyUtil.copy(equipmentFileToday, EquipmentFile.class);
-        equipmentFileTodayMapper.insert(equipmentFile);
+        equipmentFileTodayMapper.insert(equipmentFileToday);
     }
 
     /**

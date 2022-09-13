@@ -14,7 +14,6 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
-        import java.util.Date;
 
 @Service
 public class EquipmentTyEventService {
@@ -25,8 +24,14 @@ public class EquipmentTyEventService {
     /**
     * 列表查询
     */
-    public List<EquipmentTyEvent> list(EquipmentTyEventExample example) {
-        return equipmentTyEventMapper.selectByExample(example);
+    public void list(PageDto pageDto) {
+    PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
+        EquipmentTyEventExample equipmentTyEventExample = new EquipmentTyEventExample();
+        List<EquipmentTyEvent> equipmentTyEventList = equipmentTyEventMapper.selectByExample(equipmentTyEventExample);
+        PageInfo<EquipmentTyEvent> pageInfo = new PageInfo<>(equipmentTyEventList);
+        pageDto.setTotal(pageInfo.getTotal());
+        List<EquipmentTyEventDto> equipmentTyEventDtoList = CopyUtil.copyList(equipmentTyEventList, EquipmentTyEventDto.class);
+        pageDto.setList(equipmentTyEventDtoList);
     }
 
     /**
@@ -45,7 +50,6 @@ public class EquipmentTyEventService {
     * 新增
     */
     private void insert(EquipmentTyEvent equipmentTyEvent) {
-                Date now = new Date();
         equipmentTyEvent.setId(UuidUtil.getShortUuid());
         equipmentTyEventMapper.insert(equipmentTyEvent);
     }

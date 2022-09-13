@@ -10,12 +10,12 @@
             <table style="font-size: 1.1em;width:100%" class="text-right">
               <tbody>
               <tr>
-                <td style="width:10%">
-                  创建日期：
-                </td>
-                <td style="width: 25%">
-                  <times v-bind:startTime="startTime" v-bind:endTime="endTime" start-id="etestime" end-id="eteetime"></times>
-                </td>
+<!--                <td style="width:10%">-->
+<!--                  创建日期：-->
+<!--                </td>-->
+<!--                <td style="width: 25%">-->
+<!--                  <times v-bind:startTime="startTime" v-bind:endTime="endTime" start-id="etestime" end-id="eteetime"></times>-->
+<!--                </td>-->
                 <td style="width:10%">
                   设备名称：
                 </td>
@@ -51,7 +51,7 @@
           <th>所属机构</th>
           <th>检测点</th>
           <th>设备sn</th>
-          <th>创建时间</th>
+<!--          <th>创建时间</th>-->
           <th>开始时间</th>
           <th>结束时间</th>
           <th>头数</th>
@@ -62,7 +62,7 @@
           <td>{{deptMap|optionMapKV(item.deptcode)}}</td>
           <td>{{waterEquipments|optionNSArray(item.sbbh)}}</td>
           <td>{{item.sbbh}}</td>
-          <td>{{item.cjsj}}</td>
+<!--          <td>{{item.cjsj}}</td>-->
           <td>{{item.kssj}}</td>
           <td>{{item.jssj}}</td>
           <td>{{item.ts}}</td>

@@ -5,7 +5,7 @@
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
     <result column="bjsj" jdbcType="VARCHAR" property="bjsj" />
-    <result column="alarmNum" jdbcType="INTEGER" property="alarmnum" />
+    <result column="alarm_num" jdbcType="INTEGER" property="alarmNum" />
     <result column="xs" jdbcType="VARCHAR" property="xs" />
     <result column="fz" jdbcType="VARCHAR" property="fz" />
     <result column="deptcode" jdbcType="VARCHAR" property="deptcode" />
@@ -75,7 +75,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, sbbh, bjsj, alarmNum, xs, fz, deptcode, xmbh, sm, bz, sm1, sm2, sm3
+    id, sbbh, bjsj, alarm_num, xs, fz, deptcode, xmbh, sm, bz, sm1, sm2, sm3
   </sql>
   <select id="selectByExample" parameterType="com.pd.server.main.domain.AppearNumbersExample" resultMap="BaseResultMap">
     select
@@ -109,11 +109,11 @@
   </delete>
   <insert id="insert" parameterType="com.pd.server.main.domain.AppearNumbers">
     insert into appear_numbers (id, sbbh, bjsj, 
-      alarmNum, xs, fz, deptcode, 
+      alarm_num, xs, fz, deptcode, 
       xmbh, sm, bz, sm1, 
       sm2, sm3)
     values (#{id,jdbcType=VARCHAR}, #{sbbh,jdbcType=VARCHAR}, #{bjsj,jdbcType=VARCHAR}, 
-      #{alarmnum,jdbcType=INTEGER}, #{xs,jdbcType=VARCHAR}, #{fz,jdbcType=VARCHAR}, #{deptcode,jdbcType=VARCHAR}, 
+      #{alarmNum,jdbcType=INTEGER}, #{xs,jdbcType=VARCHAR}, #{fz,jdbcType=VARCHAR}, #{deptcode,jdbcType=VARCHAR}, 
       #{xmbh,jdbcType=VARCHAR}, #{sm,jdbcType=VARCHAR}, #{bz,jdbcType=VARCHAR}, #{sm1,jdbcType=VARCHAR}, 
       #{sm2,jdbcType=VARCHAR}, #{sm3,jdbcType=VARCHAR})
   </insert>
@@ -129,8 +129,8 @@
       <if test="bjsj != null">
         bjsj,
       </if>
-      <if test="alarmnum != null">
-        alarmNum,
+      <if test="alarmNum != null">
+        alarm_num,
       </if>
       <if test="xs != null">
         xs,
@@ -170,8 +170,8 @@
       <if test="bjsj != null">
         #{bjsj,jdbcType=VARCHAR},
       </if>
-      <if test="alarmnum != null">
-        #{alarmnum,jdbcType=INTEGER},
+      <if test="alarmNum != null">
+        #{alarmNum,jdbcType=INTEGER},
       </if>
       <if test="xs != null">
         #{xs,jdbcType=VARCHAR},
@@ -220,8 +220,8 @@
       <if test="record.bjsj != null">
         bjsj = #{record.bjsj,jdbcType=VARCHAR},
       </if>
-      <if test="record.alarmnum != null">
-        alarmNum = #{record.alarmnum,jdbcType=INTEGER},
+      <if test="record.alarmNum != null">
+        alarm_num = #{record.alarmNum,jdbcType=INTEGER},
       </if>
       <if test="record.xs != null">
         xs = #{record.xs,jdbcType=VARCHAR},
@@ -260,7 +260,7 @@
     set id = #{record.id,jdbcType=VARCHAR},
       sbbh = #{record.sbbh,jdbcType=VARCHAR},
       bjsj = #{record.bjsj,jdbcType=VARCHAR},
-      alarmNum = #{record.alarmnum,jdbcType=INTEGER},
+      alarm_num = #{record.alarmNum,jdbcType=INTEGER},
       xs = #{record.xs,jdbcType=VARCHAR},
       fz = #{record.fz,jdbcType=VARCHAR},
       deptcode = #{record.deptcode,jdbcType=VARCHAR},
@@ -283,8 +283,8 @@
       <if test="bjsj != null">
         bjsj = #{bjsj,jdbcType=VARCHAR},
       </if>
-      <if test="alarmnum != null">
-        alarmNum = #{alarmnum,jdbcType=INTEGER},
+      <if test="alarmNum != null">
+        alarm_num = #{alarmNum,jdbcType=INTEGER},
       </if>
       <if test="xs != null">
         xs = #{xs,jdbcType=VARCHAR},
@@ -320,7 +320,7 @@
     update appear_numbers
     set sbbh = #{sbbh,jdbcType=VARCHAR},
       bjsj = #{bjsj,jdbcType=VARCHAR},
-      alarmNum = #{alarmnum,jdbcType=INTEGER},
+      alarm_num = #{alarmNum,jdbcType=INTEGER},
       xs = #{xs,jdbcType=VARCHAR},
       fz = #{fz,jdbcType=VARCHAR},
       deptcode = #{deptcode,jdbcType=VARCHAR},

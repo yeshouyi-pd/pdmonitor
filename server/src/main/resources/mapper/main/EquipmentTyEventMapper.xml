@@ -4,9 +4,9 @@
   <resultMap id="BaseResultMap" type="com.pd.server.main.domain.EquipmentTyEvent">
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
-    <result column="kssj" jdbcType="TIMESTAMP" property="kssj" />
-    <result column="jssj" jdbcType="TIMESTAMP" property="jssj" />
-    <result column="cjsj" jdbcType="TIMESTAMP" property="cjsj" />
+    <result column="kssj" jdbcType="VARCHAR" property="kssj" />
+    <result column="jssj" jdbcType="VARCHAR" property="jssj" />
+    <result column="rq" jdbcType="VARCHAR" property="rq" />
     <result column="ts" jdbcType="VARCHAR" property="ts" />
     <result column="deptcode" jdbcType="VARCHAR" property="deptcode" />
     <result column="xmbh" jdbcType="VARCHAR" property="xmbh" />
@@ -75,7 +75,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, sbbh, kssj, jssj, cjsj, ts, deptcode, xmbh, bz, sm, sm1, sm2, sm3
+    id, sbbh, kssj, jssj, rq, ts, deptcode, xmbh, bz, sm, sm1, sm2, sm3
   </sql>
   <select id="selectByExample" parameterType="com.pd.server.main.domain.EquipmentTyEventExample" resultMap="BaseResultMap">
     select
@@ -109,15 +109,13 @@
   </delete>
   <insert id="insert" parameterType="com.pd.server.main.domain.EquipmentTyEvent">
     insert into equipment_ty_event (id, sbbh, kssj, 
-      jssj, cjsj, ts, 
-      deptcode, xmbh, bz, 
-      sm, sm1, sm2, sm3
-      )
-    values (#{id,jdbcType=VARCHAR}, #{sbbh,jdbcType=VARCHAR}, #{kssj,jdbcType=TIMESTAMP}, 
-      #{jssj,jdbcType=TIMESTAMP}, #{cjsj,jdbcType=TIMESTAMP}, #{ts,jdbcType=VARCHAR}, 
-      #{deptcode,jdbcType=VARCHAR}, #{xmbh,jdbcType=VARCHAR}, #{bz,jdbcType=VARCHAR}, 
-      #{sm,jdbcType=VARCHAR}, #{sm1,jdbcType=VARCHAR}, #{sm2,jdbcType=VARCHAR}, #{sm3,jdbcType=VARCHAR}
-      )
+      jssj, rq, ts, deptcode, 
+      xmbh, bz, sm, sm1, 
+      sm2, sm3)
+    values (#{id,jdbcType=VARCHAR}, #{sbbh,jdbcType=VARCHAR}, #{kssj,jdbcType=VARCHAR}, 
+      #{jssj,jdbcType=VARCHAR}, #{rq,jdbcType=VARCHAR}, #{ts,jdbcType=VARCHAR}, #{deptcode,jdbcType=VARCHAR}, 
+      #{xmbh,jdbcType=VARCHAR}, #{bz,jdbcType=VARCHAR}, #{sm,jdbcType=VARCHAR}, #{sm1,jdbcType=VARCHAR}, 
+      #{sm2,jdbcType=VARCHAR}, #{sm3,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.pd.server.main.domain.EquipmentTyEvent">
     insert into equipment_ty_event
@@ -134,8 +132,8 @@
       <if test="jssj != null">
         jssj,
       </if>
-      <if test="cjsj != null">
-        cjsj,
+      <if test="rq != null">
+        rq,
       </if>
       <if test="ts != null">
         ts,
@@ -170,13 +168,13 @@
         #{sbbh,jdbcType=VARCHAR},
       </if>
       <if test="kssj != null">
-        #{kssj,jdbcType=TIMESTAMP},
+        #{kssj,jdbcType=VARCHAR},
       </if>
       <if test="jssj != null">
-        #{jssj,jdbcType=TIMESTAMP},
+        #{jssj,jdbcType=VARCHAR},
       </if>
-      <if test="cjsj != null">
-        #{cjsj,jdbcType=TIMESTAMP},
+      <if test="rq != null">
+        #{rq,jdbcType=VARCHAR},
       </if>
       <if test="ts != null">
         #{ts,jdbcType=VARCHAR},
@@ -220,13 +218,13 @@
         sbbh = #{record.sbbh,jdbcType=VARCHAR},
       </if>
       <if test="record.kssj != null">
-        kssj = #{record.kssj,jdbcType=TIMESTAMP},
+        kssj = #{record.kssj,jdbcType=VARCHAR},
       </if>
       <if test="record.jssj != null">
-        jssj = #{record.jssj,jdbcType=TIMESTAMP},
+        jssj = #{record.jssj,jdbcType=VARCHAR},
       </if>
-      <if test="record.cjsj != null">
-        cjsj = #{record.cjsj,jdbcType=TIMESTAMP},
+      <if test="record.rq != null">
+        rq = #{record.rq,jdbcType=VARCHAR},
       </if>
       <if test="record.ts != null">
         ts = #{record.ts,jdbcType=VARCHAR},
@@ -261,9 +259,9 @@
     update equipment_ty_event
     set id = #{record.id,jdbcType=VARCHAR},
       sbbh = #{record.sbbh,jdbcType=VARCHAR},
-      kssj = #{record.kssj,jdbcType=TIMESTAMP},
-      jssj = #{record.jssj,jdbcType=TIMESTAMP},
-      cjsj = #{record.cjsj,jdbcType=TIMESTAMP},
+      kssj = #{record.kssj,jdbcType=VARCHAR},
+      jssj = #{record.jssj,jdbcType=VARCHAR},
+      rq = #{record.rq,jdbcType=VARCHAR},
       ts = #{record.ts,jdbcType=VARCHAR},
       deptcode = #{record.deptcode,jdbcType=VARCHAR},
       xmbh = #{record.xmbh,jdbcType=VARCHAR},
@@ -283,13 +281,13 @@
         sbbh = #{sbbh,jdbcType=VARCHAR},
       </if>
       <if test="kssj != null">
-        kssj = #{kssj,jdbcType=TIMESTAMP},
+        kssj = #{kssj,jdbcType=VARCHAR},
       </if>
       <if test="jssj != null">
-        jssj = #{jssj,jdbcType=TIMESTAMP},
+        jssj = #{jssj,jdbcType=VARCHAR},
       </if>
-      <if test="cjsj != null">
-        cjsj = #{cjsj,jdbcType=TIMESTAMP},
+      <if test="rq != null">
+        rq = #{rq,jdbcType=VARCHAR},
       </if>
       <if test="ts != null">
         ts = #{ts,jdbcType=VARCHAR},
@@ -321,9 +319,9 @@
   <update id="updateByPrimaryKey" parameterType="com.pd.server.main.domain.EquipmentTyEvent">
     update equipment_ty_event
     set sbbh = #{sbbh,jdbcType=VARCHAR},
-      kssj = #{kssj,jdbcType=TIMESTAMP},
-      jssj = #{jssj,jdbcType=TIMESTAMP},
-      cjsj = #{cjsj,jdbcType=TIMESTAMP},
+      kssj = #{kssj,jdbcType=VARCHAR},
+      jssj = #{jssj,jdbcType=VARCHAR},
+      rq = #{rq,jdbcType=VARCHAR},
       ts = #{ts,jdbcType=VARCHAR},
       deptcode = #{deptcode,jdbcType=VARCHAR},
       xmbh = #{xmbh,jdbcType=VARCHAR},

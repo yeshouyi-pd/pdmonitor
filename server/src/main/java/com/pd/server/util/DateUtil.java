@@ -7,6 +7,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class DateUtil {
     /**
@@ -199,11 +201,43 @@ public class DateUtil {
     // ===================================================
 
     public static void main(String[] args) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yy-MM-dd HH-mm-ss");
-        String str = sdf.format(new Date());
-        System.out.println(sdf.format(getNextDay(new Date())));
-        System.out.println(sdf.format(getYearBefore(new Date())));
-        System.out.println(sdf.format(getMinutesLater(new Date(),-5)));
+//        SimpleDateFormat sdf = new SimpleDateFormat("yy-MM-dd HH-mm-ss");
+//        String str = sdf.format(new Date());
+//        System.out.println(sdf.format(getNextDay(new Date())));
+//        System.out.println(sdf.format(getYearBefore(new Date())));
+//        System.out.println(sdf.format(getMinutesLater(new Date(),-5)));
+        String str = "2022_09_08_14_29_43_2022_09_08_14_29_46_1_A2.txt";//\d{n,}
+        //2022_09_05_20_18_16.jpg
+        //2022_09_05_20_18_16.png
+        //2022_09_05_20_18_16.txt
+        //2022_09_05_20_18_16.wav
+        //2022_09_05_20_18_16_predation.jpg
+        //2022_08_16_15_44_54_predation.png
+        //2022_08_16_15_44_54_predation.txt
+        //2022_08_16_15_44_54_predation.wav
+        //2022_07_27_13_36_50_predation_59.txt
+        //2022_07_30_09_32_15_0.txt
+        //2022_09_05_09_04_54_0_A2.txt
+        //2022_09_08_14_29_43_2022_09_08_14_29_46_1_A2.txt
+        String pattern = "^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{1,}_A2.txt$";
+        // "^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}.txt$";
+        // "^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}.jpg$";
+        // "^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}.png$";
+        // "^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}.wav$";
+        // "^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_predation.jpg$"
+        // "^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_predation.png$"
+        // "^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_predation.txt$"
+        // "^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_predation.wav$"
+        // "^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_predation_\\d{1,}.txt$"
+        // "^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{1,}.txt$";
+        // "^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{1,}_A2.txt$";
+        // "^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{1,}_A2.txt$";
+
+
+        Pattern r = Pattern.compile(pattern);
+        Matcher m = r.matcher(str);
+        System.out.println(m.matches());
+
     }
 
     /**

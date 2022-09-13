@@ -70,10 +70,10 @@ public class ShjController{
                 InterfaceLog log = new InterfaceLog();
                 log.setId(UuidUtil.getShortUuid());
                 log.setIp(request.getLocalAddr());
-                log.setQqcs(jsonParam);
+                log.setQqcs("'"+jsonParam+"'");
                 log.setQqsj(new Date());
                 log.setQqry(methodname);
-                log.setFhsj(JSONObject.toJSONString(retJson(returnObject, methodname, data)));
+                log.setFhsj("'"+JSONObject.toJSONString(retJson(returnObject, methodname, data))+"'");
                 interfaceLogMapper.insert(log);
             }
         }

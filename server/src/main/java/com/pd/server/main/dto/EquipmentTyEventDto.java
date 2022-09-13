@@ -1,9 +1,7 @@
 package com.pd.server.main.dto;
 
-        import java.util.Date;
-        import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class EquipmentTyEventDto extends PageDto{
+public class EquipmentTyEventDto {
 
     /**
     * 
@@ -18,20 +16,17 @@ public class EquipmentTyEventDto extends PageDto{
     /**
     * 开始时间
     */
-        @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
-    private Date kssj;
+    private String kssj;
 
     /**
     * 结束时间
     */
-        @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
-    private Date jssj;
+    private String jssj;
 
     /**
-     * 创建时间
-     */
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
-    private Date cjsj;
+    * 创建时间
+    */
+    private String rq;
 
     /**
     * 头数
@@ -44,8 +39,8 @@ public class EquipmentTyEventDto extends PageDto{
     private String deptcode;
 
     /**
-     * 项目编号
-     */
+    * 项目编号
+    */
     private String xmbh;
 
     /**
@@ -89,20 +84,28 @@ public class EquipmentTyEventDto extends PageDto{
         this.sbbh = sbbh;
     }
 
-    public Date getKssj() {
+    public String getKssj() {
         return kssj;
     }
 
-    public void setKssj(Date kssj) {
+    public void setKssj(String kssj) {
         this.kssj = kssj;
     }
 
-    public Date getJssj() {
+    public String getJssj() {
         return jssj;
     }
 
-    public void setJssj(Date jssj) {
+    public void setJssj(String jssj) {
         this.jssj = jssj;
+    }
+
+    public String getRq() {
+        return rq;
+    }
+
+    public void setRq(String rq) {
+        this.rq = rq;
     }
 
     public String getTs() {
@@ -119,6 +122,14 @@ public class EquipmentTyEventDto extends PageDto{
 
     public void setDeptcode(String deptcode) {
         this.deptcode = deptcode;
+    }
+
+    public String getXmbh() {
+        return xmbh;
+    }
+
+    public void setXmbh(String xmbh) {
+        this.xmbh = xmbh;
     }
 
     public String getBz() {
@@ -161,13 +172,6 @@ public class EquipmentTyEventDto extends PageDto{
         this.sm3 = sm3;
     }
 
-    public String getXmbh() {
-        return xmbh;
-    }
-
-    public void setXmbh(String xmbh) {
-        this.xmbh = xmbh;
-    }
 
     @Override
     public String toString() {
@@ -179,8 +183,10 @@ public class EquipmentTyEventDto extends PageDto{
             sb.append(", sbbh=").append(sbbh);
             sb.append(", kssj=").append(kssj);
             sb.append(", jssj=").append(jssj);
+            sb.append(", rq=").append(rq);
             sb.append(", ts=").append(ts);
             sb.append(", deptcode=").append(deptcode);
+            sb.append(", xmbh=").append(xmbh);
             sb.append(", bz=").append(bz);
             sb.append(", sm=").append(sm);
             sb.append(", sm1=").append(sm1);

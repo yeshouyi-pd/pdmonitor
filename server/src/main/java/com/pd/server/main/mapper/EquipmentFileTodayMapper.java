@@ -6,6 +6,7 @@ import com.pd.server.main.domain.EquipmentFileToday;
 import com.pd.server.main.domain.EquipmentFileTodayExample;
 import java.util.List;
 
+import com.pd.server.main.dto.AppearNumbersDto;
 import com.pd.server.main.dto.WelcomeKvDto;
 import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
 import org.apache.ibatis.annotations.Param;
@@ -28,7 +29,9 @@ public interface EquipmentFileTodayMapper {
 
     int deleteByPrimaryKey(String id);
 
-    int insert(EquipmentFile record);
+    int insert(EquipmentFileToday record);
+
+    int insertEquipFile(EquipmentFile record);
 
     int insertSelective(EquipmentFileToday record);
 

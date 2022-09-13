@@ -68,7 +68,7 @@ public class EquipmentFileTyTodayDto {
     private String xmbh;
 
     /**
-    * 报警文件类型1图片2音频3视频
+    * 报警文件类型1图片2音频3文件
     */
     private String wjlx;
 
@@ -83,12 +83,12 @@ public class EquipmentFileTyTodayDto {
     private String ly;
 
     /**
-    * 
+    * 坐标原数据
     */
     private String sm1;
 
     /**
-    * 
+    * 坐标信息
     */
     private String sm2;
 
@@ -111,6 +111,26 @@ public class EquipmentFileTyTodayDto {
     * 
     */
     private String sm6;
+
+    /**
+    * type，codeset表中的文件种类
+    */
+    private String type;
+
+    /**
+    * 头数
+    */
+    private String ts;
+
+    /**
+    * txt文件类型|1：必传文件，2：脉冲或者A4设备头数文件，3：A2设备头数文件
+    */
+    private String txtlx;
+
+    /**
+    * 文件名称截取，为了查询出对应的音频，文件，图片等数据
+    */
+    private String wjmc;
 
     public String getId() {
         return id;
@@ -280,6 +300,38 @@ public class EquipmentFileTyTodayDto {
         this.sm6 = sm6;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getTs() {
+        return ts;
+    }
+
+    public void setTs(String ts) {
+        this.ts = ts;
+    }
+
+    public String getTxtlx() {
+        return txtlx;
+    }
+
+    public void setTxtlx(String txtlx) {
+        this.txtlx = txtlx;
+    }
+
+    public String getWjmc() {
+        return wjmc;
+    }
+
+    public void setWjmc(String wjmc) {
+        this.wjmc = wjmc;
+    }
+
 
     @Override
     public String toString() {
@@ -308,6 +360,10 @@ public class EquipmentFileTyTodayDto {
             sb.append(", sm4=").append(sm4);
             sb.append(", sm5=").append(sm5);
             sb.append(", sm6=").append(sm6);
+            sb.append(", type=").append(type);
+            sb.append(", ts=").append(ts);
+            sb.append(", txtlx=").append(txtlx);
+            sb.append(", wjmc=").append(wjmc);
         sb.append("]");
         return sb.toString();
     }

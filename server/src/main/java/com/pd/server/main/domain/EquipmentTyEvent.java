@@ -1,17 +1,15 @@
 package com.pd.server.main.domain;
 
-import java.util.Date;
-
 public class EquipmentTyEvent {
     private String id;
 
     private String sbbh;
 
-    private Date kssj;
+    private String kssj;
 
-    private Date jssj;
+    private String jssj;
 
-    private Date cjsj;
+    private String rq;
 
     private String ts;
 
@@ -45,28 +43,28 @@ public class EquipmentTyEvent {
         this.sbbh = sbbh;
     }
 
-    public Date getKssj() {
+    public String getKssj() {
         return kssj;
     }
 
-    public void setKssj(Date kssj) {
+    public void setKssj(String kssj) {
         this.kssj = kssj;
     }
 
-    public Date getJssj() {
+    public String getJssj() {
         return jssj;
     }
 
-    public void setJssj(Date jssj) {
+    public void setJssj(String jssj) {
         this.jssj = jssj;
     }
 
-    public Date getCjsj() {
-        return cjsj;
+    public String getRq() {
+        return rq;
     }
 
-    public void setCjsj(Date cjsj) {
-        this.cjsj = cjsj;
+    public void setRq(String rq) {
+        this.rq = rq;
     }
 
     public String getTs() {
@@ -143,7 +141,7 @@ public class EquipmentTyEvent {
         sb.append(", sbbh=").append(sbbh);
         sb.append(", kssj=").append(kssj);
         sb.append(", jssj=").append(jssj);
-        sb.append(", cjsj=").append(cjsj);
+        sb.append(", rq=").append(rq);
         sb.append(", ts=").append(ts);
         sb.append(", deptcode=").append(deptcode);
         sb.append(", xmbh=").append(xmbh);

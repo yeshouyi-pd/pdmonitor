@@ -96,22 +96,7 @@
                     <div class="dataAllBorder01 cage_cl" style="margin-top: 9% !important; height: 24%">
                         <div class="dataAllBorder02" id="cage_cl" style="border: 0px solid red;padding-left: 10%;padding-top: 5%;">
                             <div class="analysis">当日声学侦测次数：{{alarmDatas.num}}次</div>
-                            <!--<ul class="data_show_box">
-                                <li class="data_cage" v-for="item  in  alarmDatas.sum">{{item}}</li>
-                            </ul>-->
-<!--                            <div class="depart_number_box">-->
-<!--                                <ul class="depart_number_cage" style="margin-bottom: 0px;">-->
-<!--                                    &lt;!&ndash;<li class="depart_name">出现次数：</li>&ndash;&gt;-->
-<!--                                    <li class="depart_number">{{alarmDatas.num}}次</li>-->
-<!--                                </ul>-->
-<!--                            </div>-->
                             <div class="analysis" style="margin: 20px 0;">当日事件(群次)：{{alarmDatas.nnm}}次</div>
-<!--                            <div class="depart_number_box">-->
-<!--                                <ul class="depart_number_cage" style="margin-bottom: 0px;">-->
-<!--                                    &lt;!&ndash;<li class="depart_name">事件次数：</li>&ndash;&gt;-->
-<!--                                    <li class="depart_number">{{alarmDatas.nnm}}次</li>-->
-<!--                                </ul>-->
-<!--                            </div>-->
                             <div class="analysis">当日捕食次数：{{alarmDatas.bnum}}次</div>
                         </div>
                     </div>
@@ -196,21 +181,6 @@
                             </div>
                         </div>
                         <div class="clear"></div>
-                        <!--<div class="modal-header" style="background: #395DC0;">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title">详细信息</h4>
-                        </div>
-                        <div class="modal-body" style="background: #395DC0;">
-                            <div style="display: flex;flex-wrap: wrap;margin-bottom: 30px;">
-                                <div v-for="(item,index) in equipmentFiles" style="margin:20px;width: 150px;height: 250px;display: flex;flex-wrap: wrap;">
-                                    &lt;!&ndash;<div style="text-align: center;width: 150px;">
-                                        <img :src="item.tplj" style="height: 200px;cursor: pointer;" v-on:click="checkImg(item,index)">
-                                    </div>&ndash;&gt;
-                                    <div style="margin: 0 auto;">{{item.sbbh}}</div>
-                                    <div style="margin: 0 auto;">{{item.cjsj}}</div>
-                                </div>
-                            </div>
-                        </div>-->
                         <div class="modal-footer" style="background: #395DC0;">
                             <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
                         </div>
@@ -219,19 +189,6 @@
             </div><!-- /.modal -->
 
         </div>
-        <!--<remote-js src="/js/echarts-all.js"></remote-js>
-        <remote-js src="/js/bstable/js/bootstrap.min.js"></remote-js>
-        <remote-js src="/js/bstable/js/bootstrap-table.js"></remote-js>
-        <remote-js type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=5ieMMexWmzB9jivTq6oCRX9j&callback"></remote-js>
-        <remote-js src="/js/Home_page.js"></remote-js>
-        <remote-js src="/js/jquery.js"></remote-js>
-        <remote-js src="/js/laydate.js"></remote-js>
-        <remote-js src="/js/index.js"></remote-js>
-        <remote-js type="text/javascript" src="/js/jquery.pagination.js"></remote-js>
-        <remote-js src="/js/Home_page.js"></remote-js>
-        <remote-js src="/js/artDialog/artDialog.js"></remote-js>-->
-        <!--<remote-js src="/js/bstable/js/bootstrap-table-zh-CN.min.js"></remote-js>-->
-        <!--<remote-js src="/js/artDialog/plugins/iframeTools.source.js"></remote-js>-->
     </div>
 </template>
 

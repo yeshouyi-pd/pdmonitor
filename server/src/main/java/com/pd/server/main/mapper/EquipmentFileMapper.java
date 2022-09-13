@@ -20,13 +20,9 @@ public interface EquipmentFileMapper {
 
     int insertSelective(EquipmentFile record);
 
-    List<EquipmentFile> lists(EquipmentFileExample example);
-
     List<EquipmentFile> selectByExample(EquipmentFileExample example);
 
     EquipmentFile selectByPrimaryKey(String id);
-
-    EquipmentFile selectLastOneBySbbh(String sbbh);
 
     int updateByExampleSelective(@Param("record") EquipmentFile record, @Param("example") EquipmentFileExample example);
 
@@ -57,4 +53,8 @@ public interface EquipmentFileMapper {
     List<EquipmentFile> listBylimit(EquipmentFileExample example);
 
     List<AlarmNumbersDto> groupByRq(EquipmentFileExample example);
+
+    List<EquipmentFile> lists(EquipmentFileExample example);
+
+    EquipmentFile selectLastOneBySbbh(String sbbh);
 }
