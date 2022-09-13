@@ -23,6 +23,10 @@
     <result column="sm4" jdbcType="VARCHAR" property="sm4" />
     <result column="sm5" jdbcType="VARCHAR" property="sm5" />
     <result column="sm6" jdbcType="VARCHAR" property="sm6" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="ts" jdbcType="VARCHAR" property="ts" />
+    <result column="txtlx" jdbcType="VARCHAR" property="txtlx" />
+    <result column="wjmc" jdbcType="VARCHAR" property="wjmc" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -84,7 +88,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, sbbh, tplj, cjsj, create_time, nf, yf, rq, xs, fz, deptcode, xmbh, wjlx, jczl, 
-    ly, sm1, sm2, sm3, sm4, sm5, sm6
+    ly, sm1, sm2, sm3, sm4, sm5, sm6, `type`, ts, txtlx, wjmc
   </sql>
   <select id="selectByExample" parameterType="com.pd.server.main.domain.EquipmentFileTyExample" resultMap="BaseResultMap">
     select
@@ -122,14 +126,16 @@
       yf, rq, xs, fz, 
       deptcode, xmbh, wjlx, 
       jczl, ly, sm1, sm2, 
-      sm3, sm4, sm5, sm6
+      sm3, sm4, sm5, sm6, 
+      `type`, ts, txtlx, wjmc
       )
     values (#{id,jdbcType=VARCHAR}, #{sbbh,jdbcType=VARCHAR}, #{tplj,jdbcType=VARCHAR}, 
       #{cjsj,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, #{nf,jdbcType=VARCHAR}, 
       #{yf,jdbcType=VARCHAR}, #{rq,jdbcType=VARCHAR}, #{xs,jdbcType=VARCHAR}, #{fz,jdbcType=VARCHAR}, 
       #{deptcode,jdbcType=VARCHAR}, #{xmbh,jdbcType=VARCHAR}, #{wjlx,jdbcType=VARCHAR}, 
       #{jczl,jdbcType=VARCHAR}, #{ly,jdbcType=VARCHAR}, #{sm1,jdbcType=VARCHAR}, #{sm2,jdbcType=VARCHAR}, 
-      #{sm3,jdbcType=VARCHAR}, #{sm4,jdbcType=VARCHAR}, #{sm5,jdbcType=VARCHAR}, #{sm6,jdbcType=VARCHAR}
+      #{sm3,jdbcType=VARCHAR}, #{sm4,jdbcType=VARCHAR}, #{sm5,jdbcType=VARCHAR}, #{sm6,jdbcType=VARCHAR}, 
+      #{type,jdbcType=VARCHAR}, #{ts,jdbcType=VARCHAR}, #{txtlx,jdbcType=VARCHAR}, #{wjmc,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.pd.server.main.domain.EquipmentFileTy">
@@ -198,6 +204,18 @@
       <if test="sm6 != null">
         sm6,
       </if>
+      <if test="type != null">
+        `type`,
+      </if>
+      <if test="ts != null">
+        ts,
+      </if>
+      <if test="txtlx != null">
+        txtlx,
+      </if>
+      <if test="wjmc != null">
+        wjmc,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -262,6 +280,18 @@
       </if>
       <if test="sm6 != null">
         #{sm6,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="ts != null">
+        #{ts,jdbcType=VARCHAR},
+      </if>
+      <if test="txtlx != null">
+        #{txtlx,jdbcType=VARCHAR},
+      </if>
+      <if test="wjmc != null">
+        #{wjmc,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -337,6 +367,18 @@
       <if test="record.sm6 != null">
         sm6 = #{record.sm6,jdbcType=VARCHAR},
       </if>
+      <if test="record.type != null">
+        `type` = #{record.type,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ts != null">
+        ts = #{record.ts,jdbcType=VARCHAR},
+      </if>
+      <if test="record.txtlx != null">
+        txtlx = #{record.txtlx,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wjmc != null">
+        wjmc = #{record.wjmc,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -364,7 +406,11 @@
       sm3 = #{record.sm3,jdbcType=VARCHAR},
       sm4 = #{record.sm4,jdbcType=VARCHAR},
       sm5 = #{record.sm5,jdbcType=VARCHAR},
-      sm6 = #{record.sm6,jdbcType=VARCHAR}
+      sm6 = #{record.sm6,jdbcType=VARCHAR},
+      `type` = #{record.type,jdbcType=VARCHAR},
+      ts = #{record.ts,jdbcType=VARCHAR},
+      txtlx = #{record.txtlx,jdbcType=VARCHAR},
+      wjmc = #{record.wjmc,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -432,6 +478,18 @@
       <if test="sm6 != null">
         sm6 = #{sm6,jdbcType=VARCHAR},
       </if>
+      <if test="type != null">
+        `type` = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="ts != null">
+        ts = #{ts,jdbcType=VARCHAR},
+      </if>
+      <if test="txtlx != null">
+        txtlx = #{txtlx,jdbcType=VARCHAR},
+      </if>
+      <if test="wjmc != null">
+        wjmc = #{wjmc,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -456,7 +514,11 @@
       sm3 = #{sm3,jdbcType=VARCHAR},
       sm4 = #{sm4,jdbcType=VARCHAR},
       sm5 = #{sm5,jdbcType=VARCHAR},
-      sm6 = #{sm6,jdbcType=VARCHAR}
+      sm6 = #{sm6,jdbcType=VARCHAR},
+      `type` = #{type,jdbcType=VARCHAR},
+      ts = #{ts,jdbcType=VARCHAR},
+      txtlx = #{txtlx,jdbcType=VARCHAR},
+      wjmc = #{wjmc,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
   <select id="selectTodayGps" parameterType="com.pd.server.main.domain.EquipmentFileTyTodayExample" resultType="java.lang.String">

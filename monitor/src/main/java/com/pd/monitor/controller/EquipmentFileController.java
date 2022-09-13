@@ -410,6 +410,7 @@ public class EquipmentFileController extends BaseWxController {
                 ca.andSbsnIn(user.getXmbhsbsns().get(equipmentFileDto.getXmbh()));
             }
         }
+        ca.andDqzlIn(Arrays.asList("A1","A4"));
         List<String> sbbhList = waterEquipmentService.findSbbh(example);
         responseDto.setContent(sbbhList);
         return responseDto;
@@ -493,6 +494,26 @@ public class EquipmentFileController extends BaseWxController {
         // 保存校验
                 ValidatorUtil.length(equipmentFileDto.getSbbh(), "设备唯一标识", 1, 50);
                 ValidatorUtil.length(equipmentFileDto.getTplj(), "图片路径", 1, 500);
+                ValidatorUtil.length(equipmentFileDto.getNf(), "采集年份", 1, 20);
+                ValidatorUtil.length(equipmentFileDto.getYf(), "采集月份", 1, 20);
+                ValidatorUtil.length(equipmentFileDto.getRq(), "采集日期", 1, 20);
+                ValidatorUtil.length(equipmentFileDto.getXs(), "采集小时", 1, 20);
+                ValidatorUtil.length(equipmentFileDto.getFz(), "采集分钟", 1, 20);
+                ValidatorUtil.length(equipmentFileDto.getDeptcode(), "部门", 1, 36);
+                ValidatorUtil.length(equipmentFileDto.getXmbh(), "项目编号", 1, 36);
+                ValidatorUtil.length(equipmentFileDto.getWjlx(), "报警文件类型1图片2音频3文件", 1, 128);
+                ValidatorUtil.length(equipmentFileDto.getJczl(), "监测种类1江豚2白海豚", 1, 1);
+                ValidatorUtil.length(equipmentFileDto.getLy(), "来源1实时数据采集2非实时数据分析", 1, 1);
+                ValidatorUtil.length(equipmentFileDto.getSm1(), "坐标原数据", 1, 500);
+                ValidatorUtil.length(equipmentFileDto.getSm2(), "坐标信息", 1, 255);
+                ValidatorUtil.length(equipmentFileDto.getSm3(), "", 1, 255);
+                ValidatorUtil.length(equipmentFileDto.getSm4(), "", 1, 255);
+                ValidatorUtil.length(equipmentFileDto.getSm5(), "", 1, 255);
+                ValidatorUtil.length(equipmentFileDto.getSm6(), "", 1, 255);
+                ValidatorUtil.length(equipmentFileDto.getType(), "type，codeset表中的文件种类", 1, 50);
+                ValidatorUtil.length(equipmentFileDto.getTs(), "头数", 1, 10);
+                ValidatorUtil.length(equipmentFileDto.getTxtlx(), "txt文件类型", 1, 5);
+                ValidatorUtil.length(equipmentFileDto.getWjmc(), "文件名称截取，为了查询出对应的音频，文件，图片等数据", 1, 100);
 
         ResponseDto responseDto = new ResponseDto();
         equipmentFileService.save(equipmentFileDto);

@@ -23,13 +23,16 @@
     <result column="sm4" jdbcType="VARCHAR" property="sm4" />
     <result column="sm5" jdbcType="VARCHAR" property="sm5" />
     <result column="sm6" jdbcType="VARCHAR" property="sm6" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="ts" jdbcType="VARCHAR" property="ts" />
+    <result column="txtlx" jdbcType="VARCHAR" property="txtlx" />
+    <result column="wjmc" jdbcType="VARCHAR" property="wjmc" />
   </resultMap>
   <resultMap id="StatisticsResultMap" type="com.pd.server.main.dto.basewx.my.AlarmNumbersDto">
     <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
     <result column="bjsj" jdbcType="VARCHAR" property="bjsj" />
     <result column="alarmNum" jdbcType="INTEGER" property="alarmNum" />
   </resultMap>
-
   <resultMap id="BaseResultMapKV" type="com.pd.server.main.dto.WelcomeKvDto">
     <result column="deptname" jdbcType="VARCHAR" property="deptname" />
     <result column="text" jdbcType="VARCHAR" property="text" />
@@ -100,23 +103,8 @@
   </sql>
   <sql id="Base_Column_List">
     id, sbbh, tplj, cjsj, create_time, nf, yf, rq, xs, fz, deptcode, xmbh, wjlx, jczl, 
-    ly, sm1, sm2, sm3, sm4, sm5, sm6
+    ly, sm1, sm2, sm3, sm4, sm5, sm6, `type`, ts, txtlx, wjmc
   </sql>
-  <select id="lists" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultMap="BaseResultMap">
-    select
-    <if test="distinct">
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    from equipment_file
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    and tplj LIKE '%.txt'
-    <if test="orderByClause != null">
-      order by ${orderByClause}
-    </if>
-  </select>
   <select id="selectByExample" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
@@ -137,13 +125,6 @@
     from equipment_file
     where id = #{id,jdbcType=VARCHAR}
   </select>
-  <select id="selectLastOneBySbbh" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List" />
-    from equipment_file
-    where sbbh = #{sbbh,jdbcType=VARCHAR}  and  (tplj LIKE '%.png' or tplj LIKE '%.jpg' or tplj LIKE '%.txt')
-    order by cjsj desc limit 1
-  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from equipment_file
     where id = #{id,jdbcType=VARCHAR}
@@ -160,14 +141,16 @@
       yf, rq, xs, fz, 
       deptcode, xmbh, wjlx, 
       jczl, ly, sm1, sm2, 
-      sm3, sm4, sm5, sm6
+      sm3, sm4, sm5, sm6, 
+      `type`, ts, txtlx, wjmc
       )
     values (#{id,jdbcType=VARCHAR}, #{sbbh,jdbcType=VARCHAR}, #{tplj,jdbcType=VARCHAR}, 
       #{cjsj,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, #{nf,jdbcType=VARCHAR}, 
       #{yf,jdbcType=VARCHAR}, #{rq,jdbcType=VARCHAR}, #{xs,jdbcType=VARCHAR}, #{fz,jdbcType=VARCHAR}, 
       #{deptcode,jdbcType=VARCHAR}, #{xmbh,jdbcType=VARCHAR}, #{wjlx,jdbcType=VARCHAR}, 
       #{jczl,jdbcType=VARCHAR}, #{ly,jdbcType=VARCHAR}, #{sm1,jdbcType=VARCHAR}, #{sm2,jdbcType=VARCHAR}, 
-      #{sm3,jdbcType=VARCHAR}, #{sm4,jdbcType=VARCHAR}, #{sm5,jdbcType=VARCHAR}, #{sm6,jdbcType=VARCHAR}
+      #{sm3,jdbcType=VARCHAR}, #{sm4,jdbcType=VARCHAR}, #{sm5,jdbcType=VARCHAR}, #{sm6,jdbcType=VARCHAR}, 
+      #{type,jdbcType=VARCHAR}, #{ts,jdbcType=VARCHAR}, #{txtlx,jdbcType=VARCHAR}, #{wjmc,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.pd.server.main.domain.EquipmentFile">
@@ -236,6 +219,18 @@
       <if test="sm6 != null">
         sm6,
       </if>
+      <if test="type != null">
+        `type`,
+      </if>
+      <if test="ts != null">
+        ts,
+      </if>
+      <if test="txtlx != null">
+        txtlx,
+      </if>
+      <if test="wjmc != null">
+        wjmc,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -300,6 +295,18 @@
       </if>
       <if test="sm6 != null">
         #{sm6,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="ts != null">
+        #{ts,jdbcType=VARCHAR},
+      </if>
+      <if test="txtlx != null">
+        #{txtlx,jdbcType=VARCHAR},
+      </if>
+      <if test="wjmc != null">
+        #{wjmc,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -375,6 +382,18 @@
       <if test="record.sm6 != null">
         sm6 = #{record.sm6,jdbcType=VARCHAR},
       </if>
+      <if test="record.type != null">
+        `type` = #{record.type,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ts != null">
+        ts = #{record.ts,jdbcType=VARCHAR},
+      </if>
+      <if test="record.txtlx != null">
+        txtlx = #{record.txtlx,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wjmc != null">
+        wjmc = #{record.wjmc,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -402,7 +421,11 @@
       sm3 = #{record.sm3,jdbcType=VARCHAR},
       sm4 = #{record.sm4,jdbcType=VARCHAR},
       sm5 = #{record.sm5,jdbcType=VARCHAR},
-      sm6 = #{record.sm6,jdbcType=VARCHAR}
+      sm6 = #{record.sm6,jdbcType=VARCHAR},
+      `type` = #{record.type,jdbcType=VARCHAR},
+      ts = #{record.ts,jdbcType=VARCHAR},
+      txtlx = #{record.txtlx,jdbcType=VARCHAR},
+      wjmc = #{record.wjmc,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -470,6 +493,18 @@
       <if test="sm6 != null">
         sm6 = #{sm6,jdbcType=VARCHAR},
       </if>
+      <if test="type != null">
+        `type` = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="ts != null">
+        ts = #{ts,jdbcType=VARCHAR},
+      </if>
+      <if test="txtlx != null">
+        txtlx = #{txtlx,jdbcType=VARCHAR},
+      </if>
+      <if test="wjmc != null">
+        wjmc = #{wjmc,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -494,12 +529,51 @@
       sm3 = #{sm3,jdbcType=VARCHAR},
       sm4 = #{sm4,jdbcType=VARCHAR},
       sm5 = #{sm5,jdbcType=VARCHAR},
-      sm6 = #{sm6,jdbcType=VARCHAR}
+      sm6 = #{sm6,jdbcType=VARCHAR},
+      `type` = #{type,jdbcType=VARCHAR},
+      ts = #{ts,jdbcType=VARCHAR},
+      txtlx = #{txtlx,jdbcType=VARCHAR},
+      wjmc = #{wjmc,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
-  <select id="selectAudioByExample" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultType="java.lang.String">
+  <select id="lists" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultMap="BaseResultMap">
     select
-    tplj
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from equipment_file
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    and tplj LIKE '%.txt'
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectLastOneBySbbh" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from equipment_file
+    where sbbh = #{sbbh,jdbcType=VARCHAR}  and  (tplj LIKE '%.png' or tplj LIKE '%.jpg' or tplj LIKE '%.txt')
+    order by cjsj desc limit 1
+  </select>
+  <select id="groupByRq" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultMap="StatisticsResultMap">
+    select
+    sbbh,rq bjsj,count(*) alarmNum, deptcode
+    from equipment_file
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    group by sbbh, rq, deptcode
+    order by sbbh, rq, deptcode
+  </select>
+  <select id="listBylimit" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
     from equipment_file
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -507,51 +581,8 @@
     <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
+    limit 100
   </select>
-  <select id="selectSbbhByExample" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultType="java.lang.String">
-    select
-    distinct sbbh
-    from equipment_file
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null">
-      order by ${orderByClause}
-    </if>
-  </select>
-  <select id="statisticsAlarmNums" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultMap="StatisticsResultMap">
-    select
-    sbbh,rq bjsj,count(*) alarmNum, xs, fz, deptcode
-    from equipment_file
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    group by sbbh, rq, xs, fz, deptcode
-    order by sbbh, rq, xs, fz, deptcode
-  </select>
-  <select id="statisticsAlarmNumsByPage" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultMap="StatisticsResultMap">
-    select
-    sbbh,rq bjsj,count(*) alarmNum, xs, fz, deptcode
-    from equipment_file
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    AND tplj LIKE '%.txt'
-    AND sbbh not like 'TY%'
-    group by sbbh, rq, xs, fz, deptcode
-    order by sbbh, rq, xs, fz, deptcode
-  </select>
-  <select id="getWarningDate"  resultMap="BaseResultMapKV" parameterType="com.pd.server.main.domain.EquipmentFileExample">
-    SELECT  b.`deptname`  , c.`text`  , c.`code` FROM     water_equipment a , dept  b , (
-    SELECT sbbh  `text` ,COUNT(*)  `code`  FROM   equipment_file
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    and   TO_DAYS(cjsj) = TO_DAYS(NOW())  AND tplj LIKE '%.txt' AND sbbh not like 'TY%' GROUP BY sbbh ) c  WHERE a.sbsn = c.text AND  a.deptcode = b.deptcode
-  </select>
-
-
-
   <select id="getAlljcsjByDept" parameterType="com.pd.server.main.domain.EquipmentFileExample"  resultMap="BaseResultMapKVint">
     SELECT deptcode `key` ,COUNT(*)  `value` FROM  equipment_file
     <if test="_parameter != null">
@@ -596,12 +627,39 @@
     group by rq, xs, deptcode
     order by rq,xs
   </select>
-  <select id="listBylimit" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultMap="BaseResultMap">
+  <select id="statisticsAlarmNums" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultMap="StatisticsResultMap">
     select
-    <if test="distinct">
-      distinct
+    sbbh,rq bjsj,count(*) alarmNum, xs, fz, deptcode
+    from equipment_file
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
     </if>
-    <include refid="Base_Column_List" />
+    group by sbbh, rq, xs, fz, deptcode
+    order by sbbh, rq, xs, fz, deptcode
+  </select>
+  <select id="statisticsAlarmNumsByPage" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultMap="StatisticsResultMap">
+    select
+    sbbh,rq bjsj,count(*) alarmNum, xs, fz, deptcode
+    from equipment_file
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    AND tplj LIKE '%.txt'
+    AND sbbh not like 'TY%'
+    group by sbbh, rq, xs, fz, deptcode
+    order by sbbh, rq, xs, fz, deptcode
+  </select>
+  <select id="getWarningDate"  resultMap="BaseResultMapKV" parameterType="com.pd.server.main.domain.EquipmentFileExample">
+    SELECT  b.`deptname`  , c.`text`  , c.`code` FROM     water_equipment a , dept  b , (
+    SELECT sbbh  `text` ,COUNT(*)  `code`  FROM   equipment_file
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    and   TO_DAYS(cjsj) = TO_DAYS(NOW())  AND tplj LIKE '%.txt' AND sbbh not like 'TY%' GROUP BY sbbh ) c  WHERE a.sbsn = c.text AND  a.deptcode = b.deptcode
+  </select>
+  <select id="selectAudioByExample" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultType="java.lang.String">
+    select
+    wjmc
     from equipment_file
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -609,16 +667,16 @@
     <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
-      limit 100
   </select>
-  <select id="groupByRq" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultMap="StatisticsResultMap">
+  <select id="selectSbbhByExample" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultType="java.lang.String">
     select
-    sbbh,rq bjsj,count(*) alarmNum, deptcode
+    distinct sbbh
     from equipment_file
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
-    group by sbbh, rq, deptcode
-    order by sbbh, rq, deptcode
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
   </select>
 </mapper>

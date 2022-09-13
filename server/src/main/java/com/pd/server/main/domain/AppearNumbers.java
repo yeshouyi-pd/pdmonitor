@@ -7,7 +7,7 @@ public class AppearNumbers {
 
     private String bjsj;
 
-    private Integer alarmnum;
+    private Integer alarmNum;
 
     private String xs;
 
@@ -51,12 +51,12 @@ public class AppearNumbers {
         this.bjsj = bjsj;
     }
 
-    public Integer getAlarmnum() {
-        return alarmnum;
+    public Integer getAlarmNum() {
+        return alarmNum;
     }
 
-    public void setAlarmnum(Integer alarmnum) {
-        this.alarmnum = alarmnum;
+    public void setAlarmNum(Integer alarmNum) {
+        this.alarmNum = alarmNum;
     }
 
     public String getXs() {
@@ -140,7 +140,7 @@ public class AppearNumbers {
         sb.append(", id=").append(id);
         sb.append(", sbbh=").append(sbbh);
         sb.append(", bjsj=").append(bjsj);
-        sb.append(", alarmnum=").append(alarmnum);
+        sb.append(", alarmNum=").append(alarmNum);
         sb.append(", xs=").append(xs);
         sb.append(", fz=").append(fz);
         sb.append(", deptcode=").append(deptcode);

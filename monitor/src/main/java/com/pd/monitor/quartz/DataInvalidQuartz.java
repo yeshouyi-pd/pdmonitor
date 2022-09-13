@@ -32,6 +32,7 @@ public class DataInvalidQuartz {
     @Resource
     private WaterEquiplogService waterEquiplogService;
 
+    //江豚设备
     /**
      * 每10分钟执行一次
      * @throws Exception

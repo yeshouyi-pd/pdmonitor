@@ -20,7 +20,7 @@ public enum RedisCode {
 
     AllUSER("alluser"),//所有用户
 
-    SBSNCENTERCODE("sbsncentercode"),//设备sn对应的监测点
+    SBSNCENTERCODE("sbsncentercode"),//设备sn对应的部门信息
 
     PROJECTCODENAME("project_code_name"),//项目信息缓存
 

@@ -314,63 +314,63 @@ public class AppearNumbersExample {
             return (Criteria) this;
         }
 
-        public Criteria andAlarmnumIsNull() {
-            addCriterion("alarmNum is null");
+        public Criteria andAlarmNumIsNull() {
+            addCriterion("alarm_num is null");
             return (Criteria) this;
         }
 
-        public Criteria andAlarmnumIsNotNull() {
-            addCriterion("alarmNum is not null");
+        public Criteria andAlarmNumIsNotNull() {
+            addCriterion("alarm_num is not null");
             return (Criteria) this;
         }
 
-        public Criteria andAlarmnumEqualTo(Integer value) {
-            addCriterion("alarmNum =", value, "alarmnum");
+        public Criteria andAlarmNumEqualTo(Integer value) {
+            addCriterion("alarm_num =", value, "alarmNum");
             return (Criteria) this;
         }
 
-        public Criteria andAlarmnumNotEqualTo(Integer value) {
-            addCriterion("alarmNum <>", value, "alarmnum");
+        public Criteria andAlarmNumNotEqualTo(Integer value) {
+            addCriterion("alarm_num <>", value, "alarmNum");
             return (Criteria) this;
         }
 
-        public Criteria andAlarmnumGreaterThan(Integer value) {
-            addCriterion("alarmNum >", value, "alarmnum");
+        public Criteria andAlarmNumGreaterThan(Integer value) {
+            addCriterion("alarm_num >", value, "alarmNum");
             return (Criteria) this;
         }
 
-        public Criteria andAlarmnumGreaterThanOrEqualTo(Integer value) {
-            addCriterion("alarmNum >=", value, "alarmnum");
+        public Criteria andAlarmNumGreaterThanOrEqualTo(Integer value) {
+            addCriterion("alarm_num >=", value, "alarmNum");
             return (Criteria) this;
         }
 
-        public Criteria andAlarmnumLessThan(Integer value) {
-            addCriterion("alarmNum <", value, "alarmnum");
+        public Criteria andAlarmNumLessThan(Integer value) {
+            addCriterion("alarm_num <", value, "alarmNum");
             return (Criteria) this;
         }
 
-        public Criteria andAlarmnumLessThanOrEqualTo(Integer value) {
-            addCriterion("alarmNum <=", value, "alarmnum");
+        public Criteria andAlarmNumLessThanOrEqualTo(Integer value) {
+            addCriterion("alarm_num <=", value, "alarmNum");
             return (Criteria) this;
         }
 
-        public Criteria andAlarmnumIn(List<Integer> values) {
-            addCriterion("alarmNum in", values, "alarmnum");
+        public Criteria andAlarmNumIn(List<Integer> values) {
+            addCriterion("alarm_num in", values, "alarmNum");
             return (Criteria) this;
         }
 
-        public Criteria andAlarmnumNotIn(List<Integer> values) {
-            addCriterion("alarmNum not in", values, "alarmnum");
+        public Criteria andAlarmNumNotIn(List<Integer> values) {
+            addCriterion("alarm_num not in", values, "alarmNum");
             return (Criteria) this;
         }
 
-        public Criteria andAlarmnumBetween(Integer value1, Integer value2) {
-            addCriterion("alarmNum between", value1, value2, "alarmnum");
+        public Criteria andAlarmNumBetween(Integer value1, Integer value2) {
+            addCriterion("alarm_num between", value1, value2, "alarmNum");
             return (Criteria) this;
         }
 
-        public Criteria andAlarmnumNotBetween(Integer value1, Integer value2) {
-            addCriterion("alarmNum not between", value1, value2, "alarmnum");
+        public Criteria andAlarmNumNotBetween(Integer value1, Integer value2) {
+            addCriterion("alarm_num not between", value1, value2, "alarmNum");
             return (Criteria) this;
         }
 

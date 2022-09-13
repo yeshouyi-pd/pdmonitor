@@ -16,7 +16,7 @@ public interface EquipmentFileTyTodayMapper {
 
     int insert(EquipmentFileTyToday record);
 
-    int save(EquipmentFileTy record);
+    int insertEquipTy(EquipmentFileTy record);
 
     int insertSelective(EquipmentFileTyToday record);
 

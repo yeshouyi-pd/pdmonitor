@@ -45,6 +45,14 @@ public class EquipmentFileTyToday {
 
     private String sm6;
 
+    private String type;
+
+    private String ts;
+
+    private String txtlx;
+
+    private String wjmc;
+
     public String getId() {
         return id;
     }
@@ -213,6 +221,38 @@ public class EquipmentFileTyToday {
         this.sm6 = sm6;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getTs() {
+        return ts;
+    }
+
+    public void setTs(String ts) {
+        this.ts = ts;
+    }
+
+    public String getTxtlx() {
+        return txtlx;
+    }
+
+    public void setTxtlx(String txtlx) {
+        this.txtlx = txtlx;
+    }
+
+    public String getWjmc() {
+        return wjmc;
+    }
+
+    public void setWjmc(String wjmc) {
+        this.wjmc = wjmc;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -240,6 +280,10 @@ public class EquipmentFileTyToday {
         sb.append(", sm4=").append(sm4);
         sb.append(", sm5=").append(sm5);
         sb.append(", sm6=").append(sm6);
+        sb.append(", type=").append(type);
+        sb.append(", ts=").append(ts);
+        sb.append(", txtlx=").append(txtlx);
+        sb.append(", wjmc=").append(wjmc);
         sb.append("]");
         return sb.toString();
     }

@@ -177,6 +177,7 @@ public class WelcomeController  extends BaseWxController{
                 if(!CollectionUtils.isEmpty(listdept)){
                     equipmentFileExampleca.andDeptcodeIn(listdept);
                 }
+                equipmentFileExampleca.andTxtlxEqualTo("1");
                 List<WelcomeKvDto>  list  =  equipmentFileTodayService.getWarningDate(equipmentFileExample);
                 responseDto.setContent(list);
             }

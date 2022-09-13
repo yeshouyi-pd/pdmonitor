@@ -26,6 +26,10 @@ public class EquipmentFileTyTodayService {
         return equipmentFileTyTodayMapper.selectTodayGps(rq,sbbh);
     }
 
+    public List<EquipmentFileTyToday> selectByExample(EquipmentFileTyTodayExample example){
+        return equipmentFileTyTodayMapper.selectByExample(example);
+    }
+
     /**
     * 列表查询
     */

@@ -1,6 +1,7 @@
 package com.pd.server.main.service.shj;
 
 import com.alibaba.fastjson.JSONObject;
+import com.pd.server.config.RedisCode;
 import com.pd.server.config.SpringUtil;
 import com.pd.server.main.domain.*;
 import com.pd.server.main.mapper.EquipmentFileMapper;
@@ -8,6 +9,7 @@ import com.pd.server.main.mapper.EquipmentFileTodayMapper;
 import com.pd.server.main.mapper.WaterEquipmentMapper;
 import com.pd.server.main.service.AttrService;
 import com.pd.server.util.DateUtil;
+import com.pd.server.util.TypeUtils;
 import com.pd.server.util.UuidUtil;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -45,15 +47,20 @@ public class EquipmentFileShjService extends AbstractScanRequest{
             data = "参数错误";
             return data;
         }
-        //Map<String,String> map = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.SBSNCENTERCODE);
         EquipmentFileMapper equipmentFileMapper = SpringUtil.getBean(EquipmentFileMapper.class);
         EquipmentFileTodayMapper todayMapper = SpringUtil.getBean(EquipmentFileTodayMapper.class);
-        EquipmentFileExample exampleFile = new EquipmentFileExample();
-        EquipmentFileExample.Criteria caFile = exampleFile.createCriteria();
+        EquipmentFileTodayExample exampleTodayFile = new EquipmentFileTodayExample();
+        EquipmentFileTodayExample.Criteria caFile = exampleTodayFile.createCriteria();
         caFile.andTpljEqualTo(tplj);
         caFile.andSbbhEqualTo(sbbh);
-        List<EquipmentFile> comment = equipmentFileMapper.selectByExample(exampleFile);
+        List<EquipmentFileToday> comment = todayMapper.selectByExample(exampleTodayFile);
         if(comment==null || comment.isEmpty()){
+            WaterEquipmentMapper waterEquipmentMapper = SpringUtil.getBean(WaterEquipmentMapper.class);
+            WaterEquipmentExample example = new WaterEquipmentExample();
+            WaterEquipmentExample.Criteria ca = example.createCriteria();
+            ca.andSbsnEqualTo(sbbh);
+            List<WaterEquipment> lists = waterEquipmentMapper.selectByExample(example);
+            String deptcode = lists.get(0).getSbsn();
             EquipmentFile entity = new EquipmentFile();
             entity.setId(UuidUtil.getShortUuid());
             entity.setSbbh(sbbh);
@@ -62,30 +69,21 @@ public class EquipmentFileShjService extends AbstractScanRequest{
             entity.setNf(DateUtil.getFormatDate(entity.getCjsj(),"yyyy"));
             entity.setYf(DateUtil.getFormatDate(entity.getCjsj(),"yyyy-MM"));
             entity.setRq(DateUtil.getFormatDate(entity.getCjsj(),"yyyy-MM-dd"));
-            entity.setXs(DateUtil.getFormatDate(entity.getCjsj(),"HH"));
-            entity.setFz(DateUtil.getFormatDate(entity.getCjsj(),"mm"));
+            entity.setXs(DateUtil.getFormatDate(entity.getCjsj(),"yyyy-MM-dd HH"));
+            entity.setFz(DateUtil.getFormatDate(entity.getCjsj(),"yyyy-MM-dd HH:mm"));
             entity.setLy("1");//实时数据
-            WaterEquipmentMapper waterEquipmentMapper = SpringUtil.getBean(WaterEquipmentMapper.class);
-            WaterEquipmentExample example = new WaterEquipmentExample();
-            WaterEquipmentExample.Criteria ca = example.createCriteria();
-            ca.andSbsnEqualTo(sbbh);
-            List<WaterEquipment> lists = waterEquipmentMapper.selectByExample(example);
-            if(!StringUtils.isEmpty(lists)&&lists.size()>0&&!StringUtils.isEmpty(lists.get(0).getDeptcode())){
-                entity.setDeptcode(lists.get(0).getDeptcode());
+            entity.setDeptcode(deptcode);
+            if(tplj.contains("predation")){
+                entity.setJczl("1");//捕食
             }
             entity.setCreateTime(new Date());
-            if(tplj.contains("predation")&&tplj.contains("txt")){
-                entity.setSm3("1");
-            }else if(tplj.contains("txt")){
-                if(tplj.substring(tplj.lastIndexOf("/")+1,tplj.lastIndexOf(".txt")).length()==19){
-                    entity.setSm3("1");
-                }else{
-                    entity.setSm3("2");
-                    //截取头数
-                    String ts = tplj.substring(tplj.lastIndexOf("/")+21,tplj.lastIndexOf(".txt"));
-                    entity.setSm4("0".equals(ts)?"1":ts);
-                }
-            }
+            //调用方法，传递文件名称，获取wjlx.type,txtlx,ts,wjmc
+            Map<String, String> typeUtil = TypeUtils.getType(tplj.substring(tplj.lastIndexOf("/")+1));
+            entity.setTs(typeUtil.get(TypeUtils.TS));
+            entity.setType(typeUtil.get(TypeUtils.TYPE));
+            entity.setTxtlx(typeUtil.get(TypeUtils.TXTLX));
+            entity.setWjmc(typeUtil.get(TypeUtils.WJMC));
+            entity.setWjlx(typeUtil.get(TypeUtils.WJLX));
             AttrService attrService = SpringUtil.getBean(AttrService.class);
             String predationsbsn = attrService.findByAttrKey("predationsbsn");
             if(predationsbsn.contains(sbbh)&&!tplj.contains("predation")&&tplj.contains("png")){
@@ -98,13 +96,13 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                     beforeEntity = JSONObject.parseObject(entityJson,EquipmentFile.class);
                     if(!StringUtils.isEmpty(beforeEntity.getCjsj())&&isOverThreeMinute(DateUtil.getFormatDate(beforeEntity.getCjsj(),"yyyy-MM-dd HH:mm:ss"),cjsj)){
                         equipmentFileMapper.insert(beforeEntity);
-                        todayMapper.insert(beforeEntity);
+                        todayMapper.insertEquipFile(beforeEntity);
                         redisTstaticemplate.opsForValue().set(sbbh+"WB", JSONObject.toJSONString(entity));
                     }else{
                         EquipmentFile lastFile = equipmentFileMapper.selectLastOneBySbbh(sbbh);
                         if(!StringUtils.isEmpty(beforeEntity.getCjsj())&&!StringUtils.isEmpty(lastFile.getCjsj())&&isOverThreeMinute(DateUtil.getFormatDate(lastFile.getCjsj(),"yyyy-MM-dd HH:mm:ss"),DateUtil.getFormatDate(beforeEntity.getCjsj(),"yyyy-MM-dd HH:mm:ss"))){
                             equipmentFileMapper.insert(beforeEntity);
-                            todayMapper.insert(beforeEntity);
+                            todayMapper.insertEquipFile(beforeEntity);
                         }
                         redisTstaticemplate.opsForValue().set(sbbh+"WB", JSONObject.toJSONString(entity));
                     }
@@ -114,12 +112,9 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                 data="保存成功";
             }else {
                 equipmentFileMapper.insert(entity);
-                todayMapper.insert(entity);
+                todayMapper.insertEquipFile(entity);
                 data="保存成功";
             }
-            equipmentFileMapper.insert(entity);
-            todayMapper.insert(entity);
-            data="保存成功";
             return data;
         }else {
             data="该图片已保存过";

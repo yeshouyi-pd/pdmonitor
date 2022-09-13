@@ -42,41 +42,48 @@ public class EquipmentFileTodayController extends BaseWxController {
     public ResponseDto statisticsAlarmNumsByTimeSum(@RequestBody AlarmNumbersDto alarmNumbersDto) throws ParseException {
         ResponseDto responseDto = new ResponseDto();
         EquipmentFileTodayExample example = new EquipmentFileTodayExample();
+        EquipmentFileTodayExample example1 = new EquipmentFileTodayExample();
         EquipmentFileTodayExample.Criteria ca = example.createCriteria();
+        EquipmentFileTodayExample.Criteria ca1 = example1.createCriteria();
         LoginUserDto userDto = getRequestHeader();
         List<String> deptList = getUpdeptcode(userDto.getDeptcode());
         if(!CollectionUtils.isEmpty(deptList)){
             ca.andDeptcodeIn(deptList);
+            ca1.andDeptcodeIn(deptList);
         }
         if(!StringUtils.isEmpty(alarmNumbersDto.getSbbh())){
             ca.andSbbhEqualTo(alarmNumbersDto.getSbbh());
+            ca1.andSbbhEqualTo(alarmNumbersDto.getSbbh());
         }
         if(!StringUtils.isEmpty(alarmNumbersDto.getDeptcode())){
             ca.andDeptcodeEqualTo(alarmNumbersDto.getDeptcode());
+            ca1.andDeptcodeEqualTo(alarmNumbersDto.getDeptcode());
         }
         if(!StringUtils.isEmpty(alarmNumbersDto.getStime())){
             ca.andRqGreaterThanOrEqualTo(alarmNumbersDto.getStime());
+            ca1.andRqGreaterThanOrEqualTo(alarmNumbersDto.getStime());
         }
         if(!StringUtils.isEmpty(alarmNumbersDto.getEtime())){
             ca.andRqLessThanOrEqualTo(alarmNumbersDto.getEtime());
+            ca1.andRqLessThanOrEqualTo(alarmNumbersDto.getEtime());
         }
-        List<AlarmNumbersDto> lists = equipmentFileTodayService.statisticsAlarmNumsByPage(example);
-        ca.andTpljLike("%txt");
-        List<EquipmentFileToday> allList = equipmentFileTodayService.listAll(example);
+        ca.andTxtlxEqualTo("1");
+        List<AlarmNumbersDto> lists = equipmentFileTodayService.statisticsAlarmNums(example);
+        ca1.andJczlEqualTo("1");
+        List<EquipmentFileToday> predationList = equipmentFileTodayService.listAll(example1);
         List<AlarmNumbersDto> resultList = new ArrayList<>();
         Map<String, List<AlarmNumbersDto>> mapList = lists.stream().collect(Collectors.groupingBy(AlarmNumbersDto::getSbbh));
         for(String key : mapList.keySet()){
             List<AlarmNumbersDto> listsTemp = mapList.get(key);
             if(!CollectionUtils.isEmpty(listsTemp)){
                 AlarmNumbersDto firstEntity = listsTemp.get(0);
-                String curDateStr = firstEntity.getBjsj()+" "+firstEntity.getXs()+":"+firstEntity.getFz();
-                //String lastDateStr = laterThreeMinute(curDateStr);
+                String curDateStr = firstEntity.getFz();
                 Integer bjsl = firstEntity.getAlarmNum();
                 for(int i=1;i<listsTemp.size();i++){
                     AlarmNumbersDto entity = listsTemp.get(i);
                     AlarmNumbersDto beforeEntity = listsTemp.get(i-1);
-                    String beforeDateStr = beforeEntity.getBjsj()+" "+beforeEntity.getXs()+":"+beforeEntity.getFz();
-                    String nextDateStr = entity.getBjsj()+" "+entity.getXs()+":"+entity.getFz();
+                    String beforeDateStr = beforeEntity.getFz();
+                    String nextDateStr = entity.getFz();
                     if(entity.getSbbh().equals(firstEntity.getSbbh())){
                         if(isOverThreeMinute(beforeDateStr, nextDateStr)){
                             bjsl = bjsl + entity.getAlarmNum();
@@ -88,8 +95,7 @@ public class EquipmentFileTodayController extends BaseWxController {
                             result.setAlarmNum(bjsl);
                             resultList.add(result);
                             firstEntity = entity;
-                            curDateStr = firstEntity.getBjsj()+" "+firstEntity.getXs()+":"+firstEntity.getFz();
-                            //lastDateStr = laterThreeMinute(curDateStr);
+                            curDateStr = firstEntity.getFz();
                             bjsl = firstEntity.getAlarmNum();
                         }
                     }else {
@@ -100,8 +106,7 @@ public class EquipmentFileTodayController extends BaseWxController {
                         result.setAlarmNum(bjsl);
                         resultList.add(result);
                         firstEntity = entity;
-                        curDateStr = firstEntity.getBjsj()+" "+firstEntity.getXs()+":"+firstEntity.getFz();
-                        //lastDateStr = laterThreeMinute(curDateStr);
+                        curDateStr = firstEntity.getFz();
                         bjsl = firstEntity.getAlarmNum();
                     }
                     if(i==listsTemp.size()-1){
@@ -128,12 +133,9 @@ public class EquipmentFileTodayController extends BaseWxController {
             Integer alarmNum = resultList.get(i).getAlarmNum();
             num = num + alarmNum;
         }
-        List<EquipmentFileToday> predationList = allList.stream().filter(entity -> entity.getTplj().contains("predation")).collect(Collectors.toList());
         Map<String,Object> map = new HashMap<String, Object>();
-        String sum = String.valueOf(resultList.size());
         map.put("num",num);
         map.put("nnm",resultList.size());
-        map.put("sum",sum.split(""));
         map.put("bnum",predationList.size());
         responseDto.setContent(map);
         return responseDto;
@@ -177,15 +179,19 @@ public class EquipmentFileTodayController extends BaseWxController {
                 ValidatorUtil.length(equipmentFileTodayDto.getFz(), "采集分钟", 1, 20);
                 ValidatorUtil.length(equipmentFileTodayDto.getDeptcode(), "部门", 1, 36);
                 ValidatorUtil.length(equipmentFileTodayDto.getXmbh(), "项目编号", 1, 36);
-                ValidatorUtil.length(equipmentFileTodayDto.getWjlx(), "报警文件类型1图片2音频3视频", 1, 128);
+                ValidatorUtil.length(equipmentFileTodayDto.getWjlx(), "报警文件类型1图片2音频3文件", 1, 128);
                 ValidatorUtil.length(equipmentFileTodayDto.getJczl(), "监测种类1江豚2白海豚", 1, 1);
                 ValidatorUtil.length(equipmentFileTodayDto.getLy(), "来源1实时数据采集2非实时数据分析", 1, 1);
-                ValidatorUtil.length(equipmentFileTodayDto.getSm1(), "", 1, 1024);
-                ValidatorUtil.length(equipmentFileTodayDto.getSm2(), "", 1, 1024);
-                ValidatorUtil.length(equipmentFileTodayDto.getSm3(), "", 1, 1024);
-                ValidatorUtil.length(equipmentFileTodayDto.getSm4(), "", 1, 1024);
-                ValidatorUtil.length(equipmentFileTodayDto.getSm5(), "", 1, 1024);
-                ValidatorUtil.length(equipmentFileTodayDto.getSm6(), "", 1, 1024);
+                ValidatorUtil.length(equipmentFileTodayDto.getSm1(), "坐标原数据", 1, 500);
+                ValidatorUtil.length(equipmentFileTodayDto.getSm2(), "坐标信息", 1, 255);
+                ValidatorUtil.length(equipmentFileTodayDto.getSm3(), "", 1, 255);
+                ValidatorUtil.length(equipmentFileTodayDto.getSm4(), "", 1, 255);
+                ValidatorUtil.length(equipmentFileTodayDto.getSm5(), "", 1, 255);
+                ValidatorUtil.length(equipmentFileTodayDto.getSm6(), "", 1, 255);
+                ValidatorUtil.length(equipmentFileTodayDto.getType(), "type，codeset表中的文件种类", 1, 50);
+                ValidatorUtil.length(equipmentFileTodayDto.getTs(), "sm为2或3的时候才会有数据，表示头数", 1, 10);
+                ValidatorUtil.length(equipmentFileTodayDto.getTxtlx(), "txt文件类型", 1, 5);
+                ValidatorUtil.length(equipmentFileTodayDto.getWjmc(), "文件名称截取，为了查询出对应的音频，文件，图片等数据", 1, 100);
 
         ResponseDto responseDto = new ResponseDto();
         equipmentFileTodayService.save(equipmentFileTodayDto);

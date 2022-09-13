@@ -60,10 +60,11 @@ public class StatisticsDataQuartz {
         EquipmentFileTodayExample example = new EquipmentFileTodayExample();
         EquipmentFileTodayExample.Criteria ca = example.createCriteria();
         ca.andRqEqualTo(beforeDayStr);
-        ca.andSm3EqualTo("1");
+        ca.andTxtlxEqualTo("1");
         List<AlarmNumbersDto> lists = equipmentFileTodayService.statisticsAlarmNums(example);
         for(AlarmNumbersDto item : lists){
             AppearNumbersDto dto = CopyUtil.copy(item,AppearNumbersDto.class);
+            dto.setBjsj(beforeDayStr);
             appearNumbersService.save(dto);
         }
         //出现事件统计，捕食次数统计
@@ -83,14 +84,14 @@ public class StatisticsDataQuartz {
             List<AlarmNumbersDto> resultList = new ArrayList<>();
             if(!CollectionUtils.isEmpty(listsTemp)){
                 AlarmNumbersDto firstEntity = listsTemp.get(0);
-                String curDateStr = firstEntity.getBjsj()+" "+firstEntity.getXs()+":"+firstEntity.getFz();
+                String curDateStr = firstEntity.getFz();
                 //String lastDateStr = laterThreeMinute(curDateStr);
                 Integer bjsl = firstEntity.getAlarmNum();
                 for(int i=1;i<listsTemp.size();i++){
                     AlarmNumbersDto entity = listsTemp.get(i);
                     AlarmNumbersDto beforeEntity = listsTemp.get(i-1);
-                    String beforeDateStr = beforeEntity.getBjsj()+" "+beforeEntity.getXs()+":"+beforeEntity.getFz();
-                    String nextDateStr = entity.getBjsj()+" "+entity.getXs()+":"+entity.getFz();
+                    String beforeDateStr = beforeEntity.getFz();
+                    String nextDateStr = entity.getFz();
                     if(entity.getSbbh().equals(firstEntity.getSbbh())){
                         if(isOverThreeMinute(beforeDateStr, nextDateStr)){
                             bjsl = bjsl + entity.getAlarmNum();
@@ -102,8 +103,7 @@ public class StatisticsDataQuartz {
                             result.setAlarmNum(bjsl);
                             resultList.add(result);
                             firstEntity = entity;
-                            curDateStr = firstEntity.getBjsj()+" "+firstEntity.getXs()+":"+firstEntity.getFz();
-                            //lastDateStr = laterThreeMinute(curDateStr);
+                            curDateStr = firstEntity.getFz();
                             bjsl = firstEntity.getAlarmNum();
                         }
                     }else {
@@ -114,8 +114,7 @@ public class StatisticsDataQuartz {
                         result.setAlarmNum(bjsl);
                         resultList.add(result);
                         firstEntity = entity;
-                        curDateStr = firstEntity.getBjsj()+" "+firstEntity.getXs()+":"+firstEntity.getFz();
-                        //lastDateStr = laterThreeMinute(curDateStr);
+                        curDateStr = firstEntity.getFz();
                         bjsl = firstEntity.getAlarmNum();
                     }
                     if(i==listsTemp.size()-1){
@@ -154,9 +153,9 @@ public class StatisticsDataQuartz {
                     EquipmentFileTodayExample tsExample = new EquipmentFileTodayExample();
                     EquipmentFileTodayExample.Criteria tsCa = tsExample.createCriteria();
                     tsCa.andSbbhEqualTo(key);
-                    tsCa.andSm3EqualTo("2");
-                    tsCa.andCjsjGreaterThanOrEqualTo(DateUtil.toDate(kssj,"yyyy-MM-dd HH:mm:ss"));
-                    tsCa.andCjsjLessThanOrEqualTo(DateUtil.toDate(jssj,"yyyy-MM-dd HH:mm:ss"));
+                    tsCa.andTxtlxEqualTo("2");
+                    tsCa.andFzGreaterThanOrEqualTo(arr[0]);
+                    tsCa.andFzLessThanOrEqualTo(arr[1]);
                     int tsCount = equipmentFileTodayService.countTsByExample(tsExample);
                     if(!StringUtils.isEmpty(tsCount)){
                         entity.setSm1(String.valueOf(tsCount));
@@ -179,11 +178,7 @@ public class StatisticsDataQuartz {
             EquipmentFileTodayExample example1 = new EquipmentFileTodayExample();
             EquipmentFileTodayExample.Criteria ca1 = example1.createCriteria();
             ca1.andRqEqualTo(beforeDayStr);
-            ca1.andTpljLike("%predation%");
-            ca1.andSm3EqualTo("1");
-            if(!StringUtils.isEmpty(alarmNumbersDto.getDeptcode())){
-                ca1.andDeptcodeEqualTo(alarmNumbersDto.getDeptcode());
-            }
+            ca1.andJczlEqualTo("1");
             ca1.andSbbhEqualTo(alarmNumbersDto.getSbbh());
             List<EquipmentFileToday> predationList = equipmentFileTodayService.listAll(example1);
             PredationNumDto dto = new PredationNumDto();
@@ -251,4 +246,5 @@ public class StatisticsDataQuartz {
         }
         return false;
     }
+
 }

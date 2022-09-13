@@ -73,12 +73,12 @@
 <!--          <div style="margin: 0 auto;">{{item.cjsj}}</div>-->
           <div style="margin: 0 auto;word-wrap: break-word;">{{item.tplj.substring(item.tplj.lastIndexOf("/")+1,item.tplj.length)}}</div>
           <div style="margin: 0 auto;" v-if="item.hasAudio">
-            <button class="btn btn-white btn-default btn-round" style="margin: 0 auto;" v-on:click="downloadAudio(item)">
+            <button class="btn btn-white btn-default btn-round" style="margin: 0 auto;" v-on:click="download(item)">
               <i class="ace-icon fa fa-volume-down red2">下载音频</i>
             </button>
           </div>
           <div style="margin: 0 auto;">
-            <button class="btn btn-white btn-default btn-round" style="margin: 0 auto;" v-on:click="downloadTxt(item)">
+            <button class="btn btn-white btn-default btn-round" style="margin: 0 auto;" v-on:click="download(item)">
               <i class="ace-icon fa fa-volume-down red2">发现头数</i>
             </button>
           </div>
@@ -169,7 +169,6 @@ export default {
       equipmentFileDto:{},
       equipmentFile:{},
       maxHeight:'',
-      sbbhs:[],
       curIndex:0,
       curTplj:'',
       curSbsn:'',
@@ -180,12 +179,8 @@ export default {
   },
   mounted() {
     let _this = this;
-    // let curDate = new Date();
-    // _this.equipmentFileDto.stime=Tool.dateFormat("yyyy-MM-dd",new Date(curDate.getTime()-3600000*24*6));
-    // _this.equipmentFileDto.etime=Tool.dateFormat("yyyy-MM-dd",curDate);
     _this.$refs.pagination.size = 24;
     _this.list(1);
-    _this.findSbbh();
     let h = document.documentElement.clientHeight || document.body.clientHeight;
     _this.maxHeight = h*0.8;
     _this.findDeviceInfo();
@@ -261,18 +256,6 @@ export default {
         _this.$refs.pagination.render(page, resp.content.total);
       })
     },
-    findSbbh(){
-      let _this = this;
-      let data = {};
-      if("460100"!=Tool.getLoginUser().deptcode){
-        data = {'xmbh':Tool.getLoginUser().xmbh};
-      }
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFile/findSbbh', data).then((response)=>{
-        Loading.hide();
-        let resp = response.data;
-        _this.sbbhs = resp.content;
-      })
-    },
     /**
      * 查看原图
      */
@@ -288,25 +271,9 @@ export default {
       $("#img-modal").modal("show");
     },
     /**
-     * 下载音频
+     * 下载
      */
-    downloadAudio(obj){
-      //console.log(obj.txtSrc.substring(obj.txtSrc.lastIndexOf("/")+1,obj.txtSrc.length));
-      let _this = this;
-      if(!obj.hasAudio){
-        Toast.warning("该图片没有对应的音频文件！");
-        return;
-      }
-      let paramsStr = "fileUrl="+obj.tplj.substring(0,obj.tplj.lastIndexOf("/")+1)+"&fileName="+obj.tplj.substring(obj.tplj.lastIndexOf("/")+1,obj.tplj.length-3)+"wav";
-      //let paramsStr = "fileUrl="+obj.tplj.substring(0,obj.tplj.lastIndexOf("/")+1)+"&fileName="+obj.txtSrc.substring(obj.txtSrc.lastIndexOf("/")+1,obj.txtSrc.length);
-      let url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downAudioFile?'+paramsStr;
-      console.log(url);
-      window.location.href = url;
-    },
-    downloadTxt(obj){
-      //console.log(obj.txtSrc.substring(obj.txtSrc.lastIndexOf("/")+1,obj.txtSrc.length));
-      let _this = this;
-      //let paramsStr = "fileUrl="+obj.tplj.substring(0,obj.tplj.lastIndexOf("/")+1)+"&fileName="+obj.txtSrc.substring(obj.txtSrc.lastIndexOf("/")+1,obj.txtSrc.length);
+    download(obj){
       let paramsStr = "fileUrl="+obj.tplj.substring(0,obj.tplj.lastIndexOf("/")+1)+"&fileName="+obj.tplj.substring(obj.tplj.lastIndexOf("/")+1,obj.tplj.length);
       let url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downAudioFile?'+paramsStr;
       console.log(url);

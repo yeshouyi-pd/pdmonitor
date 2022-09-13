@@ -79,15 +79,19 @@ public class EquipmentFileTyTodayController {
                 ValidatorUtil.length(equipmentFileTyTodayDto.getFz(), "采集分钟", 1, 20);
                 ValidatorUtil.length(equipmentFileTyTodayDto.getDeptcode(), "部门", 1, 36);
                 ValidatorUtil.length(equipmentFileTyTodayDto.getXmbh(), "项目编号", 1, 36);
-                ValidatorUtil.length(equipmentFileTyTodayDto.getWjlx(), "报警文件类型1图片2音频3视频", 1, 128);
+                ValidatorUtil.length(equipmentFileTyTodayDto.getWjlx(), "报警文件类型1图片2音频3文件", 1, 128);
                 ValidatorUtil.length(equipmentFileTyTodayDto.getJczl(), "监测种类1江豚2白海豚", 1, 1);
                 ValidatorUtil.length(equipmentFileTyTodayDto.getLy(), "来源1实时数据采集2非实时数据分析", 1, 1);
-                ValidatorUtil.length(equipmentFileTyTodayDto.getSm1(), "", 1, 1024);
-                ValidatorUtil.length(equipmentFileTyTodayDto.getSm2(), "", 1, 1024);
-                ValidatorUtil.length(equipmentFileTyTodayDto.getSm3(), "", 1, 1024);
-                ValidatorUtil.length(equipmentFileTyTodayDto.getSm4(), "", 1, 1024);
-                ValidatorUtil.length(equipmentFileTyTodayDto.getSm5(), "", 1, 1024);
-                ValidatorUtil.length(equipmentFileTyTodayDto.getSm6(), "", 1, 1024);
+                ValidatorUtil.length(equipmentFileTyTodayDto.getSm1(), "坐标原数据", 1, 500);
+                ValidatorUtil.length(equipmentFileTyTodayDto.getSm2(), "坐标信息", 1, 255);
+                ValidatorUtil.length(equipmentFileTyTodayDto.getSm3(), "", 1, 255);
+                ValidatorUtil.length(equipmentFileTyTodayDto.getSm4(), "", 1, 255);
+                ValidatorUtil.length(equipmentFileTyTodayDto.getSm5(), "", 1, 255);
+                ValidatorUtil.length(equipmentFileTyTodayDto.getSm6(), "", 1, 255);
+                ValidatorUtil.length(equipmentFileTyTodayDto.getType(), "type，codeset表中的文件种类", 1, 50);
+                ValidatorUtil.length(equipmentFileTyTodayDto.getTs(), "头数", 1, 10);
+                ValidatorUtil.length(equipmentFileTyTodayDto.getTxtlx(), "txt文件类型", 1, 5);
+                ValidatorUtil.length(equipmentFileTyTodayDto.getWjmc(), "文件名称截取，为了查询出对应的音频，文件，图片等数据", 1, 100);
 
         ResponseDto responseDto = new ResponseDto();
         equipmentFileTyTodayService.save(equipmentFileTyTodayDto);
