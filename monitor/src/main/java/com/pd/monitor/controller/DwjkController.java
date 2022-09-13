@@ -131,20 +131,6 @@ public class DwjkController extends BaseWxController {
                     interfaceLogService.save(interfaceLog);
                     return responseDto;
                 }
-                InterfaceLogExample interfaceLogExample = new InterfaceLogExample();
-                InterfaceLogExample.Criteria logCa = interfaceLogExample.createCriteria();
-                logCa.andQqryEqualTo(qqcs.get("dwmc").toString());
-                logCa.andIpEqualTo(qqcs.get("ip").toString());
-                logCa.andQqsjEqualTo(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd HH"));
-                List<InterfaceLog> list = interfaceLogService.listAll(interfaceLogExample);
-                String reqNum = attrService.findByAttrKey("reqNum");
-                if(list.size()>=Integer.parseInt(reqNum)){
-                    responseDto.setCode("4000");
-                    responseDto.setContent("该时段请求次数已达上限，请稍后重试！");
-                    interfaceLog.setFhsj(JSONObject.toJSONString(responseDto));
-                    interfaceLogService.save(interfaceLog);
-                    return responseDto;
-                }
                 EquipmentFileExample fileExample = new EquipmentFileExample();
                 EquipmentFileExample.Criteria fileCa = fileExample.createCriteria();
                 fileCa.andSbbhEqualTo(qqcs.get("sbsn").toString());
