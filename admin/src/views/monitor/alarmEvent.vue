@@ -317,7 +317,7 @@ export default {
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileAlarmEvent/detailByParam', {
         'sbbh':alarmEvent.sbbh,
         'deptcode':alarmEvent.deptcode,
-        'bjsj':alarmEvent.bjsj
+        'bjsj':alarmEvent.cjsj
       }).then((response)=>{
         Loading.hide();
         let resp = response.data;

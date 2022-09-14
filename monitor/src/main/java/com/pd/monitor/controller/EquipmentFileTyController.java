@@ -67,9 +67,9 @@ public class EquipmentFileTyController extends BaseWxController {
         }
         example.setOrderByClause(" cjsj desc ");
         List<EquipmentFileTy> lists = equipmentFileTyService.lists(example);
-        List<EquipmentFileTyDto> listsDto = CopyUtil.copyList(lists,EquipmentFileTyDto.class);
-        PageInfo<EquipmentFileTyDto> pageInfo = new PageInfo<>(listsDto);
+        PageInfo<EquipmentFileTy> pageInfo = new PageInfo<>(lists);
         pageDto.setTotal(pageInfo.getTotal());
+        List<EquipmentFileTyDto> listsDto = CopyUtil.copyList(lists,EquipmentFileTyDto.class);
         pageDto.setList(listsDto);
         responseDto.setContent(pageDto);
         return responseDto;
