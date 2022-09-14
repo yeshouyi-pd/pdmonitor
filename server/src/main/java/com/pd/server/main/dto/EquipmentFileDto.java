@@ -136,12 +136,6 @@ public class EquipmentFileDto extends PageDto{
 
     private  PlayDto playDto;
 
-    private String txtSrc;
-
-    private boolean hasTxt;
-
-    private boolean hasAudio;//图片是否有对应的音频
-
     public String getId() {
         return id;
     }
@@ -356,30 +350,6 @@ public class EquipmentFileDto extends PageDto{
 
     public void setPlayDto(PlayDto playDto) {
         this.playDto = playDto;
-    }
-
-    public String getTxtSrc() {
-        return txtSrc;
-    }
-
-    public void setTxtSrc(String txtSrc) {
-        this.txtSrc = txtSrc;
-    }
-
-    public boolean isHasTxt() {
-        return hasTxt;
-    }
-
-    public void setHasTxt(boolean hasTxt) {
-        this.hasTxt = hasTxt;
-    }
-
-    public boolean isHasAudio() {
-        return hasAudio;
-    }
-
-    public void setHasAudio(boolean hasAudio) {
-        this.hasAudio = hasAudio;
     }
 
     @Override
