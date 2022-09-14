@@ -66,8 +66,8 @@
     <div>
       <div style="display: flex;flex-wrap: wrap;margin-bottom: 30px;">
         <div v-for="(item,index) in equipmentFiles" style="margin:20px;width: 150px;height: 310px;text-align: center;">
-          <div style="text-align: center;width: 100px;margin: 0 auto;" v-if="item.type!=1009&&item.type!=1010">
-            <img :src="item.tplj.substring(0,item.tplj.lastIndexOf('.')+1)+'jpg'" style="width: 100px;height: 200px;cursor: pointer;" v-on:click="checkImg(item,index)">
+          <div style="text-align: center;width: 100px;margin: 0 auto;">
+            <img alt="无图片" :src="item.tplj.substring(0,item.tplj.lastIndexOf('.')+1)+'jpg'" style="width: 100px;height: 200px;cursor: pointer;" v-on:click="checkImg(item,index)">
           </div>
           <div style="margin: 0 auto;">{{waterEquipments|optionNSArray(item.sbbh)}}</div>
           <div style="margin: 0 auto;word-wrap: break-word;">{{item.tplj.substring(item.tplj.lastIndexOf("/")+1,item.tplj.length)}}</div>
@@ -255,6 +255,18 @@ export default {
         _this.$refs.pagination.render(page, resp.content.total);
       })
     },
+    checkImgExists(imgurl){
+      return new Promise(function (resolve, reject){
+        let imgObj = new Image();
+        imgObj.src = imgurl;
+        imgObj.onload = function (res) {
+          resolve(res);
+        }
+        imgObj.onerror = function (err) {
+          reject(err);
+        }
+      })
+    },
     /**
      * 查看原图
      */
@@ -283,7 +295,7 @@ export default {
       let paramsStr = "fileUrl="+lj.substring(0,lj.lastIndexOf("/")+1)+"&fileName="+lj.substring(lj.lastIndexOf("/")+1,lj.length);
       let url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downAudioFile?'+paramsStr;
       _this.$ajax.get(url).then((response)=>{
-        if(response.data.includes("未找到该文件")){
+        if(response.data.includes("系统异常")){
           Toast.error("未找到该文件！");
         }else{
           window.location.href = url;
