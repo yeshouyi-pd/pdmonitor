@@ -255,18 +255,6 @@ export default {
         _this.$refs.pagination.render(page, resp.content.total);
       })
     },
-    checkImgExists(imgurl){
-      return new Promise(function (resolve, reject){
-        let imgObj = new Image();
-        imgObj.src = imgurl;
-        imgObj.onload = function (res) {
-          resolve(res);
-        }
-        imgObj.onerror = function (err) {
-          reject(err);
-        }
-      })
-    },
     /**
      * 查看原图
      */
