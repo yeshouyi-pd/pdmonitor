@@ -177,7 +177,6 @@ public class EquipmentFileController extends BaseWxController {
     @PostMapping("/lists")
     public ResponseDto lists(@RequestBody EquipmentFileDto pageDto){
         ResponseDto responseDto = new ResponseDto();
-        LoginUserDto user = getRequestHeader();
         PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
         EquipmentFileExample equipmentFileExample = new EquipmentFileExample();
         EquipmentFileExample.Criteria ca = equipmentFileExample.createCriteria();
@@ -198,9 +197,9 @@ public class EquipmentFileController extends BaseWxController {
         }else{
             lists = equipmentFileService.lists(equipmentFileExample);
         }
-        List<EquipmentFileDto> listDto = CopyUtil.copyList(lists, EquipmentFileDto.class);
-        PageInfo<EquipmentFileDto> pageInfo = new PageInfo<>(listDto);
+        PageInfo<EquipmentFile> pageInfo = new PageInfo<>(lists);
         pageDto.setTotal(pageInfo.getTotal());
+        List<EquipmentFileDto> listDto = CopyUtil.copyList(lists, EquipmentFileDto.class);
         pageDto.setList(listDto);
         responseDto.setContent(pageDto);
         return responseDto;
