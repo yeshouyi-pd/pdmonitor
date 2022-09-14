@@ -9,6 +9,7 @@ import com.pd.server.main.domain.EquipmentFileTy;
 import com.pd.server.main.domain.EquipmentFileTyExample;
 import com.pd.server.main.dto.*;
 import com.pd.server.main.service.EquipmentFileTyService;
+import com.pd.server.util.CopyUtil;
 import com.pd.server.util.ValidatorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,9 +67,10 @@ public class EquipmentFileTyController extends BaseWxController {
         }
         example.setOrderByClause(" cjsj desc ");
         List<EquipmentFileTy> lists = equipmentFileTyService.lists(example);
-        PageInfo<EquipmentFileTy> pageInfo = new PageInfo<>(lists);
+        List<EquipmentFileTyDto> listsDto = CopyUtil.copyList(lists,EquipmentFileTyDto.class);
+        PageInfo<EquipmentFileTyDto> pageInfo = new PageInfo<>(listsDto);
         pageDto.setTotal(pageInfo.getTotal());
-        pageDto.setList(lists);
+        pageDto.setList(listsDto);
         responseDto.setContent(pageDto);
         return responseDto;
     }
