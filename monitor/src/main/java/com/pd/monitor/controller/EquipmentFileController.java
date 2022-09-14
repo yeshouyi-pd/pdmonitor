@@ -12,6 +12,7 @@ import com.pd.server.main.dto.*;
 import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
 import com.pd.server.main.service.EquipmentFileService;
 import com.pd.server.main.service.WaterEquipmentService;
+import com.pd.server.util.CopyUtil;
 import com.pd.server.util.DateTools;
 import com.pd.server.util.DateUtil;
 import com.pd.server.util.ValidatorUtil;
@@ -163,24 +164,11 @@ public class EquipmentFileController extends BaseWxController {
         return responseDto;
     }
 
-    /**
-    * 列表查询
-    */
-    @PostMapping("/list")
-    public ResponseDto list(@RequestBody EquipmentFileDto pageDto) {
-        ResponseDto responseDto = new ResponseDto();
-        LoginUserDto user = getRequestHeader();
-        List<String> list = getUpdeptcode(user.getDeptcode());
-        equipmentFileService.list(pageDto,list,user);
-        responseDto.setContent(pageDto);
-        return responseDto;
-    }
-
-    @PostMapping("/detail/{tpmc}")
-    public ResponseDto detail(@PathVariable String tpmc){
+    @PostMapping("/detail/{wjmc}")
+    public ResponseDto detail(@PathVariable String wjmc){
         ResponseDto responseDto = new ResponseDto();
         EquipmentFileExample example = new EquipmentFileExample();
-        example.createCriteria().andTpljLike("%"+tpmc+"%");
+        example.createCriteria().andWjmcEqualTo(wjmc);
         List<EquipmentFile> lists = equipmentFileService.listAll(example);
         responseDto.setContent(lists);
         return responseDto;
@@ -202,17 +190,18 @@ public class EquipmentFileController extends BaseWxController {
         if(!StringUtils.isEmpty(pageDto.getSbbh())){
             ca.andSbbhEqualTo(pageDto.getSbbh());//
         }
-        if(!StringUtils.isEmpty(pageDto.getXmbh())){
-            if(!CollectionUtils.isEmpty(user.getXmbhsbsns().get(pageDto.getXmbh()))){
-                ca.andSbbhIn(user.getXmbhsbsns().get(pageDto.getXmbh()));
-            }
-        }
         ca.andTxtlxEqualTo("1");
         equipmentFileExample.setOrderByClause(" cjsj desc ");
-        List<EquipmentFile> lists = equipmentFileService.lists(equipmentFileExample);
-        PageInfo<EquipmentFile> pageInfo = new PageInfo<>(lists);
+        List<EquipmentFile> lists = new ArrayList<>();
+        if(!StringUtils.isEmpty(pageDto.getXmbh())){
+            lists = equipmentFileService.selectByExampleSpecial(pageDto);
+        }else{
+            lists = equipmentFileService.lists(equipmentFileExample);
+        }
+        List<EquipmentFileDto> listDto = CopyUtil.copyList(lists, EquipmentFileDto.class);
+        PageInfo<EquipmentFileDto> pageInfo = new PageInfo<>(listDto);
         pageDto.setTotal(pageInfo.getTotal());
-        pageDto.setList(lists);
+        pageDto.setList(listDto);
         responseDto.setContent(pageDto);
         return responseDto;
     }

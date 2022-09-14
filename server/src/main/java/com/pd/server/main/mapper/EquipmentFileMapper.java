@@ -4,6 +4,7 @@ import com.pd.server.main.domain.EquipmentFile;
 import com.pd.server.main.domain.EquipmentFileExample;
 import java.util.List;
 
+import com.pd.server.main.dto.EquipmentFileDto;
 import com.pd.server.main.dto.KvIntDto;
 import com.pd.server.main.dto.WelcomeKvDto;
 import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
@@ -21,6 +22,8 @@ public interface EquipmentFileMapper {
     int insertSelective(EquipmentFile record);
 
     List<EquipmentFile> selectByExample(EquipmentFileExample example);
+
+    List<EquipmentFile> selectByExampleSpecial(@Param("record") EquipmentFileDto record);
 
     EquipmentFile selectByPrimaryKey(String id);
 

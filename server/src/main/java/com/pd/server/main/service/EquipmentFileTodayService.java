@@ -88,8 +88,8 @@ public class EquipmentFileTodayService {
     /**
     * 更新
     */
-    private void update(EquipmentFileToday equipmentFileToday) {
-        equipmentFileTodayMapper.updateByPrimaryKey(equipmentFileToday);
+    public void update(EquipmentFileToday equipmentFileToday) {
+        equipmentFileTodayMapper.updateByPrimaryKeySelective(equipmentFileToday);
     }
 
     /**

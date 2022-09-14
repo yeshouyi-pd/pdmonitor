@@ -36,6 +36,8 @@ public class StatisticsDataQuartz {
     @Resource
     private EquipmentFileTodayService equipmentFileTodayService;
     @Resource
+    private EquipmentFileTyTodayService equipmentFileTyTodayService;
+    @Resource
     private AppearNumbersService appearNumbersService;
     @Resource
     private EquipmentFileAlarmEventService equipmentFileAlarmEventService;
@@ -201,15 +203,25 @@ public class StatisticsDataQuartz {
             }
             predationNumService.save(dto);
         }
+        clearTodayData();
+    }
+
+    public void clearTodayData(){
         //清除数据
         /**
-         * EquipmentFileToday只保存当天数据，凌晨一点清除前一天的数据
+         * EquipmentFileToday,EquipmentFileTyToday只保存当天数据，凌晨一点清除前一天的数据
          */
         EquipmentFileTodayExample todayExample = new EquipmentFileTodayExample();
         todayExample.createCriteria().andRqLessThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(),-1),"yyyy-MM-dd"));
         List<EquipmentFileToday> list = equipmentFileTodayService.listAll(todayExample);
         for(EquipmentFileToday entity : list){
             equipmentFileTodayService.delete(entity.getId());
+        }
+        EquipmentFileTyTodayExample tyExample = new EquipmentFileTyTodayExample();
+        tyExample.createCriteria().andRqLessThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(),-1),"yyyy-MM-dd"));
+        List<EquipmentFileTyToday> tyTodayList = equipmentFileTyTodayService.selectByExample(tyExample);
+        for(EquipmentFileTyToday entity : tyTodayList){
+            equipmentFileTyTodayService.delete(entity.getId());
         }
     }
 

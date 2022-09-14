@@ -41,71 +41,12 @@ public class EquipmentFileService {
         return equipmentFileMapper.statisticsAlarmNumsByHour(example);
     }
 
-    /**
-    * 列表查询
-    */
-    public void list(EquipmentFileDto pageDto, List<String> list, LoginUserDto user) {
-        EquipmentFileExample audioExample = new EquipmentFileExample();
-        EquipmentFileExample.Criteria audioCa = audioExample.createCriteria();
-        EquipmentFileExample example = new EquipmentFileExample();
-        EquipmentFileExample.Criteria txtCa = example.createCriteria();
-        EquipmentFileExample equipmentFileExample = new EquipmentFileExample();
-        EquipmentFileExample.Criteria ca = equipmentFileExample.createCriteria();
-        if(!StringUtils.isEmpty(pageDto.getStime())){
-            audioCa.andRqGreaterThanOrEqualTo(pageDto.getStime());
-            txtCa.andRqGreaterThanOrEqualTo(pageDto.getStime());
-            ca.andRqGreaterThanOrEqualTo(pageDto.getStime());
-        }else{
-            audioCa.andRqGreaterThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(),-6),"yyyy-MM-dd"));
-            txtCa.andRqGreaterThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(),-6),"yyyy-MM-dd"));
-            ca.andRqGreaterThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(),-6),"yyyy-MM-dd"));
-        }
-        if(!StringUtils.isEmpty(pageDto.getEtime())){
-            audioCa.andRqLessThanOrEqualTo(pageDto.getEtime());
-            txtCa.andRqLessThanOrEqualTo(pageDto.getEtime());
-            ca.andRqLessThanOrEqualTo(pageDto.getEtime());
-        }else{
-            audioCa.andRqLessThanOrEqualTo(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd"));
-            txtCa.andRqLessThanOrEqualTo(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd"));
-            ca.andRqLessThanOrEqualTo(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd"));
-        }
-        if(!StringUtils.isEmpty(pageDto.getSbbh())){
-            audioCa.andSbbhEqualTo(pageDto.getSbbh());
-            txtCa.andSbbhEqualTo(pageDto.getSbbh());
-            ca.andSbbhEqualTo(pageDto.getSbbh());
-        }
-        if(!StringUtils.isEmpty(pageDto.getTplj())&&"predation".equals(pageDto.getTplj())){
-            audioCa.andJczlEqualTo("1");
-            txtCa.andJczlEqualTo("1");
-            ca.andJczlEqualTo("1");
-        }
-        audioCa.andWjlxEqualTo("2");
-        List<String> audioFileList = equipmentFileMapper.selectAudioByExample(audioExample);
-        txtCa.andWjlxEqualTo("1");
-        List<String> txtFileList = equipmentFileMapper.selectAudioByExample(example);
-        PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
-        ca.andTxtlxEqualTo("1");
-        equipmentFileExample.setOrderByClause(" cjsj desc ");
-        List<EquipmentFile> equipmentFileList = equipmentFileMapper.selectByExample(equipmentFileExample);
-        PageInfo<EquipmentFile> pageInfo = new PageInfo<>(equipmentFileList);
-        pageDto.setTotal(pageInfo.getTotal());
-        List<EquipmentFileDto> equipmentFileDtoList = CopyUtil.copyList(equipmentFileList, EquipmentFileDto.class);
-        for(EquipmentFileDto item : equipmentFileDtoList){
-            if(audioFileList.contains(item.getWjmc())){
-                item.setHasAudio(true);
-            }else{
-                item.setHasAudio(false);
-            }
-            item.setHasTxt(false);
-            for(String str : txtFileList){
-                if(str.contains(item.getWjmc())){
-                    item.setHasTxt(true);
-                    item.setTxtSrc(item.getTplj());
-                    break;
-                }
-            }
-        }
-        pageDto.setList(equipmentFileDtoList);
+    public List<EquipmentFile> selectByExampleSpecial(EquipmentFileDto record){
+        return equipmentFileMapper.selectByExampleSpecial(record);
+    }
+
+    public EquipmentFile selectByPrimaryKey(String id){
+        return equipmentFileMapper.selectByPrimaryKey(id);
     }
 
     public List<EquipmentFile> lists(EquipmentFileExample equipmentFileExample){
@@ -142,8 +83,8 @@ public class EquipmentFileService {
     /**
     * 更新
     */
-    private void update(EquipmentFile equipmentFile) {
-        equipmentFileMapper.updateByPrimaryKey(equipmentFile);
+    public void update(EquipmentFile equipmentFile) {
+        equipmentFileMapper.updateByPrimaryKeySelective(equipmentFile);
     }
 
     /**

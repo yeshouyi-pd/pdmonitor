@@ -62,7 +62,7 @@
           <td>{{deptMap|optionMapKV(item.deptcode)}}</td>
           <td>{{waterEquipments|optionNSArray(item.sbbh)}}</td>
           <td>{{item.sbbh}}</td>
-          <td>{{item.cjsj}}</td>
+          <td>{{moment(item.cjsj).format("YYYY-MM-DD HH:mm:ss")}}</td>
           <td><span v-if="item.tplj.includes('predation')">捕食</span><span v-else>出现</span></td>
           <td>
             <div class="hidden-sm hidden-xs btn-group">
@@ -205,13 +205,7 @@ export default {
     detail(item){
       let _this = this;
       Loading.show();
-      let tpmc = "";
-      if(item.tplj.includes("predation")){
-        tpmc = item.tplj.substring(item.tplj.lastIndexOf("/")+1,item.tplj.lastIndexOf("_predation.txt"));
-      }else{
-        tpmc = item.tplj.substring(item.tplj.lastIndexOf("/")+1,item.tplj.lastIndexOf(".txt"));
-      }
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFile/detail/'+tpmc, {}).then((response) => {
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFile/detail/'+item.wjmc, {}).then((response) => {
         Loading.hide();
         let resp = response.data;
         _this.details = resp.content;

@@ -1,7 +1,6 @@
 package com.pd.monitor.quartz;
 
 import com.pd.server.main.domain.*;
-import com.pd.server.main.service.EquipmentFileTodayService;
 import com.pd.server.main.service.InterfaceLogService;
 import com.pd.server.main.service.WaterEquiplogService;
 import com.pd.server.util.DateUtil;
@@ -12,7 +11,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.util.Date;
 import java.util.List;
 
 @Component
@@ -21,8 +19,6 @@ public class ClearDataQuartz {
 
     private static final Logger LOG = LoggerFactory.getLogger(ClearDataQuartz.class);
 
-    @Resource
-    private EquipmentFileTodayService todayService;
     @Resource
     private InterfaceLogService interfaceLogService;
     @Resource
@@ -50,5 +46,4 @@ public class ClearDataQuartz {
             waterEquiplogService.delete(entity.getId());
         }
     }
-
 }
