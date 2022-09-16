@@ -19,6 +19,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -50,13 +51,13 @@ public class AppearNumbersController extends BaseWxController {
         if(!StringUtils.isEmpty(pageDto.getSbbh())){
             ca.andSbbhEqualTo(pageDto.getSbbh());
         }
-        if(!StringUtils.isEmpty(pageDto.getXmbh())){
-            if(!CollectionUtils.isEmpty(userDto.getXmbhsbsns().get(pageDto.getXmbh()))){
-                ca.andSbbhIn(userDto.getXmbhsbsns().get(pageDto.getXmbh()));
-            }
-        }
         example.setOrderByClause(" fz desc ");
-        List<AppearNumbers> appearNumbersList = appearNumbersService.list(example);
+        List<AppearNumbers> appearNumbersList = new ArrayList<>();
+        if(!StringUtils.isEmpty(pageDto.getXmbh())){
+            appearNumbersList = appearNumbersService.selectByExampleSpecial(pageDto);
+        }else{
+            appearNumbersList = appearNumbersService.list(example);
+        }
         PageInfo<AppearNumbers> pageInfo = new PageInfo<>(appearNumbersList);
         pageDto.setTotal(pageInfo.getTotal());
         List<AppearNumbersDto> appearNumbersDtoList = CopyUtil.copyList(appearNumbersList, AppearNumbersDto.class);

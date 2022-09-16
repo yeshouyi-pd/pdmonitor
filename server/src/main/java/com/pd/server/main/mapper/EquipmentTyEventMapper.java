@@ -3,6 +3,8 @@ package com.pd.server.main.mapper;
 import com.pd.server.main.domain.EquipmentTyEvent;
 import com.pd.server.main.domain.EquipmentTyEventExample;
 import java.util.List;
+
+import com.pd.server.main.dto.EquipmentTyEventDto;
 import org.apache.ibatis.annotations.Param;
 
 public interface EquipmentTyEventMapper {
@@ -17,6 +19,8 @@ public interface EquipmentTyEventMapper {
     int insertSelective(EquipmentTyEvent record);
 
     List<EquipmentTyEvent> selectByExample(EquipmentTyEventExample example);
+
+    List<EquipmentTyEvent> selectByExampleSpecial(@Param("record") EquipmentTyEventDto record);
 
     EquipmentTyEvent selectByPrimaryKey(String id);
 

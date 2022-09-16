@@ -1,7 +1,7 @@
 package com.pd.server.main.dto;
 
 
-public class EquipmentTyEventDto {
+public class EquipmentTyEventDto extends PageDto{
 
     /**
     * 

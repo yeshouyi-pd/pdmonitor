@@ -80,7 +80,7 @@
                                 <td>{{ list.cjsj }}</td>
                                 <td style="text-align: center"  v-on:click="showpic(list.id)">
 
-                                    <img  :data-original="list.tplj"  style="width:10px;height: auto"  :id="list.id" :src="list.tplj" :alt="list.cjsj">
+                                    <img  :data-original="list.tplj.substring(0,list.tplj.lastIndexOf('.')+1)+'jpg'"  style="width:10px;height: auto"  :id="list.id" :src="list.tplj.substring(0,list.tplj.lastIndexOf('.')+1)+'jpg'" :alt="list.cjsj">
                                 </td>
                                 <td style="display: none">
                                   <div style="width: 100%;text-align: center" >

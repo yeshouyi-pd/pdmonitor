@@ -26,25 +26,12 @@ public class EquipmentFileTyService {
         return equipmentFileTyMapper.selectTodayGps(rq,sbbh);
     }
 
-    public List<EquipmentFileTy> lists(EquipmentFileTyExample example){
-        return equipmentFileTyMapper.lists(example);
-    }
-
-    public List<EquipmentFileTy> listAll(EquipmentFileTyExample example){
+    public List<EquipmentFileTy> selectByExample(EquipmentFileTyExample example){
         return equipmentFileTyMapper.selectByExample(example);
     }
 
-    /**
-    * 列表查询
-    */
-    public void list(PageDto pageDto) {
-    PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
-        EquipmentFileTyExample equipmentFileTyExample = new EquipmentFileTyExample();
-        List<EquipmentFileTy> equipmentFileTyList = equipmentFileTyMapper.selectByExample(equipmentFileTyExample);
-        PageInfo<EquipmentFileTy> pageInfo = new PageInfo<>(equipmentFileTyList);
-        pageDto.setTotal(pageInfo.getTotal());
-        List<EquipmentFileTyDto> equipmentFileTyDtoList = CopyUtil.copyList(equipmentFileTyList, EquipmentFileTyDto.class);
-        pageDto.setList(equipmentFileTyDtoList);
+    public List<EquipmentFileTy> selectByExampleSpecial(EquipmentFileTyDto record){
+        return equipmentFileTyMapper.selectByExampleSpecial(record);
     }
 
     /**

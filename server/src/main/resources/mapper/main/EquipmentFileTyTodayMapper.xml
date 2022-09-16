@@ -542,7 +542,7 @@
   <select id="selectTodayGps" parameterType="com.pd.server.main.domain.EquipmentFileTyTodayExample" resultType="java.lang.String">
     select distinct(sm2) sm2
     from equipment_file_ty_today
-    where sm3='3' and rq=#{rq,jdbcType=VARCHAR} and sbbh = #{sbbh,jdbcType=VARCHAR}
+    where txtlx='3' and rq=#{rq,jdbcType=VARCHAR} and sbbh = #{sbbh,jdbcType=VARCHAR}
     order by cjsj desc
   </select>
 </mapper>

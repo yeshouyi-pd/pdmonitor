@@ -97,12 +97,13 @@ public class EquipmentFileAlarmEventController extends BaseWxController {
         if(!StringUtils.isEmpty(pageDto.getEtime())){
             ca.andBjsjLessThanOrEqualTo(pageDto.getEtime());
         }
+        example.setOrderByClause(" bjsj desc,xh desc ");
+        List<EquipmentFileAlarmEvent> equipmentFileAlarmEventList = new ArrayList<>();
         if(!StringUtils.isEmpty(pageDto.getXmbh())){
-            if(!CollectionUtils.isEmpty(userDto.getXmbhsbsns().get(pageDto.getXmbh()))){
-                ca.andSbbhIn(userDto.getXmbhsbsns().get(pageDto.getXmbh()));
-            }
+            equipmentFileAlarmEventList = equipmentFileAlarmEventService.selectByExampleSpecial(pageDto);
+        }else{
+            equipmentFileAlarmEventList = equipmentFileAlarmEventService.list(example);
         }
-        List<EquipmentFileAlarmEvent> equipmentFileAlarmEventList = equipmentFileAlarmEventService.list(example);
         PageInfo<EquipmentFileAlarmEvent> pageInfo = new PageInfo<>(equipmentFileAlarmEventList);
         pageDto.setTotal(pageInfo.getTotal());
         List<EquipmentFileAlarmEventDto> equipmentFileAlarmEventDtoList = CopyUtil.copyList(equipmentFileAlarmEventList, EquipmentFileAlarmEventDto.class);

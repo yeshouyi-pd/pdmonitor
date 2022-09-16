@@ -3,6 +3,8 @@ package com.pd.server.main.mapper;
 import com.pd.server.main.domain.AppearNumbers;
 import com.pd.server.main.domain.AppearNumbersExample;
 import java.util.List;
+
+import com.pd.server.main.dto.AppearNumbersDto;
 import org.apache.ibatis.annotations.Param;
 
 public interface AppearNumbersMapper {
@@ -17,6 +19,8 @@ public interface AppearNumbersMapper {
     int insertSelective(AppearNumbers record);
 
     List<AppearNumbers> selectByExample(AppearNumbersExample example);
+
+    List<AppearNumbers> selectByExampleSpecial(@Param("record") AppearNumbersDto record);
 
     AppearNumbers selectByPrimaryKey(String id);
 

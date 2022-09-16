@@ -108,7 +108,7 @@
                 <img v-on:click="beforePic()" v-show="curIndex!=0" src="../../../public/static/image/turnLeft.png"/>
               </div>
               <div style="text-align: center;width: 500px;overflow-x: auto;">
-                <img :src="curTplj" :style="{height:+maxHeight-100+'px'}"/>
+                <img :src="curTplj" :style="{height:+maxHeight-100+'px'}"  alt="无数据"/>
               </div>
               <div style="text-align: right;margin: auto;">
                 <img v-on:click="nextPic()" v-show="curIndex!=equipmentFiles.length-1" src="../../../public/static/image/turnRight.png"/>
@@ -133,7 +133,7 @@
             <h4 class="modal-title">原图图片</h4>
           </div>
           <div class="modal-body" :style="{height:+maxHeight+'px',overflow:'auto',textAlign:'center'}">
-            <img :src="curTplj"/>
+            <img :src="curTplj" alt="无数据"/>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-white btn-default btn-round" data-dismiss="modal">
@@ -205,7 +205,7 @@ export default {
     beforePic(){
       let _this = this;
       _this.curIndex = _this.curIndex-1;
-      _this.curTplj = _this.equipmentFiles[_this.curIndex].txtSrc;
+      _this.curTplj = _this.equipmentFiles[_this.curIndex].tplj.substring(0,_this.equipmentFiles[_this.curIndex].tplj.lastIndexOf('.')+1)+'jpg';
       _this.curSbsn = _this.equipmentFiles[_this.curIndex].sbbh;
       _this.curCjsj = _this.equipmentFiles[_this.curIndex].cjsj;
       _this.curWjmc = _this.equipmentFiles[_this.curIndex].tplj;
@@ -214,7 +214,7 @@ export default {
     nextPic(){
       let _this = this;
       _this.curIndex = _this.curIndex+1;
-      _this.curTplj = _this.equipmentFiles[_this.curIndex].txtSrc;
+      _this.curTplj = _this.equipmentFiles[_this.curIndex].tplj.substring(0,_this.equipmentFiles[_this.curIndex].tplj.lastIndexOf('.')+1)+'jpg';
       _this.curSbsn = _this.equipmentFiles[_this.curIndex].sbbh;
       _this.curCjsj = _this.equipmentFiles[_this.curIndex].cjsj;
       _this.curWjmc = _this.equipmentFiles[_this.curIndex].tplj;
@@ -261,7 +261,7 @@ export default {
     checkImg(item,index){
       let _this = this;
       _this.curIndex = index;
-      _this.curTplj = item.txtSrc;
+      _this.curTplj = item.tplj.substring(0,item.tplj.lastIndexOf('.')+1)+'jpg';
       _this.curSbsn = item.sbbh;
       _this.curCjsj = item.cjsj;
       _this.curWjmc = item.tplj;

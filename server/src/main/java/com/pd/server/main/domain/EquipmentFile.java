@@ -53,6 +53,8 @@ public class EquipmentFile {
 
     private String wjmc;
 
+    private String sbmc;//手机端需要
+
     public String getId() {
         return id;
     }
@@ -251,6 +253,14 @@ public class EquipmentFile {
 
     public void setWjmc(String wjmc) {
         this.wjmc = wjmc;
+    }
+
+    public String getSbmc() {
+        return sbmc;
+    }
+
+    public void setSbmc(String sbmc) {
+        this.sbmc = sbmc;
     }
 
     @Override

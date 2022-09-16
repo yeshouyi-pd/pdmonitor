@@ -194,7 +194,7 @@ export default {
       if("460100"!=Tool.getLoginUser().deptcode){
         _this.equipmentFileDto.xmbh=Tool.getLoginUser().xmbh;
       }
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileTy/lists', _this.equipmentFileDto).then((response) => {
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileTy/list', _this.equipmentFileDto).then((response) => {
         Loading.hide();
         let resp = response.data;
         _this.equipmentFiles = resp.content.list;
@@ -205,13 +205,7 @@ export default {
     detail(item){
       let _this = this;
       Loading.show();
-      let tpmc = "";
-      if(item.tplj.includes("predation")){
-        tpmc = item.tplj.substring(item.tplj.lastIndexOf("/")+1,item.tplj.lastIndexOf("_predation.txt"));
-      }else{
-        tpmc = item.tplj.substring(item.tplj.lastIndexOf("/")+1,item.tplj.lastIndexOf(".txt"));
-      }
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileTy/detail/'+tpmc, {}).then((response) => {
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileTy/detail/'+item.wjmc, {}).then((response) => {
         Loading.hide();
         let resp = response.data;
         _this.details = resp.content;
