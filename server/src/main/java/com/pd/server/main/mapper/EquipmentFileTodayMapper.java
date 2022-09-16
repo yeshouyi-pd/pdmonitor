@@ -7,11 +7,14 @@ import com.pd.server.main.domain.EquipmentFileTodayExample;
 import java.util.List;
 
 import com.pd.server.main.dto.AppearNumbersDto;
+import com.pd.server.main.dto.KvIntDto;
 import com.pd.server.main.dto.WelcomeKvDto;
 import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
 import org.apache.ibatis.annotations.Param;
 
 public interface EquipmentFileTodayMapper {
+
+    List<KvIntDto> getAlljcsjByDept(EquipmentFileTodayExample example);
 
     int countTsByExample(EquipmentFileTodayExample example);
 
@@ -20,8 +23,6 @@ public interface EquipmentFileTodayMapper {
     List<AlarmNumbersDto> groupByRq(EquipmentFileTodayExample example);
 
     List<AlarmNumbersDto> statisticsAlarmNums(EquipmentFileTodayExample example);
-
-    List<AlarmNumbersDto> statisticsAlarmNumsByPage(EquipmentFileTodayExample example);
 
     long countByExample(EquipmentFileTodayExample example);
 

@@ -19,6 +19,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -37,15 +38,9 @@ public class PredationNumController extends BaseWxController {
     @PostMapping("/list")
     public ResponseDto list(@RequestBody PredationNumDto pageDto) {
         ResponseDto responseDto = new ResponseDto();
-        LoginUserDto userDto = getRequestHeader();
         PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
         PredationNumExample example = new PredationNumExample();
         PredationNumExample.Criteria ca = example.createCriteria();
-        if(!StringUtils.isEmpty(pageDto.getXmbh())){
-            if(!CollectionUtils.isEmpty(userDto.getXmbhsbsns().get(pageDto.getXmbh()))){
-                ca.andSbbhIn(userDto.getXmbhsbsns().get(pageDto.getXmbh()));
-            }
-        }
         if(!StringUtils.isEmpty(pageDto.getSbbh())){
             ca.andSbbhEqualTo(pageDto.getSbbh());
         }
@@ -56,7 +51,12 @@ public class PredationNumController extends BaseWxController {
             ca.andCjsjLessThanOrEqualTo(pageDto.getEtime(),"%Y-%m-%d");
         }
         example.setOrderByClause(" cjsj desc ");
-        List<PredationNum> predationNumList = predationNumService.list(example);
+        List<PredationNum> predationNumList = new ArrayList<>();
+        if(!StringUtils.isEmpty(pageDto.getXmbh())){
+            predationNumList = predationNumService.selectByExampleSpecial(pageDto);
+        }else {
+            predationNumList = predationNumService.list(example);
+        }
         PageInfo<PredationNum> pageInfo = new PageInfo<>(predationNumList);
         pageDto.setTotal(pageInfo.getTotal());
         List<PredationNumDto> predationNumDtoList = CopyUtil.copyList(predationNumList, PredationNumDto.class);

@@ -30,6 +30,10 @@ public class PredationNumService {
         return predationNumMapper.selectByExample(example);
     }
 
+    public List<PredationNum> selectByExampleSpecial(PredationNumDto record) {
+        return predationNumMapper.selectByExampleSpecial(record);
+    }
+
     /**
      * 列表查询
      */

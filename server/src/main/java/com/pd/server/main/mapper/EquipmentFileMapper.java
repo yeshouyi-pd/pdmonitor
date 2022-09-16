@@ -45,8 +45,6 @@ public interface EquipmentFileMapper {
 
     List<WelcomeKvDto> getWarningDate(EquipmentFileExample equipmentFileExample);
 
-    List<KvIntDto> getAlljcsjByDept(EquipmentFileExample equipmentFileExample);
-
     List<EquipmentFile> getthisDeptjxsjJT(EquipmentFileExample equipmentFileExample);
 
     List<AlarmNumbersDto> statisticsAlarmNumsByHour(EquipmentFileExample example);

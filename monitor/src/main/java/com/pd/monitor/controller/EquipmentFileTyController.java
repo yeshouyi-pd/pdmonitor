@@ -18,6 +18,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -31,16 +32,16 @@ public class EquipmentFileTyController extends BaseWxController {
     private EquipmentFileTyService equipmentFileTyService;
 
     @PostMapping("/detail/{tpmc}")
-    public ResponseDto detail(@PathVariable String tpmc){
+    public ResponseDto detail(@PathVariable String wjmc){
         ResponseDto responseDto = new ResponseDto();
         EquipmentFileTyExample example = new EquipmentFileTyExample();
-        example.createCriteria().andTpljLike("%"+tpmc+"%");
-        List<EquipmentFileTy> lists = equipmentFileTyService.listAll(example);
+        example.createCriteria().andWjmcEqualTo(wjmc);
+        List<EquipmentFileTy> lists = equipmentFileTyService.selectByExample(example);
         responseDto.setContent(lists);
         return responseDto;
     }
 
-    @PostMapping("/lists")
+    @PostMapping("/list")
     public ResponseDto lists(@RequestBody EquipmentFileTyDto pageDto){
         ResponseDto responseDto = new ResponseDto();
         LoginUserDto user = getRequestHeader();
@@ -60,28 +61,18 @@ public class EquipmentFileTyController extends BaseWxController {
         if(!StringUtils.isEmpty(pageDto.getSbbh())){
             ca.andSbbhEqualTo(pageDto.getSbbh());
         }
-        if(!StringUtils.isEmpty(pageDto.getXmbh())){
-            if(!CollectionUtils.isEmpty(user.getXmbhsbsns().get(pageDto.getXmbh()))){
-                ca.andSbbhIn(user.getXmbhsbsns().get(pageDto.getXmbh()));
-            }
-        }
+        ca.andWjlxEqualTo("3");
         example.setOrderByClause(" cjsj desc ");
-        List<EquipmentFileTy> lists = equipmentFileTyService.lists(example);
+        List<EquipmentFileTy> lists = new ArrayList<>();
+        if(!StringUtils.isEmpty(pageDto.getXmbh())){
+            lists = equipmentFileTyService.selectByExampleSpecial(pageDto);
+        }else{
+            lists = equipmentFileTyService.selectByExample(example);
+        }
         PageInfo<EquipmentFileTy> pageInfo = new PageInfo<>(lists);
         pageDto.setTotal(pageInfo.getTotal());
         List<EquipmentFileTyDto> listsDto = CopyUtil.copyList(lists,EquipmentFileTyDto.class);
         pageDto.setList(listsDto);
-        responseDto.setContent(pageDto);
-        return responseDto;
-    }
-
-    /**
-    * 列表查询
-    */
-    @PostMapping("/list")
-    public ResponseDto list(@RequestBody PageDto pageDto) {
-        ResponseDto responseDto = new ResponseDto();
-        equipmentFileTyService.list(pageDto);
         responseDto.setContent(pageDto);
         return responseDto;
     }

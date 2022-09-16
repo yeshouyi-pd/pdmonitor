@@ -58,6 +58,10 @@ public class EquipmentFileAlarmEventService {
         return equipmentFileAlarmEventMapper.selectByExample(example);
     }
 
+    public List<EquipmentFileAlarmEvent> selectByExampleSpecial(EquipmentFileAlarmEventDto record) {
+        return equipmentFileAlarmEventMapper.selectByExampleSpecial(record);
+    }
+
     /**
      * 列表查询
      */

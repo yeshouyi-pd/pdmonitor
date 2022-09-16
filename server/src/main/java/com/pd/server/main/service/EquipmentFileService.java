@@ -100,10 +100,6 @@ public class EquipmentFileService {
         return equipmentFileMapper.getWarningDate(equipmentFileExample);
     }
 
-    public List<KvIntDto> getAlljcsjByDept(EquipmentFileExample equipmentFileExample) {
-        return equipmentFileMapper.getAlljcsjByDept(equipmentFileExample);
-    }
-
     public List<EquipmentFileDto> getthisDeptjxsjJT(EquipmentFileExample equipmentFileExample) {
         List<EquipmentFile> list  = equipmentFileMapper.getthisDeptjxsjJT(equipmentFileExample);
         List<EquipmentFileDto> equipmentFileDtoList = CopyUtil.copyList(list , EquipmentFileDto.class);

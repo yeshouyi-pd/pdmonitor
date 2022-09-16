@@ -1,22 +1,30 @@
 package com.pd.monitor.controller;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.pd.server.main.domain.EquipmentTyEvent;
+import com.pd.server.main.domain.EquipmentTyEventExample;
 import com.pd.server.main.dto.EquipmentTyEventDto;
 import com.pd.server.main.dto.PageDto;
 import com.pd.server.main.dto.ResponseDto;
 import com.pd.server.main.service.EquipmentTyEventService;
+import com.pd.server.util.CopyUtil;
 import com.pd.server.util.ValidatorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin/equipmentTyEvent")
 public class EquipmentTyEventController {
 
     private static final Logger LOG = LoggerFactory.getLogger(EquipmentTyEventController.class);
-    public static final String BUSINESS_NAME = "";
+    public static final String BUSINESS_NAME = "聚类事件";
 
     @Resource
     private EquipmentTyEventService equipmentTyEventService;
@@ -25,9 +33,31 @@ public class EquipmentTyEventController {
     * 列表查询
     */
     @PostMapping("/list")
-    public ResponseDto list(@RequestBody PageDto pageDto) {
+    public ResponseDto list(@RequestBody EquipmentTyEventDto pageDto) {
         ResponseDto responseDto = new ResponseDto();
-        equipmentTyEventService.list(pageDto);
+        PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
+        EquipmentTyEventExample example = new EquipmentTyEventExample();
+        EquipmentTyEventExample.Criteria ca = example.createCriteria();
+        if(!StringUtils.isEmpty(pageDto.getSbbh())){
+            ca.andSbbhEqualTo(pageDto.getSbbh());
+        }
+        if(!StringUtils.isEmpty(pageDto.getStime())){
+            ca.andRqGreaterThanOrEqualTo(pageDto.getStime());
+        }
+        if(!StringUtils.isEmpty(pageDto.getEtime())){
+            ca.andRqLessThanOrEqualTo(pageDto.getEtime());
+        }
+        example.setOrderByClause(" jssj desc ");
+        List<EquipmentTyEvent> equipmentTyEventList = new ArrayList<>();
+        if(!StringUtils.isEmpty(pageDto.getXmbh())){
+            equipmentTyEventList = equipmentTyEventService.selectByExampleSpecial(pageDto);
+        }else{
+            equipmentTyEventList = equipmentTyEventService.list(example);
+        }
+        PageInfo<EquipmentTyEvent> pageInfo = new PageInfo<>(equipmentTyEventList);
+        pageDto.setTotal(pageInfo.getTotal());
+        List<EquipmentTyEventDto> equipmentTyEventDtoList = CopyUtil.copyList(equipmentTyEventList, EquipmentTyEventDto.class);
+        pageDto.setList(equipmentTyEventDtoList);
         responseDto.setContent(pageDto);
         return responseDto;
     }

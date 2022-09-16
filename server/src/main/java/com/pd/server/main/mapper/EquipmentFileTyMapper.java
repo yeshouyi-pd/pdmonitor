@@ -3,6 +3,8 @@ package com.pd.server.main.mapper;
 import com.pd.server.main.domain.EquipmentFileTy;
 import com.pd.server.main.domain.EquipmentFileTyExample;
 import java.util.List;
+
+import com.pd.server.main.dto.EquipmentFileTyDto;
 import org.apache.ibatis.annotations.Param;
 
 public interface EquipmentFileTyMapper {
@@ -17,6 +19,8 @@ public interface EquipmentFileTyMapper {
     int insertSelective(EquipmentFileTy record);
 
     List<EquipmentFileTy> selectByExample(EquipmentFileTyExample example);
+
+    List<EquipmentFileTy> selectByExampleSpecial(@Param("record") EquipmentFileTyDto record);
 
     EquipmentFileTy selectByPrimaryKey(String id);
 

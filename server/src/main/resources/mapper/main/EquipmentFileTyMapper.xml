@@ -104,6 +104,20 @@
       order by ${orderByClause}
     </if>
   </select>
+  <select id="selectByExampleSpecial" parameterType="map" resultMap="BaseResultMap">
+    select a.* from equipment_file_ty a LEFT JOIN water_pro_equip b
+    ON a.sbbh = b.sbsn where b.xmbh = #{record.xmbh,jdbcType=VARCHAR} and a.wjlx='3'
+    <if test="record.sbbh != null and record.sbbh !=''">
+      AND a.sbbh = #{record.sbbh,jdbcType=VARCHAR}
+    </if>
+    <if test="record.stime != null and record.stime !=''">
+      AND a.rq &gt;= #{record.stime,jdbcType=VARCHAR}
+    </if>
+    <if test="record.etime != null and record.etime !=''">
+      AND a.rq &lt;= #{record.etime,jdbcType=VARCHAR}
+    </if>
+    order by cjsj desc
+  </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
@@ -524,22 +538,7 @@
   <select id="selectTodayGps" parameterType="com.pd.server.main.domain.EquipmentFileTyTodayExample" resultType="java.lang.String">
     select distinct(sm2) sm2
     from equipment_file_ty
-    where sm3='3' and rq=#{rq,jdbcType=VARCHAR} and sbbh = #{sbbh,jdbcType=VARCHAR}
+    where txtlx='3' and rq=#{rq,jdbcType=VARCHAR} and sbbh = #{sbbh,jdbcType=VARCHAR}
     order by cjsj desc
-  </select>
-  <select id="lists" parameterType="com.pd.server.main.domain.EquipmentFileTyExample" resultMap="BaseResultMap">
-    select
-    <if test="distinct">
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    from equipment_file_ty
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    and tplj LIKE '%.txt'
-    <if test="orderByClause != null">
-      order by ${orderByClause}
-    </if>
   </select>
 </mapper>

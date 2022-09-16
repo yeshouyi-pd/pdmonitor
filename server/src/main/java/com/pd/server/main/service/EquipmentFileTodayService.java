@@ -4,10 +4,7 @@ import com.pd.server.main.domain.EquipmentFile;
 import com.pd.server.main.domain.EquipmentFileExample;
 import com.pd.server.main.domain.EquipmentFileToday;
 import com.pd.server.main.domain.EquipmentFileTodayExample;
-import com.pd.server.main.dto.AppearNumbersDto;
-import com.pd.server.main.dto.EquipmentFileTodayDto;
-import com.pd.server.main.dto.PageDto;
-import com.pd.server.main.dto.WelcomeKvDto;
+import com.pd.server.main.dto.*;
 import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
 import com.pd.server.main.mapper.EquipmentFileTodayMapper;
 import com.pd.server.util.CopyUtil;
@@ -27,6 +24,10 @@ public class EquipmentFileTodayService {
     @Resource
     private EquipmentFileTodayMapper equipmentFileTodayMapper;
 
+    public List<KvIntDto> getAlljcsjByDept(EquipmentFileTodayExample example){
+        return equipmentFileTodayMapper.getAlljcsjByDept(example);
+    }
+
     public int countTsByExample(EquipmentFileTodayExample example){
         return equipmentFileTodayMapper.countTsByExample(example);
     }
@@ -41,10 +42,6 @@ public class EquipmentFileTodayService {
 
     public List<AlarmNumbersDto> statisticsAlarmNums(EquipmentFileTodayExample example){
         return equipmentFileTodayMapper.statisticsAlarmNums(example);
-    }
-
-    public List<AlarmNumbersDto> statisticsAlarmNumsByPage(EquipmentFileTodayExample example){
-        return equipmentFileTodayMapper.statisticsAlarmNumsByPage(example);
     }
 
     public List<EquipmentFileToday> listAll(EquipmentFileTodayExample equipmentFileTodayExample){

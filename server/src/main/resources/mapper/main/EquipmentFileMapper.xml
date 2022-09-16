@@ -39,10 +39,6 @@
     <result column="code" jdbcType="VARCHAR" property="code" />
   </resultMap>
 
-  <resultMap id="BaseResultMapKVint" type="com.pd.server.main.dto.KvIntDto">
-    <result column="key" jdbcType="VARCHAR" property="key" />
-    <result column="value" jdbcType="VARCHAR" property="value" />
-  </resultMap>
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -597,23 +593,22 @@
     </if>
     limit 100
   </select>
-  <select id="getAlljcsjByDept" parameterType="com.pd.server.main.domain.EquipmentFileExample"  resultMap="BaseResultMapKVint">
-    SELECT deptcode `key` ,COUNT(*)  `value` FROM  equipment_file
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    and   TO_DAYS(cjsj) = TO_DAYS(NOW())  and  tplj LIKE '%.txt'  GROUP  BY  deptcode
-
-  </select>
-
 
   <select id="getthisDeptjxsjJT" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultMap="BaseResultMap">
     SELECT  b. * , a. sbmc   FROM  water_equipment a, (
-    select * from equipment_file
+    select * from equipment_file_today
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
-    AND  TO_DAYS(cjsj) = TO_DAYS(NOW()) and  tplj LIKE '%.txt'  ) b WHERE a.sbsn = b.sbbh ORDER BY b.sbbh  , b.cjsj DESC
+    AND  TO_DAYS(cjsj) = TO_DAYS(NOW()) and  wjlx='3' ) b WHERE a.sbsn = b.sbbh
+    union all
+    SELECT  d. * , c. sbmc   FROM  water_equipment c, (
+    select * from equipment_file_ty_today
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    AND  TO_DAYS(cjsj) = TO_DAYS(NOW()) and  wjlx='3' ) d WHERE c.sbsn = d.sbbh order by cjsj
+
   </select>
 
   <select id="statisticsAlarmNumsByHour" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultMap="StatisticsResultMap">

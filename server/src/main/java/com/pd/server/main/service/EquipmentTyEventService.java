@@ -24,14 +24,12 @@ public class EquipmentTyEventService {
     /**
     * 列表查询
     */
-    public void list(PageDto pageDto) {
-    PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
-        EquipmentTyEventExample equipmentTyEventExample = new EquipmentTyEventExample();
-        List<EquipmentTyEvent> equipmentTyEventList = equipmentTyEventMapper.selectByExample(equipmentTyEventExample);
-        PageInfo<EquipmentTyEvent> pageInfo = new PageInfo<>(equipmentTyEventList);
-        pageDto.setTotal(pageInfo.getTotal());
-        List<EquipmentTyEventDto> equipmentTyEventDtoList = CopyUtil.copyList(equipmentTyEventList, EquipmentTyEventDto.class);
-        pageDto.setList(equipmentTyEventDtoList);
+    public List<EquipmentTyEvent> list(EquipmentTyEventExample example) {
+        return equipmentTyEventMapper.selectByExample(example);
+    }
+
+    public List<EquipmentTyEvent> selectByExampleSpecial(EquipmentTyEventDto record) {
+        return equipmentTyEventMapper.selectByExampleSpecial(record);
     }
 
     /**

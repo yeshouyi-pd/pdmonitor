@@ -28,6 +28,10 @@ public class AppearNumbersService {
         return appearNumbersMapper.selectByExample(example);
     }
 
+    public List<AppearNumbers> selectByExampleSpecial(AppearNumbersDto record) {
+        return appearNumbersMapper.selectByExampleSpecial(record);
+    }
+
     /**
     * 保存，id有值时更新，无值时新增
     */

@@ -24,6 +24,8 @@ public interface EquipmentFileAlarmEventMapper {
 
     List<EquipmentFileAlarmEvent> selectByExample(EquipmentFileAlarmEventExample example);
 
+    List<EquipmentFileAlarmEvent> selectByExampleSpecial(@Param("record") EquipmentFileAlarmEventDto record);
+
     List<EquipmentFileAlarmEventDwDto> selectDwByExample(EquipmentFileAlarmEventExample example);
 
     EquipmentFileAlarmEvent selectByPrimaryKey(String id);
