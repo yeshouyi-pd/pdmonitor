@@ -30,13 +30,13 @@
                         </router-link>
                       </li>
 
-<!--                      <li class="light-blue dropdown-modal">-->
-<!--                          <router-link to="/mobile/largemonitors">-->
-<!--                              <a class=" dropdown-toggle" style="cursor: pointer;">-->
-<!--                                  <font color="white">返回大屏</font>-->
-<!--                              </a>-->
-<!--                          </router-link>-->
-<!--                      </li>-->
+                      <li class="light-blue dropdown-modal">
+                          <router-link to="/mobile/largemonitors">
+                              <a class=" dropdown-toggle" style="cursor: pointer;">
+                                  <font color="white">返回大屏</font>
+                              </a>
+                          </router-link>
+                      </li>
 
                       <li class="light-blue dropdown-modal" v-on:click="downloadVideo()">
                           <a   class=" dropdown-toggle" style="cursor: pointer;">

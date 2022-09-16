@@ -49,6 +49,7 @@ import EquipmentFileTable from "./views/monitor/equipmentFileTable.vue";
 import EquipmentFileTy from "./views/tydevice/equipmentFileTy.vue";
 import EquipmentFileTyTable from "./views/tydevice/equipmentFileTyTable.vue";
 import EquipmentTyEvent from "./views/tydevice/equipmentTyEvent.vue";
+import LargemonitorsTy from "./views/mobile/largemonitorsTy.vue";
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -72,6 +73,9 @@ export default new Router({
         path: "/login",
         component:Login
     },{
+        path: "/mobile/largemonitorsTy",
+        component: LargemonitorsTy
+    },{
         path: "/mobile/largemonitors",
         component: Largemonitors
     },{
@@ -94,10 +98,9 @@ export default new Router({
         path: "/mobile/jtlistinfo",
         component:Jtlistinfo
     },{
-            path: "/mobile/test",
-            component: Test
-        }
-    ,{
+        path: "/mobile/test",
+        component: Test
+    },{
         path: "/",
         name:"admin",//为每一个路由都加上name属性，后续做通用的aidebar激活方法样式会用的
         component:Admin,
