@@ -116,20 +116,18 @@
     </if>
   </select>
   <select id="selectByExampleSpecial"  parameterType="map" resultMap="BaseResultMap">
-    select c.* from
-      (select a.id, a.sbbh, a.tplj, a.cjsj, a.create_time, a.nf, a.yf, a.rq, a.xs, a.fz, a.deptcode, a.xmbh, a.wjlx, a.jczl, a.ly, a.sm1, a.sm2, a.sm3, a.sm4, a.sm5, a.sm6,a.type as type,a.ts, a.txtlx,a.wjmc
-        from equipment_file a  where a.wjlx='3'
-        <if test="record.sbbh != null and record.sbbh !=''">
-          AND a.sbbh = #{record.sbbh,jdbcType=VARCHAR}
-        </if>
-        <if test="record.stime != null and record.stime !=''">
-          AND a.rq &gt;= #{record.stime,jdbcType=VARCHAR}
-        </if>
-        <if test="record.etime != null and record.etime !=''">
-          AND a.rq &lt;= #{record.etime,jdbcType=VARCHAR}
-        </if>
-        )c
-    LEFT JOIN (select b.sbsn from water_pro_equip b where b.xmbh = #{record.xmbh,jdbcType=VARCHAR})d ON c.sbbh = d.sbsn order by c.cjsj DESC
+    select a.id, a.sbbh, a.tplj, a.cjsj, a.create_time, a.nf, a.yf, a.rq, a.xs, a.fz, a.deptcode, a.xmbh, a.wjlx, a.jczl, a.ly, a.sm1, a.sm2, a.sm3, a.sm4, a.sm5, a.sm6,a.type as type,a.ts, a.txtlx,a.wjmc
+    from equipment_file a FORCE index(cjsj) where a.wjlx='3' and a.sbbh in (select b.sbsn from water_pro_equip b FORCE index(sbsn) where b.xmbh = #{record.xmbh,jdbcType=VARCHAR})
+    <if test="record.sbbh != null and record.sbbh !=''">
+      AND a.sbbh = #{record.sbbh,jdbcType=VARCHAR}
+    </if>
+    <if test="record.stime != null and record.stime !=''">
+      AND a.rq &gt;= #{record.stime,jdbcType=VARCHAR}
+    </if>
+    <if test="record.etime != null and record.etime !=''">
+      AND a.rq &lt;= #{record.etime,jdbcType=VARCHAR}
+    </if>
+     order by cjsj DESC limit #{record.startNum,jdbcType=INTEGER},#{record.endNum,jdbcType=INTEGER}
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 

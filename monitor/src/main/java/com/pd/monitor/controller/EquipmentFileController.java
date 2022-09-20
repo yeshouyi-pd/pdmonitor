@@ -177,7 +177,6 @@ public class EquipmentFileController extends BaseWxController {
     @PostMapping("/lists")
     public ResponseDto lists(@RequestBody EquipmentFileDto pageDto){
         ResponseDto responseDto = new ResponseDto();
-        PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
         EquipmentFileExample equipmentFileExample = new EquipmentFileExample();
         EquipmentFileExample.Criteria ca = equipmentFileExample.createCriteria();
         if(!StringUtils.isEmpty(pageDto.getStime())){
@@ -193,12 +192,17 @@ public class EquipmentFileController extends BaseWxController {
         equipmentFileExample.setOrderByClause(" cjsj desc ");
         List<EquipmentFile> lists = new ArrayList<>();
         if(!StringUtils.isEmpty(pageDto.getXmbh())){
+            long count = equipmentFileService.countByExample(equipmentFileExample);
+            pageDto.setStartNum((pageDto.getPage()-1)* pageDto.getSize());
+            pageDto.setEndNum(pageDto.getSize());
             lists = equipmentFileService.selectByExampleSpecial(pageDto);
+            pageDto.setTotal(count);
         }else{
+            PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
             lists = equipmentFileService.lists(equipmentFileExample);
+            PageInfo<EquipmentFile> pageInfo = new PageInfo<>(lists);
+            pageDto.setTotal(pageInfo.getTotal());
         }
-        PageInfo<EquipmentFile> pageInfo = new PageInfo<>(lists);
-        pageDto.setTotal(pageInfo.getTotal());
         List<EquipmentFileDto> listDto = CopyUtil.copyList(lists, EquipmentFileDto.class);
         pageDto.setList(listDto);
         responseDto.setContent(pageDto);

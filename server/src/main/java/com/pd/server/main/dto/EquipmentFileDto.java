@@ -136,6 +136,10 @@ public class EquipmentFileDto extends PageDto{
 
     private  PlayDto playDto;
 
+    private int startNum;
+
+    private int endNum;
+
     public String getId() {
         return id;
     }
@@ -350,6 +354,22 @@ public class EquipmentFileDto extends PageDto{
 
     public void setPlayDto(PlayDto playDto) {
         this.playDto = playDto;
+    }
+
+    public int getStartNum() {
+        return startNum;
+    }
+
+    public void setStartNum(int startNum) {
+        this.startNum = startNum;
+    }
+
+    public int getEndNum() {
+        return endNum;
+    }
+
+    public void setEndNum(int endNum) {
+        this.endNum = endNum;
     }
 
     @Override

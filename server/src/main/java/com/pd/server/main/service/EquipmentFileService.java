@@ -59,6 +59,10 @@ public class EquipmentFileService {
         return equipmentFileList;
     }
 
+    public long countByExample(EquipmentFileExample example){
+        return equipmentFileMapper.countByExample(example);
+    }
+
     /**
     * 保存，id有值时更新，无值时新增
     */

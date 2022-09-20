@@ -28,6 +28,16 @@
     <result column="txtlx" jdbcType="VARCHAR" property="txtlx" />
     <result column="wjmc" jdbcType="VARCHAR" property="wjmc" />
   </resultMap>
+  <resultMap id="KVResultMap" type="com.pd.server.main.dto.basewx.my.GpsKVDto">
+    <result column="gps" jdbcType="VARCHAR" property="gps" />
+    <result column="ts" jdbcType="VARCHAR" property="ts" />
+  </resultMap>
+  <resultMap id="TyDataMap" type="com.pd.server.main.dto.basewx.my.TyDataDto">
+    <result column="cxcs" jdbcType="INTEGER" property="cxcs" />
+    <result column="bscs" jdbcType="INTEGER" property="bscs" />
+    <result column="jlcs" jdbcType="INTEGER" property="jlcs" />
+    <result column="ts" jdbcType="INTEGER" property="ts" />
+  </resultMap>
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -539,10 +549,17 @@
       wjmc = #{wjmc,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
-  <select id="selectTodayGps" parameterType="com.pd.server.main.domain.EquipmentFileTyTodayExample" resultType="java.lang.String">
-    select distinct(sm2) sm2
+  <select id="selectTodayGps" resultMap="KVResultMap">
+    select distinct(sm2) gps,ts
     from equipment_file_ty_today
     where txtlx='3' and rq=#{rq,jdbcType=VARCHAR} and sbbh = #{sbbh,jdbcType=VARCHAR}
     order by cjsj desc
+  </select>
+  <select id="selectTyData" parameterType="com.pd.server.main.domain.EquipmentFileTyTodayExample" resultMap="TyDataMap">
+    select count(1) as cxcs,sum(IF(jczl='1',1,0)) as bscs,sum(IF(type='1012',1,0)) as jlcs,max(ts) as ts
+    from equipment_file_ty_today
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
   </select>
 </mapper>

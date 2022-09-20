@@ -117,8 +117,10 @@ export default {
         if(gpslist && gpslist.length>0){
           gpslist.forEach(function (item){
             var icon = new TIcon("https://webapi.amap.com/theme/v1.3/markers/n/mark_bs.png",new TSize(19,27),{anchor:new TPixel(9,27)});
-            let lnglat = new TLngLat(Number(item[0]),Number(item[1]));
+            let gps = item.gps.split(",");
+            let lnglat = new TLngLat(Number(gps[0]),Number(gps[1]));
             let marker = new TMarker(lnglat,{icon:icon});
+            marker.setTitle(item.ts);
             _this.map.addOverLay(marker);
           })
         }

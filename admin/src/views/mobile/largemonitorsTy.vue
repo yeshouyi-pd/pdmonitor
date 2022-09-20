@@ -1,77 +1,71 @@
 <template>
-  <div>
+  <div class="ty-body">
     <div class="row">
       <div class="col-xl-3 col-sm-3 col-12">
         <div class="card">
           <div class="card-body" style="border: 1px solid rgb(255, 238, 195);">
-            <div data-v-03643b6e="" class="card-num" style="background-color: rgb(255, 238, 195);">409</div>
-            <div data-v-03643b6e="" class="card-text">机动业务预约数量</div>
+            <div class="card-num" style="background-color: rgb(255, 238, 195);">{{topData.cxcs}}</div>
+            <div class="card-text">侦测次数</div>
           </div>
         </div>
       </div>
-      <div data-v-03643b6e="" class="col-xl-3 col-sm-3 col-12">
-        <div data-v-03643b6e="" class="card">
-          <div data-v-03643b6e="" class="card-body" style="border: 1px solid rgb(195, 227, 238);">
-            <div data-v-03643b6e="" class="card-num" style="background-color: rgb(195, 227, 238);">194</div>
-            <div data-v-03643b6e="" class="card-text">驾驶业务预约数量</div>
+      <div class="col-xl-3 col-sm-3 col-12">
+        <div class="card">
+          <div class="card-body" style="border: 1px solid rgb(195, 227, 238);">
+            <div class="card-num" style="background-color: rgb(195, 227, 238);">{{topData.bscs}}</div>
+            <div class="card-text">捕食次数</div>
           </div>
         </div>
       </div>
-      <div data-v-03643b6e="" class="col-xl-3 col-sm-3 col-12">
-        <div data-v-03643b6e="" class="card">
-          <div data-v-03643b6e="" class="card-body" style="border: 1px solid rgb(206, 255, 213);">
-            <div data-v-03643b6e="" class="card-num" style="background-color: rgb(206, 255, 213);">730</div>
-            <div data-v-03643b6e="" class="card-text">违法业务预约数量</div>
+      <div class="col-xl-3 col-sm-3 col-12">
+        <div class="card">
+          <div class="card-body" style="border: 1px solid rgb(206, 255, 213);">
+            <div class="card-num" style="background-color: rgb(206, 255, 213);">{{topData.jlcs}}</div>
+            <div class="card-text">聚类次数</div>
           </div>
         </div>
       </div>
-      <div data-v-03643b6e="" class="col-xl-3 col-sm-3 col-12">
-        <div data-v-03643b6e="" class="card">
-          <div data-v-03643b6e="" class="card-body" style="border: 1px solid rgb(252, 202, 255);">
-            <div data-v-03643b6e="" class="card-num" style="background-color: rgb(252, 202, 255);">0</div>
-            <div data-v-03643b6e="" class="card-text">查验业务预约数量</div>
+      <div class="col-xl-3 col-sm-3 col-12">
+        <div class="card">
+          <div class="card-body" style="border: 1px solid rgb(252, 202, 255);">
+            <div class="card-num" style="background-color: rgb(252, 202, 255);">{{topData.ts}}</div>
+            <div class="card-text">最多豚数</div>
           </div>
         </div>
       </div>
     </div>
-    <div class="widget-box left-top" style="text-align: center">
-      <div class="widget-header ">
-        <h5 class="widget-title">
-          <i class="ace-icon fa fa-tachometer  "></i>
-          监测站设备分布图
-        </h5>
+    <div style="display: flex">
+      <div class="left">
+        <table class="left-choose">
+          <tbody>
+          <tr>
+            <td style="width: 80%">
+              <select v-model="curSbsn" class="form-control">
+                <option value="" selected>请选择</option>
+                <option v-for="item in equipments" :value="item.sbsn">{{item.sbmc}}</option>
+              </select>
+            </td>
+            <td >
+              <button type="button" v-on:click="getGpsBySbsn()" class="btn btn-sm btn-info btn-round" style="margin-right: 10px;">
+                <i class="ace-icon fa fa-book"></i>
+                查询
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <div id="mapDiv" style="position:absolute;" class="left-map"></div>
       </div>
-      <div class="widget-body">
-        <div class="widget-main">
-          <table class="left-top-choose">
-            <tbody>
-            <tr>
-              <td style="width: 80%">
-                <select v-model="curSbsn" class="form-control">
-                  <option value="" selected>请选择</option>
-                  <option v-for="item in equipments" :value="item.sbsn">{{item.sbmc}}</option>
-                </select>
-              </td>
-              <td >
-                <button type="button" v-on:click="getGpsBySbsn()" class="btn btn-sm btn-info btn-round" style="margin-right: 10px;">
-                  <i class="ace-icon fa fa-book"></i>
-                  查询
-                </button>
-              </td>
-            </tr>
-            </tbody>
-          </table>
-          <div id="mapDiv" style="position:absolute;" class="top-map"></div>
-        </div><!-- /.widget-main -->
-      </div><!-- /.widget-body -->
-    </div><!-- /.widget-box -->
+      <div class="right">
 
+      </div>
+    </div>
   </div>
 </template>
 <script>
-import Dategreater from "../../components/dategreater";
+
 export default {
-  components: {Dategreater},
+  components: {},
   name: 'largemonitors-ty',
   data: function (){
     return {
@@ -85,23 +79,30 @@ export default {
       markerClusterer:null,
       markers:[],
       maxHeight:'',
-      maxWidth:''
+      maxWidth:'',
+      topData:{}
     }
   },
   created() {
     let _this = this;
     _this.curDateStr = Tool.dateFormat("yyyy-MM-dd");
     _this.getEquipmentByTy();
+    _this.getTopData();
   },
   mounted() {
     let _this = this;
     _this.initMap();
   },
   methods: {
-    dateMethod(rep){
+    //获取当日出现次数，捕食次数，聚类次数，最多豚数
+    getTopData(){
       let _this = this;
-      _this.curDateStr = rep;
-      _this.$forceUpdate();
+      Loading.show();
+      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileTyToday/getDataStatistics').then((response)=>{
+        Loading.hide();
+        let resp = response.data;
+        _this.topData = resp.content;
+      })
     },
     //获取拖曳设备
     getEquipmentByTy(){
@@ -136,8 +137,10 @@ export default {
         if(gpslist && gpslist.length>0){
           gpslist.forEach(function (item){
             var icon = new TIcon("https://webapi.amap.com/theme/v1.3/markers/n/mark_bs.png",new TSize(19,27),{anchor:new TPixel(9,27)});
-            let lnglat = new TLngLat(Number(item[0]),Number(item[1]));
+            let gps = item.gps.split(",");
+            let lnglat = new TLngLat(Number(gps[0]),Number(gps[1]));
             let marker = new TMarker(lnglat,{icon:icon});
+            marker.setTitle(item.ts);
             _this.map.addOverLay(marker);
           })
         }
@@ -166,19 +169,48 @@ export default {
 }
 </script>
 <style scoped>
-.left-top{
-  width: 1100px;
-  height: 580px;
+.ty-body{
   background-color: #fff;
 }
-.left-top-choose{
+.card-body{
+  display: flex;
+  width: 98%;
+  height: 80px;
+  border-radius: 10px
+}
+.card-num{
+  height: 60px;
+  line-height: 60px;
+  margin-top: 10px;
+  width: 16%;
+  text-align: center;
+  border-radius: 10px;
+  margin-left: 5px;
+  font-size: 22px;
+}
+.card-text{
+  line-height: 80px;
+  margin-left: 10px;
+  font-size: 18px;
+  font-weight: 600;
+}
+.left{
+  margin-top: 10px;
+  width: 1100px;
+  height: 830px;
+  background-color: #fff;
+}
+.left-choose{
   font-size: 1.1em;
   position: absolute;
   z-index: 9999;
   left: 300px;
 }
-.top-map{
+.left-map{
   width: 1080px;
-  height: 520px;
+  height: 830px;
+}
+.right{
+
 }
 </style>
