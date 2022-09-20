@@ -5,6 +5,7 @@ import com.pd.server.main.domain.EquipmentFileTyExample;
 import java.util.List;
 
 import com.pd.server.main.dto.EquipmentFileTyDto;
+import com.pd.server.main.dto.basewx.my.GpsKVDto;
 import org.apache.ibatis.annotations.Param;
 
 public interface EquipmentFileTyMapper {
@@ -32,7 +33,5 @@ public interface EquipmentFileTyMapper {
 
     int updateByPrimaryKey(EquipmentFileTy record);
 
-    List<String> selectTodayGps(@Param("rq")String rq,@Param("sbbh")String sbbh);
-
-    List<EquipmentFileTy> lists(EquipmentFileTyExample example);
+    List<GpsKVDto> selectTodayGps(@Param("rq")String rq, @Param("sbbh")String sbbh);
 }

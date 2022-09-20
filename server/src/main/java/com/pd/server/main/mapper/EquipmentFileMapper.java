@@ -11,6 +11,7 @@ import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
 import org.apache.ibatis.annotations.Param;
 
 public interface EquipmentFileMapper {
+
     long countByExample(EquipmentFileExample example);
 
     int deleteByExample(EquipmentFileExample example);

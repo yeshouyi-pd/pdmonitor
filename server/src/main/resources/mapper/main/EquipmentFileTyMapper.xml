@@ -28,6 +28,10 @@
     <result column="txtlx" jdbcType="VARCHAR" property="txtlx" />
     <result column="wjmc" jdbcType="VARCHAR" property="wjmc" />
   </resultMap>
+  <resultMap id="KVResultMap" type="com.pd.server.main.dto.basewx.my.GpsKVDto">
+    <result column="gps" jdbcType="VARCHAR" property="gps" />
+    <result column="ts" jdbcType="VARCHAR" property="ts" />
+  </resultMap>
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -104,10 +108,9 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByExampleSpecial" parameterType="map" resultMap="BaseResultMap">
-    select c.* from
-    (select a.id, a.sbbh, a.tplj, a.cjsj, a.create_time, a.nf, a.yf, a.rq, a.xs, a.fz, a.deptcode, a.xmbh, a.wjlx, a.jczl, a.ly, a.sm1, a.sm2, a.sm3, a.sm4, a.sm5, a.sm6,a.type as type,a.ts, a.txtlx,a.wjmc
-    from equipment_file_ty a  where a.wjlx='3'
+  <select id="selectByExampleSpecial"  parameterType="map" resultMap="BaseResultMap">
+    select a.id, a.sbbh, a.tplj, a.cjsj, a.create_time, a.nf, a.yf, a.rq, a.xs, a.fz, a.deptcode, a.xmbh, a.wjlx, a.jczl, a.ly, a.sm1, a.sm2, a.sm3, a.sm4, a.sm5, a.sm6,a.type as type,a.ts, a.txtlx,a.wjmc
+    from equipment_file_ty a FORCE index(cjsj) where a.wjlx='3' and a.sbbh in (select b.sbsn from water_pro_equip b FORCE index(sbsn) where b.xmbh = #{record.xmbh,jdbcType=VARCHAR})
     <if test="record.sbbh != null and record.sbbh !=''">
       AND a.sbbh = #{record.sbbh,jdbcType=VARCHAR}
     </if>
@@ -117,8 +120,7 @@
     <if test="record.etime != null and record.etime !=''">
       AND a.rq &lt;= #{record.etime,jdbcType=VARCHAR}
     </if>
-    )c
-    LEFT JOIN (select b.sbsn from water_pro_equip b where b.xmbh = #{record.xmbh,jdbcType=VARCHAR})d ON c.sbbh = d.sbsn order by c.cjsj DESC
+    order by cjsj DESC
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
@@ -537,8 +539,8 @@
       wjmc = #{wjmc,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
-  <select id="selectTodayGps" parameterType="com.pd.server.main.domain.EquipmentFileTyTodayExample" resultType="java.lang.String">
-    select distinct(sm2) sm2
+  <select id="selectTodayGps" parameterType="com.pd.server.main.domain.EquipmentFileTyTodayExample" resultMap="KVResultMap">
+    select distinct(sm2) gps,ts
     from equipment_file_ty
     where txtlx='3' and rq=#{rq,jdbcType=VARCHAR} and sbbh = #{sbbh,jdbcType=VARCHAR}
     order by cjsj desc

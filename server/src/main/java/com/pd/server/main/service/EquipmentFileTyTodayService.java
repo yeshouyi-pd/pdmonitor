@@ -4,6 +4,8 @@ import com.pd.server.main.domain.EquipmentFileTyToday;
 import com.pd.server.main.domain.EquipmentFileTyTodayExample;
 import com.pd.server.main.dto.EquipmentFileTyTodayDto;
 import com.pd.server.main.dto.PageDto;
+import com.pd.server.main.dto.basewx.my.GpsKVDto;
+import com.pd.server.main.dto.basewx.my.TyDataDto;
 import com.pd.server.main.mapper.EquipmentFileTyTodayMapper;
 import com.pd.server.util.CopyUtil;
 import com.pd.server.util.UuidUtil;
@@ -22,7 +24,11 @@ public class EquipmentFileTyTodayService {
     @Resource
     private EquipmentFileTyTodayMapper equipmentFileTyTodayMapper;
 
-    public List<String> selectTodayGps(String rq,String sbbh){
+    public TyDataDto selectTyData(EquipmentFileTyTodayExample example){
+        return equipmentFileTyTodayMapper.selectTyData(example);
+    }
+
+    public List<GpsKVDto> selectTodayGps(String rq, String sbbh){
         return equipmentFileTyTodayMapper.selectTodayGps(rq,sbbh);
     }
 

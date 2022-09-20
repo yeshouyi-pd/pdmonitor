@@ -1,8 +1,14 @@
 package com.pd.monitor.controller;
 
+import com.pd.monitor.wx.conf.BaseWxController;
+import com.pd.server.main.domain.EquipmentFileTyToday;
+import com.pd.server.main.domain.EquipmentFileTyTodayExample;
 import com.pd.server.main.dto.EquipmentFileTyTodayDto;
+import com.pd.server.main.dto.LoginUserDto;
 import com.pd.server.main.dto.PageDto;
 import com.pd.server.main.dto.ResponseDto;
+import com.pd.server.main.dto.basewx.my.GpsKVDto;
+import com.pd.server.main.dto.basewx.my.TyDataDto;
 import com.pd.server.main.service.EquipmentFileTyService;
 import com.pd.server.main.service.EquipmentFileTyTodayService;
 import com.pd.server.util.DateUtil;
@@ -23,33 +29,44 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/admin/equipmentFileTyToday")
-public class EquipmentFileTyTodayController {
+public class EquipmentFileTyTodayController extends BaseWxController {
 
     private static final Logger LOG = LoggerFactory.getLogger(EquipmentFileTyTodayController.class);
-    public static final String BUSINESS_NAME = "";
+    public static final String BUSINESS_NAME = "拖曳设备当日声谱图";
 
     @Resource
     private EquipmentFileTyTodayService equipmentFileTyTodayService;
     @Resource
     private EquipmentFileTyService equipmentFileTyService;
 
+    @GetMapping("/getDataStatistics")
+    public ResponseDto getDataStatistics(){
+        ResponseDto responseDto = new ResponseDto();
+        LoginUserDto userDto = getRequestHeader();
+        List<String> depts = getUpdeptcode(userDto.getDeptcode());
+        EquipmentFileTyTodayExample example = new EquipmentFileTyTodayExample();
+        EquipmentFileTyTodayExample.Criteria ca = example.createCriteria();
+        if(!CollectionUtils.isEmpty(depts)){
+            ca.andDeptcodeIn(depts);
+        }
+        TyDataDto dto = equipmentFileTyTodayService.selectTyData(example);
+        responseDto.setContent(dto);
+        return responseDto;
+    }
+
     @PostMapping("/selectTodayGps")
     public ResponseDto selectTodayGps(@RequestBody EquipmentFileTyTodayDto todayDto){
         ResponseDto responseDto = new ResponseDto();
         String todayStr = DateUtil.getFormatDate(new Date(),"yyyy-MM-dd");
-        List<String> gpsList = new ArrayList<>();
-        List<String[]> result = new ArrayList<>();
+        List<GpsKVDto> gpsList = new ArrayList<>();
         if(!StringUtils.isEmpty(todayDto.getRq())){
             if(todayStr.equals(todayDto.getRq())){
                 gpsList = equipmentFileTyTodayService.selectTodayGps(todayDto.getRq(),todayDto.getSbbh());
             }else{
                 gpsList = equipmentFileTyService.selectTodayGps(todayDto.getRq(),todayDto.getSbbh());
             }
-            if(!CollectionUtils.isEmpty(gpsList)){
-                result = gpsList.stream().filter(Objects::nonNull).map(u -> u.split(",")).collect(Collectors.toList());
-            }
         }
-        responseDto.setContent(result);
+        responseDto.setContent(gpsList);
         return responseDto;
     }
 

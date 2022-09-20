@@ -31,7 +31,7 @@ public class EquipmentFileTyController extends BaseWxController {
     @Resource
     private EquipmentFileTyService equipmentFileTyService;
 
-    @PostMapping("/detail/{tpmc}")
+    @PostMapping("/detail/{wjmc}")
     public ResponseDto detail(@PathVariable String wjmc){
         ResponseDto responseDto = new ResponseDto();
         EquipmentFileTyExample example = new EquipmentFileTyExample();

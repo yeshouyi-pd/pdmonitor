@@ -4,6 +4,9 @@ import com.pd.server.main.domain.EquipmentFileTy;
 import com.pd.server.main.domain.EquipmentFileTyToday;
 import com.pd.server.main.domain.EquipmentFileTyTodayExample;
 import java.util.List;
+
+import com.pd.server.main.dto.basewx.my.GpsKVDto;
+import com.pd.server.main.dto.basewx.my.TyDataDto;
 import org.apache.ibatis.annotations.Param;
 
 public interface EquipmentFileTyTodayMapper {
@@ -32,5 +35,7 @@ public interface EquipmentFileTyTodayMapper {
 
     int updateByPrimaryKey(EquipmentFileTyToday record);
 
-    List<String> selectTodayGps(@Param("rq")String rq,@Param("sbbh")String sbbh);
+    List<GpsKVDto> selectTodayGps(@Param("rq")String rq, @Param("sbbh")String sbbh);
+
+    TyDataDto selectTyData(EquipmentFileTyTodayExample example);
 }

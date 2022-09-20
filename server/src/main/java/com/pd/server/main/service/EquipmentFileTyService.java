@@ -4,6 +4,7 @@ import com.pd.server.main.domain.EquipmentFileTy;
 import com.pd.server.main.domain.EquipmentFileTyExample;
 import com.pd.server.main.dto.EquipmentFileTyDto;
 import com.pd.server.main.dto.PageDto;
+import com.pd.server.main.dto.basewx.my.GpsKVDto;
 import com.pd.server.main.mapper.EquipmentFileTyMapper;
 import com.pd.server.util.CopyUtil;
 import com.pd.server.util.UuidUtil;
@@ -22,7 +23,7 @@ public class EquipmentFileTyService {
     @Resource
     private EquipmentFileTyMapper equipmentFileTyMapper;
 
-    public List<String> selectTodayGps(String rq,String sbbh){
+    public List<GpsKVDto> selectTodayGps(String rq, String sbbh){
         return equipmentFileTyMapper.selectTodayGps(rq,sbbh);
     }
 
