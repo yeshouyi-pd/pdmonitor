@@ -54,6 +54,7 @@
           <th>开始时间</th>
           <th>结束时间</th>
           <th>头数</th>
+          <th style="width: 10%;">操作</th>
         </tr>
         </thead>
         <tbody>
@@ -64,6 +65,13 @@
           <td>{{item.kssj}}</td>
           <td>{{item.jssj}}</td>
           <td>{{item.ts}}</td>
+          <td>
+            <div class="hidden-sm hidden-xs btn-group">
+              <button v-on:click="downloadFile(item.id)" class="btn btn-xs btn-info" style="margin-left: 10px;">
+                <i class="ace-icon fa fa-volume-down bigger-120">下载文件</i>
+              </button>
+            </div>
+          </td>
         </tr>
         </tbody>
       </table>
@@ -145,6 +153,11 @@ export default {
         _this.equipmentTyEvents = resp.content.list;
         _this.$refs.pagination.render(page, resp.content.total);
       })
+    },
+    downloadFile(id){
+      let url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downAudioFileById?id='+id;
+      console.log(url);
+      window.location.href = url;
     }
   }
 }

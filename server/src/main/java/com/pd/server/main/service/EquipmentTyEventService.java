@@ -21,6 +21,10 @@ public class EquipmentTyEventService {
     @Resource
     private EquipmentTyEventMapper equipmentTyEventMapper;
 
+    public EquipmentTyEvent selectByPrimaryKey(String id){
+        return equipmentTyEventMapper.selectByPrimaryKey(id);
+    }
+
     /**
     * 列表查询
     */

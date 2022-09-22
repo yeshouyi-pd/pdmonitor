@@ -1,7 +1,6 @@
 package com.pd.server.main.service.shj;
 
 import com.alibaba.fastjson.JSONObject;
-import com.pd.server.config.RedisCode;
 import com.pd.server.config.SpringUtil;
 import com.pd.server.main.domain.*;
 import com.pd.server.main.mapper.EquipmentFileTyMapper;
@@ -11,7 +10,6 @@ import com.pd.server.main.mapper.WaterEquipmentMapper;
 import com.pd.server.util.DateUtil;
 import com.pd.server.util.TypeUtils;
 import com.pd.server.util.UuidUtil;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -91,19 +89,26 @@ public class EquipmentFileTyShjService extends AbstractScanRequest{
                     tyEvent.setJssj(jssj);
                     tyEvent.setRq(wjmc.substring(0,4)+"-"+wjmc.substring(5,7)+"-"+wjmc.substring(8,10));
                     tyEvent.setTs(entity.getTs());
+                    tyEvent.setBz(entity.getId());
                     equipmentTyEventMapper.insert(tyEvent);
                 }
                 equipmentFileTyMapper.insert(entity);
                 todayMapper.insertEquipTy(entity);
                 data="保存成功";
-                return data;
+                JSONObject result = new JSONObject();
+                result.put("data",data);
+                result.put("entity",entity);
+                return result.toJSONString();
             }else {
                 data="该图片已保存过";
-                return data;
+                JSONObject result = new JSONObject();
+                result.put("data",data);
+                return result.toJSONString();
             }
         }catch (Exception e){
-            data="数据解析出错";
-            return data;
+            JSONObject result = new JSONObject();
+            result.put("data",data);
+            return result.toJSONString();
         }
     }
 
