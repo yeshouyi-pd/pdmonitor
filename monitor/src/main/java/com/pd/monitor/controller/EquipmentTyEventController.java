@@ -2,32 +2,51 @@ package com.pd.monitor.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.pd.monitor.wx.conf.BaseWxController;
 import com.pd.server.main.domain.EquipmentTyEvent;
 import com.pd.server.main.domain.EquipmentTyEventExample;
 import com.pd.server.main.dto.EquipmentTyEventDto;
-import com.pd.server.main.dto.PageDto;
+import com.pd.server.main.dto.LoginUserDto;
 import com.pd.server.main.dto.ResponseDto;
 import com.pd.server.main.service.EquipmentTyEventService;
 import com.pd.server.util.CopyUtil;
+import com.pd.server.util.DateUtils;
 import com.pd.server.util.ValidatorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("/admin/equipmentTyEvent")
-public class EquipmentTyEventController {
+public class EquipmentTyEventController extends BaseWxController {
 
     private static final Logger LOG = LoggerFactory.getLogger(EquipmentTyEventController.class);
     public static final String BUSINESS_NAME = "聚类事件";
 
     @Resource
     private EquipmentTyEventService equipmentTyEventService;
+
+    @GetMapping("/getTodayEvent")
+    public ResponseDto getTodayEvent(){
+        ResponseDto responseDto = new ResponseDto();
+        LoginUserDto userDto = getRequestHeader();
+        List<String> depts = getUpdeptcode(userDto.getDeptcode());
+        EquipmentTyEventExample example = new EquipmentTyEventExample();
+        EquipmentTyEventExample.Criteria ca = example.createCriteria();
+        ca.andRqEqualTo(DateUtils.getDateToStrFormat(new Date(),"yyyy-MM-dd"));
+        if(!CollectionUtils.isEmpty(depts)){
+            ca.andDeptcodeIn(depts);
+        }
+        example.setOrderByClause(" kssj desc ");
+        List<EquipmentTyEvent> lists = equipmentTyEventService.list(example);
+        responseDto.setContent(lists);
+        return responseDto;
+    }
 
     /**
     * 列表查询

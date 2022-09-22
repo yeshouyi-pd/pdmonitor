@@ -2,7 +2,11 @@ package com.pd.monitor.controller;
 
 import com.pd.server.main.domain.EquipmentFile;
 import com.pd.server.main.domain.EquipmentFileExample;
+import com.pd.server.main.domain.EquipmentFileTy;
+import com.pd.server.main.domain.EquipmentTyEvent;
 import com.pd.server.main.service.EquipmentFileService;
+import com.pd.server.main.service.EquipmentFileTyService;
+import com.pd.server.main.service.EquipmentTyEventService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +28,50 @@ public class DownloadAudioController {
     public static final String BUSINESS_NAME = "下载江豚音频文件";
 
     @Resource
-    private EquipmentFileService equipmentFileService;
+    private EquipmentFileTyService equipmentFileTyService;
+    @Resource
+    private EquipmentTyEventService equipmentTyEventService;
+
+    @GetMapping("/downAudioFileById")
+    public void downAudioFileById(HttpServletRequest request, HttpServletResponse response){
+        BufferedInputStream in = null;
+        try{
+            String id = request.getParameter("id");
+            EquipmentTyEvent event = equipmentTyEventService.selectByPrimaryKey(id);
+            EquipmentFileTy fileEntity = equipmentFileTyService.selectByPrimaryKey(event.getBz());
+            String fileName = fileEntity.getTplj().substring(fileEntity.getTplj().lastIndexOf("/"));
+            String fileUrl = fileEntity.getTplj().substring(0,fileEntity.getTplj().lastIndexOf("/")+1);
+            String remoteFileUrl = java.net.URLEncoder.encode(fileName, "UTF-8").replace("+","%20");
+            if (null == remoteFileUrl || remoteFileUrl.length() == 0) {
+                throw new RuntimeException("remoteFileUrl is invalid!");
+            }
+            URL url = new URL(fileUrl+remoteFileUrl);
+            // URLConnection conn = url.openConnection();
+            // in = new BufferedInputStream(conn.getInputStream());
+            // 这和上面两句一样的效果
+            in = new BufferedInputStream(url.openStream());
+            response.reset();
+            response.setContentType("application/octet-stream");
+            fileName = new String(fileName.getBytes(), "ISO-8859-1");
+            response.setHeader("Content-Disposition", "attachment; filename="+fileName);
+            // 将网络输入流转换为输出流
+            int i;
+            while ((i = in.read()) != -1) {
+                response.getOutputStream().write(i);
+            }
+            in.close();
+            response.getOutputStream().close();
+        }catch (IOException e){
+            try{
+                String result = "未找到该文件";
+                response.getOutputStream().write(result.getBytes());
+                in.close();
+                response.getOutputStream().close();
+            }catch (IOException exception){
+                System.out.println("关闭流失败");
+            }
+        }
+    }
 
     @GetMapping("/downAudioFile")
     public void downAudioFile(HttpServletRequest request, HttpServletResponse response) {

@@ -57,7 +57,22 @@
         <div id="mapDiv" style="position:absolute;" class="left-map"></div>
       </div>
       <div class="right">
-
+        <table class="table  table-bordered table-hover" >
+          <thead>
+            <tr>
+              <th>开始时间</th>
+              <th>结束时间</th>
+              <th>头数</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="item in eventData">
+              <td>{{item.kssj}}</td>
+              <td>{{item.jssj}}</td>
+              <td>{{item.ts}}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -80,7 +95,8 @@ export default {
       markers:[],
       maxHeight:'',
       maxWidth:'',
-      topData:{}
+      topData:{},
+      eventData:[]
     }
   },
   created() {
@@ -88,12 +104,49 @@ export default {
     _this.curDateStr = Tool.dateFormat("yyyy-MM-dd");
     _this.getEquipmentByTy();
     _this.getTopData();
+    _this.getTodayEvent();
   },
   mounted() {
     let _this = this;
     _this.initMap();
+    _this.openSocket();
   },
   methods: {
+    openSocket(){
+      var socket;
+      if(typeof(WebSocket) == "undefined") {
+        alert("您的浏览器不支持WebSocket,无法实时更新数据,请使用谷歌、火狐或IE11等浏览器!");
+      }else{
+        var socketUrl="ws://146.56.226.176:9091/monitor/websocket/21";
+        console.log(socketUrl);
+        if(socket!=null){
+          socket.close();
+          socket=null;
+        }
+        socket = new WebSocket(socketUrl);
+        //打开事件
+        socket.onopen = function() {
+          console.log("websocket已打开");
+        };
+        //获得消息事件
+        socket.onmessage = function(msg) {
+          if(msg.data.includes("连接成功")){
+            Toast.success(msg.data);
+          }else{
+            console.log(msg.data);
+          }
+          console.log(msg);
+        };
+        //关闭事件
+        socket.onclose = function() {
+          console.log("websocket已关闭");
+        };
+        //发生了错误事件
+        socket.onerror = function() {
+          console.log("websocket发生了错误");
+        }
+      }
+    },
     //获取当日出现次数，捕食次数，聚类次数，最多豚数
     getTopData(){
       let _this = this;
@@ -102,6 +155,16 @@ export default {
         Loading.hide();
         let resp = response.data;
         _this.topData = resp.content;
+      })
+    },
+    //获取当天聚类事件
+    getTodayEvent(){
+      let _this = this;
+      Loading.show();
+      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentTyEvent/getTodayEvent').then((response)=>{
+        Loading.hide();
+        let resp = response.data;
+        _this.eventData = resp.content;
       })
     },
     //获取拖曳设备
@@ -196,7 +259,7 @@ export default {
 }
 .left{
   margin-top: 10px;
-  width: 1100px;
+  width: 80%;
   height: 830px;
   background-color: #fff;
 }
@@ -207,10 +270,12 @@ export default {
   left: 300px;
 }
 .left-map{
-  width: 1080px;
+  width: 78%;
   height: 830px;
 }
 .right{
-
+  width: 19%;
+  margin-top: 10px;
+  border: 1px solid #ccc;
 }
 </style>

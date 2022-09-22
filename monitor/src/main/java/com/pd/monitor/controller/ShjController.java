@@ -51,6 +51,14 @@ public class ShjController{
             Class<?> shjClass =  Class.forName(actionName);
             AbstractScanRequest shjRequest = (AbstractScanRequest)shjClass.getConstructor().newInstance();
             data = shjRequest.request(jsonObject.getJSONObject("data"));
+            if("EquipmentFileByTy".equals(methodname)){
+                JSONObject result = JSONObject.parseObject(data);
+                data = result.getString("data");
+                if("保存成功".equals(data)){
+                    JSONObject entity = result.getJSONObject("entity");
+                    WebSocketServer.sendInfo(entity.toJSONString(),null);
+                }
+            }
             if("参数错误".equals(data)){
                 returnObject.put("returnCode", ShjJsonConstant.CODE_4000);
                 returnObject.put("returnMsg", ShjJsonConstant.MSG_4000);

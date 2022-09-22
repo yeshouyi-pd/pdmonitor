@@ -23,6 +23,10 @@ public class EquipmentFileTyService {
     @Resource
     private EquipmentFileTyMapper equipmentFileTyMapper;
 
+    public EquipmentFileTy selectByPrimaryKey(String id){
+        return equipmentFileTyMapper.selectByPrimaryKey(id);
+    }
+
     public List<GpsKVDto> selectTodayGps(String rq, String sbbh){
         return equipmentFileTyMapper.selectTodayGps(rq,sbbh);
     }
