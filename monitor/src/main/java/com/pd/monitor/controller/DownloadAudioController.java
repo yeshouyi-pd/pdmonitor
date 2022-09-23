@@ -1,10 +1,7 @@
 package com.pd.monitor.controller;
 
-import com.pd.server.main.domain.EquipmentFile;
-import com.pd.server.main.domain.EquipmentFileExample;
 import com.pd.server.main.domain.EquipmentFileTy;
 import com.pd.server.main.domain.EquipmentTyEvent;
-import com.pd.server.main.service.EquipmentFileService;
 import com.pd.server.main.service.EquipmentFileTyService;
 import com.pd.server.main.service.EquipmentTyEventService;
 import org.slf4j.Logger;

@@ -1,7 +1,21 @@
 <template>
   <div class="ty-body">
-    <div class="row">
-      <div class="col-xl-3 col-sm-3 col-12">
+    <div style="padding-top: 10px;">
+      <div class="col-xl-3 col-sm-2 col-12">
+        <div class="card" style="height: 80px;display: flex;justify-content: center;align-items: center;">
+          <div class="card-body" style="height: 40px;">
+            <button class="btn btn-primary" v-on:click="toDp">
+              <i class="ace-icon fa fa-reply icon-only bigger-150"></i>
+              返回大屏
+            </button>
+            <button class="btn btn-primary" style="margin-left: 5px;" v-on:click="toChoose">
+              <i class="ace-icon fa fa-signal icon-only bigger-150"></i>
+              进入主页
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-sm-2 col-12">
         <div class="card">
           <div class="card-body" style="border: 1px solid rgb(255, 238, 195);">
             <div class="card-num" style="background-color: rgb(255, 238, 195);">{{topData.cxcs}}</div>
@@ -9,7 +23,7 @@
           </div>
         </div>
       </div>
-      <div class="col-xl-3 col-sm-3 col-12">
+      <div class="col-xl-3 col-sm-2 col-12">
         <div class="card">
           <div class="card-body" style="border: 1px solid rgb(195, 227, 238);">
             <div class="card-num" style="background-color: rgb(195, 227, 238);">{{topData.bscs}}</div>
@@ -17,7 +31,7 @@
           </div>
         </div>
       </div>
-      <div class="col-xl-3 col-sm-3 col-12">
+      <div class="col-xl-3 col-sm-2 col-12">
         <div class="card">
           <div class="card-body" style="border: 1px solid rgb(206, 255, 213);">
             <div class="card-num" style="background-color: rgb(206, 255, 213);">{{topData.jlcs}}</div>
@@ -25,7 +39,7 @@
           </div>
         </div>
       </div>
-      <div class="col-xl-3 col-sm-3 col-12">
+      <div class="col-xl-3 col-sm-2 col-12">
         <div class="card">
           <div class="card-body" style="border: 1px solid rgb(252, 202, 255);">
             <div class="card-num" style="background-color: rgb(252, 202, 255);">{{topData.ts}}</div>
@@ -96,7 +110,8 @@ export default {
       maxHeight:'',
       maxWidth:'',
       topData:{},
-      eventData:[]
+      eventData:[],
+      amap:'',
     }
   },
   created() {
@@ -109,15 +124,22 @@ export default {
   mounted() {
     let _this = this;
     _this.initMap();
-    _this.openSocket();
   },
   methods: {
+    toDp(){
+      window.location.href = "/mobile/largemonitors";
+    },
+    toChoose(){
+      window.location.href = "/admin/chooseProject";
+    },
     openSocket(){
-      var socket;
+      let _this = this;
+      let socket;
       if(typeof(WebSocket) == "undefined") {
         alert("您的浏览器不支持WebSocket,无法实时更新数据,请使用谷歌、火狐或IE11等浏览器!");
       }else{
-        var socketUrl="ws://146.56.226.176:9091/monitor/websocket/21";
+        //let socketUrl="ws://146.56.226.176:9091/monitor/websocket/21_"+new Date().getTime();
+        let socketUrl="ws://192.168.10.13:9091/monitor/websocket/21_"+new Date().getTime();
         console.log(socketUrl);
         if(socket!=null){
           socket.close();
@@ -133,9 +155,33 @@ export default {
           if(msg.data.includes("连接成功")){
             Toast.success(msg.data);
           }else{
-            console.log(msg.data);
+            let data = JSON.parse(msg.data);
+            if(data.wjlx=='3'){
+              _this.topData.cxcs++;
+              if(data.type=='1009'||data.type=='1007'){
+                _this.topData.bscs++;
+              }
+              if(data.type=='1012'){
+                _this.topData.jlcs++;
+                let wjmc = data.tplj.substring(data.tplj.lastIndexOf("/")+1,data.tplj.lastIndexOf("_A2.txt"));
+                let kssj = wjmc.substring(0,4)+"-"+wjmc.substring(5,7)+"-"+wjmc.substring(8,10)+" "+wjmc.substring(11,13)+":"+wjmc.substring(14,16)+":"+wjmc.substring(17,19);
+                let jssj = wjmc.substring(20,24)+"-"+wjmc.substring(25,27)+"-"+wjmc.substring(28,30)+" "+wjmc.substring(31,33)+":"+wjmc.substring(34,36)+":"+wjmc.substring(37,39);
+                let ts = wjmc.substring(40)==0?1:wjmc.substring(40);
+                let item = {
+                  "kssj":kssj,
+                  "jssj":jssj,
+                  "ts":ts
+                }
+                _this.eventData.unshift(item);
+                _this.addMarker(data.sm2,ts);
+              }
+              if(!Tool.isEmpty(data.ts)){
+                if(_this.topData.ts==0 || _this.topData.ts<Number(data.ts)){
+                  _this.topData.ts = Number(data.ts);
+                }
+              }
+            }
           }
-          console.log(msg);
         };
         //关闭事件
         socket.onclose = function() {
@@ -155,6 +201,19 @@ export default {
         Loading.hide();
         let resp = response.data;
         _this.topData = resp.content;
+        if(Tool.isEmpty(_this.topData.cxcs)){
+          _this.topData.cxcs=0;
+        }
+        if(Tool.isEmpty(_this.topData.bscs)){
+          _this.topData.bscs=0;
+        }
+        if(Tool.isEmpty(_this.topData.jlcs)){
+          _this.topData.jlcs=0;
+        }
+        if(Tool.isEmpty(_this.topData.ts)){
+          _this.topData.ts=0;
+        }
+        _this.openSocket();
       })
     },
     //获取当天聚类事件
@@ -180,14 +239,14 @@ export default {
           let arr = _this.equipments[0].gps.split(",");
           _this.jd = Number(arr[0]);
           _this.wd = Number(arr[1]);
-          _this.map.centerAndZoom(new TLngLat(_this.jd,_this.wd),_this.zoom);
+          // _this.map.centerAndZoom(new TLngLat(_this.jd,_this.wd),_this.zoom);
           _this.getGpsBySbsn();
         }
       })
     },
     getGpsBySbsn(){
       let _this = this;
-      _this.map.clearOverLays();
+      _this.amap.clearMap();
       let obj = {
         "rq":_this.curDateStr,
         "sbbh":_this.curSbsn
@@ -197,36 +256,72 @@ export default {
         Loading.hide();
         let resp = response.data;
         let gpslist = resp.content;
+        // if(gpslist && gpslist.length>0){
+        //   _this.map.panTo(new TLngLat(Number(gpslist[0].gps.split(",")[0]),Number(gpslist[0].gps.split(",")[1])));
+        //   gpslist.forEach(function (item){
+        //     let icon = new TIcon("https://webapi.amap.com/theme/v1.3/markers/n/mark_bs.png",new TSize(19,27),{anchor:new TPixel(9,27)});
+        //     let gps = item.gps.split(",");
+        //     let lnglat = new TLngLat(Number(gps[0]),Number(gps[1]));
+        //     let marker = new TMarker(lnglat,{icon:icon});
+        //     marker.setTitle(item.ts);
+        //     _this.map.addOverLay(marker);
+        //   })
+        // }
         if(gpslist && gpslist.length>0){
+          _this.amap.setCenter(gpslist[0].gps.split(","));
           gpslist.forEach(function (item){
-            var icon = new TIcon("https://webapi.amap.com/theme/v1.3/markers/n/mark_bs.png",new TSize(19,27),{anchor:new TPixel(9,27)});
-            let gps = item.gps.split(",");
-            let lnglat = new TLngLat(Number(gps[0]),Number(gps[1]));
-            let marker = new TMarker(lnglat,{icon:icon});
-            marker.setTitle(item.ts);
-            _this.map.addOverLay(marker);
+            let marker = new AMap.Marker({
+              position: item.gps.split(","),
+              icon: '//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-default.png',
+              anchor:'bottom-center',
+              offset: new AMap.Pixel(0, 0),
+              map: _this.amap
+            });
+            marker.setLabel({
+              direction:'center',
+              offset:new AMap.Pixel(0, -5),
+              content: item.ts, //设置文本标注内容
+            });
           })
         }
       })
     },
     initMap(){
+      // let _this = this;
+      // //初始化地图对象
+      // _this.map=new TMap("mapDiv");
+      // //设置显示地图的中心点和级别
+      // if(_this.wd!=0&&_this.wd!=0){
+      //   _this.map.centerAndZoom(new TLngLat(_this.jd,_this.wd),_this.zoom);
+      // }
+      // //允许鼠标滚轮缩放地图
+      // _this.map.enableHandleMouseScroll();
       let _this = this;
-      //初始化地图对象
-      _this.map=new TMap("mapDiv");
-      //设置显示地图的中心点和级别
-      if(_this.wd!=0&&_this.wd!=0){
-        _this.map.centerAndZoom(new TLngLat(_this.jd,_this.wd),_this.zoom);
-      }
-      //允许鼠标滚轮缩放地图
-      _this.map.enableHandleMouseScroll();
+      _this.amap = new AMap.Map('mapDiv', {
+        resizeEnable: true,
+        zoom: _this.zoom
+      });
     },
-    initMapMarkers(){
+    addMarker(gpsStr,ts){
       let _this = this;
-      let config = {
-        markers:_this.markers
-      };
-      //最简单的用法，生成一个marker数组，然后调用markerClusterer类即可
-      _this.markerClusterer = new TMarkerClusterer(_this.map,config);
+      // let icon = new TIcon("https://webapi.amap.com/theme/v1.3/markers/n/mark_bs.png",new TSize(19,27),{anchor:new TPixel(9,27)});
+      // let gps = gpsStr.split(",");
+      // let lnglat = new TLngLat(Number(gps[0]),Number(gps[1]));
+      // let marker = new TMarker(lnglat,{icon:icon});
+      // marker.setTitle(ts);
+      // _this.map.addOverLay(marker);
+      let marker = new AMap.Marker({
+        position: gpsStr.split(","),
+        icon: '//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-default.png',
+        anchor:'bottom-center',
+        offset: new AMap.Pixel(0, 0),
+        map: _this.amap
+      });
+      marker.setLabel({
+        direction:'center',
+        offset:new AMap.Pixel(0, -5),
+        content: ts, //设置文本标注内容
+      });
     }
   }
 }
@@ -234,6 +329,8 @@ export default {
 <style scoped>
 .ty-body{
   background-color: #fff;
+  display: flex;
+  flex-direction: column;
 }
 .card-body{
   display: flex;
@@ -245,7 +342,7 @@ export default {
   height: 60px;
   line-height: 60px;
   margin-top: 10px;
-  width: 16%;
+  width: 25%;
   text-align: center;
   border-radius: 10px;
   margin-left: 5px;

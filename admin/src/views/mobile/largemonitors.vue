@@ -12,6 +12,7 @@
             <ul style="height: 30px; margin-bottom: 0px;">
                 <!--<router-link to="/admin/chooseProject">-->
                     <li @click="chooseProject" class="l_left total_chose_fr nav_active">主页</li>
+                    <li @click="toTyDp" class="l_left total_chose_fr nav_active">巡护</li>
                 <!--</router-link>-->
             </ul>
         </div>
@@ -258,6 +259,9 @@
             _this.heightMax = h*0.8-20;
         },
         methods: {
+            toTyDp(){
+                window.location.href = "/mobile/largemonitorsTy";
+            },
             chooseProject(){
                 window.location.href = "/admin/chooseProject";
             },

@@ -56,6 +56,7 @@ public class ShjController{
                 data = result.getString("data");
                 if("保存成功".equals(data)){
                     JSONObject entity = result.getJSONObject("entity");
+                    entity.remove("sm1");
                     WebSocketServer.sendInfo(entity.toJSONString(),null);
                 }
             }
