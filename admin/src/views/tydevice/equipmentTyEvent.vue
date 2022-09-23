@@ -10,17 +10,10 @@
             <table style="font-size: 1.1em;width:100%" class="text-right">
               <tbody>
               <tr>
-<!--                <td style="width:10%">-->
-<!--                  创建日期：-->
-<!--                </td>-->
-<!--                <td style="width: 25%">-->
-<!--                  <times v-bind:startTime="startTime" v-bind:endTime="endTime" start-id="etestime" end-id="eteetime"></times>-->
-<!--                </td>-->
                 <td style="width:10%">
                   设备名称：
                 </td>
                 <td style="width: 15%">
-<!--                  <input class="form-control" type="text"  v-model="equipmentTyEventDto.sbbh"/>-->
                   <select v-model="equipmentTyEventDto.sbbh" class="form-control" id="form-field-select-1">
                     <option value="" selected>请选择</option>
                     <option v-for="item in waterEquipments" :value="item.sbsn">{{item.sbmc}}</option>
