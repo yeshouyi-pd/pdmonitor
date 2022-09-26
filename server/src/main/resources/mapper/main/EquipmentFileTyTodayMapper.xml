@@ -556,7 +556,7 @@
     order by cjsj desc
   </select>
   <select id="selectTyData" parameterType="com.pd.server.main.domain.EquipmentFileTyTodayExample" resultMap="TyDataMap">
-    select sum(IF(wjlx='3',1,0)) as cxcs,sum(IF(jczl='1',1,0)) as bscs,sum(IF(type='1012',1,0)) as jlcs,max(ts) as ts
+    select count(1) as cxcs,sum(IF(jczl='1',1,0)) as bscs,sum(IF(type='1012',1,0)) as jlcs,max(ts) as ts
     from equipment_file_ty_today
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
