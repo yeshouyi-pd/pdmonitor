@@ -58,7 +58,7 @@ export default {
       jd:0,
       wd:0,
       map:null,
-      zoom:12,
+      zoom:11,
       markerClusterer:null,
       markers:[],
       maxHeight:'',
@@ -115,6 +115,8 @@ export default {
         let resp = response.data;
         let gpslist = resp.content;
         if(gpslist && gpslist.length>0){
+          console.log(gpslist.length/2);
+          _this.map.panTo(new TLngLat(Number(gpslist[parseInt(gpslist.length/2)].gps.split(",")[0]),Number(gpslist[parseInt(gpslist.length/2)].gps.split(",")[1])));
           gpslist.forEach(function (item){
             var icon = new TIcon("https://webapi.amap.com/theme/v1.3/markers/n/mark_bs.png",new TSize(19,27),{anchor:new TPixel(9,27)});
             let gps = item.gps.split(",");
