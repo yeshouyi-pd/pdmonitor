@@ -30,6 +30,7 @@ public class TypeUtils {
     public static final String KEY_10 = "KEY_10";
     public static final String KEY_11 = "KEY_11";
     public static final String KEY_12 = "KEY_12";
+    public static final String KEY_13 = "KEY_13";
 
 
     public static final String ZZ_1 = "^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}.txt$";
@@ -44,6 +45,7 @@ public class TypeUtils {
     public static final String ZZ_10 ="^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{1,}.txt$";
     public static final String ZZ_11 ="^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{1,}_A2.txt$";
     public static final String ZZ_12 ="^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{1,}_A2.txt$";
+    public static final String ZZ_13 ="^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{1,}_A2_\\w{1,}.mp4$";
 
     public static Map<String,String> patternmap = new HashMap<>();
     static {
@@ -59,6 +61,7 @@ public class TypeUtils {
         patternmap.put(KEY_10,ZZ_10);
         patternmap.put(KEY_11,ZZ_11);
         patternmap.put(KEY_12,ZZ_12);
+        patternmap.put(KEY_13,ZZ_13);
     }
 
 
@@ -141,6 +144,11 @@ public class TypeUtils {
                         txtlx="3";
                         ts = tss[12];
 
+                    }else if(KEY_13.equals(entry.getKey())){
+                        type = "1013";
+                        wjlx ="4";
+                        ts = tss[12];
+
                     }
                     break;
                 }
@@ -176,7 +184,8 @@ public class TypeUtils {
         String u11  = "2022_09_05_09_04_54_0_A2.txt";
         String u12  = "2022_09_08_14_29_43_2022_09_08_14_29_46_1_A2.txt";
         String tst = "2022_09_09_10_18_12_0.wav";
-        Map<String,String> map =  getType(u12);
+        String u13 = "2022_09_08_14_29_43_2022_09_08_14_29_46_1_A2_TD33.mp4";
+        Map<String,String> map =  getType(u13);
         Set set = map.entrySet();
         for(Object key:set){
             Map.Entry entry = (Map.Entry) key;
