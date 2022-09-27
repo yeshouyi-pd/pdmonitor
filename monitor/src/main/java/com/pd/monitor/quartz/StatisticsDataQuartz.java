@@ -165,7 +165,7 @@ public class StatisticsDataQuartz {
                 }
                 equipmentFileAlarmEventService.insert(entity);
                 //将信息写入事件相机表中，以便于做切片
-                saveEventCameraInfo(entity, key, kssj, jssj);
+                //saveEventCameraInfo(entity, key, kssj, jssj);
             }
         }
         //捕食次数统计
@@ -225,29 +225,29 @@ public class StatisticsDataQuartz {
         }
     }
 
-    public void saveEventCameraInfo(EquipmentFileAlarmEventDto entity, String key, String kssj, String jssj){
-        if(kssj.equals(jssj)){
-            jssj = DateUtil.getFormatDate(DateUtil.getMinutesLater(DateUtil.toDate(jssj,"yyyy-MM-dd HH:mm:ss"),1),"yyyy-MM-dd HH:mm:ss");
-        }
-        //通过设备编号查询相机信息
-        List<CameraInfo> list = cameraInfoService.findBySbbh(key);
-        if(!CollectionUtils.isEmpty(list)){
-            for (CameraInfo cameraInfo : list){
-                EventCameraInfoDto info = new EventCameraInfoDto();
-                info.setDvrip(cameraInfo.getDvrip());
-                info.setTdh(cameraInfo.getSbdk());
-                info.setSxtbh(cameraInfo.getSm2());
-                info.setKssj(DateUtil.toDate(kssj,"yyyy-MM-dd HH:mm:ss"));
-                info.setJssj(DateUtil.toDate(jssj,"yyyy-MM-dd HH:mm:ss"));
-                info.setSjid(entity.getId());
-                info.setSbsn(entity.getSbbh());
-                info.setDeptcode(entity.getDeptcode());
-                eventCameraInfoService.save(info);
-            }
-        }else {
-            LOG.error("设备编号:"+key+",没有查询到对于的相机信息");
-        }
-    }
+//    public void saveEventCameraInfo(EquipmentFileAlarmEventDto entity, String key, String kssj, String jssj){
+//        if(kssj.equals(jssj)){
+//            jssj = DateUtil.getFormatDate(DateUtil.getMinutesLater(DateUtil.toDate(jssj,"yyyy-MM-dd HH:mm:ss"),1),"yyyy-MM-dd HH:mm:ss");
+//        }
+//        //通过设备编号查询相机信息
+//        List<CameraInfo> list = cameraInfoService.findBySbbh(key);
+//        if(!CollectionUtils.isEmpty(list)){
+//            for (CameraInfo cameraInfo : list){
+//                EventCameraInfoDto info = new EventCameraInfoDto();
+//                info.setDvrip(cameraInfo.getDvrip());
+//                info.setTdh(cameraInfo.getSbdk());
+//                info.setSxtbh(cameraInfo.getSm2());
+//                info.setKssj(DateUtil.toDate(kssj,"yyyy-MM-dd HH:mm:ss"));
+//                info.setJssj(DateUtil.toDate(jssj,"yyyy-MM-dd HH:mm:ss"));
+//                info.setSjid(entity.getId());
+//                info.setSbsn(entity.getSbbh());
+//                info.setDeptcode(entity.getDeptcode());
+//                eventCameraInfoService.save(info);
+//            }
+//        }else {
+//            LOG.error("设备编号:"+key+",没有查询到对于的相机信息");
+//        }
+//    }
 
     public static Boolean isOverThreeMinute(String curDateStr, String nextDateStr){
         Date begin = DateUtil.toDate(curDateStr,"yyyy-MM-dd HH:mm");
