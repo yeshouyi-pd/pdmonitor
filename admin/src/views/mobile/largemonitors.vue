@@ -109,23 +109,17 @@
                                 <thead>
                                 <tr style="background: #395DC0;color: #FFFFFF;">
                                     <th style="width: 20%;">设备编号</th>
-                                    <th style="width: 20%;">检验项目</th>
-                                    <th style="width: 20%;">检验结果</th>
-                                    <th style="width: 40%;">更新时间</th>
+                                    <th style="width: 30%;">开始时间</th>
+                                    <th style="width: 30%;">结束时间</th>
+                                    <th style="width: 20%;">头数</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr v-for="item  in  waterQualityResults" style="text-align: left;background: #18468E;">
-                                    <td>{{ item.ip }}</td>
-                                    <td>
-                                        {{szjcx|optionMapKV(item.jcxm )}}
-                                    </td>
-                                    <td >
-                                        <div v-show="item.dataResult">
-                                            <b class="green">{{item.dataResult}}</b>{{JYXM_DW|optionKV(item.jcxm)}}
-                                        </div>
-                                    </td>
-                                    <td>{{item.createTime}}</td>
+                                <tr v-for="item  in  eventDatas" style="text-align: left;background: #18468E;">
+                                    <td>{{ item.sbbh }}</td>
+                                    <td>{{ item.kssj.substring(11) }}</td>
+                                    <td>{{ item.jssj.substring(11) }}</td>
+                                    <td>{{ item.ts }}</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -240,17 +234,19 @@
                 intervalId:null,
                 cameras:[],
                 heightMax:'',
-                deptMap:[]
+                deptMap:[],
+                eventDatas:[]
             }
         },
         mounted: function () {
             let _this = this;
             _this.deptMap = Tool.getDeptUser();
             _this.getDataCamera();
-            _this.getSzjcx();
+            //_this.getSzjcx();
             _this.getPieChart();
-            _this.getLatestDate();
-            _this.TimeControl();
+            _this.getEventData();
+            //_this.getLatestDate();
+            //_this.TimeControl();
             //_this.Interval();
             _this.getWarningDate();
             _this.getContainerDate();
@@ -285,10 +281,11 @@
                 // 计时器为空，操作
                 _this.intervalId = setInterval(() => {
                     console.log("刷新" + new Date());
-                    _this.getSzjcx();
+                    //_this.getSzjcx();
                     _this.getPieChart();
-                    _this.getLatestDate();
-                    _this.TimeControl();
+                    _this.getEventData();
+                    //_this.getLatestDate();
+                    //_this.TimeControl();
                     _this.getWarningDate();
                     _this.getContainerDate();
                     _this.TimeSum();
@@ -455,6 +452,16 @@
                     let response = res.data;
                     _this.waterQualityResults = response.content;
                 })
+            },
+            /**
+             * 事件数据
+             */
+            getEventData(){
+              let _this = this;
+              _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getEventData').then((res)=>{
+                let response = res.data;
+                _this.eventDatas = response.content;
+              })
             },
             /**
              *  welcome 饼状图 数据

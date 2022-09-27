@@ -4,10 +4,7 @@ package com.pd.monitor.controller;
 import com.pd.monitor.wx.conf.BaseWxController;
 import com.pd.server.main.domain.*;
 import com.pd.server.main.dto.*;
-import com.pd.server.main.service.EquipmentFileService;
-import com.pd.server.main.service.EquipmentFileTodayService;
-import com.pd.server.main.service.WaterEquipmentService;
-import com.pd.server.main.service.WaterQualityResultService;
+import com.pd.server.main.service.*;
 import com.pd.server.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,10 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -48,6 +42,8 @@ public class WelcomeController  extends BaseWxController{
 
     @Resource
     private EquipmentFileTodayService equipmentFileTodayService;
+    @Resource
+    private EquipmentTyEventService equipmentTyEventService;
 
     /**
      * 大屏 捕食行为
@@ -130,6 +126,25 @@ public class WelcomeController  extends BaseWxController{
         return responseDto;
     }
 
+    @GetMapping("/getEventData")
+    public ResponseDto getEventData() {
+        ResponseDto responseDto = new ResponseDto();
+        LoginUserDto user   = getRequestHeader();
+        if(null != user) {
+            if (!StringUtils.isEmpty(user.getDeptcode())) {
+                List<String> listdept = getUpdeptcode(user.getDeptcode());
+                EquipmentTyEventExample example = new EquipmentTyEventExample();
+                EquipmentTyEventExample.Criteria  ca = example.createCriteria();
+                if(!CollectionUtils.isEmpty(listdept)){
+                    ca.andDeptcodeIn(listdept);
+                }
+                ca.andRqEqualTo(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd"));
+                List<EquipmentTyEvent> list = equipmentTyEventService.list(example);
+                responseDto.setContent(list);
+            }
+        }
+        return responseDto;
+    }
 
     /**
      *  welcome 水质实时数据
