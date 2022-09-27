@@ -97,8 +97,9 @@
                     <div class="dataAllBorder01 cage_cl" style="margin-top: 9% !important; height: 24%">
                         <div class="dataAllBorder02" id="cage_cl" style="border: 0px solid red;padding-left: 10%;padding-top: 5%;">
                             <div class="analysis">当日声学侦测次数：{{alarmDatas.num}}次</div>
-                            <div class="analysis" style="margin: 20px 0;">当日事件(群次)：{{alarmDatas.nnm}}次</div>
+                            <div class="analysis" style="margin: 5px 0;">当日事件(群次)：{{alarmDatas.nnm}}次</div>
                             <div class="analysis">当日捕食次数：{{alarmDatas.bnum}}次</div>
+                            <div class="analysis" style="margin: 5px 0;">当日群次：{{eventDatas.length}}次</div>
                         </div>
                     </div>
 
