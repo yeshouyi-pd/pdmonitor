@@ -139,6 +139,7 @@ public class WelcomeController  extends BaseWxController{
                     ca.andDeptcodeIn(listdept);
                 }
                 ca.andRqEqualTo(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd"));
+                example.setOrderByClause(" kssj desc ");
                 List<EquipmentTyEvent> list = equipmentTyEventService.list(example);
                 responseDto.setContent(list);
             }
