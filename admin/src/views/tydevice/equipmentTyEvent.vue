@@ -47,7 +47,7 @@
           <th>开始时间</th>
           <th>结束时间</th>
           <th>头数</th>
-          <th style="width: 10%;">操作</th>
+          <th style="width: 13%;">操作</th>
         </tr>
         </thead>
         <tbody>
@@ -62,6 +62,9 @@
             <div class="hidden-sm hidden-xs btn-group">
               <button v-on:click="downloadFile(item.id)" class="btn btn-xs btn-info" style="margin-left: 10px;">
                 <i class="ace-icon fa fa-volume-down bigger-120">下载文件</i>
+              </button>
+              <button v-on:click="downloadVedio(item.id)" class="btn btn-xs btn-info" style="margin-left: 10px;">
+                <i class="ace-icon fa fa-volume-down bigger-120">下载视频</i>
               </button>
             </div>
           </td>
@@ -151,6 +154,19 @@ export default {
       let url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downAudioFileById?id='+id;
       console.log(url);
       window.location.href = url;
+    },
+    downloadVedio(id){
+      let _this = this;
+      let url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downZipById?id='+id;
+      _this.$ajax.get(url).then((response)=>{
+        if(response.data && response.data.message && response.data.message.includes("系统异常")){
+          Toast.error("系统异常，请联系管理员！");
+        }else if(response.data && response.data.includes("未找到对应视频")){
+          Toast.error("未找到对应视频！");
+        }else{
+          window.location.href = url;
+        }
+      })
     }
   }
 }
