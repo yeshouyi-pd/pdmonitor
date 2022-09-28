@@ -71,7 +71,7 @@
         <div id="mapDiv" style="position:absolute;" class="left-map"></div>
       </div>
       <div class="right">
-        <table class="table  table-bordered table-hover" >
+        <table class="table  table-bordered table-hover">
           <thead>
             <tr>
               <th>开始时间</th>
@@ -79,7 +79,7 @@
               <th>头数</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody  style="height: 800px;overflow-y: auto" >
             <tr v-for="item in eventData">
               <td>{{item.kssj}}</td>
               <td>{{item.jssj}}</td>
@@ -138,8 +138,8 @@ export default {
       if(typeof(WebSocket) == "undefined") {
         alert("您的浏览器不支持WebSocket,无法实时更新数据,请使用谷歌、火狐或IE11等浏览器!");
       }else{
-        //let socketUrl="ws://146.56.226.176:9091/monitor/websocket/21_"+new Date().getTime();
-        let socketUrl="ws://192.168.10.13:9091/monitor/websocket/21_"+new Date().getTime();
+        let socketUrl="ws://146.56.226.176:9091/monitor/websocket/21_"+new Date().getTime();
+        //let socketUrl="ws://192.168.10.13:9091/monitor/websocket/21_"+new Date().getTime();
         console.log(socketUrl);
         if(socket!=null){
           socket.close();
@@ -374,5 +374,7 @@ export default {
   width: 19%;
   margin-top: 10px;
   border: 1px solid #ccc;
+  height: 830px;
+  overflow-y: auto;
 }
 </style>
