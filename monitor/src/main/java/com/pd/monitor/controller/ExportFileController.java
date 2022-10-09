@@ -7,6 +7,7 @@ import com.pd.server.config.RedisCode;
 import com.pd.server.main.domain.*;
 import com.pd.server.main.dto.EquipmentFileAlarmEventDto;
 import com.pd.server.main.dto.LoginUserDto;
+import com.pd.server.main.dto.PredationNumDto;
 import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
 import com.pd.server.main.service.EquipmentFileAlarmEventService;
 import com.pd.server.main.service.EquipmentFileService;
@@ -57,29 +58,29 @@ public class ExportFileController extends BaseWxController{
      */
     @GetMapping("/exportByPredationNum")
     public void exportByPredationNum(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String deptcode = request.getParameter("deptcode");
+        PredationNumDto dto = new PredationNumDto();
         PredationNumExample example = new PredationNumExample();
         PredationNumExample.Criteria ca = example.createCriteria();
         if(!StringUtils.isEmpty(request.getParameter("stime"))){
             ca.andCjsjGreaterThanOrEqualTo(request.getParameter("stime"),"%Y-%m-%d");
+            dto.setStime(request.getParameter("stime"));
         }
         if(!StringUtils.isEmpty(request.getParameter("etime"))){
             ca.andCjsjLessThanOrEqualTo(request.getParameter("etime"),"%Y-%m-%d");
+            dto.setEtime(request.getParameter("etime"));
         }
         if(!StringUtils.isEmpty(request.getParameter("sbbh"))){
             ca.andSbbhEqualTo(request.getParameter("sbbh"));
-        }
-        if(!StringUtils.isEmpty(request.getParameter("xmbh"))){
-            Map<String, List<String>> mapXmbhsbsn = (Map<String, List<String>>) redisTemplate.opsForValue().get(RedisCode.PROJECTSBSNS);
-            ca.andSbbhIn( mapXmbhsbsn.get(request.getParameter("xmbh")));
-        }else{
-            List<String> list = getUpdeptcode(deptcode);
-            if(!CollectionUtils.isEmpty(list)){
-                ca.andDeptcodeIn(list);
-            }
+            dto.setSbbh(request.getParameter("sbbh"));
         }
         example.setOrderByClause(" cjsj desc ");
-        List<PredationNum> dataList = predationNumService.list(example);
+        List<PredationNum> dataList = new ArrayList<>();
+        if(!StringUtils.isEmpty(request.getParameter("xmbh"))){
+            dto.setXmbh(request.getParameter("xmbh"));
+            dataList = predationNumService.selectByExampleSpecial(dto);
+        }else{
+            dataList = predationNumService.list(example);
+        }
         //导出
         HSSFWorkbook workbook = new HSSFWorkbook();
         //设置公共单元格样式
@@ -153,26 +154,29 @@ public class ExportFileController extends BaseWxController{
      */
     @GetMapping("/exportByAlarmEvent")
     public void exportByAlarmEvent(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        PredationNumDto dto = new PredationNumDto();
         PredationNumExample example = new PredationNumExample();
         PredationNumExample.Criteria ca = example.createCriteria();
-        if(!StringUtils.isEmpty(request.getParameter("xmbh"))){
-            Map<String, List<String>> mapXmbhsbsn = (Map<String, List<String>>) redisTemplate.opsForValue().get(RedisCode.PROJECTSBSNS);
-            List<String> sbsns = mapXmbhsbsn.get(request.getParameter("xmbh"));
-            if(!CollectionUtils.isEmpty(sbsns)){
-                ca.andSbbhIn(sbsns);
-            }
-        }
         if(!StringUtils.isEmpty(request.getParameter("sbbh"))){
             ca.andSbbhEqualTo(request.getParameter("sbbh"));
+            dto.setSbbh(request.getParameter("sbbh"));
         }
         if(!StringUtils.isEmpty(request.getParameter("stime"))){
             ca.andCjsjGreaterThanOrEqualTo(request.getParameter("stime"),"%Y-%m-%d");
+            dto.setStime(request.getParameter("stime"));
         }
         if(!StringUtils.isEmpty(request.getParameter("etime"))){
             ca.andCjsjLessThanOrEqualTo(request.getParameter("etime"),"%Y-%m-%d");
+            dto.setEtime(request.getParameter("etime"));
         }
         example.setOrderByClause(" cjsj desc ");
-        List<PredationNum> dataList = predationNumService.list(example);
+        List<PredationNum> dataList = new ArrayList<>();
+        if(!StringUtils.isEmpty(request.getParameter("xmbh"))){
+            dto.setXmbh(request.getParameter("xmbh"));
+            dataList = predationNumService.selectByExampleSpecial(dto);
+        }else {
+            dataList = predationNumService.list(example);
+        }
         //导出
         HSSFWorkbook workbook = new HSSFWorkbook();
         //设置公共单元格样式
@@ -202,24 +206,27 @@ public class ExportFileController extends BaseWxController{
         List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(waterEquipmentExample);
         Map<String, String> mapSbxh = waterEquipmentList.stream().collect(Collectors.toMap(p -> p.getSbsn(), p -> p.getSbmc()));
         for(int i=0;i<dataList.size();i++){
+            EquipmentFileAlarmEvent efae = new EquipmentFileAlarmEvent();
             PredationNum entity = dataList.get(i);
             HSSFRow comRow = sheet.createRow(i+1);
             HSSFCell comCell0 = comRow.createCell(0);
             comCell0.setCellValue(mapDept.get(entity.getDeptcode()));
             comCell0.setCellStyle(cellStyleCommon);
+            efae.setDeptcode(entity.getDeptcode());
             HSSFCell comCell1 = comRow.createCell(1);
             comCell1.setCellValue(mapSbxh.get(entity.getSbbh()));
             comCell1.setCellStyle(cellStyleCommon);
+            efae.setSbbh(entity.getSbbh());
             HSSFCell comCell2 = comRow.createCell(2);
             comCell2.setCellValue(entity.getSbbh());
             comCell2.setCellStyle(cellStyleCommon);
             HSSFCell comCell3 = comRow.createCell(3);
             comCell3.setCellValue(entity.getCjsj());
             comCell3.setCellStyle(cellStyleCommon);
+            efae.setBjsj(DateUtil.getFormatDate(entity.getCjsj(),"yyyy-MM-dd"));
             HSSFCell comCell4 = comRow.createCell(4);
             comCell4.setCellValue(entity.getSm1());
             comCell4.setCellStyle(cellStyleCommon);
-            EquipmentFileAlarmEvent efae = CopyUtil.copy(entity,EquipmentFileAlarmEvent.class);
             List<EquipmentFileAlarmEvent> detailAlarmTimes = equipmentFileAlarmEventService.detailByParam(efae);
             List<String> eventTimes=  detailAlarmTimes.stream().filter(Objects::nonNull).map(EquipmentFileAlarmEvent::getEventTime).collect(Collectors.toList());
             HSSFCell comCell5 = comRow.createCell(5);
