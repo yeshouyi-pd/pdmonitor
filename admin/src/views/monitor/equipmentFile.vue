@@ -65,7 +65,7 @@
 
     <div>
       <div style="display: flex;flex-wrap: wrap;margin-bottom: 30px;">
-        <div v-for="(item,index) in equipmentFiles" style="margin:20px;width: 150px;height: 310px;text-align: center;">
+        <div v-for="(item,index) in equipmentFiles" style="margin:20px;width: 150px;height: 330px;text-align: center;">
           <div style="text-align: center;width: 100px;margin: 0 auto;">
             <img alt="无图片" :src="item.tplj.substring(0,item.tplj.lastIndexOf('.')+1)+'jpg'" style="width: 100px;height: 200px;cursor: pointer;" v-on:click="checkImg(item,index)">
           </div>
@@ -79,6 +79,11 @@
           <div style="margin: 0 auto;">
             <button class="btn btn-white btn-default btn-round" style="margin: 0 auto;" v-on:click="download(item,2)">
               <i class="ace-icon fa fa-volume-down red2">发现头数</i>
+            </button>
+          </div>
+          <div style="margin: 0 auto;">
+            <button class="btn btn-white btn-default btn-round" style="margin: 0 auto;" v-on:click="downloadVedio(item)">
+              <i class="ace-icon fa fa-volume-down red2">视频文件</i>
             </button>
           </div>
         </div>
@@ -285,6 +290,19 @@ export default {
       _this.$ajax.get(url).then((response)=>{
         if(response.data.includes("系统异常")){
           Toast.error("未找到该文件！");
+        }else{
+          window.location.href = url;
+        }
+      })
+    },
+    downloadVedio(item){
+      let _this = this;
+      let url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downZipByWjmc?wjmc='+item.wjmc;
+      _this.$ajax.get(url).then((response)=>{
+        if(response.data && response.data.message && response.data.message.includes("系统异常")){
+          Toast.error("系统异常，请联系管理员！");
+        }else if(response.data && response.data.includes("未找到")){
+          Toast.error("未找到对应视频！");
         }else{
           window.location.href = url;
         }
