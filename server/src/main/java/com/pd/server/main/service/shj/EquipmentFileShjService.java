@@ -4,10 +4,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.pd.server.config.RedisCode;
 import com.pd.server.config.SpringUtil;
 import com.pd.server.main.domain.*;
+import com.pd.server.main.dto.PointerDayDto;
+import com.pd.server.main.dto.PointerSecondDto;
 import com.pd.server.main.mapper.EquipmentFileMapper;
 import com.pd.server.main.mapper.EquipmentFileTodayMapper;
 import com.pd.server.main.mapper.WaterEquipmentMapper;
 import com.pd.server.main.service.AttrService;
+import com.pd.server.main.service.PointerDayService;
+import com.pd.server.main.service.PointerSecondService;
 import com.pd.server.util.DateUtil;
 import com.pd.server.util.TypeUtils;
 import com.pd.server.util.UuidUtil;
@@ -84,6 +88,23 @@ public class EquipmentFileShjService extends AbstractScanRequest{
             entity.setTxtlx(typeUtil.get(TypeUtils.TXTLX));
             entity.setWjmc(typeUtil.get(TypeUtils.WJMC));
             entity.setWjlx(typeUtil.get(TypeUtils.WJLX));
+            if("1018".equals(entity.getType())){//指针数据每秒
+                PointerSecondService service = SpringUtil.getBean(PointerSecondService.class);
+                PointerSecondDto dto = new PointerSecondDto();
+                dto.setDecibelValue(entity.getTs());
+                dto.setCjsj(DateUtil.toDate(cjsj,"yyyy-MM-dd HH:mm:ss"));
+                dto.setSm(sbbh);
+                dto.setCreateTime(new Date());
+                service.save(dto);
+            }else if("1019".equals(entity.getType())){//指针数据每天
+                PointerDayService service = SpringUtil.getBean(PointerDayService.class);
+                PointerDayDto dto = new PointerDayDto();
+                dto.setDecibelValue(entity.getTs());
+                dto.setCjsj(DateUtil.toDate(cjsj,"yyyy-MM-dd HH:mm:ss"));
+                dto.setSm(sbbh);
+                dto.setCreateTime(new Date());
+                service.save(dto);
+            }
             AttrService attrService = SpringUtil.getBean(AttrService.class);
             String predationsbsn = attrService.findByAttrKey("predationsbsn");
             if(predationsbsn.contains(sbbh)&&!tplj.contains("predation")&&tplj.contains("png")){
