@@ -5,6 +5,12 @@ import axios from "axios";
 import filter from './filter/filter'
 import VueAMap from 'vue-amap';
 import Moment from 'moment';
+import DataV from '@jiaminghi/data-view'
+import ElementUI from 'element-ui'
+import locale from 'element-ui/lib/locale/lang/en'
+
+Vue.use(ElementUI, { locale })
+Vue.use(DataV)
 Vue.use(VueAMap);
 VueAMap.initAMapApiLoader({
     key: '5a7e61d356499dc86719d0b4960a1ad8',

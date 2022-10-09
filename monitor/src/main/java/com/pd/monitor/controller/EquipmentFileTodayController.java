@@ -158,6 +158,7 @@ public class EquipmentFileTodayController extends BaseWxController {
         EquipmentFileTodayExample example = new EquipmentFileTodayExample();
         EquipmentFileTodayExample.Criteria criteria = example.createCriteria();
         criteria.andSbbhEqualTo(pageDto.getSbbh());
+        criteria.andTxtlxEqualTo("1");
         example.setOrderByClause(" cjsj desc ");
         List<EquipmentFileToday> equipmentFiles = equipmentFileTodayService.listAll(example);
         responseDto.setContent(equipmentFiles);

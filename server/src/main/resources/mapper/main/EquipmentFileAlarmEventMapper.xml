@@ -348,12 +348,12 @@
     ORDER BY bjsj ASC
   </select>
   <select id="statisticsByExampleOnlyDept" parameterType="com.pd.server.main.domain.EquipmentFileAlarmEventExample" resultMap="StatisticsResultMap">
-    select deptcode,bjsj,COUNT(*) counts
+    select bjsj,COUNT(*) counts
     from equipment_file_alarm_event
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
-    GROUP BY deptcode,bjsj
+    GROUP BY bjsj
     ORDER BY bjsj DESC
   </select>
 </mapper>

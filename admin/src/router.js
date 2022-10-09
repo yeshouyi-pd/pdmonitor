@@ -50,6 +50,9 @@ import EquipmentFileTy from "./views/tydevice/equipmentFileTy.vue";
 import EquipmentFileTyTable from "./views/tydevice/equipmentFileTyTable.vue";
 import EquipmentTyEvent from "./views/tydevice/equipmentTyEvent.vue";
 import LargemonitorsTy from "./views/mobile/largemonitorsTy.vue";
+import DcbData from "./views/electricity/dcbData.vue";
+import DlbData from "./views/electricity/dlbData.vue";
+import TdData from "./views/electricity/tdData.vue";
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -264,7 +267,18 @@ export default new Router({
             path: "tydevice/equipmentTyEvent",
             name: "tydevice/equipmentTyEvent",
             component: EquipmentTyEvent
+        },{
+            path: "electricity/dcbData",
+            name: "electricity/dcbData",
+            component: DcbData
+        },{
+            path: "electricity/dlbData",
+            name: "electricity/dlbData",
+            component: DlbData
+        },{
+            path: "electricity/tdData",
+            name: "electricity/tdData",
+            component: TdData
         }]
-
     }]
 })
