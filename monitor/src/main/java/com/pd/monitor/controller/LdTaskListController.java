@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Date;
 
 @RestController
 @RequestMapping("/admin/ldTaskList")
@@ -20,6 +21,27 @@ public class LdTaskListController {
 
     @Resource
     private LdTaskListService ldTaskListService;
+
+    @PostMapping("/restart/{sbcj}")
+    public ResponseDto restart(@PathVariable String sbcj){
+        ResponseDto responseDto = new ResponseDto();
+        try {
+            LdTaskListDto dto = new LdTaskListDto();
+            dto.setIccid(sbcj);
+            dto.setTask("cmd:203");
+            dto.setFsdate(new Date());
+            ldTaskListService.save(dto);
+            Thread.sleep(3000);
+            dto.setIccid(sbcj);
+            dto.setTask("cmd:202");
+            dto.setFsdate(new Date());
+            ldTaskListService.save(dto);
+            return responseDto;
+        }catch (Exception e){
+            responseDto.setSuccess(false);
+            return responseDto;
+        }
+    }
 
     /**
     * 列表查询

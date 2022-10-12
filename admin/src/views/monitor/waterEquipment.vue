@@ -82,10 +82,10 @@
               <th>设备读取指令</th>
               <th>设备型号</th>
               <th>设备gps坐标</th>
-              <th>设备负责人</th>
-              <th>负责人电话</th>
-              <th>设备量程</th>
-              <th>设备进度范围</th>
+<!--              <th>设备负责人</th>-->
+<!--              <th>负责人电话</th>-->
+<!--              <th>设备量程</th>-->
+<!--              <th>设备进度范围</th>-->
               <th>设备放置位置</th>
               <th>SIM卡卡号</th>
               <th>设备状态</th>
@@ -105,10 +105,10 @@
                 <td>{{waterEquipment.dqzl}}</td>
                 <td>{{waterEquipment.sbxh}}</td>
                 <td>{{waterEquipment.gps}}</td>
-                <td>{{waterEquipment.fzr}}</td>
-                <td>{{waterEquipment.fzrdh}}</td>
-                <td>{{waterEquipment.sblc}}</td>
-                <td>{{waterEquipment.jdfw}}</td>
+<!--                <td>{{waterEquipment.fzr}}</td>-->
+<!--                <td>{{waterEquipment.fzrdh}}</td>-->
+<!--                <td>{{waterEquipment.sblc}}</td>-->
+<!--                <td>{{waterEquipment.jdfw}}</td>-->
                 <td>{{waterEquipment.fzwz}}</td>
                 <td>{{waterEquipment.sbcj}}</td>
           <td><span v-if="waterEquipment.sbzt=='1'">正常</span><span v-if="waterEquipment.sbzt=='2'">离线</span><span v-if="waterEquipment.sbzt=='3'">设备故障</span></td>
@@ -117,9 +117,9 @@
               <button v-on:click="edit(waterEquipment)" class="btn btn-xs btn-info" title="修改">
                 <i class="ace-icon fa fa-pencil bigger-120"></i>
               </button>
-  <!--            <button v-on:click="del(waterEquipment.id)" class="btn btn-xs btn-danger">-->
-  <!--              <i class="ace-icon fa fa-trash-o bigger-120"></i>-->
-  <!--            </button>-->
+              <button v-on:click="restart(waterEquipment.sbcj)" class="btn btn-xs btn-info" title="重启">
+                <i class="ace-icon fa fa-refresh bigger-120"></i>
+              </button>
             </div>
           </td>
         </tr>
@@ -315,6 +315,24 @@
       _this.checkHeightMax = h*0.8;
     },
     methods: {
+      restart(sbcj){
+        let _this = this;
+        Loading.show();
+        if(!Tool.isEmpty(sbcj)){
+          _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/ldTaskList/restart/'+sbcj).then((res) => {
+            Loading.hide();
+            let response = res.data;
+            if(response.success){
+              Toast.success("执行完毕");
+            }else{
+              Toast.success("执行出错，请联系管理员");
+            }
+          })
+        }else{
+          Toast.success("没有SIM卡卡号，不执行！");
+          Loading.hide();
+        }
+      },
       changeTab(){
         let _this = this;
         _this.defaultShow = !_this.defaultShow;
