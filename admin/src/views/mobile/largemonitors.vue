@@ -150,7 +150,7 @@
           </div>
           <div style="float:left;width: 50%;">
             <div style="border: 0px solid red;text-align:center;">
-              <img :src=srcpic style="height: 520px;width:50%;">
+              <img alt="无图片" :src=srcpic style="height: 520px;width:50%;">
             </div>
           </div>
           <div class="clear"></div>
@@ -365,7 +365,7 @@ export default {
         let resp = response.data;
         _this.equipmentFiles = resp.content;
         if(_this.equipmentFiles.length > 0){
-          _this.srcpic = _this.equipmentFiles[0].tplj;
+          _this.srcpic = _this.equipmentFiles[0].tplj.substring(0,_this.equipmentFiles[0].tplj.lastIndexOf('.')+1)+'jpg';
         }
       })
     },
@@ -374,7 +374,7 @@ export default {
      */
     showRealPic(tplj){
       let _this = this;
-      _this.srcpic = tplj;
+      _this.srcpic = tplj.substring(0,tplj.lastIndexOf('.')+1)+'jpg';
     },
     getRightTopData(){
       let _this = this;

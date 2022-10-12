@@ -87,7 +87,7 @@
               <th>设备量程</th>
               <th>设备进度范围</th>
               <th>设备放置位置</th>
-              <th>设备厂家</th>
+              <th>SIM卡卡号</th>
               <th>设备状态</th>
             <th>操作</th>
           </tr>
@@ -240,7 +240,7 @@
                       </div>
                     </div>
                     <div class="form-group">
-                      <label class="col-sm-2 control-label">设备厂家</label>
+                      <label class="col-sm-2 control-label">SIM卡卡号</label>
                       <div class="col-sm-4">
                         <input v-model="waterEquipment.sbcj" class="form-control">
                       </div>
@@ -457,8 +457,8 @@
                 || !Validator.length(_this.waterEquipment.jdfw, "设备进度范围", 1, 128)
                 // || !Validator.require(_this.waterEquipment.fzwz, "设备放置位置")
                 || !Validator.length(_this.waterEquipment.fzwz, "设备放置位置", 1, 450)
-                // || !Validator.require(_this.waterEquipment.sbcj, "设备厂家")
-                || !Validator.length(_this.waterEquipment.sbcj, "设备厂家", 1, 450)
+                // || !Validator.require(_this.waterEquipment.sbcj, "SIM卡卡号")
+                || !Validator.length(_this.waterEquipment.sbcj, "SIM卡卡号", 1, 450)
                 || !Validator.length(_this.waterEquipment.sbzt, "设备状态", 1, 1)
                 || !Validator.length(_this.waterEquipment.bz, "备注", 1, 2000)
                 || !Validator.length(_this.waterEquipment.createBy, "创建人", 1, 128)
