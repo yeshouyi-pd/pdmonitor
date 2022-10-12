@@ -1,6 +1,5 @@
 package com.pd.monitor.quartz;
 
-import com.pd.server.main.domain.LdTaskList;
 import com.pd.server.main.domain.WaterEquipment;
 import com.pd.server.main.domain.WaterEquipmentExample;
 import com.pd.server.main.dto.LdTaskListDto;
@@ -35,7 +34,7 @@ public class WaterEquipQuartz {
         for(WaterEquipment entity : equipmentList){
             LdTaskListDto dto = new LdTaskListDto();
             dto.setIccid(entity.getSbcj());
-            dto.setTask("cmd:202");
+            dto.setTask("cmd:206");
             dto.setFsdate(new Date());
             ldTaskListService.save(dto);
         }
@@ -50,7 +49,7 @@ public class WaterEquipQuartz {
         for(WaterEquipment entity : equipmentList){
             LdTaskListDto dto = new LdTaskListDto();
             dto.setIccid(entity.getSbcj());
-            dto.setTask("cmd:203");
+            dto.setTask("cmd:207");
             dto.setFsdate(new Date());
             ldTaskListService.save(dto);
         }
