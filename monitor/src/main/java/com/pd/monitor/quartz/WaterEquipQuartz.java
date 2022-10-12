@@ -27,8 +27,7 @@ public class WaterEquipQuartz {
     private LdTaskListService ldTaskListService;
 
     /* 每天凌晨7点打开设备 */
-    //@Scheduled(cron = "0 0 7 * * ? ")
-    @Scheduled(cron = "0 20 9 * * ? ")
+    @Scheduled(cron = "0 0 7 * * ? ")
     public void openLoop(){
         WaterEquipmentExample example = new WaterEquipmentExample();
         example.createCriteria().andSbcjIsNotNull().andSbcjNotEqualTo("");;
@@ -43,8 +42,7 @@ public class WaterEquipQuartz {
     }
 
     /* 每天晚上7点关闭设备 */
-    //@Scheduled(cron = "0 0 19 * * ? ")
-    @Scheduled(cron = "0 25 9 * * ? ")
+    @Scheduled(cron = "0 0 19 * * ? ")
     public void closeLoop(){
         WaterEquipmentExample example = new WaterEquipmentExample();
         example.createCriteria().andSbcjIsNotNull().andSbcjNotEqualTo("");
