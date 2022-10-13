@@ -25,14 +25,8 @@ public class LdTaskListService {
     /**
     * 列表查询
     */
-    public void list(PageDto pageDto) {
-    PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
-        LdTaskListExample ldTaskListExample = new LdTaskListExample();
-        List<LdTaskList> ldTaskListList = ldTaskListMapper.selectByExample(ldTaskListExample);
-        PageInfo<LdTaskList> pageInfo = new PageInfo<>(ldTaskListList);
-        pageDto.setTotal(pageInfo.getTotal());
-        List<LdTaskListDto> ldTaskListDtoList = CopyUtil.copyList(ldTaskListList, LdTaskListDto.class);
-        pageDto.setList(ldTaskListDtoList);
+    public List<LdTaskList> list(LdTaskListExample example) {
+        return ldTaskListMapper.selectByExample(example);
     }
 
     /**

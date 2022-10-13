@@ -177,14 +177,26 @@ public class CodeSetUtilController extends BaseWxController {
     @GetMapping("/getXmbhAndXmmc")
     public ResponseDto getXmbhAndXmmc(){
         ResponseDto responseDto = new ResponseDto();
-//        Map<String,String> map = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.PROJECTCODENAME);
         WaterProjectExample example = new WaterProjectExample();
-        WaterProjectExample.Criteria ca = example.createCriteria();
         List<WaterProject> list = waterProjectService.selectByExample(example);
         Map<String, String>  map = new LinkedHashMap<String,String>();
         for(WaterProject vo : list){
             map.put(vo.getXmbh(),vo.getXmmc());
         }
+        responseDto.setContent(map);
+        return responseDto;
+    }
+
+    /**
+     * 获取发送指令
+     * @return
+     */
+    @GetMapping("/getFszl")
+    public ResponseDto getFszl(){
+        ResponseDto responseDto = new ResponseDto();
+        Map<String,String> map = new LinkedHashMap<String,String>();
+        Map<String, Map<String,String>>  allmap = (Map<String, Map<String, String>>) redisTemplate.opsForValue().get(RedisCode.CODESET);
+        map = allmap.get(CodeType.FSZL_CODE);
         responseDto.setContent(map);
         return responseDto;
     }
