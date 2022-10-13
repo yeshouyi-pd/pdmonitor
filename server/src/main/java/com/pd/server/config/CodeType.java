@@ -26,4 +26,14 @@ public class CodeType {
      */
     public final  static String  SBLB_CODE ="0701";
 
+    /**
+     * 文件种类
+     */
+    public final  static String  WJZL_CODE ="13";
+
+    /**
+     * 发送指令
+     */
+    public final static String FSZL_CODE = "14";
+
 }

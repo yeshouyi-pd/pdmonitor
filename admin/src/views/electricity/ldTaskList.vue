@@ -1,57 +1,79 @@
 <template>
   <div>
+    <div class="widget-box">
+      <div class="widget-header">
+        <h4 class="widget-title">下发命令查询</h4>
+      </div>
+      <div class="widget-body">
+        <div class="widget-main">
+          <form>
+            <table style="font-size: 1.1em;width:80%" class="text-right">
+              <tbody>
+              <tr>
+                <td style="width:10%">
+                  SIM卡卡号：
+                </td>
+                <td style="width: 20%">
+                  <input class="form-control" type="text"  v-model="ldTaskListDto.iccid"/>
+                </td>
+                <td style="width: 10%">
+                  状态：
+                </td>
+                <td style="width: 20%">
+                  <select v-model="ldTaskListDto.state" style="width: 100%;">
+                    <option value="">请选择</option>
+                    <option value="0">等待执行</option>
+                    <option value="1">执行完毕</option>
+                  </select>
+                </td>
+                <td style="width: 20%" class="text-center">
+                  <button  type="button" v-on:click="list(1)" class="btn btn-sm  btn-info btn-round">
+                    <i class="ace-icon fa fa-book"></i>
+                    查询
+                  </button>
+                  <a href="javascript:location.replace(location.href);"  class="btn btn-sm   btn-success btn-round" style="margin-left: 10px;">
+                    <i class="ace-icon fa fa-refresh"></i>
+                    重置
+                  </a>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </form>
+        </div>
+      </div>
+    </div>
     <p>
       <button v-on:click="add()" class="btn btn-white btn-default btn-round">
         <i class="ace-icon fa fa-edit"></i>
         新增
       </button>
-      &nbsp;
-      <button v-on:click="list(1)" class="btn btn-white btn-default btn-round">
-        <i class="ace-icon fa fa-refresh"></i>
-        刷新
-      </button>
     </p>
-
-
     <div>
-    <table id="simple-table" class="table  table-bordered table-hover">
-      <thead>
-      <tr>
-                    <th></th>
+      <table id="simple-table" class="table  table-bordered table-hover">
+        <thead>
+          <tr>
             <th>SIM卡卡号</th>
-            <th>cmd：201 状态返回 ;202 CH1开 ;203 CH1关 ;204 CH2开 ;205 CH2关 ;206 CH3开 ;207 CH3关 ;208 CH4开 ;209 CH4关 ;211 开充电 ;212 关充电</th>
-            <th>0：等待执行；1:执行完毕</th>
+            <th>命令</th>
+            <th>状态</th>
             <th>任务发生时间</th>
             <th>任务完成时间</th>
-        <th>操作</th>
-      </tr>
-      </thead>
-
-      <tbody>
-      <tr v-for="ldTaskList in ldTaskLists">
-              <td>{{ldTaskList.id}}</td>
-              <td>{{ldTaskList.iccid}}</td>
-              <td>{{ldTaskList.task}}</td>
-              <td>{{ldTaskList.state}}</td>
-              <td>{{ldTaskList.fsdate}}</td>
-              <td>{{ldTaskList.jsdate}}</td>
-        <td>
-          <div class="hidden-sm hidden-xs btn-group">
-            <button v-on:click="edit(ldTaskList)" class="btn btn-xs btn-info">
-              <i class="ace-icon fa fa-pencil bigger-120"></i>
-            </button>
-            <button v-on:click="del(ldTaskList.id)" class="btn btn-xs btn-danger">
-              <i class="ace-icon fa fa-trash-o bigger-120"></i>
-            </button>
-          </div>
-        </td>
-      </tr>
-      </tbody>
-    </table>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="ldTaskList in ldTaskLists">
+            <td>{{ldTaskList.iccid}}</td>
+            <td>{{fszls|optionMapKV(ldTaskList.task)}}</td>
+            <td><span v-if="ldTaskList.state=='0'">等待执行</span><span v-else>执行完毕</span></td>
+            <td>{{ldTaskList.fsdate}}</td>
+            <td>{{ldTaskList.jsdate}}</td>
+          </tr>
+        </tbody>
+      </table>
       <pagination ref="pagination" v-bind:list="list" v-bind:itemCount="8"></pagination>
     </div>
     <div id="form-modal" class="modal fade" tabindex="-1" role="dialog">
-      <div class="modal-dialog" role="document">
+      <div class="modal-dialog" role="document" style="width: 50%">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -59,36 +81,20 @@
           </div>
           <div class="modal-body">
             <form class="form-horizontal">
-                    <div class="form-group">
-                      <label class="col-sm-2 control-label">SIM卡卡号</label>
-                      <div class="col-sm-10">
-                        <input v-model="ldTaskList.iccid" class="form-control">
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label class="col-sm-2 control-label">cmd：201 状态返回 ;202 CH1开 ;203 CH1关 ;204 CH2开 ;205 CH2关 ;206 CH3开 ;207 CH3关 ;208 CH4开 ;209 CH4关 ;211 开充电 ;212 关充电</label>
-                      <div class="col-sm-10">
-                        <input v-model="ldTaskList.task" class="form-control">
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label class="col-sm-2 control-label">0：等待执行；1:执行完毕</label>
-                      <div class="col-sm-10">
-                        <input v-model="ldTaskList.state" class="form-control">
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label class="col-sm-2 control-label">任务发生时间</label>
-                      <div class="col-sm-10">
-                        <input v-model="ldTaskList.fsdate" class="form-control">
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label class="col-sm-2 control-label">任务完成时间</label>
-                      <div class="col-sm-10">
-                        <input v-model="ldTaskList.jsdate" class="form-control">
-                      </div>
-                    </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">SIM卡卡号</label>
+                <div class="col-sm-10">
+                  <input v-model="ldTaskList.iccid" class="form-control">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">命令</label>
+                <div class="col-sm-10">
+                  <select v-model="ldTaskList.task" style="width: 100%;">
+                    <option v-for="(key,value) in fszls" :value="value">{{key}}</option>
+                  </select>
+                </div>
+              </div>
             </form>
           </div>
           <div class="modal-footer">
@@ -108,19 +114,29 @@
     name: "monitor-ldTaskList",
     data: function() {
       return {
-      ldTaskList: {},
-      ldTaskLists: [],
-    }
+        ldTaskListDto: {},
+        ldTaskList: {},
+        ldTaskLists: [],
+        fszls:[]
+      }
     },
     mounted: function() {
       let _this = this;
       _this.$refs.pagination.size = 10;
       _this.list(1);
-      // sidebar激活样式方法一
-      // this.$parent.activeSidebar("monitor-ldTaskList-sidebar");
-
+      _this.getFszl();
     },
     methods: {
+      /**
+       * 获取设备型号
+       */
+      getFszl(){
+        let _this = this;
+        _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/CodeSetUtil/getFszl').then((res) => {
+          let response = res.data;
+          _this.fszls = response.content;
+        })
+      },
       /**
        * 点击【新增】
        */
@@ -129,31 +145,19 @@
         _this.ldTaskList = {};
         $("#form-modal").modal("show");
       },
-
-      /**
-       * 点击【编辑】
-       */
-      edit(ldTaskList) {
-        let _this = this;
-        _this.ldTaskList = $.extend({}, ldTaskList);
-        $("#form-modal").modal("show");
-      },
-
       /**
        * 列表查询
        */
       list(page) {
         let _this = this;
         Loading.show();
-        _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/ldTaskList/list', {
-          page: page,
-          size: _this.$refs.pagination.size,
-        }).then((response)=>{
+        _this.ldTaskListDto.page = page;
+        _this.ldTaskListDto.size = _this.$refs.pagination.size;
+        _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/ldTaskList/list', _this.ldTaskListDto).then((response)=>{
           Loading.hide();
           let resp = response.data;
           _this.ldTaskLists = resp.content.list;
           _this.$refs.pagination.render(page, resp.content.total);
-
         })
       },
 
@@ -162,15 +166,15 @@
        */
       save() {
         let _this = this;
-
         // 保存校验
         if (1 != 1
                 || !Validator.length(_this.ldTaskList.iccid, "SIM卡卡号", 1, 32)
-                || !Validator.length(_this.ldTaskList.task, "cmd：201 状态返回 ;202 CH1开 ;203 CH1关 ;204 CH2开 ;205 CH2关 ;206 CH3开 ;207 CH3关 ;208 CH4开 ;209 CH4关 ;211 开充电 ;212 关充电", 1, 32)
+                || !Validator.require(_this.ldTaskList.iccid, "SIM卡卡号")
+                || !Validator.length(_this.ldTaskList.task, "命令", 1, 32)
+                || !Validator.require(_this.ldTaskList.task, "命令")
         ) {
           return;
         }
-
         Loading.show();
         _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/ldTaskList/save', _this.ldTaskList).then((response)=>{
           Loading.hide();
@@ -183,24 +187,6 @@
             Toast.warning(resp.message)
           }
         })
-      },
-
-      /**
-       * 点击【删除】
-       */
-      del(id) {
-        let _this = this;
-        Confirm.show("删除后不可恢复，确认删除？", function () {
-          Loading.show();
-          _this.$ajax.delete(process.env.VUE_APP_SERVER + '/monitor/admin/ldTaskList/delete/' + id).then((response)=>{
-            Loading.hide();
-            let resp = response.data;
-            if (resp.success) {
-              _this.list(1);
-              Toast.success("删除成功！");
-            }
-          })
-        });
       }
     }
   }

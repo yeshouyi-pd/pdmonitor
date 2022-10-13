@@ -117,9 +117,9 @@
               <button v-on:click="edit(waterEquipment)" class="btn btn-xs btn-info" title="修改">
                 <i class="ace-icon fa fa-pencil bigger-120"></i>
               </button>
-              <button v-on:click="restart(waterEquipment.sbcj)" class="btn btn-xs btn-info" title="重启">
-                <i class="ace-icon fa fa-refresh bigger-120"></i>
-              </button>
+<!--              <button v-on:click="restart(waterEquipment.sbcj)" class="btn btn-xs btn-info" title="重启">-->
+<!--                <i class="ace-icon fa fa-refresh bigger-120"></i>-->
+<!--              </button>-->
             </div>
           </td>
         </tr>

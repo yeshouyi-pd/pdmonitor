@@ -80,7 +80,7 @@
       <pagination ref="pagination" v-bind:list="list" v-bind:itemCount="10"></pagination>
     </div>
     <div id="form-modal" class="modal fade" tabindex="-1" role="dialog">
-      <div class="modal-dialog" role="document">
+      <div class="modal-dialog" role="document" style="width: 60%">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
