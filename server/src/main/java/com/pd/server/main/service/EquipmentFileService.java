@@ -45,6 +45,10 @@ public class EquipmentFileService {
         return equipmentFileMapper.selectByExampleSpecial(record);
     }
 
+    public List<EquipmentFile> selectByExampleSpecialNoForceindex(EquipmentFileDto record){
+        return equipmentFileMapper.selectByExampleSpecialNoForceindex(record);
+    }
+
     public EquipmentFile selectByPrimaryKey(String id){
         return equipmentFileMapper.selectByPrimaryKey(id);
     }
@@ -61,6 +65,10 @@ public class EquipmentFileService {
 
     public long countByExample(EquipmentFileExample example){
         return equipmentFileMapper.countByExample(example);
+    }
+
+    public long countByExampleSpecial(EquipmentFileDto record){
+        return equipmentFileMapper.countByExampleSpecial(record);
     }
 
     /**

@@ -14,6 +14,8 @@ public interface EquipmentFileMapper {
 
     long countByExample(EquipmentFileExample example);
 
+    long countByExampleSpecial(@Param("record") EquipmentFileDto record);
+
     int deleteByExample(EquipmentFileExample example);
 
     int deleteByPrimaryKey(String id);
@@ -25,6 +27,8 @@ public interface EquipmentFileMapper {
     List<EquipmentFile> selectByExample(EquipmentFileExample example);
 
     List<EquipmentFile> selectByExampleSpecial(@Param("record") EquipmentFileDto record);
+
+    List<EquipmentFile> selectByExampleSpecialNoForceindex(@Param("record") EquipmentFileDto record);
 
     EquipmentFile selectByPrimaryKey(String id);
 

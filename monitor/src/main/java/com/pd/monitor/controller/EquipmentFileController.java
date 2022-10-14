@@ -192,10 +192,14 @@ public class EquipmentFileController extends BaseWxController {
         equipmentFileExample.setOrderByClause(" cjsj desc ");
         List<EquipmentFile> lists = new ArrayList<>();
         if(!StringUtils.isEmpty(pageDto.getXmbh())){
-            long count = equipmentFileService.countByExample(equipmentFileExample);
+            long count = equipmentFileService.countByExampleSpecial(pageDto);
             pageDto.setStartNum((pageDto.getPage()-1)* pageDto.getSize());
             pageDto.setEndNum(pageDto.getSize());
-            lists = equipmentFileService.selectByExampleSpecial(pageDto);
+            if(count<10000){
+                lists = equipmentFileService.selectByExampleSpecialNoForceindex(pageDto);
+            }else {
+                lists = equipmentFileService.selectByExampleSpecial(pageDto);
+            }
             pageDto.setTotal(count);
         }else{
             PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
