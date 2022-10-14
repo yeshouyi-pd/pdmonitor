@@ -78,7 +78,7 @@
           </div>
           <div style="margin: 0 auto;">
             <button class="btn btn-white btn-default btn-round" style="margin: 0 auto;" v-on:click="download(item,2)">
-              <i class="ace-icon fa fa-volume-down red2">发现头数</i>
+              <i class="ace-icon fa fa-volume-down red2">发现头数<span v-bind:id="item.id" style="color: #00aa00;font-weight: bold"></span></i>
             </button>
           </div>
           <div style="margin: 0 auto;">
@@ -258,7 +258,22 @@ export default {
         let resp = response.data;
         _this.equipmentFiles = resp.content.list;
         _this.$refs.pagination.render(page, resp.content.total);
+        _this.getTs(_this.equipmentFiles);
       })
+    },
+    getTs(equipmentFiles){
+      let _this = this;
+      for(let i=0;i<equipmentFiles.length;i++){
+        let id = equipmentFiles[i].id;
+        _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFile/getTs/'+equipmentFiles[i].wjmc).then((response)=>{
+          Loading.hide();
+          let resp = response.data;
+          let item = resp.content;
+          if(!Tool.isEmpty(item)){
+            document.getElementById(id).innerText="("+item.ts+")";
+          }
+        })
+      }
     },
     /**
      * 查看原图
