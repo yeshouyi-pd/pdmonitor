@@ -5,6 +5,7 @@ import com.pd.server.main.domain.WaterEquiplogExample;
 import com.pd.server.main.dto.WaterEquiplogDto;
 import com.pd.server.main.mapper.WaterEquiplogMapper;
 import com.pd.server.util.CopyUtil;
+import com.pd.server.util.DateTools;
 import com.pd.server.util.UuidUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -33,7 +34,7 @@ public class WaterEquiplogService {
      */
     public WaterEquiplog findBySbbh(String sbbh){
         WaterEquiplogExample example = new WaterEquiplogExample();
-        example.createCriteria().andSbbhEqualTo(sbbh);
+        example.createCriteria().andSbbhEqualTo(sbbh).andCjsjEqualTo(DateTools.getFormatDate(new Date(),"yyyy-MM-dd"));
         example.setOrderByClause(" cjsj desc ");
         List<WaterEquiplog> waterEquiplogs = waterEquiplogMapper.selectByExample(example);
         if(waterEquiplogs.size() > 0){

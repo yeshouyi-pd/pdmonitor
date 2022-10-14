@@ -400,6 +400,11 @@ public class WaterEquiplogExample {
             return (Criteria) this;
         }
 
+        public Criteria andCjsjEqualTo(String value) {
+            addCriterion("DATE_FORMAT(cjsj,'%Y-%m-%d') =", value, "cjsj");
+            return (Criteria) this;
+        }
+
         public Criteria andCjsjNotEqualTo(Date value) {
             addCriterion("cjsj <>", value, "cjsj");
             return (Criteria) this;
