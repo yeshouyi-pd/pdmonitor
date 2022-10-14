@@ -174,11 +174,11 @@ public class EquipmentFileController extends BaseWxController {
         return responseDto;
     }
 
-    @PostMapping("/getTs/{wjmc}")
-    public ResponseDto getTs(@PathVariable String wjmc){
+    @PostMapping("/getTs/{wjmc}/{sbbh}")
+    public ResponseDto getTs(@PathVariable String wjmc,@PathVariable String sbbh){
         ResponseDto responseDto = new ResponseDto();
         EquipmentFileExample example = new EquipmentFileExample();
-        example.createCriteria().andWjmcEqualTo(wjmc).andTypeEqualTo("1014");
+        example.createCriteria().andWjmcEqualTo(wjmc).andTypeEqualTo("1014").andSbbhEqualTo(sbbh);
         List<EquipmentFile> lists = equipmentFileService.listAll(example);
         responseDto.setContent(lists.size()>0?lists.get(0):"");
         return responseDto;
