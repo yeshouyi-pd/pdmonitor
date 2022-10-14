@@ -117,7 +117,7 @@
   </select>
   <select id="selectByExampleSpecial"  parameterType="map" resultMap="BaseResultMap">
     select a.id, a.sbbh, a.tplj, a.cjsj, a.create_time, a.nf, a.yf, a.rq, a.xs, a.fz, a.deptcode, a.xmbh, a.wjlx, a.jczl, a.ly, a.sm1, a.sm2, a.sm3, a.sm4, a.sm5, a.sm6,a.type as type,a.ts, a.txtlx,a.wjmc
-    from equipment_file a FORCE index(cjsj) where a.wjlx='3' and a.sbbh in (select b.sbsn from water_pro_equip b FORCE index(sbsn) where b.xmbh = #{record.xmbh,jdbcType=VARCHAR})
+    from equipment_file a FORCE index(cjsj) where a.txtlx='1' and a.sbbh in (select b.sbsn from water_pro_equip b FORCE index(sbsn) where b.xmbh = #{record.xmbh,jdbcType=VARCHAR})
     <if test="record.sbbh != null and record.sbbh !=''">
       AND a.sbbh = #{record.sbbh,jdbcType=VARCHAR}
     </if>
@@ -131,7 +131,7 @@
   </select>
   <select id="selectByExampleSpecialNoForceindex"  parameterType="map" resultMap="BaseResultMap">
     select a.id, a.sbbh, a.tplj, a.cjsj, a.create_time, a.nf, a.yf, a.rq, a.xs, a.fz, a.deptcode, a.xmbh, a.wjlx, a.jczl, a.ly, a.sm1, a.sm2, a.sm3, a.sm4, a.sm5, a.sm6,a.type as type,a.ts, a.txtlx,a.wjmc
-    from equipment_file a where a.wjlx='3' and a.sbbh in (select b.sbsn from water_pro_equip b FORCE index(sbsn) where b.xmbh = #{record.xmbh,jdbcType=VARCHAR})
+    from equipment_file a where a.txtlx='1' and a.sbbh in (select b.sbsn from water_pro_equip b FORCE index(sbsn) where b.xmbh = #{record.xmbh,jdbcType=VARCHAR})
     <if test="record.sbbh != null and record.sbbh !=''">
       AND a.sbbh = #{record.sbbh,jdbcType=VARCHAR}
     </if>
@@ -341,7 +341,7 @@
     </if>
   </select>
   <select id="countByExampleSpecial"   parameterType="map" resultType="java.lang.Long">
-    select count(*) from equipment_file a where a.wjlx='3' and a.sbbh in (select b.sbsn from water_pro_equip b FORCE index(sbsn) where b.xmbh = #{record.xmbh,jdbcType=VARCHAR})
+    select count(*) from equipment_file a where a.txtlx='1' and a.sbbh in (select b.sbsn from water_pro_equip b FORCE index(sbsn) where b.xmbh = #{record.xmbh,jdbcType=VARCHAR})
     <if test="record.sbbh != null and record.sbbh !=''">
       AND a.sbbh = #{record.sbbh,jdbcType=VARCHAR}
     </if>

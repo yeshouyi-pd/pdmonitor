@@ -174,6 +174,16 @@ public class EquipmentFileController extends BaseWxController {
         return responseDto;
     }
 
+    @PostMapping("/getTs/{wjmc}")
+    public ResponseDto getTs(@PathVariable String wjmc){
+        ResponseDto responseDto = new ResponseDto();
+        EquipmentFileExample example = new EquipmentFileExample();
+        example.createCriteria().andWjmcEqualTo(wjmc).andTypeEqualTo("1014");
+        List<EquipmentFile> lists = equipmentFileService.listAll(example);
+        responseDto.setContent(lists.size()>0?lists.get(0):"");
+        return responseDto;
+    }
+
     @PostMapping("/lists")
     public ResponseDto lists(@RequestBody EquipmentFileDto pageDto){
         ResponseDto responseDto = new ResponseDto();
@@ -188,7 +198,7 @@ public class EquipmentFileController extends BaseWxController {
         if(!StringUtils.isEmpty(pageDto.getSbbh())){
             ca.andSbbhEqualTo(pageDto.getSbbh());//
         }
-        ca.andWjlxEqualTo("3");
+        ca.andTxtlxEqualTo("1");
         equipmentFileExample.setOrderByClause(" cjsj desc ");
         List<EquipmentFile> lists = new ArrayList<>();
         if(!StringUtils.isEmpty(pageDto.getXmbh())){
