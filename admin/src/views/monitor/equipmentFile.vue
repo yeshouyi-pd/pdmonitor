@@ -70,7 +70,7 @@
             <img alt="无图片" :src="item.tplj.substring(0,item.tplj.lastIndexOf('.')+1)+'jpg'" style="width: 100px;height: 200px;cursor: pointer;" v-on:click="checkImg(item,index)">
           </div>
           <div style="margin: 0 auto;">{{waterEquipments|optionNSArray(item.sbbh)}}</div>
-          <div style="margin: 0 auto;word-wrap: break-word;">{{item.tplj.substring(item.tplj.lastIndexOf("/")+1,item.tplj.length)}}</div>
+          <div style="margin: 0 auto;word-wrap: break-word;">{{item.cjsj}}</div>
           <div style="margin: 0 auto;">
             <button class="btn btn-white btn-default btn-round" style="margin: 0 auto;" v-on:click="download(item,1)">
               <i class="ace-icon fa fa-volume-down red2">下载音频</i>
@@ -265,12 +265,14 @@ export default {
       let _this = this;
       for(let i=0;i<equipmentFiles.length;i++){
         let id = equipmentFiles[i].id;
-        _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFile/getTs/'+equipmentFiles[i].wjmc).then((response)=>{
+        _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFile/getTs/'+equipmentFiles[i].wjmc+"/"+equipmentFiles[i].sbbh).then((response)=>{
           Loading.hide();
           let resp = response.data;
           let item = resp.content;
           if(!Tool.isEmpty(item)){
             document.getElementById(id).innerText="("+item.ts+")";
+          }else{
+            document.getElementById(id).innerText="";
           }
         })
       }
