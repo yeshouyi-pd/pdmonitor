@@ -54,6 +54,7 @@ import DcbData from "./views/electricity/dcbData.vue";
 import DlbData from "./views/electricity/dlbData.vue";
 import TdData from "./views/electricity/tdData.vue";
 import LdTaskList from "./views/electricity/ldTaskList.vue";
+import EquipmentFileEvent from "./views/monitor/equipmentFileEvent.vue";
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -284,6 +285,10 @@ export default new Router({
             path: "electricity/ldTaskList",
             name: "electricity/ldTaskList",
             component: LdTaskList
+        },{
+            path: "monitor/equipmentFileEvent",
+            name: "monitor/equipmentFileEvent",
+            component: EquipmentFileEvent
         }]
     }]
 })

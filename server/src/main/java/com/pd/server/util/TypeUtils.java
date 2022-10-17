@@ -37,6 +37,12 @@ public class TypeUtils {
     public static final String KEY_17 = "KEY_17";
     public static final String KEY_18 = "KEY_18";
     public static final String KEY_19 = "KEY_19";
+    public static final String KEY_20 = "KEY_20";
+    public static final String KEY_21 = "KEY_21";
+    public static final String KEY_22 = "KEY_22";
+    public static final String KEY_23 = "KEY_23";
+    public static final String KEY_24 = "KEY_24";
+    public static final String KEY_25 = "KEY_25";
 
 
     public static final String ZZ_1 = "^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}.txt$";
@@ -58,6 +64,12 @@ public class TypeUtils {
     public static final String ZZ_17 ="^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_predation_\\d{1,}_A4_\\w{1,}.mp4$";
     public static final String ZZ_18 ="^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_FISH_\\d{1,}.txt$";
     public static final String ZZ_19 ="^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_YFP_\\d{1,}.txt$";
+    public static final String ZZ_20 ="^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_predation_\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{1,}_A4.txt$";
+    public static final String ZZ_21 ="^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_predation_\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{1,}_A4_\\w{1,}.mp4$";
+    public static final String ZZ_22 ="^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_predation_\\d{1,}_A4.txt$";
+    public static final String ZZ_23 ="^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_predation_\\d{1,}_A4_\\w{1,}.mp4$";
+    public static final String ZZ_24 ="^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{1,}_A4.txt$";
+    public static final String ZZ_25 ="^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{1,}_A4_\\w{1,}.mp4$";
 
     public static Map<String,String> patternmap = new HashMap<>();
     static {
@@ -80,6 +92,12 @@ public class TypeUtils {
         patternmap.put(KEY_17,ZZ_17);
         patternmap.put(KEY_18,ZZ_18);
         patternmap.put(KEY_19,ZZ_19);
+        patternmap.put(KEY_20,ZZ_20);
+        patternmap.put(KEY_21,ZZ_21);
+        patternmap.put(KEY_22,ZZ_22);
+        patternmap.put(KEY_23,ZZ_23);
+        patternmap.put(KEY_24,ZZ_24);
+        patternmap.put(KEY_25,ZZ_25);
     }
 
 
@@ -191,10 +209,42 @@ public class TypeUtils {
                         type = "1018";
                         wjlx ="5";
                         ts=tss[7].split("\\.")[0];
+
                     }else if(KEY_19.equals(entry.getKey())){
                         type = "1019";
                         wjlx ="6";
                         ts=tss[7].split("\\.")[0];
+
+                    }else if(KEY_20.equals(entry.getKey())){
+                        type = "1020";
+                        wjlx ="3";
+                        ts=tss[13];
+                        txtlx ="5";
+                    }else if(KEY_21.equals(entry.getKey())){
+                        type = "1021";
+                        wjlx ="4";
+                        ts=tss[13];
+
+                    }else if(KEY_22.equals(entry.getKey())){
+                        type = "1022";
+                        wjlx ="3";
+                        ts=tss[13];
+                        txtlx ="5";
+                    }else if(KEY_23.equals(entry.getKey())){
+                        type = "1023";
+                        wjlx ="4";
+                        ts=tss[13];
+
+                    }else if(KEY_24.equals(entry.getKey())){
+                        type = "1024";
+                        wjlx ="3";
+                        ts=tss[12];
+                        txtlx ="5";
+                    }else if(KEY_25.equals(entry.getKey())){
+                        type = "1025";
+                        wjlx ="4";
+                        ts=tss[12];
+
                     }
                     break;
                 }
@@ -237,7 +287,14 @@ public class TypeUtils {
         String u17 = "2022_10_09_14_36_30_predation_2_A4_TD33.mp4";
         String u18 = "2022_10_09_14_36_30_FISH_144.txt";
         String u19 = "2022_10_09_14_36_30_YFP_189.txt";
-        Map<String,String> map =  getType(u19);
+        String u20 = "2022_10_15_23_09_20_predation_2022_10_15_23_10_36_2_A4.txt";
+        String u21 = "2022_10_15_23_09_20_predation_2022_10_15_23_10_36_2_A4_TD33.mp4";
+        String u22 = "2022_10_15_23_07_10_2022_10_15_23_07_50_predation_2_A4.txt";
+        String u23 = "2022_10_15_23_07_10_2022_10_15_23_07_50_predation_2_A4_TD33.mp4";
+        String u24 = "2022_10_15_23_02_36_2022_10_15_23_02_36_1_A4.txt";
+        String u25 = "2022_10_15_23_02_36_2022_10_15_23_02_36_1_A4_TD33.mp4";
+
+        Map<String,String> map =  getType(u24);
         Set set = map.entrySet();
         for(Object key:set){
             Map.Entry entry = (Map.Entry) key;

@@ -49,7 +49,7 @@ public class ShjJsonConstant {
              */
             put("EquipmentFile", "com.pd.server.main.service.shj.EquipmentFileShjService");
             /**
-             * 拖曳设备文件
+             * 拖曳(A2)设备文件
              */
             put("EquipmentFileByTy", "com.pd.server.main.service.shj.EquipmentFileTyShjService");
             /**
