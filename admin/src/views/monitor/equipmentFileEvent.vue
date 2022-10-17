@@ -160,10 +160,14 @@ export default {
           }
         }
       }
-      let k=0;
+      _this.myChart.setOption({
+        series: [{data:list[0]}],
+        title: {text: title[0],left:"19%"}
+      });
+      let k=1;
       _this.intervalId = setInterval(function () {
         if(k==list.length){
-          k=0;
+          k=list.length-1;
         }
         _this.myChart.setOption({
           series: [
