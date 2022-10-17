@@ -261,7 +261,7 @@ export default {
     },
     downloadVedio(id){
       let _this = this;
-      let url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downZipById?id='+id;
+      let url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downZipByA4Id?id='+id;
       _this.$ajax.get(url).then((response)=>{
         if(response.data && response.data.message && response.data.message.includes("系统异常")){
           Toast.error("系统异常，请联系管理员！");
