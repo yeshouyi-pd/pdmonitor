@@ -32,6 +32,10 @@ public class EquipmentFileEventService {
         return equipmentFileEventMapper.selectByExampleSpecial(record);
     }
 
+    public EquipmentFileEvent selectByPrimaryKey(String id){
+        return equipmentFileEventMapper.selectByPrimaryKey(id);
+    }
+
     /**
     * 保存，id有值时更新，无值时新增
     */

@@ -89,15 +89,15 @@
             <div v-if="isMobileflag" class="col-xs-10" style="margin-top: 10px;">
                     <span>
                       <i class="ace-icon fa fa-square blue"></i>
-                      <span style="margin-left: 10px;">创新技术</span>
+                      <span style="margin-left: 10px;">科技创新</span>
                     </span>
               <span style="margin-left: 5px;">
                       <i class="ace-icon fa fa-square blue"></i>
-                      <span style="margin-left: 10px;">实时平台</span>
+                      <span style="margin-left: 10px;">声学监测</span>
                     </span>
               <span style="margin-left: 5px;">
                       <i class="ace-icon fa fa-square blue"></i>
-                      <span style="margin-left: 10px;">专业团队</span>
+                      <span style="margin-left: 10px;">实时精准</span>
                     </span>
             </div>
             <div v-else class="col-xs-4" style="margin-top: 20px;margin-left: 15%;">
