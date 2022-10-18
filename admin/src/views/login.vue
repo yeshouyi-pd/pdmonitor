@@ -4,13 +4,13 @@
       <div :style="'padding-top:'+paddingsize+'%'"></div>
         <div class="main-content" style="padding-left: 0px;padding-right: 0px;">
           <div>
-            <div :class="isMobileflag?'col-sm-10':'col-sm-4'" :style="'margin-left:'+marginleft+'%;'">
+            <div :class="isMobileflag?'col-sm-10':'col-sm-4'" :style="'margin-left:'+marginleft+'%;margin-top:'+margintop+'px;'">
 
               <div class="center">
                                   <span :style="'font-size:'+fontsize+'px'">
 <!--                                      <i class="ace-icon fa fa-leaf green"></i>-->
                                     <img :style="'height:'+imgsize+'px;margin-top: -10px;'" src="/static/favicon.png"/>
-                                      <span >齿鲸类实时声学分析预警系统</span>
+                                    <span> 齿鲸类实时声学分析预警系统</span>
                                   </span>
               </div>
 
@@ -100,22 +100,22 @@
                       <span style="margin-left: 10px;">实时精准</span>
                     </span>
             </div>
-            <div v-else class="col-xs-4" style="margin-top: 20px;margin-left: 15%;">
+            <div v-else class="col-xs-4" style="margin-top: -10px;margin-left: 15%;font-style: italic;font-size: 24px;">
                     <span>
-                      <i class="ace-icon fa fa-square blue"></i>
-                      <span class="logo-text-style">创新技术</span>
+                      <i class="ace-icon fa fa-circle blue" style="font-size: 20px;"></i>
+                      <span class="logo-text-style">科技创新</span>
                     </span>
-              <span style="margin-left: 20px;">
-                      <i class="ace-icon fa fa-square blue"></i>
-                      <span class="logo-text-style">实时平台</span>
+              <span style="margin-left: 30px;">
+                      <i class="ace-icon fa fa-circle blue" style="font-size: 20px;"></i>
+                      <span class="logo-text-style">声学监测</span>
                     </span>
-              <span style="margin-left: 20px;">
-                      <i class="ace-icon fa fa-square blue"></i>
-                      <span class="logo-text-style">专业团队</span>
+              <span style="margin-left: 30px;">
+                      <i class="ace-icon fa fa-circle blue" style="font-size: 20px;"></i>
+                      <span class="logo-text-style">实时精准</span>
                     </span>
             </div>
             </div><!-- /.row -->
-          <div   class="position-relative-gs"><img height="60px;" src="/static/image/loginButtom.png"/></div>
+          <div   class="position-relative-gs"><img height="100px;" src="/static/image/loginButtom.png"/></div>
         </div><!-- /.main-content -->
     </div><!-- /.main-container -->
 </template>
@@ -134,7 +134,8 @@
                 imgsize: 51,
                 paddingsize:6,
               marginleft:45,
-              margin:100
+              margin:70,
+              margintop:40
             }
         },
         mounted:function(){//mounted初始化方法
@@ -183,13 +184,14 @@
                 _this.margin=50;
                 _this.paddingsize=6;
                 _this.fontsize =45;
+                _this.margintop = 0;
               }else if(window.screen.height<=1024){
                 _this.paddingsize=6;
                 _this.margin=100;
                 _this.fontsize =45;
               }else if(window.screen.height<=1080){
                 _this.paddingsize=6;
-                _this.margin=120;
+                _this.margin=70;
                 _this.fontsize =45;
               }
             }
