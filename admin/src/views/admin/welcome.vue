@@ -109,7 +109,7 @@
                   <div class="widget-header ">
                     <h5 class="widget-title">
                       <i class="ace-icon fa fa-bell"></i>
-                      江豚预警
+                      豚预警
                     </h5>
                   </div>
                   <div class="widget-body">

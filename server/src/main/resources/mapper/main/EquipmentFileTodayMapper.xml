@@ -336,13 +336,13 @@
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
-    and   TO_DAYS(cjsj) = TO_DAYS(NOW())  and  wjlx='3'  GROUP  BY  deptcode
+    and   TO_DAYS(cjsj) = TO_DAYS(NOW())  and  txtlx='1'  GROUP  BY  deptcode
     union all
     SELECT deptcode `key` ,COUNT(*)  `value` FROM  equipment_file_ty_today
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
-    and   TO_DAYS(cjsj) = TO_DAYS(NOW())  and  wjlx='3'  GROUP  BY  deptcode
+    and   TO_DAYS(cjsj) = TO_DAYS(NOW())  and  txtlx='1'  GROUP  BY  deptcode
   </select>
   <select id="countTsByExample" parameterType="com.pd.server.main.domain.EquipmentFileTodayExample" resultType="java.lang.Integer">
     select sum(ts) from equipment_file_today

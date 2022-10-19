@@ -55,6 +55,10 @@ public class EquipmentFileTyShjService extends AbstractScanRequest{
                 WaterEquipmentExample.Criteria ca = example.createCriteria();
                 ca.andSbsnEqualTo(sbbh);
                 List<WaterEquipment> lists = waterEquipmentMapper.selectByExample(example);
+                if(lists==null || lists.isEmpty()){
+                    data="设备编号不存在";
+                    return data;
+                }
                 String deptcode = lists.get(0).getDeptcode();
                 EquipmentFileTy entity = new EquipmentFileTy();
                 entity.setId(UuidUtil.getShortUuid());

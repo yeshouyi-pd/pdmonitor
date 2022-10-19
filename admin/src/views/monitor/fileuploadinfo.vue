@@ -57,7 +57,7 @@
                 <div style="display: flex;flex-direction: row;flex-wrap: wrap;">
                   <button style="margin: 20px;border-radius: 30px;"  class="btn-info" :class="active == index ? 'bodycheck' : 'bodyontcheck'" v-for="( item ,index) in waterProUser" >
                     <div style="display: flex;flex-direction: column;padding: 10px;height: 167px;"   v-on:click="changeTab(index,item)" >
-                      <img  style="width: 100px;" src="/static/favicon.png"/>
+                      <img  style="width: 100px;" src="/static/PRCD12.png"/>
                       <span style="width: 100px;margin-top: 5px;font-size: 14px;">{{xmbhMap|optionMapKV(item.xmbh)}}</span>
                     </div>
                   </button>

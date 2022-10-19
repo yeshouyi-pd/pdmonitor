@@ -88,7 +88,7 @@ public class ExportFileController extends BaseWxController{
         cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_LEFT);
         cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
         // 创建一个工作表
-        String fileName = "江豚捕食统计(" + new Date().getTime() + ").xls";
+        String fileName = "捕食统计(" + new Date().getTime() + ").xls";
         HSSFSheet sheet = workbook.createSheet("按捕食次数统计");
         // 自适应列宽度
         sheet.autoSizeColumn(1, true);
@@ -184,7 +184,7 @@ public class ExportFileController extends BaseWxController{
         cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_LEFT);
         cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
         // 创建一个工作表
-        String fileName = "江豚事件统计(" + new Date().getTime() + ").xls";
+        String fileName = "事件统计(" + new Date().getTime() + ").xls";
         HSSFSheet sheet = workbook.createSheet("按事件统计");
         // 自适应列宽度
         sheet.autoSizeColumn(1, true);
@@ -304,7 +304,7 @@ public class ExportFileController extends BaseWxController{
         cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_LEFT);
         cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
         // 创建一个工作表
-        String fileName = "江豚出现统计(" + new Date().getTime() + ").xls";
+        String fileName = "出现统计(" + new Date().getTime() + ").xls";
         HSSFSheet sheet = workbook.createSheet("出现时间");
         // 自适应列宽度
         sheet.autoSizeColumn(1, true);

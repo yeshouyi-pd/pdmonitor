@@ -625,14 +625,14 @@
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
-    AND  TO_DAYS(cjsj) = TO_DAYS(NOW()) and  wjlx='3' ) b WHERE a.sbsn = b.sbbh
+    AND  TO_DAYS(cjsj) = TO_DAYS(NOW()) and  txtlx='1' ) b WHERE a.sbsn = b.sbbh
     union all
     SELECT  d. * , c. sbmc   FROM  water_equipment c, (
     select * from equipment_file_ty_today
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
-    AND  TO_DAYS(cjsj) = TO_DAYS(NOW()) and  wjlx='3' ) d WHERE c.sbsn = d.sbbh order by cjsj
+    AND  TO_DAYS(cjsj) = TO_DAYS(NOW()) and  txtlx='1' ) d WHERE c.sbsn = d.sbbh order by cjsj
 
   </select>
 

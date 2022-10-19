@@ -2,10 +2,7 @@ package com.pd.monitor.controller;
 
 import com.pd.server.config.RedisCode;
 import com.pd.server.main.domain.*;
-import com.pd.server.main.service.EquipmentFileEventService;
-import com.pd.server.main.service.EquipmentFileService;
-import com.pd.server.main.service.EquipmentFileTyService;
-import com.pd.server.main.service.EquipmentTyEventService;
+import com.pd.server.main.service.*;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,9 +39,12 @@ public class DownloadAudioController {
     private EquipmentFileEventService equipmentFileEventService;//A4设备聚类
     @Resource
     public RedisTemplate redisTemplate;
+    @Resource
+    public AttrService attrService;
 
     @GetMapping("/downZipByWjmc")
     public void downZipByWjmc(HttpServletRequest request, HttpServletResponse response) throws Exception{
+        String filePath = attrService.findByAttrKey("filePath");
         String wjmc = request.getParameter("wjmc");
         EquipmentFileExample example = new EquipmentFileExample();
         EquipmentFileExample.Criteria ca = example.createCriteria();
@@ -60,7 +60,7 @@ public class DownloadAudioController {
             // 循环调用压缩文件方法,将一个一个需要下载的文件打入压缩文件包
             for (EquipmentFile entity : lists) {
                 // 该方法在下面定义
-                fileToZip(entity.getTplj().replace("http://146.56.226.176:8088/","C:\\FileInfoApi\\"), zipOut);
+                fileToZip(entity.getTplj().replace("http://146.56.226.176:8088/",filePath), zipOut);
             }
             // 压缩完成后,关闭压缩流
             zipOut.close();
@@ -90,6 +90,7 @@ public class DownloadAudioController {
 
     @GetMapping("/downZipByA4Id")
     public void downZipByA4Id(HttpServletRequest request, HttpServletResponse response) throws Exception{
+        String filePath = attrService.findByAttrKey("filePath");
         String id = request.getParameter("id");
         EquipmentFileEvent event = equipmentFileEventService.selectByPrimaryKey(id);
         EquipmentFile fileEntity = equipmentFileService.selectByPrimaryKey(event.getEquipmentFileId());
@@ -111,7 +112,7 @@ public class DownloadAudioController {
             // 循环调用压缩文件方法,将一个一个需要下载的文件打入压缩文件包
             for (EquipmentFile entity : lists) {
                 // 该方法在下面定义
-                fileToZip(entity.getTplj().replace("http://146.56.226.176:8088/","C:\\FileInfoApi\\"), zipOut);
+                fileToZip(entity.getTplj().replace("http://146.56.226.176:8088/",filePath), zipOut);
             }
             // 压缩完成后,关闭压缩流
             zipOut.close();
@@ -145,6 +146,7 @@ public class DownloadAudioController {
 
     @GetMapping("/downZipById")
     public void downZipById(HttpServletRequest request, HttpServletResponse response) throws Exception{
+        String filePath = attrService.findByAttrKey("filePath");
         String id = request.getParameter("id");
         EquipmentTyEvent event = equipmentTyEventService.selectByPrimaryKey(id);
         EquipmentFileTy fileEntity = equipmentFileTyService.selectByPrimaryKey(event.getBz());
@@ -166,7 +168,7 @@ public class DownloadAudioController {
             // 循环调用压缩文件方法,将一个一个需要下载的文件打入压缩文件包
             for (EquipmentFileTy entity : lists) {
                 // 该方法在下面定义
-                fileToZip(entity.getTplj().replace("http://146.56.226.176:8088/","C:\\FileInfoApi\\"), zipOut);
+                fileToZip(entity.getTplj().replace("http://146.56.226.176:8088/",filePath), zipOut);
             }
             // 压缩完成后,关闭压缩流
             zipOut.close();
