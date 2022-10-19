@@ -69,6 +69,7 @@ public class EquipmentFileTodayController extends BaseWxController {
         }
         ca.andTxtlxEqualTo("1");
         List<AlarmNumbersDto> lists = equipmentFileTodayService.statisticsAlarmNums(example);
+        ca1.andTxtlxEqualTo("1");
         ca1.andJczlEqualTo("1");
         List<EquipmentFileToday> predationList = equipmentFileTodayService.listAll(example1);
         List<AlarmNumbersDto> resultList = new ArrayList<>();
