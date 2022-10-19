@@ -38,7 +38,7 @@ public class LdTaskListController {
             dto.setTask("cmd:203");
             dto.setFsdate(new Date());
             ldTaskListService.save(dto);
-            Thread.sleep(3000);
+            Thread.sleep(1000);
             dto.setIccid(sbcj);
             dto.setTask("cmd:202");
             dto.setFsdate(new Date());
