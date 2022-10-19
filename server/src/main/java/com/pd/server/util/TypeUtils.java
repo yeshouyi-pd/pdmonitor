@@ -43,6 +43,8 @@ public class TypeUtils {
     public static final String KEY_23 = "KEY_23";
     public static final String KEY_24 = "KEY_24";
     public static final String KEY_25 = "KEY_25";
+    public static final String KEY_26 = "KEY_26";
+    public static final String KEY_27 = "KEY_27";
 
 
     public static final String ZZ_1 = "^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}.txt$";
@@ -70,6 +72,8 @@ public class TypeUtils {
     public static final String ZZ_23 ="^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_predation_\\d{1,}_A4_\\w{1,}.mp4$";
     public static final String ZZ_24 ="^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{1,}_A4.txt$";
     public static final String ZZ_25 ="^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{1,}_A4_\\w{1,}.mp4$";
+    public static final String ZZ_26 ="^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_predation_\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_predation_\\d{1,}_A4.txt$";
+    public static final String ZZ_27 ="^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_predation_\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_predation_\\d{1,}_A4_\\w{1,}.mp4$";
 
     public static Map<String,String> patternmap = new HashMap<>();
     static {
@@ -98,6 +102,8 @@ public class TypeUtils {
         patternmap.put(KEY_23,ZZ_23);
         patternmap.put(KEY_24,ZZ_24);
         patternmap.put(KEY_25,ZZ_25);
+        patternmap.put(KEY_26,ZZ_26);
+        patternmap.put(KEY_27,ZZ_27);
     }
 
 
@@ -245,6 +251,16 @@ public class TypeUtils {
                         wjlx ="4";
                         ts=tss[12];
 
+                    }else if(KEY_26.equals(entry.getKey())){
+                        type = "1026";
+                        wjlx ="3";
+                        ts=tss[14];
+                        txtlx ="5";
+                    }else if(KEY_27.equals(entry.getKey())){
+                        type = "1027";
+                        wjlx ="4";
+                        ts=tss[14];
+
                     }
                     break;
                 }
@@ -293,8 +309,10 @@ public class TypeUtils {
         String u23 = "2022_10_15_23_07_10_2022_10_15_23_07_50_predation_2_A4_TD33.mp4";
         String u24 = "2022_10_15_23_02_36_2022_10_15_23_02_36_1_A4.txt";
         String u25 = "2022_10_15_23_02_36_2022_10_15_23_02_36_1_A4_TD33.mp4";
+        String u26 = "2022_10_15_23_02_36_predation_2022_10_15_23_02_36_predation_1_A4.txt";
+        String u27 = "2022_10_15_23_02_36_predation_2022_10_15_23_02_36_predation_1_A4_TD33.mp4";
 
-        Map<String,String> map =  getType(u24);
+        Map<String,String> map =  getType(u27);
         Set set = map.entrySet();
         for(Object key:set){
             Map.Entry entry = (Map.Entry) key;

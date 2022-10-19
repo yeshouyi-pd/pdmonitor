@@ -86,7 +86,7 @@
                        <span  v-on:click="tojtlist()" class="line-height-1 bigger-200"> {{jtcount}} </span>
 
                     <br/>
-                    <span class="line-height-1 smaller-75"> 江豚出现数据 </span>
+                    <span class="line-height-1 smaller-75">声学侦测次数</span>
                   </td>
                 </tr>
               </table>

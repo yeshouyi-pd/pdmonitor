@@ -5,117 +5,98 @@
         <div class="main-content" style="padding-left: 0px;padding-right: 0px;">
           <div>
             <div :class="isMobileflag?'col-sm-10':'col-sm-4'" :style="'margin-left:'+marginleft+'%;margin-top:'+margintop+'px;'">
-
               <div class="center">
-                                  <span :style="'font-size:'+fontsize+'px'">
-<!--                                      <i class="ace-icon fa fa-leaf green"></i>-->
-                                    <img :style="'height:'+imgsize+'px;margin-top: -10px;'" src="/static/favicon.png"/>
-                                    <span> 齿鲸类实时声学分析预警系统</span>
-                                  </span>
+                <span :style="'font-size:'+fontsize+'px'">
+<!--                                     <i class="ace-icon fa fa-leaf green"></i>-->
+                  <img :style="'height:'+imgsize+'px;margin-top: -10px;'" src="/static/PRCD10.png"/>
+                  <span> 齿鲸类实时声学分析预警系统</span>
+                </span>
               </div>
-
-                    <div class="login-container" :style="'margin:'+margin+'px auto'">
+              <div class="login-container" :style="'margin:'+margin+'px auto'">
+                <div class="space-6"></div>
+                <div class="position-relative">
+                  <div id="login-box" class="login-box visible widget-box no-border">
+                    <div class="widget-body">
+                      <div class="widget-main">
+                        <h4 class="header blue lighter bigger">
+                          <i class="ace-icon fa fa-coffee green"></i>
+                          请输入用户密码
+                        </h4>
                         <div class="space-6"></div>
-
-                        <div class="position-relative">
-                            <div id="login-box" class="login-box visible widget-box no-border">
-                                <div class="widget-body">
-                                    <div class="widget-main">
-                                        <h4 class="header blue lighter bigger">
-                                            <i class="ace-icon fa fa-coffee green"></i>
-                                            请输入用户密码
-                                        </h4>
-
-                                        <div class="space-6"></div>
-
-                                        <form>
-                                            <fieldset>
-                                                <label class="block clearfix">
-														<span class="block input-icon input-icon-right">
-															<input v-model="user.loginName" type="text" class="form-control" placeholder="请输入用户名" />
-															<i class="ace-icon fa fa-user"></i>
-														</span>
-                                                </label>
-
-                                                <label class="block clearfix">
-														<span class="block input-icon input-icon-right">
-															<input  v-model="user.password"  type="password" class="form-control" placeholder="密码" />
-															<i class="ace-icon fa fa-lock"></i>
-														</span>
-                                                </label>
-                                                <label class="block clearfix">
-                                                     <span class="block input-icon input-icon-right">
-                                                      <div class="input-group">
-                                                       <input v-model="user.imageCode" type="text" class="form-control" placeholder="验证码">
-                                                        <span class="input-group-addon" id="basic-addon2">
-                                                      <img v-on:click="loadImageCode()" id="image-code" alt="验证码"/>
-                                                            </span>
-                                                      </div>
-                                                     </span>
-                                                </label>
-                                                <div class="space"></div>
-
-                                                <div class="clearfix">
-                                                    <label class="inline">
-                                                        <input v-model="remember" type="checkbox" class="ace" />
-                                                        <span class="lbl">记住我</span>
-                                                    </label>
-
-                                                    <button type="button"
-                                                            class="width-35 pull-right btn btn-sm btn-primary"
-                                                             v-on:click="login()" >
-                                                        <i class="ace-icon fa fa-key"></i>
-                                                        <span class="bigger-110">登录</span>
-                                                    </button>
-                                                </div>
-
-                                                <div class="space-4"></div>
-                                            </fieldset>
-                                        </form>
-
-
-
-
-
-
-                                    </div><!-- /.widget-main -->
-
-                                </div><!-- /.widget-body -->
-                            </div><!-- /.login-box -->
-
-                        </div><!-- /.position-relative -->
-                    </div>
-                </div><!-- /.col -->
+                        <form>
+                          <fieldset>
+                            <label class="block clearfix">
+                              <span class="block input-icon input-icon-right">
+                                <input v-model="user.loginName" type="text" class="form-control" placeholder="请输入用户名" />
+                                <i class="ace-icon fa fa-user"></i>
+                              </span>
+                            </label>
+                            <label class="block clearfix">
+                              <span class="block input-icon input-icon-right">
+                                <input  v-model="user.password"  type="password" class="form-control" placeholder="密码" />
+                                <i class="ace-icon fa fa-lock"></i>
+                              </span>
+                            </label>
+                            <label class="block clearfix">
+                              <span class="block input-icon input-icon-right">
+                                <div class="input-group">
+                                  <input v-model="user.imageCode" type="text" class="form-control" placeholder="验证码">
+                                  <span class="input-group-addon" id="basic-addon2">
+                                    <img v-on:click="loadImageCode()" id="image-code" alt="验证码"/>
+                                  </span>
+                                </div>
+                              </span>
+                            </label>
+                            <div class="space"></div>
+                            <div class="clearfix">
+                              <label class="inline">
+                                <input v-model="remember" type="checkbox" class="ace" />
+                                <span class="lbl">记住我</span>
+                              </label>
+                              <button type="button" class="width-35 pull-right btn btn-sm btn-primary" v-on:click="login()" >
+                                <i class="ace-icon fa fa-key"></i>
+                                <span class="bigger-110">登录</span>
+                              </button>
+                            </div>
+                            <div class="space-4"></div>
+                          </fieldset>
+                        </form>
+                      </div><!-- /.widget-main -->
+                    </div><!-- /.widget-body -->
+                  </div><!-- /.login-box -->
+                </div><!-- /.position-relative -->
+              </div>
+            </div><!-- /.col -->
             <div v-if="isMobileflag" class="col-xs-10" style="margin-top: 10px;">
-                    <span>
-                      <i class="ace-icon fa fa-square blue"></i>
-                      <span style="margin-left: 10px;">科技创新</span>
-                    </span>
+              <span>
+                <i class="ace-icon fa fa-square blue"></i>
+                <span style="margin-left: 10px;">科技创新</span>
+              </span>
               <span style="margin-left: 5px;">
-                      <i class="ace-icon fa fa-square blue"></i>
-                      <span style="margin-left: 10px;">声学监测</span>
-                    </span>
+                <i class="ace-icon fa fa-square blue"></i>
+                <span style="margin-left: 10px;">声学监测</span>
+              </span>
               <span style="margin-left: 5px;">
-                      <i class="ace-icon fa fa-square blue"></i>
-                      <span style="margin-left: 10px;">实时精准</span>
-                    </span>
+                <i class="ace-icon fa fa-square blue"></i>
+                <span style="margin-left: 10px;">实时精准</span>
+              </span>
             </div>
-            <div v-else class="col-xs-4" style="margin-top: -10px;margin-left: 15%;font-style: italic;font-size: 24px;">
-                    <span>
-                      <i class="ace-icon fa fa-circle blue" style="font-size: 20px;"></i>
-                      <span class="logo-text-style">科技创新</span>
-                    </span>
+            <div v-else class="col-xs-4" style="margin-top:10px;margin-left: 15%;font-style: italic;font-size: 24px;">
+              <span>
+                <i class="ace-icon fa fa-circle blue" style="font-size: 20px;"></i>
+                <span class="logo-text-style">科技创新</span>
+              </span>
               <span style="margin-left: 30px;">
-                      <i class="ace-icon fa fa-circle blue" style="font-size: 20px;"></i>
-                      <span class="logo-text-style">声学监测</span>
-                    </span>
+                <i class="ace-icon fa fa-circle blue" style="font-size: 20px;"></i>
+                <span class="logo-text-style">声学监测</span>
+              </span>
               <span style="margin-left: 30px;">
-                      <i class="ace-icon fa fa-circle blue" style="font-size: 20px;"></i>
-                      <span class="logo-text-style">实时精准</span>
-                    </span>
+                <i class="ace-icon fa fa-circle blue" style="font-size: 20px;"></i>
+                <span class="logo-text-style">实时精准</span>
+              </span>
             </div>
-            </div><!-- /.row -->
-          <div   class="position-relative-gs"><img height="100px;" src="/static/image/loginButtom.png"/></div>
+          </div><!-- /.row -->
+          <div   class="position-relative-gs"><img height="80px;" src="/static/image/loginButtom.png"/></div>
         </div><!-- /.main-content -->
     </div><!-- /.main-container -->
 </template>
@@ -126,13 +107,13 @@
         name:'login',
         data:function(){
             return{
-                user:{},
-                remember:true,
-                imageCodeToken: "",
-                isMobileflag:false,
-                fontsize:45,
-                imgsize: 51,
-                paddingsize:6,
+              user:{},
+              remember:true,
+              imageCodeToken: "",
+              isMobileflag:false,
+              fontsize:35,
+              imgsize: 51,
+              paddingsize:6,
               marginleft:45,
               margin:70,
               margintop:40
@@ -164,6 +145,7 @@
               _this.paddingsize=20;
               _this.marginleft=0;
               _this.margin=20;
+              _this.margintop=-18;
             }else{
               _this.isMobileflag =false;
               _this.imgsize = 51;
@@ -175,24 +157,24 @@
               }else if(window.screen.height<=768){
                 _this.margin=10;
                 _this.paddingsize=5;
-                _this.fontsize =45;
+                _this.fontsize =35;
               }else if(window.screen.height<=800){
                 _this.margin=10;
                 _this.paddingsize=6;
-                _this.fontsize =45;
+                _this.fontsize =35;
               }else if(window.screen.height<=900){
                 _this.margin=50;
                 _this.paddingsize=6;
-                _this.fontsize =45;
+                _this.fontsize =35;
                 _this.margintop = 0;
               }else if(window.screen.height<=1024){
                 _this.paddingsize=6;
                 _this.margin=100;
-                _this.fontsize =45;
+                _this.fontsize =35;
               }else if(window.screen.height<=1080){
                 _this.paddingsize=6;
                 _this.margin=70;
-                _this.fontsize =45;
+                _this.fontsize =35;
               }
             }
           },
@@ -208,11 +190,10 @@
                     return;
                 }
                 let md5= hex_md5(this.user.password);
-                let   rememberUser =  LocalStorage.get(LOCAL_KEY_REMEMBER_USER) || {};
+                let rememberUser =  LocalStorage.get(LOCAL_KEY_REMEMBER_USER) || {};
 
                 if(md5 !== rememberUser.md5 ){
                     _this.user.password=hex_md5(_this.user.password +KEY);
-
                 }
                 _this.user.imageCodeToken = _this.imageCodeToken;
                 Loading.show();
@@ -263,9 +244,9 @@
 </script>
 
 <style scoped>
-.col-sm-4{
-  width: 55%;
-}
+    .col-sm-4{
+      width: 55%;
+    }
     .input-group-addon {
         padding: 0;
     }

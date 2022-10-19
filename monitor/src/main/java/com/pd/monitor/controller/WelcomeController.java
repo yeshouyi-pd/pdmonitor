@@ -80,7 +80,7 @@ public class WelcomeController  extends BaseWxController{
         resultMap.put("value",predationList.size());
         resultList.add(resultMap);
         Map<String,Object> resultMap1 = new HashMap<>();
-        resultMap1.put("name", "江豚出现");
+        resultMap1.put("name", "侦测数据");
         resultMap1.put("value",allList.size());
         resultList.add(resultMap1);
         responseDto.setContent(resultList);

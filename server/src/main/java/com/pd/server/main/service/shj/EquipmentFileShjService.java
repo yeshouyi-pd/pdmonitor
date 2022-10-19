@@ -48,6 +48,10 @@ public class EquipmentFileShjService extends AbstractScanRequest{
             WaterEquipmentExample.Criteria ca = example.createCriteria();
             ca.andSbsnEqualTo(sbbh);
             List<WaterEquipment> lists = waterEquipmentMapper.selectByExample(example);
+            if(lists==null || lists.isEmpty()){
+                data="设备编号不存在";
+                return data;
+            }
             String deptcode = lists.get(0).getDeptcode();
             EquipmentFile entity = new EquipmentFile();
             entity.setId(UuidUtil.getShortUuid());
@@ -75,7 +79,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
             entity.setTxtlx(typeUtil.get(TypeUtils.TXTLX));
             entity.setWjmc(typeUtil.get(TypeUtils.WJMC));
             entity.setWjlx(typeUtil.get(TypeUtils.WJLX));
-            if("1020".equals(entity.getType())||"1022".equals(entity.getType())||"1024".equals(entity.getType())){
+            if("1020".equals(entity.getType())||"1022".equals(entity.getType())||"1024".equals(entity.getType())||"1026".equals(entity.getType())){
                 EquipmentFileEventMapper equipmentFileEventMapper = SpringUtil.getBean(EquipmentFileEventMapper.class);
                 String temp = tplj.substring(tplj.lastIndexOf("/")+1,tplj.lastIndexOf("_A4.txt"));
                 String[] arr = temp.split("_");
@@ -83,7 +87,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                 fileEvent.setId(UuidUtil.getShortUuid());
                 fileEvent.setSbbh(sbbh);
                 fileEvent.setKssj(arr[0]+"-"+arr[1]+"-"+arr[2]+" "+arr[3]+":"+arr[4]+":"+arr[5]);
-                fileEvent.setJssj("1020".equals(entity.getType())?arr[7]+"-"+arr[8]+"-"+arr[9]+" "+arr[10]+":"+arr[11]+":"+arr[12]:arr[6]+"-"+arr[7]+"-"+arr[8]+" "+arr[9]+":"+arr[10]+":"+arr[11]);
+                fileEvent.setJssj("1020".equals(entity.getType())||"1026".equals(entity.getType())?arr[7]+"-"+arr[8]+"-"+arr[9]+" "+arr[10]+":"+arr[11]+":"+arr[12]:arr[6]+"-"+arr[7]+"-"+arr[8]+" "+arr[9]+":"+arr[10]+":"+arr[11]);
                 fileEvent.setRq(arr[0]+"-"+arr[1]+"-"+arr[2]);
                 fileEvent.setTs(entity.getTs());
                 fileEvent.setJtnr(entity.getSm1());

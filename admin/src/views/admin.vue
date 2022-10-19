@@ -15,7 +15,7 @@
               <div class="navbar-header pull-left">
                   <a href="index.html" class="navbar-brand">
                       <small>
-                          <img style="height: 28px;margin-top: -8px;" src="/static/favicon.png"/>
+                          <img style="height: 28px;margin-top: -8px;" src="/static/PRCD16.png"/>
                         齿鲸类实时声学分析预警系统V1.0
                       </small>
                   </a>

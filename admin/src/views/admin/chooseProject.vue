@@ -3,7 +3,7 @@
     <div style="display: flex;flex-direction: row;flex-wrap: wrap;">
       <button style="margin: 30px;border-radius: 50px;" class="btn-info" v-for="item in xmbhs" v-on:click="toWelcome(item)">
         <div style="display: flex;flex-direction: column;padding: 50px;height: 446px;">
-          <img src="/static/favicon.png" style="width: 236px;"/>
+          <img src="/static/PRCD16.png" style="width: 236px;"/>
           <span style="margin-top: 20px;font-size: 30px;display: block;width: 236px;">{{xmbhMap|optionMapKV(item)}}</span>
         </div>
       </button>
