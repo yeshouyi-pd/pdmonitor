@@ -28,7 +28,7 @@ public class EquipmentFileTodayService {
         return equipmentFileTodayMapper.getAlljcsjByDept(example);
     }
 
-    public int countTsByExample(EquipmentFileTodayExample example){
+    public Integer countTsByExample(EquipmentFileTodayExample example){
         return equipmentFileTodayMapper.countTsByExample(example);
     }
 

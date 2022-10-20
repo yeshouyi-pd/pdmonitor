@@ -37,7 +37,7 @@ public class DataInvalidQuartz {
      * 每10分钟执行一次
      * @throws Exception
      */
-    @Scheduled(cron="0 */30 * * * ?")
+    @Scheduled(cron="0 */10 * * * ?")
     public void updateTheCounter(){
         WaterEquipmentExample example = new WaterEquipmentExample();
         example.createCriteria().andSblbEqualTo("0001");

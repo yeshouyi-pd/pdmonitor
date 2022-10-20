@@ -16,7 +16,7 @@ public interface EquipmentFileTodayMapper {
 
     List<KvIntDto> getAlljcsjByDept(EquipmentFileTodayExample example);
 
-    int countTsByExample(EquipmentFileTodayExample example);
+    Integer countTsByExample(EquipmentFileTodayExample example);
 
     List<WelcomeKvDto> getWarningDate(EquipmentFileTodayExample example);
 

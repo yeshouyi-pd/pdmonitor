@@ -30,7 +30,7 @@ public class EquipmentFileAlarmEventService {
         return equipmentFileAlarmEventMapper.countByExample(example);
     }
 
-    public int countTsByExample(EquipmentFileAlarmEventExample example){
+    public Integer countTsByExample(EquipmentFileAlarmEventExample example){
         return equipmentFileAlarmEventMapper.countTsByExample(example);
     }
 
@@ -136,7 +136,7 @@ public class EquipmentFileAlarmEventService {
 
     public void insert(EquipmentFileAlarmEventDto equipmentFileAlarmEventDto){
         EquipmentFileAlarmEvent equipmentFileAlarmEvent = CopyUtil.copy(equipmentFileAlarmEventDto, EquipmentFileAlarmEvent.class);
-        equipmentFileAlarmEventMapper.insert(equipmentFileAlarmEvent);
+        equipmentFileAlarmEventMapper.insertSelective(equipmentFileAlarmEvent);
     }
 
     /**

@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Param;
 
 public interface EquipmentFileAlarmEventMapper {
 
-    int countTsByExample(EquipmentFileAlarmEventExample example);
+    Integer countTsByExample(EquipmentFileAlarmEventExample example);
 
     long countByExample(EquipmentFileAlarmEventExample example);
 
