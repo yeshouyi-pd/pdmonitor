@@ -7,6 +7,7 @@ import com.pd.server.main.domain.LdTaskListExample;
 import com.pd.server.main.dto.LdTaskListDto;
 import com.pd.server.main.dto.PageDto;
 import com.pd.server.main.dto.ResponseDto;
+import com.pd.server.main.service.AttrService;
 import com.pd.server.main.service.LdTaskListService;
 import com.pd.server.util.CopyUtil;
 import com.pd.server.util.ValidatorUtil;
@@ -28,17 +29,20 @@ public class LdTaskListController {
 
     @Resource
     private LdTaskListService ldTaskListService;
+    @Resource
+    private AttrService attrService;
 
     @PostMapping("/restart/{sbcj}")
     public ResponseDto restart(@PathVariable String sbcj){
         ResponseDto responseDto = new ResponseDto();
+        String restartinterval = attrService.findByAttrKey("restartinterval");
         try {
             LdTaskListDto dto = new LdTaskListDto();
             dto.setIccid(sbcj);
             dto.setTask("cmd:203");
             dto.setFsdate(new Date());
             ldTaskListService.save(dto);
-            Thread.sleep(1000);
+            Thread.sleep(Long.parseLong(restartinterval));
             dto.setIccid(sbcj);
             dto.setTask("cmd:202");
             dto.setFsdate(new Date());
