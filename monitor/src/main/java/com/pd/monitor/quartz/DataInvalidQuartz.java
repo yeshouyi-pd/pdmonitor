@@ -43,10 +43,11 @@ public class DataInvalidQuartz {
         example.createCriteria().andSblbEqualTo("0001");
         List<WaterEquipment> waterList = waterEquipmentService.list(example);
         String reqinterval = attrService.findByAttrKey("reqinterval");
+        String reqintervalextend = attrService.findByAttrKey("reqintervalextend");
         for (int i = 0; i < waterList.size(); i++) {
             WaterEquipment equipment = waterList.get(i);
             WaterEquiplog log = waterEquiplogService.findBySbbh(equipment.getSbsn());
-            if(null != log && log.getCode().equals("1") && Long.parseLong(DateTools.getDatePoorS(new Date(), log.getCjsj())) < Long.parseLong(reqinterval)){
+            if(null != log && log.getCode().equals("1") && Long.parseLong(DateTools.getDatePoorS(new Date(), log.getCjsj())) < (Long.parseLong(reqinterval)+Long.parseLong(reqintervalextend))){
                 equipment.setSbzt("1");//正常
             }else{
                 equipment.setSbzt("2");//离线
