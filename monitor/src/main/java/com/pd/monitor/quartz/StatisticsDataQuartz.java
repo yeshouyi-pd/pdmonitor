@@ -158,7 +158,7 @@ public class StatisticsDataQuartz {
                     tsCa.andTxtlxEqualTo("2");
                     tsCa.andFzGreaterThanOrEqualTo(arr[0]);
                     tsCa.andFzLessThanOrEqualTo(arr[1]);
-                    int tsCount = equipmentFileTodayService.countTsByExample(tsExample);
+                    Integer tsCount = equipmentFileTodayService.countTsByExample(tsExample);
                     if(!StringUtils.isEmpty(tsCount)){
                         entity.setSm1(String.valueOf(tsCount));
                     }
@@ -198,7 +198,7 @@ public class StatisticsDataQuartz {
             long alarmCount = equipmentFileAlarmEventService.alarmCount(eventExample);
             dto.setSm1(StringUtils.isEmpty(alarmCount)?"0":Long.toString(alarmCount));
             if(sbbha4.contains(alarmNumbersDto.getSbbh())){
-                int tsCount = equipmentFileAlarmEventService.countTsByExample(eventExample);
+                Integer tsCount = equipmentFileAlarmEventService.countTsByExample(eventExample);
                 dto.setSm2(StringUtils.isEmpty(tsCount)?"0":String.valueOf(tsCount));
             }
             predationNumService.save(dto);

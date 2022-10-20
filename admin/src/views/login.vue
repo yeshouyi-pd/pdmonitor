@@ -4,7 +4,7 @@
       <div :style="'padding-top:'+paddingsize+'%'"></div>
         <div class="main-content" style="padding-left: 0px;padding-right: 0px;">
           <div>
-            <div :class="isMobileflag?'col-sm-10':'col-sm-4'" :style="'margin-left:'+marginleft+'%;margin-top:'+margintop+'px;'">
+            <div :class="isMobileflag?'col-sm-10':'login-content'">
               <div class="center">
                 <span :style="'font-size:'+fontsize+'px'">
 <!--                                     <i class="ace-icon fa fa-leaf green"></i>-->
@@ -12,7 +12,7 @@
                   <span> 齿鲸类实时声学分析预警系统</span>
                 </span>
               </div>
-              <div class="login-container" :style="'margin:'+margin+'px auto'">
+              <div class="login-container" style="margin-top: 5%;">
                 <div class="space-6"></div>
                 <div class="position-relative">
                   <div id="login-box" class="login-box visible widget-box no-border">
@@ -81,7 +81,7 @@
                 <span style="margin-left: 10px;">实时精准</span>
               </span>
             </div>
-            <div v-else class="col-xs-4" style="margin-top:10px;margin-left: 15%;font-style: italic;font-size: 24px;">
+            <div v-else class="col-xs-4" style="margin-top: 5%;margin-left: 15%;font-style: italic;font-size: 24px;">
               <span>
                 <i class="ace-icon fa fa-circle blue" style="font-size: 20px;"></i>
                 <span class="logo-text-style">科技创新</span>
@@ -244,8 +244,10 @@
 </script>
 
 <style scoped>
-    .col-sm-4{
-      width: 55%;
+    .login-content{
+      position: relative;
+      margin-left: 40%;
+      margin-top: 3%;
     }
     .input-group-addon {
         padding: 0;
