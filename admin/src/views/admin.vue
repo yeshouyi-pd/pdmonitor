@@ -201,7 +201,7 @@
                   <div class="footer-content">
 						<span class="bigger-120">
 							<span class="blue bolder"></span>
-							武汉品度科技有限公司
+							技术支持：品度科技|联系电话：027-8778 0759
 						</span>
 
                   </div>

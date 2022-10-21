@@ -62,7 +62,8 @@ export default {
       markerClusterer:null,
       markers:[],
       maxHeight:'',
-      maxWidth:''
+      maxWidth:'',
+      amap:''
     }
   },
   created() {
@@ -97,14 +98,15 @@ export default {
           let arr = _this.equipments[0].gps.split(",");
           _this.jd = Number(arr[0]);
           _this.wd = Number(arr[1]);
-          _this.map.centerAndZoom(new TLngLat(_this.jd,_this.wd),_this.zoom);
+          //_this.map.centerAndZoom(new TLngLat(_this.jd,_this.wd),_this.zoom);
           _this.getGpsBySbsn();
         }
       })
     },
     getGpsBySbsn(){
       let _this = this;
-      _this.map.clearOverLays();
+      // _this.map.clearOverLays();
+      _this.amap.clearMap();
       let obj = {
         "rq":_this.curDateStr,
         "sbbh":_this.curSbsn
@@ -114,30 +116,52 @@ export default {
         Loading.hide();
         let resp = response.data;
         let gpslist = resp.content;
+        // if(gpslist && gpslist.length>0){
+        //   console.log(gpslist.length/2);
+        //   _this.map.panTo(new TLngLat(Number(gpslist[parseInt(gpslist.length/2)].gps.split(",")[0]),Number(gpslist[parseInt(gpslist.length/2)].gps.split(",")[1])));
+        //   gpslist.forEach(function (item){
+        //     var icon = new TIcon("https://webapi.amap.com/theme/v1.3/markers/n/mark_bs.png",new TSize(19,27),{anchor:new TPixel(9,27)});
+        //     let gps = item.gps.split(",");
+        //     let lnglat = new TLngLat(Number(gps[0]),Number(gps[1]));
+        //     let marker = new TMarker(lnglat,{icon:icon});
+        //     marker.setTitle(item.ts);
+        //     _this.map.addOverLay(marker);
+        //   })
+        // }
         if(gpslist && gpslist.length>0){
-          console.log(gpslist.length/2);
-          _this.map.panTo(new TLngLat(Number(gpslist[parseInt(gpslist.length/2)].gps.split(",")[0]),Number(gpslist[parseInt(gpslist.length/2)].gps.split(",")[1])));
+          _this.amap.setCenter(gpslist[0].gps.split(","));
           gpslist.forEach(function (item){
-            var icon = new TIcon("https://webapi.amap.com/theme/v1.3/markers/n/mark_bs.png",new TSize(19,27),{anchor:new TPixel(9,27)});
-            let gps = item.gps.split(",");
-            let lnglat = new TLngLat(Number(gps[0]),Number(gps[1]));
-            let marker = new TMarker(lnglat,{icon:icon});
-            marker.setTitle(item.ts);
-            _this.map.addOverLay(marker);
+            let marker = new AMap.Marker({
+              position: item.gps.split(","),
+              icon: '//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-default.png',
+              anchor:'bottom-center',
+              offset: new AMap.Pixel(0, 0),
+              map: _this.amap
+            });
+            marker.setLabel({
+              direction:'center',
+              offset:new AMap.Pixel(0, -5),
+              content: item.ts, //设置文本标注内容
+            });
           })
         }
       })
     },
     initMap(){
+      // let _this = this;
+      // //初始化地图对象
+      // _this.map=new TMap("mapDiv");
+      // //设置显示地图的中心点和级别
+      // if(_this.wd!=0&&_this.wd!=0){
+      //   _this.map.centerAndZoom(new TLngLat(_this.jd,_this.wd),_this.zoom);
+      // }
+      // //允许鼠标滚轮缩放地图
+      // _this.map.enableHandleMouseScroll();
       let _this = this;
-      //初始化地图对象
-      _this.map=new TMap("mapDiv");
-      //设置显示地图的中心点和级别
-      if(_this.wd!=0&&_this.wd!=0){
-        _this.map.centerAndZoom(new TLngLat(_this.jd,_this.wd),_this.zoom);
-      }
-      //允许鼠标滚轮缩放地图
-      _this.map.enableHandleMouseScroll();
+      _this.amap = new AMap.Map('mapDiv', {
+        resizeEnable: true,
+        zoom: _this.zoom
+      });
     },
     initMapMarkers(){
       let _this = this;

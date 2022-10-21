@@ -117,9 +117,9 @@
               <button v-on:click="edit(waterEquipment)" class="btn btn-xs btn-info" title="修改">
                 <i class="ace-icon fa fa-pencil bigger-120"></i>
               </button>
-<!--              <button v-on:click="restart(waterEquipment.sbcj)" class="btn btn-xs btn-info" title="重启">-->
-<!--                <i class="ace-icon fa fa-refresh bigger-120"></i>-->
-<!--              </button>-->
+              <button v-on:click="restart(waterEquipment.sbcj)" class="btn btn-xs btn-info" title="重启">
+                <i class="ace-icon fa fa-refresh bigger-120"></i>
+              </button>
             </div>
           </td>
         </tr>
@@ -319,7 +319,7 @@
         let _this = this;
         Loading.show();
         if(!Tool.isEmpty(sbcj)){
-          _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/ldTaskList/restart/'+sbcj).then((res) => {
+          _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/ldTaskListSec/restart/'+sbcj).then((res) => {
             Loading.hide();
             let response = res.data;
             if(response.success){

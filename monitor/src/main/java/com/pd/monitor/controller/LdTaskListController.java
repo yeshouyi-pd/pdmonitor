@@ -5,12 +5,10 @@ import com.github.pagehelper.PageInfo;
 import com.pd.server.main.domain.LdTaskList;
 import com.pd.server.main.domain.LdTaskListExample;
 import com.pd.server.main.dto.LdTaskListDto;
-import com.pd.server.main.dto.PageDto;
 import com.pd.server.main.dto.ResponseDto;
 import com.pd.server.main.service.AttrService;
 import com.pd.server.main.service.LdTaskListService;
 import com.pd.server.util.CopyUtil;
-import com.pd.server.util.ValidatorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
@@ -25,7 +23,7 @@ import java.util.List;
 public class LdTaskListController {
 
     private static final Logger LOG = LoggerFactory.getLogger(LdTaskListController.class);
-    public static final String BUSINESS_NAME = "";
+    public static final String BUSINESS_NAME = "下发指令";
 
     @Resource
     private LdTaskListService ldTaskListService;
@@ -43,9 +41,10 @@ public class LdTaskListController {
             dto.setFsdate(new Date());
             ldTaskListService.save(dto);
             Thread.sleep(Long.parseLong(restartinterval));
-            dto.setIccid(sbcj);
-            dto.setTask("cmd:202");
-            dto.setFsdate(new Date());
+            LdTaskListDto dto1 = new LdTaskListDto();
+            dto1.setIccid(sbcj);
+            dto1.setTask("cmd:202");
+            dto1.setFsdate(new Date());
             ldTaskListService.save(dto);
             return responseDto;
         }catch (Exception e){

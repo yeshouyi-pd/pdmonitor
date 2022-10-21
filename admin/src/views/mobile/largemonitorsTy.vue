@@ -111,7 +111,7 @@ export default {
       maxWidth:'',
       topData:{},
       eventData:[],
-      amap:'',
+      amap:''
     }
   },
   created() {

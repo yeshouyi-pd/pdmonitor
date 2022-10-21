@@ -84,7 +84,10 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">SIM卡卡号</label>
                 <div class="col-sm-10">
-                  <input v-model="ldTaskList.iccid" class="form-control">
+<!--                  <input v-model="ldTaskList.iccid" class="form-control">-->
+                  <select v-model="ldTaskList.iccid" style="width: 100%;">
+                    <option v-for="item in waterEquipments" :value="item.sbcj">{{item.sbmc}}</option>
+                  </select>
                 </div>
               </div>
               <div class="form-group">
@@ -117,8 +120,13 @@
         ldTaskListDto: {},
         ldTaskList: {},
         ldTaskLists: [],
-        fszls:[]
+        fszls:[],
+        waterEquipments:[]
       }
+    },
+    created:function(){
+      let _this = this;
+      _this.getEquip();
     },
     mounted: function() {
       let _this = this;
@@ -127,6 +135,17 @@
       _this.getFszl();
     },
     methods: {
+      getEquip(){
+        let _this = this;
+        let obj = {};
+        if("460100"!=Tool.getLoginUser().deptcode){
+          obj.xmbh = Tool.getLoginUser().xmbh;
+        }
+        _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/findAll',obj).then((response)=>{
+          _this.waterEquipments = response.data.content;
+          _this.$forceUpdate();
+        })
+      },
       /**
        * 获取设备型号
        */
@@ -153,7 +172,7 @@
         Loading.show();
         _this.ldTaskListDto.page = page;
         _this.ldTaskListDto.size = _this.$refs.pagination.size;
-        _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/ldTaskList/list', _this.ldTaskListDto).then((response)=>{
+        _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/ldTaskListSec/list', _this.ldTaskListDto).then((response)=>{
           Loading.hide();
           let resp = response.data;
           _this.ldTaskLists = resp.content.list;
@@ -176,7 +195,7 @@
           return;
         }
         Loading.show();
-        _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/ldTaskList/save', _this.ldTaskList).then((response)=>{
+        _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/ldTaskListSec/save', _this.ldTaskList).then((response)=>{
           Loading.hide();
           let resp = response.data;
           if (resp.success) {
