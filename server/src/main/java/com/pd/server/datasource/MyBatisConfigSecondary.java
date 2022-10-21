@@ -4,17 +4,18 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
+import com.mysql.cj.jdbc.MysqlXADataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.jta.atomikos.AtomikosDataSourceBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.jdbc.core.JdbcTemplate;
-import com.atomikos.jdbc.AtomikosDataSourceBean;
 
 // basePackages 最好分开配置 如果放在同一个文件夹可能会报错
 @Configuration
@@ -24,9 +25,13 @@ public class MyBatisConfigSecondary {
 	// 配置数据源
 	@Bean(name = "secondaryDataSource")
 	public DataSource SecondaryDataSource(DBConfigSecondary secondaryConfig) throws SQLException {
-		AtomikosDataSourceBean xaDataSource = new AtomikosDataSourceBean();
+		MysqlXADataSource mainXaDataSource = new MysqlXADataSource();
+		mainXaDataSource.setURL(secondaryConfig.getUrl());
+		mainXaDataSource.setPassword(secondaryConfig.getPassword());
+		mainXaDataSource.setUser(secondaryConfig.getUsername());
+		org.springframework.boot.jta.atomikos.AtomikosDataSourceBean xaDataSource = new AtomikosDataSourceBean();
+		xaDataSource.setXaDataSource(mainXaDataSource);
 		xaDataSource.setUniqueResourceName("secondaryDataSource");
-
 		xaDataSource.setMinPoolSize(secondaryConfig.getMinPoolSize());
 		xaDataSource.setMaxPoolSize(secondaryConfig.getMaxPoolSize());
 		xaDataSource.setMaxLifetime(secondaryConfig.getMaxLifetime());

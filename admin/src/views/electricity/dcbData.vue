@@ -178,7 +178,7 @@
         Loading.show();
         _this.dcbDataDto.page = page;
         _this.dcbDataDto.size = _this.$refs.pagination.size;
-        _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/dcbData/list', _this.dcbDataDto).then((response)=>{
+        _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/dcbDataSec/list', _this.dcbDataDto).then((response)=>{
           Loading.hide();
           let resp = response.data;
           _this.dcbDatas = resp.content.list;

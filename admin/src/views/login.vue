@@ -8,11 +8,12 @@
               <div class="center">
                 <span :style="'font-size:'+fontsize+'px'">
 <!--                                     <i class="ace-icon fa fa-leaf green"></i>-->
-                  <img :style="'height:'+imgsize+'px;margin-top: -10px;'" src="/static/PRCD10.png"/>
-                  <span> 齿鲸类实时声学分析预警系统</span>
+<!--                  <img :style="'height:'+imgsize+'px;margin-top: -10px;'" src="/static/PRCD10.png"/>-->
+                   <p>广东省中华白海豚国家重要湿地</p>
+                  <p>中华白海豚种群数量分布定点声学监测项目</p>
                 </span>
               </div>
-              <div class="login-container" style="margin-top: 5%;">
+              <div class="login-container" :style="'margin-top: '+margintop+';margin-left:'+marginleft">
                 <div class="space-6"></div>
                 <div class="position-relative">
                   <div id="login-box" class="login-box visible widget-box no-border">
@@ -96,7 +97,10 @@
               </span>
             </div>
           </div><!-- /.row -->
-          <div   class="position-relative-gs"><img height="80px;" src="/static/image/loginButtom.png"/></div>
+          <div   class="position-relative-gs">
+<!--            <img height="80px;" src="/static/image/loginButtom.png"/>-->
+            广东珠江口中华白海豚国家级自然保护区管理局
+          </div>
         </div><!-- /.main-content -->
     </div><!-- /.main-container -->
 </template>
@@ -114,9 +118,9 @@
               fontsize:35,
               imgsize: 51,
               paddingsize:6,
-              marginleft:45,
+              marginleft:'60%',
               margin:70,
-              margintop:40
+              margintop:'2%'
             }
         },
         mounted:function(){//mounted初始化方法
@@ -140,16 +144,17 @@
             let _this = this;
             if(/phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone/i.test(navigator.userAgent)){
               _this.isMobileflag =true;
-              _this.fontsize =27;
+              _this.fontsize =18;
               _this.imgsize = 31;
               _this.paddingsize=20;
               _this.marginleft=0;
               _this.margin=20;
-              _this.margintop=-18;
+              _this.margintop='6%';
             }else{
               _this.isMobileflag =false;
               _this.imgsize = 51;
-              _this.marginleft=45;
+              _this.marginleft='60%';
+              _this.margintop='2%';
               if(window.screen.height<=720){
                 _this.margin=0;
                 _this.paddingsize=5;
@@ -166,7 +171,6 @@
                 _this.margin=50;
                 _this.paddingsize=6;
                 _this.fontsize =35;
-                _this.margintop = 0;
               }else if(window.screen.height<=1024){
                 _this.paddingsize=6;
                 _this.margin=100;
@@ -246,8 +250,6 @@
 <style scoped>
     .login-content{
       position: relative;
-      margin-left: 40%;
-      margin-top: 3%;
     }
     .input-group-addon {
         padding: 0;
@@ -267,6 +269,7 @@
       bottom: 30px;
       width: 100%;
       text-align: center;
+      font-size: 24px;
     }
     .logo-text-style{
       font-size: 20px;
