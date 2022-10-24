@@ -6,8 +6,8 @@
         <img src="/largemonitors/assets/imgs/左上角title.png" alt="">
         <span>
           <div @click="chooseProject" style="cursor: pointer;">主页</div>
-          <div style="margin: 0 10px;"> / </div>
-          <div @click="toTyDp" style="cursor: pointer;">巡护</div>
+<!--          <div style="margin: 0 10px;"> / </div>-->
+<!--          <div @click="toTyDp" style="cursor: pointer;">巡护</div>-->
         </span>
       </div>
     </header>
