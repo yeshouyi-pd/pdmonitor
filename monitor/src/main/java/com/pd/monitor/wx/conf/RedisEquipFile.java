@@ -41,9 +41,9 @@ public class RedisEquipFile extends BaseWxController {
         for(String sbbh : arr){
             if(!StringUtils.isEmpty(redisTemplate.opsForValue().get(sbbh+"WB"))){
                 String entityJson = (String) redisTemplate.opsForValue().get(sbbh+"WB");
-                System.out.println("entityJson"+entityJson);
+                LOG.error("entityJson:" + entityJson);
                 EquipmentFile entity = JSONObject.parseObject(entityJson, EquipmentFile.class);
-                EquipmentFile lastFile = equipmentFileService.selectLastOneBySbbh(sbbh);
+                EquipmentFileToday lastFile = equipmentFileTodayMapper.selectLastOneBySbbh(sbbh);
                 if(!StringUtils.isEmpty(entity.getCjsj())&&!StringUtils.isEmpty(lastFile.getCjsj())&&isOverMinute(DateUtil.getFormatDate(lastFile.getCjsj(),"yyyy-MM-dd HH:mm:ss"),DateUtil.getFormatDate(entity.getCjsj(),"yyyy-MM-dd HH:mm:ss"))){
                     equipmentFileMapper.insert(entity);
                     equipmentFileTodayMapper.insertEquipFile(entity);

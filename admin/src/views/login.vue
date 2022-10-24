@@ -98,8 +98,8 @@
             </div>
           </div><!-- /.row -->
           <div   class="position-relative-gs">
-<!--            <img height="80px;" src="/static/image/loginButtom.png"/>-->
-            广东珠江口中华白海豚国家级自然保护区管理局
+            <img height="40px;" src="/static/image/loginButtom.png"/>
+            <div>广东珠江口中华白海豚国家级自然保护区管理局</div>
           </div>
         </div><!-- /.main-content -->
     </div><!-- /.main-container -->

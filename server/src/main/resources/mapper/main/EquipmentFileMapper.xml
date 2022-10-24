@@ -590,7 +590,7 @@
     select
     <include refid="Base_Column_List" />
     from equipment_file
-    where sbbh = #{sbbh,jdbcType=VARCHAR}  and  (tplj LIKE '%.png' or tplj LIKE '%.jpg' or tplj LIKE '%.txt')
+    where sbbh = #{sbbh,jdbcType=VARCHAR}  and  txtlx='1'
     order by cjsj desc limit 1
   </select>
   <select id="groupByRq" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultMap="StatisticsResultMap">

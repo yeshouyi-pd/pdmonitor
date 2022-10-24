@@ -6,20 +6,34 @@ import com.pd.server.main.domain.*;
 import com.pd.server.main.dto.PointerDayDto;
 import com.pd.server.main.dto.PointerSecondDto;
 import com.pd.server.main.mapper.*;
+import com.pd.server.main.service.AttrService;
 import com.pd.server.main.service.PointerDayService;
 import com.pd.server.main.service.PointerSecondService;
 import com.pd.server.util.DateUtil;
 import com.pd.server.util.TypeUtils;
 import com.pd.server.util.UuidUtil;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 @Service
 public class EquipmentFileShjService extends AbstractScanRequest{
+
+    public  static RedisTemplate  redisTstaticemplate;
+
+    @Resource
+    private RedisTemplate redisTemplate;
+
+    @PostConstruct
+    protected void init() {
+        redisTstaticemplate = redisTemplate;
+    }
 
     /**
      * 设备文件
@@ -80,20 +94,24 @@ public class EquipmentFileShjService extends AbstractScanRequest{
             entity.setWjmc(typeUtil.get(TypeUtils.WJMC));
             entity.setWjlx(typeUtil.get(TypeUtils.WJLX));
             if("1020".equals(entity.getType())||"1022".equals(entity.getType())||"1024".equals(entity.getType())||"1026".equals(entity.getType())){
-                EquipmentFileEventMapper equipmentFileEventMapper = SpringUtil.getBean(EquipmentFileEventMapper.class);
                 String temp = tplj.substring(tplj.lastIndexOf("/")+1,tplj.lastIndexOf("_A4.txt"));
                 String[] arr = temp.split("_");
-                EquipmentFileEvent fileEvent = new EquipmentFileEvent();
-                fileEvent.setId(UuidUtil.getShortUuid());
-                fileEvent.setSbbh(sbbh);
-                fileEvent.setKssj(arr[0]+"-"+arr[1]+"-"+arr[2]+" "+arr[3]+":"+arr[4]+":"+arr[5]);
-                fileEvent.setJssj("1020".equals(entity.getType())||"1026".equals(entity.getType())?arr[7]+"-"+arr[8]+"-"+arr[9]+" "+arr[10]+":"+arr[11]+":"+arr[12]:arr[6]+"-"+arr[7]+"-"+arr[8]+" "+arr[9]+":"+arr[10]+":"+arr[11]);
-                fileEvent.setRq(arr[0]+"-"+arr[1]+"-"+arr[2]);
-                fileEvent.setTs(entity.getTs());
-                fileEvent.setJtnr(entity.getSm1());
-                fileEvent.setDeptcode(deptcode);
-                fileEvent.setEquipmentFileId(entity.getId());
-                equipmentFileEventMapper.insertSelective(fileEvent);
+                String kssj = arr[0]+"-"+arr[1]+"-"+arr[2]+" "+arr[3]+":"+arr[4]+":"+arr[5];
+                String jssj = "1020".equals(entity.getType())||"1026".equals(entity.getType())?arr[7]+"-"+arr[8]+"-"+arr[9]+" "+arr[10]+":"+arr[11]+":"+arr[12]:arr[6]+"-"+arr[7]+"-"+arr[8]+" "+arr[9]+":"+arr[10]+":"+arr[11];
+                if(!kssj.equals(jssj)){
+                    EquipmentFileEventMapper equipmentFileEventMapper = SpringUtil.getBean(EquipmentFileEventMapper.class);
+                    EquipmentFileEvent fileEvent = new EquipmentFileEvent();
+                    fileEvent.setId(UuidUtil.getShortUuid());
+                    fileEvent.setSbbh(sbbh);
+                    fileEvent.setKssj(kssj);
+                    fileEvent.setJssj(jssj);
+                    fileEvent.setRq(arr[0]+"-"+arr[1]+"-"+arr[2]);
+                    fileEvent.setTs(entity.getTs());
+                    fileEvent.setJtnr(entity.getSm1());
+                    fileEvent.setDeptcode(deptcode);
+                    fileEvent.setEquipmentFileId(entity.getId());
+                    equipmentFileEventMapper.insertSelective(fileEvent);
+                }
             }else if("1018".equals(entity.getType())){//指针数据每秒
                 PointerSecondService service = SpringUtil.getBean(PointerSecondService.class);
                 PointerSecondDto dto = new PointerSecondDto();
@@ -111,9 +129,37 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                 dto.setCreateTime(new Date());
                 service.save(dto);
             }
-            equipmentFileMapper.insert(entity);
-            todayMapper.insertEquipFile(entity);
-            data="保存成功";
+            AttrService attrService = SpringUtil.getBean(AttrService.class);
+            String predationsbsn = attrService.findByAttrKey("predationsbsn");
+            if(predationsbsn.contains(sbbh)&&tplj.contains("txt")&&!"5".equals(typeUtil.get(TypeUtils.WJLX))&&!"6".equals(typeUtil.get(TypeUtils.WJLX))){
+                //RedisTemplate redisTemplate = SpringUtil.getBean(RedisTemplate.class);
+                //判断是否是雾报(前后三分钟都没有报警的数据是雾报数据，雾报数据不保存)
+                EquipmentFile beforeEntity = new EquipmentFile();
+                System.out.println(redisTstaticemplate.opsForValue().get(sbbh+"WB"));
+                if(!StringUtils.isEmpty(redisTstaticemplate.opsForValue().get(sbbh+"WB"))){
+                    String entityJson = (String) redisTstaticemplate.opsForValue().get(sbbh+"WB");
+                    beforeEntity = JSONObject.parseObject(entityJson,EquipmentFile.class);
+                    if(!StringUtils.isEmpty(beforeEntity.getCjsj())&&isOverThreeMinute(DateUtil.getFormatDate(beforeEntity.getCjsj(),"yyyy-MM-dd HH:mm:ss"),cjsj)){
+                        equipmentFileMapper.insert(beforeEntity);
+                        todayMapper.insertEquipFile(beforeEntity);
+                        redisTstaticemplate.opsForValue().set(sbbh+"WB", JSONObject.toJSONString(entity));
+                    }else{
+                        EquipmentFileToday lastFile = todayMapper.selectLastOneBySbbh(sbbh);
+                        if(!StringUtils.isEmpty(beforeEntity.getCjsj())&&!StringUtils.isEmpty(lastFile.getCjsj())&&isOverThreeMinute(DateUtil.getFormatDate(lastFile.getCjsj(),"yyyy-MM-dd HH:mm:ss"),DateUtil.getFormatDate(beforeEntity.getCjsj(),"yyyy-MM-dd HH:mm:ss"))){
+                            equipmentFileMapper.insert(beforeEntity);
+                            todayMapper.insertEquipFile(beforeEntity);
+                        }
+                        redisTstaticemplate.opsForValue().set(sbbh+"WB", JSONObject.toJSONString(entity));
+                    }
+                }else{
+                    redisTstaticemplate.opsForValue().set(sbbh+"WB", JSONObject.toJSONString(entity));
+                }
+                data="保存成功";
+            }else {
+                equipmentFileMapper.insert(entity);
+                todayMapper.insertEquipFile(entity);
+                data="保存成功";
+            }
             return data;
         }else {
             data="该图片已保存过";
@@ -121,4 +167,15 @@ public class EquipmentFileShjService extends AbstractScanRequest{
         }
     }
 
+    public static Boolean isOverThreeMinute(String curDateStr, String nextDateStr){
+        Date begin = DateUtil.toDate(curDateStr,"yyyy-MM-dd HH:mm");
+        Date end = DateUtil.toDate(nextDateStr,"yyyy-MM-dd HH:mm");
+        long minute=(end.getTime()-begin.getTime())/(1000*60);//除以1000是为了转换成秒
+        AttrService attrService = SpringUtil.getBean(AttrService.class);
+        String predationInterval = attrService.findByAttrKey("predationInterval");
+        if(minute<=Integer.parseInt(predationInterval)){
+            return true;
+        }
+        return false;
+    }
 }

@@ -50,10 +50,11 @@
       <table id="simple-table" class="table  table-bordered table-hover">
         <thead>
           <tr>
+            <th>设备编号</th>
             <th>SIM卡卡号</th>
             <th>设备IP:端口</th>
             <th>电路板温度(°C)</th>
-            <th>转接板时间</th>
+<!--            <th>转接板时间</th>-->
             <th>充电状态</th>
             <th>事件时间</th>
           <th>操作</th>
@@ -61,10 +62,11 @@
         </thead>
         <tbody>
           <tr v-for="dlbData in dlbDatas">
+            <td>{{smEq|optionCNArray(dlbData.iccid)}}</td>
             <td>{{dlbData.iccid}}</td>
             <td>{{dlbData.ipport}}</td>
-            <td>{{dlbData.wd}}</td>
-            <td>{{dlbData.sj}}</td>
+            <td>{{dlbData.wd/10}}</td>
+<!--            <td>{{dlbData.sj}}</td>-->
             <td>{{dlbData.cdzt}}</td>
             <td>{{dlbData.sjdate}}</td>
             <td>
@@ -104,23 +106,23 @@
                 <div class="profile-info-row">
                   <div class="profile-info-name" style="width: 10%;">电路板温度(°C)</div>
                   <div class="profile-info-value" style="width: 40%;">
-                    <span class="editable">{{dlbData.wd}}</span>
+                    <span class="editable">{{dlbData.wd/10}}</span>
                   </div>
-                  <div class="profile-info-name" style="width: 10%;">转接板时间</div>
+<!--                  <div class="profile-info-name" style="width: 10%;">转接板时间</div>-->
+<!--                  <div class="profile-info-value" style="width: 40%;">-->
+<!--                    <span class="editable">{{dlbData.sj}}</span>-->
+<!--                  </div>-->
+                  <div class="profile-info-name" style="width: 10%;">事件时间</div>
                   <div class="profile-info-value" style="width: 40%;">
-                    <span class="editable">{{dlbData.sj}}</span>
+                    <span class="editable">{{dlbData.sjdate}}</span>
                   </div>
                 </div>
               </div>
               <div class="profile-user-info profile-user-info-striped">
                 <div class="profile-info-row">
-                  <div class="profile-info-name" style="width: 10%;">充电状态</div>
-                  <div class="profile-info-value" style="width: 40%;">
+                  <div class="profile-info-name">充电状态</div>
+                  <div class="profile-info-value">
                     <span class="editable">{{dlbData.cdzt}}</span>
-                  </div>
-                  <div class="profile-info-name" style="width: 10%;">事件时间</div>
-                  <div class="profile-info-value" style="width: 40%;">
-                    <span class="editable">{{dlbData.sjdate}}</span>
                   </div>
                 </div>
               </div>
@@ -146,7 +148,12 @@
         dlbDataDto:{},
         dlbData: {},
         dlbDatas: [],
+        smEq: []
       }
+    },
+    created:function(){
+      let _this = this;
+      _this.getEquip();
     },
     mounted: function() {
       let _this = this;
@@ -154,6 +161,23 @@
       _this.list(1);
     },
     methods: {
+      getEquip(){
+        let _this = this;
+        let obj = {};
+        if("460100"!=Tool.getLoginUser().deptcode){
+          obj.xmbh = Tool.getLoginUser().xmbh;
+        }
+        _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/findAll',obj).then((response)=>{
+          let waterEquipments = response.data.content;
+          waterEquipments.forEach(function (item){
+            if(!Tool.isEmpty(item.sbcj)){
+              let obj = {"code":item.sbcj,"name":item.sbsn};
+              _this.smEq.push(obj);
+            }
+          })
+          _this.$forceUpdate();
+        })
+      },
       /**
        *开始时间
        */
