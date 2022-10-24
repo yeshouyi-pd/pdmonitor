@@ -50,6 +50,7 @@
       <table id="simple-table" class="table  table-bordered table-hover">
         <thead>
           <tr>
+            <th>设备编号</th>
             <th>SIM卡卡号</th>
             <th>设备IP:端口</th>
             <th>电池电压(V)</th>
@@ -61,9 +62,10 @@
         </thead>
         <tbody>
           <tr v-for="dcbData in dcbDatas">
+            <td>{{smEq|optionCNArray(dcbData.iccid)}}</td>
             <td>{{dcbData.iccid}}</td>
             <td>{{dcbData.ipport}}</td>
-            <td>{{dcbData.dy}}</td>
+            <td>{{dcbData.dy/10}}</td>
             <td>{{dcbData.rl}}</td>
             <td>{{dcbData.dl}}</td>
             <td>{{dcbData.sjdate}}</td>
@@ -104,7 +106,7 @@
                 <div class="profile-info-row">
                   <div class="profile-info-name" style="width: 10%;">电池电压(V)</div>
                   <div class="profile-info-value" style="width: 40%;">
-                    <span class="editable">{{dcbData.dy}}</span>
+                    <span class="editable">{{dcbData.dy/10}}</span>
                   </div>
                   <div class="profile-info-name" style="width: 10%;">剩余容量(mAh)</div>
                   <div class="profile-info-value" style="width: 40%;">
@@ -146,7 +148,12 @@
         dcbDataDto: {},
         dcbData: {},
         dcbDatas: [],
+        smEq: []
       }
+    },
+    created:function(){
+      let _this = this;
+      _this.getEquip();
     },
     mounted: function() {
       let _this = this;
@@ -154,6 +161,23 @@
       _this.list(1);
     },
     methods: {
+      getEquip(){
+        let _this = this;
+        let obj = {};
+        if("460100"!=Tool.getLoginUser().deptcode){
+          obj.xmbh = Tool.getLoginUser().xmbh;
+        }
+        _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/findAll',obj).then((response)=>{
+          let waterEquipments = response.data.content;
+          waterEquipments.forEach(function (item){
+            if(!Tool.isEmpty(item.sbcj)){
+              let obj = {"code":item.sbcj,"name":item.sbsn};
+              _this.smEq.push(obj);
+            }
+          })
+          _this.$forceUpdate();
+        })
+      },
       /**
        *开始时间
        */

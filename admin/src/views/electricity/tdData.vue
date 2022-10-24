@@ -50,6 +50,7 @@
       <table id="simple-table" class="table  table-bordered table-hover">
         <thead>
           <tr>
+            <th>设备编号</th>
             <th>SIM卡卡号</th>
             <th>设备IP:端口</th>
             <th>数据类型</th>
@@ -62,15 +63,16 @@
         </thead>
         <tbody>
           <tr v-for="tdData in tdDatas">
+            <td>{{smEq|optionCNArray(tdData.iccid)}}</td>
             <td>{{tdData.iccid}}</td>
             <td>{{tdData.ipport}}</td>
             <td>
-              <span v-if="tdData.tdlx=='40'">雷达电源通道的工作状态</span>
-              <span v-if="tdData.tdlx=='41'">指示灯输出通道的工作状态</span>
-              <span v-if="tdData.tdlx=='42'">喇叭电源输出通道的工作状态</span>
-              <span v-if="tdData.tdlx=='43'">备用输出通道的工作状态</span>
+              <span v-if="tdData.tdlx=='40'">主机工作状态</span>
+              <span v-if="tdData.tdlx=='41'">NVR工作状态</span>
+              <span v-if="tdData.tdlx=='42'">备用工作状态</span>
+              <span v-if="tdData.tdlx=='43'">备用工作状态</span>
             </td>
-            <td>{{tdData.dy}}</td>
+            <td>{{tdData.dy/10}}</td>
             <td>{{tdData.dl}}</td>
             <td><span v-if="tdData.tdzt=='0'||tdData.tdzt=='1'">正常</span><span v-else>异常</span></td>
             <td>{{tdData.sjdate}}</td>
@@ -111,10 +113,10 @@
                 <div class="profile-info-row">
                   <div class="profile-info-name" style="width: 10%;">数据类型</div>
                   <div class="profile-info-value" style="width: 40%;">
-                    <span class="editable" v-if="tdData.tdlx=='40'">雷达电源通道的工作状态</span>
-                    <span class="editable" v-if="tdData.tdlx=='41'">指示灯输出通道的工作状态</span>
-                    <span class="editable" v-if="tdData.tdlx=='42'">喇叭电源输出通道的工作状态</span>
-                    <span class="editable" v-if="tdData.tdlx=='43'">备用输出通道的工作状态</span>
+                    <span class="editable" v-if="tdData.tdlx=='40'">主机工作状态</span>
+                    <span class="editable" v-if="tdData.tdlx=='41'">NVR工作状态</span>
+                    <span class="editable" v-if="tdData.tdlx=='42'">备用工作状态</span>
+                    <span class="editable" v-if="tdData.tdlx=='43'">备用工作状态</span>
                   </div>
                   <div class="profile-info-name" style="width: 10%;">通道号</div>
                   <div class="profile-info-value" style="width: 40%;">
@@ -126,7 +128,7 @@
                 <div class="profile-info-row">
                   <div class="profile-info-name" style="width: 10%;">电压(V)</div>
                   <div class="profile-info-value" style="width: 40%;">
-                    <span class="editable">{{tdData.dy}}</span>
+                    <span class="editable">{{tdData.dy/10}}</span>
                   </div>
                   <div class="profile-info-name" style="width: 10%;">电流(mA)</div>
                   <div class="profile-info-value" style="width: 40%;">
@@ -169,7 +171,12 @@
         tdDataDto: {},
         tdData: {},
         tdDatas: [],
+        smEq:[]
       }
+    },
+    created:function(){
+      let _this = this;
+      _this.getEquip();
     },
     mounted: function() {
       let _this = this;
@@ -177,6 +184,23 @@
       _this.list(1);
     },
     methods: {
+      getEquip(){
+        let _this = this;
+        let obj = {};
+        if("460100"!=Tool.getLoginUser().deptcode){
+          obj.xmbh = Tool.getLoginUser().xmbh;
+        }
+        _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/findAll',obj).then((response)=>{
+          let waterEquipments = response.data.content;
+          waterEquipments.forEach(function (item){
+            if(!Tool.isEmpty(item.sbcj)){
+              let obj = {"code":item.sbcj,"name":item.sbsn};
+              _this.smEq.push(obj);
+            }
+          })
+          _this.$forceUpdate();
+        })
+      },
       /**
        *开始时间
        */

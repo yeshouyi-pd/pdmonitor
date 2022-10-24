@@ -25,12 +25,12 @@ public class MyBatisConfigSecondary {
 	// 配置数据源
 	@Bean(name = "secondaryDataSource")
 	public DataSource SecondaryDataSource(DBConfigSecondary secondaryConfig) throws SQLException {
-		MysqlXADataSource mainXaDataSource = new MysqlXADataSource();
-		mainXaDataSource.setURL(secondaryConfig.getUrl());
-		mainXaDataSource.setPassword(secondaryConfig.getPassword());
-		mainXaDataSource.setUser(secondaryConfig.getUsername());
-		org.springframework.boot.jta.atomikos.AtomikosDataSourceBean xaDataSource = new AtomikosDataSourceBean();
-		xaDataSource.setXaDataSource(mainXaDataSource);
+		MysqlXADataSource secondaryXaDataSource = new MysqlXADataSource();
+		secondaryXaDataSource.setURL(secondaryConfig.getUrl());
+		secondaryXaDataSource.setPassword(secondaryConfig.getPassword());
+		secondaryXaDataSource.setUser(secondaryConfig.getUsername());
+		AtomikosDataSourceBean xaDataSource = new AtomikosDataSourceBean();
+		xaDataSource.setXaDataSource(secondaryXaDataSource);
 		xaDataSource.setUniqueResourceName("secondaryDataSource");
 		xaDataSource.setMinPoolSize(secondaryConfig.getMinPoolSize());
 		xaDataSource.setMaxPoolSize(secondaryConfig.getMaxPoolSize());

@@ -603,4 +603,11 @@
       wjmc = #{wjmc,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
+  <select id="selectLastOneBySbbh" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from equipment_file_today
+    where sbbh = #{sbbh,jdbcType=VARCHAR}  and  txtlx='1'
+    order by cjsj desc limit 1
+  </select>
 </mapper>

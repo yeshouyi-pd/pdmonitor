@@ -47,4 +47,6 @@ public interface EquipmentFileTodayMapper {
     int updateByPrimaryKeySelective(EquipmentFileToday record);
 
     int updateByPrimaryKey(EquipmentFileToday record);
+
+    EquipmentFileToday selectLastOneBySbbh(String sbbh);
 }

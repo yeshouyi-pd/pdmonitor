@@ -53,6 +53,7 @@
       <table id="simple-table" class="table  table-bordered table-hover">
         <thead>
           <tr>
+            <th>设备编号</th>
             <th>SIM卡卡号</th>
             <th>命令</th>
             <th>状态</th>
@@ -62,6 +63,7 @@
         </thead>
         <tbody>
           <tr v-for="ldTaskList in ldTaskLists">
+            <td>{{smEq|optionCNArray(ldTaskList.iccid)}}</td>
             <td>{{ldTaskList.iccid}}</td>
             <td>{{fszls|optionMapKV(ldTaskList.task)}}</td>
             <td><span v-if="ldTaskList.state=='0'">等待执行</span><span v-else>执行完毕</span></td>
@@ -121,7 +123,8 @@
         ldTaskList: {},
         ldTaskLists: [],
         fszls:[],
-        waterEquipments:[]
+        waterEquipments:[],
+        smEq:[]
       }
     },
     created:function(){
@@ -143,6 +146,12 @@
         }
         _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/findAll',obj).then((response)=>{
           _this.waterEquipments = response.data.content;
+          _this.waterEquipments.forEach(function (item){
+            if(!Tool.isEmpty(item.sbcj)){
+              let obj = {"code":item.sbcj,"name":item.sbsn};
+              _this.smEq.push(obj);
+            }
+          })
           _this.$forceUpdate();
         })
       },
