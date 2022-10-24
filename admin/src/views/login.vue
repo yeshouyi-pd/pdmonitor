@@ -68,34 +68,34 @@
                 </div><!-- /.position-relative -->
               </div>
             </div><!-- /.col -->
-            <div v-if="isMobileflag" class="col-xs-10" style="margin-top: 10px;">
-              <span>
-                <i class="ace-icon fa fa-square blue"></i>
-                <span style="margin-left: 10px;">科技创新</span>
-              </span>
-              <span style="margin-left: 5px;">
-                <i class="ace-icon fa fa-square blue"></i>
-                <span style="margin-left: 10px;">声学监测</span>
-              </span>
-              <span style="margin-left: 5px;">
-                <i class="ace-icon fa fa-square blue"></i>
-                <span style="margin-left: 10px;">实时精准</span>
-              </span>
-            </div>
-            <div v-else class="col-xs-4" style="margin-top: 5%;margin-left: 15%;font-style: italic;font-size: 24px;">
-              <span>
-                <i class="ace-icon fa fa-circle blue" style="font-size: 20px;"></i>
-                <span class="logo-text-style">科技创新</span>
-              </span>
-              <span style="margin-left: 30px;">
-                <i class="ace-icon fa fa-circle blue" style="font-size: 20px;"></i>
-                <span class="logo-text-style">声学监测</span>
-              </span>
-              <span style="margin-left: 30px;">
-                <i class="ace-icon fa fa-circle blue" style="font-size: 20px;"></i>
-                <span class="logo-text-style">实时精准</span>
-              </span>
-            </div>
+<!--            <div v-if="isMobileflag" class="col-xs-10" style="margin-top: 10px;">-->
+<!--              <span>-->
+<!--                <i class="ace-icon fa fa-square blue"></i>-->
+<!--                <span style="margin-left: 10px;">科技创新</span>-->
+<!--              </span>-->
+<!--              <span style="margin-left: 5px;">-->
+<!--                <i class="ace-icon fa fa-square blue"></i>-->
+<!--                <span style="margin-left: 10px;">声学监测</span>-->
+<!--              </span>-->
+<!--              <span style="margin-left: 5px;">-->
+<!--                <i class="ace-icon fa fa-square blue"></i>-->
+<!--                <span style="margin-left: 10px;">实时精准</span>-->
+<!--              </span>-->
+<!--            </div>-->
+<!--            <div v-else class="col-xs-4" style="margin-top: 3%;margin-left: 15%;font-style: italic;font-size: 24px;">-->
+<!--              <span>-->
+<!--                <i class="ace-icon fa fa-circle blue" style="font-size: 20px;"></i>-->
+<!--                <span class="logo-text-style">科技创新</span>-->
+<!--              </span>-->
+<!--              <span style="margin-left: 30px;">-->
+<!--                <i class="ace-icon fa fa-circle blue" style="font-size: 20px;"></i>-->
+<!--                <span class="logo-text-style">声学监测</span>-->
+<!--              </span>-->
+<!--              <span style="margin-left: 30px;">-->
+<!--                <i class="ace-icon fa fa-circle blue" style="font-size: 20px;"></i>-->
+<!--                <span class="logo-text-style">实时精准</span>-->
+<!--              </span>-->
+<!--            </div>-->
           </div><!-- /.row -->
           <div   class="position-relative-gs">
             <img height="40px;" src="/static/image/loginButtom.png"/>
@@ -120,7 +120,7 @@
               paddingsize:6,
               marginleft:'60%',
               margin:70,
-              margintop:'2%'
+              margintop:'4%'
             }
         },
         mounted:function(){//mounted初始化方法
@@ -154,7 +154,7 @@
               _this.isMobileflag =false;
               _this.imgsize = 51;
               _this.marginleft='60%';
-              _this.margintop='2%';
+              _this.margintop='4%';
               if(window.screen.height<=720){
                 _this.margin=0;
                 _this.paddingsize=5;
@@ -270,6 +270,7 @@
       width: 100%;
       text-align: center;
       font-size: 24px;
+      font-family: "楷体";
     }
     .logo-text-style{
       font-size: 20px;

@@ -15,8 +15,8 @@
               <div class="navbar-header pull-left">
                   <a href="index.html" class="navbar-brand">
                       <small>
-                          <img style="height: 28px;margin-top: -8px;" src="/static/PRCD16.png"/>
-                        齿鲸类实时声学分析预警系统V1.0
+                          <img style="height: 28px;margin-top: -8px;" src="/static/image/loginButtom.png"/>
+                        中华白海豚种群数量分布定点声学监测平台V1.0
                       </small>
                   </a>
               </div>
@@ -38,13 +38,13 @@
                           </router-link>
                       </li>
 
-                      <li class="light-blue dropdown-modal">
-                        <router-link to="/mobile/largemonitorsTy">
-                          <a class=" dropdown-toggle" style="cursor: pointer;">
-                            <font color="white">返回巡护</font>
-                          </a>
-                        </router-link>
-                      </li>
+<!--                      <li class="light-blue dropdown-modal">-->
+<!--                        <router-link to="/mobile/largemonitorsTy">-->
+<!--                          <a class=" dropdown-toggle" style="cursor: pointer;">-->
+<!--                            <font color="white">返回巡护</font>-->
+<!--                          </a>-->
+<!--                        </router-link>-->
+<!--                      </li>-->
 
                       <li class="light-blue dropdown-modal" v-on:click="downloadVideo()">
                           <a   class=" dropdown-toggle" style="cursor: pointer;">
@@ -201,7 +201,7 @@
                   <div class="footer-content">
 						<span class="bigger-120">
 							<span class="blue bolder"></span>
-							技术支持：品度科技|联系电话：027-8778 0759
+							技术支持：027-8778 0759
 						</span>
 
                   </div>

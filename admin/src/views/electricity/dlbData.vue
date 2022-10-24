@@ -67,7 +67,7 @@
             <td>{{dlbData.ipport}}</td>
             <td>{{dlbData.wd/10}}</td>
 <!--            <td>{{dlbData.sj}}</td>-->
-            <td>{{dlbData.cdzt}}</td>
+            <td><span v-if="dlbData.cdzt=='1'">开关打开，正在充电</span></td>
             <td>{{dlbData.sjdate}}</td>
             <td>
               <div class="hidden-sm hidden-xs btn-group" title="详情">
@@ -122,7 +122,7 @@
                 <div class="profile-info-row">
                   <div class="profile-info-name">充电状态</div>
                   <div class="profile-info-value">
-                    <span class="editable">{{dlbData.cdzt}}</span>
+                    <span class="editable" v-if="dlbData.cdzt=='1'">开关打开，正在充电</span>
                   </div>
                 </div>
               </div>
