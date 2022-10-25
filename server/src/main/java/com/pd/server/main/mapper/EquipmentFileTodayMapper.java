@@ -38,6 +38,8 @@ public interface EquipmentFileTodayMapper {
 
     List<EquipmentFileToday> selectByExample(EquipmentFileTodayExample example);
 
+    List<EquipmentFileToday> selectByExampleDw(EquipmentFileTodayExample example);
+
     EquipmentFileToday selectByPrimaryKey(String id);
 
     int updateByExampleSelective(@Param("record") EquipmentFileToday record, @Param("example") EquipmentFileTodayExample example);
