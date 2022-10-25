@@ -1,44 +1,41 @@
 <template>
-    <div class="main-container">
-        <img class="bgimg" src="/static/image/loginbg.jpg"/>
-      <div :style="'padding-top:'+paddingsize+'%'"></div>
-        <div class="main-content" style="padding-left: 0px;padding-right: 0px;">
-          <div>
-            <div :class="isMobileflag?'col-sm-10':'login-content'">
-              <div class="center">
-                <span :style="'font-size:'+fontsize+'px'">
-<!--                                     <i class="ace-icon fa fa-leaf green"></i>-->
-<!--                  <img :style="'height:'+imgsize+'px;margin-top: -10px;'" src="/static/PRCD10.png"/>-->
-                   <p>广东省中华白海豚国家重要湿地</p>
-                  <p>中华白海豚种群数量分布定点声学监测项目</p>
-                </span>
-              </div>
-              <div class="login-container" :style="'margin-top: '+margintop+';margin-left:'+marginleft">
-                <div class="space-6"></div>
-                <div class="position-relative">
-                  <div id="login-box" class="login-box visible widget-box no-border">
-                    <div class="widget-body">
-                      <div class="widget-main">
-                        <h4 class="header blue lighter bigger">
-                          <i class="ace-icon fa fa-coffee green"></i>
-                          请输入用户密码
-                        </h4>
-                        <div class="space-6"></div>
-                        <form>
-                          <fieldset>
-                            <label class="block clearfix">
+    <div>
+      <div v-if="!isMobileflag" class="main-content" style="width: 100%;height: 100vh;background-image: url('/static/image/loginbg.jpg');background-size: 100% 100%;">
+        <div class="center" style="margin-top: 7%;margin-bottom: 4%">
+          <span :style="'font-size:'+fontsize+'px'">
+          <p>广东省中华白海豚国家重要湿地
+          <p>中华白海豚种群数量分布定点声学监测项目</p>
+          </span>
+        </div>
+<!--        <div class="center" style="margin-top: 7%;margin-bottom: 7%">-->
+<!--          <span :style="'font-size:'+fontsize+'px;margin-left:30%;'">-->
+<!--            <img :style="'height:'+imgsize+'px;margin-top: -8px;margin-right:10px;'" src="/static/PRCD10.png"/>-->
+<!--            <span>水生哺乳类智慧监测管理平台V1.0</span>-->
+<!--          </span>-->
+<!--        </div>-->
+        <div id="login-box1" class="login-box visible widget-box no-border" style="width: 475px;margin-left: 55%;">
+          <div class="widget-body">
+            <div class="widget-main">
+              <h4 class="header blue lighter bigger">
+                <i class="ace-icon fa fa-coffee green"></i>
+                请输入用户密码
+              </h4>
+              <div class="space-6"></div>
+              <form>
+                <fieldset>
+                  <label class="block clearfix">
                               <span class="block input-icon input-icon-right">
                                 <input v-model="user.loginName" type="text" class="form-control" placeholder="请输入用户名" />
                                 <i class="ace-icon fa fa-user"></i>
                               </span>
-                            </label>
-                            <label class="block clearfix">
+                  </label>
+                  <label class="block clearfix">
                               <span class="block input-icon input-icon-right">
                                 <input  v-model="user.password"  type="password" class="form-control" placeholder="密码" />
                                 <i class="ace-icon fa fa-lock"></i>
                               </span>
-                            </label>
-                            <label class="block clearfix">
+                  </label>
+                  <label class="block clearfix">
                               <span class="block input-icon input-icon-right">
                                 <div class="input-group">
                                   <input v-model="user.imageCode" type="text" class="form-control" placeholder="验证码">
@@ -47,62 +44,96 @@
                                   </span>
                                 </div>
                               </span>
-                            </label>
-                            <div class="space"></div>
-                            <div class="clearfix">
-                              <label class="inline">
-                                <input v-model="remember" type="checkbox" class="ace" />
-                                <span class="lbl">记住我</span>
-                              </label>
-                              <button type="button" class="width-35 pull-right btn btn-sm btn-primary" v-on:click="login()" >
-                                <i class="ace-icon fa fa-key"></i>
-                                <span class="bigger-110">登录</span>
-                              </button>
-                            </div>
-                            <div class="space-4"></div>
-                          </fieldset>
-                        </form>
-                      </div><!-- /.widget-main -->
-                    </div><!-- /.widget-body -->
-                  </div><!-- /.login-box -->
-                </div><!-- /.position-relative -->
-              </div>
-            </div><!-- /.col -->
-<!--            <div v-if="isMobileflag" class="col-xs-10" style="margin-top: 10px;">-->
-<!--              <span>-->
-<!--                <i class="ace-icon fa fa-square blue"></i>-->
-<!--                <span style="margin-left: 10px;">科技创新</span>-->
-<!--              </span>-->
-<!--              <span style="margin-left: 5px;">-->
-<!--                <i class="ace-icon fa fa-square blue"></i>-->
-<!--                <span style="margin-left: 10px;">声学监测</span>-->
-<!--              </span>-->
-<!--              <span style="margin-left: 5px;">-->
-<!--                <i class="ace-icon fa fa-square blue"></i>-->
-<!--                <span style="margin-left: 10px;">实时精准</span>-->
-<!--              </span>-->
-<!--            </div>-->
-<!--            <div v-else class="col-xs-4" style="margin-top: 3%;margin-left: 15%;font-style: italic;font-size: 24px;">-->
-<!--              <span>-->
-<!--                <i class="ace-icon fa fa-circle blue" style="font-size: 20px;"></i>-->
-<!--                <span class="logo-text-style">科技创新</span>-->
-<!--              </span>-->
-<!--              <span style="margin-left: 30px;">-->
-<!--                <i class="ace-icon fa fa-circle blue" style="font-size: 20px;"></i>-->
-<!--                <span class="logo-text-style">声学监测</span>-->
-<!--              </span>-->
-<!--              <span style="margin-left: 30px;">-->
-<!--                <i class="ace-icon fa fa-circle blue" style="font-size: 20px;"></i>-->
-<!--                <span class="logo-text-style">实时精准</span>-->
-<!--              </span>-->
-<!--            </div>-->
-          </div><!-- /.row -->
-          <div   class="position-relative-gs">
-            <img height="40px;" src="/static/image/loginButtom.png"/>
-            <div>广东珠江口中华白海豚国家级自然保护区管理局</div>
-          </div>
-        </div><!-- /.main-content -->
-    </div><!-- /.main-container -->
+                  </label>
+                  <div class="space"></div>
+                  <div class="clearfix">
+                    <label class="inline">
+                      <input v-model="remember" type="checkbox" class="ace" />
+                      <span class="lbl">记住我</span>
+                    </label>
+                    <button type="button" class="width-35 pull-right btn btn-sm btn-primary" v-on:click="login()" >
+                      <i class="ace-icon fa fa-key"></i>
+                      <span class="bigger-110">登录</span>
+                    </button>
+                  </div>
+                  <div class="space-4"></div>
+                </fieldset>
+              </form>
+            </div><!-- /.widget-main -->
+          </div><!-- /.widget-body -->
+        </div><!-- /.login-box -->
+        <div style="margin-top: 10%;text-align: center">
+          <img height="40px;" src="/static/image/loginButtom.png"/>
+          <div style="margin-top: 5px;">广东珠江口中华白海豚国家级自然保护区管理局</div>
+<!--          <img height="80px;" src="/static/image/loginButtom1.png"/>-->
+        </div>
+      </div>
+      <div  v-if="isMobileflag" class="main-content" style="width: 100%;height: 100vh;background-image: url('/static/image/loginbg.jpg');background-size: 100% 100%;">
+        <div class="center" style="margin-top: 15%">
+        <span :style="'font-size:'+fontsize+'px'">
+          <p>广东省中华白海豚国家重要湿地
+          <p>中华白海豚种群数量分布定点声学监测项目</p>
+<!--          <span>水生哺乳类智慧监测管理平台V1.0</span>-->
+        </span>
+        </div>
+        <div id="login-box" class="login-box visible widget-box no-border" style="margin-top: 20%;">
+          <div class="widget-body">
+            <div class="widget-main">
+              <h4 class="header blue lighter bigger">
+                <i class="ace-icon fa fa-coffee green"></i>
+                请输入用户密码
+              </h4>
+              <div class="space-6"></div>
+              <form>
+                <fieldset>
+                  <label class="block clearfix">
+                              <span class="block input-icon input-icon-right">
+                                <input v-model="user.loginName" type="text" class="form-control" placeholder="请输入用户名" />
+                                <i class="ace-icon fa fa-user"></i>
+                              </span>
+                  </label>
+                  <label class="block clearfix">
+                              <span class="block input-icon input-icon-right">
+                                <input  v-model="user.password"  type="password" class="form-control" placeholder="密码" />
+                                <i class="ace-icon fa fa-lock"></i>
+                              </span>
+                  </label>
+                  <label class="block clearfix">
+                              <span class="block input-icon input-icon-right">
+                                <div class="input-group">
+                                  <input v-model="user.imageCode" type="text" class="form-control" placeholder="验证码">
+                                  <span class="input-group-addon" id="basic-addon2">
+                                    <img v-on:click="loadImageCode()" id="image-code" alt="验证码"/>
+                                  </span>
+                                </div>
+                              </span>
+                  </label>
+                  <div class="space"></div>
+                  <div class="clearfix">
+                    <label class="inline">
+                      <input v-model="remember" type="checkbox" class="ace" />
+                      <span class="lbl">记住我</span>
+                    </label>
+                    <button type="button" class="width-35 pull-right btn btn-sm btn-primary" v-on:click="login()" >
+                      <i class="ace-icon fa fa-key"></i>
+                      <span class="bigger-110">登录</span>
+                    </button>
+                  </div>
+                  <div class="space-4"></div>
+                </fieldset>
+              </form>
+            </div><!-- /.widget-main -->
+          </div><!-- /.widget-body -->
+        </div><!-- /.login-box -->
+        <div style="margin-top: 10%;text-align: center">
+                  <img  v-if="!isMobileflag" height="40px;" src="/static/image/loginButtom.png"/>
+                  <div>广东珠江口中华白海豚国家级自然保护区管理局</div>
+<!--          <div   class="position-relative-gs">-->
+<!--            <img height="40px;" src="/static/image/loginButtom1.png" style="margin-top: 15%;"/>-->
+<!--          </div>-->
+        </div>
+      </div>
+    </div>
 </template>
 
 <script>
@@ -120,7 +151,7 @@
               paddingsize:6,
               marginleft:'60%',
               margin:70,
-              margintop:'4%'
+              margintop:'8%'
             }
         },
         mounted:function(){//mounted初始化方法
@@ -154,7 +185,7 @@
               _this.isMobileflag =false;
               _this.imgsize = 51;
               _this.marginleft='60%';
-              _this.margintop='4%';
+              _this.margintop='8%';
               if(window.screen.height<=720){
                 _this.margin=0;
                 _this.paddingsize=5;
@@ -265,6 +296,13 @@
         margin-left: 60%;
     }
     .position-relative-gs{
+      position: relative;
+      width: 100%;
+      text-align: center;
+      font-family: "楷体";
+      margin-top: 20px;
+    }
+    .position-relative-gs1{
       position: absolute;
       bottom: 30px;
       width: 100%;

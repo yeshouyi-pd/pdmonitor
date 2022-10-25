@@ -18,6 +18,10 @@
                           <img style="height: 28px;margin-top: -8px;" src="/static/image/loginButtom.png"/>
                         中华白海豚种群数量分布定点声学监测平台V1.0
                       </small>
+<!--                    <small>-->
+<!--                      <img style="height: 28px;margin-top: -8px;" src="/static/image/loginButtom.png"/>-->
+<!--                      水生哺乳类智慧监测管理平台V1.0-->
+<!--                    </small>-->
                   </a>
               </div>
               <div class="navbar-buttons navbar-header pull-right" role="navigation">
