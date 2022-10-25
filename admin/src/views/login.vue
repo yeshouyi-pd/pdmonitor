@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div :style="'height: '+maxHeight+'px'">
       <div v-if="!isMobileflag" class="main-content" style="width: 100%;height: 100vh;background-image: url('/static/image/loginbg.jpg');background-size: 100% 100%;">
         <div class="center" style="margin-top: 7%;margin-bottom: 4%">
           <span :style="'font-size:'+fontsize+'px'">
@@ -68,7 +68,7 @@
 <!--          <img height="80px;" src="/static/image/loginButtom1.png"/>-->
         </div>
       </div>
-      <div  v-if="isMobileflag" class="main-content" style="width: 100%;height: 100vh;background-image: url('/static/image/loginbg.jpg');background-size: 100% 100%;">
+      <div v-if="isMobileflag" class="main-content" style="width: 100%;height: 100%;background-image: url('/static/image/loginbg.jpg');background-size: 100% 100%;">
         <div class="center" style="margin-top: 15%">
         <span :style="'font-size:'+fontsize+'px'">
           <p>广东省中华白海豚国家重要湿地
@@ -151,11 +151,13 @@
               paddingsize:6,
               marginleft:'60%',
               margin:70,
-              margintop:'8%'
+              margintop:'8%',
+              maxHeight:''
             }
         },
         mounted:function(){//mounted初始化方法
             let _this = this;
+            _this.maxHeight = $(window).height();
              _this.isMobile();
 
             $('body').removeClass('no-skin');
