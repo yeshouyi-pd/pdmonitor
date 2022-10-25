@@ -26,6 +26,8 @@ public interface EquipmentFileMapper {
 
     List<EquipmentFile> selectByExample(EquipmentFileExample example);
 
+    List<EquipmentFile> selectByExampleDw(EquipmentFileExample example);
+
     List<EquipmentFile> selectByExampleSpecial(@Param("record") EquipmentFileDto record);
 
     List<EquipmentFile> selectByExampleSpecialNoForceindex(@Param("record") EquipmentFileDto record);

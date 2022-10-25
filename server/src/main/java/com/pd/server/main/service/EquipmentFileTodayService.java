@@ -48,6 +48,10 @@ public class EquipmentFileTodayService {
         return equipmentFileTodayMapper.selectByExample(equipmentFileTodayExample);
     }
 
+    public List<EquipmentFileToday> listAllDw(EquipmentFileTodayExample equipmentFileTodayExample){
+        return equipmentFileTodayMapper.selectByExampleDw(equipmentFileTodayExample);
+    }
+
     /**
     * 列表查询
     */

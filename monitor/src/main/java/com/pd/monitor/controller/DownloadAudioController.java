@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.io.File;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -44,6 +45,8 @@ public class DownloadAudioController {
 
     @GetMapping("/downZipByWjmc")
     public void downZipByWjmc(HttpServletRequest request, HttpServletResponse response) throws Exception{
+        response.setCharacterEncoding("UTF-8");
+        String fileUrl = attrService.findByAttrKey("fileUrl");//http://49.239.193.146:8082/
         String filePath = attrService.findByAttrKey("filePath");
         String wjmc = request.getParameter("wjmc");
         EquipmentFileExample example = new EquipmentFileExample();
@@ -60,7 +63,7 @@ public class DownloadAudioController {
             // 循环调用压缩文件方法,将一个一个需要下载的文件打入压缩文件包
             for (EquipmentFile entity : lists) {
                 // 该方法在下面定义
-                fileToZip(entity.getTplj().replace("http://146.56.226.176:8088/",filePath), zipOut);
+                fileToZip(entity.getTplj().replace(fileUrl,filePath), zipOut);
             }
             // 压缩完成后,关闭压缩流
             zipOut.close();
@@ -90,6 +93,8 @@ public class DownloadAudioController {
 
     @GetMapping("/downZipByA4Id")
     public void downZipByA4Id(HttpServletRequest request, HttpServletResponse response) throws Exception{
+        response.setCharacterEncoding("UTF-8");
+        String fileUrl = attrService.findByAttrKey("fileUrl");//http://49.239.193.146:8082/
         String filePath = attrService.findByAttrKey("filePath");
         String id = request.getParameter("id");
         EquipmentFileEvent event = equipmentFileEventService.selectByPrimaryKey(id);
@@ -112,7 +117,7 @@ public class DownloadAudioController {
             // 循环调用压缩文件方法,将一个一个需要下载的文件打入压缩文件包
             for (EquipmentFile entity : lists) {
                 // 该方法在下面定义
-                fileToZip(entity.getTplj().replace("http://146.56.226.176:8088/",filePath), zipOut);
+                fileToZip(entity.getTplj().replace(fileUrl,filePath), zipOut);
             }
             // 压缩完成后,关闭压缩流
             zipOut.close();
@@ -146,6 +151,8 @@ public class DownloadAudioController {
 
     @GetMapping("/downZipById")
     public void downZipById(HttpServletRequest request, HttpServletResponse response) throws Exception{
+        response.setCharacterEncoding("UTF-8");
+        String fileUrl = attrService.findByAttrKey("fileUrl");//http://49.239.193.146:8082/
         String filePath = attrService.findByAttrKey("filePath");
         String id = request.getParameter("id");
         EquipmentTyEvent event = equipmentTyEventService.selectByPrimaryKey(id);
@@ -168,7 +175,7 @@ public class DownloadAudioController {
             // 循环调用压缩文件方法,将一个一个需要下载的文件打入压缩文件包
             for (EquipmentFileTy entity : lists) {
                 // 该方法在下面定义
-                fileToZip(entity.getTplj().replace("http://146.56.226.176:8088/",filePath), zipOut);
+                fileToZip(entity.getTplj().replace(fileUrl,filePath), zipOut);
             }
             // 压缩完成后,关闭压缩流
             zipOut.close();
@@ -225,22 +232,18 @@ public class DownloadAudioController {
 
     @GetMapping("/downAudioFileById")
     public void downAudioFileById(HttpServletRequest request, HttpServletResponse response){
+        response.setCharacterEncoding("UTF-8");
+        String fileUrl = attrService.findByAttrKey("fileUrl");//http://49.239.193.146:8082/
+        String filePath = attrService.findByAttrKey("filePath");
         BufferedInputStream in = null;
         try{
             String id = request.getParameter("id");
             EquipmentTyEvent event = equipmentTyEventService.selectByPrimaryKey(id);
             EquipmentFileTy fileEntity = equipmentFileTyService.selectByPrimaryKey(event.getBz());
             String fileName = fileEntity.getTplj().substring(fileEntity.getTplj().lastIndexOf("/"));
-            String fileUrl = fileEntity.getTplj().substring(0,fileEntity.getTplj().lastIndexOf("/")+1);
-            String remoteFileUrl = java.net.URLEncoder.encode(fileName, "UTF-8").replace("+","%20");
-            if (null == remoteFileUrl || remoteFileUrl.length() == 0) {
-                throw new RuntimeException("remoteFileUrl is invalid!");
-            }
-            URL url = new URL(fileUrl+remoteFileUrl);
-            // URLConnection conn = url.openConnection();
-            // in = new BufferedInputStream(conn.getInputStream());
+            in = new BufferedInputStream(new FileInputStream(fileEntity.getTplj().replace(fileUrl,filePath)));
             // 这和上面两句一样的效果
-            in = new BufferedInputStream(url.openStream());
+            //in = new BufferedInputStream(url.openStream());
             response.reset();
             response.setContentType("application/octet-stream");
             fileName = new String(fileName.getBytes(), "ISO-8859-1");
@@ -266,19 +269,17 @@ public class DownloadAudioController {
 
     @GetMapping("/downAudioFile")
     public void downAudioFile(HttpServletRequest request, HttpServletResponse response) {
+        response.setCharacterEncoding("UTF-8");
+        String fileUrl = attrService.findByAttrKey("fileUrl");//http://49.239.193.146:8082/
+        String filePath = attrService.findByAttrKey("filePath");
         BufferedInputStream in = null;
         try{
-            String fileUrl = request.getParameter("fileUrl");
             String fileName = request.getParameter("fileName");
-            String remoteFileUrl = java.net.URLEncoder.encode(fileName, "UTF-8").replace("+","%20");
-            if (null == remoteFileUrl || remoteFileUrl.length() == 0) {
-                throw new RuntimeException("remoteFileUrl is invalid!");
-            }
-            URL url = new URL(fileUrl+remoteFileUrl);
+            String path = request.getParameter("fileUrl")+fileName;
             // URLConnection conn = url.openConnection();
             // in = new BufferedInputStream(conn.getInputStream());
             // 这和上面两句一样的效果
-            in = new BufferedInputStream(url.openStream());
+            in = new BufferedInputStream(new FileInputStream(path.replace(fileUrl,filePath)));
             response.reset();
             response.setContentType("application/octet-stream");
             fileName = new String(fileName.getBytes(), "ISO-8859-1");

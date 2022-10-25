@@ -63,6 +63,10 @@ public class EquipmentFileService {
         return equipmentFileList;
     }
 
+    public List<EquipmentFile> listAllDw(EquipmentFileExample equipmentFileExample){
+        return equipmentFileMapper.selectByExampleDw(equipmentFileExample);
+    }
+
     public long countByExample(EquipmentFileExample example){
         return equipmentFileMapper.countByExample(example);
     }

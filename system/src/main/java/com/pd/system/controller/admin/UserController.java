@@ -172,6 +172,46 @@ return responseDto;
     }
 
     /**
+     * 登录对外接口
+     */
+    @PostMapping("/loginDw")
+    public ResponseDto loginDw(@RequestBody UserDto userDto, HttpServletRequest request) {
+        LOG.info("用户登录开始");
+        ResponseDto responseDto = new ResponseDto();
+        userDto.setPassword(DigestUtils.md5DigestAsHex(userDto.getPassword().getBytes()));
+        LoginUserDto loginUserDto = userService.login(userDto);
+        String token = UuidUtil.getShortUuid();
+        loginUserDto.setToken(token);
+        /**
+         * 登录成功后根据用户名获取就tonken
+         * 如果tonken 存在则移除原来的tonken 值（单一登录）
+         */
+        Object userobject =  redisTemplate.opsForValue().get(RedisCode.AllUSER);
+        Map<String,String> usermap = new HashMap<String,String>();
+        if(null != userobject && userobject instanceof Map<?,?>){
+            usermap = (Map<String, String>) userobject;
+            String oldtoken = usermap.get(userDto.getLoginName());
+            if(!StringUtils.isEmpty(oldtoken)){//当前用户存在其他登录
+                redisTemplate.delete(oldtoken);//移除原来用户的tonken
+            }
+        }
+        usermap.put(userDto.getLoginName(),token);
+        redisTemplate.opsForValue().set(RedisCode.AllUSER, usermap);
+
+        Map<String ,String> mapdept = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.DEPTCODENAME);
+        loginUserDto.setDeptmap(mapdept);
+        Map<String ,String> mapuser = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.USERCODENAME);
+        loginUserDto.setUsermap(mapuser);
+        Map<String, List<String>> mapxmbhsbsns = (Map<String, List<String>>) redisTemplate.opsForValue().get(RedisCode.PROJECTSBSNS);
+        loginUserDto.setXmbhsbsns(mapxmbhsbsns);
+        redisTemplate.opsForValue().set(token, JSON.toJSONString(loginUserDto), 3600, TimeUnit.SECONDS);
+
+        //request.getSession().setAttribute(Constants.LOGIN_USER,loginUserDto);
+        responseDto.setContent(loginUserDto);
+        return responseDto;
+    }
+
+    /**
      * 退出
      */
     @GetMapping("/logout/{token}")
