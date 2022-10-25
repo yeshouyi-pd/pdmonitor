@@ -1,7 +1,8 @@
 <template>
   <div class="wrap" id="app">
     <header style="position: relative;">
-      <img src="/largemonitors/assets/imgs/headertitle.png" style="position: absolute;left: 39%;top:20px;width: 450px;">
+      <img src="/largemonitors/assets/imgs/headertitle.png" style="position: absolute;left: 30%;top:20px;width: 750px;">
+<!--      <img src="/largemonitors/assets/imgs/headertitle1.png" style="position: absolute;left: 39%;top:20px;width: 450px;">-->
       <div class="lefttitle">
         <img src="/largemonitors/assets/imgs/左上角title.png" alt="">
         <span>
