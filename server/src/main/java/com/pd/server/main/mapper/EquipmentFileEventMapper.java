@@ -5,6 +5,8 @@ import com.pd.server.main.domain.EquipmentFileEventExample;
 import java.util.List;
 
 import com.pd.server.main.dto.EquipmentFileEventDto;
+import com.pd.server.main.dto.EventDto;
+import com.pd.server.main.dto.KvIntDto;
 import org.apache.ibatis.annotations.Param;
 
 public interface EquipmentFileEventMapper {
@@ -31,4 +33,6 @@ public interface EquipmentFileEventMapper {
     int updateByPrimaryKeySelective(EquipmentFileEvent record);
 
     int updateByPrimaryKey(EquipmentFileEvent record);
+
+    List<EventDto> getEquipmentEventByDept(EquipmentFileEventExample equipmentFileEventExample);
 }

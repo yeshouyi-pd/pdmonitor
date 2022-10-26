@@ -64,7 +64,7 @@
                   <td style="width: 80%">
                               <span  v-on:click="toshjlist()" class="line-height-1 bigger-200"> {{shjcount}} </span>
                     <br/>
-                    <span class="line-height-1 smaller-75"> 水环境监测数据 </span>
+                    <span class="line-height-1 smaller-75"> 聚类事件次数 </span>
                   </td>
                 </tr>
               </table>
@@ -142,7 +142,7 @@
             if (!_this.hasResourceRouter(_this.$route.name)) {
                 _this.$router.push("/login");
             }
-            _this.getAlljcsjByDept();//水环境监测
+            _this.getEquipmentEventByDept();//聚类事件
             _this.getAlljtByDept();//江豚预警
 
             let userInfo = Tool.getLoginUser();
@@ -181,13 +181,13 @@
 
             },
 
-
+        
             /**
-             *  welcome 水环境数据监测
+             *  welcome 聚类时间
              */
-            getAlljcsjByDept() {
+            getEquipmentEventByDept() {
                 let _this = this;
-                _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/mobile/getAlljcsjByDept').then((res)=>{
+                _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/mobile/getEquipmentEventByDept').then((res)=>{
                     let response = res.data;
                     _this.KvMap = response.content;
                     if(!Tool.isEmpty(_this.KvMap)){
@@ -196,6 +196,7 @@
                             count = count +key.value;
                         }
                         _this.shjcount = count;
+                        console.log("==="+_this.shjcount)
                         SessionStorage.set(MSHJMAP,_this.KvMap);
                     }
                 })

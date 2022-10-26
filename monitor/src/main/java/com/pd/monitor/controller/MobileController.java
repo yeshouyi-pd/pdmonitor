@@ -4,10 +4,8 @@ package com.pd.monitor.controller;
 import com.pd.monitor.wx.conf.BaseWxController;
 import com.pd.server.main.domain.*;
 import com.pd.server.main.dto.*;
-import com.pd.server.main.service.EquipmentFileService;
-import com.pd.server.main.service.EquipmentFileTodayService;
-import com.pd.server.main.service.WaterEquipmentService;
-import com.pd.server.main.service.WaterQualityResultService;
+import com.pd.server.main.service.*;
+import com.pd.server.util.DateTools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
@@ -41,6 +39,10 @@ public class MobileController  extends BaseWxController {
     @Resource
     private EquipmentFileTodayService equipmentFileTodayService;
 
+    @Resource
+    private EquipmentFileEventService  equipmentFileEventService;
+
+
 
     /**
      * 水环境数据
@@ -59,6 +61,35 @@ public class MobileController  extends BaseWxController {
                     waterQualityResultca.andSm1In(listdept);
                 }
                 List<KvIntDto>  list   = waterQualityResultService.getAlljcsjByDept(waterQualityResultExample);
+                responseDto.setContent(list);
+            }
+        }
+        return responseDto;
+
+    }
+
+
+
+    /**
+     * equipment_file_event 获取设备聚类事件
+     * @return
+     */
+    @GetMapping("/getEquipmentEventByDept")
+    public ResponseDto getEquipmentEventByDept(){
+        ResponseDto responseDto = new ResponseDto();
+        LoginUserDto user   = getRequestHeader();
+        if(null != user){
+            if(!StringUtils.isEmpty(user.getDeptcode())){
+                List<String > listdept   =  getUpdeptcode(user.getDeptcode());
+                EquipmentFileEventExample equipmentFileEventExample = new EquipmentFileEventExample();
+                EquipmentFileEventExample.Criteria  ca = equipmentFileEventExample.createCriteria();
+                if(!CollectionUtils.isEmpty(listdept)){
+                  //  ca.andDeptcodeIn(listdept);
+                }
+
+                //统计当天数据
+                ca.andRqEqualTo(DateTools.getFormatDate(new Date(), DateTools.yyyy_MM_dd));
+                List<EventDto>  list   = equipmentFileEventService.getEquipmentEventByDept(equipmentFileEventExample);
                 responseDto.setContent(list);
             }
         }
@@ -167,6 +198,31 @@ public class MobileController  extends BaseWxController {
         return responseDto;
 
     }
+
+
+
+    /**
+     * 根据设备编号获取聚类信息
+     * @return
+     */
+    @PostMapping("/list")
+    public ResponseDto list(@RequestBody EquipmentFileEventDto equipmentFileEventDto){
+        ResponseDto responseDto = new ResponseDto();
+
+        if(null != equipmentFileEventDto){
+            if(!StringUtils.isEmpty(equipmentFileEventDto.getSbbh())){
+                EquipmentFileEventExample equipmentFileEventExample = new EquipmentFileEventExample();
+                EquipmentFileEventExample.Criteria  ca = equipmentFileEventExample.createCriteria();
+                ca.andSbbhEqualTo(equipmentFileEventDto.getSbbh());
+                equipmentFileEventExample.setOrderByClause("kssj desc");
+                List<EquipmentFileEvent>  list   = equipmentFileEventService.list(equipmentFileEventExample);
+                responseDto.setContent(list);
+            }
+        }
+        return responseDto;
+
+    }
+
 
 
 }

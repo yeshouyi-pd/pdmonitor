@@ -18,6 +18,11 @@
     <result column="sm2" jdbcType="VARCHAR" property="sm2" />
     <result column="sm3" jdbcType="VARCHAR" property="sm3" />
   </resultMap>
+  <resultMap id="BaseResultMapKV" type="com.pd.server.main.dto.EventDto">
+    <result column="deptcode" jdbcType="VARCHAR" property="deptcode" />
+    <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
+    <result column="value" jdbcType="INTEGER" property="value" />
+  </resultMap>
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -379,4 +384,15 @@
       sm3 = #{sm3,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
+
+
+  <select id="getEquipmentEventByDept" parameterType="com.pd.server.main.domain.EquipmentFileEventExample"  resultMap="BaseResultMapKV">
+    SELECT  deptcode , sbbh ,COUNT(*)  `value` FROM  equipment_file_event
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+     GROUP  BY  deptcode , sbbh
+
+  </select>
+
 </mapper>
