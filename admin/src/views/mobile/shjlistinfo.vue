@@ -4,7 +4,7 @@
     <div class="space-1"></div>
     <div>
 						<span class="label label-primary arrowed-in-right label-lg">
-									<b>【{{mc}}】</b>
+									<b>【{{sbbh}}】</b>
 						</span>
     </div>
       <div class="space-2"></div>
@@ -14,79 +14,32 @@
           <!-- PAGE CONTENT BEGINS -->
           <div class="row">
             <div class="col-xs-12">
-              <table id="simple-table" class="table table-striped table-bordered table-hover">
+              <table id="simple-table" class="table  table-bordered table-hover">
                 <thead>
                 <tr>
                   <th class="center">
                     序号
                   </th>
-                  <th>设备名称</th>
-                  <th>设备编号</th>
-                  <th class="detail-col">详情</th>
+                  <th>设备SN</th>
+                  <th>开始时间</th>
+                  <th>结束时间</th>
+                  <th class="detail-col">雷达图</th>
                 </tr>
                 </thead>
 
                 <tbody>
-                <template v-for="(name,set,index)  in sets"  >
-                <tr v-on:click="activetbale(set+'details');">
+                <template v-for="(entity,index)  in equipmentFileEvents"  >
+                <tr >
                   <td class="center">{{ index +1 }}</td>
-                  <td>{{name}}</td>
-                  <td>{{set}} </td>
+                  <td>{{entity.sbbh}}</td>
+                  <td>{{entity.kssj}} </td>
+                  <td>{{entity.jssj}} </td>
                   <td class="center">
                     <div class="action-buttons">
-                      <a href="#" class="green bigger-140 show-details-btn" :id="set+'details'"  title="Show Details">
+                      <a href="#"  v-on:click="showEcharts(entity)" class="green bigger-140 show-details-btn" :id="index+'details'"  title="Show Details">
                         <i class="ace-icon fa fa-angle-double-down"></i>
                         <span class="sr-only">详情</span>
                       </a>
-                    </div>
-                  </td>
-                </tr>
-                <tr class="detail-row">
-                  <td colspan="4">
-                    <div class="table-detail">
-                      <div class="row">
-                        <div class="col-xs-12 col-sm-2">
-                          <div class="text-center">
-                            <div class="width-80 label label-info label-xlg arrowed-in arrowed-in-right">
-                              <div class="inline position-relative">
-                                <a class="user-title-label" href="#">
-                                  <i class="ace-icon fa fa-circle light-green"></i>
-                                  &nbsp;
-                                  <span class="white">{{ name }}</span>
-                                </a>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="col-xs-12 col-sm-12">
-                          <div class="space visible-xs"></div>
-
-                            <table  class="table table-striped table-bordered table-hover">
-                              <thead>
-                              <tr>
-                                <td>检测项目</td>
-                                <td>监测结果</td>
-                                <td>检测时间</td>
-                              </tr>
-
-                              </thead>
-                              <tbody>
-                              <tr v-for="list in  lists.filter((x,y)=>{ return x.ip === set })" >
-                                <td>
-                                  {{szjcx|optionMapKV(list.jcxm )}}
-                                </td>
-                                <td>
-                                  <div v-show="list.dataResult">
-                                    <b class="green">{{list.dataResult}}</b>{{JYXM_DW|optionKV(list.jcxm)}}
-                                  </div>
-                                </td>
-                                <td>{{ list.createTime }}</td>
-                              </tr>
-                              </tbody>
-                            </table>
-                        </div>
-                      </div>
                     </div>
                   </td>
                 </tr>
@@ -95,8 +48,6 @@
                 </tbody>
               </table>
 
-
-
             </div><!-- /.span -->
           </div><!-- /.row -->
         </div>
@@ -104,6 +55,30 @@
 
 
     </div>
+
+
+    <div id="echart-modal" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">雷达图</h4>
+          </div>
+          <div class="modal-body" style="width: 400px;height: 550px;margin: auto;text-align: center" >
+            <div style="width: 400px;height: 450px;" id="echartEvent"></div>
+            <p>{{equipmentFileEvent.kssj}}至{{equipmentFileEvent.jssj}}</p>
+            <p>保守估计发生头数<span style="color: red">{{equipmentFileEvent.ts}}头</span></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-white btn-default btn-round" data-dismiss="modal">
+              <i class="ace-icon fa fa-times"></i>
+              关闭
+            </button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
   </div>
 
 </template>
@@ -113,82 +88,129 @@ export default {
   name: "shjlistinfo",
   data: function () {
     return {
-      sm1:'',
-      mc:'',
+      sbbh:'',
+      equipmentFileEvents:[],
       lists:[], //数据
       sets:[], //业务
       JYXM_DW:JYXM_DW,
       szjcx:[],
+      myChart:null,
+      intervalId:'',
+      equipmentFileEvent:{},
 
     }
   },
   mounted: function () {
     let _this =this;
-    _this.sm1 = SessionStorage.get(MSHJSM);
-    if(Tool.isEmpty(_this.sm1)){
+    _this.sbbh = SessionStorage.get(MSHJSM);
+    if(Tool.isEmpty(_this.sbbh)){
       _this.$router.push("/mobile/mindex");
     }
-    _this.mc = SessionStorage.get(MSHJMC);
 
+    _this.list();
+    //监听模态框关闭
+    $('#echart-modal').on('hidden.bs.modal', function () {
+      //先消除再创建
+      if(_this.myChart!=null){
+        _this.myChart.dispose();
+      }
+      if (_this.intervalId != null) {
+        clearInterval(_this.intervalId); //清除计时器
+        _this.intervalId = null; //设置为null
+      }
+    });
 
-    _this.getxxinfo();
-    _this.getSzjcx();
 
   },
   methods: {
 
-    /**
-     * 获取水质检测项
-     */
-    getSzjcx(){
+    showEcharts(item){
       let _this = this;
-      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/CodeSetUtil/getSzjcx', {
-      }).then((response)=>{
+      _this.equipmentFileEvent = $.extend({}, item);
+      _this.$forceUpdate();
+      _this.initEcharts();
+      let list = [];
+      let title = [];
+      let arr = item.jtnr.split("/");//2022_10_15_02_15_14-0:105,1:235
+      for(let i=0;i<arr.length;i++){
+        let rqandjd = arr[i].split("-");//2022_10_15_02_15_14和0:105,1:235
+        let item = [];
+        let rqarr = rqandjd[0].split("_");//2022和10和15和02和15和14
+        if(rqandjd.length==2){
+          if(rqandjd[1].split(",").length>0){
+            let jdarr =  rqandjd[1].split(",");//0:105和1:235
+            for(let j=0;j<jdarr.length;j++){
+              if(jdarr[j].split(":").length==2){
+                item.push([1.5,jdarr[j].split(":")[1]]);
+              }
+            }
+            list.push(item);
+            title.push(rqarr[0]+"-"+rqarr[1]+"-"+rqarr[2]+" "+rqarr[3]+":"+rqarr[4]+":"+rqarr[5]);
+          }
+        }
+      }
+      _this.myChart.setOption({
+        series: [{data:list[0]}],
+        title: {text: title[0],left:"19%"}
+      });
+      let k=1;
+      _this.intervalId = setInterval(function () {
+        if(k==list.length){
+          k=list.length-1;
+        }
+        _this.myChart.setOption({
+          series: [
+            {
+              data:list[k]
+            }
+          ],
+          title: {
+            text: title[k],
+            left:"19%"
+          }
+        });
+        k=k+1;
+      }, 4000);
+      $("#echart-modal").modal("show");
+    },
+    initEcharts(){
+      let _this = this;
+      let option = {
+        polar: {
+          center: ['40%', '50%']
+        },
+        angleAxis: {
+          type: 'value',
+          min: 0,
+          max:360
+        },
+        radiusAxis: {
+          min: 0,
+          max: 3
+        },
+        series: [{
+          coordinateSystem: 'polar',
+          type: 'scatter',
+          showSymbol: false
+        }],
+        animationDuration: 400
+      };
+      _this.myChart = echarts.init(document.getElementById("echartEvent"));
+      _this.myChart.setOption(option);
+    },
+
+    /**
+     * 列表查询
+     */
+    list() {
+      let _this = this;
+      Loading.show();
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/mobile/list', {sbbh:_this.sbbh}).then((response)=>{
+        Loading.hide();
         let resp = response.data;
-        _this.szjcx = resp.content;
+        _this.equipmentFileEvents = resp.content;
       })
     },
-
-    getxxinfo(){
-      let _this =this;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/mobile/getthisDeptjxsj', {sm1:_this.sm1}).then((response)=>{
-        let resp = response.data;
-        let datas  =  resp.content
-        _this.lists = datas.list;
-         _this.sets  =datas.map;
-
-
-       })
-
-      },
-
-    activetbale(id){
-      let _this =this;
-      $('[data-rel="tooltip"]').tooltip({placement: _this.tooltip_placement});
-      /***************/
-         $('#'+id).closest('tr').next().toggleClass('open');
-         $('#'+id).find(ace.vars['.icon']).toggleClass('fa-angle-double-down').toggleClass('fa-angle-double-up');
-      /***************/
-
-    },
-    tooltip_placement(context, source){
-      let $source = $(source);
-      let $parent = $source.closest('table')
-      let off1 = $parent.offset();
-      let w1 = $parent.width();
-      let off2 = $source.offset();
-      if( parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2) ) return 'right';
-      return 'left';
-
-
-    }
-
-
-
-
-
-
-
 
   }
 }

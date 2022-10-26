@@ -4,17 +4,17 @@
     <div class="space-1"></div>
     <div>
 						<span class="label label-primary arrowed-in-right label-lg">
-									<b>水环境监测数据</b>
+									<b>聚类事件次数</b>
 						</span>
     </div>
       <div class="space-6"></div>
         <div class="message-list" id="message-list">
           <div v-for="key in KvMap">
-          <div class="message-item message-unread" v-on:click="shjlistinfo(key.key)">
+          <div class="message-item message-unread" v-on:click="shjlistinfo(key.sbbh)">
             <i class="message-star ace-icon fa fa-star orange2"></i>
 
             <span class="sender" >
-																		{{key.key}}
+																		{{key.sbbh}}
 																	</span>
 
             <span class="time" style="font-size: 15px">{{key.value}}次 </span>
@@ -25,7 +25,7 @@
             <span class="summary">
 																		<span class="badge badge-success mail-tag"></span>
 																		<span class="text">
-																			{{deptmap|optionMapKV(key.key)}}
+																			{{deptmap|optionMapKV(key.deptcode)}}
 																		</span>
             </span>
 
@@ -70,10 +70,10 @@ export default {
         _this.deptmap = response.content;
       })
     },
-   shjlistinfo(sm1){
+   shjlistinfo(sbbh){
     let _this = this;
-     SessionStorage.set(MSHJSM,sm1);
-     SessionStorage.set(MSHJMC,_this.option(_this.deptmap,sm1));
+     SessionStorage.set(MSHJSM,sbbh);
+    // SessionStorage.set(MSHJMC,_this.option(_this.deptmap,sm1));
     _this.$router.push("/mobile/shjlistinfo");
   },
 

@@ -3,6 +3,8 @@ package com.pd.server.main.service;
 import com.pd.server.main.domain.EquipmentFileEvent;
 import com.pd.server.main.domain.EquipmentFileEventExample;
 import com.pd.server.main.dto.EquipmentFileEventDto;
+import com.pd.server.main.dto.EventDto;
+import com.pd.server.main.dto.KvIntDto;
 import com.pd.server.main.dto.PageDto;
 import com.pd.server.main.mapper.EquipmentFileEventMapper;
 import com.pd.server.util.CopyUtil;
@@ -70,4 +72,7 @@ public class EquipmentFileEventService {
         equipmentFileEventMapper.deleteByPrimaryKey(id);
     }
 
+    public List<EventDto> getEquipmentEventByDept(EquipmentFileEventExample equipmentFileEventExample) {
+        return equipmentFileEventMapper.getEquipmentEventByDept(equipmentFileEventExample);
+    }
 }
