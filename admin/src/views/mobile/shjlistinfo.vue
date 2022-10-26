@@ -64,8 +64,8 @@
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title">雷达图</h4>
           </div>
-          <div class="modal-body" style="width: 400px;height: 550px;margin: auto;text-align: center" >
-            <div style="width: 400px;height: 450px;" id="echartEvent"></div>
+          <div class="modal-body" style="width: 330px;height: 450px;margin: auto;text-align: center" >
+            <div style="width: 300px;height: 350px;" id="echartEvent"></div>
             <p>{{equipmentFileEvent.kssj}}至{{equipmentFileEvent.jssj}}</p>
             <p>保守估计发生头数<span style="color: red">{{equipmentFileEvent.ts}}头</span></p>
           </div>
@@ -177,7 +177,7 @@ export default {
       let _this = this;
       let option = {
         polar: {
-          center: ['40%', '50%']
+          center: ['50%', '50%']
         },
         angleAxis: {
           type: 'value',
