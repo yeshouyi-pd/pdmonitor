@@ -55,6 +55,7 @@ import DlbData from "./views/electricity/dlbData.vue";
 import TdData from "./views/electricity/tdData.vue";
 import LdTaskList from "./views/electricity/ldTaskList.vue";
 import EquipmentFileEvent from "./views/monitor/equipmentFileEvent.vue";
+import WelcomeDw from "./views/admin/welcomeDw.vue";
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -105,6 +106,9 @@ export default new Router({
     },{
         path: "/mobile/test",
         component: Test
+    },{
+        path: "/welcomeDw",
+        component:WelcomeDw
     },{
         path: "/",
         name:"admin",//为每一个路由都加上name属性，后续做通用的aidebar激活方法样式会用的

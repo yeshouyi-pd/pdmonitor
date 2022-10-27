@@ -205,15 +205,17 @@
         }
         Loading.show();
         _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/ldTaskListSec/save', _this.ldTaskList).then((response)=>{
-          Loading.hide();
-          let resp = response.data;
-          if (resp.success) {
-            $("#form-modal").modal("hide");
-            _this.list(1);
-            Toast.success("保存成功！");
-          } else {
-            Toast.warning(resp.message)
-          }
+          setTimeout(function (){
+            Loading.hide();
+            let resp = response.data;
+            if (resp.success) {
+              $("#form-modal").modal("hide");
+              _this.list(1);
+              Toast.success("保存成功！");
+            } else {
+              Toast.warning(resp.message)
+            }
+          },5000);
         })
       }
     }

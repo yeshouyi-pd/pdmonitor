@@ -70,6 +70,10 @@
             <p>保守估计发声头数<span style="color: red">{{equipmentFileEvent.ts}}头</span></p>
           </div>
           <div class="modal-footer">
+            <button v-if="showBtn" type="button" class="btn btn-white btn-default btn-round" v-on:click="reloadLdt">
+              <i class="ace-icon fa fa-refresh"></i>
+              重播
+            </button>
             <button type="button" class="btn btn-white btn-default btn-round" data-dismiss="modal">
               <i class="ace-icon fa fa-times"></i>
               关闭
@@ -97,7 +101,9 @@ export default {
       myChart:null,
       intervalId:'',
       equipmentFileEvent:{},
-
+      showBtn:false,
+      echartsData:[],
+      title:[]
     }
   },
   mounted: function () {
@@ -118,19 +124,29 @@ export default {
         clearInterval(_this.intervalId); //清除计时器
         _this.intervalId = null; //设置为null
       }
+      _this.showBtn = false;
     });
 
 
   },
   methods: {
-
+    //重新播放雷达图
+    reloadLdt(){
+      let _this = this;
+      _this.showBtn = false;
+      clearInterval(_this.intervalId);
+      _this.intervalId = null; //设置为null
+      _this.myChart.dispose();
+      _this.initEcharts();
+      _this.loopEchartsData(_this.echartsData,_this.title);
+    },
     showEcharts(item){
       let _this = this;
       _this.equipmentFileEvent = $.extend({}, item);
       _this.$forceUpdate();
       _this.initEcharts();
-      let list = [];
-      let title = [];
+      _this.echartsData = [];
+      _this.title = [];
       let arr = item.jtnr.split("/");//2022_10_15_02_15_14-0:105,1:235
       for(let i=0;i<arr.length;i++){
         let rqandjd = arr[i].split("-");//2022_10_15_02_15_14和0:105,1:235
@@ -144,11 +160,16 @@ export default {
                 item.push([1.5,jdarr[j].split(":")[1]]);
               }
             }
-            list.push(item);
-            title.push(rqarr[0]+"-"+rqarr[1]+"-"+rqarr[2]+" "+rqarr[3]+":"+rqarr[4]+":"+rqarr[5]);
+            _this.echartsData.push(item);
+            _this.title.push(rqarr[0]+"-"+rqarr[1]+"-"+rqarr[2]+" "+rqarr[3]+":"+rqarr[4]+":"+rqarr[5]);
           }
         }
       }
+      _this.loopEchartsData(_this.echartsData,_this.title);
+      $("#echart-modal").modal("show");
+    },
+    loopEchartsData(list,title){
+      let _this = this;
       _this.myChart.setOption({
         series: [{data:list[0]}],
         title: {text: title[0],left:"19%"}
@@ -157,6 +178,7 @@ export default {
       _this.intervalId = setInterval(function () {
         if(k==list.length){
           k=list.length-1;
+          _this.showBtn = true;
         }
         _this.myChart.setOption({
           series: [
@@ -171,7 +193,6 @@ export default {
         });
         k=k+1;
       }, 4000);
-      $("#echart-modal").modal("show");
     },
     initEcharts(){
       let _this = this;
@@ -193,7 +214,7 @@ export default {
           type: 'scatter',
           showSymbol: false
         }],
-        animationDuration: 400
+        animation:false
       };
       _this.myChart = echarts.init(document.getElementById("echartEvent"));
       _this.myChart.setOption(option);
