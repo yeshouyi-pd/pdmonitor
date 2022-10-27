@@ -266,7 +266,9 @@ public class TypeUtils {
                 }
             }
             if("0".equals(ts)){
-                ts = "1";
+                if(!("1020".equals(type)||"1022".equals(type)||"1024".equals(type)||"1026".equals(type))){
+                    ts = "1";
+                }
             }
             typemap.put(WJLX,wjlx);
             typemap.put(TYPE,type);
@@ -294,7 +296,7 @@ public class TypeUtils {
         String u9  = "2022_07_27_13_36_50_predation_59.txt";
         String u10  = "2022_07_30_09_32_15_0.txt";
         String u11  = "2022_09_05_09_04_54_0_A2.txt";
-        String u12  = "2022_09_08_14_29_43_2022_09_08_14_29_46_1_A2.txt";
+        String u12  = "2022_09_08_14_29_43_2022_09_08_14_29_46_0_A2.txt";
         String tst = "2022_09_09_10_18_12_0.wav";
         String u13 = "2022_09_08_14_29_43_2022_09_08_14_29_46_1_A2_TD33.mp4";
         String u14 = "2022_10_09_14_36_30_2_A4.txt";
@@ -303,16 +305,16 @@ public class TypeUtils {
         String u17 = "2022_10_09_14_36_30_predation_2_A4_TD33.mp4";
         String u18 = "2022_10_09_14_36_30_FISH_144.txt";
         String u19 = "2022_10_09_14_36_30_YFP_189.txt";
-        String u20 = "2022_10_15_23_09_20_predation_2022_10_15_23_10_36_2_A4.txt";
-        String u21 = "2022_10_15_23_09_20_predation_2022_10_15_23_10_36_2_A4_TD33.mp4";
-        String u22 = "2022_10_15_23_07_10_2022_10_15_23_07_50_predation_2_A4.txt";
+        String u20 = "2022_10_15_23_09_20_predation_2022_10_15_23_10_36_0_A4.txt";
+        String u21 = "2022_10_15_23_09_20_predation_2022_10_15_23_10_36_0_A4_TD33.mp4";
+        String u22 = "2022_10_15_23_07_10_2022_10_15_23_07_50_predation_0_A4.txt";
         String u23 = "2022_10_15_23_07_10_2022_10_15_23_07_50_predation_2_A4_TD33.mp4";
-        String u24 = "2022_10_15_23_02_36_2022_10_15_23_02_36_1_A4.txt";
+        String u24 = "2022_10_15_23_02_36_2022_10_15_23_02_36_0_A4.txt";
         String u25 = "2022_10_15_23_02_36_2022_10_15_23_02_36_1_A4_TD33.mp4";
         String u26 = "2022_10_15_23_02_36_predation_2022_10_15_23_02_36_predation_1_A4.txt";
         String u27 = "2022_10_15_23_02_36_predation_2022_10_15_23_02_36_predation_1_A4_TD33.mp4";
 
-        Map<String,String> map =  getType(u27);
+        Map<String,String> map =  getType(u12);
         Set set = map.entrySet();
         for(Object key:set){
             Map.Entry entry = (Map.Entry) key;
