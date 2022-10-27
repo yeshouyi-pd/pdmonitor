@@ -18,6 +18,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -37,17 +38,18 @@ public class PointerDayController extends BaseWxController {
     @PostMapping("/listAll")
     public ResponseDto listAll(@RequestBody PointerDayDto pointerDayDto) {
         ResponseDto responseDto = new ResponseDto();
-        LoginUserDto userDto = getRequestHeader();
-        List<String> deptList = getUpdeptcode(userDto.getDeptcode());
         PointerDayExample example = new PointerDayExample();
         PointerDayExample.Criteria ca = example.createCriteria();
-        if(deptList.size()>0){
-            ca.andSmIn(deptList);
-        }
         if(!StringUtils.isEmpty(pointerDayDto.getCjsj())){
+            pointerDayDto.setBz3(DateUtil.getFormatDate(pointerDayDto.getCjsj(),"yyyy-MM-dd"));
             ca.andCjsjEqualTo(DateUtil.getFormatDate(pointerDayDto.getCjsj(),"yyyy-MM-dd"),"%Y-%m-%d");
         }
-        List<PointerCommenDto> pointerSecondList = pointerDayService.selectAll(example);
+        List<PointerCommenDto> pointerSecondList = new ArrayList<>();
+        if(!StringUtils.isEmpty(pointerDayDto.getXmbh())){
+            pointerSecondList = pointerDayService.selectAllSpecial(pointerDayDto);
+        }else{
+            pointerSecondList = pointerDayService.selectAll(example);
+        }
         responseDto.setContent(pointerSecondList);
         return responseDto;
     }

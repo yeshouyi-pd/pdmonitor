@@ -45,7 +45,7 @@
         </tr>
         </tbody>
       </table>
-      <pagination ref="pagination" v-bind:list="list" v-bind:itemCount="8"></pagination>
+      <pagination ref="pagination" v-bind:list="list" v-bind:itemCount="10"></pagination>
     </div>
 
 
@@ -122,7 +122,7 @@
     },
     mounted: function() {
       let _this = this;
-      _this.$refs.pagination.size = 5;
+      _this.$refs.pagination.size = 10;
       _this.list(1);
       // sidebar激活样式方法一
       // this.$parent.activeSidebar("system-role-sidebar");

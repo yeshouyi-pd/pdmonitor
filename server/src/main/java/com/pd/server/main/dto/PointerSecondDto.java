@@ -3,7 +3,7 @@ package com.pd.server.main.dto;
         import java.util.Date;
         import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class PointerSecondDto {
+public class PointerSecondDto{
 
     /**
     * 主键
@@ -51,6 +51,8 @@ public class PointerSecondDto {
     * 备注字段
     */
     private String bz3;
+
+    private String xmbh;
 
     public String getId() {
         return id;
@@ -124,6 +126,13 @@ public class PointerSecondDto {
         this.bz3 = bz3;
     }
 
+    public String getXmbh() {
+        return xmbh;
+    }
+
+    public void setXmbh(String xmbh) {
+        this.xmbh = xmbh;
+    }
 
     @Override
     public String toString() {

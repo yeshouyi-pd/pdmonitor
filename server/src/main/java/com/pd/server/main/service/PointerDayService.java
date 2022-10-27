@@ -27,6 +27,10 @@ public class PointerDayService {
         return pointerDayMapper.selectAll(example);
     }
 
+    public List<PointerCommenDto> selectAllSpecial(PointerDayDto record){
+        return pointerDayMapper.selectAllSpecial(record);
+    }
+
     /**
     * 列表查询
     */

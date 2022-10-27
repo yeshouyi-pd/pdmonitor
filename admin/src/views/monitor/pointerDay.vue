@@ -41,6 +41,9 @@ export default {
     listAll(){
       let _this = this;
       Loading.show();
+      if("460100"!=Tool.getLoginUser().deptcode){
+        _this.pointerDayDto.xmbh = Tool.getLoginUser().xmbh;
+      }
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/pointerDay/listAll', _this.pointerDayDto).then((response) => {
         Loading.hide();
         let resp = response.data;

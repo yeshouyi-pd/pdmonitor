@@ -27,6 +27,10 @@ public class PointerSecondService {
         return pointerSecondMapper.selectAll(example);
     }
 
+    public List<PointerCommenDto> selectAllSpecial(PointerSecondDto record){
+        return pointerSecondMapper.selectAllSpecial(record);
+    }
+
     /**
     * 列表查询
     */

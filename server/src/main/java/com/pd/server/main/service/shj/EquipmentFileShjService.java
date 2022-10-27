@@ -93,7 +93,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
             entity.setTxtlx(typeUtil.get(TypeUtils.TXTLX));
             entity.setWjmc(typeUtil.get(TypeUtils.WJMC));
             entity.setWjlx(typeUtil.get(TypeUtils.WJLX));
-            if("1020".equals(entity.getType())||"1022".equals(entity.getType())||"1024".equals(entity.getType())||"1026".equals(entity.getType())){
+            if(!"0".equals(typeUtil.get(TypeUtils.TS))&&("1020".equals(entity.getType())||"1022".equals(entity.getType())||"1024".equals(entity.getType())||"1026".equals(entity.getType()))){
                 String temp = tplj.substring(tplj.lastIndexOf("/")+1,tplj.lastIndexOf("_A4.txt"));
                 String[] arr = temp.split("_");
                 String kssj = arr[0]+"-"+arr[1]+"-"+arr[2]+" "+arr[3]+":"+arr[4]+":"+arr[5];

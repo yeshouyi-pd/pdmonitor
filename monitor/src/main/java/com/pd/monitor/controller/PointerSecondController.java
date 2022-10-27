@@ -13,6 +13,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -31,17 +32,18 @@ public class PointerSecondController extends BaseWxController {
     @PostMapping("/listAll")
     public ResponseDto listAll(@RequestBody PointerSecondDto pointerSecondDto) {
         ResponseDto responseDto = new ResponseDto();
-        LoginUserDto userDto = getRequestHeader();
-        List<String> deptList = getUpdeptcode(userDto.getDeptcode());
         PointerSecondExample example = new PointerSecondExample();
         PointerSecondExample.Criteria ca = example.createCriteria();
-        if(deptList.size()>0){
-           ca.andSmIn(deptList);
-        }
         if(!StringUtils.isEmpty(pointerSecondDto.getCjsj())){
+            pointerSecondDto.setBz3(DateUtil.getFormatDate(pointerSecondDto.getCjsj(),"yyyy-MM-dd"));
             ca.andCjsjEqualTo(DateUtil.getFormatDate(pointerSecondDto.getCjsj(),"yyyy-MM-dd"),"%Y-%m-%d");
         }
-        List<PointerCommenDto> pointerSecondList = pointerSecondService.selectAll(example);
+        List<PointerCommenDto> pointerSecondList = new ArrayList<>();
+        if(!StringUtils.isEmpty(pointerSecondDto.getXmbh())){
+            pointerSecondList = pointerSecondService.selectAllSpecial(pointerSecondDto);
+        }else{
+            pointerSecondList = pointerSecondService.selectAll(example);
+        }
         responseDto.setContent(pointerSecondList);
         return responseDto;
     }
