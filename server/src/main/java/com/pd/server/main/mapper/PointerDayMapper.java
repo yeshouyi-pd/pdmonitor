@@ -4,6 +4,7 @@ import com.pd.server.main.domain.PointerDay;
 import com.pd.server.main.domain.PointerDayExample;
 import java.util.List;
 
+import com.pd.server.main.dto.PointerDayDto;
 import com.pd.server.main.dto.basewx.my.PointerCommenDto;
 import org.apache.ibatis.annotations.Param;
 
@@ -21,6 +22,8 @@ public interface PointerDayMapper {
     List<PointerDay> selectByExample(PointerDayExample example);
 
     List<PointerCommenDto> selectAll(PointerDayExample example);
+
+    List<PointerCommenDto> selectAllSpecial(@Param("record") PointerDayDto record);
 
     PointerDay selectByPrimaryKey(String id);
 

@@ -84,7 +84,7 @@
           <div class="modal-body" style="width: 400px;height: 550px;margin: auto;text-align: center" >
             <div style="width: 400px;height: 450px;" id="echartEvent"></div>
             <p>{{equipmentFileEvent.kssj}}至{{equipmentFileEvent.jssj}}</p>
-            <p>保守估计发生头数<span style="color: red">{{equipmentFileEvent.ts}}头</span></p>
+            <p>保守估计发声头数<span style="color: red">{{equipmentFileEvent.ts}}头</span></p>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-white btn-default btn-round" data-dismiss="modal">
@@ -188,7 +188,7 @@ export default {
       let _this = this;
       let option = {
         polar: {
-          center: ['45%', '50%']
+          center: ['50%', '50%']
         },
         angleAxis: {
           type: 'value',
