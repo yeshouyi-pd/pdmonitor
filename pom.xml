@@ -10,7 +10,8 @@
 		<module>server</module>
 		<module>generator</module>
 		<module>monitor</module>
-    </modules>
+		<module>power</module>
+	</modules>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>

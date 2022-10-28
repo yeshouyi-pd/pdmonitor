@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pd.power.main.mapper.DlbDataSecMapper">
+  <resultMap id="BaseResultMap" type="com.pd.power.main.domain.DlbDataSec">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="ICCID" jdbcType="VARCHAR" property="iccid" />
+    <result column="IPPort" jdbcType="VARCHAR" property="ipport" />
+    <result column="wd" jdbcType="VARCHAR" property="wd" />
+    <result column="sj" jdbcType="VARCHAR" property="sj" />
+    <result column="cdzt" jdbcType="VARCHAR" property="cdzt" />
+    <result column="sjdate" jdbcType="TIMESTAMP" property="sjdate" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, ICCID, IPPort, wd, sj, cdzt, sjdate
+  </sql>
+  <select id="selectByExample" parameterType="com.pd.power.main.domain.DlbDataSecExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from dlb_data
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from dlb_data
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from dlb_data
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pd.power.main.domain.DlbDataSecExample">
+    delete from dlb_data
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pd.power.main.domain.DlbDataSec">
+    insert into dlb_data (id, ICCID, IPPort, 
+      wd, sj, cdzt, sjdate
+      )
+    values (#{id,jdbcType=INTEGER}, #{iccid,jdbcType=VARCHAR}, #{ipport,jdbcType=VARCHAR}, 
+      #{wd,jdbcType=VARCHAR}, #{sj,jdbcType=VARCHAR}, #{cdzt,jdbcType=VARCHAR}, #{sjdate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.pd.power.main.domain.DlbDataSec">
+    insert into dlb_data
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="iccid != null">
+        ICCID,
+      </if>
+      <if test="ipport != null">
+        IPPort,
+      </if>
+      <if test="wd != null">
+        wd,
+      </if>
+      <if test="sj != null">
+        sj,
+      </if>
+      <if test="cdzt != null">
+        cdzt,
+      </if>
+      <if test="sjdate != null">
+        sjdate,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="iccid != null">
+        #{iccid,jdbcType=VARCHAR},
+      </if>
+      <if test="ipport != null">
+        #{ipport,jdbcType=VARCHAR},
+      </if>
+      <if test="wd != null">
+        #{wd,jdbcType=VARCHAR},
+      </if>
+      <if test="sj != null">
+        #{sj,jdbcType=VARCHAR},
+      </if>
+      <if test="cdzt != null">
+        #{cdzt,jdbcType=VARCHAR},
+      </if>
+      <if test="sjdate != null">
+        #{sjdate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pd.power.main.domain.DlbDataSecExample" resultType="java.lang.Long">
+    select count(*) from dlb_data
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update dlb_data
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.iccid != null">
+        ICCID = #{record.iccid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ipport != null">
+        IPPort = #{record.ipport,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wd != null">
+        wd = #{record.wd,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sj != null">
+        sj = #{record.sj,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cdzt != null">
+        cdzt = #{record.cdzt,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sjdate != null">
+        sjdate = #{record.sjdate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update dlb_data
+    set id = #{record.id,jdbcType=INTEGER},
+      ICCID = #{record.iccid,jdbcType=VARCHAR},
+      IPPort = #{record.ipport,jdbcType=VARCHAR},
+      wd = #{record.wd,jdbcType=VARCHAR},
+      sj = #{record.sj,jdbcType=VARCHAR},
+      cdzt = #{record.cdzt,jdbcType=VARCHAR},
+      sjdate = #{record.sjdate,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pd.power.main.domain.DlbDataSec">
+    update dlb_data
+    <set>
+      <if test="iccid != null">
+        ICCID = #{iccid,jdbcType=VARCHAR},
+      </if>
+      <if test="ipport != null">
+        IPPort = #{ipport,jdbcType=VARCHAR},
+      </if>
+      <if test="wd != null">
+        wd = #{wd,jdbcType=VARCHAR},
+      </if>
+      <if test="sj != null">
+        sj = #{sj,jdbcType=VARCHAR},
+      </if>
+      <if test="cdzt != null">
+        cdzt = #{cdzt,jdbcType=VARCHAR},
+      </if>
+      <if test="sjdate != null">
+        sjdate = #{sjdate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pd.power.main.domain.DlbDataSec">
+    update dlb_data
+    set ICCID = #{iccid,jdbcType=VARCHAR},
+      IPPort = #{ipport,jdbcType=VARCHAR},
+      wd = #{wd,jdbcType=VARCHAR},
+      sj = #{sj,jdbcType=VARCHAR},
+      cdzt = #{cdzt,jdbcType=VARCHAR},
+      sjdate = #{sjdate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
