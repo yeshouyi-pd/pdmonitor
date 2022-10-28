@@ -302,6 +302,42 @@
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
+  <update id="updateBySbbhSelective" parameterType="com.pd.server.main.domain.WaterEquiplog">
+    update water_equiplog
+    <set>
+      <if test="code != null">
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="msg != null">
+        msg = #{msg,jdbcType=VARCHAR},
+      </if>
+      <if test="cjsj != null">
+        cjsj = #{cjsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="reqmsg != null">
+        reqMsg = #{reqmsg,jdbcType=VARCHAR},
+      </if>
+      <if test="respmsg != null">
+        respMsg = #{respmsg,jdbcType=VARCHAR},
+      </if>
+      <if test="sm1 != null">
+        sm1 = #{sm1,jdbcType=VARCHAR},
+      </if>
+      <if test="sm2 != null">
+        sm2 = #{sm2,jdbcType=VARCHAR},
+      </if>
+      <if test="sm3 != null">
+        sm3 = #{sm3,jdbcType=VARCHAR},
+      </if>
+      <if test="sm4 != null">
+        sm4 = #{sm4,jdbcType=VARCHAR},
+      </if>
+      <if test="sm5 != null">
+        sm5 = #{sm5,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where sbbh = #{sbbh,jdbcType=VARCHAR}
+  </update>
   <update id="updateByPrimaryKey" parameterType="com.pd.server.main.domain.WaterEquiplog">
     update water_equiplog
     set sbbh = #{sbbh,jdbcType=VARCHAR},

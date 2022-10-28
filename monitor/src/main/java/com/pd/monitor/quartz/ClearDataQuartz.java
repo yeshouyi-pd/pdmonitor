@@ -38,13 +38,13 @@ public class ClearDataQuartz {
             interfaceLogService.delete(entity.getId());
         }
         /**
-         * 清除1个月之前的心跳包数据(water_equiplog表)改为只保留今天的数据
+         * 清除1个月之前的心跳包数据(water_equiplog表)表中每个设备只有一条数据，对于新数据只做更新不做新增所以没有必要再删除
          */
-        WaterEquiplogExample equiplogExample = new WaterEquiplogExample();
-        equiplogExample.createCriteria().andCjsjLessThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(), -1),"yyyy-MM-dd"));
-        List<WaterEquiplog> equiplogList = waterEquiplogService.list(equiplogExample);
-        for(WaterEquiplog entity : equiplogList){
-            waterEquiplogService.delete(entity.getId());
-        }
+//        WaterEquiplogExample equiplogExample = new WaterEquiplogExample();
+//        equiplogExample.createCriteria().andCjsjLessThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(), -1),"yyyy-MM-dd"));
+//        List<WaterEquiplog> equiplogList = waterEquiplogService.list(equiplogExample);
+//        for(WaterEquiplog entity : equiplogList){
+//            waterEquiplogService.delete(entity.getId());
+//        }
     }
 }
