@@ -79,10 +79,23 @@
             }
         },
         mounted: function() {
-            let _this = this;
-            _this.getWaterState();
+          let _this = this;
+          _this.getWaterState();
+          _this.dataRefreh();
         },
         methods: {
+          // 定时刷新数据函数
+          dataRefreh() {
+            let _this = this;
+            // 计时器正在进行中，退出函数
+            if (_this.intervalId != null) {
+              return;
+            }
+            // 计时器为空，操作 30秒
+            _this.intervalId = setInterval(() => {
+              _this.getWaterState();
+            }, 30000)
+          },
           startEquip(sbcj){
             let _this = this;
             Loading.show();
