@@ -16,7 +16,7 @@
                                         <div style="width:96%;height:120px;position:relative;top:2px;border:2px solid #009900;border-radius:2px;">
                                             <div style="color: #009900;position:relative;top:10px;">
                                                 <p style="font-size: 18px;font-weight: bolder;">{{state.sbsn}}</p>
-                                                <p style="font-size: 18px;font-weight: bold;">设备正常</p>
+                                                <p style="font-size: 18px;font-weight: bold;">已上线</p>
                                                 <p style="font-size: 10px;">{{state.sbmc}}</p>
                                             </div>
                                         </div>
@@ -35,7 +35,7 @@
                           <div style="width:96%;height:170px;position:relative;top:2px;border:2px solid #FF0000;border-radius:2px;">
                             <div style="color: #FF0000;position:relative;top:10px;">
                               <p style="font-size: 18px;font-weight: bolder;">{{state.sbsn}}</p>
-                              <p style="font-size: 18px;font-weight: bold;">设备异常</p>
+                              <p style="font-size: 18px;font-weight: bold;">未上线</p>
                               <p style="font-size: 10px;">{{state.sbmc}}</p>
                               <button v-on:click="startEquip(state.sbcj)" class="btn btn-xs btn-primary " style="background-color: #B74635!important;border-color: #D15B47;">
                                 开机
