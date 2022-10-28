@@ -14,6 +14,7 @@ MSHJMC="MSHJMC";
 MJTMAP="MJTMAP";//江豚
 MJTSM="MJTSM";
 MJTMC="MJTMC";
+TODATORWEEK="TODATORWEEK";//查询条件本周还是当天
 
 SessionStorage = {
     get: function (key) {
