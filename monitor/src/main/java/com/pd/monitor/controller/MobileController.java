@@ -235,6 +235,8 @@ public class MobileController  extends BaseWxController {
 
     /**
      * 根据设备编号获取聚类信息
+     * sm 1 本周
+     * sm 2 当天
      * @return
      */
     @PostMapping("/list")
@@ -246,6 +248,18 @@ public class MobileController  extends BaseWxController {
                 EquipmentFileEventExample equipmentFileEventExample = new EquipmentFileEventExample();
                 EquipmentFileEventExample.Criteria  ca = equipmentFileEventExample.createCriteria();
                 ca.andSbbhEqualTo(equipmentFileEventDto.getSbbh());
+                Date  date = new Date();
+                //本周
+                if(equipmentFileEventDto.getSm().equals("1")){
+                    //获取7天前事件
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(new Date());
+                    calendar.add(Calendar.DATE, - 7);
+                    date = calendar.getTime();
+                    ca.andRqGreaterThanOrEqualTo(DateTools.getFormatDate(date, DateTools.yyyy_MM_dd));
+                }else{
+                    ca.andRqEqualTo(DateTools.getFormatDate(date, DateTools.yyyy_MM_dd));
+                }
                 equipmentFileEventExample.setOrderByClause("kssj desc");
                 List<EquipmentFileEvent>  list   = equipmentFileEventService.list(equipmentFileEventExample);
                 responseDto.setContent(list);
