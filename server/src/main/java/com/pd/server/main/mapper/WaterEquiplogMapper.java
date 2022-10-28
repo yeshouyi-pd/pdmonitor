@@ -26,5 +26,7 @@ public interface WaterEquiplogMapper {
 
     int updateByPrimaryKeySelective(WaterEquiplog record);
 
+    int updateBySbbhSelective(WaterEquiplog record);
+
     int updateByPrimaryKey(WaterEquiplog record);
 }

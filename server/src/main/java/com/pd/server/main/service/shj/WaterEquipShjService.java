@@ -42,14 +42,15 @@ public class WaterEquipShjService extends AbstractScanRequest{
         }
         try {
             WaterEquiplog record = new WaterEquiplog();
-            record.setId(UuidUtil.getShortUuid());
             record.setSbbh(sbbh);
             record.setCode(code);
             record.setMsg(msg);
             record.setReqmsg(JSONObject.toJSONString(jsonParam));
             record.setCjsj(new Date());
             record.setRespmsg("保存成功");
-            waterEquiplogMapper.insert(record);
+            record.setSm1(listWater.get(0).getSbcj());
+            record.setSm2(listWater.get(0).getSbmc());
+            waterEquiplogMapper.updateBySbbhSelective(record);
             AttrExample attrExample = new AttrExample();
             attrExample.createCriteria().andAttrcodeEqualTo("reqinterval");
             List<Attr> list = attrMapper.selectByExample(attrExample);
