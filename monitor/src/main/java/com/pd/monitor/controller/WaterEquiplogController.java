@@ -29,8 +29,22 @@ public class WaterEquiplogController extends BaseWxController {
     @Resource
     private WaterEquiplogService waterEquiplogService;
 
-    @Resource
-    private WaterEquipmentService waterEquipmentService;
+    @PostMapping("/getWaterState")
+    public ResponseDto getWaterState(@RequestBody WaterEquiplogDto equiplogDto){
+        ResponseDto responseDto = new ResponseDto();
+        LoginUserDto loginUserDto = getRequestHeader();
+        WaterEquiplogExample example = new WaterEquiplogExample();
+        WaterEquiplogExample.Criteria ca = example.createCriteria();
+        if(!StringUtils.isEmpty(equiplogDto.getXmbh())){
+            if(!CollectionUtils.isEmpty(loginUserDto.getXmbhsbsns().get(equiplogDto.getXmbh()))){
+                ca.andSbbhIn(loginUserDto.getXmbhsbsns().get(equiplogDto.getXmbh()));
+            }
+        }
+        List<WaterEquiplog> waterlist = waterEquiplogService.list(example);
+        List<WaterEquiplogDto> waterEquiplogList = CopyUtil.copyList(waterlist, WaterEquiplogDto.class);
+        responseDto.setContent(waterEquiplogList);
+        return responseDto;
+    }
 
     /**
     * 列表查询
