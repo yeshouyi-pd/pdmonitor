@@ -142,7 +142,7 @@
   import Times from "../../components/times";
   export default {
     components: {Pagination,Times},
-    name: "monitor-dlbData",
+    name: "power-dlbData",
     data: function() {
       return {
         dlbDataDto:{},
@@ -202,7 +202,7 @@
         Loading.show();
         _this.dlbDataDto.page = page;
         _this.dlbDataDto.size = _this.$refs.pagination.size;
-        _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/dlbDataSec/list', _this.dlbDataDto).then((response)=>{
+        _this.$ajax.post(process.env.VUE_APP_SERVER + '/power/admin/dlbDataSec/list', _this.dlbDataDto).then((response)=>{
           Loading.hide();
           let resp = response.data;
           _this.dlbDatas = resp.content.list;

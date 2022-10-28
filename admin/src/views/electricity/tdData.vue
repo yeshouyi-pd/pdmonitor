@@ -165,7 +165,7 @@
   import Times from "../../components/times";
   export default {
     components: {Pagination,Times},
-    name: "monitor-tdData",
+    name: "power-tdData",
     data: function() {
       return {
         tdDataDto: {},
@@ -225,7 +225,7 @@
         Loading.show();
         _this.tdDataDto.page = page;
         _this.tdDataDto.size = _this.$refs.pagination.size;
-        _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/tdDataSec/list', _this.tdDataDto).then((response)=>{
+        _this.$ajax.post(process.env.VUE_APP_SERVER + '/power/admin/tdDataSec/list', _this.tdDataDto).then((response)=>{
           Loading.hide();
           let resp = response.data;
           _this.tdDatas = resp.content.list;

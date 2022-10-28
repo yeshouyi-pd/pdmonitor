@@ -116,7 +116,7 @@
   import Pagination from "../../components/pagination";
   export default {
     components: {Pagination},
-    name: "monitor-ldTaskList",
+    name: "power-ldTaskList",
     data: function() {
       return {
         ldTaskListDto: {},
@@ -181,7 +181,7 @@
         Loading.show();
         _this.ldTaskListDto.page = page;
         _this.ldTaskListDto.size = _this.$refs.pagination.size;
-        _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/ldTaskListSec/list', _this.ldTaskListDto).then((response)=>{
+        _this.$ajax.post(process.env.VUE_APP_SERVER + '/power/admin/ldTaskListSec/list', _this.ldTaskListDto).then((response)=>{
           Loading.hide();
           let resp = response.data;
           _this.ldTaskLists = resp.content.list;
@@ -204,7 +204,7 @@
           return;
         }
         Loading.show();
-        _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/ldTaskListSec/save', _this.ldTaskList).then((response)=>{
+        _this.$ajax.post(process.env.VUE_APP_SERVER + '/power/admin/ldTaskListSec/save', _this.ldTaskList).then((response)=>{
           setTimeout(function (){
             Loading.hide();
             let resp = response.data;

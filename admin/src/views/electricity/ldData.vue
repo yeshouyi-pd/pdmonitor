@@ -129,7 +129,7 @@
   import Pagination from "../../components/pagination";
   export default {
     components: {Pagination},
-    name: "monitor-ldData",
+    name: "power-ldData",
     data: function() {
       return {
       ldData: {},
@@ -141,7 +141,7 @@
       _this.$refs.pagination.size = 10;
       _this.list(1);
       // sidebar激活样式方法一
-      // this.$parent.activeSidebar("monitor-ldData-sidebar");
+      // this.$parent.activeSidebar("power-ldData-sidebar");
 
     },
     methods: {
@@ -169,7 +169,7 @@
       list(page) {
         let _this = this;
         Loading.show();
-        _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/ldData/list', {
+        _this.$ajax.post(process.env.VUE_APP_SERVER + '/power/admin/ldData/list', {
           page: page,
           size: _this.$refs.pagination.size,
         }).then((response)=>{
@@ -201,7 +201,7 @@
         }
 
         Loading.show();
-        _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/ldData/save', _this.ldData).then((response)=>{
+        _this.$ajax.post(process.env.VUE_APP_SERVER + '/power/admin/ldData/save', _this.ldData).then((response)=>{
           Loading.hide();
           let resp = response.data;
           if (resp.success) {
@@ -221,7 +221,7 @@
         let _this = this;
         Confirm.show("删除后不可恢复，确认删除？", function () {
           Loading.show();
-          _this.$ajax.delete(process.env.VUE_APP_SERVER + '/monitor/admin/ldData/delete/' + id).then((response)=>{
+          _this.$ajax.delete(process.env.VUE_APP_SERVER + '/power/admin/ldData/delete/' + id).then((response)=>{
             Loading.hide();
             let resp = response.data;
             if (resp.success) {
