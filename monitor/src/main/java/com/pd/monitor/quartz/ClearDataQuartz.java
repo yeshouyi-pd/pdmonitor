@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -37,10 +38,10 @@ public class ClearDataQuartz {
             interfaceLogService.delete(entity.getId());
         }
         /**
-         * 清除1个月之前的心跳包数据(water_equiplog表)
+         * 清除1个月之前的心跳包数据(water_equiplog表)改为只保留今天的数据
          */
         WaterEquiplogExample equiplogExample = new WaterEquiplogExample();
-        equiplogExample.createCriteria().andCjsjLessThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getMonthBeforeOrLater(-1),"yyyy-MM-dd"));
+        equiplogExample.createCriteria().andCjsjLessThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(), -1),"yyyy-MM-dd"));
         List<WaterEquiplog> equiplogList = waterEquiplogService.list(equiplogExample);
         for(WaterEquiplog entity : equiplogList){
             waterEquiplogService.delete(entity.getId());
