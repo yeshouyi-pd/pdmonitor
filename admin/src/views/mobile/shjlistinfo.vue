@@ -103,12 +103,14 @@ export default {
       equipmentFileEvent:{},
       showBtn:false,
       echartsData:[],
-      title:[]
+      title:[],
+      queryTyep:2,//1 查询本周 2 查询当天
     }
   },
   mounted: function () {
     let _this =this;
     _this.sbbh = SessionStorage.get(MSHJSM);
+    _this.queryTyep=  SessionStorage.get(TODATORWEEK )|| 2 ;
     if(Tool.isEmpty(_this.sbbh)){
       _this.$router.push("/mobile/mindex");
     }
@@ -226,7 +228,7 @@ export default {
     list() {
       let _this = this;
       Loading.show();
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/mobile/list', {sbbh:_this.sbbh}).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/mobile/list', {sbbh:_this.sbbh,sm:_this.queryTyep}).then((response)=>{
         Loading.hide();
         let resp = response.data;
         _this.equipmentFileEvents = resp.content;

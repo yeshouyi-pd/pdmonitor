@@ -120,6 +120,7 @@
                 offLineCount:0,
                 errorCount:0,
                 KvMap:[],
+                BzKvMap:[],
                 shjcount:0,//当后天聚类事件
                 shjbzcount:0,//本周聚类事件
                 KvMapjt:[],
@@ -161,13 +162,15 @@
                   if(_this.shjbzcount < 1){
                     Toast.warning("暂无相关数据")
                   }else{
-                    SessionStorage.set(MSHJMAP,_this.KvMap);
+                    SessionStorage.set(MSHJMAP,_this.BzKvMap);
+                    SessionStorage.set(TODATORWEEK,1);//本周
                     _this.$router.push("/mobile/shjlist");
                   }
                 }else if(tyep == 2){
                   if(_this.shjcount < 1){
                     Toast.warning("暂无相关数据")
                   }else{
+                    SessionStorage.set(TODATORWEEK,2);//当天
                     SessionStorage.set(MSHJMAP,_this.KvMap);
                     _this.$router.push("/mobile/shjlist");
                   }
@@ -212,10 +215,10 @@
           let _this = this;
           _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/mobile/getBzEquipmentEventByDept').then((res)=>{
             let response = res.data;
-            _this.KvMap = response.content;
-            if(!Tool.isEmpty(_this.KvMap)){
+            _this.BzKvMap = response.content;
+            if(!Tool.isEmpty(_this.BzKvMap)){
               let count =0;
-              for(let key of _this.KvMap){
+              for(let key of _this.BzKvMap){
                 count = count +key.value;
               }
               _this.shjbzcount = count;
