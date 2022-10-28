@@ -47,53 +47,43 @@
           <b>数据信息提醒</b>
         </span>
             </div>
+
+
             <div class="space-6"></div>
-            <div class="row">
-                <div class="col-xs-6 col-sm-6">
-                    <div class="center">
-            <span class="btn btn-app  btn-primary  no-hover" style="margin: 1px ; width: 95%">
-              <table style="width: 100%">
-                <tr>
-                  <td style="width: 20%">
-                    <div class="grid3">
-                      <img style="width: 30px;height: 30px;margin-left: 2px" src="../../../public/static/image/s.png">
-
-                    </div>
-
-                  </td>
-                  <td style="width: 80%">
-                              <span  v-on:click="toshjlist()" class="line-height-1 bigger-200"> {{shjcount}} </span>
-                    <br/>
-                    <span class="line-height-1 smaller-75"> 聚类事件次数 </span>
-                  </td>
-                </tr>
-              </table>
+          <div class="row">
+            <div class="col-xs-4 col-sm-4 center">
+              <div class="center">
+						<span class="btn btn-app  btn-primary no-hover" style="margin: 1px;width: 93%">
+                <span class="line-height-0 white">本周</span>
+             <span  v-on:click="toshjlist(1)" class="line-height-1 bigger-200"> {{shjbzcount}} </span>
+                      <br/>
+              <span class="line-height-1 smaller-60">聚类事件次数 </span>
             </span>
-                    </div>
-                </div>
-                <div class="col-xs-6 col-sm-6">
-                    <div class="center">
-            <span class="btn btn-app  btn-pink no-hover" style="margin: 1px ; width: 95%">
-              <table style="width: 100%">
-                <tr>
-                  <td style="width: 20%">
-                   <div class="grid3">
-                      <img style="width: 30px;height: 30px;margin-left: 2px" src="../../../public/static/image/t.png">
-
-                    </div>
-                  </td>
-                  <td style="width: 80%">
-                       <span  v-on:click="tojtlist()" class="line-height-1 bigger-200"> {{jtcount}} </span>
-
-                    <br/>
-                    <span class="line-height-1 smaller-75">声学侦测次数</span>
-                  </td>
-                </tr>
-              </table>
-            </span>
-                    </div>
-                </div>
+              </div>
             </div>
+
+            <div class="col-xs-4 col-sm-4 center">
+              <div class="center">
+						<span class="btn btn-app  btn-purple no-hover" style="margin: 1px;width: 93%">
+                 <span class="line-height-0 white">今日</span>
+              <span  v-on:click="toshjlist(2)" class="line-height-1 bigger-200"> {{shjcount}} </span>
+                      <br/>
+              <span class="line-height-1 smaller-60">聚类事件次数 </span>
+            </span>
+              </div>
+            </div>
+
+            <div class="col-xs-4 col-sm-4 center">
+              <div class="center">
+            <span class="btn btn-app  btn-pink  no-hover" style="margin: 1px ;width: 93%">
+                     <span  v-on:click="tojtlist()" class="line-height-1 bigger-200"> {{jtcount}} </span>
+                     <br/>
+                     <span class="line-height-1 smaller-60"> 声学侦测次数 </span>
+            </span>
+              </div>
+            </div>
+          </div>
+
             <div class="space-6"></div>
             <div>
         <span class="label label-primary arrowed-in-right label-lg">
@@ -130,7 +120,9 @@
                 offLineCount:0,
                 errorCount:0,
                 KvMap:[],
-                shjcount:0,
+                BzKvMap:[],
+                shjcount:0,//当后天聚类事件
+                shjbzcount:0,//本周聚类事件
                 KvMapjt:[],
                 jtcount:0,
 
@@ -142,8 +134,10 @@
             if (!_this.hasResourceRouter(_this.$route.name)) {
                 _this.$router.push("/login");
             }
-            _this.getEquipmentEventByDept();//聚类事件
+            _this.getEquipmentEventByDept();//今天聚类事件
+            _this.getBzEquipmentEventByDept();//本周聚类事件
             _this.getAlljtByDept();//江豚预警
+
 
             let userInfo = Tool.getLoginUser();
             _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterData/findAll/' + userInfo.deptcode).then((response)=>{
@@ -162,13 +156,26 @@
             _this.findDeviceInfo();
 
         }, methods: {
-            toshjlist (){
+            toshjlist (tyep){
                 let _this = this;
-                if(_this.shjcount < 1){
+                if(tyep == 1){
+                  if(_this.shjbzcount < 1){
                     Toast.warning("暂无相关数据")
-                }else{
+                  }else{
+                    SessionStorage.set(MSHJMAP,_this.BzKvMap);
+                    SessionStorage.set(TODATORWEEK,1);//本周
                     _this.$router.push("/mobile/shjlist");
+                  }
+                }else if(tyep == 2){
+                  if(_this.shjcount < 1){
+                    Toast.warning("暂无相关数据")
+                  }else{
+                    SessionStorage.set(TODATORWEEK,2);//当天
+                    SessionStorage.set(MSHJMAP,_this.KvMap);
+                    _this.$router.push("/mobile/shjlist");
+                  }
                 }
+
             },
 
             tojtlist (){
@@ -183,7 +190,7 @@
 
         
             /**
-             *  welcome 聚类时间
+             *  welcome 聚类事件今天
              */
             getEquipmentEventByDept() {
                 let _this = this;
@@ -196,11 +203,28 @@
                             count = count +key.value;
                         }
                         _this.shjcount = count;
-                        console.log("==="+_this.shjcount)
-                        SessionStorage.set(MSHJMAP,_this.KvMap);
                     }
                 })
             },
+
+
+        /**
+         *  welcome 聚类事件本周
+         */
+        getBzEquipmentEventByDept() {
+          let _this = this;
+          _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/mobile/getBzEquipmentEventByDept').then((res)=>{
+            let response = res.data;
+            _this.BzKvMap = response.content;
+            if(!Tool.isEmpty(_this.BzKvMap)){
+              let count =0;
+              for(let key of _this.BzKvMap){
+                count = count +key.value;
+              }
+              _this.shjbzcount = count;
+            }
+          })
+        },
 
             /**
              *江豚预警

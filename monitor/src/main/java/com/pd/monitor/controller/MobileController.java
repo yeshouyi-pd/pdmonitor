@@ -71,7 +71,7 @@ public class MobileController  extends BaseWxController {
 
 
     /**
-     * equipment_file_event 获取设备聚类事件
+     * equipment_file_event 获取设备聚类事件 今天
      * @return
      */
     @GetMapping("/getEquipmentEventByDept")
@@ -84,7 +84,7 @@ public class MobileController  extends BaseWxController {
                 EquipmentFileEventExample equipmentFileEventExample = new EquipmentFileEventExample();
                 EquipmentFileEventExample.Criteria  ca = equipmentFileEventExample.createCriteria();
                 if(!CollectionUtils.isEmpty(listdept)){
-                  //  ca.andDeptcodeIn(listdept);
+                    ca.andDeptcodeIn(listdept);
                 }
 
                 //统计当天数据
@@ -96,6 +96,38 @@ public class MobileController  extends BaseWxController {
         return responseDto;
 
     }
+    /**
+     * equipment_file_event 获取设备聚类事件 本周
+     * @return
+     */
+    @GetMapping("/getBzEquipmentEventByDept")
+    public ResponseDto getBzEquipmentEventByDept(){
+        ResponseDto responseDto = new ResponseDto();
+        LoginUserDto user   = getRequestHeader();
+        if(null != user){
+            if(!StringUtils.isEmpty(user.getDeptcode())){
+                List<String > listdept   =  getUpdeptcode(user.getDeptcode());
+                EquipmentFileEventExample equipmentFileEventExample = new EquipmentFileEventExample();
+                EquipmentFileEventExample.Criteria  ca = equipmentFileEventExample.createCriteria();
+                if(!CollectionUtils.isEmpty(listdept)){
+                    ca.andDeptcodeIn(listdept);
+                }
+                //获取7天前事件
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(new Date());
+                calendar.add(Calendar.DATE, - 7);
+                Date date = calendar.getTime();
+                //统计当天数据
+                ca.andRqGreaterThanOrEqualTo(DateTools.getFormatDate(date, DateTools.yyyy_MM_dd));
+                List<EventDto>  list   = equipmentFileEventService.getEquipmentEventByDept(equipmentFileEventExample);
+                responseDto.setContent(list);
+            }
+        }
+        return responseDto;
+
+    }
+
+
 
 
     /**
@@ -203,6 +235,8 @@ public class MobileController  extends BaseWxController {
 
     /**
      * 根据设备编号获取聚类信息
+     * sm 1 本周
+     * sm 2 当天
      * @return
      */
     @PostMapping("/list")
@@ -214,6 +248,18 @@ public class MobileController  extends BaseWxController {
                 EquipmentFileEventExample equipmentFileEventExample = new EquipmentFileEventExample();
                 EquipmentFileEventExample.Criteria  ca = equipmentFileEventExample.createCriteria();
                 ca.andSbbhEqualTo(equipmentFileEventDto.getSbbh());
+                Date  date = new Date();
+                //本周
+                if(equipmentFileEventDto.getSm().equals("1")){
+                    //获取7天前事件
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(new Date());
+                    calendar.add(Calendar.DATE, - 7);
+                    date = calendar.getTime();
+                    ca.andRqGreaterThanOrEqualTo(DateTools.getFormatDate(date, DateTools.yyyy_MM_dd));
+                }else{
+                    ca.andRqEqualTo(DateTools.getFormatDate(date, DateTools.yyyy_MM_dd));
+                }
                 equipmentFileEventExample.setOrderByClause("kssj desc");
                 List<EquipmentFileEvent>  list   = equipmentFileEventService.list(equipmentFileEventExample);
                 responseDto.setContent(list);
