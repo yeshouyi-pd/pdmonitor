@@ -60,4 +60,12 @@ public class AttrController extends BaseController {
         RedisConfig.init_attr();//刷新attr缓存
         return responseDto;
     }
+
+    @PostMapping("/findByAttrKey/{attrcode}")
+    public ResponseDto findByAttrKey(@PathVariable String attrcode){
+        ResponseDto responseDto = new ResponseDto();
+        String attrkey = attrService.findByAttrKey(attrcode);
+        responseDto.setContent(attrkey);
+        return responseDto;
+    }
 }
