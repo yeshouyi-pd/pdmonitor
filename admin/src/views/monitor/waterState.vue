@@ -73,17 +73,28 @@
         name: "waterState",
         data: function() {
             return {
-                zcStates:[],
-                ycStates:[],
-                waterEquipmentDto:{},
+              zcStates:[],
+              ycStates:[],
+              waterEquipmentDto:{},
+              restartinterval:10000
             }
         },
         mounted: function() {
           let _this = this;
+          _this.findByAttrKey();
           _this.getWaterState();
           _this.dataRefreh();
         },
         methods: {
+          findByAttrKey(){
+            let _this = this;
+            _this.$ajax.post(process.env.VUE_APP_SERVER + '/system/admin/attr/findByAttrKey/restartinterval').then((response)=>{
+              let resp = response.data;
+              if (resp.success) {
+                _this.restartinterval = resp.content;
+              }
+            })
+          },
           // 定时刷新数据函数
           dataRefreh() {
             let _this = this;
@@ -100,7 +111,7 @@
             let _this = this;
             Loading.show();
             if(!Tool.isEmpty(sbcj)){
-              _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/ldTaskListSec/startEquip/'+sbcj).then((res) => {
+              _this.$ajax.post(process.env.VUE_APP_SERVER + '/power/admin/ldTaskListSec/startEquip/'+sbcj).then((res) => {
                 Loading.hide();
                 let response = res.data;
                 if(response.success){
@@ -118,7 +129,7 @@
             let _this = this;
             Loading.show();
             if(!Tool.isEmpty(sbcj)){
-              _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/ldTaskListSec/restart/'+sbcj).then((res) => {
+              _this.$ajax.post(process.env.VUE_APP_SERVER + '/power/admin/ldTaskListSec/restart/'+sbcj+"/"+_this.restartinterval).then((res) => {
                 Loading.hide();
                 let response = res.data;
                 if(response.success){
@@ -136,7 +147,7 @@
             let _this = this;
             Loading.show();
             if(!Tool.isEmpty(sbcj)){
-              _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/ldTaskListSec/closedEquip/'+sbcj).then((res) => {
+              _this.$ajax.post(process.env.VUE_APP_SERVER + '/power/admin/ldTaskListSec/closedEquip/'+sbcj).then((res) => {
                 Loading.hide();
                 let response = res.data;
                 if(response.success){

@@ -298,11 +298,13 @@
         checkHeightMax:'',
         chooseDeptName:'',
         sblbs:[],
-        defaultShow:true
+        defaultShow:true,
+        restartinterval:10000
       }
     },
     mounted: function() {
       let _this = this;
+      _this.findByAttrKey();
       _this.$refs.pagination.size = 10;
       _this.list(1);
       _this.getDeptTree();
@@ -315,11 +317,20 @@
       _this.checkHeightMax = h*0.8;
     },
     methods: {
+      findByAttrKey(){
+        let _this = this;
+        _this.$ajax.post(process.env.VUE_APP_SERVER + '/system/admin/attr/findByAttrKey/restartinterval').then((response)=>{
+          let resp = response.data;
+          if (resp.success) {
+            _this.restartinterval = resp.content;
+          }
+        })
+      },
       restart(sbcj){
         let _this = this;
         Loading.show();
         if(!Tool.isEmpty(sbcj)){
-          _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/ldTaskListSec/restart/'+sbcj).then((res) => {
+          _this.$ajax.post(process.env.VUE_APP_SERVER + '/power/admin/ldTaskListSec/restart/'+sbcj+"/"+_this._this.restartinterval).then((res) => {
             Loading.hide();
             let response = res.data;
             if(response.success){
