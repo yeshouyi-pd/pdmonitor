@@ -185,7 +185,12 @@ export default {
         _this.myChart.setOption({
           series: [
             {
-              data:list[k]
+              data:list[k],
+              itemStyle:{
+                color:(e)=>{
+                  return _this.domColor(e.dataIndex)
+                }
+              }
             }
           ],
           title: {
@@ -195,6 +200,16 @@ export default {
         });
         k=k+1;
       }, 4000);
+    },
+    domColor(dataIndex){
+      let newAry=[];
+      for(let k=0;k<20;k++){
+        let r = Math.ceil(Math.random()*256);
+        let g = Math.ceil(Math.random()*256);
+        let b = Math.ceil(Math.random()*256);
+        newAry.push(`rgb(${r},${g},${b})`);
+      }
+      return newAry[dataIndex];
     },
     initEcharts(){
       let _this = this;
