@@ -189,8 +189,9 @@ export default {
       });
       let k=1;
       _this.intervalId = setInterval(function () {
-        if(k==list.length){
+        if(k==list.length-1){
           k=list.length-1;
+          clearInterval(_this.intervalId);
           _this.showBtn = true;
         }
         _this.myChart.setOption({
