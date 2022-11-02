@@ -184,7 +184,14 @@ export default {
     loopEchartsData(list,title){
       let _this = this;
       _this.myChart.setOption({
-        series: [{data:list[0]}],
+        series: [{
+          data:list[0],
+          itemStyle:{
+            color:(e)=>{
+              return _this.domColor(e.dataIndex)
+            }
+          }
+        }],
         title: {text: title[0],left:"19%"}
       });
       let k=1;
