@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/welcome")
-public class WelcomeController  extends BaseWxController{
+public class WelcomeController extends BaseWxController{
 
     private static final Logger LOG = LoggerFactory.getLogger(WelcomeController.class);
     public static final String BUSINESS_NAME = "首页";
@@ -44,6 +44,10 @@ public class WelcomeController  extends BaseWxController{
     private EquipmentFileTodayService equipmentFileTodayService;
     @Resource
     private EquipmentTyEventService equipmentTyEventService;
+    @Resource
+    private PointerSecondService pointerSecondService;
+    @Resource
+    private PointerDayService pointerDayService;
 
     /**
      * 大屏 捕食行为
@@ -129,7 +133,7 @@ public class WelcomeController  extends BaseWxController{
     @GetMapping("/getEventData")
     public ResponseDto getEventData() {
         ResponseDto responseDto = new ResponseDto();
-        LoginUserDto user   = getRequestHeader();
+        LoginUserDto user = getRequestHeader();
         if(null != user) {
             if (!StringUtils.isEmpty(user.getDeptcode())) {
                 List<String> listdept = getUpdeptcode(user.getDeptcode());
@@ -139,8 +143,10 @@ public class WelcomeController  extends BaseWxController{
                     ca.andDeptcodeIn(listdept);
                 }
                 ca.andRqEqualTo(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd"));
-                example.setOrderByClause(" kssj desc ");
-                List<EquipmentTyEvent> list = equipmentTyEventService.list(example);
+                List<EquipmentTyEvent> list = equipmentTyEventService.listByDp(example);
+                if(!CollectionUtils.isEmpty(list)){
+                    list = list.stream().sorted(Comparator.comparing(EquipmentTyEvent::getKssj).reversed()).collect(Collectors.toList());
+                }
                 responseDto.setContent(list);
             }
         }
@@ -309,7 +315,78 @@ public class WelcomeController  extends BaseWxController{
         return responseDto;
     }
 
+    @GetMapping("/getDevice")
+    public ResponseDto getDevice() {
+        ResponseDto responseDto = new ResponseDto();
+        WaterEquipmentExample example = new WaterEquipmentExample();
+        WaterEquipmentExample.Criteria ca = example.createCriteria();
+        LoginUserDto user = getRequestHeader();
+        List<String> listdept = getUpdeptcode(user.getDeptcode());
+//        if(!CollectionUtils.isEmpty(listdept)){
+//            ca.andDeptcodeIn(listdept);
+//        }
+        List<WaterEquipment> list = waterEquipmentService.list(example);
+        responseDto.setContent(list);
+        return responseDto;
+    }
 
+    @GetMapping("/getThreeDayTs")
+    public ResponseDto getThreeDayTs(){
+        ResponseDto responseDto = new ResponseDto();
+        EquipmentTyEventExample example = new EquipmentTyEventExample();
+        EquipmentTyEventExample.Criteria ca = example.createCriteria();
+        LoginUserDto user = getRequestHeader();
+        List<String> listdept = getUpdeptcode(user.getDeptcode());
+        if(!CollectionUtils.isEmpty(listdept)){
+            ca.andDeptcodeIn(listdept);
+        }
+        ca.andRqGreaterThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(),-4),"yyyy-MM-dd"));
+        ca.andRqLessThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(),-1),"yyyy-MM-dd"));
+        List<EquipmentTyEvent> list = equipmentTyEventService.listSumTs(example);
+        Map<String,Object> resultMap = new HashMap<>();
+        if(!CollectionUtils.isEmpty(list)){
+            Map<String, List<EquipmentTyEvent>> map = list.stream().collect(Collectors.groupingBy(EquipmentTyEvent::getSbbh));
+            List<String> rqs= list.stream().filter(Objects::nonNull).map(EquipmentTyEvent::getRq).collect(Collectors.toList());
+            resultMap.put("map",map);
+            resultMap.put("rqs",rqs);
+        }
+        responseDto.setContent(resultMap);
+        return responseDto;
+    }
 
+    @PostMapping("/getSwipeData")
+    public ResponseDto getSwipeData(@RequestBody Map<String,String> map){
+        ResponseDto responseDto = new ResponseDto();
+        EquipmentFileTodayExample example = new EquipmentFileTodayExample();
+        EquipmentFileTodayExample.Criteria ca = example.createCriteria();
+        if(!StringUtils.isEmpty(map.get("sbbh"))){
+            ca.andSbbhEqualTo(map.get("sbbh"));
+        }
+        if(!StringUtils.isEmpty(map.get("kssj"))){
+            ca.andCjsjGreaterThanOrEqualTo(DateUtil.toDate(map.get("kssj"),"yyyy-MM-dd HH:mm:ss"));
+        }
+        if(!StringUtils.isEmpty(map.get("jssj"))){
+            ca.andCjsjLessThanOrEqualTo(DateUtil.toDate(map.get("jssj"),"yyyy-MM-dd HH:mm:ss"));
+        }
+        ca.andWjlxEqualTo("1");
+        List<EquipmentFileToday> list = equipmentFileTodayService.listAllDw(example);
+        responseDto.setContent(list);
+        return responseDto;
+    }
 
+    @GetMapping("/getPointerSecond")
+    public ResponseDto getPointerSecond(){
+        ResponseDto responseDto = new ResponseDto();
+        PointerSecond entity = pointerSecondService.selectByDp();
+        responseDto.setContent(entity);
+        return responseDto;
+    }
+
+    @GetMapping("/getPointerDay")
+    public ResponseDto getPointerDay(){
+        ResponseDto responseDto = new ResponseDto();
+        PointerDay entity = pointerDayService.selectByDp();
+        responseDto.setContent(entity);
+        return responseDto;
+    }
 }

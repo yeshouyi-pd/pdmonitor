@@ -27,6 +27,8 @@ public interface PointerDayMapper {
 
     PointerDay selectByPrimaryKey(String id);
 
+    PointerDay selectByDp();
+
     int updateByExampleSelective(@Param("record") PointerDay record, @Param("example") PointerDayExample example);
 
     int updateByExample(@Param("record") PointerDay record, @Param("example") PointerDayExample example);
