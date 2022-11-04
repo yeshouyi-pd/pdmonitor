@@ -59,7 +59,9 @@
 <!--          <div class="imgs">-->
 <!--            <div id="barChart" style="width: 438px ;height: 290px;"></div>-->
 <!--          </div>-->
-          <swiper :list="swiperData" id="ceshi" style="text-align: center;width: 438px ;height: 300px;"></swiper>
+          <div class="imgs" style="width: 438px ;height: 310px;">
+            <swiper :list="swiperData" id="ceshi" style="text-align: center;width: 438px ;height: 290px;"></swiper>
+          </div>
         </div>
       </div>
       <div class="bcenter">
@@ -104,7 +106,7 @@
           </div>
         </div>
         <div class="h37">
-          <div style="height: 100%;display: flex;border-bottom: 1px dashed #fff;padding-bottom: 5px;">
+          <div class="imgs" style="height: 100%;display: flex;padding-bottom: 5px;">
             <div style="width: 50%;height: 100%;position: relative;">
               <div id="gauge1" style="width: 100%;height: 100%;"></div>
               <span
@@ -213,7 +215,12 @@ export default {
   },
   created() {
     let _this = this;
-    _this.getDevice();//获取所有的设备，因为要用到设备的位置
+    //获取所有的设备，因为要用到设备的位置
+    _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getDevice').then((res)=>{
+      let response = res.data;
+      _this.devices = response.content;
+      _this.$forceUpdate();
+    })
     //_this.getAlarmEventStatistics();//左下角出现事件统计图
     _this.getThreeDayTs();//左下角最近三天的总头数
     //_this.getWarningDate();//中间下方，获取各个设备的声学侦测次数和详情
@@ -241,6 +248,8 @@ export default {
         let response = res.data.content;
         if(!Tool.isEmpty(response)){
           _this.gauge1(response.decibelValue);
+        }else{
+          _this.gauge1(115);
         }
       })
     },
@@ -323,7 +332,7 @@ export default {
         if(!Tool.isEmpty(response)){
           _this.gauge2(response.decibelValue);
         }else{
-          _this.gauge2(148);
+          _this.gauge2(130);
         }
       })
     },
@@ -395,15 +404,6 @@ export default {
       chart.setOption(option)
       window.addEventListener('resize', () => {
         chart.resize()
-      })
-    },
-    //获取所有的设备
-    getDevice(){
-      let _this = this;
-      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getDevice').then((res)=>{
-        let response = res.data;
-        _this.devices = response.content;
-        _this.$forceUpdate();
       })
     },
     // 定时刷新数据函数
