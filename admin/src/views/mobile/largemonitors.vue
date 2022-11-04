@@ -59,7 +59,7 @@
 <!--          <div class="imgs">-->
 <!--            <div id="barChart" style="width: 438px ;height: 290px;"></div>-->
 <!--          </div>-->
-          <div class="imgs" style="width: 438px ;height: 310px;">
+          <div class="imgs">
             <swiper :list="swiperData" id="ceshi" style="text-align: center;width: 438px ;height: 290px;"></swiper>
           </div>
         </div>
@@ -99,7 +99,7 @@
 
         </div>
         <div class=" h37">
-          <span>鲸豚出现事件统计图</span>
+          <span>侦测头次统计（以天为单位）</span>
           <div class="imgs">
 <!--            <dv-scroll-board :config="config2"  ref="scrollBoard2"/>-->
             <div id="barChart" style="width: 438px ;height: 320px;"></div>
@@ -500,7 +500,7 @@ export default {
         yAxis: [
           {
             type: 'value',
-            name: '头数',
+            name: '侦测头次',
             axisLine: {
               lineStyle: {
                 color: "rgba(251, 251, 251, 1)"
