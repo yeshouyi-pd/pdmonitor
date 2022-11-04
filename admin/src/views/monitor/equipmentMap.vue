@@ -42,7 +42,6 @@ export default {
   },
   data: function() {
     return {
-      waterDatas:[],
       deptMap:[],
       onLineCount:0,
       offLineCount:0,
@@ -60,15 +59,6 @@ export default {
       resizeEnable: true,
       zoom: 5
     });
-
-    let userInfo = Tool.getLoginUser();
-    _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterData/findAll/' + Tool.getLoginUser().deptcode).then((response)=>{
-      let resp = response.data;
-      if (resp.success) {
-        _this.waterDatas = resp.content;
-        _this.$forceUpdate();
-      }
-    })
     if(Tool.isEmpty(_this.heightMax)){
       let h = document.documentElement.clientHeight || document.body.clientHeight;
       _this.heightMax = h*0.8-20;
