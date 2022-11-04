@@ -31,6 +31,10 @@ public class PointerSecondService {
         return pointerSecondMapper.selectAllSpecial(record);
     }
 
+    public PointerSecond selectByDp(){
+        return pointerSecondMapper.selectByDp();
+    }
+
     /**
     * 列表查询
     */

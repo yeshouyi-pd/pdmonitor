@@ -55,10 +55,11 @@
           </div>
         </div>
         <div class="h37">
-          <span>鲸豚出现事件统计图</span>
-          <div class="imgs">
-            <div id="barChart" style="width: 438px ;height: 290px;"></div>
-          </div>
+<!--          <span>鲸豚出现事件统计图</span>-->
+<!--          <div class="imgs">-->
+<!--            <div id="barChart" style="width: 438px ;height: 290px;"></div>-->
+<!--          </div>-->
+          <swiper :list="swiperData" id="ceshi" style="text-align: center;width: 438px ;height: 300px;"></swiper>
         </div>
       </div>
       <div class="bcenter">
@@ -96,43 +97,49 @@
 
         </div>
         <div class=" h37">
+          <span>鲸豚出现事件统计图</span>
           <div class="imgs">
-            <dv-scroll-board :config="config2"  ref="scrollBoard2"/>
+<!--            <dv-scroll-board :config="config2"  ref="scrollBoard2"/>-->
+            <div id="barChart" style="width: 438px ;height: 320px;"></div>
           </div>
         </div>
         <div class="h37">
-          <span>设备故障率</span>
-          <div class="imgs">
-            <div style="width:100%;height:70%">
-              <div id="ggg" style="width: 438px; height: 203px"></div>
+          <div style="height: 100%;display: flex;border-bottom: 1px dashed #fff;padding-bottom: 5px;">
+            <div style="width: 50%;height: 100%;position: relative;">
+              <div id="gauge1" style="width: 100%;height: 100%;"></div>
+              <span
+                  style="position: absolute;top: 0;left: 50%;transform:translateX(-50%);font-size: 12px;color: #fff;">鱼类指针</span>
+              <div style="position: absolute;left: 0;top: 65%;font-size: 12px;color: #fff;">
+                <div class="flex">
+                  <span style="color: #a4c656;width:30px;display: inline-block;padding: 2px 0;">142</span>
+                  <span>造成鱼体暂时性听力阈值损伤</span>
+                </div>
+                <div class="flex">
+                  <span style="color: #ffc74b;width:30px ;display: inline-block;padding: 2px 0;">153</span>
+                  <span>造成鱼体压力荷尔蒙改变</span>
+                </div>
+                <div class="flex">
+                  <span style="color: #f1843d;width:30px ;display: inline-block;padding: 2px 0;">180</span>
+                  <span>造成鱼体永久性的听力阈值损失</span>
+                </div>
+                <div class="flex">
+                  <span style="color: #ed483b;width:30px ;display: inline-block;padding: 2px 0;">228.9</span>
+                  <span>造成鱼体死亡风险</span>
+                </div>
+              </div>
+
             </div>
-            <div style="width:100%;height:30%;display: flex;">
-              <div style="width:25%;height:100%;display: flex;align-items: center;color: #fff;">
-                <div id="t1" style="width: 55px; height: 87px; padding: 0px; margin: 0px; border-width: 0px;"></div>
-                <div>
-                  <div style="margin-bottom: 10px;">总数</div>
-                  <div style="color: #49C6E5;">{{ zs }}</div>
+            <div style="width: 50%;height: 100%;position: relative;">
+              <div id="gauge2" style="width: 100%;height: 100%;"></div>
+              <span style="position: absolute;top: 0;left: 50%;transform:translateX(-50%);font-size: 12px;color: #fff;">豚类指针</span>
+              <div style="position: absolute;left: 0;top: 65%;font-size: 12px;color: #fff;">
+                <div class="flex">
+                  <span style="color: #ffc74b;width:30px ;display: inline-block;padding: 2px 0;">180</span>
+                  <span class="ellipsis">造成中华白海豚暂时性听力阈值损伤</span>
                 </div>
-              </div>
-              <div style="width:25%;height:100%;display: flex;align-items: center;color: #fff;">
-                <div id="t2" style="width: 55px; height: 87px; padding: 0px; margin: 0px; border-width: 0px;"></div>
-                <div>
-                  <div style="margin-bottom: 10px;">在线</div>
-                  <div style="color: #49C6E5;">{{ zc }}</div>
-                </div>
-              </div>
-              <div style="width:25%;height:100%;display: flex;align-items: center;color: #fff;">
-                <div id="t3" style="width: 55px; height: 87px; padding: 0px; margin: 0px; border-width: 0px;"></div>
-                <div>
-                  <div style="margin-bottom: 10px;">离线</div>
-                  <div style="color: #49C6E5;">{{ lx }}</div>
-                </div>
-              </div>
-              <div style="width:25%;height:100%;display: flex;align-items: center;color: #fff;">
-                <div id="t4" style="width: 55px; height: 87px; padding: 0px; margin: 0px; border-width: 0px;"></div>
-                <div>
-                  <div style="margin-bottom: 10px;">故障</div>
-                  <div style="color: #49C6E5;">{{ gz }}</div>
+                <div class="flex">
+                  <span style="color: #f1843d;width:30px ;display: inline-block;padding: 2px 0;">200</span>
+                  <span>造成中华白海豚永久性的听力阈值损失</span>
                 </div>
               </div>
             </div>
@@ -165,9 +172,10 @@
 </template>
 <script>
 import EquipmentAMap from "../monitor/equipmentAMap";
+import Swiper from "../../components/swipe";
 export default {
   name:'largemonitors',
-  components:{EquipmentAMap},
+  components:{EquipmentAMap,Swiper},
   data: function (){
     return {
       config: {
@@ -175,7 +183,7 @@ export default {
         oddRowBGC: "#1F2C94",
         evenRowBGC: "",
         align: ['center', 'center', 'center', 'center'],
-        header: ['监测点', '设备编号', '声学侦测次数', '操作'],
+        header: ['设备位置', '开始时间', '结束时间', '头数', '声谱图'],
         data: []
       },
       config2: {
@@ -198,17 +206,24 @@ export default {
       srcpic:'',
       heightMax:'',
       LOCAL_ZHBHT:LOCAL_ZHBHT,
-      LOCAL_SSBRL:LOCAL_SSBRL
+      LOCAL_SSBRL:LOCAL_SSBRL,
+      devices:[],
+      swiperData:[]
     }
   },
   created() {
     let _this = this;
-    _this.getAlarmEventStatistics();//左下角出现事件统计图
-    _this.getWarningDate();//中间下方，获取各个设备的声学侦测次数和详情
+    _this.getDevice();//获取所有的设备，因为要用到设备的位置
+    //_this.getAlarmEventStatistics();//左下角出现事件统计图
+    _this.getThreeDayTs();//左下角最近三天的总头数
+    //_this.getWarningDate();//中间下方，获取各个设备的声学侦测次数和详情
     _this.getRightTopData();//右上角获取当日声学侦测次数、事件(群次)、捕食次数
-    _this.getEventData();//右侧中间获取事件数据
-    _this.getDeviceUsed();//右下角设备在线率
+    //_this.getEventData();//右侧中间获取事件数据
+    //_this.getDeviceUsed();//右下角设备在线率
+    _this.getPointerDay();
+    _this.getPointerSecond();
     _this.deptMap = Tool.getDeptUser();
+
   },
   mounted() {
     let _this = this;
@@ -216,9 +231,182 @@ export default {
     _this.heightMax = h*0.6-20;
     // _this.map();
     _this.dataRefreh();
+    _this.getA4AndA2JL();//中间下方，获取A2设备和A4设备聚类
     window.jsmethod = _this.jsmethod;
+    window.getSwipeData = _this.getSwipeData;
   },
   methods: {
+    getPointerSecond(){
+      let _this = this;
+      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getPointerSecond').then((res)=>{
+        let response = res.data.content;
+        if(!Tool.isEmpty(response)){
+          _this.gauge1(response.decibelValue);
+        }
+      })
+    },
+    gauge1(value) {
+      let chart = echarts.init(document.getElementById('gauge1'))
+      let option = {
+        series: [
+          {
+            type: 'gauge',
+            startAngle: 180,
+            endAngle: 0,
+            center: ['50%', '60%'],
+            radius: '75%',
+            min: 100,
+            max: 240,
+            axisLine: {
+              lineStyle: {
+                width: 6,
+                color: [
+                  [0.3, '#327662'],
+                  [0.38, '#F7BA0B'],
+                  [0.57, '#DD7907'],
+                  [0.92, '#fd666d'],
+                  [1, '#701F29']
+                ]
+              }
+            },
+            pointer: {
+              icon: 'path://M2090.36389,615.30999 L2090.36389,615.30999 C2091.48372,615.30999 2092.40383,616.194028 2092.44859,617.312956 L2096.90698,728.755929 C2097.05155,732.369577 2094.2393,735.416212 2090.62566,735.56078 C2090.53845,735.564269 2090.45117,735.566014 2090.36389,735.566014 L2090.36389,735.566014 C2086.74736,735.566014 2083.81557,732.63423 2083.81557,729.017692 C2083.81557,728.930412 2083.81732,728.84314 2083.82081,728.755929 L2088.2792,617.312956 C2088.32396,616.194028 2089.24407,615.30999 2090.36389,615.30999 Z',
+              itemStyle: {
+                color: '#aa0210'
+              }
+            },
+            axisTick: {
+              show: false,
+              length: 12,
+              lineStyle: {
+                color: 'auto',
+                width: 2
+              }
+            },
+            splitLine: {
+              show: false,
+              length: 20,
+              lineStyle: {
+                color: 'auto',
+                width: 5
+              }
+            },
+            axisLabel: {
+              color: '#fff',
+              fontSize: 10,
+              distance: -40
+            },
+            title: {
+              offsetCenter: [0, '-10%'],
+              fontSize: 20
+            },
+            detail: {
+              show: false,
+            },
+            data: [
+              {
+                value: value,
+                name: ''
+              }
+            ]
+          }
+        ]
+      };
+      chart.setOption(option)
+      window.addEventListener('resize', () => {
+        chart.resize()
+      })
+    },
+    getPointerDay(){
+      let _this = this;
+      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getPointerDay').then((res)=>{
+        let response = res.data.content;
+        if(!Tool.isEmpty(response)){
+          _this.gauge2(response.decibelValue);
+        }else{
+          _this.gauge2(148);
+        }
+      })
+    },
+    gauge2(value) {
+      let chart = echarts.init(document.getElementById('gauge2'))
+      let option = {
+        series: [
+          {
+            type: 'gauge',
+            startAngle: 180,
+            endAngle: 0,
+            center: ['50%', '60%'],
+            radius: '75%',
+            min: 120,
+            max: 220,
+            axisLine: {
+              lineStyle: {
+                width: 6,
+                color: [
+                  [0.6, '#327662'],
+                  [0.8, '#F7BA0B'],
+                  [1, '#701F29']
+                ]
+              }
+            },
+            pointer: {
+              icon: 'path://M2090.36389,615.30999 L2090.36389,615.30999 C2091.48372,615.30999 2092.40383,616.194028 2092.44859,617.312956 L2096.90698,728.755929 C2097.05155,732.369577 2094.2393,735.416212 2090.62566,735.56078 C2090.53845,735.564269 2090.45117,735.566014 2090.36389,735.566014 L2090.36389,735.566014 C2086.74736,735.566014 2083.81557,732.63423 2083.81557,729.017692 C2083.81557,728.930412 2083.81732,728.84314 2083.82081,728.755929 L2088.2792,617.312956 C2088.32396,616.194028 2089.24407,615.30999 2090.36389,615.30999 Z',
+              itemStyle: {
+                color: '#aa0210'
+              }
+            },
+            axisTick: {
+              show: false,
+              length: 12,
+              lineStyle: {
+                color: 'auto',
+                width: 2
+              }
+            },
+            splitLine: {
+              show: false,
+              length: 20,
+              lineStyle: {
+                color: 'auto',
+                width: 5
+              }
+            },
+            axisLabel: {
+              color: '#fff',
+              fontSize: 10,
+              distance: -40
+            },
+            title: {
+              offsetCenter: [0, '-10%'],
+              fontSize: 20
+            },
+            detail: {
+              show: false,
+            },
+            data: [
+              {
+                value: value,
+                name: ''
+              }
+            ]
+          }
+        ]
+      };
+      chart.setOption(option)
+      window.addEventListener('resize', () => {
+        chart.resize()
+      })
+    },
+    //获取所有的设备
+    getDevice(){
+      let _this = this;
+      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getDevice').then((res)=>{
+        let response = res.data;
+        _this.devices = response.content;
+        _this.$forceUpdate();
+      })
+    },
     // 定时刷新数据函数
     dataRefreh() {
       let _this = this;
@@ -229,11 +417,15 @@ export default {
       // 计时器为空，操作
       _this.intervalId = setInterval(() => {
         console.log("刷新" + new Date());
-        _this.getAlarmEventStatistics();//左下角出现事件统计图
-        _this.getWarningDate();//中间下方，获取各个设备的声学侦测次数和详情
+        //_this.getAlarmEventStatistics();//左下角出现事件统计图
+        _this.getThreeDayTs();//左下角最近三天的总头数
+        //_this.getWarningDate();//中间下方，获取各个设备的声学侦测次数和详情
+        _this.getA4AndA2JL();//中间下方，获取A2设备和A4设备聚类
         _this.getRightTopData();//右上角获取当日声学侦测次数、事件(群次)、捕食次数
-        _this.getEventData();//右侧中间获取事件数据
-        _this.getDeviceUsed();//右下角设备在线率
+        //_this.getEventData();//右侧中间获取事件数据
+        //_this.getDeviceUsed();//右下角设备在线率
+        _this.getPointerDay();
+        _this.getPointerSecond();
       }, 600000);
     },
     // 停止定时器
@@ -247,6 +439,83 @@ export default {
     },
     toTyDp(){
       window.location.href = "/mobile/largemonitorsTy";
+    },
+    getThreeDayTs(){
+      let _this = this;
+      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getThreeDayTs').then((res)=>{
+        let response = res.data;
+        let contentDatas = response.content;
+        let legendData = [];
+        let seriesData = [];
+        if(contentDatas.map){
+          for(let sbbh in contentDatas.map){
+            legendData.push(sbbh);
+            let infos = contentDatas.map[sbbh];
+            let rqs = contentDatas.rqs;
+            let allData = [];
+            for(let i=0;i<infos.length;i++){
+              let seriesItem = [];
+              let info = infos[i];
+              if(rqs.includes(info.rq)){
+                let index = rqs.findIndex((x) => x == info.rq);
+                rqs.splice(index,1);
+              }
+              seriesItem.push(info.rq,info.ts);
+              allData.push(seriesItem);
+            }
+            for(let k=0;k<rqs.length;k++){
+              let seriesItem = [];
+              seriesItem.push(rqs[k],0);
+              allData.push(seriesItem);
+            }
+            let obj = {
+              name: sbbh,
+              type: 'bar',
+              data: allData
+            }
+            seriesData.push(obj);
+          }
+        }
+        _this.initBarChar(legendData,seriesData);
+      })
+    },
+    initBarChar(legendData,seriesData){
+      let option = {
+        legend: {
+          data: legendData,
+          textStyle: {
+            color: "rgba(251, 251, 251, 1)"
+          }
+        },
+        xAxis: [
+          {
+            type: 'category',
+            name: '日期',
+            axisLine: {
+              lineStyle: {
+                color: "rgba(251, 251, 251, 1)"
+              }
+            }
+          }
+        ],
+        yAxis: [
+          {
+            type: 'value',
+            name: '头数',
+            axisLine: {
+              lineStyle: {
+                color: "rgba(251, 251, 251, 1)"
+              }
+            }
+          }
+        ],
+        series: seriesData
+      };
+      let chart = echarts.init(document.getElementById('barChart'))
+      chart.setOption(option)
+      window.addEventListener('resize', () => {
+        chart.resize()
+      })
     },
     getAlarmEventStatistics(){
       let _this = this;
@@ -337,6 +606,44 @@ export default {
         _this.$refs['scrollBoard'].updateRows(_this.config.data, 0);
       })
     },
+    getA4AndA2JL(){
+      let _this = this;
+      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getEventData').then((res)=>{
+        let response = res.data;
+        let eventDatas = response.content;
+        if(eventDatas && eventDatas.length>0){
+          _this.getSwipeData(eventDatas[0].sbbh,eventDatas[0].kssj,eventDatas[0].jssj);
+        }
+        _this.config.data = []
+        for(let i=0;i<eventDatas.length;i++){
+          let item = eventDatas[i];
+          let arrItem = [_this.optionKVArray(_this.devices,item.sbbh),item.kssj.substring(11),item.jssj.substring(11),item.ts, `<div class="btn-detail" onclick="getSwipeData('${item.sbbh}','${item.kssj}','${item.jssj}')">查看声谱图</div>`];
+          _this.config.data.push(arrItem);
+        }
+        this.$refs['scrollBoard'].updateRows(_this.config.data, 0);
+      })
+    },
+    getSwipeData(sbbh,kssj,jssj){
+      let _this = this;
+      let item = {
+        "sbbh":sbbh,
+        "kssj":kssj,
+        "jssj":jssj
+      }
+      _this.swiperData=[];
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/welcome/getSwipeData',item).then((response)=>{
+        let resp = response.data;
+        let arr = resp.content;
+        for(let i=0;i<arr.length;i++){
+          let obj = {
+            "id":arr[i].id,
+            "imgUrl":arr[i].tplj
+          }
+          _this.swiperData.push(obj);
+          _this.$forceUpdate();
+        }
+      })
+    },
     optionMapKV(object, key) {
       if (!object || !key) {
         return "";
@@ -345,6 +652,19 @@ export default {
         for (let enums in object) {
           if (key === enums) {
             result = object[enums];
+          }
+        }
+        return result;
+      }
+    },
+    optionKVArray(list, key) {
+      if (!list || !key) {
+        return "";
+      } else {
+        let result = "";
+        for (let i = 0; i < list.length; i++) {
+          if (key === list[i]["sbsn"]) {
+            result = list[i]["fzwz"];
           }
         }
         return result;

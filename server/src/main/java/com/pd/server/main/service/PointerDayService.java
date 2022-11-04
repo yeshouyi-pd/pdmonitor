@@ -31,6 +31,10 @@ public class PointerDayService {
         return pointerDayMapper.selectAllSpecial(record);
     }
 
+    public PointerDay selectByDp(){
+        return pointerDayMapper.selectByDp();
+    }
+
     /**
     * 列表查询
     */
