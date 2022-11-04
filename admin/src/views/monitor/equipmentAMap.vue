@@ -73,12 +73,16 @@
                             _this.errorCount++;
                         }
                         let icon = new AMap.Icon({
-                            image: 'https://vdata.amap.com/icons/b18/1/2.png',
-                            size: new AMap.Size(24, 24)
+                            image: '/largemonitors/assets/imgs/zcsb.png',
+                            size: new AMap.Size(29, 29)
                         });
+                        let ycicon = new AMap.Icon({
+                            image: '/largemonitors/assets/imgs/ycsb.png',
+                            size: new AMap.Size(29, 29)
+                        })
                         if("0001"==devices[i].sblb){
                             let marker = new AMap.Marker({
-                                icon: icon,
+                                icon: devices[i].sbzt=='1'?icon:ycicon,
                                 position: devices[i].gps.split(','),
                                 offset: new AMap.Pixel(-12,-12),
                                 zIndex: 101,
