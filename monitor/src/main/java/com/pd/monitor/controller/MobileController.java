@@ -48,10 +48,10 @@ public class MobileController  extends BaseWxController {
      * 水环境数据
      * @return
      */
-    @GetMapping("/getAlljcsjByDept")
-    public ResponseDto getAlljcsjByDept(){
+    @PostMapping("/getAlljcsjByDept")
+    public ResponseDto getAlljcsjByDept(@RequestBody  LoginUserDto user){
         ResponseDto responseDto = new ResponseDto();
-        LoginUserDto user   = getRequestHeader();
+       
         if(null != user){
             if(!StringUtils.isEmpty(user.getDeptcode())){
                List<String > listdept   =  getUpdeptcode(user.getDeptcode());
@@ -74,10 +74,10 @@ public class MobileController  extends BaseWxController {
      * equipment_file_event 获取设备聚类事件 今天
      * @return
      */
-    @GetMapping("/getEquipmentEventByDept")
-    public ResponseDto getEquipmentEventByDept(){
+    @PostMapping("/getEquipmentEventByDept")
+    public ResponseDto getEquipmentEventByDept(@RequestBody  LoginUserDto user){
         ResponseDto responseDto = new ResponseDto();
-        LoginUserDto user   = getRequestHeader();
+       
         if(null != user){
             if(!StringUtils.isEmpty(user.getDeptcode())){
                 List<String > listdept   =  getUpdeptcode(user.getDeptcode());
@@ -100,10 +100,10 @@ public class MobileController  extends BaseWxController {
      * equipment_file_event 获取设备聚类事件 本周
      * @return
      */
-    @GetMapping("/getBzEquipmentEventByDept")
-    public ResponseDto getBzEquipmentEventByDept(){
+    @PostMapping("/getBzEquipmentEventByDept")
+    public ResponseDto getBzEquipmentEventByDept(@RequestBody  LoginUserDto user){
         ResponseDto responseDto = new ResponseDto();
-        LoginUserDto user   = getRequestHeader();
+       
         if(null != user){
             if(!StringUtils.isEmpty(user.getDeptcode())){
                 List<String > listdept   =  getUpdeptcode(user.getDeptcode());
@@ -134,10 +134,10 @@ public class MobileController  extends BaseWxController {
      * 江豚预警
      * @return
      */
-    @GetMapping("/getAlljtByDept")
-    public ResponseDto getAlljtByDept(){
+    @PostMapping("/getAlljtByDept")
+    public ResponseDto getAlljtByDept(@RequestBody  LoginUserDto user){
         ResponseDto responseDto = new ResponseDto();
-        LoginUserDto user   = getRequestHeader();
+       
         if(null != user){
             if(!StringUtils.isEmpty(user.getDeptcode())){
                 List<String > listdept   =  getUpdeptcode(user.getDeptcode());

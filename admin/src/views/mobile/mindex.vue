@@ -194,7 +194,7 @@
              */
             getEquipmentEventByDept() {
                 let _this = this;
-                _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/mobile/getEquipmentEventByDept').then((res)=>{
+                _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/mobile/getEquipmentEventByDept', {deptcode:_this.loginUser.deptcode}).then((res)=>{
                     let response = res.data;
                     _this.KvMap = response.content;
                     if(!Tool.isEmpty(_this.KvMap)){
@@ -213,7 +213,7 @@
          */
         getBzEquipmentEventByDept() {
           let _this = this;
-          _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/mobile/getBzEquipmentEventByDept').then((res)=>{
+          _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/mobile/getBzEquipmentEventByDept', {deptcode:_this.loginUser.deptcode}).then((res)=>{
             let response = res.data;
             _this.BzKvMap = response.content;
             if(!Tool.isEmpty(_this.BzKvMap)){
@@ -231,7 +231,7 @@
              */
             getAlljtByDept() {
                 let _this = this;
-                _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/mobile/getAlljtByDept').then((res)=>{
+                _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/mobile/getAlljtByDept', {deptcode:_this.loginUser.deptcode}).then((res)=>{
                     let response = res.data;
                     _this.KvMapjt = response.content;
                     if(!Tool.isEmpty(_this.KvMapjt)){
