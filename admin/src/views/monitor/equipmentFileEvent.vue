@@ -194,31 +194,33 @@ export default {
         }],
         title: {text: title[0],left:"19%"}
       });
-      let k=1;
-      _this.intervalId = setInterval(function () {
-        if(k==list.length-1){
-          k=list.length-1;
-          clearInterval(_this.intervalId);
-          _this.showBtn = true;
-        }
-        _this.myChart.setOption({
-          series: [
-            {
-              data:list[k],
-              itemStyle:{
-                color:(e)=>{
-                  return _this.domColor(e.dataIndex)
+      if(list.length>1){
+        let k=1;
+        _this.intervalId = setInterval(function () {
+          if(k==list.length-1){
+            k=list.length-1;
+            clearInterval(_this.intervalId);
+            _this.showBtn = true;
+          }
+          _this.myChart.setOption({
+            series: [
+              {
+                data:list[k],
+                itemStyle:{
+                  color:(e)=>{
+                    return _this.domColor(e.dataIndex)
+                  }
                 }
               }
+            ],
+            title: {
+              text: title[k],
+              left:"19%"
             }
-          ],
-          title: {
-            text: title[k],
-            left:"19%"
-          }
-        });
-        k=k+1;
-      }, 4000);
+          });
+          k=k+1;
+        }, 4000);
+      }
     },
     domColor(dataIndex){
       let newAry=[];
