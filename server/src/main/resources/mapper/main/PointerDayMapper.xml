@@ -134,6 +134,12 @@
     from pointer_day
     where id = #{id,jdbcType=VARCHAR}
   </select>
+  <select id="selectByDp" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from pointer_day
+    order by cjsj desc limit 1
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from pointer_day
     where id = #{id,jdbcType=VARCHAR}

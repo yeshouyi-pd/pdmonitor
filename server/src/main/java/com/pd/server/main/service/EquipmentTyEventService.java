@@ -36,6 +36,14 @@ public class EquipmentTyEventService {
         return equipmentTyEventMapper.selectByExampleSpecial(record);
     }
 
+    public List<EquipmentTyEvent> listByDp(EquipmentTyEventExample example){
+        return equipmentTyEventMapper.selectByExampleDp(example);
+    }
+
+    public List<EquipmentTyEvent> listSumTs(EquipmentTyEventExample example){
+        return equipmentTyEventMapper.selectByExampleSumTs(example);
+    }
+
     /**
     * 保存，id有值时更新，无值时新增
     */

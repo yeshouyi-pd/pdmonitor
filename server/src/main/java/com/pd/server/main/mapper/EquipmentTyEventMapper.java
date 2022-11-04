@@ -22,6 +22,10 @@ public interface EquipmentTyEventMapper {
 
     List<EquipmentTyEvent> selectByExampleSpecial(@Param("record") EquipmentTyEventDto record);
 
+    List<EquipmentTyEvent> selectByExampleDp(EquipmentTyEventExample example);
+
+    List<EquipmentTyEvent> selectByExampleSumTs(EquipmentTyEventExample example);
+
     EquipmentTyEvent selectByPrimaryKey(String id);
 
     int updateByExampleSelective(@Param("record") EquipmentTyEvent record, @Param("example") EquipmentTyEventExample example);
