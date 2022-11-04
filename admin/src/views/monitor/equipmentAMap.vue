@@ -6,7 +6,7 @@
             <div style="padding:0px 0px 5px 5px;color: #00A7D2;"><i class="fa fa-map-marker" style="color:#B03A5B;padding-right: 10px;"></i>设备故障 {{errorCount}}个</div>
         </div>-->
         <div :style="{height: heightMax + 'px'}">
-            <div id="equipmentamap" style="width:100%;height: 100%"></div>
+            <div id="equipmentamap" style="width:100%;height: 100%" ></div>
         </div>
     </div>
 </template>
@@ -17,6 +17,10 @@
             heightMax: {
                 default: ""
             },
+          mapStyle: {
+            default: "amap://styles/darkblue"
+          },
+
         },
         data: function() {
             return {
@@ -55,7 +59,7 @@
                     center: [114.299945,30.593221],
                     resizeEnable: true,
                     zoom: 5,
-                    mapStyle: "amap://styles/darkblue"
+                    mapStyle: _this.mapStyle
                 });
             },
             findDeviceInfo(){
