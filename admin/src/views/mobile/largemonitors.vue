@@ -134,14 +134,24 @@
             <div style="width: 50%;height: 100%;position: relative;">
               <div id="gauge2" style="width: 100%;height: 100%;"></div>
               <span style="position: absolute;top: 0;left: 50%;transform:translateX(-50%);font-size: 12px;color: #fff;">豚类指针</span>
-              <div style="position: absolute;left: 0;top: 65%;font-size: 12px;color: #fff;">
+              <div style="position: absolute;left: 0;top: 65%;font-size: 12px;color: #fff;" v-if="LOCAL_ZHBHT">
                 <div class="flex">
-                  <span style="color: #ffc74b;width:30px ;display: inline-block;padding: 2px 0;">180</span>
+                  <span style="color: #ffc74b;width:30px ;display: inline-block;padding: 2px 0;">195</span>
                   <span class="ellipsis">造成中华白海豚暂时性听力阈值损伤</span>
                 </div>
                 <div class="flex">
-                  <span style="color: #f1843d;width:30px ;display: inline-block;padding: 2px 0;">200</span>
+                  <span style="color: #f1843d;width:30px ;display: inline-block;padding: 2px 0;">215</span>
                   <span>造成中华白海豚永久性的听力阈值损失</span>
+                </div>
+              </div>
+              <div style="position: absolute;left: 0;top: 65%;font-size: 12px;color: #fff;" v-if="LOCAL_SSBRL">
+                <div class="flex">
+                  <span style="color: #ffc74b;width:30px ;display: inline-block;padding: 2px 0;">180</span>
+                  <span class="ellipsis">造成长江江豚暂时性听力阈值损伤</span>
+                </div>
+                <div class="flex">
+                  <span style="color: #f1843d;width:30px ;display: inline-block;padding: 2px 0;">200</span>
+                  <span>造成长江江豚永久性的听力阈值损失</span>
                 </div>
               </div>
             </div>
@@ -330,10 +340,88 @@ export default {
       _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getPointerDay').then((res)=>{
         let response = res.data.content;
         if(!Tool.isEmpty(response)){
-          _this.gauge2(response.decibelValue);
+          if(_this.LOCAL_SSBRL){
+            _this.gauge2(response.decibelValue);
+          }else{
+            _this.gauge3(response.decibelValue);
+          }
         }else{
-          _this.gauge2(130);
+          if(_this.LOCAL_SSBRL){
+            _this.gauge2(130);
+          }else{
+            _this.gauge3(130);
+          }
         }
+      })
+    },
+    gauge3(value) {
+      let chart = echarts.init(document.getElementById('gauge2'))
+      let option = {
+        series: [
+          {
+            type: 'gauge',
+            startAngle: 180,
+            endAngle: 0,
+            center: ['50%', '60%'],
+            radius: '75%',
+            min: 120,
+            max: 220,
+            axisLine: {
+              lineStyle: {
+                width: 6,
+                color: [
+                  [0.75, '#327662'],
+                  [0.95, '#F7BA0B'],
+                  [1, '#701F29']
+                ]
+              }
+            },
+            pointer: {
+              icon: 'path://M2090.36389,615.30999 L2090.36389,615.30999 C2091.48372,615.30999 2092.40383,616.194028 2092.44859,617.312956 L2096.90698,728.755929 C2097.05155,732.369577 2094.2393,735.416212 2090.62566,735.56078 C2090.53845,735.564269 2090.45117,735.566014 2090.36389,735.566014 L2090.36389,735.566014 C2086.74736,735.566014 2083.81557,732.63423 2083.81557,729.017692 C2083.81557,728.930412 2083.81732,728.84314 2083.82081,728.755929 L2088.2792,617.312956 C2088.32396,616.194028 2089.24407,615.30999 2090.36389,615.30999 Z',
+              itemStyle: {
+                color: '#aa0210'
+              }
+            },
+            axisTick: {
+              show: false,
+              length: 12,
+              lineStyle: {
+                color: 'auto',
+                width: 2
+              }
+            },
+            splitLine: {
+              show: false,
+              length: 20,
+              lineStyle: {
+                color: 'auto',
+                width: 5
+              }
+            },
+            axisLabel: {
+              color: '#fff',
+              fontSize: 10,
+              distance: -40
+            },
+            title: {
+              offsetCenter: [0, '-10%'],
+              fontSize: 20
+            },
+            detail: {
+              show: false,
+            },
+            data: [
+              {
+                value: value,
+                name: ''
+              }
+            ]
+          }
+        ]
+      };
+      chart.setOption(option)
+      window.addEventListener('resize', () => {
+        chart.resize()
       })
     },
     gauge2(value) {
