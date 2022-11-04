@@ -55,7 +55,7 @@
               <div class="center">
 						<span class="btn btn-app  btn-primary no-hover" style="margin: 1px;width: 93%">
                 <span class="line-height-0 white">本周</span>
-             <span  v-on:click="toshjlist(1)" class="line-height-1 bigger-200"> {{shjbzcount}} </span>
+             <span  v-on:click="toshjlist(1)" class="line-height-1 bigger-110"> {{shjbzcount}} </span>
                       <br/>
               <span class="line-height-1 smaller-60">聚类事件次数 </span>
             </span>
@@ -66,7 +66,7 @@
               <div class="center">
 						<span class="btn btn-app  btn-purple no-hover" style="margin: 1px;width: 93%">
                  <span class="line-height-0 white">今日</span>
-              <span  v-on:click="toshjlist(2)" class="line-height-1 bigger-200"> {{shjcount}} </span>
+              <span  v-on:click="toshjlist(2)" class="line-height-1 bigger-110"> {{shjcount}} </span>
                       <br/>
               <span class="line-height-1 smaller-60">聚类事件次数 </span>
             </span>
@@ -76,7 +76,7 @@
             <div class="col-xs-4 col-sm-4 center">
               <div class="center">
             <span class="btn btn-app  btn-pink  no-hover" style="margin: 1px ;width: 93%">
-                     <span  v-on:click="tojtlist()" class="line-height-1 bigger-200"> {{jtcount}} </span>
+                     <span  v-on:click="tojtlist()" class="line-height-1 bigger-110"> {{jtcount}} </span>
                      <br/>
                      <span class="line-height-1 smaller-60"> 声学侦测次数 </span>
             </span>
