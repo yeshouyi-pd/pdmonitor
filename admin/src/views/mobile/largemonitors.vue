@@ -223,7 +223,7 @@ export default {
     _this.getPointerDay();
     _this.getPointerSecond();
     _this.deptMap = Tool.getDeptUser();
-
+    _this.getA4AndA2JL();//中间下方，获取A2设备和A4设备聚类
   },
   mounted() {
     let _this = this;
@@ -231,7 +231,6 @@ export default {
     _this.heightMax = h*0.6-20;
     // _this.map();
     _this.dataRefreh();
-    _this.getA4AndA2JL();//中间下方，获取A2设备和A4设备聚类
     window.jsmethod = _this.jsmethod;
     window.getSwipeData = _this.getSwipeData;
   },
