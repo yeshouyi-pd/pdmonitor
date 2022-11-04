@@ -237,8 +237,13 @@ public class WaterEquipmentController  extends BaseWxController {
     @PostMapping("/findAll")
     public ResponseDto findAll(@RequestBody WaterEquipmentDto waterEquipmentDto) {
         ResponseDto responseDto = new ResponseDto();
-        LoginUserDto user = getRequestHeader();
-        List<String> list = getUpdeptcode(user.getDeptcode());
+        String deptcode = waterEquipmentDto.getDeptcode();
+        LoginUserDto user = new LoginUserDto();
+        if(StringUtils.isEmpty(deptcode)){
+             user = getRequestHeader();
+            deptcode = user.getDeptcode();
+        }
+        List<String> list = getUpdeptcode(deptcode);
         WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
         WaterEquipmentExample.Criteria ca = waterEquipmentExample.createCriteria();
         ca.andGpsIsNotNull();
