@@ -14,14 +14,14 @@
 
               <div class="navbar-header pull-left">
                   <a href="index.html" class="navbar-brand">
-                      <small>
-                          <img style="height: 28px;margin-top: -8px;" src="/static/image/loginButtom.png"/>
-                        中华白海豚种群数量分布定点声学监测平台V1.0
-                      </small>
-<!--                    <small>-->
-<!--                      <img style="height: 28px;margin-top: -8px;" src="/static/image/loginButtom.png"/>-->
-<!--                      水生哺乳类智慧监测管理平台V1.0-->
-<!--                    </small>-->
+                    <small  v-if="LOCAL_ZHBHT">
+                      <img style="height: 28px;margin-top: -8px;" src="/static/image/loginButtom.png"/>
+                      中华白海豚种群数量分布定点声学监测平台V1.0
+                    </small>
+                    <small  v-if="LOCAL_SSBRL">
+                      <img style="height: 28px;margin-top: -8px;" src="/static/image/loginButtom.png"/>
+                      水生哺乳类智慧监测管理平台V1.0
+                    </small>
                   </a>
               </div>
               <div class="navbar-buttons navbar-header pull-right" role="navigation">
@@ -42,13 +42,13 @@
                           </router-link>
                       </li>
 
-<!--                      <li class="light-blue dropdown-modal">-->
-<!--                        <router-link to="/mobile/largemonitorsTy">-->
-<!--                          <a class=" dropdown-toggle" style="cursor: pointer;">-->
-<!--                            <font color="white">返回巡护</font>-->
-<!--                          </a>-->
-<!--                        </router-link>-->
-<!--                      </li>-->
+                      <li v-if="LOCAL_SSBRL" class="light-blue dropdown-modal">
+                        <router-link to="/mobile/largemonitorsTy">
+                          <a class=" dropdown-toggle" style="cursor: pointer;">
+                            <font color="white">返回巡护</font>
+                          </a>
+                        </router-link>
+                      </li>
 
                       <li class="light-blue dropdown-modal" v-on:click="downloadVideo()">
                           <a   class=" dropdown-toggle" style="cursor: pointer;">
@@ -261,7 +261,9 @@
                 showresources :[],//竖向菜单
               oldPwd:'',
               newPwd:'',
-                isRouterAlive:true
+                isRouterAlive:true,
+              LOCAL_ZHBHT:LOCAL_ZHBHT,
+              LOCAL_SSBRL:LOCAL_SSBRL
             }
         },
         provide(){

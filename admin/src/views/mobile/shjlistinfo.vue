@@ -173,19 +173,32 @@ export default {
     loopEchartsData(list,title){
       let _this = this;
       _this.myChart.setOption({
-        series: [{data:list[0]}],
+        series: [{
+          data:list[0],
+          itemStyle:{
+            color:(e)=>{
+              return _this.domColor(e.dataIndex)
+            }
+          }
+        }],
         title: {text: title[0],left:"19%"}
       });
       let k=1;
       _this.intervalId = setInterval(function () {
-        if(k==list.length){
+        if(k==list.length-1){
           k=list.length-1;
+          clearInterval(_this.intervalId);
           _this.showBtn = true;
         }
         _this.myChart.setOption({
           series: [
             {
-              data:list[k]
+              data:list[k],
+              itemStyle:{
+                color:(e)=>{
+                  return _this.domColor(e.dataIndex)
+                }
+              }
             }
           ],
           title: {
@@ -195,6 +208,16 @@ export default {
         });
         k=k+1;
       }, 4000);
+    },
+    domColor(dataIndex){
+      let newAry=[];
+      for(let k=0;k<20;k++){
+        let r = Math.ceil(Math.random()*256);
+        let g = Math.ceil(Math.random()*256);
+        let b = Math.ceil(Math.random()*256);
+        newAry.push(`rgb(${r},${g},${b})`);
+      }
+      return newAry[dataIndex];
     },
     initEcharts(){
       let _this = this;

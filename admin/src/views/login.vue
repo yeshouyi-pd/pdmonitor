@@ -1,18 +1,18 @@
 <template>
     <div :style="'height: '+maxHeight+'px'">
       <div v-if="!isMobileflag" class="main-content" style="width: 100%;height: 100vh;background-image: url('/static/image/loginbg.jpg');background-size: 100% 100%;">
-        <div class="center" style="margin-top: 7%;margin-bottom: 4%">
+        <div v-if="LOCAL_ZHBHT" class="center" style="margin-top: 7%;margin-bottom: 4%">
           <span :style="'font-size:'+fontsize+'px'">
           <p>广东省中华白海豚国家重要湿地
           <p>中华白海豚种群数量分布定点声学监测项目</p>
           </span>
         </div>
-<!--        <div class="center" style="margin-top: 7%;margin-bottom: 7%">-->
-<!--          <span :style="'font-size:'+fontsize+'px;margin-left:30%;'">-->
-<!--            <img :style="'height:'+imgsize+'px;margin-top: -8px;margin-right:10px;'" src="/static/PRCD10.png"/>-->
-<!--            <span>水生哺乳类智慧监测管理平台V1.0</span>-->
-<!--          </span>-->
-<!--        </div>-->
+        <div v-if="LOCAL_SSBRL" class="center" style="margin-top: 7%;margin-bottom: 7%">
+          <span :style="'font-size:'+fontsize+'px;margin-left:30%;'">
+            <img :style="'height:'+imgsize+'px;margin-top: -8px;margin-right:10px;'" src="/static/PRCD10.png"/>
+            <span>水生哺乳类智慧监测管理平台V1.0</span>
+          </span>
+        </div>
         <div id="login-box1" class="login-box visible widget-box no-border" style="width: 475px;margin-left: 55%;">
           <div class="widget-body">
             <div class="widget-main">
@@ -63,17 +63,19 @@
           </div><!-- /.widget-body -->
         </div><!-- /.login-box -->
         <div style="margin-top: 10%;text-align: center">
-          <img height="40px;" src="/static/image/loginButtom.png"/>
-          <div style="margin-top: 5px;">广东珠江口中华白海豚国家级自然保护区管理局</div>
-<!--          <img height="80px;" src="/static/image/loginButtom1.png"/>-->
+          <div v-if="LOCAL_ZHBHT">
+            <img height="40px;" src="/static/image/loginButtom.png"/>
+            <div style="margin-top: 5px;">广东珠江口中华白海豚国家级自然保护区管理局</div>
+          </div>
+          <img v-if="LOCAL_SSBRL" height="80px;" src="/static/image/loginButtom1.png"/>
         </div>
       </div>
       <div v-if="isMobileflag" class="main-content" style="width: 100%;height: 100%;background-image: url('/static/image/loginbg.jpg');background-size: 100% 100%;">
         <div class="center" style="margin-top: 15%">
         <span :style="'font-size:'+fontsize+'px'">
-          <p>广东省中华白海豚国家重要湿地
-          <p>中华白海豚种群数量分布定点声学监测项目</p>
-<!--          <span>水生哺乳类智慧监测管理平台V1.0</span>-->
+          <p v-if="LOCAL_ZHBHT">广东省中华白海豚国家重要湿地
+          <p v-if="LOCAL_ZHBHT">中华白海豚种群数量分布定点声学监测项目</p>
+          <span v-if="LOCAL_SSBRL">水生哺乳类智慧监测管理平台V1.0</span>
         </span>
         </div>
         <div id="login-box" class="login-box visible widget-box no-border" style="margin-top: 20%;">
@@ -126,11 +128,13 @@
           </div><!-- /.widget-body -->
         </div><!-- /.login-box -->
         <div style="margin-top: 10%;text-align: center">
-                  <img  v-if="!isMobileflag" height="40px;" src="/static/image/loginButtom.png"/>
-                  <div>广东珠江口中华白海豚国家级自然保护区管理局</div>
-<!--          <div   class="position-relative-gs">-->
-<!--            <img height="40px;" src="/static/image/loginButtom1.png" style="margin-top: 15%;"/>-->
-<!--          </div>-->
+          <div v-if="LOCAL_ZHBHT">
+            <img  v-if="!isMobileflag" height="40px;" src="/static/image/loginButtom.png"/>
+            <div>广东珠江口中华白海豚国家级自然保护区管理局</div>
+          </div>
+          <div v-if="LOCAL_SSBRL" class="position-relative-gs">
+            <img height="40px;" src="/static/image/loginButtom1.png" style="margin-top: 15%;"/>
+          </div>
         </div>
       </div>
     </div>
@@ -152,7 +156,9 @@
               marginleft:'60%',
               margin:70,
               margintop:'8%',
-              maxHeight:''
+              maxHeight:'',
+              LOCAL_ZHBHT:LOCAL_ZHBHT,
+              LOCAL_SSBRL:LOCAL_SSBRL
             }
         },
         mounted:function(){//mounted初始化方法
