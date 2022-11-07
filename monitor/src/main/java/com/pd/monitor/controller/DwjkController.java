@@ -228,7 +228,7 @@ public class DwjkController extends BaseWxController {
                 fileCa.andSbbhEqualTo(qqcs.get("sbsn").toString());
                 fileCa.andCjsjGreaterThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getMinutesLater(new Date(),-5),"yyyy-MM-dd HH:mm:ss"),"%Y-%m-%d %H:%i:%s");
                 fileCa.andCjsjLessThanOrEqualTo(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd HH:mm:ss"),"%Y-%m-%d %H:%i:%s");
-                List<EquipmentFileToday> equipmentFiles = equipmentFileTodayService.listAll(fileTodayExample);
+                List<EquipmentFileToday> equipmentFiles = equipmentFileTodayService.listAllDw(fileTodayExample);
                 List<EquipmentFileDwjkDto> equipmentFilesDto = CopyUtil.copyList(equipmentFiles, EquipmentFileDwjkDto.class);
                 responseDto.setCode("0000");
                 responseDto.setContent(equipmentFilesDto);
@@ -539,4 +539,6 @@ public class DwjkController extends BaseWxController {
         }
         return responseDto;
     }
+
+
 }

@@ -320,8 +320,8 @@ public class WelcomeController extends BaseWxController{
         ResponseDto responseDto = new ResponseDto();
         WaterEquipmentExample example = new WaterEquipmentExample();
         WaterEquipmentExample.Criteria ca = example.createCriteria();
-        LoginUserDto user = getRequestHeader();
-        List<String> listdept = getUpdeptcode(user.getDeptcode());
+//        LoginUserDto user = getRequestHeader();
+//        List<String> listdept = getUpdeptcode(user.getDeptcode());
 //        if(!CollectionUtils.isEmpty(listdept)){
 //            ca.andDeptcodeIn(listdept);
 //        }
