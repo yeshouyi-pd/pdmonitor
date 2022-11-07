@@ -131,7 +131,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
             }
             AttrService attrService = SpringUtil.getBean(AttrService.class);
             String predationsbsn = attrService.findByAttrKey("predationsbsn");
-            if(predationsbsn.contains(sbbh)&&tplj.contains("txt")&&!"5".equals(typeUtil.get(TypeUtils.WJLX))&&!"6".equals(typeUtil.get(TypeUtils.WJLX))){
+            if(predationsbsn.contains(sbbh)&&tplj.contains("txt")&&("1001".equals(typeUtil.get(TypeUtils.TYPE))||"1007".equals(typeUtil.get(TypeUtils.TYPE)))){
                 //RedisTemplate redisTemplate = SpringUtil.getBean(RedisTemplate.class);
                 //判断是否是雾报(前后三分钟都没有报警的数据是雾报数据，雾报数据不保存)
                 EquipmentFile beforeEntity = new EquipmentFile();

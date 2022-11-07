@@ -220,6 +220,8 @@ export default {
           });
           k=k+1;
         }, 4000);
+      }else{
+        _this.showBtn = true;
       }
     },
     domColor(dataIndex){
