@@ -116,10 +116,9 @@ public class EquipmentFileService {
         return equipmentFileMapper.getWarningDate(equipmentFileExample);
     }
 
-    public List<EquipmentFileDto> getthisDeptjxsjJT(EquipmentFileExample equipmentFileExample) {
-        List<EquipmentFile> list  = equipmentFileMapper.getthisDeptjxsjJT(equipmentFileExample);
-        List<EquipmentFileDto> equipmentFileDtoList = CopyUtil.copyList(list , EquipmentFileDto.class);
-        return equipmentFileDtoList;
+    public List<EquipmentMainDto> getthisDeptjxsjJT(EquipmentFileExample equipmentFileExample) {
+        List<EquipmentMainDto> list  = equipmentFileMapper.getthisDeptjxsjJT(equipmentFileExample);
+        return list;
     }
 
     public List<EquipmentFile> listBylimit(EquipmentFileExample equipmentFileExample) {
