@@ -171,6 +171,7 @@
 import Viewer from 'viewerjs';
 import 'viewerjs/dist/viewer.css';
 import Aplayer from 'vue-aplayer'
+
 export default {
   components: {Aplayer},
   name: "jtlistinfo",
