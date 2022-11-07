@@ -29,7 +29,7 @@
 
                 <tbody>
                 <template v-for="(entity,index)  in equipmentFileEvents"  >
-                <tr >
+                <tr v-on:click="showEcharts(entity)">
                   <td class="center">{{ index +1 }}</td>
                   <td>{{entity.sbbh}}</td>
                   <td>{{entity.kssj}} </td>

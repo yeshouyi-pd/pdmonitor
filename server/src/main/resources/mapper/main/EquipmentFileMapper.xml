@@ -39,6 +39,21 @@
     <result column="code" jdbcType="VARCHAR" property="code" />
   </resultMap>
 
+  <resultMap id="getthisDeptjxsjJT" type="com.pd.server.main.dto.EquipmentMainDto">
+    <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
+    <result column="sbmc" jdbcType="VARCHAR" property="sbmc" />
+     <collection property="list" ofType="com.pd.server.main.dto.EquipmentMainListDto">
+       <id column="id" property="id"/>
+       <result column="deptcode" jdbcType="VARCHAR" property="deptcode" />
+       <result column="cjsj" jdbcType="TIMESTAMP" property="cjsj" />
+       <result column="tplj" jdbcType="VARCHAR" property="tplj" />
+       <association property="playDto" javaType="com.pd.server.main.dto.PlayDtoWav" resultMap="playDtomap"></association>
+     </collection>
+  </resultMap>
+  <resultMap type="com.pd.server.main.dto.PlayDtoWav" id="playDtomap">
+    <result column="tplj" jdbcType="VARCHAR"  property="src"/>
+  </resultMap>
+
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -646,20 +661,50 @@
     limit 100
   </select>
 
-  <select id="getthisDeptjxsjJT" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultMap="BaseResultMap">
-    SELECT  b. * , a. sbmc   FROM  water_equipment a, (
-    select * from equipment_file_today
+  <select id="getthisDeptjxsjJT" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultMap="getthisDeptjxsjJT">
+    SELECT
+    b.id,
+    b.cjsj,
+    b.tplj,
+    b.sbbh,
+    b.deptcode,
+    a.sbmc
+    FROM
+    water_equipment a,
+    (SELECT
+    *
+    FROM
+    equipment_file_today
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
-    AND  TO_DAYS(cjsj) = TO_DAYS(NOW()) and  txtlx='1' ) b WHERE a.sbsn = b.sbbh
-    union all
-    SELECT  d. * , c. sbmc   FROM  water_equipment c, (
-    select * from equipment_file_ty_today
+    AND TO_DAYS(cjsj) = TO_DAYS(NOW())
+    AND txtlx = '1') b
+    WHERE a.sbsn = b.sbbh
+    UNION
+    ALL
+    SELECT
+    d.id,
+    d.cjsj,
+    d.tplj,
+    d.sbbh,
+    d.deptcode,
+    c.sbmc
+    FROM
+    water_equipment c,
+    (SELECT
+    *
+    FROM
+    equipment_file_ty_today
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
-    AND  TO_DAYS(cjsj) = TO_DAYS(NOW()) and  txtlx='1' ) d WHERE c.sbsn = d.sbbh order by cjsj
+    AND TO_DAYS(cjsj) = TO_DAYS(NOW())
+    AND txtlx = '1') d
+    WHERE c.sbsn = d.sbbh
+    ORDER BY cjsj  DESC
+
+
 
   </select>
 
