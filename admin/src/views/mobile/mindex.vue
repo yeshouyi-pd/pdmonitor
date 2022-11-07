@@ -9,7 +9,7 @@
             </div>
             <div class="space-6"></div>
           <div class="row">
-            <div class="col-xs-4 col-sm-4 center">
+            <div class="col-xs-4 col-sm-4 center" v-on:click="toshjlist(1)" >
               <div class="center">
 						<span class="btn btn-app  btn-primary no-hover" style="margin: 1px;width: 93%">
 
@@ -22,7 +22,7 @@
               </div>
             </div>
 
-            <div class="col-xs-4 col-sm-4 center">
+            <div class="col-xs-4 col-sm-4 center" v-on:click="toshjlist(2)">
               <div class="center">
 						<span class="btn btn-app  btn-purple no-hover" style="margin: 1px;width: 93%">
 
@@ -35,7 +35,7 @@
               </div>
             </div>
 
-            <div class="col-xs-4 col-sm-4 center">
+            <div class="col-xs-4 col-sm-4 center" v-on:click="tojtlist()">
               <div class="center">
             <span class="btn btn-app  btn-success no-hover" style="margin: 1px ;width: 93%">
                      <span  v-on:click="tojtlist()" class="line-height-1 bigger-180"> {{jtcount}} </span>
