@@ -31,8 +31,8 @@ public class Ys7TokenController {
      * 获取萤石云token
      * @return
      */
-    @GetMapping("/getLatestDate")
-    public ResponseDto getLatestDate() {
+    @GetMapping("/getYcToken")
+    public ResponseDto getYcToken() {
         ResponseDto responseDto = new ResponseDto();
         String token_ys = "";
         if(StringUtils.isBlank(Ys7Utils.YS_TOKEN)){
