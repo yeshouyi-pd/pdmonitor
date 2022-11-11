@@ -31,17 +31,18 @@ public class EquipmentTyEventController extends BaseWxController {
     @Resource
     private EquipmentTyEventService equipmentTyEventService;
 
-    @GetMapping("/getTodayEvent")
-    public ResponseDto getTodayEvent(){
+    @GetMapping("/getTodayEvent/{sbbh}")
+    public ResponseDto getTodayEvent(@PathVariable String sbbh){
         ResponseDto responseDto = new ResponseDto();
-        LoginUserDto userDto = getRequestHeader();
-        List<String> depts = getUpdeptcode(userDto.getDeptcode());
+//        LoginUserDto userDto = getRequestHeader();
+//        List<String> depts = getUpdeptcode(userDto.getDeptcode());
         EquipmentTyEventExample example = new EquipmentTyEventExample();
         EquipmentTyEventExample.Criteria ca = example.createCriteria();
         ca.andRqEqualTo(DateUtils.getDateToStrFormat(new Date(),"yyyy-MM-dd"));
-        if(!CollectionUtils.isEmpty(depts)){
-            ca.andDeptcodeIn(depts);
-        }
+//        if(!CollectionUtils.isEmpty(depts)){
+//            ca.andDeptcodeIn(depts);
+//        }
+        ca.andSbbhEqualTo(sbbh);
         example.setOrderByClause(" kssj desc ");
         List<EquipmentTyEvent> lists = equipmentTyEventService.list(example);
         responseDto.setContent(lists);

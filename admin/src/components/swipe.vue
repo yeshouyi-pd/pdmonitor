@@ -2,7 +2,7 @@
   <div class="swiper-container" :id="id">
     <div class="swiper-wrapper" style="height: 300px" v-if="LOCAL_SSBRL">
       <div class="swiper-slide" v-for="Carousel in list">
-        <img :src="Carousel.imgUrl" width="300px" height="280px"/>
+        <img :src="Carousel.imgUrl" width="300px" height="290px"/>
       </div>
     </div>
     <div class="swiper-wrapper" style="height: 300px" v-if="LOCAL_ZHBHT">

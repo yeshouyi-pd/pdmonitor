@@ -400,7 +400,7 @@ public class WaterEquipmentController  extends BaseWxController {
     public ResponseDto getTyEquipment(){
         ResponseDto responseDto = new ResponseDto();
         WaterEquipmentExample example = new WaterEquipmentExample();
-        example.createCriteria().andSbsnLike("TY%");
+        example.createCriteria().andDqzlEqualTo("A2");
         List<WaterEquipment> list = waterEquipmentService.list(example);
         responseDto.setContent(list);
         return responseDto;

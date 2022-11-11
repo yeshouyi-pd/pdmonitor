@@ -39,16 +39,17 @@ public class EquipmentFileTyTodayController extends BaseWxController {
     @Resource
     private EquipmentFileTyService equipmentFileTyService;
 
-    @GetMapping("/getDataStatistics")
-    public ResponseDto getDataStatistics(){
+    @GetMapping("/getDataStatistics/{sbbh}")
+    public ResponseDto getDataStatistics(@PathVariable String sbbh){
         ResponseDto responseDto = new ResponseDto();
-        LoginUserDto userDto = getRequestHeader();
-        List<String> depts = getUpdeptcode(userDto.getDeptcode());
+//        LoginUserDto userDto = getRequestHeader();
+//        List<String> depts = getUpdeptcode(userDto.getDeptcode());
         EquipmentFileTyTodayExample example = new EquipmentFileTyTodayExample();
         EquipmentFileTyTodayExample.Criteria ca = example.createCriteria();
-        if(!CollectionUtils.isEmpty(depts)){
-            ca.andDeptcodeIn(depts);
-        }
+//        if(!CollectionUtils.isEmpty(depts)){
+//            ca.andDeptcodeIn(depts);
+//        }
+        ca.andSbbhEqualTo(sbbh);
         ca.andWjlxEqualTo("3");
         TyDataDto dto = equipmentFileTyTodayService.selectTyData(example);
         responseDto.setContent(dto);
