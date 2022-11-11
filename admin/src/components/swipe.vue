@@ -29,30 +29,37 @@ export default {
   watch: {
     list: {
       immediate: true,
-      handler() {
+      handler(newVal,oldVal) {
         this.$nextTick(() => {
           if(this.mySwiper){
             this.mySwiper.destroy(true,false)
           }
           if(this.LOCAL_ZHBHT){
-            if(this.list.length>0){
-              let firstTplj = this.list[0].imgUrl;
+            if(newVal.length>0){
+              let firstTplj =newVal[0].imgUrl;
               this.curSrc = firstTplj.substring(0,firstTplj.lastIndexOf(".")+1)+"wav";
-              document.getElementById(this.list[0].id).innerHTML='<video autoplay controls width="300px" height="20px" style="margin-top: 10px;">\n' +
-                  '          <source src="'+this.curSrc+'"  type="video/webm">\n' +
-                  '          您的浏览器不支持 HTML5 video 标签。\n' +
-                  '        </video>';
-            }
-            this.mySwiper = new Swiper('#'+this.id,{
-              autoplay : 5000,//可选选项，自动滑动
-              loop : true,//可选选项，开启循环
-              onSlideChangeStart: function(swiper){
-                let tplj = this.list[swiper.activeIndex].imgUrl;
-                this.curSrc = tplj.substring(0,tplj.lastIndexOf(".")+1)+"wav";
-                document.getElementById(this.list[swiper.activeIndex].id).innerHTML='<video autoplay controls width="300px" height="20px" style="margin-top: 10px;">\n' +
+              if(document.getElementById(newVal[0].id)){
+                document.getElementById(newVal[0].id).innerHTML='<video autoplay controls width="300px" height="20px" style="margin-top: 10px;">\n' +
                     '          <source src="'+this.curSrc+'"  type="video/webm">\n' +
                     '          您的浏览器不支持 HTML5 video 标签。\n' +
                     '        </video>';
+              }
+            }
+            this.mySwiper = new Swiper('#'+this.id,{
+              autoplay : 5000,//可选选项，自动滑动
+              loop : false,//可选选项，开启循环
+              observer:true,
+              onSlideChangeStart: function(swiper){
+                if(newVal[swiper.activeIndex]){
+                  let tplj = newVal[swiper.activeIndex].imgUrl;
+                  this.curSrc = tplj.substring(0,tplj.lastIndexOf(".")+1)+"wav";
+                  if(document.getElementById(newVal[swiper.activeIndex].id)){
+                    document.getElementById(newVal[swiper.activeIndex].id).innerHTML='<video autoplay controls width="300px" height="20px" style="margin-top: 10px;">\n' +
+                        '          <source src="'+this.curSrc+'"  type="video/webm">\n' +
+                        '          您的浏览器不支持 HTML5 video 标签。\n' +
+                        '        </video>';
+                  }
+                }
               }.bind(this)
             })
           }

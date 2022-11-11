@@ -63,7 +63,9 @@ export default {
       markers:[],
       maxHeight:'',
       maxWidth:'',
-      amap:''
+      amap:'',
+      zhbht:LOCAL_ZHBHT,
+      ssbrl:LOCAL_SSBRL
     }
   },
   created() {
@@ -148,7 +150,7 @@ export default {
       })
     },
     initMap(){
-      // let _this = this;
+      // let _this = this;113.333132,23.114138
       // //初始化地图对象
       // _this.map=new TMap("mapDiv");
       // //设置显示地图的中心点和级别
@@ -158,10 +160,19 @@ export default {
       // //允许鼠标滚轮缩放地图
       // _this.map.enableHandleMouseScroll();
       let _this = this;
-      _this.amap = new AMap.Map('mapDiv', {
-        resizeEnable: true,
-        zoom: _this.zoom
-      });
+      if(_this.ssbrl){
+        _this.amap = new AMap.Map('mapDiv', {
+          resizeEnable: true,
+          zoom: _this.zoom
+        });
+      }
+      if(_this.zhbht){
+        _this.amap = new AMap.Map('mapDiv', {
+          resizeEnable: true,
+          center:[113.333132,23.114138],
+          zoom: _this.zoom
+        });
+      }
     },
     initMapMarkers(){
       let _this = this;

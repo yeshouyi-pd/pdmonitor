@@ -2,13 +2,12 @@ package com.pd.monitor.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.pd.server.main.domain.EquipmentFileEvent;
-import com.pd.server.main.domain.EquipmentFileEventExample;
-import com.pd.server.main.domain.EquipmentTyEvent;
+import com.pd.server.main.domain.*;
 import com.pd.server.main.dto.EquipmentFileEventDto;
 import com.pd.server.main.dto.PageDto;
 import com.pd.server.main.dto.ResponseDto;
 import com.pd.server.main.service.EquipmentFileEventService;
+import com.pd.server.main.service.EquipmentFileService;
 import com.pd.server.util.CopyUtil;
 import com.pd.server.util.ValidatorUtil;
 import org.slf4j.Logger;
@@ -29,6 +28,27 @@ public class EquipmentFileEventController {
 
     @Resource
     private EquipmentFileEventService equipmentFileEventService;
+    @Resource
+    private EquipmentFileService equipmentFileService;
+
+    @PostMapping("/videoList")
+    public ResponseDto vedioList(@RequestBody EquipmentFileEventDto pageDto){
+        ResponseDto responseDto = new ResponseDto();
+        EquipmentFileEvent fileEvent = equipmentFileEventService.selectByPrimaryKey(pageDto.getId());
+        List<EquipmentFile> result = new ArrayList<>();
+        if(!StringUtils.isEmpty(fileEvent.getEquipmentFileId())){
+            EquipmentFile equipmentFile = equipmentFileService.selectByPrimaryKey(fileEvent.getEquipmentFileId());
+            if(equipmentFile!=null && !StringUtils.isEmpty(equipmentFile.getWjmc())){
+                EquipmentFileExample example = new EquipmentFileExample();
+                EquipmentFileExample.Criteria ca = example.createCriteria();
+                ca.andWjmcEqualTo(equipmentFile.getWjmc());
+                ca.andWjlxEqualTo("4");
+                result = equipmentFileService.listAll(example);
+            }
+        }
+        responseDto.setContent(result);
+        return responseDto;
+    }
 
     /**
     * 列表查询

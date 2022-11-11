@@ -47,7 +47,7 @@
           <th>开始时间</th>
           <th>结束时间</th>
           <th>头数</th>
-          <th style="width: 12%;">操作</th>
+          <th style="width: 18%;">操作</th>
         </tr>
         </thead>
         <tbody>
@@ -63,8 +63,11 @@
               <button v-on:click="showEcharts(item)" class="btn btn-xs btn-info" style="margin-left: 10px;">
                 <i class="fa-solid fa fa-list bigger-120">雷达图</i>
               </button>
-              <button v-on:click="downloadVedio(item.id)" class="btn btn-xs btn-info" style="margin-left: 10px;">
+              <button v-on:click="downloadVideo(item.id)" class="btn btn-xs btn-info" style="margin-left: 10px;">
                 <i class="ace-icon fa fa-volume-down bigger-120">下载视频</i>
+              </button>
+              <button v-if="zhbht" v-on:click="watchVideo(item.id)" class="btn btn-xs btn-info" style="margin-left: 10px;">
+                <i class="ace-icon fa  fa-video-camera bigger-120">历史回放</i>
               </button>
             </div>
           </td>
@@ -99,6 +102,29 @@
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
+
+    <div id="video-modal" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content" style="width: 750px">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">雷达图</h4>
+          </div>
+          <div class="modal-body" :style="'height: '+videoHeight+'px;overflow-y: auto'">
+            <video controls preload="auto" width="700px" height="360px" autoplay="autoplay" v-for="item in videos">
+              <source :src="item.tplj" type="video/mp4">
+              <p class="vjs-no-js"> To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a> </p>
+            </video>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-white btn-default btn-round" data-dismiss="modal">
+              <i class="ace-icon fa fa-times"></i>
+              关闭
+            </button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
   </div>
 </template>
 <script>
@@ -119,7 +145,10 @@ export default {
       intervalId:'',
       showBtn:false,
       echartsData:[],
-      title:[]
+      title:[],
+      videos:[],
+      videoHeight:400,
+      zhbht:LOCAL_ZHBHT
     }
   },
   mounted() {
@@ -143,6 +172,27 @@ export default {
     });
   },
   methods: {
+    //历史回放
+    watchVideo(id){
+      let _this = this;
+      _this.videos = [];
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileEvent/videoList', {'id':id}).then((response)=>{
+        Loading.hide();
+        let resp = response.data;
+        _this.videos = resp.content;
+        _this.$forceUpdate();
+        if(_this.videos.length>0){
+          if(_this.videos.length>=2){
+            _this.videoHeight = '761';
+          }else{
+            _this.videoHeight = '400';
+          }
+          $("#video-modal").modal("show");
+        }else{
+          Toast.error("未找到对应视频！");
+        }
+      })
+    },
     //重新播放雷达图
     reloadLdt(){
       let _this = this;
@@ -313,7 +363,7 @@ export default {
       console.log(url);
       window.location.href = url;
     },
-    downloadVedio(id){
+    downloadVideo(id){
       let _this = this;
       let url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downZipByA4Id?id='+id;
       _this.$ajax.get(url).then((response)=>{
