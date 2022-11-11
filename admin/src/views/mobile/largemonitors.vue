@@ -16,42 +16,42 @@
       <div class="pain">
         <div class="h25">
           <div class="imgs">
-<!--            <video width="100%" height="100%" poster="/largemonitors/assets/imgs/video.png">-->
-<!--              <source src="movie.mp4" type="video/mp4">-->
-<!--              <source src="movie.ogg" type="video/ogg">-->
-<!--              <source src="movie.webm" type="video/webm">-->
-<!--              <object data="movie.mp4">-->
-<!--                <embed src="movie.swf">-->
-<!--              </object>-->
-<!--            </video>-->
             <video width="100%" height="100%" autoplay="autoplay" loop="loop">
               <source class="video" title="主监控位" src="/video/12.mp4"/>
             </video>
           </div>
         </div>
         <div class="h37">
-          <div class="imgs">
+          <div class="imgs" v-if="LOCAL_SSBRL">
             <div style="height: 50%;">
               <video width="100%" height="100%" poster="/largemonitors/assets/imgs/video.png">
                 <source src="movie.mp4" type="video/mp4">
-                <source src="movie.ogg" type="video/ogg">
-                <source src="movie.webm" type="video/webm">
-                <object data="movie.mp4">
-                  <embed src="movie.swf">
-                </object>
               </video>
             </div>
             <div style="height: 50%;">
               <video width="100%" height="100%" poster="/largemonitors/assets/imgs/video.png">
                 <source src="movie.mp4" type="video/mp4">
-                <source src="movie.ogg" type="video/ogg">
-                <source src="movie.webm" type="video/webm">
-                <object data="movie.mp4">
-                  <embed src="movie.swf">
-                </object>
               </video>
             </div>
-
+          </div>
+          <div class="imgs" v-if="LOCAL_ZHBHT&&videoData.length>0">
+            <div  v-for="item in videoData">
+              <video width="440px" :height="videoHeight+'px'" controls preload="auto" autoplay="autoplay" >
+                <source :src="item.tplj" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="imgs" v-if="LOCAL_ZHBHT&&videoData.length<=0">
+            <div style="height: 50%;">
+              <video width="100%" height="100%" poster="/largemonitors/assets/imgs/video.png">
+                <source src="movie.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div style="height: 50%;">
+              <video width="100%" height="100%" poster="/largemonitors/assets/imgs/video.png">
+                <source src="movie.mp4" type="video/mp4">
+              </video>
+            </div>
           </div>
         </div>
         <div class="h37">
@@ -220,7 +220,9 @@ export default {
       LOCAL_ZHBHT:LOCAL_ZHBHT,
       LOCAL_SSBRL:LOCAL_SSBRL,
       devices:[],
-      swiperData:[]
+      swiperData:[],
+      videoData:[],
+      videoHeight:140
     }
   },
   created() {
@@ -250,6 +252,7 @@ export default {
     _this.dataRefreh();
     window.jsmethod = _this.jsmethod;
     window.getSwipeData = _this.getSwipeData;
+    window.getVideoData = _this.getVideoData;
   },
   methods: {
     getPointerSecond(){
@@ -700,6 +703,7 @@ export default {
         let eventDatas = response.content;
         if(eventDatas && eventDatas.length>0){
           _this.getSwipeData(eventDatas[0].sbbh,eventDatas[0].kssj,eventDatas[0].jssj);
+          _this.getVideoData(eventDatas[0].sbbh,eventDatas[0].kssj,eventDatas[0].jssj);
         }
         _this.config.data = []
         for(let i=0;i<eventDatas.length;i++){
@@ -712,23 +716,45 @@ export default {
     },
     getSwipeData(sbbh,kssj,jssj){
       let _this = this;
+      _this.getVideoData(sbbh,kssj,jssj)
       let item = {
         "sbbh":sbbh,
         "kssj":kssj,
         "jssj":jssj
       }
-      _this.swiperData=[];
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/welcome/getSwipeData',item).then((response)=>{
         let resp = response.data;
         let arr = resp.content;
+        let temp = [];
         for(let i=0;i<arr.length;i++){
           let obj = {
             "id":arr[i].id,
             "imgUrl":arr[i].tplj
           }
-          _this.swiperData.push(obj);
+          temp.push(obj);
           _this.$forceUpdate();
         }
+        _this.swiperData=$.extend([], temp);
+        _this.$forceUpdate();
+      })
+    },
+    getVideoData(sbbh,kssj,jssj){
+      let _this = this;
+      let item = {
+        "sbbh":sbbh,
+        "kssj":kssj,
+        "jssj":jssj
+      }
+      _this.videoData=[];
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/welcome/getVideoData',item).then((response)=>{
+        let resp = response.data;
+        _this.videoData = resp.content;
+        if(_this.videoData.length<2){
+          _this.videoHeight = 280;
+        }else{
+          _this.videoHeight = 140;
+        }
+        _this.$forceUpdate();
       })
     },
     optionMapKV(object, key) {

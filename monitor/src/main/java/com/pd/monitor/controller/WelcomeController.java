@@ -374,6 +374,26 @@ public class WelcomeController extends BaseWxController{
         return responseDto;
     }
 
+    @PostMapping("/getVideoData")
+    public ResponseDto getVideoData(@RequestBody Map<String,String> map){
+        ResponseDto responseDto = new ResponseDto();
+        EquipmentFileTodayExample example = new EquipmentFileTodayExample();
+        EquipmentFileTodayExample.Criteria ca = example.createCriteria();
+        if(!StringUtils.isEmpty(map.get("sbbh"))){
+            ca.andSbbhEqualTo(map.get("sbbh"));
+        }
+        if(!StringUtils.isEmpty(map.get("kssj"))){
+            ca.andCjsjGreaterThanOrEqualTo(DateUtil.toDate(map.get("kssj"),"yyyy-MM-dd HH:mm:ss"));
+        }
+        if(!StringUtils.isEmpty(map.get("jssj"))){
+            ca.andCjsjLessThanOrEqualTo(DateUtil.toDate(map.get("jssj"),"yyyy-MM-dd HH:mm:ss"));
+        }
+        ca.andWjlxEqualTo("4");
+        List<EquipmentFileToday> list = equipmentFileTodayService.listAllDw(example);
+        responseDto.setContent(list);
+        return responseDto;
+    }
+
     @GetMapping("/getPointerSecond")
     public ResponseDto getPointerSecond(){
         ResponseDto responseDto = new ResponseDto();
