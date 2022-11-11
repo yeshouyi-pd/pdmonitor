@@ -118,12 +118,11 @@ export default {
     let _this = this;
     _this.curDateStr = Tool.dateFormat("yyyy-MM-dd");
     _this.getEquipmentByTy();
-    _this.getTopData();
-    _this.getTodayEvent();
   },
   mounted() {
     let _this = this;
     _this.initMap();
+    _this.openSocket();
   },
   methods: {
     toDp(){
@@ -156,28 +155,30 @@ export default {
             Toast.success(msg.data);
           }else{
             let data = JSON.parse(msg.data);
-            if(data.wjlx=='3'){
-              _this.topData.cxcs++;
-              if(data.type=='1009'||data.type=='1007'){
-                _this.topData.bscs++;
-              }
-              if(data.type=='1012'){
-                _this.topData.jlcs++;
-                let wjmc = data.tplj.substring(data.tplj.lastIndexOf("/")+1,data.tplj.lastIndexOf("_A2.txt"));
-                let kssj = wjmc.substring(0,4)+"-"+wjmc.substring(5,7)+"-"+wjmc.substring(8,10)+" "+wjmc.substring(11,13)+":"+wjmc.substring(14,16)+":"+wjmc.substring(17,19);
-                let jssj = wjmc.substring(20,24)+"-"+wjmc.substring(25,27)+"-"+wjmc.substring(28,30)+" "+wjmc.substring(31,33)+":"+wjmc.substring(34,36)+":"+wjmc.substring(37,39);
-                let ts = wjmc.substring(40)==0?1:wjmc.substring(40);
-                let item = {
-                  "kssj":kssj,
-                  "jssj":jssj,
-                  "ts":ts
+            if(_this.curSbsn==data.sbbh){
+              if(data.wjlx=='3'){
+                _this.topData.cxcs++;
+                if(data.type=='1009'||data.type=='1007'){
+                  _this.topData.bscs++;
                 }
-                _this.eventData.unshift(item);
-                _this.addMarker(data.sm2,ts);
-              }
-              if(!Tool.isEmpty(data.ts)){
-                if(_this.topData.ts==0 || _this.topData.ts<Number(data.ts)){
-                  _this.topData.ts = Number(data.ts);
+                if(data.type=='1012'){
+                  _this.topData.jlcs++;
+                  let wjmc = data.tplj.substring(data.tplj.lastIndexOf("/")+1,data.tplj.lastIndexOf("_A2.txt"));
+                  let kssj = wjmc.substring(0,4)+"-"+wjmc.substring(5,7)+"-"+wjmc.substring(8,10)+" "+wjmc.substring(11,13)+":"+wjmc.substring(14,16)+":"+wjmc.substring(17,19);
+                  let jssj = wjmc.substring(20,24)+"-"+wjmc.substring(25,27)+"-"+wjmc.substring(28,30)+" "+wjmc.substring(31,33)+":"+wjmc.substring(34,36)+":"+wjmc.substring(37,39);
+                  let ts = wjmc.substring(40)==0?1:wjmc.substring(40);
+                  let item = {
+                    "kssj":kssj,
+                    "jssj":jssj,
+                    "ts":ts
+                  }
+                  _this.eventData.unshift(item);
+                  _this.addMarker(data.sm2,ts);
+                }
+                if(!Tool.isEmpty(data.ts)){
+                  if(_this.topData.ts==0 || _this.topData.ts<Number(data.ts)){
+                    _this.topData.ts = Number(data.ts);
+                  }
                 }
               }
             }
@@ -197,7 +198,7 @@ export default {
     getTopData(){
       let _this = this;
       Loading.show();
-      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileTyToday/getDataStatistics').then((response)=>{
+      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileTyToday/getDataStatistics/'+_this.curSbsn).then((response)=>{
         Loading.hide();
         let resp = response.data;
         _this.topData = resp.content;
@@ -213,17 +214,17 @@ export default {
         if(Tool.isEmpty(_this.topData.ts)){
           _this.topData.ts=0;
         }
-        _this.openSocket();
       })
     },
     //获取当天聚类事件
     getTodayEvent(){
       let _this = this;
       Loading.show();
-      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentTyEvent/getTodayEvent').then((response)=>{
+      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentTyEvent/getTodayEvent/'+_this.curSbsn).then((response)=>{
         Loading.hide();
         let resp = response.data;
-        _this.eventData = resp.content;
+        _this.eventData = resp.content!=null?resp.content:[];
+        _this.$forceUpdate();
       })
     },
     //获取拖曳设备
@@ -246,6 +247,8 @@ export default {
     },
     getGpsBySbsn(){
       let _this = this;
+      _this.getTopData();
+      _this.getTodayEvent();
       _this.amap.clearMap();
       let obj = {
         "rq":_this.curDateStr,

@@ -45,6 +45,10 @@ public class LoginAdminGatewayFilter implements GatewayFilter, Ordered {
                 || path.contains("/monitor/admin/waterEquipment/findAll")
                 || path.contains("/monitor/admin/equipmentFileAlarmEvent/echartsAlarmDataByDp")
                 || path.contains("/system/admin/user/loginDw")
+                || path.contains("/monitor/admin/waterEquipment/getTyEquipment")
+                || path.contains("/monitor/admin/equipmentFileTyToday/selectTodayGps")
+                || path.contains("/monitor/admin/equipmentTyEvent/getTodayEvent")
+                || path.contains("/monitor/admin/equipmentFileTyToday/getDataStatistics")
         ){
             LOG.info("不需要控台登录验证：{}", path);
             return chain.filter(exchange);
