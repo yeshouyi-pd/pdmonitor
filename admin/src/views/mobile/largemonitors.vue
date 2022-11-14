@@ -274,7 +274,7 @@ export default {
             type: 'gauge',
             startAngle: 180,
             endAngle: 0,
-            center: ['50%', '60%'],
+            center: ['50%', '45%'],
             radius: '75%',
             min: 100,
             max: 240,
@@ -322,7 +322,11 @@ export default {
               fontSize: 20
             },
             detail: {
-              show: false,
+              show: true,
+              formatter: "{value}dB",
+              fontSize: 14,
+              fontWeight: "normal",
+              color: '#fff'
             },
             data: [
               {
@@ -365,7 +369,7 @@ export default {
             type: 'gauge',
             startAngle: 180,
             endAngle: 0,
-            center: ['50%', '60%'],
+            center: ['50%', '45%'],
             radius: '75%',
             min: 120,
             max: 220,
@@ -411,7 +415,11 @@ export default {
               fontSize: 20
             },
             detail: {
-              show: false,
+              show: true,
+              formatter: "{value}dB",
+              fontSize: 14,
+              fontWeight: "normal",
+              color: '#fff'
             },
             data: [
               {
@@ -435,7 +443,7 @@ export default {
             type: 'gauge',
             startAngle: 180,
             endAngle: 0,
-            center: ['50%', '60%'],
+            center: ['50%', '45%'],
             radius: '75%',
             min: 120,
             max: 220,
@@ -481,7 +489,11 @@ export default {
               fontSize: 20
             },
             detail: {
-              show: false,
+              show: true,
+              formatter: "{value}dB",
+              fontSize: 14,
+              fontWeight: "normal",
+              color: '#fff'
             },
             data: [
               {
@@ -576,6 +588,9 @@ export default {
           textStyle: {
             color: "rgba(251, 251, 251, 1)"
           }
+        },
+        tooltip: {
+          show:true,
         },
         xAxis: [
           {
