@@ -345,8 +345,8 @@ public class WelcomeController extends BaseWxController{
         List<EquipmentTyEvent> list = equipmentTyEventService.listSumTs(example);
         Map<String,Object> resultMap = new HashMap<>();
         if(!CollectionUtils.isEmpty(list)){
-            Map<String, List<EquipmentTyEvent>> map = list.stream().collect(Collectors.groupingBy(EquipmentTyEvent::getSbbh));
-            List<String> rqs= list.stream().filter(Objects::nonNull).map(EquipmentTyEvent::getRq).collect(Collectors.toList());
+            Map<String, List<EquipmentTyEvent>> map = list.stream().sorted(Comparator.comparing(EquipmentTyEvent::getRq)).collect(Collectors.groupingBy(EquipmentTyEvent::getSbbh));
+            List<String> rqs= list.stream().sorted(Comparator.comparing(EquipmentTyEvent::getRq)).filter(Objects::nonNull).map(EquipmentTyEvent::getRq).distinct().collect(Collectors.toList());
             resultMap.put("map",map);
             resultMap.put("rqs",rqs);
         }
