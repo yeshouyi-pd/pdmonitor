@@ -570,6 +570,7 @@ export default {
               seriesItem.push(rqs[k],0);
               allData.push(seriesItem);
             }
+            allData.sort();
             let obj = {
               name: sbbh,
               type: 'bar',
