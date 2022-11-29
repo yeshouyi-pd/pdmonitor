@@ -214,6 +214,49 @@ public class MobileController  extends BaseWxController {
 
 
 
+
+    /**
+     * 获取当前部门当天的设备信息
+     * @return
+     */
+    @PostMapping("/getthisDeptEquipment")
+    public ResponseDto getthisDeptEquipment(@RequestBody EquipmentFileDto equipmentFileDto){
+        ResponseDto responseDto = new ResponseDto();
+
+        if(null != equipmentFileDto){
+            if(!StringUtils.isEmpty(equipmentFileDto.getDeptcode())){
+                EquipmentFileExample equipmentFileExample = new EquipmentFileExample();
+                EquipmentFileExample.Criteria  equipmentFileca = equipmentFileExample.createCriteria();
+                equipmentFileca.andDeptcodeEqualTo(equipmentFileDto.getDeptcode());
+                List<EquipmenInfo>  list   = equipmentFileService.getthisDeptEquipment(equipmentFileExample);
+                responseDto.setContent(list);
+            }
+        }
+        return responseDto;
+    }
+
+
+    /**
+     * 获取当前部门当天的设备信息---具体信息
+     * @return
+     */
+    @PostMapping("/getthisDeptEquipmentinfo")
+    public ResponseDto getthisDeptEquipmentinfo(@RequestBody EquipmentFileDto equipmentFileDto){
+        ResponseDto responseDto = new ResponseDto();
+
+        if(null != equipmentFileDto){
+            if(!StringUtils.isEmpty(equipmentFileDto.getSbbh())){
+                EquipmentFileExample equipmentFileExample = new EquipmentFileExample();
+                EquipmentFileExample.Criteria  equipmentFileca = equipmentFileExample.createCriteria();
+                equipmentFileca.andSbbhEqualTo(equipmentFileDto.getSbbh());
+                List<EquipmentMainListDto>  list   = equipmentFileService.getthisDeptEquipmentinfo(equipmentFileExample);
+                responseDto.setContent(list);
+            }
+        }
+        return responseDto;
+    }
+
+
     /**
      * 根据设备编号获取聚类信息
      * sm 1 本周
