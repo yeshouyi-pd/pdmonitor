@@ -38,6 +38,10 @@
     <result column="text" jdbcType="VARCHAR" property="text" />
     <result column="code" jdbcType="VARCHAR" property="code" />
   </resultMap>
+  <resultMap id="getthisDeptEquipment" type="com.pd.server.main.dto.EquipmenInfo">
+  <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
+  <result column="sbmc" jdbcType="VARCHAR" property="sbmc" />
+  </resultMap>
 
   <resultMap id="getthisDeptjxsjJT" type="com.pd.server.main.dto.EquipmentMainDto">
     <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
@@ -50,6 +54,15 @@
        <association property="playDto" javaType="com.pd.server.main.dto.PlayDtoWav" resultMap="playDtomap"></association>
      </collection>
   </resultMap>
+
+  <resultMap id="getthisDeptEquipmentinfo" type="com.pd.server.main.dto.EquipmentMainListDto">
+    <id column="id" property="id"/>
+    <result column="deptcode" jdbcType="VARCHAR" property="deptcode" />
+    <result column="cjsj" jdbcType="TIMESTAMP" property="cjsj" />
+    <result column="tplj" jdbcType="VARCHAR" property="tplj" />
+    <association property="playDto" javaType="com.pd.server.main.dto.PlayDtoWav" resultMap="playDtomap"></association>
+  </resultMap>
+
   <resultMap type="com.pd.server.main.dto.PlayDtoWav" id="playDtomap">
     <result column="tplj" jdbcType="VARCHAR"  property="src"/>
   </resultMap>
@@ -778,5 +791,47 @@
     <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
+  </select>
+
+  <select id="getthisDeptEquipment" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultMap="getthisDeptEquipment">
+    SELECT DISTINCT  b.sbbh  ,c.sbmc FROM (
+       SELECT DISTINCT   sbbh FROM `equipment_file_today`
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+     AND     TO_DAYS(cjsj) = TO_DAYS(NOW()) AND txtlx = '1'
+    UNION
+       ALL
+        SELECT DISTINCT   sbbh FROM  `equipment_file_ty_today`
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+     AND  TO_DAYS(cjsj) = TO_DAYS(NOW()) AND txtlx = '1' ) b ,water_equipment c WHERE b.sbbh = c.sbsn
+  </select>
+
+
+  <select id="getthisDeptEquipmentinfo" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultMap="getthisDeptEquipmentinfo">
+    SELECT *  FROM (
+    SELECT
+    id,
+    cjsj,
+    tplj,
+    deptcode  FROM `equipment_file_today`
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    AND TO_DAYS(cjsj) = TO_DAYS(NOW()) AND txtlx = '1'
+    UNION
+    ALL
+    SELECT
+    id,
+    cjsj,
+    tplj,
+    deptcode  FROM `equipment_file_ty_today`
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    AND TO_DAYS(cjsj) = TO_DAYS(NOW()) AND txtlx = '1'
+    )  b  ORDER BY cjsj  DESC
   </select>
 </mapper>

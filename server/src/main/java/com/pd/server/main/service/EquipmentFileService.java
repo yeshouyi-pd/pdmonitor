@@ -128,4 +128,14 @@ public class EquipmentFileService {
     public EquipmentFile selectLastOneBySbbh(String sbbh) {
         return equipmentFileMapper.selectLastOneBySbbh(sbbh);
     }
+
+    public List<EquipmenInfo> getthisDeptEquipment(EquipmentFileExample equipmentFileExample) {
+
+        return equipmentFileMapper.getthisDeptEquipment(equipmentFileExample);
+    }
+
+    public List<EquipmentMainListDto> getthisDeptEquipmentinfo(EquipmentFileExample equipmentFileExample) {
+        return equipmentFileMapper.getthisDeptEquipmentinfo(equipmentFileExample);
+
+    }
 }

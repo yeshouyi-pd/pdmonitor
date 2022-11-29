@@ -4,10 +4,7 @@ import com.pd.server.main.domain.EquipmentFile;
 import com.pd.server.main.domain.EquipmentFileExample;
 import java.util.List;
 
-import com.pd.server.main.dto.EquipmentFileDto;
-import com.pd.server.main.dto.EquipmentMainDto;
-import com.pd.server.main.dto.KvIntDto;
-import com.pd.server.main.dto.WelcomeKvDto;
+import com.pd.server.main.dto.*;
 import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
 import org.apache.ibatis.annotations.Param;
 
@@ -66,4 +63,8 @@ public interface EquipmentFileMapper {
     List<EquipmentFile> lists(EquipmentFileExample example);
 
     EquipmentFile selectLastOneBySbbh(String sbbh);
+
+    List<EquipmenInfo> getthisDeptEquipment(EquipmentFileExample equipmentFileExample);
+
+    List<EquipmentMainListDto> getthisDeptEquipmentinfo(EquipmentFileExample equipmentFileExample);
 }
