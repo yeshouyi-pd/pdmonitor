@@ -17,10 +17,13 @@
             heightMax: {
                 default: ""
             },
-          mapStyle: {
-            default: "amap://styles/darkblue"
-          },
-
+            mapStyle: {
+              default: "amap://styles/darkblue"
+            },
+            clickMapPoint:{
+              type: Function,
+              default: null
+            }
         },
         data: function() {
             return {
@@ -28,8 +31,9 @@
                 onLineCount:0,
                 offLineCount:0,
                 errorCount:0,
-                centerLoction:[114.299945,30.593221],
-                amap:''
+                centerLoction:[113.63,22.24],
+                amap:'',
+                zhbht:LOCAL_ZHBHT,
             }
         },
         mounted() {
@@ -41,12 +45,21 @@
         methods:{
             createAmap(){
                 let _this = this;
-                _this.amap = new AMap.Map('equipmentamap', {
+                if(_this.zhbht){
+                  _this.amap = new AMap.Map('equipmentamap', {
+                    center: [113.63,22.24],
+                    resizeEnable: true,
+                    zoom: 12,
+                    // mapStyle: _this.mapStyle
+                  });
+                }else{
+                  _this.amap = new AMap.Map('equipmentamap', {
                     center: [114.299945,30.593221],
                     resizeEnable: true,
                     zoom: 5,
                     mapStyle: _this.mapStyle
-                });
+                  });
+                }
             },
             findDeviceInfo(){
                 let _this = this;
@@ -81,7 +94,7 @@
                             marker.content = [];
                             marker.content.push(devices[i].deptcode);
                             marker.content.push(devices[i].centerCode);
-                            marker.content.push(devices[i].sbmc);
+                            marker.content.push(devices[i].fzwz);
                             marker.content.push(devices[i].sbsn);
                             AMap.event.addListener(marker, 'click', function (e) {
                                 let infoWindow = new AMap.InfoWindow({
@@ -116,7 +129,7 @@
                             marker.content = [];
                             marker.content.push(devices[i].deptcode);
                             marker.content.push(devices[i].centerCode);
-                            marker.content.push(devices[i].sbmc);
+                            marker.content.push(devices[i].fzwz);
                             marker.content.push(devices[i].sbsn);
                             //marker.on('click', _this.markerClick);
                             //鼠标点击marker弹出自定义的信息窗体
@@ -134,6 +147,7 @@
             },
             createInfoWindow(content) {
                 let _this = this;
+                _this.clickMapPoint(content[3]);
                 let info = document.createElement("div");
                 info.className = "custom-info input-card content-window-card";
 

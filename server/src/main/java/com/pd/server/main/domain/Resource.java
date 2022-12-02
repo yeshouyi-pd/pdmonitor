@@ -15,6 +15,12 @@ public class Resource {
 
     private String setbar;
 
+    private String show;
+
+    private String bz;
+
+    private String sm;
+
     public String getId() {
         return id;
     }
@@ -71,6 +77,30 @@ public class Resource {
         this.setbar = setbar;
     }
 
+    public String getShow() {
+        return show;
+    }
+
+    public void setShow(String show) {
+        this.show = show;
+    }
+
+    public String getBz() {
+        return bz;
+    }
+
+    public void setBz(String bz) {
+        this.bz = bz;
+    }
+
+    public String getSm() {
+        return sm;
+    }
+
+    public void setSm(String sm) {
+        this.sm = sm;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -84,6 +114,9 @@ public class Resource {
         sb.append(", parent=").append(parent);
         sb.append(", iocn=").append(iocn);
         sb.append(", setbar=").append(setbar);
+        sb.append(", show=").append(show);
+        sb.append(", bz=").append(bz);
+        sb.append(", sm=").append(sm);
         sb.append("]");
         return sb.toString();
     }

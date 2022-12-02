@@ -1,5 +1,6 @@
 package com.pd.server.main.mapper;
 
+import com.pd.server.main.domain.EquipmentTyEvent;
 import com.pd.server.main.domain.PredationNum;
 import com.pd.server.main.domain.PredationNumExample;
 import java.util.List;
@@ -34,4 +35,6 @@ public interface PredationNumMapper {
     int updateByPrimaryKeySelective(PredationNum record);
 
     int updateByPrimaryKey(PredationNum record);
+
+    List<EquipmentTyEvent> listEventCount(PredationNumExample example);
 }

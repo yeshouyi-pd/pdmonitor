@@ -1,14 +1,20 @@
 package com.pd.system.controller.admin;
 
 import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.pd.server.config.RedisCode;
+import com.pd.server.main.domain.User;
+import com.pd.server.main.domain.UserExample;
 import com.pd.server.main.dto.LoginUserDto;
 import com.pd.server.main.dto.PageDto;
 import com.pd.server.main.dto.ResponseDto;
 import com.pd.server.main.dto.UserDto;
 import com.pd.server.main.service.UserService;
+import com.pd.server.util.CopyUtil;
 import com.pd.server.util.UuidUtil;
 import com.pd.server.util.ValidatorUtil;
+import com.pd.system.controller.conf.BaseController;
 import com.pd.system.controller.conf.RedisConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +34,7 @@ import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/admin/user")
-public class UserController {
+public class UserController extends BaseController {
 
 private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
 public static final String BUSINESS_NAME = "用户";
@@ -65,7 +71,32 @@ public RedisTemplate redisTemplate;
 @PostMapping("/list")
 public ResponseDto list(@RequestBody UserDto userDto) {
    ResponseDto responseDto = new ResponseDto();
-   userService.list(userDto);
+   LoginUserDto loginUserDto = getRequestHeader();
+    PageHelper.startPage(userDto.getPage(), userDto.getSize());
+    UserExample userExample = new UserExample();
+    UserExample.Criteria ca = userExample.createCriteria();
+    if(null != userDto){
+        if(!StringUtils.isEmpty(userDto.getLoginName())){
+            ca.andLoginNameEqualTo(userDto.getLoginName());
+        }
+        if(!StringUtils.isEmpty(userDto.getName())){
+            ca.andNameLike("%"+userDto.getName()+"%");
+        }
+        if(!StringUtils.isEmpty(userDto.getZt())){
+            ca.andZtEqualTo(userDto.getZt());
+        }
+        if(!StringUtils.isEmpty(userDto.getRode())){
+            ca.andRodeEqualTo(userDto.getRode());
+        }
+    }
+    if(!"00000000".equals(loginUserDto.getRode())){
+        ca.andRodeNotEqualTo("00000000");
+    }
+    List<User> userList = userService.list(userExample);
+    PageInfo<User> pageInfo = new PageInfo<>(userList);
+    userDto.setTotal(pageInfo.getTotal());
+    List<UserDto> userDtoList = CopyUtil.copyList(userList, UserDto.class);
+    userDto.setList(userDtoList);
    responseDto.setContent(userDto);
    return responseDto;
 }

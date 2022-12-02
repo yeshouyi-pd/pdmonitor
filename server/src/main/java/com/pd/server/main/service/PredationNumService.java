@@ -1,5 +1,6 @@
 package com.pd.server.main.service;
 
+import com.pd.server.main.domain.EquipmentTyEvent;
 import com.pd.server.main.domain.PredationNum;
 import com.pd.server.main.domain.PredationNumExample;
 import com.pd.server.main.dto.PredationNumDto;
@@ -22,6 +23,10 @@ public class PredationNumService {
 
     @Resource
     private PredationNumMapper predationNumMapper;
+
+    public List<EquipmentTyEvent> listEventCount(PredationNumExample example){
+        return predationNumMapper.listEventCount(example);
+    }
 
     /**
     * 列表查询

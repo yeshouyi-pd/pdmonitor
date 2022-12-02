@@ -27,7 +27,7 @@ public interface PointerSecondMapper {
 
     PointerSecond selectByPrimaryKey(String id);
 
-    PointerSecond selectByDp();
+    PointerSecond selectByDp(PointerSecondExample example);
 
     int updateByExampleSelective(@Param("record") PointerSecond record, @Param("example") PointerSecondExample example);
 

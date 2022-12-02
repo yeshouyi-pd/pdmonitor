@@ -29,7 +29,7 @@ export default {
       let _this = this;
       Loading.show();
       let obj = {
-        "loginName" : "tl",
+        "loginName" : "tc",
         "password" : hex_md5("123456"+KEY)
       }
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/system/admin/user/loginDw', obj).then((response)=>{
@@ -37,7 +37,7 @@ export default {
         let resp = response.data;
         if (resp.success) {
           //Toast.success("保存成功！");
-          resp.content.xmbh = "008";
+          resp.content.xmbh = "005";
           Tool.setLoginUser(resp.content);
           _this.$router.push("/welcome");
           console.log(Tool.getLoginUser());

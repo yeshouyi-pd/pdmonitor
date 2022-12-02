@@ -33,14 +33,8 @@ public class RoleService {
     /**
      * 列表查询
      */
-    public void list(PageDto pageDto) {
-        PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
-        RoleExample roleExample = new RoleExample();
-        List<Role> roleList = roleMapper.selectByExample(roleExample);
-        PageInfo<Role> pageInfo = new PageInfo<>(roleList);
-        pageDto.setTotal(pageInfo.getTotal());
-        List<RoleDto> roleDtoList = CopyUtil.copyList(roleList, RoleDto.class);
-        pageDto.setList(roleDtoList);
+    public List<Role> list(RoleExample roleExample) {
+        return roleMapper.selectByExample(roleExample);
     }
 
     /**

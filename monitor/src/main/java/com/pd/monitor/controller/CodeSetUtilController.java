@@ -1,13 +1,14 @@
 package com.pd.monitor.controller;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.pd.server.config.CodeType;
 import com.pd.server.config.RedisCode;
-import com.pd.server.main.domain.WaterProUserExample;
-import com.pd.server.main.domain.WaterProject;
-import com.pd.server.main.domain.WaterProjectExample;
+import com.pd.server.main.domain.*;
 import com.pd.server.main.dto.*;
 import com.pd.monitor.wx.conf.BaseWxController;
 import com.pd.server.main.service.*;
+import com.pd.server.util.CopyUtil;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,7 +72,14 @@ public class CodeSetUtilController extends BaseWxController {
     @PostMapping("/getAllUser")
     public ResponseDto getAllUser(@RequestBody UserDto userDto) {
         ResponseDto responseDto = new ResponseDto();
-        userService.list(userDto);
+        PageHelper.startPage(userDto.getPage(), userDto.getSize());
+        UserExample userExample = new UserExample();
+        UserExample.Criteria ca = userExample.createCriteria();
+        List<User> userList = userService.list(userExample);
+        PageInfo<User> pageInfo = new PageInfo<>(userList);
+        userDto.setTotal(pageInfo.getTotal());
+        List<UserDto> userDtoList = CopyUtil.copyList(userList, UserDto.class);
+        userDto.setList(userDtoList);
         responseDto.setContent(userDto);
         return responseDto;
     }

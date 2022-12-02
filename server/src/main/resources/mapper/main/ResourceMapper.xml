@@ -9,6 +9,9 @@
     <result column="parent" jdbcType="CHAR" property="parent" />
     <result column="iocn" jdbcType="VARCHAR" property="iocn" />
     <result column="setbar" jdbcType="VARCHAR" property="setbar" />
+    <result column="show" jdbcType="VARCHAR" property="show" />
+    <result column="bz" jdbcType="VARCHAR" property="bz" />
+    <result column="sm" jdbcType="VARCHAR" property="sm" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -69,7 +72,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, `name`, page, request, parent, iocn, setbar
+    id, `name`, page, request, parent, iocn, setbar, `show`, bz, sm
   </sql>
   <select id="selectByExample" parameterType="com.pd.server.main.domain.ResourceExample" resultMap="BaseResultMap">
     select
@@ -104,10 +107,12 @@
   <insert id="insert" parameterType="com.pd.server.main.domain.Resource">
     insert into resource (id, `name`, page, 
       request, parent, iocn, 
-      setbar)
+      setbar, `show`, bz, sm
+      )
     values (#{id,jdbcType=CHAR}, #{name,jdbcType=VARCHAR}, #{page,jdbcType=VARCHAR}, 
       #{request,jdbcType=VARCHAR}, #{parent,jdbcType=CHAR}, #{iocn,jdbcType=VARCHAR}, 
-      #{setbar,jdbcType=VARCHAR})
+      #{setbar,jdbcType=VARCHAR}, #{show,jdbcType=VARCHAR}, #{bz,jdbcType=VARCHAR}, #{sm,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.pd.server.main.domain.Resource">
     insert into resource
@@ -133,6 +138,15 @@
       <if test="setbar != null">
         setbar,
       </if>
+      <if test="show != null">
+        `show`,
+      </if>
+      <if test="bz != null">
+        bz,
+      </if>
+      <if test="sm != null">
+        sm,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -155,6 +169,15 @@
       </if>
       <if test="setbar != null">
         #{setbar,jdbcType=VARCHAR},
+      </if>
+      <if test="show != null">
+        #{show,jdbcType=VARCHAR},
+      </if>
+      <if test="bz != null">
+        #{bz,jdbcType=VARCHAR},
+      </if>
+      <if test="sm != null">
+        #{sm,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -188,6 +211,15 @@
       <if test="record.setbar != null">
         setbar = #{record.setbar,jdbcType=VARCHAR},
       </if>
+      <if test="record.show != null">
+        `show` = #{record.show,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bz != null">
+        bz = #{record.bz,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sm != null">
+        sm = #{record.sm,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -201,7 +233,10 @@
       request = #{record.request,jdbcType=VARCHAR},
       parent = #{record.parent,jdbcType=CHAR},
       iocn = #{record.iocn,jdbcType=VARCHAR},
-      setbar = #{record.setbar,jdbcType=VARCHAR}
+      setbar = #{record.setbar,jdbcType=VARCHAR},
+      `show` = #{record.show,jdbcType=VARCHAR},
+      bz = #{record.bz,jdbcType=VARCHAR},
+      sm = #{record.sm,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -227,6 +262,15 @@
       <if test="setbar != null">
         setbar = #{setbar,jdbcType=VARCHAR},
       </if>
+      <if test="show != null">
+        `show` = #{show,jdbcType=VARCHAR},
+      </if>
+      <if test="bz != null">
+        bz = #{bz,jdbcType=VARCHAR},
+      </if>
+      <if test="sm != null">
+        sm = #{sm,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=CHAR}
   </update>
@@ -237,7 +281,10 @@
       request = #{request,jdbcType=VARCHAR},
       parent = #{parent,jdbcType=CHAR},
       iocn = #{iocn,jdbcType=VARCHAR},
-      setbar = #{setbar,jdbcType=VARCHAR}
+      setbar = #{setbar,jdbcType=VARCHAR},
+      `show` = #{show,jdbcType=VARCHAR},
+      bz = #{bz,jdbcType=VARCHAR},
+      sm = #{sm,jdbcType=VARCHAR}
     where id = #{id,jdbcType=CHAR}
   </update>
 </mapper>

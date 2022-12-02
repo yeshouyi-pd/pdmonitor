@@ -18,6 +18,8 @@ public class AlarmNumbersDto extends PageDto {
 
     private String xmbh;
 
+    private String type;//大屏所用
+
     public String getSbbh() {
         return sbbh;
     }
@@ -72,5 +74,13 @@ public class AlarmNumbersDto extends PageDto {
 
     public void setXmbh(String xmbh) {
         this.xmbh = xmbh;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

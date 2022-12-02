@@ -261,7 +261,11 @@
                       if(_this.isMobileflag){
                         _this.$router.push("/mobile/mindex")
                       }else{
+                        if(_this.LOCAL_ZHBHT){
+                          _this.$router.push("/mobile/largemonitorsZj")
+                        }else{
                           _this.$router.push("/mobile/largemonitors")
+                        }
                         //_this.$router.push("/admin/chooseProject")
                       }
 

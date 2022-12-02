@@ -768,7 +768,7 @@
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
-    and   TO_DAYS(cjsj) = TO_DAYS(NOW())  AND tplj LIKE '%.txt' AND sbbh not like 'TY%' GROUP BY sbbh ) c  WHERE a.sbsn = c.text AND  a.deptcode = b.deptcode
+    and   TO_DAYS(cjsj) = TO_DAYS(NOW())  AND txtlx = '1' GROUP BY sbbh ) c  WHERE a.sbsn = c.text AND  a.deptcode = b.deptcode
   </select>
   <select id="selectAudioByExample" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultType="java.lang.String">
     select

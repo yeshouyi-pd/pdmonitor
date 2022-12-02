@@ -219,6 +219,19 @@
                     </label>
                   </div>
                 </div>
+                <label class="col-sm-2 control-label">能否下载</label>
+                <div class="col-sm-3">
+                  <div class="radio">
+                    <label>
+                      <input name="form-zt-radio" type="radio"  value="Y" v-model="user.yj" class="ace input-lg" />
+                      <span class="lbl bigger-120">是</span>
+                    </label>
+                    <label>
+                      <input name="form-zt-radio" type="radio"  value="N"  v-model="user.yj" class="ace input-lg" />
+                      <span class="lbl bigger-120">否</span>
+                    </label>
+                  </div>
+                </div>
               </div>
 
             </form>
@@ -310,6 +323,7 @@ export default {
         let _this = this;
         _this.user = {};
         _this.user.zt = "Y";
+        _this.user.yj = "Y";
         _this.$forceUpdate();
         $("#form-modal").modal("show");
       },
@@ -355,6 +369,7 @@ export default {
                 || !Validator.length(_this.user.loginName, "登陆名", 1, 50)
                 || !Validator.length(_this.user.name, "用户名称", 1, 50)
                 || !Validator.require(_this.user.name, "用户名称")
+                || !Validator.require(_this.user.yj, "能否下载")
                 || (!Validator.require(_this.user.password, "密码") && Tool.isEmpty(_this.user.id))
 
         ) {

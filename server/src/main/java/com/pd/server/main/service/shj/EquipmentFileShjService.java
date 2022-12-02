@@ -12,6 +12,8 @@ import com.pd.server.main.service.PointerSecondService;
 import com.pd.server.util.DateUtil;
 import com.pd.server.util.TypeUtils;
 import com.pd.server.util.UuidUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -24,6 +26,8 @@ import java.util.Map;
 
 @Service
 public class EquipmentFileShjService extends AbstractScanRequest{
+
+    private static final Logger LOG = LoggerFactory.getLogger(EquipmentFileShjService.class);
 
     public  static RedisTemplate  redisTstaticemplate;
 
@@ -135,7 +139,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                 //RedisTemplate redisTemplate = SpringUtil.getBean(RedisTemplate.class);
                 //判断是否是雾报(前后三分钟都没有报警的数据是雾报数据，雾报数据不保存)
                 EquipmentFile beforeEntity = new EquipmentFile();
-                System.out.println(redisTstaticemplate.opsForValue().get(sbbh+"WB"));
+                LOG.error("缓存中的数据："+redisTstaticemplate.opsForValue().get(sbbh+"WB"));
                 if(!StringUtils.isEmpty(redisTstaticemplate.opsForValue().get(sbbh+"WB"))){
                     String entityJson = (String) redisTstaticemplate.opsForValue().get(sbbh+"WB");
                     beforeEntity = JSONObject.parseObject(entityJson,EquipmentFile.class);

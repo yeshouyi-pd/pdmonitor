@@ -347,4 +347,12 @@
       sm5 = #{sm5,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
+  <select id="listEventCount" parameterType="com.pd.server.main.domain.EquipmentTyEventExample" resultMap="BaseResultMap">
+    select sbbh,sm1 as xmbh,cjsj as rq
+    <include refid="Base_Column_List" />
+    from predation_num
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
 </mapper>

@@ -59,7 +59,7 @@
           <td>{{item.jssj}}</td>
           <td>{{item.ts}}</td>
           <td>
-            <div class="hidden-sm hidden-xs btn-group">
+            <div class="hidden-sm hidden-xs btn-group" v-if="userDto.yj=='Y'">
               <button v-on:click="downloadFile(item.id)" class="btn btn-xs btn-info" style="margin-left: 10px;">
                 <i class="ace-icon fa fa-volume-down bigger-120">下载文件</i>
               </button>
@@ -89,11 +89,13 @@ export default {
       equipmentTyEventDto:{},
       equipmentTyEvents:[],
       deptMap: [],
-      waterEquipments: []
+      waterEquipments: [],
+      userDto:null
     }
   },
   mounted() {
     let _this = this;
+    _this.userDto = Tool.getLoginUser();
     _this.deptMap = Tool.getDeptUser();
     _this.$refs.pagination.size = 10;
     _this.$forceUpdate();

@@ -69,7 +69,7 @@
               <button v-on:click="detail(item)" class="btn btn-xs btn-info" title="详情">
                 <i class="ace-icon fa fa-list bigger-120"></i>
               </button>
-              <button v-on:click="downloadFile(item)" class="btn btn-xs btn-info" style="margin-left: 10px;">
+              <button v-if="userDto.yj=='Y'" v-on:click="downloadFile(item)" class="btn btn-xs btn-info" style="margin-left: 10px;">
                 <i class="ace-icon fa fa-volume-down bigger-120">下载文件</i>
               </button>
             </div>
@@ -107,7 +107,7 @@
                 </td>
                 <td>{{item.tplj}}</td>
                 <td>
-                  <button class="btn btn-white btn-default btn-round" style="margin: 0 auto;" v-on:click="downloadFile(item)">
+                  <button v-if="userDto.yj=='Y'" class="btn btn-white btn-default btn-round" style="margin: 0 auto;" v-on:click="downloadFile(item)">
                     <i class="ace-icon fa fa-volume-down red2">下载文件</i>
                   </button>
                 </td>
@@ -143,13 +143,15 @@ export default {
       waterEquipments:[],
       maxHeight:'',
       curTplj:'',
-      details:[]
+      details:[],
+      userDto:null
     }
   },
   mounted() {
     let _this = this;
     let h = document.documentElement.clientHeight || document.body.clientHeight;
     _this.maxHeight = h*0.8;
+    _this.userDto = Tool.getLoginUser();
     _this.deptMap = Tool.getDeptUser();
     _this.list(1);
     _this.$refs.pagination.size = 10;
