@@ -138,6 +138,9 @@
     select
     <include refid="Base_Column_List" />
     from pointer_day
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
     order by cjsj desc limit 1
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">

@@ -63,7 +63,7 @@
               <button v-on:click="showEcharts(item)" class="btn btn-xs btn-info" style="margin-left: 10px;">
                 <i class="fa-solid fa fa-list bigger-120">雷达图</i>
               </button>
-              <button v-on:click="downloadVideo(item.id)" class="btn btn-xs btn-info" style="margin-left: 10px;">
+              <button  v-if="userDto.yj=='Y'" v-on:click="downloadVideo(item.id)" class="btn btn-xs btn-info" style="margin-left: 10px;">
                 <i class="ace-icon fa fa-volume-down bigger-120">下载视频</i>
               </button>
               <button v-if="zhbht" v-on:click="watchVideo(item.id)" class="btn btn-xs btn-info" style="margin-left: 10px;">
@@ -84,8 +84,12 @@
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title">雷达图</h4>
           </div>
-          <div class="modal-body" style="width: 400px;height: 550px;margin: auto;text-align: center" >
-            <div style="width: 400px;height: 450px;" id="echartEvent"></div>
+          <div class="modal-body" style="width: 400px;height: 600px;margin: auto;text-align: center;padding: 0" >
+            <h2>{{ldTime}}</h2>
+            <h4 style="margin-top: 10px">N</h4>
+            <div style="width: 400px;height: 380px;" id="echartEvent"></div>
+            <h4>S</h4>
+            <h4>(港珠澳大桥)</h4>
             <p>{{equipmentFileEvent.kssj}}至{{equipmentFileEvent.jssj}}</p>
             <p>保守估计发声头数<span style="color: red">{{equipmentFileEvent.ts}}头</span></p>
           </div>
@@ -108,7 +112,7 @@
         <div class="modal-content" style="width: 750px">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">雷达图</h4>
+            <h4 class="modal-title">历史回放</h4>
           </div>
           <div class="modal-body" :style="'height: '+videoHeight+'px;overflow-y: auto'">
             <video controls preload="auto" width="700px" height="360px" autoplay="autoplay" v-for="item in videos">
@@ -148,11 +152,14 @@ export default {
       title:[],
       videos:[],
       videoHeight:400,
-      zhbht:LOCAL_ZHBHT
+      zhbht:LOCAL_ZHBHT,
+      ldTime:'',
+      userDto:null
     }
   },
   mounted() {
     let _this = this;
+    _this.userDto = Tool.getLoginUser();
     _this.deptMap = Tool.getDeptUser();
     _this.$refs.pagination.size = 10;
     _this.$forceUpdate();
@@ -241,9 +248,9 @@ export default {
               return _this.domColor(e.dataIndex)
             }
           }
-        }],
-        title: {text: title[0],left:"19%"}
+        }]
       });
+      _this.ldTime=title[0];
       if(list.length>1){
         let k=1;
         _this.intervalId = setInterval(function () {
@@ -252,6 +259,7 @@ export default {
             clearInterval(_this.intervalId);
             _this.showBtn = true;
           }
+          _this.ldTime=title[k];
           _this.myChart.setOption({
             series: [
               {
@@ -263,10 +271,10 @@ export default {
                 }
               }
             ],
-            title: {
-              text: title[k],
-              left:"19%"
-            }
+            // title: {
+            //   text: title[k],
+            //   left:"19%"
+            // }
           });
           k=k+1;
         }, 4000);

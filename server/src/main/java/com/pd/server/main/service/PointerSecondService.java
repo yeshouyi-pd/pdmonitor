@@ -31,8 +31,8 @@ public class PointerSecondService {
         return pointerSecondMapper.selectAllSpecial(record);
     }
 
-    public PointerSecond selectByDp(){
-        return pointerSecondMapper.selectByDp();
+    public PointerSecond selectByDp(PointerSecondExample example){
+        return pointerSecondMapper.selectByDp(example);
     }
 
     /**

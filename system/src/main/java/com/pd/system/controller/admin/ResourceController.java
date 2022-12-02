@@ -1,12 +1,10 @@
 package com.pd.system.controller.admin;
 
 import com.pd.server.main.domain.ResourceExample;
-import com.pd.server.main.dto.PageDto;
-import com.pd.server.main.dto.ResourceDto;
-import com.pd.server.main.dto.ResponseDto;
-import com.pd.server.main.dto.UserDto;
+import com.pd.server.main.dto.*;
 import com.pd.server.main.service.ResourceService;
 import com.pd.server.util.ValidatorUtil;
+import com.pd.system.controller.conf.BaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
@@ -19,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/admin/resource")
-public class ResourceController {
+public class ResourceController extends BaseController {
 
     private static final Logger LOG = LoggerFactory.getLogger(ResourceController.class);
     public static final String BUSINESS_NAME = "资源";
@@ -67,7 +65,8 @@ public class ResourceController {
     @GetMapping("/load-tree")
     public ResponseDto loadTree() {
         ResponseDto responseDto = new ResponseDto();
-        List<ResourceDto> resourceDtoList = resourceService.loadTree();
+        LoginUserDto userDto = getRequestHeader();
+        List<ResourceDto> resourceDtoList = resourceService.loadTree(userDto);
         responseDto.setContent(resourceDtoList);
         return responseDto;
     }
@@ -78,7 +77,8 @@ public class ResourceController {
     @GetMapping("/load-tree-simple")
     public ResponseDto loadSimpleTree() {
         ResponseDto responseDto = new ResponseDto();
-        List<ResourceDto> resourceDtoList = resourceService.loadSimpleTree();
+        LoginUserDto userDto = getRequestHeader();
+        List<ResourceDto> resourceDtoList = resourceService.loadSimpleTree(userDto);
         responseDto.setContent(resourceDtoList);
         return responseDto;
     }

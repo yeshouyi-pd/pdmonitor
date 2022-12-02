@@ -71,7 +71,7 @@
           </div>
           <div style="margin: 0 auto;">{{waterEquipments|optionNSArray(item.sbbh)}}</div>
           <div style="margin: 0 auto;word-wrap: break-word;">{{item.cjsj}}</div>
-          <div style="margin: 0 auto;">
+          <div style="margin: 0 auto;" v-if="userDto.yj=='Y'">
             <button class="btn btn-white btn-default btn-round" style="margin: 0 auto;" v-on:click="download(item,1)">
               <i class="ace-icon fa fa-volume-down red2">下载音频</i>
             </button>
@@ -81,7 +81,7 @@
 <!--              <i class="ace-icon fa fa-volume-down red2">发现头数<span v-bind:id="item.id" style="color: #00aa00;font-weight: bold"></span></i>-->
 <!--            </button>-->
 <!--          </div>-->
-          <div style="margin: 0 auto;">
+          <div style="margin: 0 auto;" v-if="userDto.yj=='Y'">
             <button class="btn btn-white btn-default btn-round" style="margin: 0 auto;" v-on:click="downloadVedio(item)">
               <i class="ace-icon fa fa-volume-down red2">视频文件</i>
             </button>
@@ -179,10 +179,12 @@ export default {
       curCjsj:'',
       curWjmc:'',
       waterEquipments:[],
+      userDto:null
     }
   },
   mounted() {
     let _this = this;
+    _this.userDto = Tool.getLoginUser();
     _this.$refs.pagination.size = 24;
     _this.list(1);
     let h = document.documentElement.clientHeight || document.body.clientHeight;

@@ -1,16 +1,16 @@
 <template>
   <div class="swiper-container" :id="id">
-    <div class="swiper-wrapper" style="height: 300px" v-if="LOCAL_SSBRL">
+    <div class="swiper-wrapper" style="height: 300px" >
       <div class="swiper-slide" v-for="Carousel in list">
         <img :src="Carousel.imgUrl" width="300px" height="290px"/>
       </div>
     </div>
-    <div class="swiper-wrapper" style="height: 300px" v-if="LOCAL_ZHBHT">
-      <div class="swiper-slide" v-for="Carousel in list">
-        <img :src="Carousel.imgUrl" width="300px" height="240px"/>
-        <div :id="Carousel.id"></div>
-      </div>
-    </div>
+<!--    <div class="swiper-wrapper" style="height: 300px" v-if="LOCAL_ZHBHT">-->
+<!--      <div class="swiper-slide" v-for="Carousel in list">-->
+<!--        <img :src="Carousel.imgUrl" width="300px" height="240px"/>-->
+<!--        <div :id="Carousel.id"></div>-->
+<!--      </div>-->
+<!--    </div>-->
   </div>
 </template>
 
@@ -34,41 +34,41 @@ export default {
           if(this.mySwiper){
             this.mySwiper.destroy(true,false)
           }
-          if(this.LOCAL_ZHBHT){
-            if(newVal.length>0){
-              let firstTplj =newVal[0].imgUrl;
-              this.curSrc = firstTplj.substring(0,firstTplj.lastIndexOf(".")+1)+"wav";
-              if(document.getElementById(newVal[0].id)){
-                document.getElementById(newVal[0].id).innerHTML='<video autoplay controls width="300px" height="20px" style="margin-top: 10px;">\n' +
-                    '          <source src="'+this.curSrc+'"  type="video/webm">\n' +
-                    '          您的浏览器不支持 HTML5 video 标签。\n' +
-                    '        </video>';
-              }
-            }
-            this.mySwiper = new Swiper('#'+this.id,{
-              autoplay : 5000,//可选选项，自动滑动
-              loop : false,//可选选项，开启循环
-              observer:true,
-              onSlideChangeStart: function(swiper){
-                if(newVal[swiper.activeIndex]){
-                  let tplj = newVal[swiper.activeIndex].imgUrl;
-                  this.curSrc = tplj.substring(0,tplj.lastIndexOf(".")+1)+"wav";
-                  if(document.getElementById(newVal[swiper.activeIndex].id)){
-                    document.getElementById(newVal[swiper.activeIndex].id).innerHTML='<video autoplay controls width="300px" height="20px" style="margin-top: 10px;">\n' +
-                        '          <source src="'+this.curSrc+'"  type="video/webm">\n' +
-                        '          您的浏览器不支持 HTML5 video 标签。\n' +
-                        '        </video>';
-                  }
-                }
-              }.bind(this)
-            })
-          }
-          if(this.LOCAL_SSBRL){
+          // if(this.LOCAL_ZHBHT){
+          //   if(newVal.length>0){
+          //     let firstTplj =newVal[0].imgUrl;
+          //     this.curSrc = firstTplj.substring(0,firstTplj.lastIndexOf(".")+1)+"wav";
+          //     if(document.getElementById(newVal[0].id)){
+          //       document.getElementById(newVal[0].id).innerHTML='<video autoplay controls width="300px" height="20px" style="margin-top: 10px;">\n' +
+          //           '          <source src="'+this.curSrc+'"  type="video/webm">\n' +
+          //           '          您的浏览器不支持 HTML5 video 标签。\n' +
+          //           '        </video>';
+          //     }
+          //   }
+          //   this.mySwiper = new Swiper('#'+this.id,{
+          //     autoplay : 5000,//可选选项，自动滑动
+          //     loop : false,//可选选项，开启循环
+          //     observer:true,
+          //     onSlideChangeStart: function(swiper){
+          //       if(newVal[swiper.activeIndex]){
+          //         let tplj = newVal[swiper.activeIndex].imgUrl;
+          //         this.curSrc = tplj.substring(0,tplj.lastIndexOf(".")+1)+"wav";
+          //         if(document.getElementById(newVal[swiper.activeIndex].id)){
+          //           document.getElementById(newVal[swiper.activeIndex].id).innerHTML='<video autoplay controls width="300px" height="20px" style="margin-top: 10px;">\n' +
+          //               '          <source src="'+this.curSrc+'"  type="video/webm">\n' +
+          //               '          您的浏览器不支持 HTML5 video 标签。\n' +
+          //               '        </video>';
+          //         }
+          //       }
+          //     }.bind(this)
+          //   })
+          // }
+          // if(this.LOCAL_SSBRL){
             this.mySwiper = new Swiper('#'+this.id,{
               autoplay : 5000,//可选选项，自动滑动
               loop : true,//可选选项，开启循环
             })
-          }
+          // }
         });
       }
     }

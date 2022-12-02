@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 public class MqttClientLoop {
     private static final Logger LOG = LoggerFactory.getLogger(MqttClientLoop.class);
 
-    @Scheduled(cron = "0 0 0/1 * * ? ")
+    //@Scheduled(cron = "0 0 0/1 * * ? ")
     public static void loop() {
         try{
             LOG.info(">>>>>>>>>>>>>>请求数据开始<<<<<<<<<<<<<");

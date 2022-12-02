@@ -1,6 +1,7 @@
 package com.pd.monitor.controller;
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.pd.monitor.wx.conf.BaseWxController;
 import com.pd.server.main.domain.*;
 import com.pd.server.main.dto.*;
@@ -48,6 +49,8 @@ public class WelcomeController extends BaseWxController{
     private PointerSecondService pointerSecondService;
     @Resource
     private PointerDayService pointerDayService;
+    @Resource
+    private PredationNumService predationNumService;
 
     /**
      * 大屏 捕食行为
@@ -320,13 +323,59 @@ public class WelcomeController extends BaseWxController{
         ResponseDto responseDto = new ResponseDto();
         WaterEquipmentExample example = new WaterEquipmentExample();
         WaterEquipmentExample.Criteria ca = example.createCriteria();
-//        LoginUserDto user = getRequestHeader();
-//        List<String> listdept = getUpdeptcode(user.getDeptcode());
-//        if(!CollectionUtils.isEmpty(listdept)){
-//            ca.andDeptcodeIn(listdept);
-//        }
-        List<WaterEquipment> list = waterEquipmentService.list(example);
-        responseDto.setContent(list);
+        List<WaterEquipment> list = waterEquipmentService.list(null);
+        List<WaterEquipment> a4List = list.stream().filter(entity -> (entity.getDqzl().equals("A4")||entity.getDqzl().equals("A2"))).collect(Collectors.toList());
+        Map<String,Object> map = new HashMap<>();
+        map.put("list",list);
+        map.put("a4List",a4List);
+        responseDto.setContent(map);
+        return responseDto;
+    }
+
+    @PostMapping("/getSevenDayEvent")
+    public ResponseDto getSevenDayEvent(@RequestBody JSONObject jsonObject){
+        ResponseDto responseDto = new ResponseDto();
+        EquipmentTyEventExample example = new EquipmentTyEventExample();
+        EquipmentTyEventExample.Criteria ca = example.createCriteria();
+        PredationNumExample preExample = new PredationNumExample();
+        PredationNumExample.Criteria preCa = preExample.createCriteria();
+        if(!StringUtils.isEmpty(jsonObject.get("type"))&&"zjglj".equals(jsonObject.get("type"))){
+            ca.andSbbhEqualTo(jsonObject.getString("sbbh"));
+            preCa.andSbbhEqualTo(jsonObject.getString("sbbh"));
+        }else{
+            LoginUserDto user = getRequestHeader();
+            List<String> listdept = getUpdeptcode(user.getDeptcode());
+            if(!CollectionUtils.isEmpty(listdept)){
+                ca.andDeptcodeIn(listdept);
+                preCa.andDeptcodeIn(listdept);
+            }
+        }
+        ca.andRqGreaterThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(),-7),"yyyy-MM-dd"));
+        ca.andRqLessThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(),-1),"yyyy-MM-dd"));
+        preCa.andCjsjGreaterThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(),-7),"yyyy-MM-dd"),"%Y-%m-%d");
+        preCa.andCjsjLessThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(),-1),"yyyy-MM-dd"),"%Y-%m-%d");
+        List<EquipmentTyEvent> list = new ArrayList<>();
+        if(!StringUtils.isEmpty(jsonObject.get("type"))&&"zjglj".equals(jsonObject.get("type"))){
+            WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
+            waterEquipmentExample.createCriteria().andDqzlEqualTo("A1");
+            List<String> sbbhs = waterEquipmentService.findSbbh(waterEquipmentExample);
+            if(sbbhs.contains(jsonObject.getString("sbbh"))){
+                list = predationNumService.listEventCount(preExample);
+                list.stream().forEach(entity -> entity.setRq(entity.getRq().substring(0,10)));
+            }else{
+                list = equipmentTyEventService.listEventCount(example);
+            }
+        }else{
+            list = equipmentTyEventService.listSumTs(example);
+        }
+        Map<String,Object> resultMap = new HashMap<>();
+        if(!CollectionUtils.isEmpty(list)){
+            Map<String, List<EquipmentTyEvent>> map = list.stream().sorted(Comparator.comparing(EquipmentTyEvent::getRq)).collect(Collectors.groupingBy(EquipmentTyEvent::getSbbh));
+            List<String> rqs= list.stream().sorted(Comparator.comparing(EquipmentTyEvent::getRq)).filter(Objects::nonNull).map(EquipmentTyEvent::getRq).distinct().collect(Collectors.toList());
+            resultMap.put("map",map);
+            resultMap.put("rqs",rqs);
+        }
+        responseDto.setContent(resultMap);
         return responseDto;
     }
 
@@ -394,18 +443,28 @@ public class WelcomeController extends BaseWxController{
         return responseDto;
     }
 
-    @GetMapping("/getPointerSecond")
-    public ResponseDto getPointerSecond(){
+    @PostMapping("/getPointerSecond")
+    public ResponseDto getPointerSecond(@RequestBody JSONObject jsonObject){
         ResponseDto responseDto = new ResponseDto();
-        PointerSecond entity = pointerSecondService.selectByDp();
+        PointerSecondExample example = new PointerSecondExample();
+        PointerSecondExample.Criteria ca = example.createCriteria();
+        if(!StringUtils.isEmpty(jsonObject.get("type"))&&"zjglj".equals(jsonObject.get("type"))){
+            ca.andSmEqualTo(jsonObject.getString("sbbh"));
+        }
+        PointerSecond entity = pointerSecondService.selectByDp(example);
         responseDto.setContent(entity);
         return responseDto;
     }
 
-    @GetMapping("/getPointerDay")
-    public ResponseDto getPointerDay(){
+    @PostMapping("/getPointerDay")
+    public ResponseDto getPointerDay(@RequestBody JSONObject jsonObject){
         ResponseDto responseDto = new ResponseDto();
-        PointerDay entity = pointerDayService.selectByDp();
+        PointerDayExample example = new PointerDayExample();
+        PointerDayExample.Criteria ca = example.createCriteria();
+        if(!StringUtils.isEmpty(jsonObject.get("type"))&&"zjglj".equals(jsonObject.get("type"))){
+            ca.andSmEqualTo(jsonObject.getString("sbbh"));
+        }
+        PointerDay entity = pointerDayService.selectByDp(example);
         responseDto.setContent(entity);
         return responseDto;
     }

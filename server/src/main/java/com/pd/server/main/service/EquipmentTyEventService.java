@@ -44,6 +44,10 @@ public class EquipmentTyEventService {
         return equipmentTyEventMapper.selectByExampleSumTs(example);
     }
 
+    public List<EquipmentTyEvent> listEventCount(EquipmentTyEventExample example){
+        return equipmentTyEventMapper.selectByExampleCount(example);
+    }
+
     /**
     * 保存，id有值时更新，无值时新增
     */

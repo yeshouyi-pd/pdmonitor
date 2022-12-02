@@ -64,8 +64,12 @@
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title">雷达图</h4>
           </div>
-          <div class="modal-body" style="width: 350px;height: 500px;margin: auto;text-align: center" >
-            <div style="width: 350px;height: 400px;" id="echartEvent"></div>
+          <div class="modal-body" style="width: 350px;height: 600px;margin: auto;text-align: center" >
+            <h2>{{ldTime}}</h2>
+            <h4 style="margin-top: 10px">N</h4>
+            <div style="width: 350px;height: 380px;" id="echartEvent"></div>
+            <h4>S</h4>
+            <h4>(港珠澳大桥)</h4>
             <p>{{equipmentFileEvent.kssj}}至{{equipmentFileEvent.jssj}}</p>
             <p>保守估计发声头数<span style="color: red">{{equipmentFileEvent.ts}}头</span></p>
           </div>
@@ -105,6 +109,7 @@ export default {
       echartsData:[],
       title:[],
       queryTyep:2,//1 查询本周 2 查询当天
+      ldTime:''
     }
   },
   mounted: function () {
@@ -181,8 +186,9 @@ export default {
             }
           }
         }],
-        title: {text: title[0],left:"19%"}
+        // title: {text: title[0],left:"19%"}
       });
+      _this.ldTime=title[0];
       if(list.length>1){
         let k=1;
         _this.intervalId = setInterval(function () {
@@ -191,6 +197,7 @@ export default {
             clearInterval(_this.intervalId);
             _this.showBtn = true;
           }
+          _this.ldTime=title[k];
           _this.myChart.setOption({
             series: [
               {
@@ -202,10 +209,10 @@ export default {
                 }
               }
             ],
-            title: {
-              text: title[k],
-              left:"19%"
-            }
+            // title: {
+            //   text: title[k],
+            //   left:"19%"
+            // }
           });
           k=k+1;
         }, 4000);

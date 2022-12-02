@@ -157,7 +157,7 @@
                                 <div class="widget-header ">
                                   <h5 class="widget-title">
                                     <i class="ace-icon fa fa-signal"></i>
-                                    设备在线率
+                                    捕食比例
                                   </h5>
                                 </div>
                                 <div class="widget-body">
@@ -176,36 +176,36 @@
                                           <div class="hr hr8 hr-double"></div>
 
                                           <div class="clearfix">
-                                            <div class="grid4">
+                                            <div class="grid8">
 															<span class="grey">
 																<i class="ace-icon fa fa-bar-chart-o fa-2x blue"></i>
-																&nbsp; 总数
+																&nbsp;侦测次数
 															</span>
-                                              <h4 class="bigger pull-right">{{ zs }}</h4>
+                                              <h4 class="bigger pull-right">{{ zccs }}</h4>
                                             </div>
 
-                                            <div class="grid4">
+                                            <div class="grid8">
 															<span class="grey">
 																<i class="ace-icon fa fa-check-square-o fa-2x green"></i>
-																&nbsp;在线
+																&nbsp;捕食次数
 															</span>
-                                              <h4 class="bigger pull-right">{{ zc }}</h4>
+                                              <h4 class="bigger pull-right">{{ bscs }}</h4>
                                             </div>
-                                            <div class="grid4">
-															<span class="grey">
-																<i class="ace-icon fa   fa-ban fa-2x  red"></i>
-																&nbsp;离线
-															</span>
-                                              <h4 class="bigger pull-right">{{ lx }}</h4>
-                                            </div>
+<!--                                            <div class="grid4">-->
+<!--															<span class="grey">-->
+<!--																<i class="ace-icon fa   fa-ban fa-2x  red"></i>-->
+<!--																&nbsp;离线-->
+<!--															</span>-->
+<!--                                              <h4 class="bigger pull-right">{{ lx }}</h4>-->
+<!--                                            </div>-->
 
-                                            <div class="grid4">
-															<span class="grey">
-																<i class="ace-icon fa fa-bolt fa-2x yellow"></i>
-																&nbsp; 故障
-															</span>
-                                              <h4 class="bigger pull-right">{{ gz }}</h4>
-                                            </div>
+<!--                                            <div class="grid4">-->
+<!--															<span class="grey">-->
+<!--																<i class="ace-icon fa fa-bolt fa-2x yellow"></i>-->
+<!--																&nbsp; 故障-->
+<!--															</span>-->
+<!--                                              <h4 class="bigger pull-right">{{ gz }}</h4>-->
+<!--                                            </div>-->
 
                                           </div>
 
@@ -260,8 +260,9 @@ export default {
       zc:0,
       lx:0,
       gz:0,
-      JYXM_DW:JYXM_DW
-
+      JYXM_DW:JYXM_DW,
+      zccs:0,
+      bscs:0
     }
   },
   mounted:function(){
@@ -343,6 +344,8 @@ export default {
     },
     initPieEChart(data){
       let _this = this;
+      _this.zccs=data.num;
+      _this.bscs=data.bnum;
       let option = {
         tooltip: {
           trigger: 'item',

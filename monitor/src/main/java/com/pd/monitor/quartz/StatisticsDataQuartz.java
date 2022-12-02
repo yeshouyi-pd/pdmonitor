@@ -155,7 +155,7 @@ public class StatisticsDataQuartz {
                     EquipmentFileTodayExample tsExample = new EquipmentFileTodayExample();
                     EquipmentFileTodayExample.Criteria tsCa = tsExample.createCriteria();
                     tsCa.andSbbhEqualTo(key);
-                    tsCa.andTxtlxEqualTo("2");
+                    tsCa.andTxtlxEqualTo("4");
                     tsCa.andFzGreaterThanOrEqualTo(arr[0]);
                     tsCa.andFzLessThanOrEqualTo(arr[1]);
                     Integer tsCount = equipmentFileTodayService.countTsByExample(tsExample);

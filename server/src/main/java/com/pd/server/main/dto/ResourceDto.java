@@ -34,6 +34,12 @@ public class ResourceDto {
 
     private String setbar;
 
+    private String show;
+
+    private String bz;
+
+    private String sm;
+
     private List<ResourceDto> children;
 
     public String getId() {
@@ -98,6 +104,30 @@ public class ResourceDto {
 
     public void setSetbar(String setbar) {
         this.setbar = setbar;
+    }
+
+    public String getShow() {
+        return show;
+    }
+
+    public void setShow(String show) {
+        this.show = show;
+    }
+
+    public String getBz() {
+        return bz;
+    }
+
+    public void setBz(String bz) {
+        this.bz = bz;
+    }
+
+    public String getSm() {
+        return sm;
+    }
+
+    public void setSm(String sm) {
+        this.sm = sm;
     }
 
     @Override

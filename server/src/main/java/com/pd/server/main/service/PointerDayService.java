@@ -31,8 +31,8 @@ public class PointerDayService {
         return pointerDayMapper.selectAllSpecial(record);
     }
 
-    public PointerDay selectByDp(){
-        return pointerDayMapper.selectByDp();
+    public PointerDay selectByDp(PointerDayExample example){
+        return pointerDayMapper.selectByDp(example);
     }
 
     /**

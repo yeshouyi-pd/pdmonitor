@@ -34,12 +34,20 @@
                         </router-link>
                       </li>
 
-                      <li class="light-blue dropdown-modal">
-                          <router-link to="/mobile/largemonitors">
+                      <li class="light-blue dropdown-modal"   v-if="LOCAL_ZHBHT">
+                          <router-link to="/mobile/largemonitorsZj">
                               <a class=" dropdown-toggle" style="cursor: pointer;">
                                   <font color="white">返回大屏</font>
                               </a>
                           </router-link>
+                      </li>
+
+                      <li class="light-blue dropdown-modal"   v-if="LOCAL_SSBRL">
+                        <router-link to="/mobile/largemonitors">
+                          <a class=" dropdown-toggle" style="cursor: pointer;">
+                            <font color="white">返回大屏</font>
+                          </a>
+                        </router-link>
                       </li>
 
                       <li v-if="LOCAL_SSBRL" class="light-blue dropdown-modal">

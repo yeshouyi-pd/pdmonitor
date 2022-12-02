@@ -3,6 +3,7 @@ package com.pd.server.main.service;
 import com.alibaba.fastjson.JSON;
 import com.pd.server.main.domain.Resource;
 import com.pd.server.main.domain.ResourceExample;
+import com.pd.server.main.dto.LoginUserDto;
 import com.pd.server.main.dto.PageDto;
 import com.pd.server.main.dto.ResourceDto;
 import com.pd.server.main.dto.UserDto;
@@ -122,8 +123,11 @@ public class ResourceService {
      * 要求：ID要正序排列
      * @return
      */
-    public List<ResourceDto> loadTree() {
+    public List<ResourceDto> loadTree(LoginUserDto userDto) {
         ResourceExample example = new ResourceExample();
+        if(!"00000000".equals(userDto.getRode())){
+            example.createCriteria().andShowEqualTo("1");
+        }
         example.setOrderByClause("id asc");
         List<Resource> resourceList = resourceMapper.selectByExample(example);
         List<ResourceDto> resourceDtoList = CopyUtil.copyList(resourceList, ResourceDto.class);
@@ -182,8 +186,11 @@ public class ResourceService {
 
 
 
-    public List<ResourceDto> loadSimpleTree() {
+    public List<ResourceDto> loadSimpleTree(LoginUserDto userDto) {
         ResourceExample example = new ResourceExample();
+        if(!"00000000".equals(userDto.getRode())){
+            example.createCriteria().andShowEqualTo("1");
+        }
         example.setOrderByClause("id asc");
         List<Resource> resourceList = resourceMapper.selectByExample(example);
         List<ResourceDto> resourceDtoList = CopyUtil.copyList(resourceList, ResourceDto.class);

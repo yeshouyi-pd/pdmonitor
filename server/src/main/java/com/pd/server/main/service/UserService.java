@@ -39,29 +39,8 @@ private UserMapper userMapper;
     /**
      * 列表查询
      */
-    public void list(UserDto userDto) {
-        PageHelper.startPage(userDto.getPage(), userDto.getSize());
-        UserExample userExample = new UserExample();
-        if(null != userDto){
-            UserExample.Criteria ca = userExample.createCriteria();
-            if(!StringUtils.isEmpty(userDto.getLoginName())){
-                ca.andLoginNameEqualTo(userDto.getLoginName());
-            }
-            if(!StringUtils.isEmpty(userDto.getName())){
-                ca.andNameLike("%"+userDto.getName()+"%");
-            }
-            if(!StringUtils.isEmpty(userDto.getZt())){
-                ca.andZtEqualTo(userDto.getZt());
-            }
-            if(!StringUtils.isEmpty(userDto.getRode())){
-                ca.andRodeEqualTo(userDto.getRode());
-            }
-        }
-        List<User> userList = userMapper.selectByExample(userExample);
-        PageInfo<User> pageInfo = new PageInfo<>(userList);
-        userDto.setTotal(pageInfo.getTotal());
-        List<UserDto> userDtoList = CopyUtil.copyList(userList, UserDto.class);
-        userDto.setList(userDtoList);
+    public List<User> list(UserExample userExample) {
+        return userMapper.selectByExample(userExample);
     }
 
     /**

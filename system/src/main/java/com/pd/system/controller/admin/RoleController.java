@@ -1,10 +1,17 @@
 package com.pd.system.controller.admin;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.pd.server.main.domain.Role;
+import com.pd.server.main.domain.RoleExample;
+import com.pd.server.main.dto.LoginUserDto;
 import com.pd.server.main.dto.PageDto;
 import com.pd.server.main.dto.ResponseDto;
 import com.pd.server.main.dto.RoleDto;
 import com.pd.server.main.service.RoleService;
+import com.pd.server.util.CopyUtil;
 import com.pd.server.util.ValidatorUtil;
+import com.pd.system.controller.conf.BaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +21,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/admin/role")
-public class RoleController {
+public class RoleController extends BaseController {
 
     private static final Logger LOG = LoggerFactory.getLogger(RoleController.class);
     public static final String BUSINESS_NAME = "角色";
@@ -28,7 +35,18 @@ public class RoleController {
     @PostMapping("/list")
     public ResponseDto list(@RequestBody PageDto pageDto) {
         ResponseDto responseDto = new ResponseDto();
-        roleService.list(pageDto);
+        LoginUserDto user = getRequestHeader();
+        PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
+        RoleExample roleExample = new RoleExample();
+        RoleExample.Criteria ca = roleExample.createCriteria();
+        if(!"00000000".equals(user.getRode())){
+            ca.andIdNotEqualTo("00000000");
+        }
+        List<Role> roleList = roleService.list(roleExample);
+        PageInfo<Role> pageInfo = new PageInfo<>(roleList);
+        pageDto.setTotal(pageInfo.getTotal());
+        List<RoleDto> roleDtoList = CopyUtil.copyList(roleList, RoleDto.class);
+        pageDto.setList(roleDtoList);
         responseDto.setContent(pageDto);
         return responseDto;
     }
