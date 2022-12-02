@@ -106,7 +106,7 @@
                 <div id="gauge1" style="width: 100%;height: 100%;"></div>
               </div>
               <div style="width: 50%;height: 100%;">
-                <span style="text-align: center;font-size: 12px;color: #fff;">豚类指针</span>
+                <div style="text-align: center;font-size: 12px;color: #fff;">豚类指针</div>
                 <div id="gauge2" style="width: 100%;height: 100%;"></div>
               </div>
             </div>
@@ -229,7 +229,7 @@ export default {
             type: 'gauge',
             startAngle: 180,
             endAngle: 0,
-            center: ['50%', '50%'],
+            center: ['50%', '60%'],
             radius: '75%',
             min: 100,
             max: 240,
@@ -270,7 +270,7 @@ export default {
             axisLabel: {
               color: '#fff',
               fontSize: 10,
-              distance: -40
+              distance: -50
             },
             title: {
               offsetCenter: [0, '-10%'],
@@ -279,7 +279,7 @@ export default {
             detail: {
               show: true,
               formatter: "{value}dB",
-              offsetCenter: [0, '18%'],
+              // offsetCenter: [0, '15%'],
               fontSize: 14,
               fontWeight: "normal",
               color: '#fff'
@@ -321,7 +321,7 @@ export default {
             type: 'gauge',
             startAngle: 180,
             endAngle: 0,
-            center: ['50%', '50%'],
+            center: ['50%', '60%'],
             radius: '75%',
             min: 120,
             max: 220,
@@ -360,7 +360,7 @@ export default {
             axisLabel: {
               color: '#fff',
               fontSize: 10,
-              distance: -40
+              distance: -50
             },
             title: {
               offsetCenter: [0, '-10%'],
@@ -369,7 +369,7 @@ export default {
             detail: {
               show: true,
               formatter: "{value}dB",
-              offsetCenter: [0, '18%'],
+              // offsetCenter: [0, '15%'],
               fontSize: 14,
               fontWeight: "normal",
               color: '#fff'
