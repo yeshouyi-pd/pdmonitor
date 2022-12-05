@@ -415,8 +415,8 @@ public class WelcomeController extends BaseWxController{
     @PostMapping("/getSwipeData")
     public ResponseDto getSwipeData(@RequestBody Map<String,String> map){
         ResponseDto responseDto = new ResponseDto();
-        EquipmentFileTodayExample example = new EquipmentFileTodayExample();
-        EquipmentFileTodayExample.Criteria ca = example.createCriteria();
+        EquipmentFileExample example = new EquipmentFileExample();
+        EquipmentFileExample.Criteria ca = example.createCriteria();
         if(!StringUtils.isEmpty(map.get("sbbh"))){
             ca.andSbbhEqualTo(map.get("sbbh"));
         }
@@ -427,7 +427,7 @@ public class WelcomeController extends BaseWxController{
             ca.andCjsjLessThanOrEqualTo(DateUtil.toDate(map.get("jssj"),"yyyy-MM-dd HH:mm:ss"));
         }
         ca.andWjlxEqualTo("1");
-        List<EquipmentFileToday> list = equipmentFileTodayService.listAllDw(example);
+        List<EquipmentFile> list = equipmentFileService.listAllDw(example);
         responseDto.setContent(list);
         return responseDto;
     }
@@ -435,8 +435,8 @@ public class WelcomeController extends BaseWxController{
     @PostMapping("/getVideoData")
     public ResponseDto getVideoData(@RequestBody Map<String,String> map){
         ResponseDto responseDto = new ResponseDto();
-        EquipmentFileTodayExample example = new EquipmentFileTodayExample();
-        EquipmentFileTodayExample.Criteria ca = example.createCriteria();
+        EquipmentFileExample example = new EquipmentFileExample();
+        EquipmentFileExample.Criteria ca = example.createCriteria();
         if(!StringUtils.isEmpty(map.get("sbbh"))){
             ca.andSbbhEqualTo(map.get("sbbh"));
         }
@@ -447,7 +447,7 @@ public class WelcomeController extends BaseWxController{
             ca.andCjsjLessThanOrEqualTo(DateUtil.toDate(map.get("jssj"),"yyyy-MM-dd HH:mm:ss"));
         }
         ca.andWjlxEqualTo("4");
-        List<EquipmentFileToday> list = equipmentFileTodayService.listAllDw(example);
+        List<EquipmentFile> list = equipmentFileService.listAllDw(example);
         responseDto.setContent(list);
         return responseDto;
     }
