@@ -242,10 +242,6 @@ public class DownloadAudioController {
         ca.andWjmcEqualTo(fileEntity.getWjmc());
         ca.andWjlxEqualTo("4");
         List<EquipmentFileTy> lists = equipmentFileTyService.selectByExample(example);
-        // 此处模拟处理ids,拿到文件下载url
-//        List<String> paths = new ArrayList<>();
-//        paths.add("C:\\Users\\Administrator\\Desktop\\2022_09_28_09_24_06_2022_09_28_09_24_08_1_A2_TD34.mp4");
-//        paths.add("C:\\Users\\Administrator\\Desktop\\2022_09_28_09_24_06_2022_09_28_09_24_08_1_A2_TD33.mp4");
         if (lists.size() != 0) {
             // 创建临时路径,存放压缩文件
             String picStorePath = (String) redisTemplate.opsForValue().get(RedisCode.STATICPATH);//静态路径地址
