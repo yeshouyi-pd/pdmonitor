@@ -154,7 +154,8 @@ export default {
       videoHeight:400,
       zhbht:LOCAL_ZHBHT,
       ldTime:'',
-      userDto:null
+      userDto:null,
+      shj:LOCAL_SSBRL
     }
   },
   mounted() {
@@ -373,7 +374,12 @@ export default {
     },
     downloadVideo(id){
       let _this = this;
-      let url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downZipByA4Id?id='+id;
+      let url = "";
+      if(_this.shj){
+        url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downZipByA4Id53?id='+id;
+      }else {
+        url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downZipByA4Id?id='+id;
+      }
       _this.$ajax.get(url).then((response)=>{
         if(response.data && response.data.message && response.data.message.includes("系统异常")){
           Toast.error("系统异常，请联系管理员！");
