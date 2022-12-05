@@ -142,11 +142,19 @@ public class WelcomeController extends BaseWxController{
                 List<String> listdept = getUpdeptcode(user.getDeptcode());
                 EquipmentTyEventExample example = new EquipmentTyEventExample();
                 EquipmentTyEventExample.Criteria  ca = example.createCriteria();
+                EquipmentTyEventExample example1 = new EquipmentTyEventExample();
+                EquipmentTyEventExample.Criteria  ca1 = example1.createCriteria();
                 if(!CollectionUtils.isEmpty(listdept)){
                     ca.andDeptcodeIn(listdept);
+                    ca1.andDeptcodeIn(listdept);
                 }
                 ca.andRqEqualTo(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd"));
                 List<EquipmentTyEvent> list = equipmentTyEventService.listByDp(example);
+                if(CollectionUtils.isEmpty(list)){
+                    ca1.andRqLessThan(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd"));
+                    ca1.andRqGreaterThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(),-7),"yyyy-MM-dd"));
+                    list = equipmentTyEventService.listByDp(example1);
+                }
                 if(!CollectionUtils.isEmpty(list)){
                     list = list.stream().sorted(Comparator.comparing(EquipmentTyEvent::getKssj).reversed()).collect(Collectors.toList());
                 }
@@ -323,7 +331,8 @@ public class WelcomeController extends BaseWxController{
         ResponseDto responseDto = new ResponseDto();
         WaterEquipmentExample example = new WaterEquipmentExample();
         WaterEquipmentExample.Criteria ca = example.createCriteria();
-        List<WaterEquipment> list = waterEquipmentService.list(null);
+        example.setOrderByClause(" sblc ");
+        List<WaterEquipment> list = waterEquipmentService.list(example);
         List<WaterEquipment> a4List = list.stream().filter(entity -> (entity.getDqzl().equals("A4")||entity.getDqzl().equals("A2"))).collect(Collectors.toList());
         Map<String,Object> map = new HashMap<>();
         map.put("list",list);

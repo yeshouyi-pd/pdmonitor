@@ -107,14 +107,12 @@
   </select>
   <select id="selectByExampleDp" parameterType="com.pd.server.main.domain.EquipmentTyEventExample" resultMap="BaseResultMap">
     select sbbh,kssj,jssj,ts
-    <include refid="Base_Column_List" />
     from equipment_ty_event
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
     union
     select sbbh,kssj,jssj,ts
-    <include refid="Base_Column_List" />
     from equipment_file_event
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />

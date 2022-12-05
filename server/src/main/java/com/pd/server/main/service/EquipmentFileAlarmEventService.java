@@ -105,13 +105,11 @@ public class EquipmentFileAlarmEventService {
         return equipmentFileAlarmEventMapper.statisticsByExampleASC(equipmentFileAlarmEventExample);
     }
 
-    public List<EquipmentFileAlarmEventDto> listStatisticsAllByDp(EquipmentFileAlarmEventDto entityDto, List<String> list) {
+    public List<EquipmentFileAlarmEventDto> listStatisticsAllByDp(EquipmentFileAlarmEventDto entityDto) {
         EquipmentFileAlarmEventExample equipmentFileAlarmEventExample = new EquipmentFileAlarmEventExample();
         EquipmentFileAlarmEventExample.Criteria ca = equipmentFileAlarmEventExample.createCriteria();
-        if(!StringUtils.isEmpty(list)&&list.size()>0){
-            ca.andDeptcodeIn(list);
-        }else if(!StringUtils.isEmpty(entityDto.getDeptcode())){
-            ca.andDeptcodeEqualTo(entityDto.getDeptcode());
+        if(!StringUtils.isEmpty(entityDto.getSbbh())){
+            ca.andSbbhEqualTo(entityDto.getSbbh());
         }
         if(!StringUtils.isEmpty(entityDto.getStime())){
             ca.andBjsjGreaterThanOrEqualTo(entityDto.getStime());

@@ -144,7 +144,8 @@ export default {
       maxHeight:'',
       curTplj:'',
       details:[],
-      userDto:null
+      userDto:null,
+      shj:LOCAL_SSBRL
     }
   },
   mounted() {
@@ -225,7 +226,12 @@ export default {
     downloadFile(obj){
       let _this = this;
       let paramsStr = "fileUrl="+obj.tplj.substring(0,obj.tplj.lastIndexOf("/")+1)+"&fileName="+obj.tplj.substring(obj.tplj.lastIndexOf("/")+1,obj.tplj.length);
-      let url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downAudioFile?'+paramsStr;
+      let url = "";
+      if(_this.shj){
+        url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downAudioFile53?'+paramsStr;
+      }else{
+        url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downAudioFile?'+paramsStr;
+      }
       console.log(url);
       window.location.href = url;
     }

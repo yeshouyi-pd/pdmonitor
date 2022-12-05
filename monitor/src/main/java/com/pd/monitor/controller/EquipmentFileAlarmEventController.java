@@ -55,9 +55,7 @@ public class EquipmentFileAlarmEventController extends BaseWxController {
     @PostMapping("/echartsAlarmDataByDp")
     public ResponseDto echartsAlarmDataByDp(@RequestBody EquipmentFileAlarmEventDto entityDto){
         ResponseDto responseDto = new ResponseDto();
-        LoginUserDto userDto = getRequestHeader();
-        List<String> list = getUpdeptcode(userDto.getDeptcode());
-        List<EquipmentFileAlarmEventDto> listall = equipmentFileAlarmEventService.listStatisticsAllByDp(entityDto, list);
+        List<EquipmentFileAlarmEventDto> listall = equipmentFileAlarmEventService.listStatisticsAllByDp(entityDto);
         List<String> xAixsData = listall.stream().filter(Objects::nonNull).map(u->u.getBjsj()).collect(Collectors.toList());
         List<Integer> yAixsData = listall.stream().filter(Objects::nonNull).map(u->u.getCounts()).collect(Collectors.toList());
         Map<String,Object> resultMap = new HashMap<>();
