@@ -179,7 +179,8 @@ export default {
       curCjsj:'',
       curWjmc:'',
       waterEquipments:[],
-      userDto:null
+      userDto:null,
+      shj:LOCAL_SSBRL
     }
   },
   mounted() {
@@ -305,7 +306,13 @@ export default {
         lj=obj.tplj.substring(0,obj.tplj.lastIndexOf('.')+1)+'txt';
       }
       let paramsStr = "fileUrl="+lj.substring(0,lj.lastIndexOf("/")+1)+"&fileName="+lj.substring(lj.lastIndexOf("/")+1,lj.length);
-      let url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downAudioFile?'+paramsStr;
+      // let url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downAudioFile?'+paramsStr;
+      let url = "";
+      if(_this.shj){
+        url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downAudioFile53?'+paramsStr;
+      }else{
+        url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downAudioFile?'+paramsStr;
+      }
       _this.$ajax.get(url).then((response)=>{
         if((response.data && typeof response.data == 'string'&& response.data.includes("系统异常"))||(response.data.message && response.data.message.includes("系统异常"))){
           Toast.error("未找到该文件！");

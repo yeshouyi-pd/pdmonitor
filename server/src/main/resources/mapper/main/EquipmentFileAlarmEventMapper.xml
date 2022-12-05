@@ -354,6 +354,6 @@
       <include refid="Example_Where_Clause" />
     </if>
     GROUP BY bjsj
-    ORDER BY bjsj DESC
+    ORDER BY bjsj ASC
   </select>
 </mapper>

@@ -207,7 +207,7 @@
                       </div>
                     </div>
                     <div class="form-group">
-                      <label class="col-sm-2 control-label">设备量程</label>
+                      <label class="col-sm-2 control-label">设备顺序号</label>
                       <div class="col-sm-4">
                         <input v-model="waterEquipment.sblc" class="form-control">
                       </div>
@@ -480,8 +480,8 @@
                 // || !Validator.require(_this.waterEquipment.fzrdh, "负责人电话")
                 ||!Validator.checkIsGH(_this.waterEquipment.fzrdh, "负责人电话")
                 || !Validator.length(_this.waterEquipment.fzrdh, "负责人电话", 1, 45)
-                // || !Validator.require(_this.waterEquipment.sblc, "设备量程")
-                || !Validator.length(_this.waterEquipment.sblc, "设备量程", 1, 45)
+                // || !Validator.require(_this.waterEquipment.sblc, "设备顺序号")
+                || !Validator.length(_this.waterEquipment.sblc, "设备顺序号", 1, 45)
                 // || !Validator.require(_this.waterEquipment.jdfw, "设备进度范围")
                 || !Validator.length(_this.waterEquipment.jdfw, "设备进度范围", 1, 128)
                 // || !Validator.require(_this.waterEquipment.fzwz, "设备放置位置")

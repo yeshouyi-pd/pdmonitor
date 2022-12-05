@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.io.File;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -276,10 +277,49 @@ public class DownloadAudioController {
         try{
             String fileName = request.getParameter("fileName");
             String path = request.getParameter("fileUrl")+fileName;
-            // URLConnection conn = url.openConnection();
+            // HttpURLConnection conn = (HttpURLConnection)url.openConnection();
             // in = new BufferedInputStream(conn.getInputStream());
             // 这和上面两句一样的效果
             in = new BufferedInputStream(new FileInputStream(path.replace(fileUrl,filePath)));
+            response.reset();
+            response.setContentType("application/octet-stream");
+            fileName = new String(fileName.getBytes(), "ISO-8859-1");
+            response.setHeader("Content-Disposition", "attachment; filename="+fileName);
+            // 将网络输入流转换为输出流
+            int i;
+            while ((i = in.read()) != -1) {
+                response.getOutputStream().write(i);
+            }
+            in.close();
+            response.getOutputStream().close();
+        }catch (IOException e){
+            try{
+                String result = "未找到该文件";
+                response.getOutputStream().write(result.getBytes());
+                in.close();
+                response.getOutputStream().close();
+            }catch (IOException exception){
+                System.out.println("关闭流失败");
+            }
+        }
+    }
+
+    @GetMapping("/downAudioFile53")
+    public void downAudioFile53(HttpServletRequest request, HttpServletResponse response) {
+        response.setCharacterEncoding("UTF-8");
+        String fileUrl = attrService.findByAttrKey("fileUrl");//http://49.239.193.146:8082/
+        String filePath = attrService.findByAttrKey("filePath");
+        BufferedInputStream in = null;
+        try{
+            String fileName = request.getParameter("fileName");
+            String path = request.getParameter("fileUrl")+fileName;
+            URL url = new URL(path);
+            HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+            conn.setConnectTimeout(30000);
+            conn.setReadTimeout(30000);
+            in = new BufferedInputStream(conn.getInputStream());
+            // 这和上面两句一样的效果
+            // in = new BufferedInputStream(new FileInputStream(path.replace(fileUrl,filePath).replace("http:\\","http:\\\\")));
             response.reset();
             response.setContentType("application/octet-stream");
             fileName = new String(fileName.getBytes(), "ISO-8859-1");

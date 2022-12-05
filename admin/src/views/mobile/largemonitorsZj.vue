@@ -86,7 +86,7 @@
           <span>侦测事件统计（以天为单位）</span>
           <div class="imgs">
             <div style="width: 30%;float: right;">
-              <select v-model="curEventSbbh" @change="getSevenDayEvent" class="form-control" style="background-color: #13225E;color: #fff;border-color: #34B9DF;">
+              <select v-model="curEventSbbh" @change="getAlarmEventData" class="form-control" style="background-color: #13225E;color: #fff;border-color: #34B9DF;">
                 <option v-for="item in devices" :value="item.sbsn">{{item.sbmc}}</option>
               </select>
             </div>
@@ -175,7 +175,8 @@ export default {
       _this.$forceUpdate();
       _this.a4Device = response.content.a4List;
       _this.$forceUpdate();
-      _this.getSevenDayEvent();//左下角最近7天的总事件
+      //_this.getSevenDayEvent();//左下角最近7天的总事件
+      _this.getAlarmEventData();//右中最近7天的总事件
       _this.getRightTopData();//右上角获取当日声学侦测次数、事件(群次)、捕食次数
       _this.getPointer();
       _this.getA4AndA2JL();//中间下方，获取A2设备和A4设备聚类
@@ -197,7 +198,8 @@ export default {
       _this.curTopSbbh=sbbh;
       _this.curEventSbbh=sbbh;
       _this.curBottomSbbh=sbbh;
-      _this.getSevenDayEvent();//左下角最近7天的总事件
+      //_this.getSevenDayEvent();//左下角最近7天的总事件
+      _this.getAlarmEventData();//右中最近7天的总事件
       _this.getRightTopData();//右上角获取当日声学侦测次数、事件(群次)、捕食次数
       _this.getPointer();
     },
@@ -398,7 +400,8 @@ export default {
       // 计时器为空，操作
       _this.intervalId = setInterval(() => {
         console.log("刷新" + new Date());
-        _this.getSevenDayEvent();//左下角最近7天的总事件
+        //_this.getSevenDayEvent();//左下角最近7天的总事件
+        _this.getAlarmEventData();//右中最近7天的总事件
         _this.getA4AndA2JL();//中间下方，获取A2设备和A4设备聚类
         _this.getRightTopData();//右上角获取当日声学侦测次数、事件(群次)、捕食次数
         _this.getPointer();
@@ -416,97 +419,177 @@ export default {
     toTyDp(){
       window.location.href = "/mobile/largemonitorsTy";
     },
-    getSevenDayEvent(){
+    getAlarmEventData(){
       let _this = this;
-      let obj = {
-        "type":'zjglj',
-        "sbbh":_this.curEventSbbh
-      };
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/welcome/getSevenDayEvent',obj).then((res)=>{
-        let response = res.data;
-        let contentDatas = response.content;
-        let legendData = [];
-        let seriesData = [];
-        _this.$forceUpdate();
-        if(contentDatas && contentDatas.map){
-          for(let sbbh in contentDatas.map){
-            legendData.push(_this.optionKVArray(_this.devices,sbbh));
-            let infos = contentDatas.map[sbbh];
-            let rqs = contentDatas.rqs;
-            let allData = [];
-            for(let i=0;i<infos.length;i++){
-              let seriesItem = [];
-              let info = infos[i];
-              if(rqs.includes(info.rq)){
-                let index = rqs.findIndex((x) => x == info.rq);
-                rqs.splice(index,1);
-              }
-              seriesItem.push(info.rq,info.xmbh);
-              allData.push(seriesItem);
-            }
-            for(let k=0;k<rqs.length;k++){
-              let seriesItem = [];
-              seriesItem.push(rqs[k],0);
-              allData.push(seriesItem);
-            }
-            allData.sort();
-            let obj = {
-              name: _this.optionKVArray(_this.devices,sbbh),
-              type: 'bar',
-              data: allData
-            }
-            seriesData.push(obj);
-          }
-        }
-        _this.initBarChar(legendData,seriesData);
+      let obj = {};
+      obj.sbbh = _this.curEventSbbh;
+      obj.stime = Tool.dateFormat("yyyy-MM-dd",new Date(new Date().getTime()-3600000*24*7));
+      obj.etime = Tool.dateFormat("yyyy-MM-dd",new Date(new Date().getTime()-3600000*24*1));
+      _this.$forceUpdate();
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileAlarmEvent/echartsAlarmDataByDp',obj).then((response)=>{
+        let resp = response.data;
+        _this.initEchartData(resp.content);
       })
     },
-    initBarChar(legendData,seriesData){
+    initEchartData(data){
       let _this = this;
       if(_this.a4chart){
         _this.a4chart.dispose();
         _this.a4chart=null;
       }
       let option = {
-        // legend: {
-        //   data: legendData,
-        //   textStyle: {
-        //     color: "rgba(251, 251, 251, 1)"
-        //   }
-        // },
         tooltip: {
-          show:true,
+          trigger: 'axis'
         },
-        xAxis: [
-          {
-            type: 'category',
-            name: '日期',
-            axisLine: {
-              lineStyle: {
-                color: "rgba(251, 251, 251, 1)"
-              }
+        grid: {
+          bottom: '30%'
+        },
+        xAxis: {
+          show: true,
+          name: '事件日期',
+          nameLocation:'center',
+          type: 'category',
+          nameGap: 30,
+          boundaryGap: true,
+          data:data.xAixsData,
+          axisLine:{
+            show: true,
+            symbol: ['none', 'path://M5,20 L5,5 L8,8 L5,2 L2,8 L5,5 L5.3,6 L5.3,20 '],
+            symbolOffset: 10,
+            symbolSize:[35, 35],
+            lineStyle: {
+              color: "rgba(251, 251, 251, 1)"
+            }
+          },
+          axisLabel: {
+            show: true,
+            width: 100,
+            overflow: 'break'
+          }
+        },
+        yAxis: {
+          show: true,
+          name: '事件次数',
+          type: 'value',
+          nameGap: 30,
+          boundaryGap: [0, '30%'],
+          axisLine:{
+            show: true,
+            symbol: ['none', 'path://M5,20 L5,5 L8,8 L5,2 L2,8 L5,5 L5.3,6 L5.3,20 '],
+            symbolOffset: 10,
+            symbolSize:[35, 35],
+            lineStyle: {
+              color: "rgba(251, 251, 251, 1)"
             }
           }
-        ],
-        yAxis: [
+        },
+        series: [
           {
-            type: 'value',
-            name: '侦测事件',
-            axisLine: {
-              lineStyle: {
-                color: "rgba(251, 251, 251, 1)"
-              }
-            }
+            type: 'bar',
+            smooth: 0.6,
+            symbolSize: 8,
+            lineStyle: {
+              color: '#5470C6',
+              width: 2
+            },
+            data: data.yAixsData
           }
-        ],
-        series: seriesData
+        ]
       };
-      _this.a4chart = echarts.init(document.getElementById('barChart'));
-      _this.a4chart.setOption(option)
-      window.addEventListener('resize', () => {
-        chart.resize()
-      })
+      _this.a4chart = echarts.init(document.getElementById("barChart"));
+      _this.a4chart.setOption(option);
     },
+    // getSevenDayEvent(){
+    //   let _this = this;
+    //   let obj = {
+    //     "type":'zjglj',
+    //     "sbbh":_this.curEventSbbh
+    //   };
+    //   _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/welcome/getSevenDayEvent',obj).then((res)=>{
+    //     let response = res.data;
+    //     let contentDatas = response.content;
+    //     let legendData = [];
+    //     let seriesData = [];
+    //     _this.$forceUpdate();
+    //     if(contentDatas && contentDatas.map){
+    //       for(let sbbh in contentDatas.map){
+    //         legendData.push(_this.optionKVArray(_this.devices,sbbh));
+    //         let infos = contentDatas.map[sbbh];
+    //         let rqs = contentDatas.rqs;
+    //         let allData = [];
+    //         for(let i=0;i<infos.length;i++){
+    //           let seriesItem = [];
+    //           let info = infos[i];
+    //           if(rqs.includes(info.rq)){
+    //             let index = rqs.findIndex((x) => x == info.rq);
+    //             rqs.splice(index,1);
+    //           }
+    //           seriesItem.push(info.rq,info.xmbh);
+    //           allData.push(seriesItem);
+    //         }
+    //         for(let k=0;k<rqs.length;k++){
+    //           let seriesItem = [];
+    //           seriesItem.push(rqs[k],0);
+    //           allData.push(seriesItem);
+    //         }
+    //         allData.sort();
+    //         let obj = {
+    //           name: _this.optionKVArray(_this.devices,sbbh),
+    //           type: 'bar',
+    //           data: allData
+    //         }
+    //         seriesData.push(obj);
+    //       }
+    //     }
+    //     _this.initBarChar(legendData,seriesData);
+    //   })
+    // },
+    // initBarChar(legendData,seriesData){
+    //   let _this = this;
+    //   if(_this.a4chart){
+    //     _this.a4chart.dispose();
+    //     _this.a4chart=null;
+    //   }
+    //   let option = {
+    //     // legend: {
+    //     //   data: legendData,
+    //     //   textStyle: {
+    //     //     color: "rgba(251, 251, 251, 1)"
+    //     //   }
+    //     // },
+    //     tooltip: {
+    //       show:true,
+    //     },
+    //     xAxis: [
+    //       {
+    //         type: 'category',
+    //         name: '日期',
+    //         axisLine: {
+    //           lineStyle: {
+    //             color: "rgba(251, 251, 251, 1)"
+    //           }
+    //         }
+    //       }
+    //     ],
+    //     yAxis: [
+    //       {
+    //         type: 'value',
+    //         name: '侦测事件',
+    //         axisLine: {
+    //           lineStyle: {
+    //             color: "rgba(251, 251, 251, 1)"
+    //           }
+    //         }
+    //       }
+    //     ],
+    //     series: seriesData
+    //   };
+    //   _this.a4chart = echarts.init(document.getElementById('barChart'));
+    //   _this.a4chart.setOption(option)
+    //   window.addEventListener('resize', () => {
+    //     chart.resize()
+    //   })
+    // },
     getA4AndA2JL(){
       let _this = this;
       _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getEventData').then((res)=>{
@@ -516,7 +599,7 @@ export default {
           _this.getSwipeData(eventDatas[0].sbbh,eventDatas[0].kssj,eventDatas[0].jssj);
           _this.getVideoData(eventDatas[0].sbbh,eventDatas[0].kssj,eventDatas[0].jssj);
         }
-        _this.config.data = []
+        _this.config.data = [];
         for(let i=0;i<eventDatas.length;i++){
           let item = eventDatas[i];
           let arrItem = [_this.optionKVArray(_this.devices,item.sbbh),item.kssj.substring(11),item.jssj.substring(11),item.ts, `<div class="btn-detail" onclick="getSwipeData('${item.sbbh}','${item.kssj}','${item.jssj}')">查看声谱图</div>`];
