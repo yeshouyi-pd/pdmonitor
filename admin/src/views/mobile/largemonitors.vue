@@ -393,7 +393,7 @@ export default {
     },
     getThreeDayTs(){
       let _this = this;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/welcome/getThreeDayTs',{}).then((res)=>{
+      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getThreeDayTs').then((res)=>{
         let response = res.data;
         let contentDatas = response.content;
         let legendData = [];
