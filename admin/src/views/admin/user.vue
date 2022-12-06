@@ -223,11 +223,11 @@
                 <div class="col-sm-3">
                   <div class="radio">
                     <label>
-                      <input name="form-zt-radio" type="radio"  value="Y" v-model="user.yj" class="ace input-lg" />
+                      <input name="form-xz-radio" type="radio"  value="Y" v-model="user.yj" class="ace input-lg" />
                       <span class="lbl bigger-120">是</span>
                     </label>
                     <label>
-                      <input name="form-zt-radio" type="radio"  value="N"  v-model="user.yj" class="ace input-lg" />
+                      <input name="form-xz-radio" type="radio"  value="N"  v-model="user.yj" class="ace input-lg" />
                       <span class="lbl bigger-120">否</span>
                     </label>
                   </div>
