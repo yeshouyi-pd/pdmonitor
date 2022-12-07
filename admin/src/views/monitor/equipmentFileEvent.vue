@@ -89,7 +89,7 @@
             <h4 style="margin-top: 10px">N</h4>
             <div style="width: 400px;height: 380px;" id="echartEvent"></div>
             <h4>S</h4>
-            <h4>(港珠澳大桥)</h4>
+            <h4 v-if="!shj">(港珠澳大桥)</h4>
             <p>{{equipmentFileEvent.kssj}}至{{equipmentFileEvent.jssj}}</p>
             <p>保守估计发声头数<span style="color: red">{{equipmentFileEvent.ts}}头</span></p>
           </div>

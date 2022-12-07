@@ -120,7 +120,6 @@
   </select>
   <select id="selectByExampleSumTs" parameterType="com.pd.server.main.domain.EquipmentTyEventExample" resultMap="BaseResultMap">
     select sbbh,sum(ts) as ts,rq
-    <include refid="Base_Column_List" />
     from equipment_ty_event
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -128,7 +127,6 @@
     GROUP BY sbbh,rq
     union
     select sbbh,sum(ts) as ts,rq
-    <include refid="Base_Column_List" />
     from equipment_file_event
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
