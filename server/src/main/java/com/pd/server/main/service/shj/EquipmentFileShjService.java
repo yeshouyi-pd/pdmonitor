@@ -148,10 +148,14 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                         todayMapper.insertEquipFile(beforeEntity);
                         redisTstaticemplate.opsForValue().set(sbbh+"WB", JSONObject.toJSONString(entity));
                     }else{
-                        EquipmentFileToday lastFile = todayMapper.selectLastOneBySbbh(sbbh);
-                        if(!StringUtils.isEmpty(beforeEntity.getCjsj())&&!StringUtils.isEmpty(lastFile.getCjsj())&&isOverThreeMinute(DateUtil.getFormatDate(lastFile.getCjsj(),"yyyy-MM-dd HH:mm:ss"),DateUtil.getFormatDate(beforeEntity.getCjsj(),"yyyy-MM-dd HH:mm:ss"))){
-                            equipmentFileMapper.insert(beforeEntity);
-                            todayMapper.insertEquipFile(beforeEntity);
+                        try{
+                            EquipmentFile lastFile = equipmentFileMapper.selectLastOneBySbbh(sbbh);
+                            if(!StringUtils.isEmpty(beforeEntity.getCjsj())&&!StringUtils.isEmpty(lastFile.getCjsj())&&isOverThreeMinute(DateUtil.getFormatDate(lastFile.getCjsj(),"yyyy-MM-dd HH:mm:ss"),DateUtil.getFormatDate(beforeEntity.getCjsj(),"yyyy-MM-dd HH:mm:ss"))){
+                                equipmentFileMapper.insert(beforeEntity);
+                                todayMapper.insertEquipFile(beforeEntity);
+                            }
+                        }catch (Exception e){
+                            LOG.error("错误："+e.getMessage());
                         }
                         redisTstaticemplate.opsForValue().set(sbbh+"WB", JSONObject.toJSONString(entity));
                     }
