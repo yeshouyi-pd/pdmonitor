@@ -4,6 +4,7 @@ import com.pd.server.main.domain.Role;
 import com.pd.server.main.domain.RoleExample;
 import com.pd.server.main.domain.RoleResource;
 import com.pd.server.main.domain.RoleResourceExample;
+import com.pd.server.main.dto.LoginUserDto;
 import com.pd.server.main.dto.PageDto;
 import com.pd.server.main.dto.RoleDto;
 import com.pd.server.main.mapper.RoleMapper;
@@ -112,9 +113,12 @@ public class RoleService {
         return resourceIdList;
     }
 
-    public List<RoleDto> allroles() {
-
+    public List<RoleDto> allroles(LoginUserDto user) {
         RoleExample roleExample = new RoleExample();
+        RoleExample.Criteria ca = roleExample.createCriteria();
+        if(!"00000000".equals(user.getRode())){
+            ca.andIdNotEqualTo("00000000");
+        }
         List<Role> roleList = roleMapper.selectByExample(roleExample);
         return CopyUtil.copyList(roleList, RoleDto.class);
     }
