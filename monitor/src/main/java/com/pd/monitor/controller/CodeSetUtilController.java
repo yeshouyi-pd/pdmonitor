@@ -77,7 +77,7 @@ public class CodeSetUtilController extends BaseWxController {
         UserExample.Criteria ca = userExample.createCriteria();
         LoginUserDto loginUserDto = getRequestHeader();
         if(!"00000000".equals(loginUserDto.getRode())){
-            ca.andIdNotEqualTo("00000000");
+            ca.andRodeNotEqualTo("00000000");
         }
         List<User> userList = userService.list(userExample);
         PageInfo<User> pageInfo = new PageInfo<>(userList);
