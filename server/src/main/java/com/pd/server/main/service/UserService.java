@@ -148,4 +148,8 @@ private UserMapper userMapper;
         LOG.info("有权限的请求：{}", requestSet);
         loginUserDto.setRequests(requestSet);
     }
+
+    public List<String> glyCode(){
+        return userMapper.glyCode();
+    }
 }

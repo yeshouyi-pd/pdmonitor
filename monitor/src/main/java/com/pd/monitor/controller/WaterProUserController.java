@@ -6,6 +6,7 @@ import com.pd.server.main.domain.WaterProUserExample;
 import com.pd.server.main.dto.LoginUserDto;
 import com.pd.server.main.dto.WaterProUserDto;
 import com.pd.server.main.dto.ResponseDto;
+import com.pd.server.main.service.UserService;
 import com.pd.server.main.service.WaterProUserService;
 import com.pd.server.util.ValidatorUtil;
 import org.slf4j.Logger;
@@ -26,6 +27,8 @@ public class WaterProUserController extends BaseWxController {
 
     @Resource
     private WaterProUserService waterProUserService;
+    @Resource
+    private UserService userService;
 
     /**
     * 列表查询
@@ -91,6 +94,11 @@ public class WaterProUserController extends BaseWxController {
         }
         if(!StringUtils.isEmpty(waterProUserDto.getUsercode())){
             ca.andUsercodeEqualTo(waterProUserDto.getUsercode());
+        }
+        LoginUserDto userDto = getRequestHeader();
+        if(!"00000000".equals(userDto.getRode())){
+            List<String> gly = userService.glyCode();
+            ca.andUsercodeNotIn(gly);
         }
         List<WaterProUser> lists = waterProUserService.selectByExample(example);
         responseDto.setContent(lists);
