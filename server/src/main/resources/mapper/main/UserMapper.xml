@@ -475,4 +475,7 @@
       jyw = #{jyw,jdbcType=VARCHAR}
     where id = #{id,jdbcType=CHAR}
   </update>
+  <select id="glyCode" resultType="java.lang.String">
+    SELECT login_name FROM USER WHERE rode='00000000';
+  </select>
 </mapper>
