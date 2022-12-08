@@ -110,8 +110,9 @@ public class RoleController extends BaseController {
     @GetMapping("/allroles")
     public ResponseDto allroles() {
         LOG.info("加载资源开始");
+        LoginUserDto user = getRequestHeader();
         ResponseDto responseDto = new ResponseDto<>();
-        List<RoleDto> list = roleService.allroles();
+        List<RoleDto> list = roleService.allroles(user);
         responseDto.setContent(list);
         return responseDto;
     }
