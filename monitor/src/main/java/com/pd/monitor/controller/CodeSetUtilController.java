@@ -75,6 +75,10 @@ public class CodeSetUtilController extends BaseWxController {
         PageHelper.startPage(userDto.getPage(), userDto.getSize());
         UserExample userExample = new UserExample();
         UserExample.Criteria ca = userExample.createCriteria();
+        LoginUserDto loginUserDto = getRequestHeader();
+        if(!"00000000".equals(loginUserDto.getRode())){
+            ca.andIdNotEqualTo("00000000");
+        }
         List<User> userList = userService.list(userExample);
         PageInfo<User> pageInfo = new PageInfo<>(userList);
         userDto.setTotal(pageInfo.getTotal());
