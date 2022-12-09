@@ -36,8 +36,8 @@ public class EquipmentTyEventService {
         return equipmentTyEventMapper.selectByExampleSpecial(record);
     }
 
-    public List<EquipmentTyEvent> listByDp(EquipmentTyEventExample example){
-        return equipmentTyEventMapper.selectByExampleDp(example);
+    public List<EquipmentTyEvent> listByDp(EquipmentTyEventExample example,String a4Sbbh){
+        return equipmentTyEventMapper.selectByExampleDp(example,a4Sbbh);
     }
 
     public List<EquipmentTyEvent> listSumTs(EquipmentTyEventExample example){

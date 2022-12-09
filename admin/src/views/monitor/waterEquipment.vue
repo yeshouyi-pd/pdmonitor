@@ -128,7 +128,7 @@
       <pagination ref="pagination" v-bind:list="list" v-bind:itemCount="8"></pagination>
     </div>
 
-    <div v-else><equipment-map></equipment-map></div>
+    <div v-else><EquipmentAMap v-bind:height-max="740"></EquipmentAMap></div>
 
     <div id="form-modal" class="modal fade" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document" style="width: 60%;">
@@ -283,9 +283,9 @@
 
 <script>
   import Pagination from "../../components/pagination";
-  import EquipmentMap from "@/views/monitor/equipmentMap";
+  import EquipmentAMap from "../monitor/equipmentAMap";
   export default {
-    components: {Pagination, EquipmentMap},
+    components: {Pagination, EquipmentAMap},
     name: "monitor-waterEquipment",
     data: function() {
       return {
