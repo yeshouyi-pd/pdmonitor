@@ -1,9 +1,11 @@
 package com.pd.server.util;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class DateUtils {
 
@@ -50,9 +52,12 @@ public class DateUtils {
     }
 
     public static void main(String[] args) throws ParseException {
-        System.out.println(new Date());
-        System.out.println(getDateToStr(new Date()));
-        System.out.println(getStrToDateFormat("2020-10-21","yyyy-MM-dd"));
+        System.out.println(getBeginWeek());
+        System.out.println(getEndWeek());
+        System.out.println(getBeginDayStrOfSomeMonth(0));
+        System.out.println(getEndDayStrOfSomeMonth(0));
+        System.out.println(getBeginDayStrOfSomeMonth(1));
+        System.out.println(getEndDayStrOfSomeMonth(1));
     }
 
     //获取某年某月的第一天日期
@@ -69,5 +74,82 @@ public class DateUtils {
         int day = calendar.getActualMaximum(5);
         calendar.set(year, month - 1, day);
         return calendar.getTime();
+    }
+
+    // 获取本周开始时间
+    public static String getBeginWeek() {
+        Calendar cal = Calendar.getInstance();
+        // 设置一个星期的第一天，按中国的习惯一个星期的第一天是星期一
+        cal.setFirstDayOfWeek(Calendar.MONDAY);
+        // 获得当前日期是一个星期的第几天
+        int dayWeek = cal.get(Calendar.DAY_OF_WEEK);
+        if(dayWeek==1){
+            dayWeek = 8;
+        }
+        cal.add(Calendar.DATE, cal.getFirstDayOfWeek() - dayWeek);// 根据日历的规则，给当前日期减去星期几与一个星期第一天的差值
+        return DateUtil.getFormatDate(getDayStartTime(cal.getTime()),"yyyy-MM-dd HH:mm:ss");
+    }
+
+    // 获取本周结束时间
+    public static String getEndWeek() {
+        Calendar cal = Calendar.getInstance();
+        // 设置一个星期的第一天，按中国的习惯一个星期的第一天是星期一
+        cal.setFirstDayOfWeek(Calendar.MONDAY);
+        // 获得当前日期是一个星期的第几天
+        int dayWeek = cal.get(Calendar.DAY_OF_WEEK);
+        if(dayWeek==1){
+            dayWeek = 8;
+        }
+        cal.add(Calendar.DATE, cal.getFirstDayOfWeek() - dayWeek);// 根据日历的规则，给当前日期减去星期几与一个星期第一天的差值
+        cal.add(Calendar.DATE, 4 +cal.getFirstDayOfWeek());
+        return DateUtil.getFormatDate(getDayStartTime(cal.getTime()),"yyyy-MM-dd HH:mm:ss");
+    }
+
+    // 获取前面第几个月（上月为第一个月）的开始时间
+    public static String getBeginDayStrOfSomeMonth(int i) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(getNowYear(), getNowMonth() - 1 - i, 1);
+        return DateUtil.getFormatDate(getDayStartTime(calendar.getTime()),"yyyy-MM-dd HH:mm:ss");
+    }
+
+    // 获取前面第几个月（上月为第一个月）的结束时间
+    public static String getEndDayStrOfSomeMonth(int i) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(getNowYear(), getNowMonth() - 1 - i, 1);
+        int day = calendar.getActualMaximum(5);
+        calendar.set(getNowYear(), getNowMonth() - 1 - i, day);
+        return DateUtil.getFormatDate(getDayEndTime(calendar.getTime()),"yyyy-MM-dd HH:mm:ss");
+    }
+
+    //获取某个日期的开始时间
+    public static Timestamp getDayStartTime(Date d) {
+        Calendar calendar = Calendar.getInstance();
+        if(null != d) calendar.setTime(d);
+        calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),    calendar.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return new Timestamp(calendar.getTimeInMillis());
+    }
+    //获取某个日期的结束时间
+    public static Timestamp getDayEndTime(Date d) {
+        Calendar calendar = Calendar.getInstance();
+        if(null != d) calendar.setTime(d);
+        calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),    calendar.get(Calendar.DAY_OF_MONTH), 23, 59, 59);
+        calendar.set(Calendar.MILLISECOND, 999);
+        return new Timestamp(calendar.getTimeInMillis());
+    }
+
+    //获取今年是哪一年
+    public static Integer getNowYear() {
+        Date date = new Date();
+        GregorianCalendar gc = (GregorianCalendar) Calendar.getInstance();
+        gc.setTime(date);
+        return Integer.valueOf(gc.get(1));
+    }
+    //获取本月是哪一月
+    public static int getNowMonth() {
+        Date date = new Date();
+        GregorianCalendar gc = (GregorianCalendar) Calendar.getInstance();
+        gc.setTime(date);
+        return gc.get(2) + 1;
     }
 }

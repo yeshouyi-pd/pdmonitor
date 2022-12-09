@@ -1,10 +1,5 @@
 <template>
     <div>
-        <!--<div id="map-top" style="width: 115px;height: 80px;border: 0px solid #EEEEEE;position: absolute;left: 12px;z-index: 100;background-color: #84EAEC;">
-            <div style="padding:5px 0px 5px 5px;color: #00A7D2;"><i class="fa fa-map-marker" style="color:#03C449;padding-right: 10px;"></i>设备正常 {{onLineCount}}个</div>
-            <div style="padding:0px 0px 5px 5px;color: #00A7D2;"><i class="fa fa-map-marker" style="color:#555555;padding-right: 10px;"></i>设备离线 {{offLineCount}}个</div>
-            <div style="padding:0px 0px 5px 5px;color: #00A7D2;"><i class="fa fa-map-marker" style="color:#B03A5B;padding-right: 10px;"></i>设备故障 {{errorCount}}个</div>
-        </div>-->
         <div :style="{height: heightMax + 'px'}">
             <div id="equipmentamap" style="width:100%;height: 100%" ></div>
         </div>
@@ -187,6 +182,11 @@
                                 zIndex: 101,
                                 map: _this.amap
                             });
+                            marker.setLabel({
+                              direction:'center',
+                              offset: new AMap.Pixel(10, 0),  //设置文本标注偏移量
+                              content: devices[i].fzwz, //设置文本标注内容
+                            });
                             marker.content = [];
                             marker.content.push(devices[i].deptcode);
                             marker.content.push(devices[i].centerCode);
@@ -204,7 +204,7 @@
                                 center: devices[i].gps.split(','),
                                 radius: 500, //半径
                                 borderWeight: 3,
-                                strokeColor: "#FF33FF",
+                                strokeColor: "#6D9DE9",
                                 strokeWeight: 6,
                                 strokeOpacity: 1,
                                 fillOpacity: 0.4,

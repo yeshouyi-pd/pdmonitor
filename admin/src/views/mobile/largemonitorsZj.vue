@@ -59,10 +59,33 @@
       <div class="pain">
         <div class="h25">
           <div class="imgs">
-            <div style="margin-bottom: 10px;width: 30%;float: right;">
-              <select v-model="curTopSbbh" @change="getRightTopData" class="form-control" style="background-color: #13225E;color: #fff;border-color: #34B9DF;">
-                <option v-for="item in devices" :value="item.sbsn">{{item.sbmc}}</option>
-              </select>
+            <div>
+              <div style="float: left;color: #fff">
+                <div class="radio" style="margin-top: 3px;margin-left: 10px;font-size: 12px;">
+                  <label style="width: 57px;">
+                    <input name="form-top-radio" type="radio"  value="1" v-model="topDayType" class="ace" />
+                    <span class="lbl bigger-120">上月</span>
+                  </label>
+                  <label style="width: 57px;">
+                    <input name="form-top-radio" type="radio"  value="2" v-model="topDayType" class="ace" />
+                    <span class="lbl bigger-120">本月</span>
+                  </label>
+                  <label style="width: 57px;">
+                    <input name="form-top-radio" type="radio"  value="3" v-model="topDayType" class="ace" />
+                    <span class="lbl bigger-120">本周</span>
+                  </label>
+                  <label style="width: 57px;">
+                    <input name="form-top-radio" type="radio"  value="4" v-model="topDayType" class="ace" />
+                    <span class="lbl bigger-120">当天</span>
+                  </label>
+                </div>
+              </div>
+              <div style="margin-bottom: 10px;width: 30%;float: right;">
+                <select v-model="curTopSbbh" @change="getRightTopData" class="form-control" style="background-color: #13225E;color: #fff;border-color: #34B9DF;">
+                  <option value="">全部</option>
+                  <option v-for="item in devices" :value="item.sbsn">{{item.sbmc}}</option>
+                </select>
+              </div>
             </div>
             <div style="display: flex;justify-content: space-around;align-items: center;clear: both;">
               <div v-for="(item,index) in right1" :key="index" style="position: relative;">
@@ -85,8 +108,25 @@
         <div class=" h37">
           <span>侦测事件统计（以天为单位）</span>
           <div class="imgs">
+            <div style="float: left;color: #fff">
+              <div class="radio" style="margin-top: 10px;margin-left: 10px;font-size: 12px;">
+                <label style="width: 80px;">
+                  <input name="form-event-radio" type="radio"  value="1" v-model="eventDayType" class="ace" />
+                  <span class="lbl bigger-120">前30天</span>
+                </label>
+                <label style="width: 80px;">
+                  <input name="form-event-radio" type="radio"  value="2" v-model="eventDayType" class="ace" />
+                  <span class="lbl bigger-120">前15天</span>
+                </label>
+                <label style="width: 80px;">
+                  <input name="form-event-radio" type="radio"  value="3" v-model="eventDayType" class="ace" />
+                  <span class="lbl bigger-120">前7天</span>
+                </label>
+              </div>
+            </div>
             <div style="width: 30%;float: right;">
               <select v-model="curEventSbbh" @change="getAlarmEventData" class="form-control" style="background-color: #13225E;color: #fff;border-color: #34B9DF;">
+                <option value="">全部</option>
                 <option v-for="item in devices" :value="item.sbsn">{{item.sbmc}}</option>
               </select>
             </div>
@@ -163,7 +203,19 @@ export default {
       curTopSbbh:'RPCDA4001',
       curEventSbbh:'RPCDA4001',
       a4chart:null,
-      curBottomSbbh:'RPCDA4001'
+      curBottomSbbh:'RPCDA4001',
+      topDayType:'4',
+      eventDayType:'3'
+    }
+  },
+  watch: {
+    topDayType() {
+      let _this = this;
+      _this.getRightTopData();
+    },
+    eventDayType() {
+      let _this = this;
+      _this.getAlarmEventData();
     }
   },
   created() {
@@ -423,8 +475,16 @@ export default {
       let _this = this;
       let obj = {};
       obj.sbbh = _this.curEventSbbh;
-      obj.stime = Tool.dateFormat("yyyy-MM-dd",new Date(new Date().getTime()-3600000*24*7));
-      obj.etime = Tool.dateFormat("yyyy-MM-dd",new Date(new Date().getTime()-3600000*24*1));
+      if(_this.eventDayType=='3'){
+        obj.stime = Tool.dateFormat("yyyy-MM-dd",new Date(new Date().getTime()-3600000*24*7));
+        obj.etime = Tool.dateFormat("yyyy-MM-dd",new Date(new Date().getTime()-3600000*24*1));
+      }else if(_this.eventDayType=='2'){
+        obj.stime = Tool.dateFormat("yyyy-MM-dd",new Date(new Date().getTime()-3600000*24*15));
+        obj.etime = Tool.dateFormat("yyyy-MM-dd",new Date(new Date().getTime()-3600000*24*1));
+      }else if(_this.eventDayType=='1'){
+        obj.stime = Tool.dateFormat("yyyy-MM-dd",new Date(new Date().getTime()-3600000*24*30));
+        obj.etime = Tool.dateFormat("yyyy-MM-dd",new Date(new Date().getTime()-3600000*24*1));
+      }
       _this.$forceUpdate();
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileAlarmEvent/echartsAlarmDataByDp',obj).then((response)=>{
         let resp = response.data;
@@ -499,97 +559,6 @@ export default {
       _this.a4chart = echarts.init(document.getElementById("barChart"));
       _this.a4chart.setOption(option);
     },
-    // getSevenDayEvent(){
-    //   let _this = this;
-    //   let obj = {
-    //     "type":'zjglj',
-    //     "sbbh":_this.curEventSbbh
-    //   };
-    //   _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/welcome/getSevenDayEvent',obj).then((res)=>{
-    //     let response = res.data;
-    //     let contentDatas = response.content;
-    //     let legendData = [];
-    //     let seriesData = [];
-    //     _this.$forceUpdate();
-    //     if(contentDatas && contentDatas.map){
-    //       for(let sbbh in contentDatas.map){
-    //         legendData.push(_this.optionKVArray(_this.devices,sbbh));
-    //         let infos = contentDatas.map[sbbh];
-    //         let rqs = contentDatas.rqs;
-    //         let allData = [];
-    //         for(let i=0;i<infos.length;i++){
-    //           let seriesItem = [];
-    //           let info = infos[i];
-    //           if(rqs.includes(info.rq)){
-    //             let index = rqs.findIndex((x) => x == info.rq);
-    //             rqs.splice(index,1);
-    //           }
-    //           seriesItem.push(info.rq,info.xmbh);
-    //           allData.push(seriesItem);
-    //         }
-    //         for(let k=0;k<rqs.length;k++){
-    //           let seriesItem = [];
-    //           seriesItem.push(rqs[k],0);
-    //           allData.push(seriesItem);
-    //         }
-    //         allData.sort();
-    //         let obj = {
-    //           name: _this.optionKVArray(_this.devices,sbbh),
-    //           type: 'bar',
-    //           data: allData
-    //         }
-    //         seriesData.push(obj);
-    //       }
-    //     }
-    //     _this.initBarChar(legendData,seriesData);
-    //   })
-    // },
-    // initBarChar(legendData,seriesData){
-    //   let _this = this;
-    //   if(_this.a4chart){
-    //     _this.a4chart.dispose();
-    //     _this.a4chart=null;
-    //   }
-    //   let option = {
-    //     // legend: {
-    //     //   data: legendData,
-    //     //   textStyle: {
-    //     //     color: "rgba(251, 251, 251, 1)"
-    //     //   }
-    //     // },
-    //     tooltip: {
-    //       show:true,
-    //     },
-    //     xAxis: [
-    //       {
-    //         type: 'category',
-    //         name: '日期',
-    //         axisLine: {
-    //           lineStyle: {
-    //             color: "rgba(251, 251, 251, 1)"
-    //           }
-    //         }
-    //       }
-    //     ],
-    //     yAxis: [
-    //       {
-    //         type: 'value',
-    //         name: '侦测事件',
-    //         axisLine: {
-    //           lineStyle: {
-    //             color: "rgba(251, 251, 251, 1)"
-    //           }
-    //         }
-    //       }
-    //     ],
-    //     series: seriesData
-    //   };
-    //   _this.a4chart = echarts.init(document.getElementById('barChart'));
-    //   _this.a4chart.setOption(option)
-    //   window.addEventListener('resize', () => {
-    //     chart.resize()
-    //   })
-    // },
     getA4AndA2JL(){
       let _this = this;
       _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getEventData').then((res)=>{
@@ -602,7 +571,7 @@ export default {
         _this.config.data = [];
         for(let i=0;i<eventDatas.length;i++){
           let item = eventDatas[i];
-          let arrItem = [_this.optionKVArray(_this.devices,item.sbbh),item.kssj.substring(11),item.jssj.substring(11),item.ts, `<div class="btn-detail" onclick="getSwipeData('${item.sbbh}','${item.kssj}','${item.jssj}')">查看声谱图</div>`];
+          let arrItem = [_this.optionKVArray(_this.devices,item.sbbh),item.kssj.substring(11),item.jssj.substring(11),Tool.isEmpty(item.ts)?"/":item.ts, `<div class="btn-detail" onclick="getSwipeData('${item.sbbh}','${item.kssj}','${item.jssj}')">查看声谱图</div>`];
           _this.config.data.push(arrItem);
         }
         this.$refs['scrollBoard'].updateRows(_this.config.data, 0);
@@ -680,14 +649,17 @@ export default {
     getRightTopData(){
       let _this = this;
       let obj = {};
-      if("460100"!=Tool.getLoginUser().deptcode){
-        obj.deptcode = Tool.getLoginUser().deptcode;
-      }
-      obj.stime = moment().subtract(0, "days").format('YYYY-MM-DD');
-      obj.etime = moment().subtract(0, "days").format('YYYY-MM-DD');
       obj.type = 'zjglj';
       obj.sbbh = _this.curTopSbbh;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileToday/statisticsAlarmNumsByTimeSum', obj).then((response) => {
+      let url = "/monitor/admin/equipmentFileToday/statisticsAlarmNumsByTimeSum";
+      if(_this.topDayType=='4'){
+        obj.stime = moment().subtract(0, "days").format('YYYY-MM-DD');
+        obj.etime = moment().subtract(0, "days").format('YYYY-MM-DD');
+      }else{
+        url = "/monitor/welcome/statisticsAlarmNumsByTimeSum";
+        obj.topDayType=_this.topDayType;
+      }
+      _this.$ajax.post(process.env.VUE_APP_SERVER + url, obj).then((response) => {
         let resp = response.data;
         let alarmDatas = resp.content;
         let zccs = { label: '当日声学侦测次数', value: alarmDatas.num==null?0:alarmDatas.num };

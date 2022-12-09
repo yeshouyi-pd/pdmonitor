@@ -48,8 +48,10 @@ public class EquipmentFileTodayController extends BaseWxController {
         LoginUserDto userDto = getRequestHeader();
         List<String> deptList = getUpdeptcode(userDto.getDeptcode());
         if(!StringUtils.isEmpty(alarmNumbersDto.getType())&&"zjglj".equals(alarmNumbersDto.getType())){
-            ca.andSbbhEqualTo(alarmNumbersDto.getSbbh());
-            ca1.andSbbhEqualTo(alarmNumbersDto.getSbbh());
+            if(!StringUtils.isEmpty(alarmNumbersDto.getSbbh())){
+                ca.andSbbhEqualTo(alarmNumbersDto.getSbbh());
+                ca1.andSbbhEqualTo(alarmNumbersDto.getSbbh());
+            }
         }else{
             if(!CollectionUtils.isEmpty(deptList)){
                 ca.andDeptcodeIn(deptList);
