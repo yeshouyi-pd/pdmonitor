@@ -24,6 +24,10 @@ public class PredationNumService {
     @Resource
     private PredationNumMapper predationNumMapper;
 
+    public List<PredationNumDwDto> statisticsExample(PredationNumExample example){
+        return predationNumMapper.statisticsExample(example);
+    }
+
     public List<EquipmentTyEvent> listEventCount(PredationNumExample example){
         return predationNumMapper.listEventCount(example);
     }

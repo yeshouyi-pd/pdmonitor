@@ -355,4 +355,14 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
+  <select id="statisticsExample" parameterType="com.pd.server.main.domain.PredationNumExample" resultMap="DwResultMap">
+    select sum(alarm_num) as cxcs,sum(predation_num) as bscs,sum(sm1) as sjcs
+    from predation_num
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
 </mapper>

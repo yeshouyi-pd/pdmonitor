@@ -37,4 +37,6 @@ public interface PredationNumMapper {
     int updateByPrimaryKey(PredationNum record);
 
     List<EquipmentTyEvent> listEventCount(PredationNumExample example);
+
+    List<PredationNumDwDto> statisticsExample(PredationNumExample example);
 }

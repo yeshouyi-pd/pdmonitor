@@ -5,8 +5,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.pd.monitor.wx.conf.BaseWxController;
 import com.pd.server.main.domain.*;
 import com.pd.server.main.dto.*;
+import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
+import com.pd.server.main.dto.basewx.my.PredationNumDwDto;
 import com.pd.server.main.service.*;
 import com.pd.server.util.DateUtil;
+import com.pd.server.util.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -139,6 +143,9 @@ public class WelcomeController extends BaseWxController{
         LoginUserDto user = getRequestHeader();
         if(null != user) {
             if (!StringUtils.isEmpty(user.getDeptcode())) {
+                WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
+                waterEquipmentExample.createCriteria().andDqzlEqualTo("A4");
+                List<String> a4SbbhList = waterEquipmentService.findSbbh(waterEquipmentExample);
                 List<String> listdept = getUpdeptcode(user.getDeptcode());
                 EquipmentTyEventExample example = new EquipmentTyEventExample();
                 EquipmentTyEventExample.Criteria  ca = example.createCriteria();
@@ -149,11 +156,11 @@ public class WelcomeController extends BaseWxController{
                     ca1.andDeptcodeIn(listdept);
                 }
                 ca.andRqEqualTo(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd"));
-                List<EquipmentTyEvent> list = equipmentTyEventService.listByDp(example);
+                List<EquipmentTyEvent> list = equipmentTyEventService.listByDp(example,String.join(",",a4SbbhList));
                 if(CollectionUtils.isEmpty(list)){
                     ca1.andRqLessThan(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd"));
                     ca1.andRqGreaterThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(),-7),"yyyy-MM-dd"));
-                    list = equipmentTyEventService.listByDp(example1);
+                    list = equipmentTyEventService.listByDp(example1,String.join(",",a4SbbhList));
                 }
                 if(!CollectionUtils.isEmpty(list)){
                     list = list.stream().sorted(Comparator.comparing(EquipmentTyEvent::getKssj).reversed()).collect(Collectors.toList());
@@ -475,6 +482,37 @@ public class WelcomeController extends BaseWxController{
         }
         PointerDay entity = pointerDayService.selectByDp(example);
         responseDto.setContent(entity);
+        return responseDto;
+    }
+
+    @PostMapping("/statisticsAlarmNumsByTimeSum")
+    public ResponseDto statisticsAlarmNumsByTimeSum(@RequestBody JSONObject jsonObject) throws ParseException {
+        ResponseDto responseDto = new ResponseDto();
+        PredationNumExample example = new PredationNumExample();
+        PredationNumExample.Criteria ca = example.createCriteria();
+        if(!StringUtils.isEmpty(jsonObject.get("sbbh"))){
+            ca.andSbbhEqualTo(jsonObject.getString("sbbh"));
+        }
+        if(!StringUtils.isEmpty(jsonObject.get("topDayType"))&&"1".equals(jsonObject.get("topDayType"))){
+            //上个月
+            ca.andCjsjGreaterThanOrEqualTo(DateUtils.getStrToDate(DateUtils.getBeginDayStrOfSomeMonth(1)));
+            ca.andCjsjLessThanOrEqualTo(DateUtils.getStrToDate(DateUtils.getEndDayStrOfSomeMonth(1)));
+        }else if(!StringUtils.isEmpty(jsonObject.get("topDayType"))&&"2".equals(jsonObject.get("topDayType"))){
+            //本月
+            ca.andCjsjGreaterThanOrEqualTo(DateUtils.getStrToDate(DateUtils.getBeginDayStrOfSomeMonth(0)));
+            ca.andCjsjLessThanOrEqualTo(DateUtils.getStrToDate(DateUtils.getEndDayStrOfSomeMonth(0)));
+        }else if(!StringUtils.isEmpty(jsonObject.get("topDayType"))&&"3".equals(jsonObject.get("topDayType"))){
+            //本周
+            ca.andCjsjGreaterThanOrEqualTo(DateUtils.getStrToDate(DateUtils.getBeginWeek()));
+            ca.andCjsjLessThanOrEqualTo(DateUtils.getStrToDate(DateUtils.getEndWeek()));
+        }
+        List<PredationNumDwDto> lists = predationNumService.statisticsExample(example);
+        Map<String,Object> map = new HashMap<String, Object>();
+        System.out.println(lists.get(0));
+        map.put("num",!CollectionUtils.isEmpty(lists)&&!StringUtils.isEmpty(lists.get(0))&&!StringUtils.isEmpty(lists.get(0).getCxcs())?lists.get(0).getCxcs():0);
+        map.put("nnm",!CollectionUtils.isEmpty(lists)&&!StringUtils.isEmpty(lists.get(0))&&!StringUtils.isEmpty(lists.get(0).getSjcs())?lists.get(0).getSjcs():0);
+        map.put("bnum",!CollectionUtils.isEmpty(lists)&&!StringUtils.isEmpty(lists.get(0))&&!StringUtils.isEmpty(lists.get(0).getBscs())?lists.get(0).getBscs():0);
+        responseDto.setContent(map);
         return responseDto;
     }
 }
