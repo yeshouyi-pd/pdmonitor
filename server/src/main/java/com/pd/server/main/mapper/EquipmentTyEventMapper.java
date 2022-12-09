@@ -22,7 +22,7 @@ public interface EquipmentTyEventMapper {
 
     List<EquipmentTyEvent> selectByExampleSpecial(@Param("record") EquipmentTyEventDto record);
 
-    List<EquipmentTyEvent> selectByExampleDp(EquipmentTyEventExample example);
+    List<EquipmentTyEvent> selectByExampleDp(@Param("example") EquipmentTyEventExample example,@Param("a4Sbbh") String a4Sbbh);
 
     List<EquipmentTyEvent> selectByExampleSumTs(EquipmentTyEventExample example);
 

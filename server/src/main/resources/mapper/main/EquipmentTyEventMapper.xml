@@ -105,18 +105,25 @@
     </if>
     order by jssj desc
   </select>
-  <select id="selectByExampleDp" parameterType="com.pd.server.main.domain.EquipmentTyEventExample" resultMap="BaseResultMap">
+  <select id="selectByExampleDp" resultMap="BaseResultMap">
     select sbbh,kssj,jssj,ts
     from equipment_ty_event
     <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
+      <include refid="Update_By_Example_Where_Clause" />
     </if>
     union
     select sbbh,kssj,jssj,ts
     from equipment_file_event
     <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
+      <include refid="Update_By_Example_Where_Clause" />
     </if>
+    union
+    (select sbbh,cjsj as kssj,cjsj as jssj,sm6 as ts
+    from equipment_file_today
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+    AND NOT FIND_IN_SET(sbbh,#{a4Sbbh,jdbcType=VARCHAR}))
   </select>
   <select id="selectByExampleSumTs" parameterType="com.pd.server.main.domain.EquipmentTyEventExample" resultMap="BaseResultMap">
     select sbbh,sum(ts) as ts,rq

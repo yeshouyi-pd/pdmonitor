@@ -90,7 +90,7 @@
                     <div class="widget-body">
                       <div class="widget-main no-padding" style="height:740px;">
 
-                        <equipmentMap v-bind:height-max="740"></equipmentMap>
+                        <equipmentAMap v-bind:height-max="740"></equipmentAMap>
 
                       </div><!-- /.widget-main -->
                     </div><!-- /.widget-body -->
@@ -246,9 +246,9 @@
   </div>
 </template>
 <script>
-import EquipmentMap from "../monitor/equipmentMap";
+import EquipmentAMap from "../monitor/equipmentAMap";
 export default {
-  components: {EquipmentMap},
+  components: {EquipmentAMap},
   name:'welcome',
   data: function() {
     return {
