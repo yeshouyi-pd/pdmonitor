@@ -90,7 +90,7 @@
                     <div class="widget-body">
                       <div class="widget-main no-padding" style="height:740px;">
 
-                        <equipmentAMap v-bind:height-max="740"></equipmentAMap>
+                        <equipmentAMap v-bind:height-max="740" map-style=""></equipmentAMap>
 
                       </div><!-- /.widget-main -->
                     </div><!-- /.widget-body -->

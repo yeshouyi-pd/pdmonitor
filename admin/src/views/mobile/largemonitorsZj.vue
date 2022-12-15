@@ -571,7 +571,7 @@ export default {
         _this.config.data = [];
         for(let i=0;i<eventDatas.length;i++){
           let item = eventDatas[i];
-          let arrItem = [_this.optionKVArray(_this.devices,item.sbbh),item.kssj.substring(11),item.jssj.substring(11),Tool.isEmpty(item.ts)?"/":item.ts, `<div class="btn-detail" onclick="getSwipeData('${item.sbbh}','${item.kssj}','${item.jssj}')">查看声谱图</div>`];
+          let arrItem = [_this.optionKVArray(_this.devices,item.sbbh),item.kssj,item.jssj,Tool.isEmpty(item.ts)?"/":item.ts, `<div class="btn-detail" onclick="getSwipeData('${item.sbbh}','${item.kssj}','${item.jssj}')">查看声谱图</div>`];
           _this.config.data.push(arrItem);
         }
         this.$refs['scrollBoard'].updateRows(_this.config.data, 0);

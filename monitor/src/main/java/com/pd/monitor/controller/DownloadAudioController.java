@@ -403,6 +403,45 @@ public class DownloadAudioController {
         }
     }
 
+    @GetMapping("/downAudioFileById53")
+    public void downAudioFileById53(HttpServletRequest request, HttpServletResponse response){
+        response.setCharacterEncoding("UTF-8");
+        BufferedInputStream in = null;
+        try{
+            String id = request.getParameter("id");
+            EquipmentTyEvent event = equipmentTyEventService.selectByPrimaryKey(id);
+            EquipmentFileTy fileEntity = equipmentFileTyService.selectByPrimaryKey(event.getBz());
+            String fileName = fileEntity.getTplj().substring(fileEntity.getTplj().lastIndexOf("/"));
+            URL url = new URL(fileEntity.getTplj());
+            HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+            conn.setConnectTimeout(30000);
+            conn.setReadTimeout(30000);
+            in = new BufferedInputStream(conn.getInputStream());
+            // 这和上面两句一样的效果
+            //in = new BufferedInputStream(url.openStream());
+            response.reset();
+            response.setContentType("application/octet-stream");
+            fileName = new String(fileName.getBytes(), "ISO-8859-1");
+            response.setHeader("Content-Disposition", "attachment; filename="+fileName);
+            // 将网络输入流转换为输出流
+            int i;
+            while ((i = in.read()) != -1) {
+                response.getOutputStream().write(i);
+            }
+            in.close();
+            response.getOutputStream().close();
+        }catch (IOException e){
+            try{
+                String result = "未找到该文件";
+                response.getOutputStream().write(result.getBytes());
+                in.close();
+                response.getOutputStream().close();
+            }catch (IOException exception){
+                System.out.println("关闭流失败");
+            }
+        }
+    }
+
     @GetMapping("/downAudioFile")
     public void downAudioFile(HttpServletRequest request, HttpServletResponse response) {
         response.setCharacterEncoding("UTF-8");
