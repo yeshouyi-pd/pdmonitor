@@ -90,7 +90,8 @@ export default {
       equipmentTyEvents:[],
       deptMap: [],
       waterEquipments: [],
-      userDto:null
+      userDto:null,
+      shj:LOCAL_SSBRL
     }
   },
   mounted() {
@@ -153,13 +154,24 @@ export default {
       })
     },
     downloadFile(id){
-      let url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downAudioFileById?id='+id;
+      let _this = this;
+      let url = "";
+      if(_this.shj){
+        url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downAudioFileById53?id='+id;
+      }else{
+        url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downAudioFileById?id='+id;
+      }
       console.log(url);
       window.location.href = url;
     },
     downloadVedio(id){
       let _this = this;
-      let url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downZipById?id='+id;
+      let url = "";
+      if(_this.shj){
+        url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downZipById53?id='+id;
+      }else{
+        url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downZipById?id='+id;
+      }
       _this.$ajax.get(url).then((response)=>{
         if(response.data && response.data.message && response.data.message.includes("系统异常")){
           Toast.error("系统异常，请联系管理员！");

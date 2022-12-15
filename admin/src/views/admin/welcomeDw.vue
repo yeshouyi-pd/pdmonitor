@@ -29,15 +29,15 @@ export default {
       let _this = this;
       Loading.show();
       let obj = {
-        "loginName" : "tc",
-        "password" : hex_md5("123456"+KEY)
+        "loginName" : "yy",
+        "password" : hex_md5("whpd1234@"+KEY)
       }
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/system/admin/user/loginDw', obj).then((response)=>{
         Loading.hide();
         let resp = response.data;
         if (resp.success) {
           //Toast.success("保存成功！");
-          resp.content.xmbh = "005";
+          resp.content.xmbh = "011";
           Tool.setLoginUser(resp.content);
           _this.$router.push("/welcome");
           console.log(Tool.getLoginUser());

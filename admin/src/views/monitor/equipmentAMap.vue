@@ -182,11 +182,13 @@
                                 zIndex: 101,
                                 map: _this.amap
                             });
-                            marker.setLabel({
-                              direction:'center',
-                              offset: new AMap.Pixel(10, 0),  //设置文本标注偏移量
-                              content: devices[i].fzwz, //设置文本标注内容
-                            });
+                            if(_this.zhbht){
+                              marker.setLabel({
+                                direction:'center',
+                                offset: new AMap.Pixel(10, 0),  //设置文本标注偏移量
+                                content: "<div style='color: #fff'>"+devices[i].fzwz+"</div>", //设置文本标注内容
+                              });
+                            }
                             marker.content = [];
                             marker.content.push(devices[i].deptcode);
                             marker.content.push(devices[i].centerCode);

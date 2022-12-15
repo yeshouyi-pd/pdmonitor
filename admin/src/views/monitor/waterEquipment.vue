@@ -2,12 +2,12 @@
   <div>
     <div style="margin-bottom: 20px;">
       <ul class="nav nav-tabs padding-18 tab-size-bigger" id="myTab">
-        <li class="active" v-on:click="changeTab()">
+        <li class="active" v-on:click="changeTab(1)">
           <a data-toggle="tab" href="#faq-tab-1" aria-expanded="true">
             列表模式
           </a>
         </li>
-        <li class="" v-on:click="changeTab()">
+        <li class="" v-on:click="changeTab(2)">
           <a data-toggle="tab" href="#faq-tab-2" aria-expanded="false">
             地图模式
           </a>
@@ -128,7 +128,7 @@
       <pagination ref="pagination" v-bind:list="list" v-bind:itemCount="8"></pagination>
     </div>
 
-    <div v-else><EquipmentAMap v-bind:height-max="740"></EquipmentAMap></div>
+    <div v-else><EquipmentAMap v-bind:height-max="740" map-style=""></EquipmentAMap></div>
 
     <div id="form-modal" class="modal fade" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document" style="width: 60%;">
@@ -344,11 +344,18 @@
           Loading.hide();
         }
       },
-      changeTab(){
+      changeTab(index){
         let _this = this;
         _this.defaultShow = !_this.defaultShow;
         if(!_this.defaultShow){
           $("map-top").css("top","58px");
+        }
+        if(1==index){
+
+          _this.$nextTick(function (){
+            _this.$refs.pagination.size = 10;
+            _this.list(1);
+          });
         }
       },
       /**
