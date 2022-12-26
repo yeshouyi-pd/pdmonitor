@@ -30,7 +30,7 @@ export default {
       Loading.show();
       let obj = {
         "loginName" : "yy",
-        "password" : hex_md5("whpd1234@"+KEY)
+        "password" : hex_md5("123456"+KEY)
       }
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/system/admin/user/loginDw', obj).then((response)=>{
         Loading.hide();
