@@ -459,6 +459,14 @@ public class WelcomeController extends BaseWxController{
         return responseDto;
     }
 
+    @GetMapping("/getVideoDataNew")
+    public ResponseDto getVideoDataNew(){
+        ResponseDto responseDto = new ResponseDto();
+        EquipmentFile equipmentFile = equipmentFileService.selectVideoDp();
+        responseDto.setContent(equipmentFile);
+        return responseDto;
+    }
+
     @PostMapping("/getPointerSecond")
     public ResponseDto getPointerSecond(@RequestBody JSONObject jsonObject){
         ResponseDto responseDto = new ResponseDto();

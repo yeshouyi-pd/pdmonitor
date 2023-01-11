@@ -232,6 +232,7 @@ export default {
       _this.getRightTopData();//右上角获取当日声学侦测次数、事件(群次)、捕食次数
       _this.getPointer();
       _this.getA4AndA2JL();//中间下方，获取A2设备和A4设备聚类
+      _this.getVideoDataNew();
     })
     _this.deptMap = Tool.getDeptUser();
   },
@@ -242,7 +243,7 @@ export default {
     _this.heightMax = h*0.6-20;
     _this.dataRefreh();
     window.getSwipeData = _this.getSwipeData;
-    window.getVideoData = _this.getVideoData;
+    //window.getVideoData = _this.getVideoData;
   },
   methods: {
     clickMapPoint(sbbh){
@@ -457,6 +458,7 @@ export default {
         _this.getA4AndA2JL();//中间下方，获取A2设备和A4设备聚类
         _this.getRightTopData();//右上角获取当日声学侦测次数、事件(群次)、捕食次数
         _this.getPointer();
+        _this.getVideoDataNew();
       }, 600000);
     },
     // 停止定时器
@@ -566,7 +568,7 @@ export default {
         let eventDatas = response.content;
         if(eventDatas && eventDatas.length>0){
           _this.getSwipeData(eventDatas[0].sbbh,eventDatas[0].kssj,eventDatas[0].jssj);
-          _this.getVideoData(eventDatas[0].sbbh,eventDatas[0].kssj,eventDatas[0].jssj);
+          //_this.getVideoData(eventDatas[0].sbbh,eventDatas[0].kssj,eventDatas[0].jssj);
         }
         _this.config.data = [];
         for(let i=0;i<eventDatas.length;i++){
@@ -579,7 +581,7 @@ export default {
     },
     getSwipeData(sbbh,kssj,jssj){
       let _this = this;
-      _this.getVideoData(sbbh,kssj,jssj)
+      //_this.getVideoData(sbbh,kssj,jssj)
       let item = {
         "sbbh":sbbh,
         "kssj":kssj,
@@ -617,6 +619,16 @@ export default {
         }else{
           _this.videoHeight = 140;
         }
+        _this.$forceUpdate();
+      })
+    },
+    getVideoDataNew(){
+      let _this = this;
+      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getVideoDataNew').then((response)=>{
+        let resp = response.data;
+        _this.videoData = [];
+        _this.videoData = resp.content;
+        _this.videoHeight = 280;
         _this.$forceUpdate();
       })
     },

@@ -138,4 +138,6 @@ public class EquipmentFileService {
         return equipmentFileMapper.getthisDeptEquipmentinfo(equipmentFileExample);
 
     }
+
+    public EquipmentFile selectVideoDp(){ return equipmentFileMapper.selectVideoDp(); }
 }

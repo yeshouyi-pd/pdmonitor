@@ -834,4 +834,10 @@
     AND TO_DAYS(cjsj) = TO_DAYS(NOW()) AND txtlx = '1'
     )  b  ORDER BY cjsj  DESC
   </select>
+  <select id="selectVideoDp" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from equipment_file
+    where wjlx='4' order by cjsj limit 1
+  </select>
 </mapper>
