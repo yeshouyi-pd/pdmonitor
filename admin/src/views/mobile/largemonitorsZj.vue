@@ -627,7 +627,7 @@ export default {
       _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getVideoDataNew').then((response)=>{
         let resp = response.data;
         _this.videoData = [];
-        _this.videoData = resp.content;
+        _this.videoData.push(resp.content);
         _this.videoHeight = 280;
         _this.$forceUpdate();
       })

@@ -838,6 +838,6 @@
     select
     <include refid="Base_Column_List" />
     from equipment_file
-    where wjlx='4' order by cjsj limit 1
+    where wjlx='4' order by cjsj desc limit 1
   </select>
 </mapper>
