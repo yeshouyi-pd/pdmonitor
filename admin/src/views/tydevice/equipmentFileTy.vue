@@ -91,10 +91,15 @@ export default {
     getEquipmentByTy(){
       let _this = this;
       Loading.show();
-      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/getTyEquipment').then((res)=>{
+      let data = {};
+      if("460100"==Tool.getLoginUser().deptcode){
+        data = {'sblb':'0001','dqzl':'A2'};
+      }else{
+        data = {'sblb':'0001','dqzl':'A2','xmbh':Tool.getLoginUser().xmbh};
+      }
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/findAll', data).then((response)=>{
         Loading.hide();
-        let response = res.data;
-        _this.equipments = response.content;
+        _this.equipments = response.data.content;
         if(_this.equipments.length>0){
           _this.curSbsn = _this.equipments[0].sbsn;
           let arr = _this.equipments[0].gps.split(",");
