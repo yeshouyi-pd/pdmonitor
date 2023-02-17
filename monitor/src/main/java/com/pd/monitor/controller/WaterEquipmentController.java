@@ -247,7 +247,7 @@ public class WaterEquipmentController  extends BaseWxController {
         WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
         WaterEquipmentExample.Criteria ca = waterEquipmentExample.createCriteria();
         ca.andGpsIsNotNull();
-        if(!CollectionUtils.isEmpty(list)){
+        if(!CollectionUtils.isEmpty(list)&&StringUtils.isEmpty(waterEquipmentDto.getXmbh())){
             ca.andDeptcodeIn(list);
         }
         if(!StringUtils.isEmpty(waterEquipmentDto.getSblb())){

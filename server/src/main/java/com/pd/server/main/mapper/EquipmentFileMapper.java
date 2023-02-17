@@ -67,4 +67,6 @@ public interface EquipmentFileMapper {
     List<EquipmenInfo> getthisDeptEquipment(EquipmentFileExample equipmentFileExample);
 
     List<EquipmentMainListDto> getthisDeptEquipmentinfo(EquipmentFileExample equipmentFileExample);
+
+    EquipmentFile selectVideoDp();
 }
