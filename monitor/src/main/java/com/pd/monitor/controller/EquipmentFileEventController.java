@@ -2,6 +2,9 @@ package com.pd.monitor.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.pd.monitor.mobileCode.FileInfo;
+import com.pd.monitor.mobileCode.FileInfoSoap;
+import com.pd.monitor.mobileCode.RetClass;
 import com.pd.server.main.domain.*;
 import com.pd.server.main.dto.EquipmentFileEventDto;
 import com.pd.server.main.dto.PageDto;
@@ -30,6 +33,16 @@ public class EquipmentFileEventController {
     private EquipmentFileEventService equipmentFileEventService;
     @Resource
     private EquipmentFileService equipmentFileService;
+
+    @PostMapping("/playVedio")
+    public ResponseDto playVedio(@RequestBody EquipmentFileEventDto pageDto){
+        ResponseDto responseDto = new ResponseDto();
+        FileInfo fileInfo = new FileInfo();
+        FileInfoSoap fileInfoSoap = fileInfo.getFileInfoSoap();
+        RetClass retClass = fileInfoSoap.getPlayUrl("LW001","2022_12_29_16_02_10_2022_12_29_16_02_59_4_A4_TD33.mp4");
+        responseDto.setContent(retClass.getPlayUrl());
+        return responseDto;
+    }
 
     @PostMapping("/videoList")
     public ResponseDto vedioList(@RequestBody EquipmentFileEventDto pageDto){

@@ -1,0 +1,648 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:s1="http://tempuri.org/AbstractTypes" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="HelloWorld">
+        <s:complexType />
+      </s:element>
+      <s:element name="HelloWorldResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="HelloWorldResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetPlayUrl">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="sbid" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="filename" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetPlayUrlResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetPlayUrlResult" type="tns:retClass" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="retClass">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="code" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="sbid" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FileName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FileMD5" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Mesg" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PlayUrl" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="TestFile">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="sbid" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="filename" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="TestFileResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="TestFileResult" type="tns:retClass" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpFileData">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="sbid" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="filename" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="fileData" type="s:base64Binary" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpFileDataResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UpFileDataResult" type="tns:retClass" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpFileDataGps">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="sbid" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="filename" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="fileData" type="s:base64Binary" />
+            <s:element minOccurs="0" maxOccurs="1" name="gpsData" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpFileDataGpsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UpFileDataGpsResult" type="tns:retClass" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpState">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="sbid" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="code" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="msg" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpStateResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UpStateResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpGroup">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="sbid" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="filename" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="msg" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpGroupResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UpGroupResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="string" nillable="true" type="s:string" />
+      <s:element name="retClass" nillable="true" type="tns:retClass" />
+    </s:schema>
+    <s:schema targetNamespace="http://tempuri.org/AbstractTypes">
+      <s:import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+      <s:complexType name="StringArray">
+        <s:complexContent mixed="false">
+          <s:restriction base="soapenc:Array">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="unbounded" name="String" type="s:string" />
+            </s:sequence>
+          </s:restriction>
+        </s:complexContent>
+      </s:complexType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="HelloWorldSoapIn">
+    <wsdl:part name="parameters" element="tns:HelloWorld" />
+  </wsdl:message>
+  <wsdl:message name="HelloWorldSoapOut">
+    <wsdl:part name="parameters" element="tns:HelloWorldResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetPlayUrlSoapIn">
+    <wsdl:part name="parameters" element="tns:GetPlayUrl" />
+  </wsdl:message>
+  <wsdl:message name="GetPlayUrlSoapOut">
+    <wsdl:part name="parameters" element="tns:GetPlayUrlResponse" />
+  </wsdl:message>
+  <wsdl:message name="TestFileSoapIn">
+    <wsdl:part name="parameters" element="tns:TestFile" />
+  </wsdl:message>
+  <wsdl:message name="TestFileSoapOut">
+    <wsdl:part name="parameters" element="tns:TestFileResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpFileDataSoapIn">
+    <wsdl:part name="parameters" element="tns:UpFileData" />
+  </wsdl:message>
+  <wsdl:message name="UpFileDataSoapOut">
+    <wsdl:part name="parameters" element="tns:UpFileDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpFileDataGpsSoapIn">
+    <wsdl:part name="parameters" element="tns:UpFileDataGps" />
+  </wsdl:message>
+  <wsdl:message name="UpFileDataGpsSoapOut">
+    <wsdl:part name="parameters" element="tns:UpFileDataGpsResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpStateSoapIn">
+    <wsdl:part name="parameters" element="tns:UpState" />
+  </wsdl:message>
+  <wsdl:message name="UpStateSoapOut">
+    <wsdl:part name="parameters" element="tns:UpStateResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpGroupSoapIn">
+    <wsdl:part name="parameters" element="tns:UpGroup" />
+  </wsdl:message>
+  <wsdl:message name="UpGroupSoapOut">
+    <wsdl:part name="parameters" element="tns:UpGroupResponse" />
+  </wsdl:message>
+  <wsdl:message name="HelloWorldHttpGetIn" />
+  <wsdl:message name="HelloWorldHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetPlayUrlHttpGetIn">
+    <wsdl:part name="sbid" type="s:string" />
+    <wsdl:part name="filename" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetPlayUrlHttpGetOut">
+    <wsdl:part name="Body" element="tns:retClass" />
+  </wsdl:message>
+  <wsdl:message name="TestFileHttpGetIn">
+    <wsdl:part name="sbid" type="s:string" />
+    <wsdl:part name="filename" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="TestFileHttpGetOut">
+    <wsdl:part name="Body" element="tns:retClass" />
+  </wsdl:message>
+  <wsdl:message name="UpFileDataHttpGetIn">
+    <wsdl:part name="sbid" type="s:string" />
+    <wsdl:part name="filename" type="s:string" />
+    <wsdl:part name="fileData" type="s1:StringArray" />
+  </wsdl:message>
+  <wsdl:message name="UpFileDataHttpGetOut">
+    <wsdl:part name="Body" element="tns:retClass" />
+  </wsdl:message>
+  <wsdl:message name="UpFileDataGpsHttpGetIn">
+    <wsdl:part name="sbid" type="s:string" />
+    <wsdl:part name="filename" type="s:string" />
+    <wsdl:part name="fileData" type="s1:StringArray" />
+    <wsdl:part name="gpsData" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="UpFileDataGpsHttpGetOut">
+    <wsdl:part name="Body" element="tns:retClass" />
+  </wsdl:message>
+  <wsdl:message name="UpStateHttpGetIn">
+    <wsdl:part name="sbid" type="s:string" />
+    <wsdl:part name="code" type="s:string" />
+    <wsdl:part name="msg" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="UpStateHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="UpGroupHttpGetIn">
+    <wsdl:part name="sbid" type="s:string" />
+    <wsdl:part name="filename" type="s:string" />
+    <wsdl:part name="msg" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="UpGroupHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="HelloWorldHttpPostIn" />
+  <wsdl:message name="HelloWorldHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetPlayUrlHttpPostIn">
+    <wsdl:part name="sbid" type="s:string" />
+    <wsdl:part name="filename" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetPlayUrlHttpPostOut">
+    <wsdl:part name="Body" element="tns:retClass" />
+  </wsdl:message>
+  <wsdl:message name="TestFileHttpPostIn">
+    <wsdl:part name="sbid" type="s:string" />
+    <wsdl:part name="filename" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="TestFileHttpPostOut">
+    <wsdl:part name="Body" element="tns:retClass" />
+  </wsdl:message>
+  <wsdl:message name="UpFileDataHttpPostIn">
+    <wsdl:part name="sbid" type="s:string" />
+    <wsdl:part name="filename" type="s:string" />
+    <wsdl:part name="fileData" type="s1:StringArray" />
+  </wsdl:message>
+  <wsdl:message name="UpFileDataHttpPostOut">
+    <wsdl:part name="Body" element="tns:retClass" />
+  </wsdl:message>
+  <wsdl:message name="UpFileDataGpsHttpPostIn">
+    <wsdl:part name="sbid" type="s:string" />
+    <wsdl:part name="filename" type="s:string" />
+    <wsdl:part name="fileData" type="s1:StringArray" />
+    <wsdl:part name="gpsData" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="UpFileDataGpsHttpPostOut">
+    <wsdl:part name="Body" element="tns:retClass" />
+  </wsdl:message>
+  <wsdl:message name="UpStateHttpPostIn">
+    <wsdl:part name="sbid" type="s:string" />
+    <wsdl:part name="code" type="s:string" />
+    <wsdl:part name="msg" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="UpStateHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="UpGroupHttpPostIn">
+    <wsdl:part name="sbid" type="s:string" />
+    <wsdl:part name="filename" type="s:string" />
+    <wsdl:part name="msg" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="UpGroupHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:portType name="FileInfoSoap">
+    <wsdl:operation name="HelloWorld">
+      <wsdl:input message="tns:HelloWorldSoapIn" />
+      <wsdl:output message="tns:HelloWorldSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPlayUrl">
+      <wsdl:input message="tns:GetPlayUrlSoapIn" />
+      <wsdl:output message="tns:GetPlayUrlSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="TestFile">
+      <wsdl:input message="tns:TestFileSoapIn" />
+      <wsdl:output message="tns:TestFileSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpFileData">
+      <wsdl:input message="tns:UpFileDataSoapIn" />
+      <wsdl:output message="tns:UpFileDataSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpFileDataGps">
+      <wsdl:input message="tns:UpFileDataGpsSoapIn" />
+      <wsdl:output message="tns:UpFileDataGpsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpState">
+      <wsdl:input message="tns:UpStateSoapIn" />
+      <wsdl:output message="tns:UpStateSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpGroup">
+      <wsdl:input message="tns:UpGroupSoapIn" />
+      <wsdl:output message="tns:UpGroupSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="FileInfoHttpGet">
+    <wsdl:operation name="HelloWorld">
+      <wsdl:input message="tns:HelloWorldHttpGetIn" />
+      <wsdl:output message="tns:HelloWorldHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPlayUrl">
+      <wsdl:input message="tns:GetPlayUrlHttpGetIn" />
+      <wsdl:output message="tns:GetPlayUrlHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="TestFile">
+      <wsdl:input message="tns:TestFileHttpGetIn" />
+      <wsdl:output message="tns:TestFileHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpFileData">
+      <wsdl:input message="tns:UpFileDataHttpGetIn" />
+      <wsdl:output message="tns:UpFileDataHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpFileDataGps">
+      <wsdl:input message="tns:UpFileDataGpsHttpGetIn" />
+      <wsdl:output message="tns:UpFileDataGpsHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpState">
+      <wsdl:input message="tns:UpStateHttpGetIn" />
+      <wsdl:output message="tns:UpStateHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpGroup">
+      <wsdl:input message="tns:UpGroupHttpGetIn" />
+      <wsdl:output message="tns:UpGroupHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="FileInfoHttpPost">
+    <wsdl:operation name="HelloWorld">
+      <wsdl:input message="tns:HelloWorldHttpPostIn" />
+      <wsdl:output message="tns:HelloWorldHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPlayUrl">
+      <wsdl:input message="tns:GetPlayUrlHttpPostIn" />
+      <wsdl:output message="tns:GetPlayUrlHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="TestFile">
+      <wsdl:input message="tns:TestFileHttpPostIn" />
+      <wsdl:output message="tns:TestFileHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpFileData">
+      <wsdl:input message="tns:UpFileDataHttpPostIn" />
+      <wsdl:output message="tns:UpFileDataHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpFileDataGps">
+      <wsdl:input message="tns:UpFileDataGpsHttpPostIn" />
+      <wsdl:output message="tns:UpFileDataGpsHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpState">
+      <wsdl:input message="tns:UpStateHttpPostIn" />
+      <wsdl:output message="tns:UpStateHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpGroup">
+      <wsdl:input message="tns:UpGroupHttpPostIn" />
+      <wsdl:output message="tns:UpGroupHttpPostOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="FileInfoSoap" type="tns:FileInfoSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="HelloWorld">
+      <soap:operation soapAction="http://tempuri.org/HelloWorld" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPlayUrl">
+      <soap:operation soapAction="http://tempuri.org/GetPlayUrl" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TestFile">
+      <soap:operation soapAction="http://tempuri.org/TestFile" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpFileData">
+      <soap:operation soapAction="http://tempuri.org/UpFileData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpFileDataGps">
+      <soap:operation soapAction="http://tempuri.org/UpFileDataGps" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpState">
+      <soap:operation soapAction="http://tempuri.org/UpState" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpGroup">
+      <soap:operation soapAction="http://tempuri.org/UpGroup" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="FileInfoSoap12" type="tns:FileInfoSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="HelloWorld">
+      <soap12:operation soapAction="http://tempuri.org/HelloWorld" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPlayUrl">
+      <soap12:operation soapAction="http://tempuri.org/GetPlayUrl" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TestFile">
+      <soap12:operation soapAction="http://tempuri.org/TestFile" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpFileData">
+      <soap12:operation soapAction="http://tempuri.org/UpFileData" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpFileDataGps">
+      <soap12:operation soapAction="http://tempuri.org/UpFileDataGps" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpState">
+      <soap12:operation soapAction="http://tempuri.org/UpState" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpGroup">
+      <soap12:operation soapAction="http://tempuri.org/UpGroup" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="FileInfoHttpGet" type="tns:FileInfoHttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="HelloWorld">
+      <http:operation location="/HelloWorld" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPlayUrl">
+      <http:operation location="/GetPlayUrl" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TestFile">
+      <http:operation location="/TestFile" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpFileData">
+      <http:operation location="/UpFileData" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpFileDataGps">
+      <http:operation location="/UpFileDataGps" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpState">
+      <http:operation location="/UpState" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpGroup">
+      <http:operation location="/UpGroup" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="FileInfoHttpPost" type="tns:FileInfoHttpPost">
+    <http:binding verb="POST" />
+    <wsdl:operation name="HelloWorld">
+      <http:operation location="/HelloWorld" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPlayUrl">
+      <http:operation location="/GetPlayUrl" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TestFile">
+      <http:operation location="/TestFile" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpFileData">
+      <http:operation location="/UpFileData" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpFileDataGps">
+      <http:operation location="/UpFileDataGps" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpState">
+      <http:operation location="/UpState" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpGroup">
+      <http:operation location="/UpGroup" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="FileInfo">
+    <wsdl:port name="FileInfoSoap" binding="tns:FileInfoSoap">
+      <soap:address location="http://49.239.193.146:49053/FileInfo.asmx" />
+    </wsdl:port>
+    <wsdl:port name="FileInfoSoap12" binding="tns:FileInfoSoap12">
+      <soap12:address location="http://49.239.193.146:49053/FileInfo.asmx" />
+    </wsdl:port>
+    <wsdl:port name="FileInfoHttpGet" binding="tns:FileInfoHttpGet">
+      <http:address location="http://49.239.193.146:49053/FileInfo.asmx" />
+    </wsdl:port>
+    <wsdl:port name="FileInfoHttpPost" binding="tns:FileInfoHttpPost">
+      <http:address location="http://49.239.193.146:49053/FileInfo.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

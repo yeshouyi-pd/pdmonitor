@@ -114,11 +114,8 @@
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title">历史回放</h4>
           </div>
-          <div class="modal-body" :style="'height: '+videoHeight+'px;overflow-y: auto'">
-            <video controls preload="auto" width="700px" height="360px" autoplay="autoplay" v-for="item in videos">
-              <source :src="item.tplj" type="video/mp4">
-              <p class="vjs-no-js"> To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a> </p>
-            </video>
+          <div class="modal-body" :style="'height: '+videoHeight+'px;overflow-y: auto;'" id="playbox">
+
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-white btn-default btn-round" data-dismiss="modal">
@@ -131,6 +128,9 @@
     </div><!-- /.modal -->
   </div>
 </template>
+<!--<link href="https://cdn.bootcss.com/video.js/7.6.5/alt/video-js-cdn.min.css" rel="stylesheet">-->
+<!--<script src="https://cdn.bootcss.com/video.js/6.6.2/video.js"></script>-->
+<!--<script src="https://cdn.bootcss.com/videojs-contrib-hls/5.15.0/videojs-contrib-hls.min.js"></script>-->
 <script>
 import Times from "../../components/times";
 import Pagination from "../../components/pagination";
@@ -155,7 +155,8 @@ export default {
       zhbht:LOCAL_ZHBHT,
       ldTime:'',
       userDto:null,
-      shj:LOCAL_SSBRL
+      shj:LOCAL_SSBRL,
+      timeHandle:null
     }
   },
   mounted() {
@@ -178,28 +179,88 @@ export default {
       }
       _this.showBtn = false;
     });
+    //监听模态框关闭
+    $('#video-modal').on('hidden.bs.modal', function () {
+      clearTimeout(_this.timeHandle);
+    });
   },
   methods: {
     //历史回放
     watchVideo(id){
       let _this = this;
-      _this.videos = [];
+      $("#playbox").empty();
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileEvent/videoList', {'id':id}).then((response)=>{
-        Loading.hide();
-        let resp = response.data;
-        _this.videos = resp.content;
-        _this.$forceUpdate();
-        if(_this.videos.length>0){
-          if(_this.videos.length>=2){
-            _this.videoHeight = '761';
-          }else{
-            _this.videoHeight = '400';
+         Loading.hide();
+         let resp = response.data;
+         let videoDatas = resp.content;
+         _this.$forceUpdate();
+         if(videoDatas.length>0){
+           if(videoDatas.length>=2){
+             _this.videoHeight = '761';
+           }else{
+             _this.videoHeight = '400';
+           }
+           for(let i=0;i<videoDatas.length;i++){
+             console.log(i);
+             let obj = videoDatas[i];
+             _this.getPlayUrl(obj.sbbh,obj.tplj.substring(obj.tplj.lastIndexOf("/")+1));
+           }
+         }else{
+           Toast.error("未找到对应视频！");
+         }
+      })
+    },
+    getPlayUrl(sbid,filename){
+      let _this = this;
+      $.post("http://49.239.193.146:49053/FileInfo.asmx/GetPlayUrl",{"sbid": sbid,"filename":filename,"fbl":"1080"}, function (data, status) {
+        if(status&&!data.getElementsByTagName('Mesg')[0].childNodes[0].nodeValue.includes('不存在')){
+          if(_this.fileExists(data.getElementsByTagName('PlayUrl')[0].childNodes[0].nodeValue)){
+            let video = document.createElement("video");
+            video.setAttribute("width","700px");
+            video.setAttribute("height","350px");
+            video.setAttribute("controls","controls");
+            if(Hls.isSupported()) {
+              let hls = new Hls();
+              hls.loadSource(data.getElementsByTagName('PlayUrl')[0].childNodes[0].nodeValue);
+              hls.attachMedia(video);
+              hls.on(Hls.Events.MANIFEST_PARSED,function() {
+                video.play();
+              });
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+              video.src = data.getElementsByTagName('PlayUrl')[0].childNodes[0].nodeValue;
+              video.addEventListener('loadedmetadata',function() {
+                video.play();
+              });
+            }
+            document.getElementById('playbox').appendChild(video);
+            $("#video-modal").modal("show");
+          }else {
+            clearTimeout(_this.timeHandle);
+            _this.timeHandle = setTimeout(function (){_this.getPlayUrl(sbid,filename)}, 10000);
           }
-          $("#video-modal").modal("show");
-        }else{
-          Toast.error("未找到对应视频！");
         }
       })
+    },
+    fileExists(url) {
+      let isFlag;
+      $.ajax({
+        url: url,
+        async: false,
+        type: 'HEAD',
+        error: function () {
+          isFlag=0;
+          return;
+        },
+        success: function () {
+          isFlag=1;
+          return;
+        }
+      });
+      if(isFlag==1){
+        return true;
+      }else{
+        return false;
+      }
     },
     //重新播放雷达图
     reloadLdt(){
@@ -393,3 +454,8 @@ export default {
   }
 }
 </script>
+<style>
+.myVideo-dimensions{
+  width: 700px;
+}
+</style>

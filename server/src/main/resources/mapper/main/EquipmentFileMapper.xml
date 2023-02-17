@@ -728,7 +728,7 @@
       <include refid="Example_Where_Clause" />
     </if>
     group by xs, deptcode
-    order by rq,xs
+    order by xs
   </select>
 
   <select id="statisticsAlarmNumsByHourAndDP" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultMap="StatisticsResultMap">

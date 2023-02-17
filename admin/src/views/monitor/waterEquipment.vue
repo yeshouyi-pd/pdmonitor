@@ -77,7 +77,7 @@
   <!--            <th>设备端口</th>-->
   <!--            <th>设备IP</th>-->
               <th>所属监测点</th>
-              <th>所属数据中心</th>
+<!--              <th>所属数据中心</th>-->
               <th>设备类别</th>
               <th>设备读取指令</th>
               <th>设备型号</th>
@@ -100,7 +100,7 @@
   <!--              <td>{{waterEquipment.port}}</td>-->
   <!--              <td>{{waterEquipment.ip}}</td>-->
                 <td>{{deptMap|optionMapKV(waterEquipment.deptcode)}}</td>
-                <td>{{waterDatas|optionWDArray(waterEquipment.centerCode)}}</td>
+<!--                <td>{{waterDatas|optionWDArray(waterEquipment.centerCode)}}</td>-->
                 <td>{{sblbs|optionMapKV(waterEquipment.sblb)}}</td>
                 <td>{{waterEquipment.dqzl}}</td>
                 <td>{{waterEquipment.sbxh}}</td>
