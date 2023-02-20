@@ -625,14 +625,15 @@ export default {
       let _this = this;
       $("#playbox").empty();
       _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getVideoDataNew').then((response)=>{
-        let resp = response.data;
+        let resp = response.data.content;
         _this.getPlayUrl(resp.sbbh,resp.tplj.substring(resp.tplj.lastIndexOf("/")+1));
         _this.$forceUpdate();
       })
     },
     getPlayUrl(sbid,filename){
       let _this = this;
-      $.post("http://49.239.193.146:49053/FileInfo.asmx/GetPlayUrl",{"sbid": sbid,"filename":filename,"fbl":"1080"}, function (data, status) {
+
+      $.post("http://49.239.193.146:49082/FileInfo.asmx/GetPlayUrl",{"sbid": sbid,"filename":filename,"fbl":"1080","fhfs":"1"}, function (data, status) {
         if(status&&!data.getElementsByTagName('Mesg')[0].childNodes[0].nodeValue.includes('不存在')){
           if(_this.fileExists(data.getElementsByTagName('PlayUrl')[0].childNodes[0].nodeValue)){
             let video = document.createElement("video");

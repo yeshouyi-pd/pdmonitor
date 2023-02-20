@@ -156,7 +156,8 @@ export default {
       ldTime:'',
       userDto:null,
       shj:LOCAL_SSBRL,
-      timeHandle:null
+      timeHandle:null,
+      canPlay:false
     }
   },
   mounted() {
@@ -189,8 +190,9 @@ export default {
     watchVideo(id){
       let _this = this;
       $("#playbox").empty();
+      _this.canPlay = false;
+      Loading.show();
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileEvent/videoList', {'id':id}).then((response)=>{
-         Loading.hide();
          let resp = response.data;
          let videoDatas = resp.content;
          _this.$forceUpdate();
@@ -200,21 +202,32 @@ export default {
            }else{
              _this.videoHeight = '400';
            }
+           let isLast = false;
            for(let i=0;i<videoDatas.length;i++){
-             console.log(i);
              let obj = videoDatas[i];
-             _this.getPlayUrl(obj.sbbh,obj.tplj.substring(obj.tplj.lastIndexOf("/")+1));
+             if(i==videoDatas.length-1){
+               isLast = true;
+             }
+             _this.getPlayUrl(obj.sbbh,obj.tplj.substring(obj.tplj.lastIndexOf("/")+1),isLast);
            }
          }else{
+           Loading.hide();
            Toast.error("未找到对应视频！");
          }
       })
     },
-    getPlayUrl(sbid,filename){
+    getPlayUrl(sbid,filename,isLast){
       let _this = this;
-      $.post("http://49.239.193.146:49053/FileInfo.asmx/GetPlayUrl",{"sbid": sbid,"filename":filename,"fbl":"1080"}, function (data, status) {
-        if(status&&!data.getElementsByTagName('Mesg')[0].childNodes[0].nodeValue.includes('不存在')){
+      let url = '';
+      if(_this.shj){
+        url="http://49.239.193.146:49053/FileInfo.asmx/GetPlayUrl";
+      }else{
+        url="http://49.239.193.146:49082/FileInfo.asmx/GetPlayUrl";
+      }
+      $.post(url,{"sbid": sbid,"filename":filename,"fbl":"1080","fhfs":"1"}, function (data, status) {
+        if(status&&!(data.getElementsByTagName('Mesg')[0].childNodes[0].nodeValue.includes('不存在')||data.getElementsByTagName('Mesg')[0].childNodes[0].nodeValue.includes('文件大小为0'))){
           if(_this.fileExists(data.getElementsByTagName('PlayUrl')[0].childNodes[0].nodeValue)){
+            Loading.hide();
             let video = document.createElement("video");
             video.setAttribute("width","700px");
             video.setAttribute("height","350px");
@@ -234,9 +247,15 @@ export default {
             }
             document.getElementById('playbox').appendChild(video);
             $("#video-modal").modal("show");
+            _this.canPlay = true;
           }else {
             clearTimeout(_this.timeHandle);
             _this.timeHandle = setTimeout(function (){_this.getPlayUrl(sbid,filename)}, 10000);
+          }
+        }else{
+          if(isLast&&!_this.canPlay){
+            Loading.hide();
+            Toast.error("未找到源文件或文件大小为0，无法转码！");
           }
         }
       })
