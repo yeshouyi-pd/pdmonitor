@@ -1,6 +1,7 @@
 package com.pd.monitor.controller;
 
 import com.pd.monitor.wx.conf.BaseWxController;
+import com.pd.server.main.domain.PointerSecond;
 import com.pd.server.main.domain.PointerSecondExample;
 import com.pd.server.main.dto.*;
 import com.pd.server.main.dto.basewx.my.PointerCommenDto;
@@ -14,7 +15,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/admin/pointerSecond")
@@ -32,17 +36,33 @@ public class PointerSecondController extends BaseWxController {
     @PostMapping("/listAll")
     public ResponseDto listAll(@RequestBody PointerSecondDto pointerSecondDto) {
         ResponseDto responseDto = new ResponseDto();
+        LoginUserDto userDto = getRequestHeader();
+        List<PointerSecond> pointerSecondList = new ArrayList<>();
         PointerSecondExample example = new PointerSecondExample();
         PointerSecondExample.Criteria ca = example.createCriteria();
-        if(!StringUtils.isEmpty(pointerSecondDto.getCjsj())){
-            pointerSecondDto.setBz3(DateUtil.getFormatDate(pointerSecondDto.getCjsj(),"yyyy-MM-dd"));
-            ca.andCjsjEqualTo(DateUtil.getFormatDate(pointerSecondDto.getCjsj(),"yyyy-MM-dd"),"%Y-%m-%d");
-        }
-        List<PointerCommenDto> pointerSecondList = new ArrayList<>();
+        List<String> useSbbhs = new ArrayList<>();
         if(!StringUtils.isEmpty(pointerSecondDto.getXmbh())){
-            pointerSecondList = pointerSecondService.selectAllSpecial(pointerSecondDto);
-        }else{
-            pointerSecondList = pointerSecondService.selectAll(example);
+            useSbbhs = userDto.getXmbhsbsns().get(pointerSecondDto.getXmbh());
+        }
+        ca.andCjsjEqualTo(DateUtil.getFormatDate(pointerSecondDto.getCjsj(),"yyyy-MM-dd"),"%Y-%m-%d");
+        List<PointerSecond> lists = pointerSecondService.selectByExample(example);
+        if(lists!=null && lists.size()>0){
+            Map<String,List<PointerSecond>> maps = lists.stream().collect(Collectors.groupingBy(PointerSecond::getSm));
+            if(!StringUtils.isEmpty(pointerSecondDto.getXmbh())){
+                for(String key : maps.keySet()){
+                    if(useSbbhs.contains(key)){
+                        List<PointerSecond> tempList = maps.get(key);
+                        List<PointerSecond> collect = tempList.stream().sorted(Comparator.comparing(PointerSecond::getCjsj).reversed()).collect(Collectors.toList());
+                        pointerSecondList.add(collect.get(0));
+                    }
+                }
+            }else{
+                for(String key : maps.keySet()){
+                    List<PointerSecond> tempList = maps.get(key);
+                    List<PointerSecond> collect = tempList.stream().sorted(Comparator.comparing(PointerSecond::getCjsj).reversed()).collect(Collectors.toList());
+                    pointerSecondList.add(collect.get(0));
+                }
+            }
         }
         responseDto.setContent(pointerSecondList);
         return responseDto;

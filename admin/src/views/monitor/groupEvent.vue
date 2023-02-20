@@ -20,10 +20,14 @@
                   <tbody>
                   <tr>
                     <td style="width:10%">
-                      设备编号：
+                      设备名称：
                     </td>
                     <td style="width: 20%">
-                      <input class="form-control" type="text"  v-model="groupEventDto.sbbh"/>
+<!--                      <input class="form-control" type="text"  v-model="groupEventDto.sbbh"/>-->
+                      <select v-model="groupEventDto.sbbh" class="form-control" id="form-field-select-1">
+                        <option value="" selected>请选择</option>
+                        <option v-for="item in waterEquipments" :value="item.sbsn">{{item.sbmc}}</option>
+                      </select>
                     </td>
                     <td colspan="2" class="text-center">
                       <button type="button" v-on:click="list(1)" class="btn btn-sm btn-info btn-round" style="margin-right: 10px;">

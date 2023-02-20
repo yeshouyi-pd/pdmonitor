@@ -35,6 +35,10 @@ public class PointerDayService {
         return pointerDayMapper.selectByDp(example);
     }
 
+    public List<PointerDay> selectByExample(PointerDayExample pointerDayExample){
+        return pointerDayMapper.selectByExample(pointerDayExample);
+    }
+
     /**
     * 列表查询
     */

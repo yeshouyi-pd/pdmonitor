@@ -35,6 +35,10 @@ public class PointerSecondService {
         return pointerSecondMapper.selectByDp(example);
     }
 
+    public List<PointerSecond> selectByExample(PointerSecondExample pointerSecondExample){
+        return pointerSecondMapper.selectByExample(pointerSecondExample);
+    }
+
     /**
     * 列表查询
     */
