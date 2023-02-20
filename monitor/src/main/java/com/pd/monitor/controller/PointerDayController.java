@@ -3,12 +3,10 @@ package com.pd.monitor.controller;
 import com.pd.monitor.wx.conf.BaseWxController;
 import com.pd.server.main.domain.PointerDay;
 import com.pd.server.main.domain.PointerDayExample;
-import com.pd.server.main.domain.PointerSecondExample;
 import com.pd.server.main.dto.LoginUserDto;
 import com.pd.server.main.dto.PointerDayDto;
 import com.pd.server.main.dto.PageDto;
 import com.pd.server.main.dto.ResponseDto;
-import com.pd.server.main.dto.basewx.my.PointerCommenDto;
 import com.pd.server.main.service.PointerDayService;
 import com.pd.server.util.DateUtil;
 import com.pd.server.util.ValidatorUtil;
@@ -19,7 +17,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/admin/pointerDay")
@@ -38,19 +39,35 @@ public class PointerDayController extends BaseWxController {
     @PostMapping("/listAll")
     public ResponseDto listAll(@RequestBody PointerDayDto pointerDayDto) {
         ResponseDto responseDto = new ResponseDto();
+        LoginUserDto userDto = getRequestHeader();
+        List<PointerDay> pointerDayList = new ArrayList<>();
         PointerDayExample example = new PointerDayExample();
         PointerDayExample.Criteria ca = example.createCriteria();
-        if(!StringUtils.isEmpty(pointerDayDto.getCjsj())){
-            pointerDayDto.setBz3(DateUtil.getFormatDate(pointerDayDto.getCjsj(),"yyyy-MM-dd"));
-            ca.andCjsjEqualTo(DateUtil.getFormatDate(pointerDayDto.getCjsj(),"yyyy-MM-dd"),"%Y-%m-%d");
-        }
-        List<PointerCommenDto> pointerSecondList = new ArrayList<>();
+        List<String> useSbbhs = new ArrayList<>();
         if(!StringUtils.isEmpty(pointerDayDto.getXmbh())){
-            pointerSecondList = pointerDayService.selectAllSpecial(pointerDayDto);
-        }else{
-            pointerSecondList = pointerDayService.selectAll(example);
+            useSbbhs = userDto.getXmbhsbsns().get(pointerDayDto.getXmbh());
         }
-        responseDto.setContent(pointerSecondList);
+        ca.andCjsjEqualTo(DateUtil.getFormatDate(pointerDayDto.getCjsj(),"yyyy-MM-dd"),"%Y-%m-%d");
+        List<PointerDay> lists = pointerDayService.selectByExample(example);
+        if(lists!=null && lists.size()>0){
+            Map<String,List<PointerDay>> maps = lists.stream().collect(Collectors.groupingBy(PointerDay::getSm));
+            if(!StringUtils.isEmpty(pointerDayDto.getXmbh())){
+                for(String key : maps.keySet()){
+                    if(useSbbhs.contains(key)){
+                        List<PointerDay> tempList = maps.get(key);
+                        List<PointerDay> collect = tempList.stream().sorted(Comparator.comparing(PointerDay::getCjsj).reversed()).collect(Collectors.toList());
+                        pointerDayList.add(collect.get(0));
+                    }
+                }
+            }else{
+                for(String key : maps.keySet()){
+                    List<PointerDay> tempList = maps.get(key);
+                    List<PointerDay> collect = tempList.stream().sorted(Comparator.comparing(PointerDay::getCjsj).reversed()).collect(Collectors.toList());
+                    pointerDayList.add(collect.get(0));
+                }
+            }
+        }
+        responseDto.setContent(pointerDayList);
         return responseDto;
     }
 

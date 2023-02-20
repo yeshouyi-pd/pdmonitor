@@ -19,14 +19,11 @@
           </div>
         </div>
         <div class="h37">
-          <div class="imgs" v-if="videoData.length>0">
-            <div  v-for="item in videoData">
-              <video width="440px" :height="videoHeight+'px'" controls preload="auto" autoplay="autoplay" >
-                <source :src="item.tplj" type="video/mp4">
-              </video>
+          <div class="imgs" v-if="canPlay">
+            <div id="playbox">
             </div>
           </div>
-          <div class="imgs" v-if="videoData.length<=0">
+          <div class="imgs" v-if="!canPlay">
             <div style="height: 50%;">
               <video width="100%" height="100%" poster="/largemonitors/assets/imgs/video.png">
                 <source src="movie.mp4" type="video/mp4">
@@ -205,7 +202,9 @@ export default {
       a4chart:null,
       curBottomSbbh:'RPCDA4001',
       topDayType:'4',
-      eventDayType:'3'
+      eventDayType:'3',
+      canPlay:false,
+      timeHandle:null
     }
   },
   watch: {
@@ -624,13 +623,66 @@ export default {
     },
     getVideoDataNew(){
       let _this = this;
+      $("#playbox").empty();
       _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getVideoDataNew').then((response)=>{
         let resp = response.data;
-        _this.videoData = [];
-        _this.videoData.push(resp.content);
-        _this.videoHeight = 280;
+        _this.getPlayUrl(resp.sbbh,resp.tplj.substring(resp.tplj.lastIndexOf("/")+1));
         _this.$forceUpdate();
       })
+    },
+    getPlayUrl(sbid,filename){
+      let _this = this;
+      $.post("http://49.239.193.146:49053/FileInfo.asmx/GetPlayUrl",{"sbid": sbid,"filename":filename,"fbl":"1080"}, function (data, status) {
+        if(status&&!data.getElementsByTagName('Mesg')[0].childNodes[0].nodeValue.includes('不存在')){
+          if(_this.fileExists(data.getElementsByTagName('PlayUrl')[0].childNodes[0].nodeValue)){
+            let video = document.createElement("video");
+            video.setAttribute("width","700px");
+            video.setAttribute("height","350px");
+            video.setAttribute("controls","controls");
+            if(Hls.isSupported()) {
+              let hls = new Hls();
+              hls.loadSource(data.getElementsByTagName('PlayUrl')[0].childNodes[0].nodeValue);
+              hls.attachMedia(video);
+              hls.on(Hls.Events.MANIFEST_PARSED,function() {
+                video.play();
+              });
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+              video.src = data.getElementsByTagName('PlayUrl')[0].childNodes[0].nodeValue;
+              video.addEventListener('loadedmetadata',function() {
+                video.play();
+              });
+            }
+            document.getElementById('playbox').appendChild(video);
+            _this.canPlay = true;
+          }else {
+            clearTimeout(_this.timeHandle);
+            _this.timeHandle = setTimeout(function (){_this.getPlayUrl(sbid,filename)}, 10000);
+          }
+        }else{
+          console.log("视频源文件不存在："+sbid+"======"+filename);
+        }
+      })
+    },
+    fileExists(url) {
+      let isFlag;
+      $.ajax({
+        url: url,
+        async: false,
+        type: 'HEAD',
+        error: function () {
+          isFlag=0;
+          return;
+        },
+        success: function () {
+          isFlag=1;
+          return;
+        }
+      });
+      if(isFlag==1){
+        return true;
+      }else{
+        return false;
+      }
     },
     optionMapKV(object, key) {
       if (!object || !key) {
