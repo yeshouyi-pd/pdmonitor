@@ -23,8 +23,6 @@ public class WaterEquipQuartz {
     private static final Logger LOG = LoggerFactory.getLogger(WaterEquipQuartz.class);
 
     @Resource
-    private WaterEquipmentService waterEquipmentService;
-    @Resource
     private LdTaskListService ldTaskListService;
     @Resource
     private AttrService attrService;
@@ -32,35 +30,29 @@ public class WaterEquipQuartz {
     /* 每天凌晨7点打开设备 */
     @Scheduled(cron = "0 0 7 * * ? ")
     public void openLoop(){
-        WaterEquipmentExample example = new WaterEquipmentExample();
-        example.createCriteria().andSbcjIsNotNull().andSbcjNotEqualTo("");;
-        List<WaterEquipment> equipmentList = waterEquipmentService.list(example);
+        String iccids = attrService.findByAttrKey("iccids");
         String zszxml = attrService.findByAttrKey("zszxml");//早上7点执行的命令
-        for(WaterEquipment entity : equipmentList){
-            if(!StringUtils.isEmpty(zszxml)){
-                LdTaskListDto dto = new LdTaskListDto();
-                dto.setIccid(entity.getSbcj());
-                dto.setTask(zszxml);
-                dto.setFsdate(new Date());
-                ldTaskListService.save(dto);
-            }
-        }
+        saveTaskList(iccids, zszxml);
     }
 
     /* 每天晚上7点关闭设备 */
     @Scheduled(cron = "0 0 19 * * ? ")
     public void closeLoop(){
-        WaterEquipmentExample example = new WaterEquipmentExample();
-        example.createCriteria().andSbcjIsNotNull().andSbcjNotEqualTo("");
-        List<WaterEquipment> equipmentList = waterEquipmentService.list(example);
+        String iccids = attrService.findByAttrKey("iccids");
         String wszxml = attrService.findByAttrKey("wszxml");//晚上7点执行的命令
-        for(WaterEquipment entity : equipmentList){
-            if(!StringUtils.isEmpty(wszxml)){
-                LdTaskListDto dto = new LdTaskListDto();
-                dto.setIccid(entity.getSbcj());
-                dto.setTask(wszxml);
-                dto.setFsdate(new Date());
-                ldTaskListService.save(dto);
+        saveTaskList(iccids, wszxml);
+    }
+
+    public void saveTaskList(String iccids,String zxml){
+        if(!StringUtils.isEmpty(iccids)){
+            for(String iccid : iccids.split(",")){
+                if(!StringUtils.isEmpty(zxml)){
+                    LdTaskListDto dto = new LdTaskListDto();
+                    dto.setIccid(iccid);
+                    dto.setTask(zxml);
+                    dto.setFsdate(new Date());
+                    ldTaskListService.save(dto);
+                }
             }
         }
     }
