@@ -123,6 +123,7 @@
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
+    AND txtlx='1'
     AND NOT FIND_IN_SET(sbbh,#{a4Sbbh,jdbcType=VARCHAR}))
   </select>
   <select id="selectByExampleSumTs" parameterType="com.pd.server.main.domain.EquipmentTyEventExample" resultMap="BaseResultMap">
