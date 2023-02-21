@@ -636,6 +636,7 @@ export default {
       $.post("http://49.239.193.146:49082/FileInfo.asmx/GetPlayUrl",{"sbid": sbid,"filename":filename,"fbl":"1080","fhfs":"1"}, function (data, status) {
         if(status&&!data.getElementsByTagName('Mesg')[0].childNodes[0].nodeValue.includes('不存在')){
           if(_this.fileExists(data.getElementsByTagName('PlayUrl')[0].childNodes[0].nodeValue)){
+            _this.canPlay = true;
             let video = document.createElement("video");
             video.setAttribute("width","700px");
             video.setAttribute("height","350px");
@@ -654,7 +655,6 @@ export default {
               });
             }
             document.getElementById('playbox').appendChild(video);
-            _this.canPlay = true;
           }else {
             clearTimeout(_this.timeHandle);
             _this.timeHandle = setTimeout(function (){_this.getPlayUrl(sbid,filename)}, 10000);
