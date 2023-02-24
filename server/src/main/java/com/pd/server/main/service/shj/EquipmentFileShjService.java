@@ -10,8 +10,11 @@ import com.pd.server.main.service.AttrService;
 import com.pd.server.main.service.PointerDayService;
 import com.pd.server.main.service.PointerSecondService;
 import com.pd.server.util.DateUtil;
+import com.pd.server.util.MQUtil;
 import com.pd.server.util.TypeUtils;
 import com.pd.server.util.UuidUtil;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -20,9 +23,8 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class EquipmentFileShjService extends AbstractScanRequest{
@@ -30,6 +32,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
     private static final Logger LOG = LoggerFactory.getLogger(EquipmentFileShjService.class);
 
     public  static RedisTemplate  redisTstaticemplate;
+
 
     @Resource
     private RedisTemplate redisTemplate;
@@ -115,6 +118,8 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                     fileEvent.setDeptcode(deptcode);
                     fileEvent.setEquipmentFileId(entity.getId());
                     equipmentFileEventMapper.insertSelective(fileEvent);
+                    //南京设备对接无人机
+                    pushMqMsg(sbbh,entity.getSm1());
                 }
             }else if("1018".equals(entity.getType())){//指针数据每秒
                 PointerSecondService service = SpringUtil.getBean(PointerSecondService.class);
@@ -185,5 +190,28 @@ public class EquipmentFileShjService extends AbstractScanRequest{
             return true;
         }
         return false;
+    }
+
+    public static void pushMqMsg(String sbbh,String jtnr){
+        try {
+            CodesetMapper codesetMapper = SpringUtil.getBean(CodesetMapper.class);
+            CodesetExample codesetExample = new CodesetExample();
+            CodesetExample.Criteria codesetCa = codesetExample.createCriteria();
+            codesetCa.andTypeEqualTo("15");
+            List<Codeset> list = codesetMapper.selectByExample(codesetExample);
+            Map<String,String> codesetMap = list==null?new HashMap<>():list.stream().collect(Collectors.toMap(p -> p.getCode(), p -> p.getName()));
+            Set<String> nja4sbsn = codesetMap.keySet();
+            if(nja4sbsn!= null && nja4sbsn.contains(sbbh)){
+                Connection connection = MQUtil.getConnection();
+                Channel channel = connection.createChannel();
+                channel.queueDeclare(MQUtil.QUEUE_NAME,false,false,false,null);
+                String message = sbbh+"&"+codesetMap.get(sbbh)+"@"+jtnr;
+                channel.basicPublish("",MQUtil.QUEUE_NAME,null,message.getBytes("UTF-8"));
+                channel.close();
+                connection.close();
+            }
+        }catch (Exception e){
+            LOG.error("无人机数据错误："+e.getMessage());
+        }
     }
 }

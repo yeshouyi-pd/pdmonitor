@@ -637,8 +637,8 @@ export default {
           if(_this.fileExists(data.getElementsByTagName('PlayUrl')[0].childNodes[0].nodeValue)){
             _this.canPlay = true;
             let video = document.createElement("video");
-            video.setAttribute("width","430px");
-            video.setAttribute("height","300px");
+            video.setAttribute("width","440px");
+            video.setAttribute("height","290px");
             video.setAttribute("controls","controls");
             if(Hls.isSupported()) {
               let hls = new Hls();
