@@ -245,7 +245,7 @@
             },
             createInfoWindow(content) {
                 let _this = this;
-                _this.clickMapPoint(content[3]);
+                // _this.clickMapPoint(content[3]);
                 let info = document.createElement("div");
                 info.className = "custom-info input-card content-window-card";
 
