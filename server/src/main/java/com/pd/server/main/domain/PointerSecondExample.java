@@ -280,12 +280,22 @@ public class PointerSecondExample {
             return (Criteria) this;
         }
 
+        public Criteria andCjsjGreaterThanOrEqualTo(String value) {
+            addCriterion("cjsj >=", value, "cjsj");
+            return (Criteria) this;
+        }
+
         public Criteria andCjsjLessThan(Date value) {
             addCriterion("cjsj <", value, "cjsj");
             return (Criteria) this;
         }
 
         public Criteria andCjsjLessThanOrEqualTo(Date value) {
+            addCriterion("cjsj <=", value, "cjsj");
+            return (Criteria) this;
+        }
+
+        public Criteria andCjsjLessThanOrEqualTo(String value) {
             addCriterion("cjsj <=", value, "cjsj");
             return (Criteria) this;
         }
@@ -301,6 +311,11 @@ public class PointerSecondExample {
         }
 
         public Criteria andCjsjBetween(Date value1, Date value2) {
+            addCriterion("cjsj between", value1, value2, "cjsj");
+            return (Criteria) this;
+        }
+
+        public Criteria andCjsjBetween(String value1, String value2) {
             addCriterion("cjsj between", value1, value2, "cjsj");
             return (Criteria) this;
         }

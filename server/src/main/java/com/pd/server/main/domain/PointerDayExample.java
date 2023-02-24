@@ -280,12 +280,22 @@ public class PointerDayExample {
             return (Criteria) this;
         }
 
+        public Criteria andCjsjGreaterThanOrEqualTo(String value) {
+            addCriterion("cjsj >=", value, "cjsj");
+            return (Criteria) this;
+        }
+
         public Criteria andCjsjLessThan(Date value) {
             addCriterion("cjsj <", value, "cjsj");
             return (Criteria) this;
         }
 
         public Criteria andCjsjLessThanOrEqualTo(Date value) {
+            addCriterion("cjsj <=", value, "cjsj");
+            return (Criteria) this;
+        }
+
+        public Criteria andCjsjLessThanOrEqualTo(String value) {
             addCriterion("cjsj <=", value, "cjsj");
             return (Criteria) this;
         }
