@@ -626,7 +626,9 @@ export default {
       $("#playbox").empty();
       _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getVideoDataNew').then((response)=>{
         let resp = response.data.content;
-        _this.getPlayUrl(resp.sbbh,resp.tplj.substring(resp.tplj.lastIndexOf("/")+1));
+        if(resp){
+          _this.getPlayUrl(resp.sbbh,resp.tplj.substring(resp.tplj.lastIndexOf("/")+1));
+        }
         _this.$forceUpdate();
       })
     },
