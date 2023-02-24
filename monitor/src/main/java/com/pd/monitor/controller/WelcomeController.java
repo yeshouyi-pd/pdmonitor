@@ -55,6 +55,8 @@ public class WelcomeController extends BaseWxController{
     private PointerDayService pointerDayService;
     @Resource
     private PredationNumService predationNumService;
+    @Resource
+    private EquipmentFileEventService equipmentFileEventService;
 
     /**
      * 大屏 捕食行为
@@ -462,8 +464,15 @@ public class WelcomeController extends BaseWxController{
     @GetMapping("/getVideoDataNew")
     public ResponseDto getVideoDataNew(){
         ResponseDto responseDto = new ResponseDto();
-        EquipmentFile equipmentFile = equipmentFileService.selectVideoDp();
-        responseDto.setContent(equipmentFile);
+        //EquipmentFile equipmentFile = equipmentFileService.selectVideoDp();
+        EquipmentFileEvent equipmentFileEvent = equipmentFileEventService.selectByDp();
+        EquipmentFile equipmentFile = equipmentFileService.selectByPrimaryKey(equipmentFileEvent.getEquipmentFileId());
+        EquipmentFileExample example = new EquipmentFileExample();
+        EquipmentFileExample.Criteria ca = example.createCriteria();
+        ca.andWjmcEqualTo(equipmentFile.getWjmc());
+        ca.andWjlxEqualTo("4");
+        List<EquipmentFile> lists = equipmentFileService.listAll(example);
+        responseDto.setContent(lists!=null&&lists.size()>0?lists.get(0):null);
         return responseDto;
     }
 

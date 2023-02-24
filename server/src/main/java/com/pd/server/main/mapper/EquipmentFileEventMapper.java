@@ -35,4 +35,6 @@ public interface EquipmentFileEventMapper {
     int updateByPrimaryKey(EquipmentFileEvent record);
 
     List<EventDto> getEquipmentEventByDept(EquipmentFileEventExample equipmentFileEventExample);
+
+    EquipmentFileEvent selectByDp();
 }

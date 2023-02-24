@@ -23,6 +23,10 @@ public class EquipmentFileEventService {
     @Resource
     private EquipmentFileEventMapper equipmentFileEventMapper;
 
+    public EquipmentFileEvent selectByDp(){
+        return equipmentFileEventMapper.selectByDp();
+    }
+
     /**
     * 列表查询
     */
