@@ -44,7 +44,9 @@ public class PointerSecondController extends BaseWxController {
         if(!StringUtils.isEmpty(pointerSecondDto.getXmbh())){
             useSbbhs = userDto.getXmbhsbsns().get(pointerSecondDto.getXmbh());
         }
-        ca.andCjsjEqualTo(DateUtil.getFormatDate(pointerSecondDto.getCjsj(),"yyyy-MM-dd"),"%Y-%m-%d");
+        //ca.andCjsjEqualTo(DateUtil.getFormatDate(pointerSecondDto.getCjsj(),"yyyy-MM-dd"),"%Y-%m-%d");
+        ca.andCjsjGreaterThanOrEqualTo(DateUtil.getFormatDate(pointerSecondDto.getCjsj(),"yyyy-MM-dd")+" 00:00:00");
+        ca.andCjsjLessThanOrEqualTo(DateUtil.getFormatDate(pointerSecondDto.getCjsj(),"yyyy-MM-dd")+" 23:59:59");
         List<PointerSecond> lists = pointerSecondService.selectByExample(example);
         if(lists!=null && lists.size()>0){
             Map<String,List<PointerSecond>> maps = lists.stream().collect(Collectors.groupingBy(PointerSecond::getSm));

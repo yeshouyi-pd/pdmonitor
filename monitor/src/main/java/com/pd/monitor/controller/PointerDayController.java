@@ -47,7 +47,9 @@ public class PointerDayController extends BaseWxController {
         if(!StringUtils.isEmpty(pointerDayDto.getXmbh())){
             useSbbhs = userDto.getXmbhsbsns().get(pointerDayDto.getXmbh());
         }
-        ca.andCjsjEqualTo(DateUtil.getFormatDate(pointerDayDto.getCjsj(),"yyyy-MM-dd"),"%Y-%m-%d");
+        //ca.andCjsjEqualTo(DateUtil.getFormatDate(pointerDayDto.getCjsj(),"yyyy-MM-dd"),"%Y-%m-%d");
+        ca.andCjsjGreaterThanOrEqualTo(DateUtil.getFormatDate(pointerDayDto.getCjsj(),"yyyy-MM-dd")+" 00:00:00");
+        ca.andCjsjLessThanOrEqualTo(DateUtil.getFormatDate(pointerDayDto.getCjsj(),"yyyy-MM-dd")+" 23:59:59");
         List<PointerDay> lists = pointerDayService.selectByExample(example);
         if(lists!=null && lists.size()>0){
             Map<String,List<PointerDay>> maps = lists.stream().collect(Collectors.groupingBy(PointerDay::getSm));
