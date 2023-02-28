@@ -1,11 +1,8 @@
 package com.pd.monitor.quartz;
 
-import com.pd.server.main.domain.WaterEquipment;
-import com.pd.server.main.domain.WaterEquipmentExample;
-import com.pd.server.main.dto.LdTaskListDto;
 import com.pd.server.main.service.AttrService;
-import com.pd.server.main.service.LdTaskListService;
-import com.pd.server.main.service.WaterEquipmentService;
+import com.pd.server.secondary.dto.LdTaskListSecDto;
+import com.pd.server.secondary.service.LdTaskListSecService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -15,7 +12,6 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.Date;
-import java.util.List;
 
 @Component
 @EnableScheduling
@@ -23,7 +19,7 @@ public class WaterEquipQuartz {
     private static final Logger LOG = LoggerFactory.getLogger(WaterEquipQuartz.class);
 
     @Resource
-    private LdTaskListService ldTaskListService;
+    private LdTaskListSecService ldTaskListSecService;
     @Resource
     private AttrService attrService;
 
@@ -47,11 +43,11 @@ public class WaterEquipQuartz {
         if(!StringUtils.isEmpty(iccids)){
             for(String iccid : iccids.split(",")){
                 if(!StringUtils.isEmpty(zxml)){
-                    LdTaskListDto dto = new LdTaskListDto();
+                    LdTaskListSecDto dto = new LdTaskListSecDto();
                     dto.setIccid(iccid);
                     dto.setTask(zxml);
                     dto.setFsdate(new Date());
-                    ldTaskListService.save(dto);
+                    ldTaskListSecService.save(dto);
                 }
             }
         }
