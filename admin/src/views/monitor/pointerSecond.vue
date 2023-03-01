@@ -15,12 +15,13 @@ export default {
       pointerSeconds:[],
       echartsDataList:[],
       intervalId:null,
-      deptMap: []
+      waterEquipments:[]
     }
   },
   created(){
     let _this = this;
     _this.dataRefreh();
+    _this.findDeviceInfo();
   },
   destroyed(){
     // 在页面销毁后，清除计时器
@@ -29,20 +30,34 @@ export default {
   },
   mounted() {
     let _this = this;
-    _this.deptMap = Tool.getDeptUser();
     _this.pointerSecondDto.cjsj = Tool.dateFormat("yyyy-MM-dd hh:mm:ss");
     _this.$forceUpdate();
     _this.listAll();
   },
   methods: {
-    optionMapKV(object, key){
-      if (!object || !key) {
+    findDeviceInfo(){
+      let _this = this;
+      Loading.show();
+      let data = {};
+      if("460100"==Tool.getLoginUser().deptcode){
+        data = {'sblb':'0001','dqzl':'A1,A4'};
+      }else{
+        data = {'sblb':'0001','dqzl':'A1,A4','xmbh':Tool.getLoginUser().xmbh};
+      }
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/findAll', data).then((response)=>{
+        Loading.hide();
+        _this.waterEquipments = response.data.content;
+        _this.$forceUpdate();
+      })
+    },
+    optionMapKV(list, key){
+      if (!list || !key) {
         return "";
       } else {
         let result = "";
-        for(let enums in object){
-          if (key === enums) {
-            result = object[enums];
+        for (let i = 0; i < list.length; i++) {
+          if (key === list[i]["sbsn"]) {
+            result = list[i]["sbmc"];
           }
         }
         return result;
@@ -144,7 +159,7 @@ export default {
             },
             detail: {
               valueAnimation: true,
-              formatter: '{value} dB\n'+time+'\n'+_this.optionMapKV(_this.deptMap,sm),
+              formatter: '{value} dB\n'+time+'\n'+_this.optionMapKV(_this.waterEquipments,sm),
               color: 'auto'
             },
             data: [

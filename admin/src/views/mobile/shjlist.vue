@@ -14,7 +14,7 @@
             <i class="message-star ace-icon fa fa-star orange2"></i>
 
             <span class="sender" >
-																		{{key.sbbh}}
+																		{{waterEquipments|optionNSArray(key.sbbh)}}
 																	</span>
 
             <span class="time" style="font-size: 15px">{{key.value}}次 </span>
@@ -46,7 +46,12 @@ export default {
     return {
       KvMap:[],
       deptmap:{},
+      waterEquipments:[]
     }
+  },
+  created() {
+    let _this = this;
+    _this.findDeviceInfo();
   },
   mounted: function () {
     let _this =this;
@@ -58,8 +63,21 @@ export default {
 
   },
   methods: {
-
-
+    findDeviceInfo(){
+      let _this = this;
+      Loading.show();
+      let data = {};
+      if("460100"==Tool.getLoginUser().deptcode){
+        data = {'sblb':'0001','dqzl':'A1,A4'};
+      }else{
+        data = {'sblb':'0001','dqzl':'A1,A4','xmbh':Tool.getLoginUser().xmbh};
+      }
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/findAll', data).then((response)=>{
+        Loading.hide();
+        _this.waterEquipments = response.data.content;
+        _this.$forceUpdate();
+      })
+    },
     /**
      *江豚预警
      */
