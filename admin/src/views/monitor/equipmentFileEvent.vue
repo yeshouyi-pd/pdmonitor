@@ -108,13 +108,13 @@
     </div><!-- /.modal -->
 
     <div id="video-modal" class="modal fade" tabindex="-1" role="dialog">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content" style="width: 750px">
+      <div class="modal-dialog" role="document" style="width: 80%">
+        <div class="modal-content" style="width: 100%;margin: auto">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title">历史回放</h4>
           </div>
-          <div class="modal-body" :style="'height: '+videoHeight+'px;overflow-y: auto;'" id="playbox">
+          <div class="modal-body" :style="'height: '+videoHeight+'px;overflow-y: auto;width:100%;'" id="playbox">
 
           </div>
           <div class="modal-footer">
@@ -128,9 +128,6 @@
     </div><!-- /.modal -->
   </div>
 </template>
-<!--<link href="https://cdn.bootcss.com/video.js/7.6.5/alt/video-js-cdn.min.css" rel="stylesheet">-->
-<!--<script src="https://cdn.bootcss.com/video.js/6.6.2/video.js"></script>-->
-<!--<script src="https://cdn.bootcss.com/videojs-contrib-hls/5.15.0/videojs-contrib-hls.min.js"></script>-->
 <script>
 import Times from "../../components/times";
 import Pagination from "../../components/pagination";
@@ -229,7 +226,7 @@ export default {
           if(_this.fileExists(data.getElementsByTagName('PlayUrl')[0].childNodes[0].nodeValue)){
             Loading.hide();
             let video = document.createElement("video");
-            video.setAttribute("width","700px");
+            video.setAttribute("width","100%");
             video.setAttribute("height","350px");
             video.setAttribute("controls","controls");
             if(Hls.isSupported()) {
