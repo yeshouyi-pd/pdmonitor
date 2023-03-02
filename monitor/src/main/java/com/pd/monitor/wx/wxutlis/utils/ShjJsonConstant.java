@@ -80,6 +80,11 @@ public class ShjJsonConstant {
              * 设备监测数据回传
              */
             put("DeviceMonitorData","com.pd.server.main.service.shj.DeviceMonitorDataShjService");
+            /**
+             * 趸船gps
+             */
+            put("PontoonGPS","com.pd.server.main.service.shj.PontoonGPSShjService");
+
         }
     };
 
