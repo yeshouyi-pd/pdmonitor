@@ -26,7 +26,7 @@
                   </select>
                 </td>
                 <td colspan="2" class="text-center">
-                  <button type="button" v-on:click="getGpsBySbsn()" class="btn btn-sm btn-info btn-round" style="margin-right: 10px;">
+                  <button type="button" v-on:click="getMapMark()" class="btn btn-sm btn-info btn-round" style="margin-right: 10px;">
                     <i class="ace-icon fa fa-book"></i>
                     查询
                   </button>
@@ -105,15 +105,53 @@ export default {
           let arr = _this.equipments[0].gps.split(",");
           _this.jd = Number(arr[0]);
           _this.wd = Number(arr[1]);
-          //_this.map.centerAndZoom(new TLngLat(_this.jd,_this.wd),_this.zoom);
-          _this.getGpsBySbsn();
+          _this.getMapMark();
         }
       })
     },
+    getMapMark(){
+      let _this = this;
+      _this.amap.clearMap();
+      _this.getGpsBySbsn();
+      _this.getPontoonGpsBySbsn();
+    },
+    /**
+     * 获取趸船的gps
+     */
+    getPontoonGpsBySbsn(){
+      let _this = this;
+      let obj = {
+        "rq":_this.curDateStr,
+        "sbbh":_this.curSbsn
+      }
+      Loading.show();
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/pontoonGps/selectGps', obj).then((response)=>{
+        Loading.hide();
+        let resp = response.data;
+        let gpslist = resp.content;
+        if(gpslist && gpslist.length>0){
+          let polylineArr = new Array();//多边形覆盖物节点坐标数组
+          _this.amap.setCenter([gpslist[0].split(",")[0],gpslist[0].split(",")[1]]);
+          gpslist.forEach(function (item){
+            let itemarr = item.split(",");
+            polylineArr.push(new AMap.LngLat(itemarr[0],itemarr[1].trim()));
+          })
+          console.log(polylineArr);
+          let  polyline = new AMap.Polyline ({
+            path: polylineArr,//设置多边形边界路径
+            borderWeight: 2, // 线条宽度，默认为 1
+            strokeColor: '#dd0310', // 线条颜色
+            lineJoin: 'round' // 折线拐点连接处样式
+          });
+          _this.amap.add(polyline);
+        }
+      })
+    },
+    /**
+     * 获取豚类的gps
+     */
     getGpsBySbsn(){
       let _this = this;
-      // _this.map.clearOverLays();
-      _this.amap.clearMap();
       let obj = {
         "rq":_this.curDateStr,
         "sbbh":_this.curSbsn
@@ -123,18 +161,6 @@ export default {
         Loading.hide();
         let resp = response.data;
         let gpslist = resp.content;
-        // if(gpslist && gpslist.length>0){
-        //   console.log(gpslist.length/2);
-        //   _this.map.panTo(new TLngLat(Number(gpslist[parseInt(gpslist.length/2)].gps.split(",")[0]),Number(gpslist[parseInt(gpslist.length/2)].gps.split(",")[1])));
-        //   gpslist.forEach(function (item){
-        //     var icon = new TIcon("https://webapi.amap.com/theme/v1.3/markers/n/mark_bs.png",new TSize(19,27),{anchor:new TPixel(9,27)});
-        //     let gps = item.gps.split(",");
-        //     let lnglat = new TLngLat(Number(gps[0]),Number(gps[1]));
-        //     let marker = new TMarker(lnglat,{icon:icon});
-        //     marker.setTitle(item.ts);
-        //     _this.map.addOverLay(marker);
-        //   })
-        // }
         if(gpslist && gpslist.length>0){
           _this.amap.setCenter(gpslist[0].gps.split(","));
           gpslist.forEach(function (item){
@@ -155,15 +181,6 @@ export default {
       })
     },
     initMap(){
-      // let _this = this;113.333132,23.114138
-      // //初始化地图对象
-      // _this.map=new TMap("mapDiv");
-      // //设置显示地图的中心点和级别
-      // if(_this.wd!=0&&_this.wd!=0){
-      //   _this.map.centerAndZoom(new TLngLat(_this.jd,_this.wd),_this.zoom);
-      // }
-      // //允许鼠标滚轮缩放地图
-      // _this.map.enableHandleMouseScroll();
       let _this = this;
       if(_this.ssbrl){
         _this.amap = new AMap.Map('mapDiv', {
@@ -178,14 +195,6 @@ export default {
           zoom: _this.zoom
         });
       }
-    },
-    initMapMarkers(){
-      let _this = this;
-      let config = {
-        markers:_this.markers
-      };
-      //最简单的用法，生成一个marker数组，然后调用markerClusterer类即可
-      _this.markerClusterer = new TMarkerClusterer(_this.map,config);
     }
   }
 }
