@@ -24,7 +24,7 @@ public class WaterEquipQuartz {
     private AttrService attrService;
 
     /* 每天凌晨7点打开设备 */
-    @Scheduled(cron = "0 0 7 * * ? ")
+    @Scheduled(cron = "0 40 5 * * ? ")
     public void openLoop(){
         String iccids = attrService.findByAttrKey("iccids");
         String zszxml = attrService.findByAttrKey("zszxml");//早上7点执行的命令
@@ -32,7 +32,7 @@ public class WaterEquipQuartz {
     }
 
     /* 每天晚上7点关闭设备 */
-    @Scheduled(cron = "0 0 19 * * ? ")
+    @Scheduled(cron = "0 10 19 * * ? ")
     public void closeLoop(){
         String iccids = attrService.findByAttrKey("iccids");
         String wszxml = attrService.findByAttrKey("wszxml");//晚上7点执行的命令
