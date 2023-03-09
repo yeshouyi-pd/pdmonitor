@@ -400,6 +400,7 @@
     select
     <include refid="Base_Column_List" />
     from equipment_file_event
-    order by jssj desc limit 1
+    WHERE DATE_FORMAT(kssj,'%H') &gt;= 7 AND DATE_FORMAT(kssj,'%H') &lt;= 19
+    order by kssj desc limit 1
   </select>
 </mapper>
