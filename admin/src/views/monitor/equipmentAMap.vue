@@ -42,7 +42,7 @@
                 let _this = this;
                 if(_this.zhbht){
                   _this.amap = new AMap.Map('equipmentamap', {
-                    center: [113.63,22.24],
+                    center: [113.73,22.30],
                     resizeEnable: true,
                     zoom: 11,
                     // mapStyle: _this.mapStyle
