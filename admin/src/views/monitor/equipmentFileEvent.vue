@@ -66,7 +66,7 @@
               <button  v-if="userDto.yj=='Y'" v-on:click="downloadVideo(item.id)" class="btn btn-xs btn-info" style="margin-left: 10px;">
                 <i class="ace-icon fa fa-volume-down bigger-120">下载视频</i>
               </button>
-              <button v-on:click="watchVideo(item.id)" class="btn btn-xs btn-info" style="margin-left: 10px;">
+              <button :id="item.id" v-on:click="watchVideo(item.id)" class="btn btn-xs btn-info" style="margin-left: 10px;">
                 <i class="ace-icon fa  fa-video-camera bigger-120">历史回放</i>
               </button>
             </div>
@@ -183,6 +183,19 @@ export default {
     });
   },
   methods: {
+    //是否有视频
+    hasVideo(id){
+      let _this = this;
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileEvent/videoList', {'id':id}).then((response)=> {
+        let resp = response.data;
+        let videoDatas = resp.content;
+        if(videoDatas.length>0){
+          $("#"+id).attr("style","display:block");
+        }else {
+          $("#"+id).attr("style","display:none");
+        }
+      })
+    },
     //历史回放
     watchVideo(id){
       let _this = this;
@@ -442,6 +455,11 @@ export default {
         let resp = response.data;
         _this.equipmentFileEvents = resp.content.list;
         _this.$refs.pagination.render(page, resp.content.total);
+        _this.$nextTick(function (){
+          for(let i=0;i<_this.equipmentFileEvents.length;i++){
+            _this.hasVideo(_this.equipmentFileEvents[i].id);
+          }
+        });
       })
     },
     downloadFile(id){
