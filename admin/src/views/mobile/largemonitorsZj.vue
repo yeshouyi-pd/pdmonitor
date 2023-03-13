@@ -24,16 +24,7 @@
             </div>
           </div>
           <div class="imgs" v-if="!canPlay">
-            <div style="height: 50%;">
-              <video width="100%" height="100%" poster="/largemonitors/assets/imgs/video.png">
-                <source src="movie.mp4" type="video/mp4">
-              </video>
-            </div>
-            <div style="height: 50%;">
-              <video width="100%" height="100%" poster="/largemonitors/assets/imgs/video.png">
-                <source src="movie.mp4" type="video/mp4">
-              </video>
-            </div>
+
           </div>
         </div>
         <div class="h37">
