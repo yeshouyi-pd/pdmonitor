@@ -100,6 +100,16 @@ public class EquipmentFileShjService extends AbstractScanRequest{
             entity.setTxtlx(typeUtil.get(TypeUtils.TXTLX));
             entity.setWjmc(typeUtil.get(TypeUtils.WJMC));
             entity.setWjlx(typeUtil.get(TypeUtils.WJLX));
+            if("4".equals(typeUtil.get(TypeUtils.WJLX))&&("1021".equals(entity.getType())||"1023".equals(entity.getType())||"1025".equals(entity.getType())||"1027".equals(entity.getType()))){
+                String temp = tplj.substring(tplj.lastIndexOf("/")+1,tplj.lastIndexOf("_A4"));
+                String[] arr = temp.split("_");
+                String kssj = arr[0]+"-"+arr[1]+"-"+arr[2]+" "+arr[3]+":"+arr[4]+":"+arr[5];
+                String jssj = "1020".equals(entity.getType())||"1026".equals(entity.getType())?arr[7]+"-"+arr[8]+"-"+arr[9]+" "+arr[10]+":"+arr[11]+":"+arr[12]:arr[6]+"-"+arr[7]+"-"+arr[8]+" "+arr[9]+":"+arr[10]+":"+arr[11];
+                if(kssj.equals(jssj)){
+                    data="该数据不用保存";
+                    return data;
+                }
+            }
             if(!"0".equals(typeUtil.get(TypeUtils.TS))&&("1020".equals(entity.getType())||"1022".equals(entity.getType())||"1024".equals(entity.getType())||"1026".equals(entity.getType()))){
                 String temp = tplj.substring(tplj.lastIndexOf("/")+1,tplj.lastIndexOf("_A4.txt"));
                 String[] arr = temp.split("_");
