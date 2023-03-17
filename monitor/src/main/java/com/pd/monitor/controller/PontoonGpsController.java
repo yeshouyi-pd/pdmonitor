@@ -1,6 +1,9 @@
 package com.pd.monitor.controller;
 
+import com.pd.monitor.wx.conf.BaseWxController;
+import com.pd.server.main.domain.PontoonGps;
 import com.pd.server.main.domain.PontoonGpsExample;
+import com.pd.server.main.dto.LoginUserDto;
 import com.pd.server.main.dto.PontoonGpsDto;
 import com.pd.server.main.dto.PageDto;
 import com.pd.server.main.dto.ResponseDto;
@@ -13,16 +16,48 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/admin/pontoonGps")
-public class PontoonGpsController {
+public class PontoonGpsController extends BaseWxController {
 
     private static final Logger LOG = LoggerFactory.getLogger(PontoonGpsController.class);
     public static final String BUSINESS_NAME = "趸船gps";
 
     @Resource
     private PontoonGpsService pontoonGpsService;
+
+    @PostMapping("/selectGpsByDateRange")
+    public ResponseDto selectGpsByDateRange(@RequestBody PontoonGpsDto pontoonGpsDto){
+        ResponseDto responseDto = new ResponseDto();
+        LoginUserDto loginUserDto = getRequestHeader();
+        PontoonGpsExample example = new PontoonGpsExample();
+        PontoonGpsExample.Criteria ca = example.createCriteria();
+        if(!StringUtils.isEmpty(pontoonGpsDto.getStime())){
+            ca.andRqGreaterThanOrEqualTo(pontoonGpsDto.getStime());
+        }
+        if(!StringUtils.isEmpty(pontoonGpsDto.getEtime())){
+            ca.andRqLessThanOrEqualTo(pontoonGpsDto.getEtime());
+        }
+        List<PontoonGps> gpsList = pontoonGpsService.selectByExample(example);
+        Map<String, Map<String,List<PontoonGps>>> result = gpsList.stream().collect(Collectors.groupingBy(PontoonGps::getSbbh, Collectors.groupingBy(PontoonGps::getRq)));
+        //判断是否是超级管理员
+        //超级管理不用进行设备编号的筛选，反之则需要
+        if(!"00000000".equals(loginUserDto.getRode())){
+            //获取用户所能查看的设备
+            List<String> sbbhs = loginUserDto.getXmbhsbsns().get(pontoonGpsDto.getXmbh());
+            //循环所有的设备编号
+            for(String key: result.keySet()){
+                if(!sbbhs.contains(key)){
+                    result.remove(key);
+                }
+            }
+        }
+
+        return responseDto;
+    }
 
     @PostMapping("/selectGps")
     public ResponseDto selectGps(@RequestBody PontoonGpsDto pontoonGpsDto){

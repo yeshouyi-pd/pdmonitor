@@ -22,6 +22,10 @@ public class PontoonGpsService {
     @Resource
     private PontoonGpsMapper pontoonGpsMapper;
 
+    public List<PontoonGps> selectByExample(PontoonGpsExample example){
+        return pontoonGpsMapper.selectByExample(example);
+    }
+
     /**
      * 获取趸船gps
      */

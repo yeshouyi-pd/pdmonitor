@@ -545,4 +545,11 @@
     where txtlx='3' and rq=#{rq,jdbcType=VARCHAR} and sbbh = #{sbbh,jdbcType=VARCHAR}
     order by cjsj desc
   </select>
+  <select id="selectGpsByExample" parameterType="com.pd.server.main.domain.EquipmentFileTyExample" resultMap="KVResultMap">
+    select distinct(sm2) gps,ts
+    from equipment_file_ty
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
 </mapper>
