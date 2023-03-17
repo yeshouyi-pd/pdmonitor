@@ -34,4 +34,6 @@ public interface EquipmentFileTyMapper {
     int updateByPrimaryKey(EquipmentFileTy record);
 
     List<GpsKVDto> selectTodayGps(@Param("rq")String rq, @Param("sbbh")String sbbh);
+
+    List<GpsKVDto> selectGpsByExample(EquipmentFileTyExample example);
 }

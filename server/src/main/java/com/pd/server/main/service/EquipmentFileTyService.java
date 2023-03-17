@@ -23,6 +23,10 @@ public class EquipmentFileTyService {
     @Resource
     private EquipmentFileTyMapper equipmentFileTyMapper;
 
+    public List<GpsKVDto> selectGpsByExample(EquipmentFileTyExample example){
+        return equipmentFileTyMapper.selectGpsByExample(example);
+    }
+
     public EquipmentFileTy selectByPrimaryKey(String id){
         return equipmentFileTyMapper.selectByPrimaryKey(id);
     }

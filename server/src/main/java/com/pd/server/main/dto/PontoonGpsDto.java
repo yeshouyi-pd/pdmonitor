@@ -3,7 +3,7 @@ package com.pd.server.main.dto;
         import java.util.Date;
         import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class PontoonGpsDto {
+public class PontoonGpsDto extends PageDto{
 
     /**
     * 
@@ -56,6 +56,16 @@ public class PontoonGpsDto {
     * 
     */
     private String sm2;
+
+    private String xmbh;
+
+    public String getXmbh() {
+        return xmbh;
+    }
+
+    public void setXmbh(String xmbh) {
+        this.xmbh = xmbh;
+    }
 
     public String getId() {
         return id;

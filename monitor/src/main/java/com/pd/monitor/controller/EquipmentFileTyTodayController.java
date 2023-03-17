@@ -1,6 +1,7 @@
 package com.pd.monitor.controller;
 
 import com.pd.monitor.wx.conf.BaseWxController;
+import com.pd.server.main.domain.EquipmentFileTyExample;
 import com.pd.server.main.domain.EquipmentFileTyToday;
 import com.pd.server.main.domain.EquipmentFileTyTodayExample;
 import com.pd.server.main.dto.EquipmentFileTyTodayDto;
@@ -53,6 +54,23 @@ public class EquipmentFileTyTodayController extends BaseWxController {
         ca.andWjlxEqualTo("3");
         TyDataDto dto = equipmentFileTyTodayService.selectTyData(example);
         responseDto.setContent(dto);
+        return responseDto;
+    }
+
+    @PostMapping("/selectGpsByDateRange")
+    public ResponseDto selectGpsByDateRange(@RequestBody EquipmentFileTyTodayDto todayDto){
+        ResponseDto responseDto = new ResponseDto();
+        EquipmentFileTyExample example = new EquipmentFileTyExample();
+        EquipmentFileTyExample.Criteria ca = example.createCriteria();
+        if(!StringUtils.isEmpty(todayDto.getStime())){
+            ca.andRqGreaterThanOrEqualTo(todayDto.getStime());
+        }
+        if(!StringUtils.isEmpty(todayDto.getEtime())){
+            ca.andRqLessThanOrEqualTo(todayDto.getEtime());
+        }
+        ca.andTxtlxEqualTo("3");
+        List<GpsKVDto> gpsList = equipmentFileTyService.selectGpsByExample(example);
+        responseDto.setContent(gpsList);
         return responseDto;
     }
 
