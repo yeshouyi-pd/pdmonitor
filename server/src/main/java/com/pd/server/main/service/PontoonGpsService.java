@@ -34,19 +34,6 @@ public class PontoonGpsService {
     }
 
     /**
-    * 列表查询
-    */
-    public void list(PageDto pageDto) {
-    PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
-        PontoonGpsExample pontoonGpsExample = new PontoonGpsExample();
-        List<PontoonGps> pontoonGpsList = pontoonGpsMapper.selectByExample(pontoonGpsExample);
-        PageInfo<PontoonGps> pageInfo = new PageInfo<>(pontoonGpsList);
-        pageDto.setTotal(pageInfo.getTotal());
-        List<PontoonGpsDto> pontoonGpsDtoList = CopyUtil.copyList(pontoonGpsList, PontoonGpsDto.class);
-        pageDto.setList(pontoonGpsDtoList);
-    }
-
-    /**
     * 保存，id有值时更新，无值时新增
     */
     public void save(PontoonGpsDto pontoonGpsDto) {
