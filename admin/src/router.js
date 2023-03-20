@@ -57,6 +57,7 @@ import TdData from "./views/electricity/tdData.vue";
 import LdTaskList from "./views/electricity/ldTaskList.vue";
 import EquipmentFileEvent from "./views/monitor/equipmentFileEvent.vue";
 import WelcomeDw from "./views/admin/welcomeDw.vue";
+import EquipmentFileTyRange from "./views/tydevice/equipmentFileTyRange.vue";
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -297,6 +298,10 @@ export default new Router({
             path: "monitor/equipmentFileEvent",
             name: "monitor/equipmentFileEvent",
             component: EquipmentFileEvent
+        },{
+            path: "tydevice/equipmentFileTyRange",
+            name: "tydevice/equipmentFileTyRange",
+            component: EquipmentFileTyRange
         }]
     }]
 })

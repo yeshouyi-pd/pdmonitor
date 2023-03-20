@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -41,6 +42,7 @@ public class PontoonGpsController extends BaseWxController {
         if(!StringUtils.isEmpty(pontoonGpsDto.getEtime())){
             ca.andRqLessThanOrEqualTo(pontoonGpsDto.getEtime());
         }
+        example.setOrderByClause(" cjsj desc ");
         List<PontoonGps> gpsList = pontoonGpsService.selectByExample(example);
         Map<String, Map<String,List<PontoonGps>>> result = gpsList.stream().collect(Collectors.groupingBy(PontoonGps::getSbbh, Collectors.groupingBy(PontoonGps::getRq)));
         //判断是否是超级管理员
@@ -55,7 +57,7 @@ public class PontoonGpsController extends BaseWxController {
                 }
             }
         }
-
+        responseDto.setContent(result);
         return responseDto;
     }
 
