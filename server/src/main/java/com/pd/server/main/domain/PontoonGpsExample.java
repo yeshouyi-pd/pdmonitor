@@ -330,6 +330,11 @@ public class PontoonGpsExample {
             return (Criteria) this;
         }
 
+        public Criteria andCjsjEqualTo(String value) {
+            addCriterion("cjsj =", value, "cjsj");
+            return (Criteria) this;
+        }
+
         public Criteria andCjsjNotEqualTo(Date value) {
             addCriterion("cjsj <>", value, "cjsj");
             return (Criteria) this;
