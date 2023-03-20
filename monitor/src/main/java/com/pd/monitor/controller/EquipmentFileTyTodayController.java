@@ -4,10 +4,7 @@ import com.pd.monitor.wx.conf.BaseWxController;
 import com.pd.server.main.domain.EquipmentFileTyExample;
 import com.pd.server.main.domain.EquipmentFileTyToday;
 import com.pd.server.main.domain.EquipmentFileTyTodayExample;
-import com.pd.server.main.dto.EquipmentFileTyTodayDto;
-import com.pd.server.main.dto.LoginUserDto;
-import com.pd.server.main.dto.PageDto;
-import com.pd.server.main.dto.ResponseDto;
+import com.pd.server.main.dto.*;
 import com.pd.server.main.dto.basewx.my.GpsKVDto;
 import com.pd.server.main.dto.basewx.my.TyDataDto;
 import com.pd.server.main.service.EquipmentFileTyService;
@@ -58,18 +55,23 @@ public class EquipmentFileTyTodayController extends BaseWxController {
     }
 
     @PostMapping("/selectGpsByDateRange")
-    public ResponseDto selectGpsByDateRange(@RequestBody EquipmentFileTyTodayDto todayDto){
+    public ResponseDto selectGpsByDateRange(@RequestBody EquipmentFileTyDto equipmentFileTyDto){
         ResponseDto responseDto = new ResponseDto();
-        EquipmentFileTyExample example = new EquipmentFileTyExample();
-        EquipmentFileTyExample.Criteria ca = example.createCriteria();
-        if(!StringUtils.isEmpty(todayDto.getStime())){
-            ca.andRqGreaterThanOrEqualTo(todayDto.getStime());
+        List<GpsKVDto> gpsList = new ArrayList<>();
+        if(!StringUtils.isEmpty(equipmentFileTyDto.getXmbh())){
+            gpsList = equipmentFileTyService.selectGpsByDto(equipmentFileTyDto);
+        }else {
+            EquipmentFileTyExample example = new EquipmentFileTyExample();
+            EquipmentFileTyExample.Criteria ca = example.createCriteria();
+            if(!StringUtils.isEmpty(equipmentFileTyDto.getStime())){
+                ca.andRqGreaterThanOrEqualTo(equipmentFileTyDto.getStime());
+            }
+            if(!StringUtils.isEmpty(equipmentFileTyDto.getEtime())){
+                ca.andRqLessThanOrEqualTo(equipmentFileTyDto.getEtime());
+            }
+            ca.andTxtlxEqualTo("3");
+            gpsList = equipmentFileTyService.selectGpsByExample(example);
         }
-        if(!StringUtils.isEmpty(todayDto.getEtime())){
-            ca.andRqLessThanOrEqualTo(todayDto.getEtime());
-        }
-        ca.andTxtlxEqualTo("3");
-        List<GpsKVDto> gpsList = equipmentFileTyService.selectGpsByExample(example);
         responseDto.setContent(gpsList);
         return responseDto;
     }
