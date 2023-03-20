@@ -35,7 +35,7 @@ public class PontoonGPSShjService extends AbstractScanRequest {
         ca.andCjsjEqualTo(cjsj);
         ca.andSbbhEqualTo(sbbh);
         List<PontoonGps> list = service.selectByExample(example);
-        if(list!=null || list.size()>=1){
+        if(list.size()>=1){
             data = "数据重复";
             return data;
         }
