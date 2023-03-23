@@ -20,7 +20,7 @@
                     </small>
                     <small  v-if="LOCAL_SSBRL">
                       <img style="height: 28px;margin-top: -8px;" src="/static/image/loginButtom.png"/>
-                      水生哺乳类智慧监测管理平台V1.0
+                      水生哺乳类声影像智慧监测管理平台V1.0
                     </small>
                   </a>
               </div>
