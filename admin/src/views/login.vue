@@ -9,8 +9,8 @@
         </div>
         <div v-if="LOCAL_SSBRL" class="center" style="margin-top: 7%;margin-bottom: 7%">
           <span :style="'font-size:'+fontsize+'px;margin-left:30%;'">
-            <img :style="'height:'+imgsize+'px;margin-top: -8px;margin-right:10px;'" src="/static/PRCD10.png"/>
-            <span>水生哺乳类声影像智慧监测管理平台V1.0</span>
+            <img :style="'height:'+imgsize+'px;margin-top: -8px;margin-right:10px;'" src="/static/PRCD13.png"/>
+            <span>水生哺乳类声影像智慧监测管理平台</span>
           </span>
         </div>
         <div id="login-box1" class="login-box visible widget-box no-border" style="width: 475px;margin-left: 55%;">
@@ -151,7 +151,7 @@
               imageCodeToken: "",
               isMobileflag:false,
               fontsize:35,
-              imgsize: 51,
+              imgsize: 105,
               paddingsize:6,
               marginleft:'60%',
               margin:70,
@@ -191,7 +191,7 @@
               _this.margintop='6%';
             }else{
               _this.isMobileflag =false;
-              _this.imgsize = 51;
+              _this.imgsize = 105;
               _this.marginleft='60%';
               _this.margintop='8%';
               if(window.screen.height<=720){

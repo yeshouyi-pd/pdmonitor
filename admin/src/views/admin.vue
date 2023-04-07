@@ -19,7 +19,7 @@
                       中华白海豚种群数量分布定点声学监测平台V1.0
                     </small>
                     <small  v-if="LOCAL_SSBRL">
-                      <img style="height: 28px;margin-top: -8px;" src="/static/image/loginButtom.png"/>
+                      <img style="height: 40px;margin-top: -8px;" src="/static/image/RPCD512-1.png"/>
                       水生哺乳类声影像智慧监测管理平台V1.0
                     </small>
                   </a>
