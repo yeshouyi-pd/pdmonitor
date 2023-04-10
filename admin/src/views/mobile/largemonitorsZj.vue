@@ -631,7 +631,7 @@ export default {
             _this.canPlay = true;
             let video = document.createElement("video");
             video.setAttribute("width","440px");
-            video.setAttribute("height","290px");
+            video.setAttribute("height","270px");
             video.setAttribute("controls","controls");
             if(Hls.isSupported()) {
               let hls = new Hls();
