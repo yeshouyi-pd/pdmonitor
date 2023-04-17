@@ -3,11 +3,15 @@ package com.pd.monitor.controller;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.pd.monitor.wx.conf.BaseWxController;
+import com.pd.server.main.domain.EquipmentFileTy;
+import com.pd.server.main.domain.EquipmentFileTyToday;
 import com.pd.server.main.domain.EquipmentTyEvent;
 import com.pd.server.main.domain.EquipmentTyEventExample;
 import com.pd.server.main.dto.EquipmentTyEventDto;
 import com.pd.server.main.dto.LoginUserDto;
 import com.pd.server.main.dto.ResponseDto;
+import com.pd.server.main.service.EquipmentFileTyService;
+import com.pd.server.main.service.EquipmentFileTyTodayService;
 import com.pd.server.main.service.EquipmentTyEventService;
 import com.pd.server.util.CopyUtil;
 import com.pd.server.util.DateUtils;
@@ -30,6 +34,10 @@ public class EquipmentTyEventController extends BaseWxController {
 
     @Resource
     private EquipmentTyEventService equipmentTyEventService;
+    @Resource
+    private EquipmentFileTyService equipmentFileTyService;
+    @Resource
+    private EquipmentFileTyTodayService equipmentFileTyTodayService;
 
     @GetMapping("/getTodayEvent/{sbbh}")
     public ResponseDto getTodayEvent(@PathVariable String sbbh){
@@ -103,6 +111,13 @@ public class EquipmentTyEventController extends BaseWxController {
 
         ResponseDto responseDto = new ResponseDto();
         equipmentTyEventService.save(equipmentTyEventDto);
+        EquipmentFileTy equipmentFileTy = equipmentFileTyService.selectByPrimaryKey(equipmentTyEventDto.getBz());
+        if(!StringUtils.isEmpty(equipmentFileTy) && !StringUtils.isEmpty(equipmentFileTy.getTs())){
+            equipmentFileTy.setTs(equipmentTyEventDto.getTs());
+            equipmentFileTyService.update(equipmentFileTy);
+            EquipmentFileTyToday equipmentFileTyToday = CopyUtil.copy(equipmentFileTy,EquipmentFileTyToday.class);
+            equipmentFileTyTodayService.update(equipmentFileTyToday);
+        }
         responseDto.setContent(equipmentTyEventDto);
         return responseDto;
     }
