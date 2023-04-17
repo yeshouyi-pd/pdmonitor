@@ -7,7 +7,7 @@
           <p>中华白海豚种群数量分布定点声学监测项目</p>
           </span>
         </div>
-        <div v-if="LOCAL_SSBRL" class="center" style="margin-top: 7%;margin-bottom: 7%">
+        <div v-if="LOCAL_SSBRL" class="center" style="margin-top: 7%;margin-bottom: 5.5%">
           <span :style="'font-size:'+fontsize+'px;margin-left:30%;'">
             <img :style="'height:'+imgsize+'px;margin-top: -8px;margin-right:10px;'" src="/static/PRCD13.png"/>
             <span>水生哺乳类声影像智慧监测管理平台</span>
