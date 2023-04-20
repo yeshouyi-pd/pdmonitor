@@ -22,24 +22,24 @@ public class PontoonGPSShjService extends AbstractScanRequest {
      * 趸船gps
      */
     public String request(JSONObject jsonParam) throws Exception {
-        String sbbh = jsonParam.getString("sbbh");
-        String gps = jsonParam.getString("gps");
-        String cjsj = jsonParam.getString("cjsj");
-        if (StringUtils.isEmpty(sbbh) || StringUtils.isEmpty(gps) || StringUtils.isEmpty(cjsj)) {
-            data = "参数错误";
-            return data;
-        }
-        PontoonGpsService service = SpringUtil.getBean(PontoonGpsService.class);
-        PontoonGpsExample example = new PontoonGpsExample();
-        PontoonGpsExample.Criteria ca = example.createCriteria();
-        ca.andCjsjEqualTo(cjsj);
-        ca.andSbbhEqualTo(sbbh);
-        List<PontoonGps> list = service.selectByExample(example);
-        if(list!=null || list.size()>=1){
-            data = "数据重复";
-            return data;
-        }
         try {
+            String sbbh = jsonParam.getString("sbbh");
+            String gps = jsonParam.getString("gps");
+            String cjsj = jsonParam.getString("cjsj");
+            if (StringUtils.isEmpty(sbbh) || StringUtils.isEmpty(gps) || StringUtils.isEmpty(cjsj)) {
+                data = "参数错误";
+                return data;
+            }
+            PontoonGpsService service = SpringUtil.getBean(PontoonGpsService.class);
+            PontoonGpsExample example = new PontoonGpsExample();
+            PontoonGpsExample.Criteria ca = example.createCriteria();
+            ca.andCjsjEqualTo(cjsj);
+            ca.andSbbhEqualTo(sbbh);
+            List<PontoonGps> list = service.selectByExample(example);
+            if(list.size()>=1){
+                data = "数据重复";
+                return data;
+            }
             PontoonGpsDto dto = new PontoonGpsDto();
             dto.setSbbh(jsonParam.getString("sbbh"));
             dto.setGps(jsonParam.getString("gps"));

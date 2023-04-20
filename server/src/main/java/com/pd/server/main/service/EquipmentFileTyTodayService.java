@@ -73,8 +73,8 @@ public class EquipmentFileTyTodayService {
     /**
     * 更新
     */
-    private void update(EquipmentFileTyToday equipmentFileTyToday) {
-        equipmentFileTyTodayMapper.updateByPrimaryKey(equipmentFileTyToday);
+    public void update(EquipmentFileTyToday equipmentFileTyToday) {
+        equipmentFileTyTodayMapper.updateByPrimaryKeySelective(equipmentFileTyToday);
     }
 
     /**
