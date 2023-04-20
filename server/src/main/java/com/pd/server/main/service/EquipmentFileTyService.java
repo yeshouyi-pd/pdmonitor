@@ -71,8 +71,8 @@ public class EquipmentFileTyService {
     /**
     * 更新
     */
-    private void update(EquipmentFileTy equipmentFileTy) {
-        equipmentFileTyMapper.updateByPrimaryKey(equipmentFileTy);
+    public void update(EquipmentFileTy equipmentFileTy) {
+        equipmentFileTyMapper.updateByPrimaryKeySelective(equipmentFileTy);
     }
 
     /**

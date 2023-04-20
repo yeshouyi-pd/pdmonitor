@@ -615,7 +615,7 @@ export default {
     getVideoDataNew(){
       let _this = this;
       $("#playbox").empty();
-      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getVideoDataNew').then((response)=>{
+      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getLastVedio').then((response)=>{
         let resp = response.data.content;
         if(resp){
           _this.getPlayUrl(resp.sbbh,resp.tplj.substring(resp.tplj.lastIndexOf("/")+1));
@@ -631,7 +631,7 @@ export default {
             _this.canPlay = true;
             let video = document.createElement("video");
             video.setAttribute("width","440px");
-            video.setAttribute("height","290px");
+            video.setAttribute("height","270px");
             video.setAttribute("controls","controls");
             if(Hls.isSupported()) {
               let hls = new Hls();

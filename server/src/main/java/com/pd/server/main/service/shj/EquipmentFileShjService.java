@@ -219,6 +219,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                 channel.basicPublish("",MQUtil.QUEUE_NAME,null,message.getBytes("UTF-8"));
                 channel.close();
                 connection.close();
+                LOG.error("无人机数据已发送："+message);
             }
         }catch (Exception e){
             LOG.error("无人机数据错误："+e.getMessage());
