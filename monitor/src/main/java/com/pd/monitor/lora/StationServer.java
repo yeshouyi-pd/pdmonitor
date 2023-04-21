@@ -15,7 +15,7 @@ public class StationServer {
             TimeUnit.SECONDS, new ArrayBlockingQueue<>(2), Executors.defaultThreadFactory(),
             new ThreadPoolExecutor.AbortPolicy());
 
-    @PostConstruct
+    //@PostConstruct
     public void startSattionServer() {
         try {
             ServerSocket serverSocket = new ServerSocket(7777);
