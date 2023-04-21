@@ -6,9 +6,14 @@ package com.pd.server.main.dto;
 public class StationsHeartDto {
 
     /**
-    * 基站id
+    * 主键
     */
     private String id;
+
+    /**
+    * 基站id
+    */
+    private String nodeId;
 
     /**
     * 基站名称
@@ -57,6 +62,14 @@ public class StationsHeartDto {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getNodeId() {
+        return nodeId;
+    }
+
+    public void setNodeId(String nodeId) {
+        this.nodeId = nodeId;
     }
 
     public String getNodeName() {
@@ -131,6 +144,7 @@ public class StationsHeartDto {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
             sb.append(", id=").append(id);
+            sb.append(", nodeId=").append(nodeId);
             sb.append(", nodeName=").append(nodeName);
             sb.append(", nodeNum=").append(nodeNum);
             sb.append(", loraId=").append(loraId);
