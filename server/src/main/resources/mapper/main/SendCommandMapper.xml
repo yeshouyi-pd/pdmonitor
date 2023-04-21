@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pd.server.main.mapper.SendCommandMapper">
+  <resultMap id="BaseResultMap" type="com.pd.server.main.domain.SendCommand">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="node_id" jdbcType="VARCHAR" property="nodeId" />
+    <result column="lora_id" jdbcType="VARCHAR" property="loraId" />
+    <result column="serial_number" jdbcType="VARCHAR" property="serialNumber" />
+    <result column="whole_sec" jdbcType="VARCHAR" property="wholeSec" />
+    <result column="frac_sec" jdbcType="DOUBLE" property="fracSec" />
+    <result column="up_chirp_cor" jdbcType="REAL" property="upChirpCor" />
+    <result column="down_chirp_cor" jdbcType="REAL" property="downChirpCor" />
+    <result column="ppm" jdbcType="DOUBLE" property="ppm" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="bz" jdbcType="VARCHAR" property="bz" />
+    <result column="sm" jdbcType="VARCHAR" property="sm" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, node_id, lora_id, serial_number, whole_sec, frac_sec, up_chirp_cor, down_chirp_cor, 
+    ppm, create_time, update_time, bz, sm, remark
+  </sql>
+  <select id="selectByExample" parameterType="com.pd.server.main.domain.SendCommandExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from send_command
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from send_command
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from send_command
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pd.server.main.domain.SendCommandExample">
+    delete from send_command
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pd.server.main.domain.SendCommand">
+    insert into send_command (id, node_id, lora_id, 
+      serial_number, whole_sec, frac_sec, 
+      up_chirp_cor, down_chirp_cor, ppm, 
+      create_time, update_time, bz, 
+      sm, remark)
+    values (#{id,jdbcType=VARCHAR}, #{nodeId,jdbcType=VARCHAR}, #{loraId,jdbcType=VARCHAR}, 
+      #{serialNumber,jdbcType=VARCHAR}, #{wholeSec,jdbcType=VARCHAR}, #{fracSec,jdbcType=DOUBLE}, 
+      #{upChirpCor,jdbcType=REAL}, #{downChirpCor,jdbcType=REAL}, #{ppm,jdbcType=DOUBLE}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{bz,jdbcType=VARCHAR}, 
+      #{sm,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pd.server.main.domain.SendCommand">
+    insert into send_command
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="nodeId != null">
+        node_id,
+      </if>
+      <if test="loraId != null">
+        lora_id,
+      </if>
+      <if test="serialNumber != null">
+        serial_number,
+      </if>
+      <if test="wholeSec != null">
+        whole_sec,
+      </if>
+      <if test="fracSec != null">
+        frac_sec,
+      </if>
+      <if test="upChirpCor != null">
+        up_chirp_cor,
+      </if>
+      <if test="downChirpCor != null">
+        down_chirp_cor,
+      </if>
+      <if test="ppm != null">
+        ppm,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="bz != null">
+        bz,
+      </if>
+      <if test="sm != null">
+        sm,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="nodeId != null">
+        #{nodeId,jdbcType=VARCHAR},
+      </if>
+      <if test="loraId != null">
+        #{loraId,jdbcType=VARCHAR},
+      </if>
+      <if test="serialNumber != null">
+        #{serialNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="wholeSec != null">
+        #{wholeSec,jdbcType=VARCHAR},
+      </if>
+      <if test="fracSec != null">
+        #{fracSec,jdbcType=DOUBLE},
+      </if>
+      <if test="upChirpCor != null">
+        #{upChirpCor,jdbcType=REAL},
+      </if>
+      <if test="downChirpCor != null">
+        #{downChirpCor,jdbcType=REAL},
+      </if>
+      <if test="ppm != null">
+        #{ppm,jdbcType=DOUBLE},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bz != null">
+        #{bz,jdbcType=VARCHAR},
+      </if>
+      <if test="sm != null">
+        #{sm,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pd.server.main.domain.SendCommandExample" resultType="java.lang.Long">
+    select count(*) from send_command
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update send_command
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.nodeId != null">
+        node_id = #{record.nodeId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.loraId != null">
+        lora_id = #{record.loraId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serialNumber != null">
+        serial_number = #{record.serialNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wholeSec != null">
+        whole_sec = #{record.wholeSec,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fracSec != null">
+        frac_sec = #{record.fracSec,jdbcType=DOUBLE},
+      </if>
+      <if test="record.upChirpCor != null">
+        up_chirp_cor = #{record.upChirpCor,jdbcType=REAL},
+      </if>
+      <if test="record.downChirpCor != null">
+        down_chirp_cor = #{record.downChirpCor,jdbcType=REAL},
+      </if>
+      <if test="record.ppm != null">
+        ppm = #{record.ppm,jdbcType=DOUBLE},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.bz != null">
+        bz = #{record.bz,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sm != null">
+        sm = #{record.sm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update send_command
+    set id = #{record.id,jdbcType=VARCHAR},
+      node_id = #{record.nodeId,jdbcType=VARCHAR},
+      lora_id = #{record.loraId,jdbcType=VARCHAR},
+      serial_number = #{record.serialNumber,jdbcType=VARCHAR},
+      whole_sec = #{record.wholeSec,jdbcType=VARCHAR},
+      frac_sec = #{record.fracSec,jdbcType=DOUBLE},
+      up_chirp_cor = #{record.upChirpCor,jdbcType=REAL},
+      down_chirp_cor = #{record.downChirpCor,jdbcType=REAL},
+      ppm = #{record.ppm,jdbcType=DOUBLE},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      bz = #{record.bz,jdbcType=VARCHAR},
+      sm = #{record.sm,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pd.server.main.domain.SendCommand">
+    update send_command
+    <set>
+      <if test="nodeId != null">
+        node_id = #{nodeId,jdbcType=VARCHAR},
+      </if>
+      <if test="loraId != null">
+        lora_id = #{loraId,jdbcType=VARCHAR},
+      </if>
+      <if test="serialNumber != null">
+        serial_number = #{serialNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="wholeSec != null">
+        whole_sec = #{wholeSec,jdbcType=VARCHAR},
+      </if>
+      <if test="fracSec != null">
+        frac_sec = #{fracSec,jdbcType=DOUBLE},
+      </if>
+      <if test="upChirpCor != null">
+        up_chirp_cor = #{upChirpCor,jdbcType=REAL},
+      </if>
+      <if test="downChirpCor != null">
+        down_chirp_cor = #{downChirpCor,jdbcType=REAL},
+      </if>
+      <if test="ppm != null">
+        ppm = #{ppm,jdbcType=DOUBLE},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bz != null">
+        bz = #{bz,jdbcType=VARCHAR},
+      </if>
+      <if test="sm != null">
+        sm = #{sm,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pd.server.main.domain.SendCommand">
+    update send_command
+    set node_id = #{nodeId,jdbcType=VARCHAR},
+      lora_id = #{loraId,jdbcType=VARCHAR},
+      serial_number = #{serialNumber,jdbcType=VARCHAR},
+      whole_sec = #{wholeSec,jdbcType=VARCHAR},
+      frac_sec = #{fracSec,jdbcType=DOUBLE},
+      up_chirp_cor = #{upChirpCor,jdbcType=REAL},
+      down_chirp_cor = #{downChirpCor,jdbcType=REAL},
+      ppm = #{ppm,jdbcType=DOUBLE},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      bz = #{bz,jdbcType=VARCHAR},
+      sm = #{sm,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
