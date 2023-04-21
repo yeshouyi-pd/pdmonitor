@@ -5,6 +5,8 @@ import java.util.Date;
 public class StationsHeart {
     private String id;
 
+    private String nodeId;
+
     private String nodeName;
 
     private String nodeNum;
@@ -27,6 +29,14 @@ public class StationsHeart {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getNodeId() {
+        return nodeId;
+    }
+
+    public void setNodeId(String nodeId) {
+        this.nodeId = nodeId;
     }
 
     public String getNodeName() {
@@ -100,6 +110,7 @@ public class StationsHeart {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
+        sb.append(", nodeId=").append(nodeId);
         sb.append(", nodeName=").append(nodeName);
         sb.append(", nodeNum=").append(nodeNum);
         sb.append(", loraId=").append(loraId);

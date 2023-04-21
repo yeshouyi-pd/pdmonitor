@@ -3,6 +3,7 @@ package com.pd.monitor.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.pd.server.main.domain.SendCommand;
 import com.pd.server.main.domain.StationsHeart;
+import com.pd.server.main.domain.StationsInfo;
 import com.pd.server.main.dto.ResponseDto;
 import com.pd.server.main.service.SendCommandService;
 import com.pd.server.main.service.StationsHeartService;
@@ -31,6 +32,8 @@ public class LoraController {
     private StationsHeartService stationsHeartService;
     @Resource
     private SendCommandService sendCommandService;
+    @Resource
+    private StationsInfoService stationsInfoService;
 
     @PostMapping("/stationsInfo")
     public ResponseDto stationsInfo(@RequestBody JSONObject jsonObject){
@@ -43,13 +46,19 @@ public class LoraController {
             return responseDto;
         }
         StationsHeart stationsHeart = new StationsHeart();
-        stationsHeart.setId(jsonObject.getString("id"));
+        stationsHeart.setId(UuidUtil.getShortUuid());
+        stationsHeart.setNodeId(jsonObject.getString("id"));
         stationsHeart.setNodeName(jsonObject.getString("name"));
         stationsHeart.setNodeNum(jsonObject.getString("num"));
         stationsHeart.setLoraId(jsonObject.getString("lora_id"));
         stationsHeart.setData(jsonObject.getString("data"));
         stationsHeart.setCreateTime(new Date());
         stationsHeartService.insertSelective(stationsHeart);
+        StationsInfo stationsInfo = stationsInfoService.selectByPrimaryKey(jsonObject.getString("id"));
+        if(stationsInfo!=null && !StringUtils.isEmpty(stationsInfo.getId())){
+            stationsInfo.setLastOnlineTime(new Date());
+            stationsInfoService.updateByPrimaryKeySelective(stationsInfo);
+        }
         try {
             StationsWebSocketServer.sendInfo(JSONObject.toJSONString(stationsHeart),null);
         } catch (IOException e) {

@@ -22,6 +22,10 @@ public class StationsInfoService {
     @Resource
     private StationsInfoMapper stationsInfoMapper;
 
+    public StationsInfo selectByPrimaryKey(String id){
+        return stationsInfoMapper.selectByPrimaryKey(id);
+    }
+
     /**
     * 列表查询
     */
@@ -48,6 +52,10 @@ public class StationsInfoService {
                 Date now = new Date();
         stationsInfo.setId(UuidUtil.getShortUuid());
         stationsInfoMapper.insert(stationsInfo);
+    }
+
+    public void updateByPrimaryKeySelective(StationsInfo stationsInfo){
+        stationsInfoMapper.updateByPrimaryKeySelective(stationsInfo);
     }
 
     /**

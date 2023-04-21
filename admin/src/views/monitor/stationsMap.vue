@@ -85,7 +85,7 @@ export default {
             let data = JSON.parse(msg.data);
             //遍历所有的基站id
             for(let id in _this.markMap){
-              if(id==data.id){
+              if(id==data.nodeId){
                 //获取marker,修改marker状态,修改最后在线时间
                 let mark = _this.markMap[id];
                 mark.setIcon(_this.onlineIcon);
@@ -144,6 +144,20 @@ export default {
           offset:new AMap.Pixel(0, -5),
           content: _this.stationsInfos[i].nodeName, //设置文本标注内容
         });
+        //信息窗体
+        marker.content = [];
+        marker.content.push(_this.stationsInfos[i].nodeName);
+        marker.content.push(_this.stationsInfos[i].id);
+        marker.content.push(_this.stationsInfos[i].dh);
+        marker.content.push(_this.stationsInfos[i].gps);
+        AMap.event.addListener(marker, 'click', function (e) {
+          let infoWindow = new AMap.InfoWindow({
+            isCustom: true,  //使用自定义窗体
+            content: _this.createInfoWindow(e.target.content),
+            offset: new AMap.Pixel(16, -15)
+          });
+          infoWindow.open(_this.amap, e.target.getPosition());
+        });
         //存放mark对象
         _this.markMap[_this.stationsInfos[i].id] = marker;
         //存放最后在线时间
@@ -161,6 +175,50 @@ export default {
       });
       _this.amap.add(polyline);
       _this.getStationHeart();
+    },
+    createInfoWindow(content) {
+      let _this = this;
+      // _this.clickMapPoint(content[3]);
+      let info = document.createElement("div");
+      info.className = "custom-info input-card content-window-card";
+
+      //可以通过下面的方式修改自定义窗体的宽高
+      //info.style.width = "400px";
+      // 定义顶部标题
+      let top = document.createElement("div");
+      let titleD = document.createElement("div");
+      let closeX = document.createElement("img");
+      top.className = "info-top";
+      titleD.innerHTML = "详情";
+      closeX.src = "https://webapi.amap.com/images/close2.gif";
+      closeX.onclick = _this.closeInfoWindow;
+
+      top.appendChild(titleD);
+      top.appendChild(closeX);
+      info.appendChild(top);
+
+      // 定义中部内容
+      let middle = document.createElement("div");
+      middle.className = "info-middle";
+      middle.style.backgroundColor = 'white';
+      middle.innerHTML = "<div>基站名称："+content[0]+"</div><div>基站ID："+content[1]+"</div><div>电话："+content[2]+"</div><div>gps："+content[3]+"</div>";
+      info.appendChild(middle);
+
+      // 定义底部内容
+      let bottom = document.createElement("div");
+      bottom.className = "info-bottom";
+      bottom.style.position = 'relative';
+      bottom.style.top = '0px';
+      bottom.style.margin = '0 auto';
+      let sharp = document.createElement("img");
+      sharp.src = "https://webapi.amap.com/images/sharp.png";
+      bottom.appendChild(sharp);
+      info.appendChild(bottom);
+      return info;
+    },
+    closeInfoWindow() {
+      let _this = this;
+      _this.amap.clearInfoWindow();
     },
     //判断在线时间是否超过5分钟
     isOverTime(lastTime){

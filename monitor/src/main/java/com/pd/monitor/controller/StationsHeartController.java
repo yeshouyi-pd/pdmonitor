@@ -16,7 +16,7 @@ import javax.annotation.Resource;
 public class StationsHeartController {
 
     private static final Logger LOG = LoggerFactory.getLogger(StationsHeartController.class);
-    public static final String BUSINESS_NAME = "基站心跳";
+    public static final String BUSINESS_NAME = "";
 
     @Resource
     private StationsHeartService stationsHeartService;
@@ -38,6 +38,7 @@ public class StationsHeartController {
     @PostMapping("/save")
     public ResponseDto save(@RequestBody StationsHeartDto stationsHeartDto) {
         // 保存校验
+                ValidatorUtil.length(stationsHeartDto.getNodeId(), "基站id", 1, 100);
                 ValidatorUtil.length(stationsHeartDto.getNodeName(), "基站名称", 1, 255);
                 ValidatorUtil.length(stationsHeartDto.getNodeNum(), "基站编号", 1, 255);
                 ValidatorUtil.length(stationsHeartDto.getLoraId(), "信标编号", 1, 255);
