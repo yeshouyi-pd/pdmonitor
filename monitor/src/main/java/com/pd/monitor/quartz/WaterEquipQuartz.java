@@ -23,19 +23,35 @@ public class WaterEquipQuartz {
     @Resource
     private AttrService attrService;
 
-    /* 每天凌晨7点打开设备 */
-    @Scheduled(cron = "0 40 5 * * ? ")
+    /* 每天凌晨5点50打开设备通道一 */
+    @Scheduled(cron = "0 50 5 * * ? ")
     public void openLoop(){
         String iccids = attrService.findByAttrKey("iccids");
         String zszxml = attrService.findByAttrKey("zszxml");//早上7点执行的命令
         saveTaskList(iccids, zszxml);
     }
 
-    /* 每天晚上7点关闭设备 */
+    /* 每天晚上7点10关闭设备通道一 */
     @Scheduled(cron = "0 10 19 * * ? ")
     public void closeLoop(){
         String iccids = attrService.findByAttrKey("iccids");
         String wszxml = attrService.findByAttrKey("wszxml");//晚上7点执行的命令
+        saveTaskList(iccids, wszxml);
+    }
+
+    /* 每天晚上5点40打开设备通道二 */
+    @Scheduled(cron = "0 40 17 * * ? ")
+    public void open2Loop(){
+        String iccids = attrService.findByAttrKey("iccids2");
+        String zszxml = attrService.findByAttrKey("zszxml2");//早上7点执行的命令
+        saveTaskList(iccids, zszxml);
+    }
+
+    /* 每天晚上7点10关闭设备通道二 */
+    @Scheduled(cron = "0 10 19 * * ? ")
+    public void close2Loop(){
+        String iccids = attrService.findByAttrKey("iccids2");
+        String wszxml = attrService.findByAttrKey("wszxml2");//晚上7点执行的命令
         saveTaskList(iccids, wszxml);
     }
 
