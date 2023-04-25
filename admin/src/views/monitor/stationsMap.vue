@@ -12,15 +12,19 @@ export default {
       zoom:11,
       onlineIcon:null,
       offlineIcon:null,
+      blingIcon:null,
       markMap:new Map(),//存放标记点marker对象
-      lastTimeMap:new Map(),//存放最后在线时间
-      stationsIntervalId:null
+      lastTimeMap:new Map(),//存放标记点最后在线时间
+      stationsIntervalId:null,
+      blingMarkId:[],//存放闪烁标记点
+      blingTimeMap:new Map(),//存放闪烁标记点最后在线时间
+      sendCommandIntervalId:null
     }
   },
   created() {
     let _this = this;
     let h = document.documentElement.clientHeight || document.body.clientHeight;
-    _this.maxHeight = h*0.8-50;
+    _this.maxHeight = h*0.9-100;
     let w = document.documentElement.clientWidth || document.body.clientWidth;
     _this.maxWidth = w-230;
     _this.$forceUpdate();
@@ -38,16 +42,35 @@ export default {
       image: '/static/image/offline-marker.png',
       size: new AMap.Size(29, 36)
     });
+    //闪烁图标样式
+    _this.blingIcon = new AMap.Icon({
+      image: '/static/image/bling.gif',
+      size: new AMap.Size(29, 36)
+    });
     // 计时器为空，操作
     _this.stationsIntervalId = setInterval(() => {
       //遍历最后在线时间，查看是否超过五分钟
       for(let id in _this.lastTimeMap){
         let mark = _this.markMap[id];
-        if(_this.isOverTime(_this.lastTimeMap[id])){
+        if(_this.isOverTime(_this.lastTimeMap[id],300000)){
           //超过五分钟
           mark.setIcon(_this.offlineIcon);
         }else{
+          if(!_this.blingMarkId.includes(id)){
+            mark.setIcon(_this.onlineIcon);
+          }
+        }
+      }
+    }, 60000);
+    // 计时器为空，操作
+    _this.sendCommandIntervalId = setInterval(() => {
+      //遍历最后在线时间，查看是否超过90秒
+      for(let id in _this.blingTimeMap){
+        let mark = _this.markMap[id];
+        if(_this.isOverTime(_this.blingTimeMap[id],90000)){
+          //超过90秒
           mark.setIcon(_this.onlineIcon);
+          _this.blingMarkId.splice(_this.blingMarkId.indexOf(id), 1);
         }
       }
     }, 60000);
@@ -56,17 +79,18 @@ export default {
   destroyed() {
     let _this = this;
     clearInterval(_this.stationsIntervalId);
+    clearInterval(_this.sendCommandIntervalId);
   },
   methods: {
-    //实时获取基站信息
-    getStationHeart(){
+    //实时获取豚类信息
+    getSendCommon(){
       let _this = this;
       let socket;
       if(typeof(WebSocket) == "undefined") {
         alert("您的浏览器不支持WebSocket,无法实时更新数据,请使用谷歌、火狐或IE11等浏览器!");
       }else{
-        //let socketUrl="ws://146.56.226.176:9091/monitor/stationsWebSocketServer/22_"+new Date().getTime();
-        let socketUrl="ws://192.168.10.13:9091/monitor/stationsWebSocketServer/22_"+new Date().getTime();
+        let socketUrl="ws://119.3.2.53:9091/monitor/sendCommandWebSocketServer/23_"+new Date().getTime();
+        //let socketUrl="ws://192.168.10.13:9091/monitor/sendCommandWebSocketServer/23_"+new Date().getTime();
         console.log(socketUrl);
         if(socket!=null){
           socket.close();
@@ -88,7 +112,56 @@ export default {
               if(id==data.nodeId){
                 //获取marker,修改marker状态,修改最后在线时间
                 let mark = _this.markMap[id];
-                mark.setIcon(_this.onlineIcon);
+                mark.setIcon(_this.blingIcon);
+                _this.blingMarkId.push(id);
+                _this.blingTimeMap[id] = data.createTime;
+              }
+            }
+          }
+        };
+        //关闭事件
+        socket.onclose = function() {
+          console.log("websocket已关闭");
+        };
+        //发生了错误事件
+        socket.onerror = function() {
+          console.log("websocket发生了错误");
+        }
+      }
+    },
+    //实时获取基站信息
+    getStationHeart(){
+      let _this = this;
+      let socket;
+      if(typeof(WebSocket) == "undefined") {
+        alert("您的浏览器不支持WebSocket,无法实时更新数据,请使用谷歌、火狐或IE11等浏览器!");
+      }else{
+        let socketUrl="ws://119.3.2.53:9091/monitor/stationsWebSocketServer/22_"+new Date().getTime();
+        //let socketUrl="ws://192.168.10.13:9091/monitor/stationsWebSocketServer/22_"+new Date().getTime();
+        console.log(socketUrl);
+        if(socket!=null){
+          socket.close();
+          socket=null;
+        }
+        socket = new WebSocket(socketUrl);
+        //打开事件
+        socket.onopen = function() {
+          console.log("websocket已打开");
+        };
+        //获得消息事件
+        socket.onmessage = function(msg) {
+          if(msg.data.includes("连接成功")){
+            //Toast.success(msg.data);
+          }else{
+            let data = JSON.parse(msg.data);
+            //遍历所有的基站id
+            for(let id in _this.markMap){
+              if(id==data.nodeId){
+                //获取marker,修改marker状态,修改最后在线时间
+                let mark = _this.markMap[id];
+                if(!_this.blingMarkId.includes(id)){
+                  mark.setIcon(_this.onlineIcon);
+                }
                 _this.lastTimeMap[id] = data.createTime;
               }
             }
@@ -128,10 +201,9 @@ export default {
       _this.amap.setCenter([116.3083,29.136176]);
       let polylineArr = new Array();
       for(let i=0;i<_this.stationsInfos.length;i++){
-        console.log(_this.stationsInfos[i]);
         //添加基站点
         let marker = new AMap.Marker({
-          icon: _this.isOverTime(_this.stationsInfos[i].lastOnlineTime)?_this.offlineIcon:_this.onlineIcon,
+          icon: _this.isOverTime(_this.stationsInfos[i].lastOnlineTime,300000)?_this.offlineIcon:_this.onlineIcon,
           position: _this.stationsInfos[i].gps.split(','),
           offset: new AMap.Pixel(3,-34),
           zIndex: 101,
@@ -175,10 +247,10 @@ export default {
       });
       _this.amap.add(polyline);
       _this.getStationHeart();
+      _this.getSendCommon();
     },
     createInfoWindow(content) {
       let _this = this;
-      // _this.clickMapPoint(content[3]);
       let info = document.createElement("div");
       info.className = "custom-info input-card content-window-card";
 
@@ -221,11 +293,11 @@ export default {
       _this.amap.clearInfoWindow();
     },
     //判断在线时间是否超过5分钟
-    isOverTime(lastTime){
+    isOverTime(lastTime,overTime){
       if(Tool.isEmpty(lastTime)){
         return true;
       }
-      if((new Date().getTime()-new Date(lastTime).getTime())>300000){
+      if((new Date().getTime()-new Date(lastTime).getTime())>overTime){
         return true;
       }else{
         return false;

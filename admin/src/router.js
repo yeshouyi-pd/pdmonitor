@@ -60,6 +60,9 @@ import WelcomeDw from "./views/admin/welcomeDw.vue";
 import EquipmentFileTyRange from "./views/tydevice/equipmentFileTyRange.vue";
 import PontoonGps from "./views/tydevice/pontoonGps.vue";
 import StationsMap from "./views/monitor/stationsMap.vue";
+import StationsInfo from "./views/monitor/stationsInfo.vue";
+import StationsHeart from "./views/monitor/stationsHeart.vue";
+import SendCommand from "./views/monitor/sendCommand.vue";
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -312,6 +315,18 @@ export default new Router({
             path: "monitor/stationsMap",
             name: "monitor/stationsMap",
             component: StationsMap
+        },{
+            path: "monitor/stationsInfo",
+            name: "monitor/stationsInfo",
+            component: StationsInfo
+        },{
+            path: "monitor/stationsHeart",
+            name: "monitor/stationsHeart",
+            component: StationsHeart
+        },{
+            path: "monitor/sendCommand",
+            name: "monitor/sendCommand",
+            component: SendCommand
         }]
     }]
 })

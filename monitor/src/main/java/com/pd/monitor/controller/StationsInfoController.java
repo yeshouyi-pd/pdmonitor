@@ -12,6 +12,7 @@ import com.pd.server.util.CopyUtil;
 import com.pd.server.util.ValidatorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -45,6 +46,16 @@ public class StationsInfoController extends PageInfo{
         ResponseDto responseDto = new ResponseDto();
         PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
         StationsInfoExample stationsInfoExample = new StationsInfoExample();
+        StationsInfoExample.Criteria ca = stationsInfoExample.createCriteria();
+        if(!StringUtils.isEmpty(pageDto.getId())){
+            ca.andIdLike("%"+pageDto.getId()+"%");
+        }
+        if(!StringUtils.isEmpty(pageDto.getNodeName())){
+            ca.andIdLike("%"+pageDto.getNodeName()+"%");
+        }
+        if(!StringUtils.isEmpty(pageDto.getNodeNum())){
+            ca.andIdLike("%"+pageDto.getNodeNum()+"%");
+        }
         stationsInfoExample.setOrderByClause(" xh desc ");
         List<StationsInfo> stationsInfoList = stationsInfoService.selectByExample(stationsInfoExample);
         PageInfo<StationsInfo> pageInfo = new PageInfo<>(stationsInfoList);
