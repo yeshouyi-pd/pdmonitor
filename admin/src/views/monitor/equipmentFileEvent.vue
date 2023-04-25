@@ -63,7 +63,7 @@
               <button v-on:click="showEcharts(item)" class="btn btn-xs btn-info" style="margin-left: 10px;">
                 <i class="fa-solid fa fa-list bigger-120">雷达图</i>
               </button>
-              <button  v-if="userDto.yj=='Y'" v-show="!zhbht" v-on:click="downloadVideo(item.id)" class="btn btn-xs btn-info" style="margin-left: 10px;">
+              <button :id="'xz'+item.id" v-if="userDto.yj=='Y'" v-on:click="downloadVideo(item.id)" class="btn btn-xs btn-info" style="margin-left: 10px;">
                 <i class="ace-icon fa fa-volume-down bigger-120">下载视频</i>
               </button>
               <button :id="item.id" v-on:click="watchVideo(item.id)" class="btn btn-xs btn-info" style="margin-left: 10px;">
@@ -190,8 +190,10 @@ export default {
         let resp = response.data;
         let videoDatas = resp.content;
         if(videoDatas.length>0){
+          $("#xz"+id).attr("style","display:block");
           $("#"+id).attr("style","display:block");
         }else {
+          $("#xz"+id).attr("style","display:none");
           $("#"+id).attr("style","display:none");
         }
       })

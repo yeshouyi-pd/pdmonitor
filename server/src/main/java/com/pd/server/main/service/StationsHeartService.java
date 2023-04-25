@@ -25,14 +25,8 @@ public class StationsHeartService {
     /**
      * 列表查询
      */
-    public void list(PageDto pageDto) {
-        PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
-        StationsHeartExample stationsHeartExample = new StationsHeartExample();
-        List<StationsHeart> stationsHeartList = stationsHeartMapper.selectByExample(stationsHeartExample);
-        PageInfo<StationsHeart> pageInfo = new PageInfo<>(stationsHeartList);
-        pageDto.setTotal(pageInfo.getTotal());
-        List<StationsHeartDto> stationsHeartDtoList = CopyUtil.copyList(stationsHeartList, StationsHeartDto.class);
-        pageDto.setList(stationsHeartDtoList);
+    public List<StationsHeart> selectByExample(StationsHeartExample stationsHeartExample) {
+        return stationsHeartMapper.selectByExample(stationsHeartExample);
     }
 
     /**
