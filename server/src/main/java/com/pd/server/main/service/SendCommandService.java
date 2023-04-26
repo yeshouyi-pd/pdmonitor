@@ -25,14 +25,8 @@ public class SendCommandService {
     /**
     * 列表查询
     */
-    public void list(PageDto pageDto) {
-    PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
-        SendCommandExample sendCommandExample = new SendCommandExample();
-        List<SendCommand> sendCommandList = sendCommandMapper.selectByExample(sendCommandExample);
-        PageInfo<SendCommand> pageInfo = new PageInfo<>(sendCommandList);
-        pageDto.setTotal(pageInfo.getTotal());
-        List<SendCommandDto> sendCommandDtoList = CopyUtil.copyList(sendCommandList, SendCommandDto.class);
-        pageDto.setList(sendCommandDtoList);
+    public List<SendCommand> selectByExample(SendCommandExample sendCommandExample) {
+        return sendCommandMapper.selectByExample(sendCommandExample);
     }
 
     /**

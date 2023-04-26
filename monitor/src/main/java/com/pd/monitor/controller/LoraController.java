@@ -3,10 +3,12 @@ package com.pd.monitor.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.pd.server.main.domain.SendCommand;
 import com.pd.server.main.domain.StationsHeart;
+import com.pd.server.main.domain.StationsHeartbeat;
 import com.pd.server.main.domain.StationsInfo;
 import com.pd.server.main.dto.ResponseDto;
 import com.pd.server.main.service.SendCommandService;
 import com.pd.server.main.service.StationsHeartService;
+import com.pd.server.main.service.StationsHeartbeatService;
 import com.pd.server.main.service.StationsInfoService;
 import com.pd.server.util.UuidUtil;
 import org.slf4j.Logger;
@@ -34,6 +36,38 @@ public class LoraController {
     private SendCommandService sendCommandService;
     @Resource
     private StationsInfoService stationsInfoService;
+    @Resource
+    private StationsHeartbeatService stationsHeartbeatService;
+
+    @PostMapping("/stationsHeartbeat")
+    public ResponseDto stationsHeartbeat(@RequestBody JSONObject jsonObject){
+        ResponseDto responseDto = new ResponseDto();
+        if(StringUtils.isEmpty(jsonObject.get("eui")) || StringUtils.isEmpty(jsonObject.get("status"))){
+            responseDto.setMessage("请求参数错误");
+            responseDto.setCode("4000");
+            responseDto.setSuccess(false);
+            return responseDto;
+        }
+        StationsHeartbeat stationsHeartbeat = new StationsHeartbeat();
+        stationsHeartbeat.setId(UuidUtil.getShortUuid());
+        stationsHeartbeat.setNodeId(jsonObject.getString("eui"));
+        stationsHeartbeat.setStatus(jsonObject.getBoolean("status").toString());
+        stationsHeartbeat.setCreateTime(new Date());
+        stationsHeartbeatService.insertSelective(stationsHeartbeat);
+        if("true".equals(stationsHeartbeat.getStatus())){
+            StationsInfo stationsInfo = stationsInfoService.selectByPrimaryKey(jsonObject.getString("eui"));
+            if(stationsInfo!=null && !StringUtils.isEmpty(stationsInfo.getId())){
+                stationsInfo.setLastOnlineTime(new Date());
+                stationsInfoService.updateByPrimaryKeySelective(stationsInfo);
+            }
+        }
+        try {
+            StationsWebSocketServer.sendInfo(JSONObject.toJSONString(stationsHeartbeat),null);
+        } catch (IOException e) {
+            LOG.error("stationsHeart推送消息失败");
+        }
+        return responseDto;
+    }
 
     @PostMapping("/stationsInfo")
     public ResponseDto stationsInfo(@RequestBody JSONObject jsonObject){
@@ -54,16 +88,16 @@ public class LoraController {
         stationsHeart.setData(jsonObject.getString("data"));
         stationsHeart.setCreateTime(new Date());
         stationsHeartService.insertSelective(stationsHeart);
-        StationsInfo stationsInfo = stationsInfoService.selectByPrimaryKey(jsonObject.getString("id"));
-        if(stationsInfo!=null && !StringUtils.isEmpty(stationsInfo.getId())){
-            stationsInfo.setLastOnlineTime(new Date());
-            stationsInfoService.updateByPrimaryKeySelective(stationsInfo);
-        }
-        try {
-            StationsWebSocketServer.sendInfo(JSONObject.toJSONString(stationsHeart),null);
-        } catch (IOException e) {
-            LOG.error("stationsHeart推送消息失败");
-        }
+//        StationsInfo stationsInfo = stationsInfoService.selectByPrimaryKey(jsonObject.getString("id"));
+//        if(stationsInfo!=null && !StringUtils.isEmpty(stationsInfo.getId())){
+//            stationsInfo.setLastOnlineTime(new Date());
+//            stationsInfoService.updateByPrimaryKeySelective(stationsInfo);
+//        }
+//        try {
+//            StationsWebSocketServer.sendInfo(JSONObject.toJSONString(stationsHeart),null);
+//        } catch (IOException e) {
+//            LOG.error("stationsHeart推送消息失败");
+//        }
         return responseDto;
     }
 
