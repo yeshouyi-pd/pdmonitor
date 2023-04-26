@@ -61,7 +61,7 @@ export default {
           }
         }
       }
-    }, 60000);
+    }, 120000);
     // 计时器为空，操作
     _this.sendCommandIntervalId = setInterval(() => {
       //遍历最后在线时间，查看是否超过90秒
@@ -159,10 +159,14 @@ export default {
               if(id==data.nodeId){
                 //获取marker,修改marker状态,修改最后在线时间
                 let mark = _this.markMap[id];
-                if(!_this.blingMarkId.includes(id)){
+                if(data.status=="true"&&!_this.blingMarkId.includes(id)){
                   mark.setIcon(_this.onlineIcon);
+                }else if(data.status=="false"){
+                  mark.setIcon(_this.offlineIcon);
                 }
-                _this.lastTimeMap[id] = data.createTime;
+                if(data.status=="true"){
+                  _this.lastTimeMap[id] = data.createTime;
+                }
               }
             }
           }
@@ -198,7 +202,7 @@ export default {
         zoom: _this.zoom
       });
       //设置中心点
-      _this.amap.setCenter([116.3083,29.136176]);
+      _this.amap.setCenter([113.799350,29.932999]);
       let polylineArr = new Array();
       for(let i=0;i<_this.stationsInfos.length;i++){
         //添加基站点

@@ -22,7 +22,7 @@ import java.util.List;
 public class StationsHeartController {
 
     private static final Logger LOG = LoggerFactory.getLogger(StationsHeartController.class);
-    public static final String BUSINESS_NAME = "基站心跳";
+    public static final String BUSINESS_NAME = "基站数据";
 
     @Resource
     private StationsHeartService stationsHeartService;
@@ -35,6 +35,7 @@ public class StationsHeartController {
         ResponseDto responseDto = new ResponseDto();
         PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
         StationsHeartExample stationsHeartExample = new StationsHeartExample();
+        stationsHeartExample.setOrderByClause(" create_time desc ");
         List<StationsHeart> stationsHeartList = stationsHeartService.selectByExample(stationsHeartExample);
         PageInfo<StationsHeart> pageInfo = new PageInfo<>(stationsHeartList);
         pageDto.setTotal(pageInfo.getTotal());

@@ -63,6 +63,7 @@ import StationsMap from "./views/monitor/stationsMap.vue";
 import StationsInfo from "./views/monitor/stationsInfo.vue";
 import StationsHeart from "./views/monitor/stationsHeart.vue";
 import SendCommand from "./views/monitor/sendCommand.vue";
+import StationsHeartbeat from "./views/monitor/stationsHeartbeat.vue";
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -327,6 +328,10 @@ export default new Router({
             path: "monitor/sendCommand",
             name: "monitor/sendCommand",
             component: SendCommand
+        },{
+            path: "monitor/stationsHeartbeat",
+            name: "monitor/stationsHeartbeat",
+            component: StationsHeartbeat
         }]
     }]
 })
