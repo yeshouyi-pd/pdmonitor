@@ -214,7 +214,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
             if(nja4sbsn!= null && nja4sbsn.contains(sbbh)){
                 Connection connection = MQUtil.getConnection();
                 Channel channel = connection.createChannel();
-                channel.queueDeclare(MQUtil.QUEUE_NAME,false,false,false,null);
+                channel.queueDeclare(MQUtil.QUEUE_NAME,true,false,false,null);
                 String message = sbbh+"&"+codesetMap.get(sbbh)+"@"+jtnr;
                 channel.basicPublish("",MQUtil.QUEUE_NAME,null,message.getBytes("UTF-8"));
                 channel.close();
