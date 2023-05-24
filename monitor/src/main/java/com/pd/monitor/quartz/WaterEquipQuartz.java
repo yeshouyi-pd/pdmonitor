@@ -23,11 +23,24 @@ public class WaterEquipQuartz {
     @Resource
     private AttrService attrService;
 
+    /* 每天凌晨5点50重启 */
+    @Scheduled(cron = "0 50 5 * * ? ")
+    public void reloadLoop() {
+        String iccids = attrService.findByAttrKey("iccidsReload");
+        try {
+            saveTaskList(iccids, "cmd:203");
+            Thread.sleep(30000);
+            saveTaskList(iccids, "cmd:202");
+        }catch (Exception e){
+            LOG.error("重启失败："+e.getMessage());
+        }
+    }
+
     /* 每天凌晨5点50打开设备通道一 */
     @Scheduled(cron = "0 50 5 * * ? ")
     public void openLoop(){
         String iccids = attrService.findByAttrKey("iccids");
-        String zszxml = attrService.findByAttrKey("zszxml");//早上7点执行的命令
+        String zszxml = attrService.findByAttrKey("zszxml");//早上5点50执行的命令
         saveTaskList(iccids, zszxml);
     }
 
@@ -35,7 +48,7 @@ public class WaterEquipQuartz {
     @Scheduled(cron = "0 10 19 * * ? ")
     public void closeLoop(){
         String iccids = attrService.findByAttrKey("iccids");
-        String wszxml = attrService.findByAttrKey("wszxml");//晚上7点执行的命令
+        String wszxml = attrService.findByAttrKey("wszxml");//晚上7点10执行的命令
         saveTaskList(iccids, wszxml);
     }
 
@@ -43,7 +56,7 @@ public class WaterEquipQuartz {
     @Scheduled(cron = "0 40 17 * * ? ")
     public void open2Loop(){
         String iccids = attrService.findByAttrKey("iccids2");
-        String zszxml = attrService.findByAttrKey("zszxml2");//早上7点执行的命令
+        String zszxml = attrService.findByAttrKey("zszxml2");//晚上5点40执行的命令
         saveTaskList(iccids, zszxml);
     }
 
@@ -51,7 +64,7 @@ public class WaterEquipQuartz {
     @Scheduled(cron = "0 10 19 * * ? ")
     public void close2Loop(){
         String iccids = attrService.findByAttrKey("iccids2");
-        String wszxml = attrService.findByAttrKey("wszxml2");//晚上7点执行的命令
+        String wszxml = attrService.findByAttrKey("wszxml2");//晚上7点10执行的命令
         saveTaskList(iccids, wszxml);
     }
 
