@@ -126,7 +126,7 @@ public class TypeUtils {
             String wjlx = "";
             String type = "";
             String ts = "";
-            String txtlx = "";
+            String txtlx = "0";
             String wjmc = info.substring(0,19);
             for(Object key:set){
                 Map.Entry entry = (Map.Entry) key;
