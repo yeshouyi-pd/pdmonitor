@@ -36,4 +36,10 @@ public class CodeType {
      */
     public final static String FSZL_CODE = "14";
 
+    /**
+     * 短信内容
+     */
+    public final static String DXNR_CODE = "15";
+
+
 }

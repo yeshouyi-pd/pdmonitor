@@ -1,7 +1,9 @@
 package com.pd.monitor.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.pd.monitor.utils.SendSmsTool;
 import com.pd.monitor.wx.conf.BaseWxController;
+import com.pd.monitor.wx.conf.WxRedisConfig;
 import com.pd.monitor.wx.wxutlis.utils.ShjJsonConstant;
 import com.pd.server.config.SpringUtil;
 import com.pd.server.main.domain.InterfaceLog;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -58,6 +61,23 @@ public class ShjController{
                     JSONObject entity = result.getJSONObject("entity");
                     entity.remove("sm1");
                     WebSocketServer.sendInfo(entity.toJSONString(),null);
+                }
+            }
+            if("EquipmentFile".equals(methodname)||"EquipmentFileByTy".equals(methodname)){
+                JSONObject result = JSONObject.parseObject(data);
+                data = result.getString("data");
+                if("保存成功".equals(data)){
+                    JSONObject entity = result.getJSONObject("entity");
+                    if("1018".equals(entity.getString("type"))||"1019".equals(entity.getString("type"))){
+                        //向页面推送数据
+                        WebSocketServer.sendInfo(entity.toJSONString(),null);
+                        //发送短信
+                        String templateId = "1018".equals(entity.getString("type"))?"1823144":"1823146";
+                        Map<String,String> dxMap = WxRedisConfig.getCodeset("15");//短信内容
+                        String params = dxMap.get(templateId).replace("sbbh",entity.getString("sbbh")).replace("yjsz",entity.getString("ts")+"dB");
+                        SendSmsTool.sendSms(templateId,params);
+                        entity.remove("sm1");
+                    }
                 }
             }
             if("参数错误".equals(data)){
