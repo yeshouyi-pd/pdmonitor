@@ -13,6 +13,7 @@ import com.tencentcloudapi.sms.v20190711.models.SendSmsRequest;
 import com.tencentcloudapi.sms.v20190711.models.SendSmsResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 
 import java.util.Map;
 
@@ -52,9 +53,11 @@ public class SendSmsTool {
             req.setExtendCode(extendCode);
             String senderid = "";
             req.setSenderId(senderid);
-            SendSmsResponse res = client.SendSms(req);
-            JSONObject resultJson = JSON.parseObject(SendSmsResponse.toJsonString(res));
-            LOG.error("短信返回数据："+resultJson);
+            if(!StringUtils.isEmpty(attrMap.get("phoneNumber"))){
+                SendSmsResponse res = client.SendSms(req);
+                JSONObject resultJson = JSON.parseObject(SendSmsResponse.toJsonString(res));
+                LOG.error("短信返回数据："+resultJson);
+            }
             return true;
         } catch (Exception e) {
             e.printStackTrace();
