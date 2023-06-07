@@ -144,4 +144,23 @@ public class WxRedisConfig implements CommandLineRunner {
         return true;
     }
 
+    /**
+     * 获取Attr表缓存信息
+     * @return
+     */
+    public static Map<String,String> getAttrMap(){
+        Map<String,String> map = (Map<String, String>) redisTstaticemplate.opsForValue().get(RedisCode.ATTRECODEKEY);
+        return map;
+    }
+
+    /**
+     * 获取Codeset表缓存信息
+     * @return
+     */
+    public static Map<String,String> getCodeset(String type){
+        Map<String,String> map = new LinkedHashMap<String,String>();
+        Map<String, Map<String,String>> allmap = (Map<String, Map<String, String>>) redisTstaticemplate.opsForValue().get(RedisCode.CODESET);
+        map = allmap.get(type);
+        return map;
+    }
 }

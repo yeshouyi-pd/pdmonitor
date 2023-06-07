@@ -178,12 +178,19 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                     redisTstaticemplate.opsForValue().set(sbbh+"WB", JSONObject.toJSONString(entity));
                 }
                 data="保存成功";
+                JSONObject result = new JSONObject();
+                result.put("data",data);
+                result.put("entity",beforeEntity);
+                return result.toJSONString();
             }else {
                 equipmentFileMapper.insert(entity);
                 todayMapper.insertEquipFile(entity);
                 data="保存成功";
+                JSONObject result = new JSONObject();
+                result.put("data",data);
+                result.put("entity",entity);
+                return result.toJSONString();
             }
-            return data;
         }else {
             data="该图片已保存过";
             return data;

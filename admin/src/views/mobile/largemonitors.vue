@@ -15,23 +15,21 @@
       <div class="pain">
         <div class="h25">
           <div class="imgs">
-            <video width="100%" height="100%" autoplay="autoplay" loop="loop">
+            <video width="100%" height="100%" autoplay="autoplay" loop="loop" controls>
               <source class="video" title="主监控位" src="/video/12.mp4"/>
             </video>
           </div>
         </div>
         <div class="h37">
           <div class="imgs">
-            <div style="height: 50%;">
-              <video width="100%" height="100%" poster="/largemonitors/assets/imgs/video.png">
-                <source src="movie.mp4" type="video/mp4">
-              </video>
-            </div>
-            <div style="height: 50%;">
-              <video width="100%" height="100%" poster="/largemonitors/assets/imgs/video.png">
-                <source src="movie.mp4" type="video/mp4">
-              </video>
-            </div>
+            <video width="100%" height="100%" autoplay="autoplay" loop="loop" controls>
+              <source class="video" title="主监控位" src="/video/13.mp4"/>
+            </video>
+<!--            <div style="height: 50%;">-->
+<!--              <video width="100%" height="100%" poster="/largemonitors/assets/imgs/video.png">-->
+<!--                <source src="movie.mp4" type="video/mp4">-->
+<!--              </video>-->
+<!--            </div>-->
           </div>
         </div>
         <div class="h37">
@@ -81,8 +79,8 @@
           <div class="imgs" style="height: 100%;display: flex;padding-bottom: 5px;">
             <div style="width: 50%;height: 100%;position: relative;">
               <div id="gauge1" style="width: 100%;height: 100%;"></div>
-              <span
-                  style="position: absolute;top: 0;left: 50%;transform:translateX(-50%);font-size: 12px;color: #fff;">鱼类指针</span>
+              <span style="position: absolute;top: 0;left: 50%;transform:translateX(-50%);font-size: 12px;color: #fff;">鱼类指针</span>
+              <img v-show="secondBling" src="/static/image/bjss.gif" style="position: absolute;top: 0;left: 70%;width: 20px;height: 20px;">
               <div style="position: absolute;left: 0;top: 65%;font-size: 12px;color: #fff;">
                 <div class="flex">
                   <span style="color: #a4c656;width:30px;display: inline-block;padding: 2px 0;">142</span>
@@ -101,11 +99,11 @@
                   <span>造成鱼体死亡风险</span>
                 </div>
               </div>
-
             </div>
             <div style="width: 50%;height: 100%;position: relative;">
               <div id="gauge2" style="width: 100%;height: 100%;"></div>
               <span style="position: absolute;top: 0;left: 50%;transform:translateX(-50%);font-size: 12px;color: #fff;">豚类指针</span>
+              <img v-show="dayBling" src="/static/image/bjss.gif" style="position: absolute;top: 0;left: 70%;width: 20px;height: 20px;">
               <div style="position: absolute;left: 0;top: 65%;font-size: 12px;color: #fff;">
                 <div class="flex">
                   <span style="color: #ffc74b;width:30px ;display: inline-block;padding: 2px 0;">180</span>
@@ -163,7 +161,14 @@ export default {
       devices:[],
       swiperData:[],
       videoData:[],
-      videoHeight:140
+      videoHeight:140,
+      intervalIdTemp:null,
+      secondCount:30,
+      dayCount:30,
+      secondTimer:null,
+      dayTimer:null,
+      secondBling:false,
+      dayBling:false
     }
   },
   created() {
@@ -171,15 +176,16 @@ export default {
     //获取所有的设备，因为要用到设备的位置
     _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getDevice').then((res)=>{
       let response = res.data;
-      _this.devices = response.content;
+      _this.devices = response.content.list;
       _this.$forceUpdate();
+      _this.getA4AndA2JL();//中间下方，获取A2设备和A4设备聚类
     })
     _this.getThreeDayTs();//左下角最近三天的总头数
     _this.getRightTopData();//右上角获取当日声学侦测次数、事件(群次)、捕食次数
     _this.getPointerDay();
     _this.getPointerSecond();
     _this.deptMap = Tool.getDeptUser();
-    _this.getA4AndA2JL();//中间下方，获取A2设备和A4设备聚类
+    _this.openSocket();
   },
   mounted() {
     let _this = this;
@@ -190,6 +196,93 @@ export default {
     window.getVideoData = _this.getVideoData;
   },
   methods: {
+    //倒计时
+    countDownSecond(){
+      let _this = this;
+      _this.secondCount--;
+      if(_this.secondCount==0){
+        _this.secondCount = 30;
+        clearTimeout(_this.secondTimer);
+        _this.getNoRequestData();
+        _this.secondTimer=null;
+        _this.secondBling = false;
+        return;
+      }
+      _this.secondTimer = setTimeout(function (){_this.countDownSecond();},1000);
+    },
+    countDownDay(){
+      let _this = this;
+      _this.dayCount--;
+      if(_this.dayCount==0){
+        _this.dayCount = 30;
+        clearTimeout(_this.dayTimer);
+        _this.dayTimer=null;
+        _this.dayBling = false;
+        return;
+      }
+      _this.dayTimer = setTimeout(function (){_this.countDownDay();},1000);
+    },
+    //获取指针实时数据
+    openSocket(){
+      let _this = this;
+      let socket;
+      if(typeof(WebSocket) == "undefined") {
+        alert("您的浏览器不支持WebSocket,无法实时更新数据,请使用谷歌、火狐或IE11等浏览器!");
+      }else{
+        let socketUrl="ws://119.3.2.53:9091/monitor/websocket/21_"+new Date().getTime();
+        //let socketUrl="ws://192.168.10.13:9091/monitor/websocket/21_"+new Date().getTime();
+        console.log(socketUrl);
+        if(socket!=null){
+          socket.close();
+          socket=null;
+        }
+        socket = new WebSocket(socketUrl);
+        //打开事件
+        socket.onopen = function() {
+          console.log("websocket已打开");
+        };
+        //获得消息事件
+        socket.onmessage = function(msg) {
+          if(msg.data.includes("连接成功")){
+            //Toast.success(msg.data);
+            console.log(msg.data);
+          }else{
+            let data = JSON.parse(msg.data);
+            if("1018"==data.type){//每秒
+              if(_this.intervalIdTemp!=null){
+                clearInterval(_this.intervalIdTemp);
+                _this.intervalIdTemp=null;
+              }
+              if(_this.secondTimer!=null){
+                clearTimeout(_this.secondTimer);
+                _this.secondTimer=null;
+              }
+              _this.gauge1(data.ts);
+              _this.secondCount = 30;
+              _this.secondBling = true;
+              _this.countDownSecond();
+            }else if("1019"==data.type){//每天
+              if(_this.dayTimer!=null){
+                clearTimeout(_this.dayTimer);
+                _this.dayTimer=null;
+              }
+              _this.gauge2(data.ts);
+              _this.dayCount = 30;
+              _this.dayBling = true;
+              _this.countDownDay();
+            }
+          }
+        };
+        //关闭事件
+        socket.onclose = function() {
+          console.log("websocket已关闭");
+        };
+        //发生了错误事件
+        socket.onerror = function() {
+          console.log("websocket发生了错误");
+        }
+      }
+    },
     getPointerSecond(){
       let _this = this;
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/welcome/getPointerSecond',{}).then((res)=>{
@@ -199,7 +292,16 @@ export default {
         }else{
           _this.gauge1(124);
         }
+        //108-115
+        _this.getNoRequestData();
       })
+    },
+    getNoRequestData(){
+      let _this = this;
+      _this.intervalIdTemp = setInterval(() => {
+        let value = Math.ceil(Math.random()*(115-108))+108;
+        _this.gauge1(value);
+      }, 3000);
     },
     gauge1(value) {
       let chart = echarts.init(document.getElementById('gauge1'))
