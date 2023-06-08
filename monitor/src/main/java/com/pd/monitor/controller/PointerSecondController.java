@@ -1,11 +1,14 @@
 package com.pd.monitor.controller;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.pd.monitor.wx.conf.BaseWxController;
 import com.pd.server.main.domain.PointerSecond;
 import com.pd.server.main.domain.PointerSecondExample;
 import com.pd.server.main.dto.*;
 import com.pd.server.main.dto.basewx.my.PointerCommenDto;
 import com.pd.server.main.service.PointerSecondService;
+import com.pd.server.util.CopyUtil;
 import com.pd.server.util.DateUtil;
 import com.pd.server.util.ValidatorUtil;
 import org.slf4j.Logger;
@@ -74,9 +77,32 @@ public class PointerSecondController extends BaseWxController {
     * 列表查询
     */
     @PostMapping("/list")
-    public ResponseDto list(@RequestBody PageDto pageDto) {
+    public ResponseDto list(@RequestBody PointerSecondDto pageDto) {
         ResponseDto responseDto = new ResponseDto();
-        pointerSecondService.list(pageDto);
+        LoginUserDto userDto = getRequestHeader();
+        PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
+        PointerSecondExample pointerSecondExample = new PointerSecondExample();
+        PointerSecondExample.Criteria ca = pointerSecondExample.createCriteria();
+        List<String> useSbbhs = new ArrayList<>();
+        if(!StringUtils.isEmpty(pageDto.getXmbh())){
+            useSbbhs = userDto.getXmbhsbsns().get(pageDto.getXmbh());
+            ca.andSmIn(useSbbhs);
+        }
+        if(!StringUtils.isEmpty(pageDto.getSm())){
+            ca.andSmEqualTo(pageDto.getSm());
+        }
+        if(!StringUtils.isEmpty(pageDto.getStime())){
+            ca.andCjsjGreaterThanOrEqualTo(pageDto.getStime()+" 00:00:00");
+        }
+        if(!StringUtils.isEmpty(pageDto.getEtime())){
+            ca.andCjsjLessThanOrEqualTo(pageDto.getEtime()+" 23:59:59");
+        }
+        pointerSecondExample.setOrderByClause(" cjsj desc ");
+        List<PointerSecond> pointerSecondList = pointerSecondService.selectByExample(pointerSecondExample);
+        PageInfo<PointerSecond> pageInfo = new PageInfo<>(pointerSecondList);
+        pageDto.setTotal(pageInfo.getTotal());
+        List<PointerSecondDto> pointerSecondDtoList = CopyUtil.copyList(pointerSecondList, PointerSecondDto.class);
+        pageDto.setList(pointerSecondDtoList);
         responseDto.setContent(pageDto);
         return responseDto;
     }

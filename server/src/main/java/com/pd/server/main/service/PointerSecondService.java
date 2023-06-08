@@ -40,19 +40,6 @@ public class PointerSecondService {
     }
 
     /**
-    * 列表查询
-    */
-    public void list(PageDto pageDto) {
-        PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
-        PointerSecondExample pointerSecondExample = new PointerSecondExample();
-        List<PointerSecond> pointerSecondList = pointerSecondMapper.selectByExample(pointerSecondExample);
-        PageInfo<PointerSecond> pageInfo = new PageInfo<>(pointerSecondList);
-        pageDto.setTotal(pageInfo.getTotal());
-        List<PointerSecondDto> pointerSecondDtoList = CopyUtil.copyList(pointerSecondList, PointerSecondDto.class);
-        pageDto.setList(pointerSecondDtoList);
-    }
-
-    /**
     * 保存，id有值时更新，无值时新增
     */
     public void save(PointerSecondDto pointerSecondDto) {

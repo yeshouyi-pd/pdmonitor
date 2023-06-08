@@ -1,5 +1,7 @@
 package com.pd.monitor.controller;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.pd.monitor.wx.conf.BaseWxController;
 import com.pd.server.main.domain.PointerDay;
 import com.pd.server.main.domain.PointerDayExample;
@@ -8,6 +10,7 @@ import com.pd.server.main.dto.PointerDayDto;
 import com.pd.server.main.dto.PageDto;
 import com.pd.server.main.dto.ResponseDto;
 import com.pd.server.main.service.PointerDayService;
+import com.pd.server.util.CopyUtil;
 import com.pd.server.util.DateUtil;
 import com.pd.server.util.ValidatorUtil;
 import org.slf4j.Logger;
@@ -77,9 +80,32 @@ public class PointerDayController extends BaseWxController {
     * 列表查询
     */
     @PostMapping("/list")
-    public ResponseDto list(@RequestBody PageDto pageDto) {
+    public ResponseDto list(@RequestBody PointerDayDto pageDto) {
         ResponseDto responseDto = new ResponseDto();
-        pointerDayService.list(pageDto);
+        LoginUserDto userDto = getRequestHeader();
+        PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
+        PointerDayExample pointerDayExample = new PointerDayExample();
+        PointerDayExample.Criteria ca = pointerDayExample.createCriteria();
+        List<String> useSbbhs = new ArrayList<>();
+        if(!StringUtils.isEmpty(pageDto.getXmbh())){
+            useSbbhs = userDto.getXmbhsbsns().get(pageDto.getXmbh());
+            ca.andSmIn(useSbbhs);
+        }
+        if(!StringUtils.isEmpty(pageDto.getSm())){
+            ca.andSmEqualTo(pageDto.getSm());
+        }
+        if(!StringUtils.isEmpty(pageDto.getStime())){
+            ca.andCjsjGreaterThanOrEqualTo(pageDto.getStime()+" 00:00:00");
+        }
+        if(!StringUtils.isEmpty(pageDto.getEtime())){
+            ca.andCjsjLessThanOrEqualTo(pageDto.getEtime()+" 23:59:59");
+        }
+        pointerDayExample.setOrderByClause(" cjsj desc ");
+        List<PointerDay> pointerDayList = pointerDayService.selectByExample(pointerDayExample);
+        PageInfo<PointerDay> pageInfo = new PageInfo<>(pointerDayList);
+        pageDto.setTotal(pageInfo.getTotal());
+        List<PointerDayDto> pointerDayDtoList = CopyUtil.copyList(pointerDayList, PointerDayDto.class);
+        pageDto.setList(pointerDayDtoList);
         responseDto.setContent(pageDto);
         return responseDto;
     }
