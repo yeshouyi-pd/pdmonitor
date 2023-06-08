@@ -40,19 +40,6 @@ public class PointerDayService {
     }
 
     /**
-    * 列表查询
-    */
-    public void list(PageDto pageDto) {
-    PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
-        PointerDayExample pointerDayExample = new PointerDayExample();
-        List<PointerDay> pointerDayList = pointerDayMapper.selectByExample(pointerDayExample);
-        PageInfo<PointerDay> pageInfo = new PageInfo<>(pointerDayList);
-        pageDto.setTotal(pageInfo.getTotal());
-        List<PointerDayDto> pointerDayDtoList = CopyUtil.copyList(pointerDayList, PointerDayDto.class);
-        pageDto.setList(pointerDayDtoList);
-    }
-
-    /**
     * 保存，id有值时更新，无值时新增
     */
     public void save(PointerDayDto pointerDayDto) {

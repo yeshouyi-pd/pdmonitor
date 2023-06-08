@@ -3,7 +3,7 @@ package com.pd.server.main.dto;
         import java.util.Date;
         import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class PointerSecondDto{
+public class PointerSecondDto extends PageDto{
 
     /**
     * 主键
