@@ -292,7 +292,7 @@ public class WaterEquipmentController  extends BaseWxController {
                 ca.andSbsnIn(loginUserDto.getXmbhsbsns().get(pageDto.getXmbh()));
             }
         }
-        waterEquipmentExample.setOrderByClause(" cjsj desc ");
+        waterEquipmentExample.setOrderByClause(" create_time desc ");
         List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(waterEquipmentExample);
         PageInfo<WaterEquipment> pageInfo = new PageInfo<>(waterEquipmentList);
         pageDto.setTotal(pageInfo.getTotal());
