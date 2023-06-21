@@ -24,6 +24,10 @@ public class EquipmentFileTodayService {
     @Resource
     private EquipmentFileTodayMapper equipmentFileTodayMapper;
 
+    public List<KvIntDto> sendSmsQuery(){
+        return equipmentFileTodayMapper.sendSmsQuery();
+    }
+
     public List<KvIntDto> getAlljcsjByDept(EquipmentFileTodayExample example){
         return equipmentFileTodayMapper.getAlljcsjByDept(example);
     }
