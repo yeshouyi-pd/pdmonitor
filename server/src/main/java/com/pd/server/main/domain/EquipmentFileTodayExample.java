@@ -345,6 +345,11 @@ public class EquipmentFileTodayExample {
             return (Criteria) this;
         }
 
+        public Criteria andCjsjGreaterThanOrEqualTo(String value) {
+            addCriterion("cjsj >=", value, "cjsj");
+            return (Criteria) this;
+        }
+
         public Criteria andCjsjGreaterThanOrEqualTo(String value, String type) {
             addCriterion("DATE_FORMAT(cjsj,'"+type+"') >=", value, "cjsj");
             return (Criteria) this;
@@ -356,6 +361,11 @@ public class EquipmentFileTodayExample {
         }
 
         public Criteria andCjsjLessThanOrEqualTo(Date value) {
+            addCriterion("cjsj <=", value, "cjsj");
+            return (Criteria) this;
+        }
+
+        public Criteria andCjsjLessThanOrEqualTo(String value) {
             addCriterion("cjsj <=", value, "cjsj");
             return (Criteria) this;
         }

@@ -79,4 +79,8 @@ public class EquipmentFileEventService {
     public List<EventDto> getEquipmentEventByDept(EquipmentFileEventExample equipmentFileEventExample) {
         return equipmentFileEventMapper.getEquipmentEventByDept(equipmentFileEventExample);
     }
+
+    public int selectTsBySms(EquipmentFileEventExample equipmentFileEventExample){
+        return equipmentFileEventMapper.selectTsBySms(equipmentFileEventExample);
+    }
 }

@@ -4,8 +4,10 @@ import com.pd.server.main.domain.EquipmentFile;
 import com.pd.server.main.domain.EquipmentFileExample;
 import java.util.List;
 
+import com.pd.server.main.domain.EquipmentFileTodayExample;
 import com.pd.server.main.dto.*;
 import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
+import com.pd.server.main.dto.basewx.my.SmsIntDto;
 import org.apache.ibatis.annotations.Param;
 
 public interface EquipmentFileMapper {
@@ -69,4 +71,6 @@ public interface EquipmentFileMapper {
     List<EquipmentMainListDto> getthisDeptEquipmentinfo(EquipmentFileExample equipmentFileExample);
 
     EquipmentFile selectVideoDp();
+
+    List<SmsIntDto> sendSmsQuery(EquipmentFileExample example);
 }

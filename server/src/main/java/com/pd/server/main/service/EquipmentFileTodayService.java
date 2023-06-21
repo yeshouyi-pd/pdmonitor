@@ -6,6 +6,7 @@ import com.pd.server.main.domain.EquipmentFileToday;
 import com.pd.server.main.domain.EquipmentFileTodayExample;
 import com.pd.server.main.dto.*;
 import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
+import com.pd.server.main.dto.basewx.my.SmsIntDto;
 import com.pd.server.main.mapper.EquipmentFileTodayMapper;
 import com.pd.server.util.CopyUtil;
 import com.pd.server.util.UuidUtil;
@@ -24,8 +25,8 @@ public class EquipmentFileTodayService {
     @Resource
     private EquipmentFileTodayMapper equipmentFileTodayMapper;
 
-    public List<KvIntDto> sendSmsQuery(){
-        return equipmentFileTodayMapper.sendSmsQuery();
+    public List<SmsIntDto> sendSmsQuery(EquipmentFileTodayExample example){
+        return equipmentFileTodayMapper.sendSmsQuery(example);
     }
 
     public List<KvIntDto> getAlljcsjByDept(EquipmentFileTodayExample example){

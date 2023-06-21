@@ -67,6 +67,12 @@
     <result column="tplj" jdbcType="VARCHAR"  property="src"/>
   </resultMap>
 
+  <resultMap id="SmsInt" type="com.pd.server.main.dto.basewx.my.SmsIntDto">
+    <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
+    <result column="bjcs" jdbcType="INTEGER" property="bjcs" />
+    <result column="sumTs" jdbcType="INTEGER" property="sumTs" />
+  </resultMap>
+
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -839,5 +845,12 @@
     <include refid="Base_Column_List" />
     from equipment_file
     where wjlx='4' order by cjsj desc limit 1
+  </select>
+  <select id="sendSmsQuery" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultMap="SmsInt">
+    SELECT sbbh,COUNT(*) bjcs FROM  equipment_file
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    GROUP  BY  sbbh
   </select>
 </mapper>

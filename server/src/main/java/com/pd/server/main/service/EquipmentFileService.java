@@ -2,9 +2,11 @@ package com.pd.server.main.service;
 
 import com.pd.server.main.domain.EquipmentFile;
 import com.pd.server.main.domain.EquipmentFileExample;
+import com.pd.server.main.domain.EquipmentFileTodayExample;
 import com.pd.server.main.domain.WaterQualityResultExample;
 import com.pd.server.main.dto.*;
 import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
+import com.pd.server.main.dto.basewx.my.SmsIntDto;
 import com.pd.server.main.mapper.EquipmentFileMapper;
 import com.pd.server.util.CopyUtil;
 import com.pd.server.util.DateUtil;
@@ -140,4 +142,8 @@ public class EquipmentFileService {
     }
 
     public EquipmentFile selectVideoDp(){ return equipmentFileMapper.selectVideoDp(); }
+
+    public List<SmsIntDto> sendSmsQuery(EquipmentFileExample example){
+        return equipmentFileMapper.sendSmsQuery(example);
+    }
 }

@@ -46,6 +46,12 @@
     <result column="key" jdbcType="VARCHAR" property="key" />
     <result column="value" jdbcType="VARCHAR" property="value" />
   </resultMap>
+
+  <resultMap id="SmsInt" type="com.pd.server.main.dto.basewx.my.SmsIntDto">
+    <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
+    <result column="bjcs" jdbcType="INTEGER" property="bjcs" />
+    <result column="sumTs" jdbcType="INTEGER" property="sumTs" />
+  </resultMap>
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -637,8 +643,11 @@
     where sbbh = #{sbbh,jdbcType=VARCHAR}  and  txtlx='1'
     order by cjsj desc limit 1
   </select>
-  <select id="sendSmsQuery" resultMap="BaseResultMapKVint">
-    SELECT sbbh `key` ,COUNT(*)  `value` FROM  equipment_file_today
-    where sbbh in ('A4001','A4002','A4003')  and  txtlx='1'  GROUP  BY  sbbh
+  <select id="sendSmsQuery" parameterType="com.pd.server.main.domain.EquipmentFileTodayExample" resultMap="SmsInt">
+    SELECT sbbh,COUNT(*) bjcs,sum(ts) sumTs FROM  equipment_file_today
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    GROUP  BY  sbbh
   </select>
 </mapper>
