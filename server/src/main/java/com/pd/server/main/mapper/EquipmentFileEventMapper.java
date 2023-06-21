@@ -37,4 +37,6 @@ public interface EquipmentFileEventMapper {
     List<EventDto> getEquipmentEventByDept(EquipmentFileEventExample equipmentFileEventExample);
 
     EquipmentFileEvent selectByDp();
+
+    int selectTsBySms(EquipmentFileEventExample equipmentFileEventExample);
 }

@@ -69,7 +69,7 @@ public class ShjController{
                 data = result.getString("data");
                 if("保存成功".equals(data)){
                     JSONObject entity = result.getJSONObject("entity");
-                    if(("A4001".equals(entity.getString("sbbh"))||"A4002".equals(entity.getString("sbbh"))||"A4003".equals(entity.getString("sbbh")))&&("1018".equals(entity.getString("type"))||"1019".equals(entity.getString("type")))){
+                    if(("A4001".equals(entity.getString("sbbh"))||"A4002".equals(entity.getString("sbbh"))||"A4003".equals(entity.getString("sbbh")))&&("1019".equals(entity.getString("type")))){
                         //向页面推送数据
                         WebSocketServer.sendInfo(entity.toJSONString(),null);
                         //发送短信

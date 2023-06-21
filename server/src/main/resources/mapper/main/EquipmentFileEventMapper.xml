@@ -403,4 +403,11 @@
     WHERE DATE_FORMAT(kssj,'%H') &gt;= 7 AND DATE_FORMAT(kssj,'%H') &lt; 19
     order by kssj desc limit 1
   </select>
+
+  <select id="selectTsBySms" parameterType="com.pd.server.main.domain.EquipmentFileEventExample" resultType="java.lang.Integer">
+    select sum(ts) from equipment_file_event
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
 </mapper>

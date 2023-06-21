@@ -10,6 +10,7 @@ import com.pd.server.main.dto.AppearNumbersDto;
 import com.pd.server.main.dto.KvIntDto;
 import com.pd.server.main.dto.WelcomeKvDto;
 import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
+import com.pd.server.main.dto.basewx.my.SmsIntDto;
 import org.apache.ibatis.annotations.Param;
 
 public interface EquipmentFileTodayMapper {
@@ -52,5 +53,5 @@ public interface EquipmentFileTodayMapper {
 
     EquipmentFileToday selectLastOneBySbbh(String sbbh);
 
-    List<KvIntDto> sendSmsQuery();
+    List<SmsIntDto> sendSmsQuery(EquipmentFileTodayExample example);
 }
