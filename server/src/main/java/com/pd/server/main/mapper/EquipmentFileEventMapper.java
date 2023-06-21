@@ -38,5 +38,5 @@ public interface EquipmentFileEventMapper {
 
     EquipmentFileEvent selectByDp();
 
-    int selectTsBySms(EquipmentFileEventExample equipmentFileEventExample);
+    Integer selectTsBySms(EquipmentFileEventExample equipmentFileEventExample);
 }

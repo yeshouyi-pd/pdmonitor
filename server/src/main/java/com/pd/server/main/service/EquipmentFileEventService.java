@@ -80,7 +80,7 @@ public class EquipmentFileEventService {
         return equipmentFileEventMapper.getEquipmentEventByDept(equipmentFileEventExample);
     }
 
-    public int selectTsBySms(EquipmentFileEventExample equipmentFileEventExample){
+    public Integer selectTsBySms(EquipmentFileEventExample equipmentFileEventExample){
         return equipmentFileEventMapper.selectTsBySms(equipmentFileEventExample);
     }
 }
