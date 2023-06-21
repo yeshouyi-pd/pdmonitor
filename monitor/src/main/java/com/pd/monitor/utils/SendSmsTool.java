@@ -42,7 +42,7 @@ public class SendSmsTool {
             req.setSign(signName);
             req.setTemplateID(templateId);
 //            String[] templateParamSet = {"A4001","145dB"};
-            String[] templateParamSet = params.split(",");
+            String[] templateParamSet = params.split("-");
             req.setTemplateParamSet(templateParamSet);
 //            String[] phoneNumberSet = {"+8618827512017","+8618827512017"};
             String[] phoneNumberSet = attrMap.get("phoneNumber").split(",");
@@ -67,6 +67,6 @@ public class SendSmsTool {
     }
 
     public static void main(String[] args) {
-        sendSms("1823144","A4001,145dB");
+        sendSms("1823144","A4001-145dB");
     }
 }

@@ -637,4 +637,8 @@
     where sbbh = #{sbbh,jdbcType=VARCHAR}  and  txtlx='1'
     order by cjsj desc limit 1
   </select>
+  <select id="sendSmsQuery" resultMap="BaseResultMapKVint">
+    SELECT sbbh `key` ,COUNT(*)  `value` FROM  equipment_file_today
+    where sbbh in ('A4001','A4002','A4003')  and  txtlx='1'  GROUP  BY  sbbh
+  </select>
 </mapper>

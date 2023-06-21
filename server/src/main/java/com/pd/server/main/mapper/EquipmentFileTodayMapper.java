@@ -51,4 +51,6 @@ public interface EquipmentFileTodayMapper {
     int updateByPrimaryKey(EquipmentFileToday record);
 
     EquipmentFileToday selectLastOneBySbbh(String sbbh);
+
+    List<KvIntDto> sendSmsQuery();
 }
