@@ -54,7 +54,7 @@ public class SendSmsQuartz {
         eventCa.andKssjGreaterThanOrEqualTo(lasthour);
         eventCa.andKssjLessThanOrEqualTo(nowhour);
         eventCa.andSbbhEqualTo("A4002");
-        int allTs = equipmentFileEventService.selectTsBySms(equipmentFileEventExample);
+        Integer allTs = equipmentFileEventService.selectTsBySms(equipmentFileEventExample);
         Map<String,Integer> sbbhBjcs = new HashMap<>();
         for (SmsIntDto entity : list){
             sbbhBjcs.put(entity.getSbbh(),entity.getBjcs());
@@ -62,7 +62,7 @@ public class SendSmsQuartz {
         String a1 = !StringUtils.isEmpty(sbbhBjcs.get("A4001"))?sbbhBjcs.get("A4001")+"":0+"";
         String a2 = !StringUtils.isEmpty(sbbhBjcs.get("A4002"))?sbbhBjcs.get("A4002")+"":0+"";
         String a3 = !StringUtils.isEmpty(sbbhBjcs.get("A4003"))?sbbhBjcs.get("A4003")+"":0+"";
-        SendSmsTool.sendSms("1841258",a1+";"+a2+";"+a3+"-"+allTs);
+        SendSmsTool.sendSms("1841258",a1+";"+a2+";"+a3+"-"+(allTs==null?0:allTs));
     }
 
     /**
@@ -82,7 +82,7 @@ public class SendSmsQuartz {
         EquipmentFileEventExample.Criteria eventCa = equipmentFileEventExample.createCriteria();
         eventCa.andRqEqualTo(lastday);
         eventCa.andSbbhEqualTo("A4002");
-        int allTs = equipmentFileEventService.selectTsBySms(equipmentFileEventExample);
+        Integer allTs = equipmentFileEventService.selectTsBySms(equipmentFileEventExample);
         Map<String,Integer> sbbhBjcs = new HashMap<>();
         for (SmsIntDto entity : list){
             sbbhBjcs.put(entity.getSbbh(),entity.getBjcs());
@@ -90,7 +90,7 @@ public class SendSmsQuartz {
         String a1 = !StringUtils.isEmpty(sbbhBjcs.get("A4001"))?sbbhBjcs.get("A4001")+"":0+"";
         String a2 = !StringUtils.isEmpty(sbbhBjcs.get("A4002"))?sbbhBjcs.get("A4002")+"":0+"";
         String a3 = !StringUtils.isEmpty(sbbhBjcs.get("A4003"))?sbbhBjcs.get("A4003")+"":0+"";
-        SendSmsTool.sendSms("1841261",a1+";"+a2+";"+a3+"-"+allTs);
+        SendSmsTool.sendSms("1841261",a1+";"+a2+";"+a3+"-"+(allTs==null?0:allTs));
     }
 
 //    @Scheduled(cron="0 0/1 * * * ? ")
