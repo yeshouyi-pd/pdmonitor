@@ -35,6 +35,11 @@ public class PointerDayService {
         return pointerDayMapper.selectByDp(example);
     }
 
+    public String selectByWrj(PointerDayExample example){
+        PointerDay pointerDay = pointerDayMapper.selectByDp(example);
+        return pointerDay.getDecibelValue();
+    }
+
     public List<PointerDay> selectByExample(PointerDayExample pointerDayExample){
         return pointerDayMapper.selectByExample(pointerDayExample);
     }

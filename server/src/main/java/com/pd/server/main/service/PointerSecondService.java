@@ -35,6 +35,10 @@ public class PointerSecondService {
         return pointerSecondMapper.selectByDp(example);
     }
 
+    public String selectByWrj(PointerSecondExample example){
+        return pointerSecondMapper.selectByDp(example).getDecibelValue();
+    }
+
     public List<PointerSecond> selectByExample(PointerSecondExample pointerSecondExample){
         return pointerSecondMapper.selectByExample(pointerSecondExample);
     }

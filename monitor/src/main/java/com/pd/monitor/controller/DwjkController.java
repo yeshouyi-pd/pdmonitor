@@ -5,6 +5,7 @@ import com.pd.monitor.wx.conf.BaseWxController;
 import com.pd.server.main.domain.*;
 import com.pd.server.main.dto.EquipmentFileDto;
 import com.pd.server.main.dto.InterfaceLogDto;
+import com.pd.server.main.dto.LoginUserDto;
 import com.pd.server.main.dto.ResponseDto;
 import com.pd.server.main.dto.basewx.my.*;
 import com.pd.server.main.service.*;
@@ -16,16 +17,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.nio.charset.StandardCharsets;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/externalInterface")
@@ -52,6 +49,12 @@ public class DwjkController extends BaseWxController {
     private EquipmentTyEventService equipmentTyEventService;
     @Resource
     private EquipmentFileEventService equipmentFileEventService;
+    @Resource
+    private PointerDayService pointerDayService;
+    @Resource
+    private PointerSecondService pointerSecondService;
+    @Resource
+    private WaterEquipmentService waterEquipmentService;
 
     /**
      * 江豚图片查询
@@ -631,6 +634,116 @@ public class DwjkController extends BaseWxController {
             interfaceLog.setFhsj("系统异常："+e.getMessage());
             interfaceLogService.save(interfaceLog);
         }
+        return responseDto;
+    }
+
+    //无人机当天指针数据
+    @GetMapping("/wrjDrZzSj")
+    public ResponseDto wrjDrZzSj() {
+        ResponseDto responseDto = new ResponseDto();
+        PointerDayExample example = new PointerDayExample();
+        String decibelValue = pointerDayService.selectByWrj(example);
+        responseDto.setCode("0000");
+        responseDto.setContent(decibelValue);
+        return responseDto;
+    }
+
+    //无人机实时指针数据
+    @GetMapping("/wrjSsZzSj")
+    public ResponseDto wrjSsZzSj() {
+        ResponseDto responseDto = new ResponseDto();
+        PointerSecondExample example = new PointerSecondExample();
+        String decibelValue = pointerSecondService.selectByWrj(example);
+        responseDto.setCode("0000");
+        responseDto.setContent(decibelValue);
+        return responseDto;
+    }
+
+    //无人机当日聚类数据
+    @GetMapping("/wrjJlsj")
+    public ResponseDto wrjJlsj() {
+        ResponseDto responseDto = new ResponseDto();
+        WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
+        waterEquipmentExample.createCriteria().andDqzlEqualTo("A4");
+        List<String> a4SbbhList = waterEquipmentService.findSbbh(waterEquipmentExample);
+        String wrjDept = attrService.findByAttrKey("wrjDept");
+        List<String> listdept = getUpdeptcode(wrjDept);
+        EquipmentTyEventExample example = new EquipmentTyEventExample();
+        EquipmentTyEventExample.Criteria  ca = example.createCriteria();
+        EquipmentTyEventExample example1 = new EquipmentTyEventExample();
+        EquipmentTyEventExample.Criteria  ca1 = example1.createCriteria();
+        if(!CollectionUtils.isEmpty(listdept)){
+            ca.andDeptcodeIn(listdept);
+            ca1.andDeptcodeIn(listdept);
+        }
+        ca.andRqEqualTo(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd"));
+        List<EquipmentTyEvent> list = equipmentTyEventService.listByDp(example,String.join(",",a4SbbhList));
+        if(CollectionUtils.isEmpty(list)){
+            ca1.andRqLessThan(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd"));
+            ca1.andRqGreaterThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(),-7),"yyyy-MM-dd"));
+            list = equipmentTyEventService.listByDp(example1,String.join(",",a4SbbhList));
+        }
+        if(!CollectionUtils.isEmpty(list)){
+            list = list.stream().sorted(Comparator.comparing(EquipmentTyEvent::getKssj).reversed()).collect(Collectors.toList());
+        }
+        List<WrjEventDto> eventLists = CopyUtil.copyList(list,WrjEventDto.class);
+        responseDto.setCode("0000");
+        responseDto.setContent(eventLists);
+        return responseDto;
+    }
+
+    //无人机当日声谱图
+    @PostMapping("/wrjSpt")
+    public ResponseDto getSwipeData(@RequestBody Map<String,String> map){
+        ResponseDto responseDto = new ResponseDto();
+        if(StringUtils.isEmpty(map.get("sbbh"))||StringUtils.isEmpty(map.get("kssj"))||StringUtils.isEmpty(map.get("jssj"))){
+            responseDto.setCode("4000");
+            responseDto.setMessage("参数错误");
+            return responseDto;
+        }
+        EquipmentFileExample example = new EquipmentFileExample();
+        EquipmentFileExample.Criteria ca = example.createCriteria();
+        if(!StringUtils.isEmpty(map.get("sbbh"))){
+            ca.andSbbhEqualTo(map.get("sbbh"));
+        }
+        if(!StringUtils.isEmpty(map.get("kssj"))){
+            ca.andCjsjGreaterThanOrEqualTo(DateUtil.toDate(map.get("kssj"),"yyyy-MM-dd HH:mm:ss"));
+        }
+        if(!StringUtils.isEmpty(map.get("jssj"))){
+            ca.andCjsjLessThanOrEqualTo(DateUtil.toDate(map.get("jssj"),"yyyy-MM-dd HH:mm:ss"));
+        }
+        ca.andWjlxEqualTo("1");
+        List<EquipmentFile> list = equipmentFileService.listAllDw(example);
+        List<String> tplist = list.stream().filter(Objects::nonNull).map(EquipmentFile::getTplj).distinct().collect(Collectors.toList());
+        responseDto.setCode("0000");
+        responseDto.setContent(tplist);
+        return responseDto;
+    }
+
+    //无人机头次统计
+    @GetMapping("/wrjTctj")
+    public ResponseDto wrjTctj(){
+        ResponseDto responseDto = new ResponseDto();
+        EquipmentTyEventExample example = new EquipmentTyEventExample();
+        EquipmentTyEventExample.Criteria ca = example.createCriteria();
+        String wrjDept = attrService.findByAttrKey("wrjDept");
+        List<String> listdept = getUpdeptcode(wrjDept);
+        if(!CollectionUtils.isEmpty(listdept)){
+            ca.andDeptcodeIn(listdept);
+        }
+        ca.andRqGreaterThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(),-4),"yyyy-MM-dd"));
+        ca.andRqLessThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(),-1),"yyyy-MM-dd"));
+        List<EquipmentTyEvent> list = equipmentTyEventService.listSumTs(example);
+        List<WrjTcDto> tsList = CopyUtil.copyList(list,WrjTcDto.class);
+        Map<String,Object> resultMap = new HashMap<>();
+        if(!CollectionUtils.isEmpty(list)){
+            Map<String, List<WrjTcDto>> map = tsList.stream().sorted(Comparator.comparing(WrjTcDto::getRq)).collect(Collectors.groupingBy(WrjTcDto::getSbbh));
+            List<String> rqs= list.stream().sorted(Comparator.comparing(EquipmentTyEvent::getRq)).filter(Objects::nonNull).map(EquipmentTyEvent::getRq).distinct().collect(Collectors.toList());
+            resultMap.put("map",map);
+            resultMap.put("rqs",rqs);
+        }
+        responseDto.setCode("0000");
+        responseDto.setContent(resultMap);
         return responseDto;
     }
 }
