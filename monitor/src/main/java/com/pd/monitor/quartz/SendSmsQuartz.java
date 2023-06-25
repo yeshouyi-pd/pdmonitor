@@ -1,7 +1,6 @@
 package com.pd.monitor.quartz;
 
 import com.pd.monitor.utils.SendSmsTool;
-import com.pd.server.main.domain.EquipmentFileEvent;
 import com.pd.server.main.domain.EquipmentFileEventExample;
 import com.pd.server.main.domain.EquipmentFileExample;
 import com.pd.server.main.domain.EquipmentFileTodayExample;
@@ -38,7 +37,7 @@ public class SendSmsQuartz {
      * 每1小时执行一次
      * @throws Exception
      */
-    @Scheduled(cron="0 0 8-19 * * ? ")
+    @Scheduled(cron="0 0 8,12,19 * * ? ")
     public void sendSmsCount(){
         String lasthour = DateUtil.getFormatDate(DateUtil.getHoursLater(new Date(),-1),"yyyy-MM-dd HH:mm")+":00";
         String nowhour = DateUtil.getFormatDate(new Date(),"yyyy-MM-dd HH:mm")+":00";
