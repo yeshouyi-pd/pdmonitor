@@ -360,6 +360,11 @@ public class EquipmentFileTodayExample {
             return (Criteria) this;
         }
 
+        public Criteria andCjsjLessThan(String value) {
+            addCriterion("cjsj <", value, "cjsj");
+            return (Criteria) this;
+        }
+
         public Criteria andCjsjLessThanOrEqualTo(Date value) {
             addCriterion("cjsj <=", value, "cjsj");
             return (Criteria) this;

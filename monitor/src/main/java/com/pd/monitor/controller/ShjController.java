@@ -74,7 +74,15 @@ public class ShjController{
                         WebSocketServer.sendInfo(entity.toJSONString(),null);
                         //发送短信
                         String templateId = "1018".equals(entity.getString("type"))?"1823144":"1823146";
-                        SendSmsTool.sendSms(templateId,entity.getString("sbbh")+"-"+entity.getString("ts")+"dB");
+                        String sbmc = "";
+                        if("A4001".equals(entity.getString("sbbh"))){
+                            sbmc = "上游3";
+                        }else if("A4002".equals(entity.getString("sbbh"))){
+                            sbmc = "大桥2";
+                        }else if("A4003".equals(entity.getString("sbbh"))){
+                            sbmc = "下游1";
+                        }
+                        SendSmsTool.sendSms(templateId,sbmc+"-"+entity.getString("ts")+"dB");
                         entity.remove("sm1");
                     }
                 }
