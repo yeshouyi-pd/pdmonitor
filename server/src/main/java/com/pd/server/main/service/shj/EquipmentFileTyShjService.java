@@ -106,6 +106,7 @@ public class EquipmentFileTyShjService extends AbstractScanRequest{
                     dto.setCjsj(DateUtil.toDate(cjsj,"yyyy-MM-dd HH:mm:ss"));
                     dto.setSm(sbbh);
                     dto.setCreateTime(new Date());
+                    dto.setBz(deptcode);
                     service.save(dto);
                 }else if("1019".equals(entity.getType())){//指针数据每天
                     PointerDayService service = SpringUtil.getBean(PointerDayService.class);
@@ -114,6 +115,7 @@ public class EquipmentFileTyShjService extends AbstractScanRequest{
                     dto.setCjsj(DateUtil.toDate(cjsj,"yyyy-MM-dd HH:mm:ss"));
                     dto.setSm(sbbh);
                     dto.setCreateTime(new Date());
+                    dto.setBz(deptcode);
                     service.save(dto);
                 }
                 equipmentFileTyMapper.insert(entity);
