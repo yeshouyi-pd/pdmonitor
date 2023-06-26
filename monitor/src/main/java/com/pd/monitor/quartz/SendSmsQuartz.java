@@ -34,19 +34,50 @@ public class SendSmsQuartz {
 
 
     /**
-     * 每1小时执行一次
+     * 早上8点执行（昨天晚上8点到今日8点）一次
      * @throws Exception
      */
-    @Scheduled(cron="0 0 8,12,19 * * ? ")
+    @Scheduled(cron="0 0 8 * * ? ")
     public void sendSmsCount(){
-        String lasthour = DateUtil.getFormatDate(DateUtil.getHoursLater(new Date(),-1),"yyyy-MM-dd HH:mm")+":00";
-        String nowhour = DateUtil.getFormatDate(new Date(),"yyyy-MM-dd HH:mm")+":00";
+        String lasthour = DateUtil.getFormatDate(DateUtil.getHoursLater(new Date(),-1),"yyyy-MM-dd ")+"20:00:00";
+        String nowhour = DateUtil.getFormatDate(new Date(),"yyyy-MM-dd ")+"08:00:00";
+        EquipmentFileExample todayExample = new EquipmentFileExample();
+        EquipmentFileExample.Criteria todayCa = todayExample.createCriteria();
+        todayCa.andSbbhIn(Arrays.asList("A4001","A4002","A4003"));
+        todayCa.andTxtlxEqualTo("1");
+        todayCa.andCjsjGreaterThanOrEqualTo(lasthour);
+        todayCa.andCjsjLessThan(nowhour);
+        List<SmsIntDto> list = equipmentFileService.sendSmsQuery(todayExample);
+        EquipmentFileEventExample equipmentFileEventExample = new EquipmentFileEventExample();
+        EquipmentFileEventExample.Criteria eventCa = equipmentFileEventExample.createCriteria();
+        eventCa.andKssjGreaterThanOrEqualTo(lasthour);
+        eventCa.andKssjLessThanOrEqualTo(nowhour);
+        eventCa.andSbbhEqualTo("A4002");
+        Integer allTs = equipmentFileEventService.selectTsBySms(equipmentFileEventExample);
+        Map<String,Integer> sbbhBjcs = new HashMap<>();
+        for (SmsIntDto entity : list){
+            sbbhBjcs.put(entity.getSbbh(),entity.getBjcs());
+        }
+        String a1 = !StringUtils.isEmpty(sbbhBjcs.get("A4001"))?sbbhBjcs.get("A4001")+"":0+"";
+        String a2 = !StringUtils.isEmpty(sbbhBjcs.get("A4002"))?sbbhBjcs.get("A4002")+"":0+"";
+        String a3 = !StringUtils.isEmpty(sbbhBjcs.get("A4003"))?sbbhBjcs.get("A4003")+"":0+"";
+        SendSmsTool.sendSms("1844123","昨日20点至今日8点"+"-"+a1+";"+a2+";"+a3+"-"+(allTs==null?0:allTs));
+    }
+
+    /**
+     * 早上11点30分执行（今日8点到11点30分）一次
+     * @throws Exception
+     */
+    @Scheduled(cron="0 30 11 * * ? ")
+    public void sendSmsCount1(){
+        String lasthour = DateUtil.getFormatDate(new Date(),"yyyy-MM-dd ")+"08:00:00";
+        String nowhour = DateUtil.getFormatDate(new Date(),"yyyy-MM-dd ")+"11:30:00";
         EquipmentFileTodayExample todayExample = new EquipmentFileTodayExample();
         EquipmentFileTodayExample.Criteria todayCa = todayExample.createCriteria();
         todayCa.andSbbhIn(Arrays.asList("A4001","A4002","A4003"));
         todayCa.andTxtlxEqualTo("1");
         todayCa.andCjsjGreaterThanOrEqualTo(lasthour);
-        todayCa.andCjsjLessThanOrEqualTo(nowhour);
+        todayCa.andCjsjLessThan(nowhour);
         List<SmsIntDto> list = equipmentFileTodayService.sendSmsQuery(todayExample);
         EquipmentFileEventExample equipmentFileEventExample = new EquipmentFileEventExample();
         EquipmentFileEventExample.Criteria eventCa = equipmentFileEventExample.createCriteria();
@@ -61,25 +92,28 @@ public class SendSmsQuartz {
         String a1 = !StringUtils.isEmpty(sbbhBjcs.get("A4001"))?sbbhBjcs.get("A4001")+"":0+"";
         String a2 = !StringUtils.isEmpty(sbbhBjcs.get("A4002"))?sbbhBjcs.get("A4002")+"":0+"";
         String a3 = !StringUtils.isEmpty(sbbhBjcs.get("A4003"))?sbbhBjcs.get("A4003")+"":0+"";
-        SendSmsTool.sendSms("1841258",a1+";"+a2+";"+a3+"-"+(allTs==null?0:allTs));
+        SendSmsTool.sendSms("1844123","今日8点至11点30分"+"-"+a1+";"+a2+";"+a3+"-"+(allTs==null?0:allTs));
     }
 
     /**
-     * 每天8点执行
+     * 17点30分执行（11点30分到17点30分）一次
      * @throws Exception
      */
-    @Scheduled(cron="0 0 8 * * ? ")
-    public void sendSmsYesterday(){
-        String lastday = DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(),-1),"yyyy-MM-dd");
-        EquipmentFileExample example = new EquipmentFileExample();
-        EquipmentFileExample.Criteria ca = example.createCriteria();
-        ca.andSbbhIn(Arrays.asList("A4001","A4002","A4003"));
-        ca.andTxtlxEqualTo("1");
-        ca.andRqEqualTo(lastday);
-        List<SmsIntDto> list = equipmentFileService.sendSmsQuery(example);
+    @Scheduled(cron="0 30 17 * * ? ")
+    public void sendSmsCount2(){
+        String lasthour = DateUtil.getFormatDate(new Date(),"yyyy-MM-dd ")+"11:30:00";
+        String nowhour = DateUtil.getFormatDate(new Date(),"yyyy-MM-dd ")+"17:30:00";
+        EquipmentFileTodayExample todayExample = new EquipmentFileTodayExample();
+        EquipmentFileTodayExample.Criteria todayCa = todayExample.createCriteria();
+        todayCa.andSbbhIn(Arrays.asList("A4001","A4002","A4003"));
+        todayCa.andTxtlxEqualTo("1");
+        todayCa.andCjsjGreaterThanOrEqualTo(lasthour);
+        todayCa.andCjsjLessThan(nowhour);
+        List<SmsIntDto> list = equipmentFileTodayService.sendSmsQuery(todayExample);
         EquipmentFileEventExample equipmentFileEventExample = new EquipmentFileEventExample();
         EquipmentFileEventExample.Criteria eventCa = equipmentFileEventExample.createCriteria();
-        eventCa.andRqEqualTo(lastday);
+        eventCa.andKssjGreaterThanOrEqualTo(lasthour);
+        eventCa.andKssjLessThanOrEqualTo(nowhour);
         eventCa.andSbbhEqualTo("A4002");
         Integer allTs = equipmentFileEventService.selectTsBySms(equipmentFileEventExample);
         Map<String,Integer> sbbhBjcs = new HashMap<>();
@@ -89,12 +123,73 @@ public class SendSmsQuartz {
         String a1 = !StringUtils.isEmpty(sbbhBjcs.get("A4001"))?sbbhBjcs.get("A4001")+"":0+"";
         String a2 = !StringUtils.isEmpty(sbbhBjcs.get("A4002"))?sbbhBjcs.get("A4002")+"":0+"";
         String a3 = !StringUtils.isEmpty(sbbhBjcs.get("A4003"))?sbbhBjcs.get("A4003")+"":0+"";
-        SendSmsTool.sendSms("1841261",a1+";"+a2+";"+a3+"-"+(allTs==null?0:allTs));
+        SendSmsTool.sendSms("1844123","今日11点30分至17点30分"+"-"+a1+";"+a2+";"+a3+"-"+(allTs==null?0:allTs));
     }
+
+    /**
+     * 20点执行（17点30分到20点）一次
+     * @throws Exception
+     */
+    @Scheduled(cron="0 0 20 * * ? ")
+    public void sendSmsCount3(){
+        String lasthour = DateUtil.getFormatDate(new Date(),"yyyy-MM-dd ")+"17:30:00";
+        String nowhour = DateUtil.getFormatDate(new Date(),"yyyy-MM-dd ")+"20:00:00";
+        EquipmentFileTodayExample todayExample = new EquipmentFileTodayExample();
+        EquipmentFileTodayExample.Criteria todayCa = todayExample.createCriteria();
+        todayCa.andSbbhIn(Arrays.asList("A4001","A4002","A4003"));
+        todayCa.andTxtlxEqualTo("1");
+        todayCa.andCjsjGreaterThanOrEqualTo(lasthour);
+        todayCa.andCjsjLessThan(nowhour);
+        List<SmsIntDto> list = equipmentFileTodayService.sendSmsQuery(todayExample);
+        EquipmentFileEventExample equipmentFileEventExample = new EquipmentFileEventExample();
+        EquipmentFileEventExample.Criteria eventCa = equipmentFileEventExample.createCriteria();
+        eventCa.andKssjGreaterThanOrEqualTo(lasthour);
+        eventCa.andKssjLessThanOrEqualTo(nowhour);
+        eventCa.andSbbhEqualTo("A4002");
+        Integer allTs = equipmentFileEventService.selectTsBySms(equipmentFileEventExample);
+        Map<String,Integer> sbbhBjcs = new HashMap<>();
+        for (SmsIntDto entity : list){
+            sbbhBjcs.put(entity.getSbbh(),entity.getBjcs());
+        }
+        String a1 = !StringUtils.isEmpty(sbbhBjcs.get("A4001"))?sbbhBjcs.get("A4001")+"":0+"";
+        String a2 = !StringUtils.isEmpty(sbbhBjcs.get("A4002"))?sbbhBjcs.get("A4002")+"":0+"";
+        String a3 = !StringUtils.isEmpty(sbbhBjcs.get("A4003"))?sbbhBjcs.get("A4003")+"":0+"";
+        SendSmsTool.sendSms("1844123","今日17点30分至20点"+"-"+a1+";"+a2+";"+a3+"-"+(allTs==null?0:allTs));
+    }
+
+//    /**
+//     * 每天8点执行
+//     * @throws Exception
+//     */
+//    @Scheduled(cron="0 0 8 * * ? ")
+//    public void sendSmsYesterday(){
+//        String lastday = DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(),-1),"yyyy-MM-dd");
+//        EquipmentFileExample example = new EquipmentFileExample();
+//        EquipmentFileExample.Criteria ca = example.createCriteria();
+//        ca.andSbbhIn(Arrays.asList("A4001","A4002","A4003"));
+//        ca.andTxtlxEqualTo("1");
+//        ca.andRqEqualTo(lastday);
+//        List<SmsIntDto> list = equipmentFileService.sendSmsQuery(example);
+//        EquipmentFileEventExample equipmentFileEventExample = new EquipmentFileEventExample();
+//        EquipmentFileEventExample.Criteria eventCa = equipmentFileEventExample.createCriteria();
+//        eventCa.andRqEqualTo(lastday);
+//        eventCa.andSbbhEqualTo("A4002");
+//        Integer allTs = equipmentFileEventService.selectTsBySms(equipmentFileEventExample);
+//        Map<String,Integer> sbbhBjcs = new HashMap<>();
+//        for (SmsIntDto entity : list){
+//            sbbhBjcs.put(entity.getSbbh(),entity.getBjcs());
+//        }
+//        String a1 = !StringUtils.isEmpty(sbbhBjcs.get("A4001"))?sbbhBjcs.get("A4001")+"":0+"";
+//        String a2 = !StringUtils.isEmpty(sbbhBjcs.get("A4002"))?sbbhBjcs.get("A4002")+"":0+"";
+//        String a3 = !StringUtils.isEmpty(sbbhBjcs.get("A4003"))?sbbhBjcs.get("A4003")+"":0+"";
+//        SendSmsTool.sendSms("1841261",a1+";"+a2+";"+a3+"-"+(allTs==null?0:allTs));
+//    }
 
 //    @Scheduled(cron="0 0/1 * * * ? ")
 //    public void test(){
 //        sendSmsCount();
-//        sendSmsYesterday();
+//        sendSmsCount1();
+//        sendSmsCount2();
+//        sendSmsCount3();
 //    }
 }
