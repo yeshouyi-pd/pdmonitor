@@ -73,7 +73,7 @@ public class ShjController{
                         //向页面推送数据
                         WebSocketServer.sendInfo(entity.toJSONString(),null);
                         //发送短信
-                        String templateId = "1018".equals(entity.getString("type"))?"1823144":"1823146";
+                        String templateId = "1018".equals(entity.getString("type"))?"1823144":"1847667";
                         String sbmc = "";
                         if("A4001".equals(entity.getString("sbbh"))){
                             sbmc = "上游3";
