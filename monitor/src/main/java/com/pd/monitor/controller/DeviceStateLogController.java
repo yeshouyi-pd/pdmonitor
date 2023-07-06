@@ -58,7 +58,6 @@ public class DeviceStateLogController extends BaseWxController {
             Map<String,String> sbbhMap = list.stream().collect(Collectors.toMap(p -> p.getSbbh(), p-> p.getZt()));
             resultMap.put(rq,sbbhMap);
         }
-
         responseDto.setContent(resultMap);
         return responseDto;
     }
