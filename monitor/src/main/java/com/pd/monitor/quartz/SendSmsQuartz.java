@@ -39,7 +39,7 @@ public class SendSmsQuartz {
      */
     @Scheduled(cron="0 0 8 * * ? ")
     public void sendSmsCount(){
-        String lasthour = DateUtil.getFormatDate(DateUtil.getHoursLater(new Date(),-1),"yyyy-MM-dd ")+"20:00:00";
+        String lasthour = DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(),-1),"yyyy-MM-dd ")+"20:00:00";
         String nowhour = DateUtil.getFormatDate(new Date(),"yyyy-MM-dd ")+"08:00:00";
         EquipmentFileExample todayExample = new EquipmentFileExample();
         EquipmentFileExample.Criteria todayCa = todayExample.createCriteria();

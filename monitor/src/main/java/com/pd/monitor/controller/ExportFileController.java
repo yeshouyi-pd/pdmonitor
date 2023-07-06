@@ -2,21 +2,14 @@ package com.pd.monitor.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.pd.monitor.wx.conf.BaseWxController;
-import com.pd.server.config.CodeType;
 import com.pd.server.config.RedisCode;
 import com.pd.server.main.domain.*;
-import com.pd.server.main.dto.EquipmentFileAlarmEventDto;
 import com.pd.server.main.dto.LoginUserDto;
 import com.pd.server.main.dto.PredationNumDto;
 import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
-import com.pd.server.main.service.EquipmentFileAlarmEventService;
-import com.pd.server.main.service.EquipmentFileService;
-import com.pd.server.main.service.PredationNumService;
-import com.pd.server.main.service.WaterEquipmentService;
-import com.pd.server.util.CopyUtil;
+import com.pd.server.main.service.*;
 import com.pd.server.util.DateUtil;
 import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.ss.util.CellRangeAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -30,6 +23,7 @@ import javax.annotation.Resource;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.util.*;
@@ -52,6 +46,103 @@ public class ExportFileController extends BaseWxController{
     private WaterEquipmentService waterEquipmentService;
     @Resource
     private PredationNumService predationNumService;
+    @Resource
+    private DeviceStateLogService deviceStateLogService;
+    @Resource
+    private WaterProEquipService waterProEquipService;
+
+    /**
+     * 导出设备运行日志
+     */
+    @GetMapping("/exportDeviceStateLog")
+    public void exportDeviceStateLog(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        DeviceStateLogExample deviceStateLogExample = new DeviceStateLogExample();
+        DeviceStateLogExample.Criteria ca = deviceStateLogExample.createCriteria();
+        if(!StringUtils.isEmpty(request.getParameter("xmbh"))){
+            List<String> sbbhs = waterProEquipService.findSbsnByXmbh(request.getParameter("xmbh"));
+            ca.andSbbhIn(sbbhs);
+        }
+        if(!StringUtils.isEmpty(request.getParameter("stime"))){
+            ca.andRqGreaterThanOrEqualTo(request.getParameter("stime"));
+        }
+        if(!StringUtils.isEmpty(request.getParameter("etime"))){
+            ca.andRqLessThanOrEqualTo(request.getParameter("etime"));
+        }
+        deviceStateLogExample.setOrderByClause(" rq desc ");
+        List<DeviceStateLog> deviceStateLogList = deviceStateLogService.selectByExample(deviceStateLogExample);
+        Map<String,List<DeviceStateLog>> rqMap = deviceStateLogList.stream().collect(Collectors.groupingBy(DeviceStateLog::getRq,LinkedHashMap::new,Collectors.toList()));
+        Map<String,Map<String,String>> resultMap = new LinkedHashMap<>();
+        for(String rq : rqMap.keySet()){
+            List<DeviceStateLog> list = rqMap.get(rq);
+            Map<String,String> sbbhMap = list.stream().collect(Collectors.toMap(p -> p.getSbbh(), p-> p.getZt()));
+            resultMap.put(rq,sbbhMap);
+        }
+        //获取所有的设备
+        WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
+        WaterEquipmentExample.Criteria ca1 = waterEquipmentExample.createCriteria();
+        ca1.andGpsIsNotNull();
+        List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(waterEquipmentExample);
+        //导出
+        HSSFWorkbook workbook = new HSSFWorkbook();
+        //设置公共单元格样式
+        HSSFCellStyle cellStyleCommon = workbook.createCellStyle();
+        cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_LEFT);
+        cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+        // 创建一个工作表
+        String fileName = "设备运行日志(" + new Date().getTime() + ").xls";
+        HSSFSheet sheet = workbook.createSheet("设备运行日志");
+        // 自适应列宽度
+        sheet.autoSizeColumn(1, true);
+        sheet.setDefaultColumnWidth(18);
+        sheet.setDefaultRowHeight((short)(40*10));
+        // 添加表头行
+        HSSFRow titleRow = sheet.createRow(0);//第1行
+        List<String> titleSbbhList = new ArrayList<>();
+        for(int i=0;i<waterEquipmentList.size();i++){
+            HSSFCell cell = titleRow.createCell(i+1);
+            cell.setCellValue(waterEquipmentList.get(i).getSbmc());
+            cell.setCellStyle(cellStyleCommon);
+            titleSbbhList.add(waterEquipmentList.get(i).getSbsn());
+        }
+        int rowIndex = 1;
+        for(String rq : resultMap.keySet()){
+            HSSFRow rowComment = sheet.createRow(rowIndex);//第1行
+            HSSFCell cell = rowComment.createCell(0);
+            cell.setCellValue(rq);
+            cell.setCellStyle(cellStyleCommon);
+            Map<String,String> sbbhMap = resultMap.get(rq);
+            int cellIndex = 1;
+            for(String sbbh : titleSbbhList){
+                HSSFCell cellComment = rowComment.createCell(cellIndex);
+                if(!StringUtils.isEmpty(sbbhMap.get(sbbh))){
+                    if("0".equals(sbbhMap.get(sbbh))){
+                        cellComment.setCellValue("√");
+                    }else if("1".equals(sbbhMap.get(sbbh))){
+                        cellComment.setCellValue("×");
+                    }else{
+                        cellComment.setCellValue("");
+                    }
+                }
+                cellComment.setCellStyle(cellStyleCommon);
+                cellIndex++;
+            }
+            rowIndex++;
+        }
+        response.setHeader("content-Type", "application/vnd.ms-excel");
+        // 下载文件的默认名称
+        String agent = request.getHeader("User-Agent");
+        if (agent.contains("MSIE") || agent.contains("Trident") || agent.contains("Edge")) {
+            response.setHeader("Content-Disposition",
+                    "attachment; filename=" + URLEncoder.encode(fileName, "UTF-8"));
+        } else {
+            response.setHeader("Content-Disposition",
+                    "attachment; filename=\"" + new String((fileName).getBytes("UTF-8"), "ISO-8859-1") + "\"");
+        }
+        response.setCharacterEncoding("utf-8");
+        ServletOutputStream out = response.getOutputStream();
+        workbook.write(out);
+        out.close();
+    }
 
     /**
      * 江豚出现按捕食统计导出

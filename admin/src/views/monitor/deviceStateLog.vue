@@ -42,6 +42,10 @@
                         <i class="ace-icon fa fa-refresh"></i>
                         重置
                       </a>
+                      <button type="button" v-on:click="exportExce()" class="btn btn-sm btn-info btn-round" style="margin-right: 10px;">
+                        <i class="ace-icon fa fa-book"></i>
+                        导出
+                      </button>
                     </td>
                   </tr>
                   </tbody>
@@ -76,6 +80,7 @@ export default {
   components: {Times},
   data: function (){
     return {
+      ssbrl:LOCAL_SSBRL,
       deviceStateLogDto:{},
       waterEquipments:[]
     }
@@ -87,8 +92,8 @@ export default {
     day1.setDate(day1.getDate() - 15);
     let day2 = new Date();
     day2.setDate(day2.getDate() - 1);
-    _this.stime = Tool.dateFormat('yyyy-MM-dd',day1);
-    _this.etime = Tool.dateFormat('yyyy-MM-dd',day2);
+    _this.deviceStateLogDto.stime = Tool.dateFormat('yyyy-MM-dd',day1);
+    _this.deviceStateLogDto.etime = Tool.dateFormat('yyyy-MM-dd',day2);
   },
   methods: {
     /**
@@ -107,6 +112,19 @@ export default {
       _this.deviceStateLogDto.etime = rep;
       _this.$forceUpdate();
     },
+    exportExce(){
+      let _this = this;
+      let paramsStr = "stime="+_this.deviceStateLogDto.stime;
+      if(Tool.isNotEmpty(_this.deviceStateLogDto.etime)){
+        paramsStr = paramsStr + "&etime="+_this.deviceStateLogDto.etime;
+      }
+      if(_this.ssbrl && "460100"!=Tool.getLoginUser().deptcode){
+        paramsStr = paramsStr + "&xmbh="+Tool.getLoginUser().xmbh;
+      }
+      let url = process.env.VUE_APP_SERVER + '/monitor/export/exportDeviceStateLog?'+paramsStr;
+      console.log(url);
+      window.location.href = url;
+    },
     /**
      * 列表查询
      */
@@ -118,6 +136,7 @@ export default {
         let resp = response.data;
         let tbody = document.getElementById("table-tbody");
         let rqMap = resp.content;
+        $("#table-tbody").empty();
         for(let rq in rqMap){
           let tr = document.createElement("tr");
           let thtr = document.getElementById("table-tr");

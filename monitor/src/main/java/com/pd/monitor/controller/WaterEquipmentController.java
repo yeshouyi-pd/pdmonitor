@@ -33,12 +33,6 @@ public class WaterEquipmentController  extends BaseWxController {
     private WaterEquipmentService waterEquipmentService;
     @Resource
     private DeptService deptService;
-    @Resource
-    private CodesetService codesetService;
-    @Resource
-    private WaterEquiplogService waterEquiplogService;
-    @Resource
-    private AttrService attrService;
 
     /**
      * 监测点数据中心树
