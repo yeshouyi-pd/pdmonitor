@@ -27,4 +27,6 @@ public interface AttrMapper {
     int updateByPrimaryKeySelective(Attr record);
 
     int updateByPrimaryKey(Attr record);
+
+    String selectByAttrKey(String attrcode);
 }
