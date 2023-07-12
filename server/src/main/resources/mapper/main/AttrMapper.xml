@@ -208,4 +208,8 @@
       createtime = #{createtime,jdbcType=DATE}
     where ID = #{id,jdbcType=VARCHAR}
   </update>
+  <select id="selectByAttrKey" parameterType="java.lang.String" resultType="java.lang.String">
+    select ATTRKEY from attr
+    where ATTRCODE = #{attrcode,jdbcType=VARCHAR}
+  </select>
 </mapper>

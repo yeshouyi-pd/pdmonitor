@@ -255,6 +255,7 @@ public class WaterEquipmentController  extends BaseWxController {
         if(!StringUtils.isEmpty(waterEquipmentDto.getDqzl())){
             ca.andDqzlIn(Arrays.asList(waterEquipmentDto.getDqzl().split(",")));
         }
+        waterEquipmentExample.setOrderByClause(" sblc ");
         List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(waterEquipmentExample);
         List<WaterEquipmentDto> waterEquipmentDtoList = CopyUtil.copyList(waterEquipmentList, WaterEquipmentDto.class);
         responseDto.setContent(waterEquipmentDtoList);

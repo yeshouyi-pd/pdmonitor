@@ -81,6 +81,7 @@ public class ExportFileController extends BaseWxController{
         WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
         WaterEquipmentExample.Criteria ca1 = waterEquipmentExample.createCriteria();
         ca1.andGpsIsNotNull();
+        waterEquipmentExample.setOrderByClause(" sblc ");
         List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(waterEquipmentExample);
         //导出
         HSSFWorkbook workbook = new HSSFWorkbook();
