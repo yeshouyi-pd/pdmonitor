@@ -389,6 +389,12 @@
       <include refid="Example_Where_Clause" />
     </if>
     and   TO_DAYS(cjsj) = TO_DAYS(NOW()) GROUP BY sbbh, deptcode
+    union
+    SELECT sbbh  `text` ,COUNT(*)  `code` , deptcode  FROM   equipment_file_ty_today
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    and   TO_DAYS(cjsj) = TO_DAYS(NOW()) GROUP BY sbbh, deptcode
   </select>
   <select id="groupByRq" parameterType="com.pd.server.main.domain.EquipmentFileTodayExample" resultMap="StatisticsResultMap">
     select

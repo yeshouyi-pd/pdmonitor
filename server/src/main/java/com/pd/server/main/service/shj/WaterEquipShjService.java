@@ -70,8 +70,8 @@ public class WaterEquipShjService extends AbstractScanRequest{
             String distance = attrMapper.selectByAttrKey("distance");
             String phoneNum = attrMapper.selectByAttrKey("heartPhone");
             if(!StringUtils.isEmpty(sbbhHeart)&&sbbhHeart.contains(sbbh)){
-                if(!StringUtils.isEmpty(msg) && !msg.equals("0,0")){
-                    long realDistance = getDistance(msg,listWater.get(0).getGps());
+                if(!StringUtils.isEmpty(msg) && !msg.equals("0,0") && !StringUtils.isEmpty(listWater.get(0).getBz())){
+                    long realDistance = getDistance(msg,listWater.get(0).getBz());
                     if(realDistance>Long.parseLong(distance)){
                         //发送短信
                         SendSmsTool.sendSms("1860261",sbbh,phoneNum);

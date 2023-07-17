@@ -218,7 +218,76 @@ public class WelcomeController extends BaseWxController{
                 }
                 todayCa.andTxtlxEqualTo("1");
                 List<WelcomeKvDto>  list  =  equipmentFileTodayService.getWarningDate(todayExample);
-                responseDto.setContent(list);
+                //事件次数
+                EquipmentFileTodayExample example = new EquipmentFileTodayExample();
+                EquipmentFileTodayExample.Criteria ca = example.createCriteria();
+                ca.andRqEqualTo(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd"));
+                ca.andTxtlxEqualTo("1");
+                List<AlarmNumbersDto> lists = equipmentFileTodayService.statisticsAlarmNums(example);
+                Map<String, List<AlarmNumbersDto>> mapList = lists.stream().collect(Collectors.groupingBy(AlarmNumbersDto::getSbbh));
+                Map<String, Integer> eventSbbhMap = new HashMap<>();
+                for(String key : mapList.keySet()) {
+                    List<AlarmNumbersDto> listsTemp = mapList.get(key);
+                    List<AlarmNumbersDto> resultList = new ArrayList<>();
+                    if (!CollectionUtils.isEmpty(listsTemp)) {
+                        AlarmNumbersDto firstEntity = listsTemp.get(0);
+                        String curDateStr = firstEntity.getFz();
+                        //String lastDateStr = laterThreeMinute(curDateStr);
+                        Integer bjsl = firstEntity.getAlarmNum();
+                        for (int i = 1; i < listsTemp.size(); i++) {
+                            AlarmNumbersDto entity = listsTemp.get(i);
+                            AlarmNumbersDto beforeEntity = listsTemp.get(i - 1);
+                            String beforeDateStr = beforeEntity.getFz();
+                            String nextDateStr = entity.getFz();
+                            if (entity.getSbbh().equals(firstEntity.getSbbh())) {
+                                if (isOverThreeMinute(beforeDateStr, nextDateStr)) {
+                                    bjsl = bjsl + entity.getAlarmNum();
+                                } else {
+                                    AlarmNumbersDto result = new AlarmNumbersDto();
+                                    result.setDeptcode(entity.getDeptcode());
+                                    result.setSbbh(entity.getSbbh());
+                                    result.setBjsj(curDateStr + " 至 " + beforeDateStr);
+                                    result.setAlarmNum(bjsl);
+                                    resultList.add(result);
+                                    firstEntity = entity;
+                                    curDateStr = firstEntity.getFz();
+                                    bjsl = firstEntity.getAlarmNum();
+                                }
+                            } else {
+                                AlarmNumbersDto result = new AlarmNumbersDto();
+                                result.setDeptcode(firstEntity.getDeptcode());
+                                result.setSbbh(firstEntity.getSbbh());
+                                result.setBjsj(curDateStr + " 至 " + beforeDateStr);
+                                result.setAlarmNum(bjsl);
+                                resultList.add(result);
+                                firstEntity = entity;
+                                curDateStr = firstEntity.getFz();
+                                bjsl = firstEntity.getAlarmNum();
+                            }
+                            if (i == listsTemp.size() - 1) {
+                                AlarmNumbersDto result = new AlarmNumbersDto();
+                                result.setDeptcode(entity.getDeptcode());
+                                result.setSbbh(entity.getSbbh());
+                                result.setBjsj(curDateStr + " 至 " + nextDateStr);
+                                result.setAlarmNum(bjsl);
+                                resultList.add(result);
+                            }
+                        }
+                        if (listsTemp.size() == 1) {
+                            AlarmNumbersDto result = new AlarmNumbersDto();
+                            result.setDeptcode(firstEntity.getDeptcode());
+                            result.setSbbh(firstEntity.getSbbh());
+                            result.setBjsj(curDateStr + " 至 " + curDateStr);
+                            result.setAlarmNum(bjsl);
+                            resultList.add(result);
+                        }
+                    }
+                    eventSbbhMap.put(key,resultList.size());
+                }
+                Map<String,Object> returnMap = new HashMap<>();
+                returnMap.put("zcsj",list);//侦测次数数据
+                returnMap.put("jlsj",eventSbbhMap);//聚类次数数据
+                responseDto.setContent(returnMap);
             }
         }
         return responseDto;
@@ -245,7 +314,76 @@ public class WelcomeController extends BaseWxController{
                     }
                 }
                 List<WelcomeKvDto>  list  =  equipmentFileService.getWarningDate(equipmentFileExample);
-                responseDto.setContent(list);
+                //事件次数
+                EquipmentFileTodayExample example = new EquipmentFileTodayExample();
+                EquipmentFileTodayExample.Criteria ca = example.createCriteria();
+                ca.andRqEqualTo(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd"));
+                ca.andTxtlxEqualTo("1");
+                List<AlarmNumbersDto> lists = equipmentFileTodayService.statisticsAlarmNums(example);
+                Map<String, List<AlarmNumbersDto>> mapList = lists.stream().collect(Collectors.groupingBy(AlarmNumbersDto::getSbbh));
+                Map<String, Integer> eventSbbhMap = new HashMap<>();
+                for(String key : mapList.keySet()) {
+                    List<AlarmNumbersDto> listsTemp = mapList.get(key);
+                    List<AlarmNumbersDto> resultList = new ArrayList<>();
+                    if (!CollectionUtils.isEmpty(listsTemp)) {
+                        AlarmNumbersDto firstEntity = listsTemp.get(0);
+                        String curDateStr = firstEntity.getFz();
+                        //String lastDateStr = laterThreeMinute(curDateStr);
+                        Integer bjsl = firstEntity.getAlarmNum();
+                        for (int i = 1; i < listsTemp.size(); i++) {
+                            AlarmNumbersDto entity = listsTemp.get(i);
+                            AlarmNumbersDto beforeEntity = listsTemp.get(i - 1);
+                            String beforeDateStr = beforeEntity.getFz();
+                            String nextDateStr = entity.getFz();
+                            if (entity.getSbbh().equals(firstEntity.getSbbh())) {
+                                if (isOverThreeMinute(beforeDateStr, nextDateStr)) {
+                                    bjsl = bjsl + entity.getAlarmNum();
+                                } else {
+                                    AlarmNumbersDto result = new AlarmNumbersDto();
+                                    result.setDeptcode(entity.getDeptcode());
+                                    result.setSbbh(entity.getSbbh());
+                                    result.setBjsj(curDateStr + " 至 " + beforeDateStr);
+                                    result.setAlarmNum(bjsl);
+                                    resultList.add(result);
+                                    firstEntity = entity;
+                                    curDateStr = firstEntity.getFz();
+                                    bjsl = firstEntity.getAlarmNum();
+                                }
+                            } else {
+                                AlarmNumbersDto result = new AlarmNumbersDto();
+                                result.setDeptcode(firstEntity.getDeptcode());
+                                result.setSbbh(firstEntity.getSbbh());
+                                result.setBjsj(curDateStr + " 至 " + beforeDateStr);
+                                result.setAlarmNum(bjsl);
+                                resultList.add(result);
+                                firstEntity = entity;
+                                curDateStr = firstEntity.getFz();
+                                bjsl = firstEntity.getAlarmNum();
+                            }
+                            if (i == listsTemp.size() - 1) {
+                                AlarmNumbersDto result = new AlarmNumbersDto();
+                                result.setDeptcode(entity.getDeptcode());
+                                result.setSbbh(entity.getSbbh());
+                                result.setBjsj(curDateStr + " 至 " + nextDateStr);
+                                result.setAlarmNum(bjsl);
+                                resultList.add(result);
+                            }
+                        }
+                        if (listsTemp.size() == 1) {
+                            AlarmNumbersDto result = new AlarmNumbersDto();
+                            result.setDeptcode(firstEntity.getDeptcode());
+                            result.setSbbh(firstEntity.getSbbh());
+                            result.setBjsj(curDateStr + " 至 " + curDateStr);
+                            result.setAlarmNum(bjsl);
+                            resultList.add(result);
+                        }
+                    }
+                    eventSbbhMap.put(key,resultList.size());
+                }
+                Map<String,Object> returnMap = new HashMap<>();
+                returnMap.put("zcsj",list);//侦测次数数据
+                returnMap.put("jlsj",eventSbbhMap);//聚类次数数据
+                responseDto.setContent(returnMap);
             }
         }
         return responseDto;
@@ -539,5 +677,15 @@ public class WelcomeController extends BaseWxController{
         map.put("bnum",!CollectionUtils.isEmpty(lists)&&!StringUtils.isEmpty(lists.get(0))&&!StringUtils.isEmpty(lists.get(0).getBscs())?lists.get(0).getBscs():0);
         responseDto.setContent(map);
         return responseDto;
+    }
+
+    public static Boolean isOverThreeMinute(String curDateStr, String nextDateStr){
+        Date begin = DateUtil.toDate(curDateStr,"yyyy-MM-dd HH:mm");
+        Date end = DateUtil.toDate(nextDateStr,"yyyy-MM-dd HH:mm");
+        long minute=(end.getTime()-begin.getTime())/(1000*60);//除以1000是为了转换成秒
+        if(minute<=2){
+            return true;
+        }
+        return false;
     }
 }

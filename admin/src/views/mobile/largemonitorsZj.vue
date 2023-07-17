@@ -449,7 +449,7 @@ export default {
         _this.getRightTopData();//右上角获取当日声学侦测次数、事件(群次)、捕食次数
         _this.getPointer();
         _this.getVideoDataNew();
-      }, 600000);
+      }, 300000);
     },
     // 停止定时器
     clear() {
