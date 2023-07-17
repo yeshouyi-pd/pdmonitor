@@ -125,28 +125,35 @@
                             <table class="table table-bordered table-striped">
                               <thead class="thin-border-bottom">
                               <tr>
-                                <th>
-                                  <i class="ace-icon fa fa-flag blue"></i>监控点
-                                </th>
+<!--                                <th>-->
+<!--                                  <i class="ace-icon fa fa-flag blue"></i>监控点-->
+<!--                                </th>-->
 
                                 <th>
                                   <i class="ace-icon fa  fa-barcode blue"></i>设备编号
                                 </th>
 
                                 <th class="hidden-480">
-                                  <i class="ace-icon fa  fa-book blue"></i>出现次数
+                                  <i class="ace-icon fa  fa-book blue"></i>侦测次数
+                                </th>
+
+                                <th class="hidden-480">
+                                  <i class="ace-icon fa  fa-book blue"></i>事件次数
                                 </th>
                               </tr>
                               </thead>
 
                               <tbody>
                               <tr v-for="keval in kvMaps">
-                                <td>{{ keval.deptname }}</td>
+<!--                                <td>{{ keval.deptname }}</td>-->
                                 <td>
                                  {{keval.text}}
                                 </td>
                                 <td>
                                   <b class="red">{{keval.code}}</b>
+                                </td>
+                                <td>
+                                  <b class="red">{{eventSbbhMap[keval.text]}}</b>
                                 </td>
                               </tr>
                               </tbody>
@@ -262,7 +269,8 @@ export default {
       gz:0,
       JYXM_DW:JYXM_DW,
       zccs:0,
-      bscs:0
+      bscs:0,
+      eventSbbhMap:null
     }
   },
   mounted:function(){
@@ -290,9 +298,14 @@ export default {
      */
     getWarningDate() {
       let _this = this;
-      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getWarningDate/'+Tool.getLoginUser().xmbh).then((res)=>{
+      let url = process.env.VUE_APP_SERVER + '/monitor/welcome/getWarningDate';
+      if("460100"!=Tool.getLoginUser().deptcode){
+        url = process.env.VUE_APP_SERVER + '/monitor/welcome/getWarningDate/'+Tool.getLoginUser().xmbh;
+      }
+      _this.$ajax.get(url).then((res)=>{
         let response = res.data;
-        _this.kvMaps = response.content;
+        _this.kvMaps = response.content.zcsj;
+        _this.eventSbbhMap = response.content.jlsj;
       })
     },
     /**

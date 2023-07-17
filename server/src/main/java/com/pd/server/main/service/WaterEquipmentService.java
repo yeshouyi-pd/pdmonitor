@@ -4,11 +4,13 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.pd.server.exception.BusinessException;
 import com.pd.server.exception.BusinessExceptionCode;
+import com.pd.server.main.domain.WaterEquiplog;
 import com.pd.server.main.domain.WaterEquipment;
 import com.pd.server.main.domain.WaterEquipmentExample;
 import com.pd.server.main.dto.LoginUserDto;
 import com.pd.server.main.dto.PieChartDto;
 import com.pd.server.main.dto.WaterEquipmentDto;
+import com.pd.server.main.mapper.WaterEquiplogMapper;
 import com.pd.server.main.mapper.WaterEquipmentMapper;
 import com.pd.server.util.CopyUtil;
 import com.pd.server.util.UuidUtil;
@@ -27,6 +29,8 @@ public class WaterEquipmentService {
 
     @Resource
     private WaterEquipmentMapper waterEquipmentMapper;
+    @Resource
+    private WaterEquiplogMapper waterEquiplogMapper;
 
     public void listByPage(WaterEquipmentDto waterEquipmentDto){
         PageHelper.startPage(waterEquipmentDto.getPage(),waterEquipmentDto.getSize());
@@ -102,6 +106,15 @@ public class WaterEquipmentService {
                 waterEquipment.setCreateTime(new Date());
             }
             this.insert(waterEquipment);
+            WaterEquiplog equiplog = new WaterEquiplog();
+            equiplog.setId(UuidUtil.getShortUuid());
+            equiplog.setSbbh(waterEquipmentDto.getSbsn());
+            equiplog.setCode("1");
+            equiplog.setMsg("正常在线");
+            equiplog.setCjsj(new Date());
+            equiplog.setSm1(waterEquipmentDto.getSbcj());
+            equiplog.setSm2(waterEquipmentDto.getSbmc());
+            waterEquiplogMapper.insert(equiplog);
         } else {
             waterEquipment.setUpdateBy(loginUserDto.getName());
             waterEquipment.setGxsj(new Date());
