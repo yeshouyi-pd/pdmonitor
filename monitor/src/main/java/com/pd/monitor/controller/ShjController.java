@@ -76,11 +76,11 @@ public class ShjController{
                         String templateId = "1018".equals(entity.getString("type"))?"1823144":"1847667";
                         String sbmc = "";
                         if("A4001".equals(entity.getString("sbbh"))){
-                            sbmc = "上游1";
+                            sbmc = "下游1";
                         }else if("A4002".equals(entity.getString("sbbh"))){
                             sbmc = "大桥2";
                         }else if("A4003".equals(entity.getString("sbbh"))){
-                            sbmc = "下游3";
+                            sbmc = "上游3";
                         }
                         SendSmsTool.sendSms(templateId,sbmc+"-"+entity.getString("ts")+"dB");
                         entity.remove("sm1");
