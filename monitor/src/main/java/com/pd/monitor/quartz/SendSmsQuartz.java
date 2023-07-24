@@ -61,7 +61,7 @@ public class SendSmsQuartz {
         String a1 = !StringUtils.isEmpty(sbbhBjcs.get("A4001"))?sbbhBjcs.get("A4001")+"":0+"";
         String a2 = !StringUtils.isEmpty(sbbhBjcs.get("A4002"))?sbbhBjcs.get("A4002")+"":0+"";
         String a3 = !StringUtils.isEmpty(sbbhBjcs.get("A4003"))?sbbhBjcs.get("A4003")+"":0+"";
-        SendSmsTool.sendSms("1858683","昨日20点至今日8点"+"-"+a1+";"+a2+";"+a3);
+        SendSmsTool.sendSms("1858683","昨日20点至今日8点"+"-"+a3+";"+a2+";"+a1);
     }
 
     /**
@@ -92,7 +92,7 @@ public class SendSmsQuartz {
         String a1 = !StringUtils.isEmpty(sbbhBjcs.get("A4001"))?sbbhBjcs.get("A4001")+"":0+"";
         String a2 = !StringUtils.isEmpty(sbbhBjcs.get("A4002"))?sbbhBjcs.get("A4002")+"":0+"";
         String a3 = !StringUtils.isEmpty(sbbhBjcs.get("A4003"))?sbbhBjcs.get("A4003")+"":0+"";
-        SendSmsTool.sendSms("1858683","今日8点至11点30分"+"-"+a1+";"+a2+";"+a3);
+        SendSmsTool.sendSms("1858683","今日8点至11点30分"+"-"+a3+";"+a2+";"+a1);
     }
 
     /**
@@ -123,7 +123,7 @@ public class SendSmsQuartz {
         String a1 = !StringUtils.isEmpty(sbbhBjcs.get("A4001"))?sbbhBjcs.get("A4001")+"":0+"";
         String a2 = !StringUtils.isEmpty(sbbhBjcs.get("A4002"))?sbbhBjcs.get("A4002")+"":0+"";
         String a3 = !StringUtils.isEmpty(sbbhBjcs.get("A4003"))?sbbhBjcs.get("A4003")+"":0+"";
-        SendSmsTool.sendSms("1858683","今日11点30分至17点30分"+"-"+a1+";"+a2+";"+a3);
+        SendSmsTool.sendSms("1858683","今日11点30分至17点30分"+"-"+a3+";"+a2+";"+a1);
     }
 
     /**
@@ -154,7 +154,7 @@ public class SendSmsQuartz {
         String a1 = !StringUtils.isEmpty(sbbhBjcs.get("A4001"))?sbbhBjcs.get("A4001")+"":0+"";
         String a2 = !StringUtils.isEmpty(sbbhBjcs.get("A4002"))?sbbhBjcs.get("A4002")+"":0+"";
         String a3 = !StringUtils.isEmpty(sbbhBjcs.get("A4003"))?sbbhBjcs.get("A4003")+"":0+"";
-        SendSmsTool.sendSms("1858683","今日17点30分至20点"+"-"+a1+";"+a2+";"+a3);
+        SendSmsTool.sendSms("1858683","今日17点30分至20点"+"-"+a3+";"+a2+";"+a1);
     }
 
 //    /**
