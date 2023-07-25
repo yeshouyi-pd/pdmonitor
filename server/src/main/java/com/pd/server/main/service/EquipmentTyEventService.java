@@ -25,6 +25,10 @@ public class EquipmentTyEventService {
         return equipmentTyEventMapper.selectByPrimaryKey(id);
     }
 
+    public List<EquipmentTyEvent> selectByExampleExport(EquipmentTyEventExample example) {
+        return equipmentTyEventMapper.selectByExampleExport(example);
+    }
+
     /**
     * 列表查询
     */

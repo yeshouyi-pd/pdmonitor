@@ -16,21 +16,21 @@
                 <td style="width: 25%">
                   <times v-bind:startTime="startTime" v-bind:endTime="endTime" v-bind:svalue="stime" v-bind:evalue="etime" start-id="rStime" end-id="rEtime"></times>
                 </td>
-<!--                <td style="width:10%">-->
-<!--                  设备名称：-->
-<!--                </td>-->
-<!--                <td style="width: 20%">-->
-<!--                  <select v-model="curSbsn" class="form-control" id="form-field-select-1">-->
-<!--                    <option value="" selected>请选择</option>-->
-<!--                    <option v-for="item in equipments" :value="item.sbsn">{{item.sbmc}}</option>-->
-<!--                  </select>-->
-<!--                </td>-->
+                <td style="width:10%">
+                  设备名称：
+                </td>
+                <td style="width: 20%">
+                  <select v-model="curSbsn" class="form-control" id="form-field-select-1">
+                    <option value="" selected>请选择</option>
+                    <option v-for="item in equipments" :value="item.sbsn">{{item.sbmc}}</option>
+                  </select>
+                </td>
                 <td colspan="2" class="text-center">
                   <button type="button" v-on:click="getMapMark()" class="btn btn-sm btn-info btn-round" style="margin-right: 10px;">
                     <i class="ace-icon fa fa-book"></i>
                     查询
                   </button>
-                  <a href="javascript:location.replace(location.href);"  class="btn btn-sm   btn-success btn-round">
+                  <a href="javascript:location.replace(location.href);"  class="btn btn-sm   btn-success btn-round" style="margin-right: 10px;">
                     <i class="ace-icon fa fa-refresh"></i>
                     重置
                   </a>
@@ -139,7 +139,8 @@ export default {
       let obj = {
         "stime":_this.stime,
         "etime":_this.etime,
-        "xmbh":Tool.getLoginUser().xmbh
+        "xmbh":Tool.getLoginUser().xmbh,
+        "sbbh":_this.curSbsn
       }
       Loading.show();
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/pontoonGps/selectGpsByDateRange', obj).then((response)=>{
@@ -178,6 +179,8 @@ export default {
       let obj = {
         "stime":_this.stime,
         "etime":_this.etime,
+        "xmbh":Tool.getLoginUser().xmbh,
+        "sbbh":_this.curSbsn
       }
       if("460100"!=Tool.getLoginUser().deptcode){
         obj.xmbh = Tool.getLoginUser().xmbh;

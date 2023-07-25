@@ -30,6 +30,10 @@ public class PontoonGPSShjService extends AbstractScanRequest {
                 data = "参数错误";
                 return data;
             }
+            if(gps.equals("NaN,NaN") || gps.equals("0,0")){
+                data = "GPS数据错误，不保存";
+                return data;
+            }
             PontoonGpsService service = SpringUtil.getBean(PontoonGpsService.class);
             PontoonGpsExample example = new PontoonGpsExample();
             PontoonGpsExample.Criteria ca = example.createCriteria();

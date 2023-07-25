@@ -46,6 +46,9 @@ public class PontoonGpsController extends BaseWxController {
         if(!StringUtils.isEmpty(pontoonGpsDto.getEtime())){
             ca.andRqLessThanOrEqualTo(pontoonGpsDto.getEtime());
         }
+        if(!StringUtils.isEmpty(pontoonGpsDto.getSbbh())){
+            ca.andSbbhEqualTo(pontoonGpsDto.getSbbh());
+        }
         example.setOrderByClause(" cjsj desc ");
         List<PontoonGps> gpsList = pontoonGpsService.selectByExample(example);
         Map<String, Map<String,List<PontoonGps>>> result = gpsList.stream().collect(Collectors.groupingBy(PontoonGps::getSbbh, Collectors.groupingBy(PontoonGps::getRq)));

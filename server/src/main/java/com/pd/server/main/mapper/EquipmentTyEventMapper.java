@@ -18,6 +18,8 @@ public interface EquipmentTyEventMapper {
 
     int insertSelective(EquipmentTyEvent record);
 
+    List<EquipmentTyEvent> selectByExampleExport(EquipmentTyEventExample example);
+
     List<EquipmentTyEvent> selectByExample(EquipmentTyEventExample example);
 
     List<EquipmentTyEvent> selectByExampleSpecial(@Param("record") EquipmentTyEventDto record);

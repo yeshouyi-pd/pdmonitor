@@ -15,6 +15,7 @@
     <result column="sm1" jdbcType="VARCHAR" property="sm1" />
     <result column="sm2" jdbcType="VARCHAR" property="sm2" />
     <result column="sm3" jdbcType="VARCHAR" property="sm3" />
+    <result column="gps" jdbcType="VARCHAR" property="gps" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -77,6 +78,16 @@
   <sql id="Base_Column_List">
     id, sbbh, kssj, jssj, rq, ts, deptcode, xmbh, bz, sm, sm1, sm2, sm3
   </sql>
+  <select id="selectByExampleExport" parameterType="com.pd.server.main.domain.EquipmentTyEventExample" resultMap="BaseResultMap">
+    select a.*,b.sm2 as gps
+    from equipment_ty_event a left join equipment_file_ty b on a.bz=b.id
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
   <select id="selectByExample" parameterType="com.pd.server.main.domain.EquipmentTyEventExample" resultMap="BaseResultMap">
     select
     <if test="distinct">

@@ -63,6 +63,9 @@ public class EquipmentFileTyTodayController extends BaseWxController {
         }else {
             EquipmentFileTyExample example = new EquipmentFileTyExample();
             EquipmentFileTyExample.Criteria ca = example.createCriteria();
+            if(!StringUtils.isEmpty(equipmentFileTyDto.getSbbh())){
+                ca.andSbbhEqualTo(equipmentFileTyDto.getSbbh());
+            }
             if(!StringUtils.isEmpty(equipmentFileTyDto.getStime())){
                 ca.andRqGreaterThanOrEqualTo(equipmentFileTyDto.getStime());
             }
