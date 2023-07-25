@@ -27,6 +27,8 @@ public class EquipmentTyEvent {
 
     private String sm3;
 
+    private String gps;
+
     public String getId() {
         return id;
     }
@@ -129,6 +131,14 @@ public class EquipmentTyEvent {
 
     public void setSm3(String sm3) {
         this.sm3 = sm3;
+    }
+
+    public String getGps() {
+        return gps;
+    }
+
+    public void setGps(String gps) {
+        this.gps = gps;
     }
 
     @Override

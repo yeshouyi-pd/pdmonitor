@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.pd.monitor.wx.conf.BaseWxController;
 import com.pd.server.config.RedisCode;
 import com.pd.server.main.domain.*;
+import com.pd.server.main.dto.EquipmentTyEventDto;
 import com.pd.server.main.dto.LoginUserDto;
 import com.pd.server.main.dto.PredationNumDto;
 import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
@@ -50,6 +51,124 @@ public class ExportFileController extends BaseWxController{
     private DeviceStateLogService deviceStateLogService;
     @Resource
     private WaterProEquipService waterProEquipService;
+    @Resource
+    private EquipmentTyEventService equipmentTyEventService;
+
+    /**
+     * 导出拖曳设备聚类事件
+     */
+    @GetMapping("/exportTyEvent")
+    public void exportTyEvent(HttpServletRequest request, HttpServletResponse response){
+        try {
+            List<String> sbbhs = new ArrayList<>();
+            EquipmentTyEventExample example = new EquipmentTyEventExample();
+            EquipmentTyEventExample.Criteria ca = example.createCriteria();
+            if(!StringUtils.isEmpty(request.getParameter("sbbh"))){
+                ca.andSbbhEqualTo(request.getParameter("sbbh"));
+            }
+            if(!StringUtils.isEmpty(request.getParameter("stime"))){
+                ca.andRqGreaterThanOrEqualTo(request.getParameter("stime"));
+            }
+            if(!StringUtils.isEmpty(request.getParameter("etime"))){
+                ca.andRqLessThanOrEqualTo(request.getParameter("etime"));
+            }
+            if(!StringUtils.isEmpty(request.getParameter("xmbh"))){
+                sbbhs = waterProEquipService.findSbsnByXmbh(request.getParameter("xmbh"));
+            }
+            example.setOrderByClause(" jssj desc ");
+            List<EquipmentTyEvent> equipmentTyEventList = equipmentTyEventService.selectByExampleExport(example);
+            //导出
+            HSSFWorkbook workbook = new HSSFWorkbook();
+            //设置公共单元格样式
+            HSSFCellStyle cellStyleCommon = workbook.createCellStyle();
+            cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_LEFT);
+            cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+            // 创建一个工作表
+            String fileName = "捕食统计(" + new Date().getTime() + ").xls";
+            HSSFSheet sheet = workbook.createSheet("按捕食次数统计");
+            // 自适应列宽度
+            sheet.autoSizeColumn(1, true);
+            sheet.setDefaultColumnWidth(18);
+            sheet.setDefaultRowHeight((short)(40*10));
+            // 添加表头行
+            HSSFRow titleRow = sheet.createRow(0);//第1行
+            List<String> titleStrList = Arrays.asList("设备名称","设备sn","开始时间","结束时间","头数","GPS数据");
+            for(int i=0;i<titleStrList.size();i++){
+                HSSFCell cell = titleRow.createCell(i);
+                cell.setCellValue(titleStrList.get(i));
+                cell.setCellStyle(cellStyleCommon);
+            }
+            WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
+            WaterEquipmentExample.Criteria caEquip = waterEquipmentExample.createCriteria();
+            caEquip.andSblbEqualTo("0001");
+            List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(waterEquipmentExample);
+            Map<String, String> mapSbxh = waterEquipmentList.stream().collect(Collectors.toMap(p -> p.getSbsn(), p -> p.getSbmc()));
+            int i=0;
+            for(EquipmentTyEvent tyEvent : equipmentTyEventList){
+                if(!StringUtils.isEmpty(request.getParameter("xmbh"))){
+                    if(sbbhs.contains(tyEvent.getSbbh())){
+                        HSSFRow comRow = sheet.createRow(i+1);
+                        HSSFCell comCell0 = comRow.createCell(0);
+                        comCell0.setCellValue(mapSbxh.get(tyEvent.getSbbh()));
+                        comCell0.setCellStyle(cellStyleCommon);
+                        HSSFCell comCell1 = comRow.createCell(1);
+                        comCell1.setCellValue(tyEvent.getSbbh());
+                        comCell1.setCellStyle(cellStyleCommon);
+                        HSSFCell comCell2 = comRow.createCell(2);
+                        comCell2.setCellValue(tyEvent.getKssj());
+                        comCell2.setCellStyle(cellStyleCommon);
+                        HSSFCell comCell3 = comRow.createCell(3);
+                        comCell3.setCellValue(tyEvent.getJssj());
+                        comCell3.setCellStyle(cellStyleCommon);
+                        HSSFCell comCell4 = comRow.createCell(4);
+                        comCell4.setCellValue(tyEvent.getTs());
+                        comCell4.setCellStyle(cellStyleCommon);
+                        HSSFCell comCell5 = comRow.createCell(5);
+                        comCell5.setCellValue(tyEvent.getGps());
+                        comCell5.setCellStyle(cellStyleCommon);
+                        i++;
+                    }
+                }else{
+                    HSSFRow comRow = sheet.createRow(i+1);
+                    HSSFCell comCell0 = comRow.createCell(0);
+                    comCell0.setCellValue(mapSbxh.get(tyEvent.getSbbh()));
+                    comCell0.setCellStyle(cellStyleCommon);
+                    HSSFCell comCell1 = comRow.createCell(1);
+                    comCell1.setCellValue(tyEvent.getSbbh());
+                    comCell1.setCellStyle(cellStyleCommon);
+                    HSSFCell comCell2 = comRow.createCell(2);
+                    comCell2.setCellValue(tyEvent.getKssj());
+                    comCell2.setCellStyle(cellStyleCommon);
+                    HSSFCell comCell3 = comRow.createCell(3);
+                    comCell3.setCellValue(tyEvent.getJssj());
+                    comCell3.setCellStyle(cellStyleCommon);
+                    HSSFCell comCell4 = comRow.createCell(4);
+                    comCell4.setCellValue(tyEvent.getTs());
+                    comCell4.setCellStyle(cellStyleCommon);
+                    HSSFCell comCell5 = comRow.createCell(5);
+                    comCell5.setCellValue(tyEvent.getGps());
+                    comCell5.setCellStyle(cellStyleCommon);
+                    i++;
+                }
+            }
+            response.setHeader("content-Type", "application/vnd.ms-excel");
+            // 下载文件的默认名称
+            String agent = request.getHeader("User-Agent");
+            if (agent.contains("MSIE") || agent.contains("Trident") || agent.contains("Edge")) {
+                response.setHeader("Content-Disposition",
+                        "attachment; filename=" + URLEncoder.encode(fileName, "UTF-8"));
+            } else {
+                response.setHeader("Content-Disposition",
+                        "attachment; filename=\"" + new String((fileName).getBytes("UTF-8"), "ISO-8859-1") + "\"");
+            }
+            response.setCharacterEncoding("utf-8");
+            ServletOutputStream out = response.getOutputStream();
+            workbook.write(out);
+            out.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
     /**
      * 导出设备运行日志

@@ -19,6 +19,12 @@
                     <option v-for="item in waterEquipments" :value="item.sbsn">{{item.sbmc}}</option>
                   </select>
                 </td>
+                <td style="width: 10%;">
+                  开始日期：
+                </td>
+                <td style="width: 15%;">
+                  <times v-bind:startTime="startTime" v-bind:endTime="endTime" start-id="rStime" end-id="rEtime"></times>
+                </td>
                 <td  style="width: 20%" class="text-center">
                   <button type="button" v-on:click="list(1)" class="btn btn-sm btn-info btn-round" style="margin-right: 10px;">
                     <i class="ace-icon fa fa-book"></i>
@@ -28,6 +34,10 @@
                     <i class="ace-icon fa fa-refresh"></i>
                     重置
                   </a>
+                  <button type="button" v-on:click="exportExcle()" class="btn btn-sm btn-warning btn-round" style="margin-right: 10px;">
+                    <i class="ace-icon fa fa-leaf"></i>
+                    导出
+                  </button>
                 </td>
               </tr>
               </tbody>
@@ -42,7 +52,7 @@
         <thead>
         <tr>
           <th>所属机构</th>
-          <th>检测点</th>
+          <th>设备名称</th>
           <th>设备sn</th>
           <th>开始时间</th>
           <th>结束时间</th>
@@ -150,6 +160,27 @@ export default {
     _this.findDeviceInfo();
   },
   methods: {
+    exportExcle(){
+      let _this = this;
+      let param = "";
+      if("460100"!=Tool.getLoginUser().deptcode){
+        param+="&xmbh="+Tool.getLoginUser().xmbh;
+      }
+      if(!Tool.isEmpty(_this.equipmentTyEventDto.sbbh)){
+        param+="&sbbh="+_this.equipmentTyEventDto.sbbh;
+      }
+      if(!Tool.isEmpty(_this.equipmentTyEventDto.stime)){
+        param+="&stime="+_this.equipmentTyEventDto.stime;
+      }
+      if(!Tool.isEmpty(_this.equipmentTyEventDto.etime)){
+        param+="&etime="+_this.equipmentTyEventDto.etime;
+      }
+      if(Tool.isEmpty(param)){
+        window.location.href = process.env.VUE_APP_SERVER + '/monitor/export/exportTyEvent';
+      }else{
+        window.location.href = process.env.VUE_APP_SERVER + '/monitor/export/exportTyEvent?'+param.substring(1,param.length);
+      }
+    },
     findDeviceInfo(){
       let _this = this;
       Loading.show();
