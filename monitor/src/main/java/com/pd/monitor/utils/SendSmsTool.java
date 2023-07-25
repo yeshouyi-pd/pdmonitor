@@ -24,8 +24,8 @@ public class SendSmsTool {
     public static Boolean sendSms(String templateId, String params){
         try {
             Map<String, String> attrMap = WxRedisConfig.getAttrMap();
-            String secretId = attrMap.get("secretId");//AKIDNhy3uWyvBHCxYxmmUP9k6INK8mmc5aqr
-            String secretKey = attrMap.get("secretKey");//zp3uZ3Qh1EHDbt0ykU9fwPjttf2D8ynQ
+            String secretId = attrMap.get("secretId");
+            String secretKey = attrMap.get("secretKey");
             Credential cred = new Credential(secretId, secretKey);
             HttpProfile httpProfile = new HttpProfile();
             httpProfile.setReqMethod("POST");
@@ -36,9 +36,9 @@ public class SendSmsTool {
             clientProfile.setHttpProfile(httpProfile);
             SmsClient client = new SmsClient(cred, "ap-guangzhou",clientProfile);
             SendSmsRequest req = new SendSmsRequest();
-            String sdkAppId = attrMap.get("sdkAppId");//1400296653
+            String sdkAppId = attrMap.get("sdkAppId");
             req.setSmsSdkAppid(sdkAppId);
-            String signName = attrMap.get("signName");//武汉品度
+            String signName = attrMap.get("signName");
             req.setSign(signName);
             req.setTemplateID(templateId);
 //            String[] templateParamSet = {"A4001","145dB"};
