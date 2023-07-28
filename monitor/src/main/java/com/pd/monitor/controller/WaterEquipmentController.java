@@ -282,6 +282,9 @@ public class WaterEquipmentController  extends BaseWxController {
         if(!StringUtils.isEmpty(pageDto.getSblb())){
             ca.andSblbEqualTo(pageDto.getSblb());
         }
+        if(!StringUtils.isEmpty(pageDto.getSbmc())){
+            ca.andSbmcLike("%"+pageDto.getSbmc()+"%");
+        }
         if(!StringUtils.isEmpty(pageDto.getXmbh())){
             if(!CollectionUtils.isEmpty(loginUserDto.getXmbhsbsns().get(pageDto.getXmbh()))){
                 ca.andSbsnIn(loginUserDto.getXmbhsbsns().get(pageDto.getXmbh()));

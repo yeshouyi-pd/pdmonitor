@@ -80,13 +80,17 @@
   </sql>
   <select id="selectByExampleExport" parameterType="com.pd.server.main.domain.EquipmentTyEventExample" resultMap="BaseResultMap">
     select a.*,b.sm2 as gps
-    from equipment_ty_event a left join equipment_file_ty b on a.bz=b.id
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
+    from equipment_ty_event a left join equipment_file_ty b on a.bz=b.id where 1=1
+    <if test="record.sbbh != null and record.sbbh !=''">
+      AND a.sbbh = #{record.sbbh,jdbcType=VARCHAR}
     </if>
-    <if test="orderByClause != null">
-      order by ${orderByClause}
+    <if test="record.stime != null and record.stime !=''">
+      AND a.rq &gt;= #{record.stime,jdbcType=VARCHAR}
     </if>
+    <if test="record.etime != null and record.etime !=''">
+      AND a.rq &lt;= #{record.etime,jdbcType=VARCHAR}
+    </if>
+    order by jssj desc
   </select>
   <select id="selectByExample" parameterType="com.pd.server.main.domain.EquipmentTyEventExample" resultMap="BaseResultMap">
     select

@@ -32,6 +32,12 @@
                   <td style="width: 15%">
                     <input class="input-sm" type="text"  v-model="waterEquipmentDto.sbsn"/>
                   </td>
+                  <td style="width:10%">
+                    设备名称：
+                  </td>
+                  <td style="width: 15%">
+                    <input class="input-sm" type="text"  v-model="waterEquipmentDto.sbmc"/>
+                  </td>
                   <td style="width: 10%">
                     设备类别：
                   </td>
