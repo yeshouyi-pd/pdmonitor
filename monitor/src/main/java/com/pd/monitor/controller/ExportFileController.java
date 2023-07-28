@@ -61,22 +61,20 @@ public class ExportFileController extends BaseWxController{
     public void exportTyEvent(HttpServletRequest request, HttpServletResponse response){
         try {
             List<String> sbbhs = new ArrayList<>();
-            EquipmentTyEventExample example = new EquipmentTyEventExample();
-            EquipmentTyEventExample.Criteria ca = example.createCriteria();
+            EquipmentTyEventDto record = new EquipmentTyEventDto();
             if(!StringUtils.isEmpty(request.getParameter("sbbh"))){
-                ca.andSbbhEqualTo(request.getParameter("sbbh"));
+                record.setSbbh(request.getParameter("sbbh"));
             }
             if(!StringUtils.isEmpty(request.getParameter("stime"))){
-                ca.andRqGreaterThanOrEqualTo(request.getParameter("stime"));
+                record.setStime(request.getParameter("stime"));
             }
             if(!StringUtils.isEmpty(request.getParameter("etime"))){
-                ca.andRqLessThanOrEqualTo(request.getParameter("etime"));
+                record.setEtime(request.getParameter("etime"));
             }
             if(!StringUtils.isEmpty(request.getParameter("xmbh"))){
                 sbbhs = waterProEquipService.findSbsnByXmbh(request.getParameter("xmbh"));
             }
-            example.setOrderByClause(" jssj desc ");
-            List<EquipmentTyEvent> equipmentTyEventList = equipmentTyEventService.selectByExampleExport(example);
+            List<EquipmentTyEvent> equipmentTyEventList = equipmentTyEventService.selectByExampleExport(record);
             //导出
             HSSFWorkbook workbook = new HSSFWorkbook();
             //设置公共单元格样式

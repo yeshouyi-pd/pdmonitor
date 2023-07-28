@@ -25,8 +25,8 @@ public class EquipmentTyEventService {
         return equipmentTyEventMapper.selectByPrimaryKey(id);
     }
 
-    public List<EquipmentTyEvent> selectByExampleExport(EquipmentTyEventExample example) {
-        return equipmentTyEventMapper.selectByExampleExport(example);
+    public List<EquipmentTyEvent> selectByExampleExport(EquipmentTyEventDto record) {
+        return equipmentTyEventMapper.selectByExampleExport(record);
     }
 
     /**
