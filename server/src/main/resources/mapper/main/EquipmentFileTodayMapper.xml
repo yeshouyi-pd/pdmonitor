@@ -399,7 +399,7 @@
   <select id="groupByRq" parameterType="com.pd.server.main.domain.EquipmentFileTodayExample" resultMap="StatisticsResultMap">
     select
     sbbh,rq bjsj,count(*) alarmNum, deptcode
-    from equipment_file
+    from equipment_file_today
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>

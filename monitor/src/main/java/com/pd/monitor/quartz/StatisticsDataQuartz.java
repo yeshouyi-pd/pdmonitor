@@ -21,10 +21,7 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -61,12 +58,12 @@ public class StatisticsDataQuartz {
         String beforeDayStr = DateTools.getFormatDate(DateUtil.getDaysLater(new Date(),-1),"yyyy-MM-dd");
         EquipmentFileTodayExample example = new EquipmentFileTodayExample();
         EquipmentFileTodayExample.Criteria ca = example.createCriteria();
-        ca.andRqEqualTo(beforeDayStr);
+        //ca.andRqEqualTo(beforeDayStr);
         ca.andTxtlxEqualTo("1");
         List<AlarmNumbersDto> lists = equipmentFileTodayService.statisticsAlarmNums(example);
         for(AlarmNumbersDto item : lists){
             AppearNumbersDto dto = CopyUtil.copy(item,AppearNumbersDto.class);
-            dto.setBjsj(beforeDayStr);
+            dto.setBjsj(item.getFz().substring(0,10));
             appearNumbersService.save(dto);
         }
         //出现事件统计，捕食次数统计
@@ -76,13 +73,13 @@ public class StatisticsDataQuartz {
 
     //出现事件统计(equipment_file_alarm_event)，然后在进行捕食次数统计(predation_num表中包含事件次数)
     public void alarmEvent(List<AlarmNumbersDto> lists,EquipmentFileTodayExample example){
-        String beforeDayStr = DateTools.getFormatDate(DateUtil.getDaysLater(new Date(),-1),"yyyy-MM-dd");
+        //String beforeDayStr = DateTools.getFormatDate(DateUtil.getDaysLater(new Date(),-1),"yyyy-MM-dd");
         Map<String, List<AlarmNumbersDto>> mapList = lists.stream().collect(Collectors.groupingBy(AlarmNumbersDto::getSbbh));
         WaterEquipmentExample exampleTemp = new WaterEquipmentExample();
         exampleTemp.createCriteria().andDqzlEqualTo("A4");
         List<String> sbbha4 = waterEquipmentService.findSbbh(exampleTemp);
         for(String key : mapList.keySet()){
-            List<AlarmNumbersDto> listsTemp = mapList.get(key);
+            List<AlarmNumbersDto> listsTemp = mapList.get(key).stream().sorted(Comparator.comparing(AlarmNumbersDto::getFz)).collect(Collectors.toList());
             List<AlarmNumbersDto> resultList = new ArrayList<>();
             if(!CollectionUtils.isEmpty(listsTemp)){
                 AlarmNumbersDto firstEntity = listsTemp.get(0);
@@ -145,7 +142,7 @@ public class StatisticsDataQuartz {
                 entity.setSbbh(alarmNumbersDto.getSbbh());
                 entity.setEventTime(alarmNumbersDto.getBjsj());
                 entity.setAlarmNum(alarmNumbersDto.getAlarmNum());
-                entity.setBjsj(beforeDayStr);
+                entity.setBjsj(alarmNumbersDto.getBjsj().substring(0,10));
                 entity.setXh(i+1);
                 String[] arr = entity.getEventTime().split(" 至 ");
                 String kssj = arr[0]+":00";
@@ -173,20 +170,20 @@ public class StatisticsDataQuartz {
     }
 
     public void predationStatistics(EquipmentFileTodayExample example, List<String> sbbha4){
-        String beforeDayStr = DateTools.getFormatDate(DateUtil.getDaysLater(new Date(),-1),"yyyy-MM-dd");
+        //String beforeDayStr = DateTools.getFormatDate(DateUtil.getDaysLater(new Date(),-1),"yyyy-MM-dd");
         List<AlarmNumbersDto> allList = equipmentFileTodayService.groupByRq(example);
         for(AlarmNumbersDto alarmNumbersDto : allList){
             //捕食次数
             EquipmentFileTodayExample example1 = new EquipmentFileTodayExample();
             EquipmentFileTodayExample.Criteria ca1 = example1.createCriteria();
-            ca1.andRqEqualTo(beforeDayStr);
+            ca1.andRqEqualTo(alarmNumbersDto.getBjsj());
             ca1.andJczlEqualTo("1");
             ca1.andSbbhEqualTo(alarmNumbersDto.getSbbh());
             List<EquipmentFileToday> predationList = equipmentFileTodayService.listAll(example1);
             PredationNumDto dto = new PredationNumDto();
             dto.setPredationNum(predationList.size());
             dto.setAlarmNum(alarmNumbersDto.getAlarmNum());
-            dto.setCjsj(DateUtil.toDate(beforeDayStr,"yyyy-MM-dd"));
+            dto.setCjsj(DateUtil.toDate(alarmNumbersDto.getBjsj(),"yyyy-MM-dd"));
             dto.setSbbh(alarmNumbersDto.getSbbh());
             if(!StringUtils.isEmpty(alarmNumbersDto.getDeptcode())){
                 dto.setDeptcode(alarmNumbersDto.getDeptcode());
@@ -194,7 +191,7 @@ public class StatisticsDataQuartz {
             EquipmentFileAlarmEventExample eventExample = new EquipmentFileAlarmEventExample();
             EquipmentFileAlarmEventExample.Criteria eventCa = eventExample.createCriteria();
             eventCa.andSbbhEqualTo(alarmNumbersDto.getSbbh());
-            eventCa.andBjsjEqualTo(beforeDayStr);
+            eventCa.andBjsjEqualTo(alarmNumbersDto.getBjsj());
             long alarmCount = equipmentFileAlarmEventService.alarmCount(eventExample);
             dto.setSm1(StringUtils.isEmpty(alarmCount)?"0":Long.toString(alarmCount));
             if(sbbha4.contains(alarmNumbersDto.getSbbh())){
@@ -203,7 +200,7 @@ public class StatisticsDataQuartz {
             }
             predationNumService.save(dto);
         }
-        clearTodayData();
+        //clearTodayData();
     }
 
     public void clearTodayData(){
@@ -259,4 +256,9 @@ public class StatisticsDataQuartz {
         return false;
     }
 
+
+    @Scheduled(cron = "0 47 14 * * ? ")
+    public void test() throws ParseException {
+        loop();
+    }
 }
