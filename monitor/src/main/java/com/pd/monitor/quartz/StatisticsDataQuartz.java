@@ -39,10 +39,6 @@ public class StatisticsDataQuartz {
     @Resource
     private EquipmentFileAlarmEventService equipmentFileAlarmEventService;
     @Resource
-    private CameraInfoService cameraInfoService;
-    @Resource
-    private EventCameraInfoService eventCameraInfoService;
-    @Resource
     private PredationNumService predationNumService;
     @Resource
     private WaterEquipmentService waterEquipmentService;
@@ -58,7 +54,7 @@ public class StatisticsDataQuartz {
         String beforeDayStr = DateTools.getFormatDate(DateUtil.getDaysLater(new Date(),-1),"yyyy-MM-dd");
         EquipmentFileTodayExample example = new EquipmentFileTodayExample();
         EquipmentFileTodayExample.Criteria ca = example.createCriteria();
-        //ca.andRqEqualTo(beforeDayStr);
+        ca.andRqEqualTo(beforeDayStr);
         ca.andTxtlxEqualTo("1");
         List<AlarmNumbersDto> lists = equipmentFileTodayService.statisticsAlarmNums(example);
         for(AlarmNumbersDto item : lists){
@@ -73,7 +69,7 @@ public class StatisticsDataQuartz {
 
     //出现事件统计(equipment_file_alarm_event)，然后在进行捕食次数统计(predation_num表中包含事件次数)
     public void alarmEvent(List<AlarmNumbersDto> lists,EquipmentFileTodayExample example){
-        //String beforeDayStr = DateTools.getFormatDate(DateUtil.getDaysLater(new Date(),-1),"yyyy-MM-dd");
+        String beforeDayStr = DateTools.getFormatDate(DateUtil.getDaysLater(new Date(),-1),"yyyy-MM-dd");
         Map<String, List<AlarmNumbersDto>> mapList = lists.stream().collect(Collectors.groupingBy(AlarmNumbersDto::getSbbh));
         WaterEquipmentExample exampleTemp = new WaterEquipmentExample();
         exampleTemp.createCriteria().andDqzlEqualTo("A4");
@@ -200,7 +196,7 @@ public class StatisticsDataQuartz {
             }
             predationNumService.save(dto);
         }
-        //clearTodayData();
+        clearTodayData();
     }
 
     public void clearTodayData(){
