@@ -56,6 +56,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
             data = "参数错误";
             return data;
         }
+        AttrService attrService = SpringUtil.getBean(AttrService.class);
         EquipmentFileMapper equipmentFileMapper = SpringUtil.getBean(EquipmentFileMapper.class);
         EquipmentFileTodayMapper todayMapper = SpringUtil.getBean(EquipmentFileTodayMapper.class);
         EquipmentFileTodayExample exampleTodayFile = new EquipmentFileTodayExample();
@@ -115,7 +116,8 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                 String[] arr = temp.split("_");
                 String kssj = arr[0]+"-"+arr[1]+"-"+arr[2]+" "+arr[3]+":"+arr[4]+":"+arr[5];
                 String jssj = "1020".equals(entity.getType())||"1026".equals(entity.getType())?arr[7]+"-"+arr[8]+"-"+arr[9]+" "+arr[10]+":"+arr[11]+":"+arr[12]:arr[6]+"-"+arr[7]+"-"+arr[8]+" "+arr[9]+":"+arr[10]+":"+arr[11];
-                if(!kssj.equals(jssj)){
+                String eventsbsn = attrService.findByAttrKey("eventsbsn");
+                if(eventsbsn.contains(sbbh)){
                     EquipmentFileEventMapper equipmentFileEventMapper = SpringUtil.getBean(EquipmentFileEventMapper.class);
                     EquipmentFileEvent fileEvent = new EquipmentFileEvent();
                     fileEvent.setId(UuidUtil.getShortUuid());
@@ -130,6 +132,23 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                     equipmentFileEventMapper.insertSelective(fileEvent);
                     //南京设备对接无人机
                     pushMqMsg(sbbh,entity.getSm1());
+                }else {
+                    if(!kssj.equals(jssj)){
+                        EquipmentFileEventMapper equipmentFileEventMapper = SpringUtil.getBean(EquipmentFileEventMapper.class);
+                        EquipmentFileEvent fileEvent = new EquipmentFileEvent();
+                        fileEvent.setId(UuidUtil.getShortUuid());
+                        fileEvent.setSbbh(sbbh);
+                        fileEvent.setKssj(kssj);
+                        fileEvent.setJssj(jssj);
+                        fileEvent.setRq(arr[0]+"-"+arr[1]+"-"+arr[2]);
+                        fileEvent.setTs(entity.getTs());
+                        fileEvent.setJtnr(entity.getSm1());
+                        fileEvent.setDeptcode(deptcode);
+                        fileEvent.setEquipmentFileId(entity.getId());
+                        equipmentFileEventMapper.insertSelective(fileEvent);
+                        //南京设备对接无人机
+                        pushMqMsg(sbbh,entity.getSm1());
+                    }
                 }
             }else if("1018".equals(entity.getType())){//指针数据每秒
                 PointerSecondService service = SpringUtil.getBean(PointerSecondService.class);
@@ -150,7 +169,6 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                 dto.setBz(deptcode);
                 service.save(dto);
             }
-            AttrService attrService = SpringUtil.getBean(AttrService.class);
             String predationsbsn = attrService.findByAttrKey("predationsbsn");
             if(predationsbsn.contains(sbbh)&&tplj.contains("txt")&&("1001".equals(typeUtil.get(TypeUtils.TYPE))||"1007".equals(typeUtil.get(TypeUtils.TYPE)))){
                 //RedisTemplate redisTemplate = SpringUtil.getBean(RedisTemplate.class);
