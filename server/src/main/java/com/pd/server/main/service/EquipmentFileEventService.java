@@ -2,15 +2,10 @@ package com.pd.server.main.service;
 
 import com.pd.server.main.domain.EquipmentFileEvent;
 import com.pd.server.main.domain.EquipmentFileEventExample;
-import com.pd.server.main.dto.EquipmentFileEventDto;
-import com.pd.server.main.dto.EventDto;
-import com.pd.server.main.dto.KvIntDto;
-import com.pd.server.main.dto.PageDto;
+import com.pd.server.main.dto.*;
 import com.pd.server.main.mapper.EquipmentFileEventMapper;
 import com.pd.server.util.CopyUtil;
 import com.pd.server.util.UuidUtil;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -25,6 +20,10 @@ public class EquipmentFileEventService {
 
     public EquipmentFileEvent selectByDp(){
         return equipmentFileEventMapper.selectByDp();
+    }
+
+    public List<EquipmentFileEvent> selectByExampleExport(EquipmentFileEventDto record) {
+        return equipmentFileEventMapper.selectByExampleExport(record);
     }
 
     /**
