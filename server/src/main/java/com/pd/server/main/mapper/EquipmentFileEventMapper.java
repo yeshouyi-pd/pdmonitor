@@ -6,7 +6,6 @@ import java.util.List;
 
 import com.pd.server.main.dto.EquipmentFileEventDto;
 import com.pd.server.main.dto.EventDto;
-import com.pd.server.main.dto.KvIntDto;
 import org.apache.ibatis.annotations.Param;
 
 public interface EquipmentFileEventMapper {
@@ -19,6 +18,8 @@ public interface EquipmentFileEventMapper {
     int insert(EquipmentFileEvent record);
 
     int insertSelective(EquipmentFileEvent record);
+
+    List<EquipmentFileEvent> selectByExampleExport(@Param("record") EquipmentFileEventDto record);
 
     List<EquipmentFileEvent> selectByExample(EquipmentFileEventExample example);
 

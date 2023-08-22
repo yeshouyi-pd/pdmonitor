@@ -85,6 +85,19 @@
     id, sbbh, kssj, jssj, rq, ts, jtnr, deptcode, equipment_file_id, xmbh, bz, sm, sm1, 
     sm2, sm3
   </sql>
+  <select id="selectByExampleExport" parameterType="com.pd.server.main.domain.EquipmentFileEventExample" resultMap="BaseResultMap">
+    select * from equipment_file_event where 1=1
+    <if test="record.sbbh != null and record.sbbh !=''">
+      AND sbbh = #{record.sbbh,jdbcType=VARCHAR}
+    </if>
+    <if test="record.stime != null and record.stime !=''">
+      AND rq &gt;= #{record.stime,jdbcType=VARCHAR}
+    </if>
+    <if test="record.etime != null and record.etime !=''">
+      AND rq &lt;= #{record.etime,jdbcType=VARCHAR}
+    </if>
+    order by kssj desc
+  </select>
   <select id="selectByExample" parameterType="com.pd.server.main.domain.EquipmentFileEventExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
