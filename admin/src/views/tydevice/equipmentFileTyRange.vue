@@ -139,8 +139,10 @@ export default {
       let obj = {
         "stime":_this.stime,
         "etime":_this.etime,
-        "xmbh":Tool.getLoginUser().xmbh,
         "sbbh":_this.curSbsn
+      }
+      if("460100"!=Tool.getLoginUser().deptcode){
+        obj.xmbh = Tool.getLoginUser().xmbh;
       }
       Loading.show();
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/pontoonGps/selectGpsByDateRange', obj).then((response)=>{
@@ -179,7 +181,6 @@ export default {
       let obj = {
         "stime":_this.stime,
         "etime":_this.etime,
-        "xmbh":Tool.getLoginUser().xmbh,
         "sbbh":_this.curSbsn
       }
       if("460100"!=Tool.getLoginUser().deptcode){
