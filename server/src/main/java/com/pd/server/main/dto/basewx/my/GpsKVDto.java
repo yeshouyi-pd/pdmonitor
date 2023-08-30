@@ -1,10 +1,14 @@
 package com.pd.server.main.dto.basewx.my;
 
+import java.util.Date;
+
 public class GpsKVDto {
 
     private String gps;
 
     private String ts;
+
+    private Date cjsj;
 
     public String getGps() {
         return gps;
