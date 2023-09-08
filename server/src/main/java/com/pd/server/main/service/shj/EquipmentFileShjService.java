@@ -9,10 +9,7 @@ import com.pd.server.main.mapper.*;
 import com.pd.server.main.service.AttrService;
 import com.pd.server.main.service.PointerDayService;
 import com.pd.server.main.service.PointerSecondService;
-import com.pd.server.util.DateUtil;
-import com.pd.server.util.MQUtil;
-import com.pd.server.util.TypeUtils;
-import com.pd.server.util.UuidUtil;
+import com.pd.server.util.*;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import org.slf4j.Logger;
@@ -52,6 +49,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
         String sbbh = jsonParam.getString("sbbh");
         String tplj = jsonParam.getString("tplj");
         String cjsj = jsonParam.getString("cjsj");
+        boolean pushData = false;
         if(StringUtils.isEmpty(sbbh)||StringUtils.isEmpty(tplj)||StringUtils.isEmpty(cjsj)){
             data = "参数错误";
             return data;
@@ -148,6 +146,11 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                         equipmentFileEventMapper.insertSelective(fileEvent);
                         //南京设备对接无人机
                         pushMqMsg(sbbh,entity.getSm1());
+                        //推送文件
+                        if("JXYSA4001".equals(sbbh)&&!pushData){
+                            PushFile.pushFile1(entity.getTplj());
+                            pushData = true;
+                        }
                     }
                 }
             }else if("1018".equals(entity.getType())){//指针数据每秒
@@ -209,6 +212,10 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                 JSONObject result = new JSONObject();
                 result.put("data",data);
                 result.put("entity",entity);
+                //推送文件
+                if("JXYSA4001".equals(sbbh)&&!pushData){
+                    PushFile.pushFile1(entity.getTplj());
+                }
                 return result.toJSONString();
             }
         }else {
@@ -228,6 +235,8 @@ public class EquipmentFileShjService extends AbstractScanRequest{
         }
         return false;
     }
+
+
 
     public static void pushMqMsg(String sbbh,String jtnr){
         try {
@@ -252,4 +261,5 @@ public class EquipmentFileShjService extends AbstractScanRequest{
             LOG.error("无人机数据错误："+e.getMessage());
         }
     }
+
 }
