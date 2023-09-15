@@ -25,6 +25,10 @@ public class EquipmentFileTodayService {
     @Resource
     private EquipmentFileTodayMapper equipmentFileTodayMapper;
 
+    public List<SmsIntDto> sendSmsQueryXz(EquipmentFileTodayExample example){
+        return equipmentFileTodayMapper.sendSmsQueryXz(example);
+    }
+
     public List<SmsIntDto> sendSmsQuery(EquipmentFileTodayExample example){
         return equipmentFileTodayMapper.sendSmsQuery(example);
     }

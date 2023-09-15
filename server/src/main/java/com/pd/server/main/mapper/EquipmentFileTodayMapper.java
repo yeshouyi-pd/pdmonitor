@@ -54,4 +54,6 @@ public interface EquipmentFileTodayMapper {
     EquipmentFileToday selectLastOneBySbbh(String sbbh);
 
     List<SmsIntDto> sendSmsQuery(EquipmentFileTodayExample example);
+
+    List<SmsIntDto> sendSmsQueryXz(EquipmentFileTodayExample example);
 }

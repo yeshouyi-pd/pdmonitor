@@ -73,4 +73,6 @@ public interface EquipmentFileMapper {
     EquipmentFile selectVideoDp();
 
     List<SmsIntDto> sendSmsQuery(EquipmentFileExample example);
+
+    List<SmsIntDto> sendSmsQueryXz(EquipmentFileExample example);
 }

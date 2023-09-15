@@ -853,4 +853,11 @@
     </if>
     GROUP  BY  sbbh
   </select>
+
+  <select id="sendSmsQueryXz" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultMap="SmsInt">
+    SELECT sbbh,COUNT(*) bjcs FROM  equipment_file
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
 </mapper>
