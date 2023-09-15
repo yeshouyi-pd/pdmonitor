@@ -82,7 +82,7 @@ public class ShjController{
                         }else if("A4003".equals(entity.getString("sbbh"))){
                             sbmc = "上游3";
                         }
-                        SendSmsTool.sendSms(templateId,sbmc+"-"+entity.getString("ts")+"dB");
+                        SendSmsTool.sendSmsNotPhone(templateId,sbmc+"-"+entity.getString("ts")+"dB");
                         entity.remove("sm1");
                     }
                 }

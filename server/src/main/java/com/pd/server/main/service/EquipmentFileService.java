@@ -146,4 +146,8 @@ public class EquipmentFileService {
     public List<SmsIntDto> sendSmsQuery(EquipmentFileExample example){
         return equipmentFileMapper.sendSmsQuery(example);
     }
+
+    public List<SmsIntDto> sendSmsQueryXz(EquipmentFileExample example){
+        return equipmentFileMapper.sendSmsQueryXz(example);
+    }
 }
