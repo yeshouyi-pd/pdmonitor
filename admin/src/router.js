@@ -65,6 +65,8 @@ import StationsHeart from "./views/monitor/stationsHeart.vue";
 import SendCommand from "./views/monitor/sendCommand.vue";
 import StationsHeartbeat from "./views/monitor/stationsHeartbeat.vue";
 import DeviceStateLog from "./views/monitor/deviceStateLog.vue";
+import MeteorologicalData from "./views/environment/meteorologicalData.vue";
+import Turbidity from "./views/environment/turbidity.vue";
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -337,6 +339,14 @@ export default new Router({
             path: "monitor/deviceStateLog",
             name: "monitor/deviceStateLog",
             component: DeviceStateLog
+        },{
+            path: "environment/meteorologicalData",
+            name: "environment/meteorologicalData",
+            component: MeteorologicalData
+        },{
+            path: "environment/turbidity",
+            name: "environment/turbidity",
+            component: Turbidity
         }]
     }]
 })
