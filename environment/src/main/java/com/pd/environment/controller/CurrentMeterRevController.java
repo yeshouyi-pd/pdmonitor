@@ -32,8 +32,6 @@ public class CurrentMeterRevController {
         try {
             CurrentMeterDto currentMeterDto = new CurrentMeterDto();
             String[] arr = str.replace("\\r","").replace("\\n","").split(",");
-            System.out.println(str);
-            System.out.println(str.replace("\r","").replace("\n",""));
             currentMeterDto.setProductNumber(arr[0]);
             currentMeterDto.setSerialNumber(arr[1]);
             currentMeterDto.setAbsSpeed(arr[2]);
