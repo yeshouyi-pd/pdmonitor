@@ -1,4 +1,4 @@
-package com.pd.system.controller.admin;
+package com.pd.environment.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.pd.server.main.dto.MeteorologicalDataDto;

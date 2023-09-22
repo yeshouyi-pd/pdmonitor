@@ -67,6 +67,7 @@ import StationsHeartbeat from "./views/monitor/stationsHeartbeat.vue";
 import DeviceStateLog from "./views/monitor/deviceStateLog.vue";
 import MeteorologicalData from "./views/environment/meteorologicalData.vue";
 import Turbidity from "./views/environment/turbidity.vue";
+import CurrentMeter from "./views/environment/currentMeter.vue";
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -347,6 +348,10 @@ export default new Router({
             path: "environment/turbidity",
             name: "environment/turbidity",
             component: Turbidity
+        },{
+            path: "environment/currentMeter",
+            name: "environment/currentMeter",
+            component: CurrentMeter
         }]
     }]
 })

@@ -11,7 +11,8 @@
 		<module>generator</module>
 		<module>monitor</module>
 		<module>power</module>
-	</modules>
+        <module>environment</module>
+    </modules>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>

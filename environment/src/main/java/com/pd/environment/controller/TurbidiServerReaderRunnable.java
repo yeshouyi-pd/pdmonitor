@@ -1,14 +1,14 @@
-package com.pd.monitor.lora;
+package com.pd.environment.controller;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
-public class StationsServerReaderRunnable  implements Runnable {
+public class TurbidiServerReaderRunnable implements Runnable {
 
     private Socket socket;
-    public StationsServerReaderRunnable(Socket socket) {
+    public TurbidiServerReaderRunnable(Socket socket) {
         this.socket = socket;
     }
 
