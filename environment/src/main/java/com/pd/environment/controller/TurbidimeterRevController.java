@@ -41,6 +41,7 @@ public class TurbidimeterRevController {
                 turbidityDto.setConductivity(arr[6]);
                 turbidityDto.setSalinity(arr[7]);
                 turbidityDto.setBatVolt(arr[8]);
+                turbidityDto.setBz("RPCDA4016");//设备编号
                 turbidityService.save(turbidityDto);
             }else {
                 LOG.error("接收到的错误数据："+str);
