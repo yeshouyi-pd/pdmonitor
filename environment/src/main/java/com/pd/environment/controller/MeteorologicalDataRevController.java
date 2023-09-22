@@ -64,6 +64,7 @@ public class MeteorologicalDataRevController {
                 meteorologicalDataDto.setSolarintensity((Double)jsonObject.get("solarintensity")==5.877471754111438E-39?0.0:formatDouble((Double)jsonObject.get("solarintensity")));
             }
             meteorologicalDataDto.setCjsj(new Date());
+            meteorologicalDataDto.setBz("RPCDA4016");
             meteorologicalDataService.save(meteorologicalDataDto);
         }catch (Exception e){
             LOG.error("接收到的数据："+JSONObject.toJSONString(jsonObject)+"====错误原因："+e.getMessage());
