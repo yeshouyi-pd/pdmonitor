@@ -50,6 +50,7 @@ public class CurrentMeterRevController {
             currentMeterDto.setMaxTilt(arr[13]);
             currentMeterDto.setStdTilt(arr[14].trim());
             currentMeterDto.setCjsj(new Date());
+            currentMeterDto.setBz("RPCDA4016");
             currentMeterService.save(currentMeterDto);
         }catch (Exception e){
             LOG.error("接收到的数据："+str+"====错误原因："+e.getMessage());
