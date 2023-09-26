@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.pd.server.main.domain.MeteorologicalData">
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="speed" jdbcType="DOUBLE" property="speed" />
-    <result column="winddirection" jdbcType="DOUBLE" property="winddirection" />
+    <result column="winddirection" jdbcType="VARCHAR" property="winddirection" />
     <result column="temperature" jdbcType="DOUBLE" property="temperature" />
     <result column="humidity" jdbcType="DOUBLE" property="humidity" />
     <result column="pressure" jdbcType="DOUBLE" property="pressure" />
@@ -115,7 +115,7 @@
       minuterainfall, hourrainfall, dayrainfall, 
       rainfallaccumulation, solarintensity, cjsj, 
       bz, sm)
-    values (#{id,jdbcType=VARCHAR}, #{speed,jdbcType=DOUBLE}, #{winddirection,jdbcType=DOUBLE}, 
+    values (#{id,jdbcType=VARCHAR}, #{speed,jdbcType=DOUBLE}, #{winddirection,jdbcType=VARCHAR},
       #{temperature,jdbcType=DOUBLE}, #{humidity,jdbcType=DOUBLE}, #{pressure,jdbcType=DOUBLE}, 
       #{minuterainfall,jdbcType=DOUBLE}, #{hourrainfall,jdbcType=DOUBLE}, #{dayrainfall,jdbcType=DOUBLE}, 
       #{rainfallaccumulation,jdbcType=DOUBLE}, #{solarintensity,jdbcType=DOUBLE}, #{cjsj,jdbcType=TIMESTAMP}, 
@@ -175,7 +175,7 @@
         #{speed,jdbcType=DOUBLE},
       </if>
       <if test="winddirection != null">
-        #{winddirection,jdbcType=DOUBLE},
+        #{winddirection,jdbcType=VARCHAR},
       </if>
       <if test="temperature != null">
         #{temperature,jdbcType=DOUBLE},
@@ -228,7 +228,7 @@
         speed = #{record.speed,jdbcType=DOUBLE},
       </if>
       <if test="record.winddirection != null">
-        winddirection = #{record.winddirection,jdbcType=DOUBLE},
+        winddirection = #{record.winddirection,jdbcType=VARCHAR},
       </if>
       <if test="record.temperature != null">
         temperature = #{record.temperature,jdbcType=DOUBLE},
@@ -272,7 +272,7 @@
     update meteorological_data
     set id = #{record.id,jdbcType=VARCHAR},
       speed = #{record.speed,jdbcType=DOUBLE},
-      winddirection = #{record.winddirection,jdbcType=DOUBLE},
+      winddirection = #{record.winddirection,jdbcType=VARCHAR},
       temperature = #{record.temperature,jdbcType=DOUBLE},
       humidity = #{record.humidity,jdbcType=DOUBLE},
       pressure = #{record.pressure,jdbcType=DOUBLE},
@@ -295,7 +295,7 @@
         speed = #{speed,jdbcType=DOUBLE},
       </if>
       <if test="winddirection != null">
-        winddirection = #{winddirection,jdbcType=DOUBLE},
+        winddirection = #{winddirection,jdbcType=VARCHAR},
       </if>
       <if test="temperature != null">
         temperature = #{temperature,jdbcType=DOUBLE},
@@ -336,7 +336,7 @@
   <update id="updateByPrimaryKey" parameterType="com.pd.server.main.domain.MeteorologicalData">
     update meteorological_data
     set speed = #{speed,jdbcType=DOUBLE},
-      winddirection = #{winddirection,jdbcType=DOUBLE},
+      winddirection = #{winddirection,jdbcType=VARCHAR},
       temperature = #{temperature,jdbcType=DOUBLE},
       humidity = #{humidity,jdbcType=DOUBLE},
       pressure = #{pressure,jdbcType=DOUBLE},

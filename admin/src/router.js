@@ -68,6 +68,7 @@ import DeviceStateLog from "./views/monitor/deviceStateLog.vue";
 import MeteorologicalData from "./views/environment/meteorologicalData.vue";
 import Turbidity from "./views/environment/turbidity.vue";
 import CurrentMeter from "./views/environment/currentMeter.vue";
+import EnvironmentDp from "./views/mobile/environmentDp.vue";
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -99,6 +100,9 @@ export default new Router({
     },{
         path: "/mobile/largemonitorsZj",
         component: LargemonitorsZj
+    },{
+        path: "/mobile/environmentDp",
+        component: EnvironmentDp
     },{
         path: "/admin/chooseProject",
         name: "/admin/chooseProject",

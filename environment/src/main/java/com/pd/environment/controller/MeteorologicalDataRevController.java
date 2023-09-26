@@ -37,7 +37,40 @@ public class MeteorologicalDataRevController {
                 meteorologicalDataDto.setSpeed((Double)jsonObject.get("speed")==5.877471754111438E-39?0.0:formatDouble((Double)jsonObject.get("speed")));
             }
             if(jsonObject.get("winddirection")!=null){
-                meteorologicalDataDto.setWinddirection((Double)jsonObject.get("winddirection")==5.877471754111438E-39?0.0:formatDouble((Double)jsonObject.get("winddirection")));
+                Double fx = (Double)jsonObject.get("winddirection");
+                if((fx>=5.877471754111438E-39&&fx<11.25) || (fx>=348.75&&fx<=360)){
+                    meteorologicalDataDto.setWinddirection("N");
+                }else if(fx>=11.25&&fx<33.75){
+                    meteorologicalDataDto.setWinddirection("NNE");
+                }else if(fx>=33.75&&fx<56.25){
+                    meteorologicalDataDto.setWinddirection("NE");
+                }else if(fx>=56.25&&fx<78.75){
+                    meteorologicalDataDto.setWinddirection("ENE");
+                }else if(fx>=78.75&&fx<101.25){
+                    meteorologicalDataDto.setWinddirection("E");
+                }else if(fx>=101.25&&fx<123.75){
+                    meteorologicalDataDto.setWinddirection("ESE");
+                }else if(fx>=123.75&&fx<146.25){
+                    meteorologicalDataDto.setWinddirection("SE");
+                }else if(fx>=146.25&&fx<168.75){
+                    meteorologicalDataDto.setWinddirection("SSE");
+                }else if(fx>=168.75&&fx<191.25){
+                    meteorologicalDataDto.setWinddirection("S");
+                }else if(fx>=191.25&&fx<213.75){
+                    meteorologicalDataDto.setWinddirection("SSW");
+                }else if(fx>=213.75&&fx<236.25){
+                    meteorologicalDataDto.setWinddirection("SW");
+                }else if(fx>=236.25&&fx<258.75){
+                    meteorologicalDataDto.setWinddirection("WSW");
+                }else if(fx>=258.75&&fx<281.25){
+                    meteorologicalDataDto.setWinddirection("W");
+                }else if(fx>=281.25&&fx<303.75){
+                    meteorologicalDataDto.setWinddirection("WNW");
+                }else if(fx>=303.75&&fx<326.25){
+                    meteorologicalDataDto.setWinddirection("NW");
+                }else if(fx>=326.25&&fx<348.75){
+                    meteorologicalDataDto.setWinddirection("NNW");
+                }
             }
             if(jsonObject.get("temperature")!=null){
                 meteorologicalDataDto.setTemperature((Double)jsonObject.get("temperature")==5.877471754111438E-39?0.0:formatDouble((Double)jsonObject.get("temperature")));

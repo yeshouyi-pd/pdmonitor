@@ -1,8 +1,53 @@
 <template>
     <div>
-        <div :style="{height: heightMax + 'px'}">
-            <div id="equipmentamap" style="width:100%;height: 100%" ></div>
+      <div :style="{height: heightMax + 'px'}">
+        <div id="equipmentamap" style="width:100%;height: 100%" ></div>
+      </div>
+
+      <div id="form-modal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document" style="width: 70%;border: 1px solid #0B61A4;color: #fff;">
+          <div class="modal-header" style="background-color: #081041">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" style="color: #fff;">X</span></button>
+            <h4 class="modal-title">气象及海洋监测</h4>
+          </div>
+          <div class="modal-content" style="background-color: #081041">
+            <div style="margin-bottom: 20px;">
+              <ul class="nav nav-tabs padding-18 tab-size-bigger" id="myTab">
+                <li class="active" v-on:click="changeTab(1)">
+                  <a data-toggle="tab" href="#faq-tab-1" aria-expanded="true" >
+                    气象监测
+                  </a>
+                </li>
+                <li class="" v-on:click="changeTab(2)">
+                  <a data-toggle="tab" href="#faq-tab-2" aria-expanded="false" >
+                    温盐深浊度仪数据
+                  </a>
+                </li>
+                <li class="" v-on:click="changeTab(3)">
+                  <a data-toggle="tab" href="#faq-tab-2" aria-expanded="false" >
+                    海流计数据
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div v-show="environmentType==1" >
+              <div id="echartMeteorological"  style='height: 500px;width: 1200px;'></div>
+            </div>
+            <div v-show="environmentType==2" >
+              <select v-model="sbbh" class="form-control" style="width: 20%;background-color: #081041;color: #fff;">
+                <option value="RPCDA4016">RPCDA4016</option>
+                <option value="ZDY21001">ZDY21001</option>
+                <option value="ZDY21002">ZDY21002</option>
+              </select>
+              <div id="echartTurbidity"  style='height: 500px;width: 1200px;'></div>
+            </div>
+            <div v-show="environmentType==3" >
+              <div id="echartCurrentMeter"  style='height: 500px;width: 1200px;'></div>
+            </div>
+          </div>
         </div>
+      </div>
+
     </div>
 </template>
 <script>
@@ -29,15 +74,388 @@
                 centerLoction:[113.63,22.24],
                 amap:'',
                 zhbht:LOCAL_ZHBHT,
+                environmentType:1,
+                sbbh:"RPCDA4016"
             }
+        },
+        watch: {
+          sbbh() {
+            let _this = this;
+            _this.getTurbidityData();
+          }
         },
         mounted() {
             let _this = this;
             _this.createAmap();
             _this.deptMap = Tool.getDeptUser();
             _this.findDeviceInfo();
+            _this.getCurrentMeterData();
+            _this.getMeteorologicalData();
+            _this.getTurbidityData();
         },
         methods:{
+            getCurrentMeterData(){
+              let _this = this;
+              let obj = {};
+              obj.stime = Tool.dateFormat("yyyy-MM-dd",new Date());
+              obj.etime = Tool.dateFormat("yyyy-MM-dd",new Date());
+              _this.$forceUpdate();
+              _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/currentMeter/getAllDataByTime',obj).then((response)=>{
+                Loading.hide();
+                let resp = response.data;
+                let xAxisDatas = [];
+                let seriesData1 = [];
+                let seriesData2 = [];
+                let seriesData3 = [];
+                let seriesData4 = [];
+                let seriesData5 = [];
+                let seriesData6 = [];
+                let seriesData7 = [];
+                let seriesData8 = [];
+                let seriesData9 = [];
+                for(let i=0;i<resp.content.length;i++){
+                  let currentMeter = resp.content[i];
+                  xAxisDatas.push(currentMeter.cjsj);
+                  seriesData1.push(currentMeter.absSpeed);
+                  seriesData2.push(currentMeter.tiltX);
+                  seriesData3.push(currentMeter.tiltY);
+                  seriesData4.push(currentMeter.spStd);
+                  seriesData5.push(currentMeter.strength);
+                  seriesData6.push(currentMeter.pingCount);
+                  seriesData7.push(currentMeter.absTilt);
+                  seriesData8.push(currentMeter.maxTilt);
+                  seriesData9.push(currentMeter.stdTilt);
+                }
+                _this.$nextTick(function (){
+                  _this.initCurrentMeterEchart(xAxisDatas,seriesData1,seriesData2,seriesData3,seriesData4,seriesData5,seriesData6,seriesData7,seriesData8,seriesData9);
+                })
+              })
+            },
+            initCurrentMeterEchart(xAxisDatas,seriesData1,seriesData2,seriesData3,seriesData4,seriesData5,seriesData6,seriesData7,seriesData8,seriesData9){
+              let option = {
+                tooltip: {
+                  trigger: 'axis'
+                },
+                legend: {
+                  data: ["abs速度","倾斜度X","倾斜度Y","Sp标准","力度","平计数","Abs倾斜度","最大倾斜度","标准倾斜度"],
+                  textStyle: {
+                    color: "#fff"
+                  }
+                },
+                grid: {
+                  left: '3%',
+                  right: '4%',
+                  bottom: '3%',
+                  containLabel: true
+                },
+                xAxis: {
+                  type: 'category',
+                  data: xAxisDatas,
+                  axisLine: {
+                    lineStyle: {
+                      color: "#fff"
+                    }
+                  }
+                },
+                yAxis: {
+                  type: 'value',
+                  axisLine: {
+                    lineStyle: {
+                      color: "#fff"
+                    }
+                  }
+                },
+                series: [
+                  {
+                    name: 'abs速度',
+                    type: 'line',
+                    data: seriesData1
+                  },
+                  {
+                    name: '倾斜度X',
+                    type: 'line',
+                    data: seriesData2
+                  },
+                  {
+                    name: '倾斜度Y',
+                    type: 'line',
+                    data: seriesData3
+                  },
+                  {
+                    name: 'Sp标准',
+                    type: 'line',
+                    data: seriesData4
+                  },
+                  {
+                    name: '力度',
+                    type: 'line',
+                    data: seriesData5
+                  },
+                  {
+                    name: '平计数',
+                    type: 'line',
+                    data: seriesData6
+                  },
+                  {
+                    name: 'Abs倾斜度',
+                    type: 'line',
+                    data: seriesData7
+                  },
+                  {
+                    name: '最大倾斜度',
+                    type: 'line',
+                    data: seriesData8
+                  },
+                  {
+                    name: '标准倾斜度',
+                    type: 'line',
+                    data: seriesData9
+                  }
+                ]
+              };
+              let echartsData = echarts.init(document.getElementById("echartCurrentMeter"));
+              echartsData.setOption(option);
+            },
+            getMeteorologicalData(){
+              let _this = this;
+              let obj = {};
+              obj.stime = Tool.dateFormat("yyyy-MM-dd",new Date());
+              obj.etime = Tool.dateFormat("yyyy-MM-dd",new Date());
+              _this.$forceUpdate();
+              _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/meteorologicalData/getAllDataByTime',obj).then((response)=>{
+                Loading.hide();
+                let resp = response.data;
+                let xAxisDatas = [];
+                let seriesData1 = [];
+                let seriesData2 = [];
+                let seriesData3 = [];
+                let seriesData4 = [];
+                let seriesData5 = [];
+                let seriesData6 = [];
+                let seriesData7 = [];
+                let seriesData8 = [];
+                let seriesData9 = [];
+                let seriesData10 = [];
+                for(let i=0;i<resp.content.length;i++){
+                  let meteorologicalData = resp.content[i];
+                  xAxisDatas.push(meteorologicalData.cjsj);
+                  seriesData1.push(meteorologicalData.speed);
+                  seriesData2.push(meteorologicalData.winddirection);
+                  seriesData3.push(meteorologicalData.temperature);
+                  seriesData4.push(meteorologicalData.humidity);
+                  seriesData5.push(meteorologicalData.pressure);
+                  seriesData6.push(meteorologicalData.minuterainfall);
+                  seriesData7.push(meteorologicalData.hourrainfall);
+                  seriesData8.push(meteorologicalData.dayrainfall);
+                  seriesData9.push(meteorologicalData.rainfallaccumulation);
+                  seriesData10.push(meteorologicalData.solarintensity);
+                }
+                _this.$nextTick(function (){
+                  _this.initMeteorologicalEchart(xAxisDatas,seriesData1,seriesData2,seriesData3,seriesData4,seriesData5,seriesData6,seriesData7,seriesData8,seriesData9,seriesData10);
+                })
+              })
+            },
+            initMeteorologicalEchart(xAxisDatas,seriesData1,seriesData2,seriesData3,seriesData4,seriesData5,seriesData6,seriesData7,seriesData8,seriesData9,seriesData10){
+              let option = {
+                tooltip: {
+                  trigger: 'axis'
+                },
+                legend: {
+                  data: ["风速","风向","温度","湿度","大气压力","分钟雨量","小时雨量","24小时雨量","观测雨量累加值","太阳光强度"],
+                  textStyle: {
+                    color: "#fff"
+                  }
+                },
+                grid: {
+                  left: '3%',
+                  right: '4%',
+                  bottom: '3%',
+                  containLabel: true
+                },
+                xAxis: {
+                  type: 'category',
+                  data: xAxisDatas,
+                  axisLine: {
+                    lineStyle: {
+                      color: "#fff"
+                    }
+                  }
+                },
+                yAxis: {
+                  type: 'value',
+                  axisLine: {
+                    lineStyle: {
+                      color: "#fff"
+                    }
+                  }
+                },
+                series: [
+                  {
+                    name: '风速',
+                    type: 'line',
+                    data: seriesData1
+                  },
+                  {
+                    name: '风向',
+                    type: 'line',
+                    data: seriesData2
+                  },
+                  {
+                    name: '温度',
+                    type: 'line',
+                    data: seriesData3
+                  },
+                  {
+                    name: '湿度',
+                    type: 'line',
+                    data: seriesData4
+                  },
+                  {
+                    name: '大气压力',
+                    type: 'line',
+                    data: seriesData5
+                  },
+                  {
+                    name: '分钟雨量',
+                    type: 'line',
+                    data: seriesData6
+                  },
+                  {
+                    name: '小时雨量',
+                    type: 'line',
+                    data: seriesData7
+                  },
+                  {
+                    name: '24小时雨量',
+                    type: 'line',
+                    data: seriesData8
+                  },
+                  {
+                    name: '观测雨量累加值',
+                    type: 'line',
+                    data: seriesData9
+                  },
+                  {
+                    name: '太阳光强度',
+                    type: 'line',
+                    data: seriesData10
+                  }
+                ]
+              };
+              let echartsData = echarts.init(document.getElementById("echartMeteorological"));
+              echartsData.setOption(option);
+            },
+            getTurbidityData(){
+              let _this = this;
+              let obj = {};
+              obj.bz = _this.sbbh;
+              obj.stime = Tool.dateFormat("yyyy-MM-dd",new Date(new Date().getTime()-3600000*24*1));
+              obj.etime = Tool.dateFormat("yyyy-MM-dd",new Date(new Date().getTime()-3600000*24*1));
+              _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/turbidity/getAllDataByTime',obj).then((response)=>{
+                let resp = response.data;
+                let xAxisDatas = [];
+                let seriesData1 = [];
+                let seriesData2 = [];
+                let seriesData3 = [];
+                let seriesData4 = [];
+                let seriesData5 = [];
+                let seriesData6 = [];
+                let seriesData7 = [];
+                for(let i=0;i<resp.content.length;i++){
+                  let turbidity = resp.content[i];
+                  xAxisDatas.push(turbidity.dateTime);
+                  seriesData1.push(turbidity.turbidityH);
+                  seriesData2.push(turbidity.turibidityL);
+                  seriesData3.push(turbidity.depth);
+                  seriesData4.push(turbidity.temperature);
+                  seriesData5.push(turbidity.conductivity);
+                  seriesData6.push(turbidity.salinity);
+                  seriesData7.push(turbidity.batVolt);
+                }
+                _this.$nextTick(function (){
+                  _this.initTurbidityEchart(xAxisDatas,seriesData1,seriesData2,seriesData3,seriesData4,seriesData5,seriesData6,seriesData7);
+                })
+              })
+            },
+            initTurbidityEchart(xAxisDatas,seriesData1,seriesData2,seriesData3,seriesData4,seriesData5,seriesData6,seriesData7){
+              let option = {
+                tooltip: {
+                  trigger: 'axis'
+                },
+                legend: {
+                  data: ["浊度高量程","浊度低量程","深度","温度","电导率","盐度","电池电压"],
+                  textStyle: {
+                    color: "#fff"
+                  }
+                },
+                grid: {
+                  left: '3%',
+                  right: '4%',
+                  bottom: '3%',
+                  containLabel: true
+                },
+                xAxis: {
+                  type: 'category',
+                  data: xAxisDatas,
+                  axisLine: {
+                    lineStyle: {
+                      color: "#fff"
+                    }
+                  }
+                },
+                yAxis: {
+                  type: 'value',
+                  axisLine: {
+                    lineStyle: {
+                      color: "#fff"
+                    }
+                  }
+                },
+                series: [
+                  {
+                    name: '浊度高量程',
+                    type: 'line',
+                    data: seriesData1
+                  },
+                  {
+                    name: '浊度低量程',
+                    type: 'line',
+                    data: seriesData2
+                  },
+                  {
+                    name: '深度',
+                    type: 'line',
+                    data: seriesData3
+                  },
+                  {
+                    name: '温度',
+                    type: 'line',
+                    data: seriesData4
+                  },
+                  {
+                    name: '电导率',
+                    type: 'line',
+                    data: seriesData5
+                  },
+                  {
+                    name: '盐度',
+                    type: 'line',
+                    data: seriesData6
+                  },
+                  {
+                    name: '电池电压',
+                    type: 'line',
+                    data: seriesData7
+                  }
+                ]
+              };
+              let echartsData = echarts.init(document.getElementById("echartTurbidity"));
+              echartsData.setOption(option);
+            },
+            changeTab(type){
+              let _this = this;
+              _this.environmentType = type;
+            },
             createAmap(){
                 let _this = this;
                 if(_this.zhbht){
@@ -245,7 +663,10 @@
             },
             createInfoWindow(content) {
                 let _this = this;
-                // _this.clickMapPoint(content[3]);
+                if("RPCDA4016"==content[3]){
+                  $("#form-modal").modal("show");
+                }
+                //_this.clickMapPoint(content[3]);
                 let info = document.createElement("div");
                 info.className = "custom-info input-card content-window-card";
 
@@ -390,5 +811,13 @@
     .amap-container img {
         max-width: none!important;
         max-height: none!important;
+    }
+    .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover{
+      background-color: rgb(8, 16, 65);
+      color: #fff;
+      border-top: 2px solid #0B61A4;
+    }
+    .nav-tabs>li>a, .nav-tabs>li>a:focus{
+      background-color: rgb(8, 16, 65);
     }
 </style>

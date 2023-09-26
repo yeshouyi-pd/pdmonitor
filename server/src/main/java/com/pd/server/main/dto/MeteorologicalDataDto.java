@@ -18,7 +18,7 @@ public class MeteorologicalDataDto extends PageDto{
     /**
     * 风向
     */
-    private Double winddirection;
+    private String winddirection;
 
     /**
     * 温度
@@ -92,11 +92,11 @@ public class MeteorologicalDataDto extends PageDto{
         this.speed = speed;
     }
 
-    public Double getWinddirection() {
+    public String getWinddirection() {
         return winddirection;
     }
 
-    public void setWinddirection(Double winddirection) {
+    public void setWinddirection(String winddirection) {
         this.winddirection = winddirection;
     }
 

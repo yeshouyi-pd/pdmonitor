@@ -9,7 +9,7 @@ public class MeteorologicalData {
 
     private Double speed;
 
-    private Double winddirection;
+    private String winddirection;
 
     private Double temperature;
 
@@ -50,11 +50,11 @@ public class MeteorologicalData {
         this.speed = speed;
     }
 
-    public Double getWinddirection() {
+    public String getWinddirection() {
         return winddirection;
     }
 
-    public void setWinddirection(Double winddirection) {
+    public void setWinddirection(String winddirection) {
         this.winddirection = winddirection;
     }
 

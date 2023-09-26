@@ -34,6 +34,16 @@
                 <tbody  >
                 <tr  >
                   <td style="width: 15%" >
+                    设备编号：
+                  </td>
+                  <td style="width: 25%;">
+                    <select v-model="turbidityDto.bz" class="form-control">
+                      <option value="RPCDA4016">RPCDA4016</option>
+                      <option value="ZDY21001">ZDY21001</option>
+                      <option value="ZDY21002">ZDY21002</option>
+                    </select>
+                  </td>
+                  <td style="width: 15%" >
                     采集日期：
                   </td>
                   <td style="width: 25%;">
@@ -93,6 +103,16 @@
         <table style="font-size: 1.1em;width:100%;margin: 20px 0" class="text-right" >
           <tbody>
             <tr>
+              <td style="width: 15%" >
+                设备编号：
+              </td>
+              <td style="width: 25%;">
+                <select v-model="sbbh" class="form-control">
+                  <option value="RPCDA4016">RPCDA4016</option>
+                  <option value="ZDY21001">ZDY21001</option>
+                  <option value="ZDY21002">ZDY21002</option>
+                </select>
+              </td>
               <td style="width:10%">
                 采集日期：
               </td>
@@ -131,6 +151,7 @@ export default {
       turbidity:{},
       turbidityDto:{},
       defaultShow:true,
+      sbbh:'RPCDA4016',
       etime:'',
       stime:''
     }
@@ -154,6 +175,7 @@ export default {
       let _this = this;
       Loading.show();
       let obj = {};
+      obj.bz = _this.sbbh;
       obj.stime = _this.stime;
       obj.etime = _this.etime;
       _this.$forceUpdate();

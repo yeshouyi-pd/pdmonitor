@@ -33,6 +33,9 @@ public class TurbidityController {
         ResponseDto responseDto = new ResponseDto();
         TurbidityExample turbidityExample = new TurbidityExample();
         TurbidityExample.Criteria ca = turbidityExample.createCriteria();
+        if(!StringUtils.isEmpty(pageDto.getBz())){
+            ca.andBzEqualTo(pageDto.getBz());
+        }
         if(!StringUtils.isEmpty(pageDto.getStime())){
             ca.andDateTimeGreaterThanOrEqualTo(pageDto.getStime(),"%Y-%m-%d");
         }
@@ -54,6 +57,9 @@ public class TurbidityController {
         PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
         TurbidityExample turbidityExample = new TurbidityExample();
         TurbidityExample.Criteria ca = turbidityExample.createCriteria();
+        if(!StringUtils.isEmpty(pageDto.getBz())){
+            ca.andBzEqualTo(pageDto.getBz());
+        }
         if(!StringUtils.isEmpty(pageDto.getStime())){
             ca.andDateTimeGreaterThanOrEqualTo(pageDto.getStime(),"%Y-%m-%d");
         }
