@@ -201,7 +201,7 @@ public class ExportFileController extends BaseWxController{
             sheet.setDefaultRowHeight((short)(40*10));
             // 添加表头行
             HSSFRow titleRow = sheet.createRow(0);//第1行
-            List<String> titleStrList = Arrays.asList("设备名称","设备sn","开始时间","结束时间","头数","GPS数据");
+            List<String> titleStrList = Arrays.asList("设备名称","设备sn","开始时间","结束时间","头数","坐标","经度","纬度");
             for(int i=0;i<titleStrList.size();i++){
                 HSSFCell cell = titleRow.createCell(i);
                 cell.setCellValue(titleStrList.get(i));
@@ -235,6 +235,14 @@ public class ExportFileController extends BaseWxController{
                         HSSFCell comCell5 = comRow.createCell(5);
                         comCell5.setCellValue(tyEvent.getGps());
                         comCell5.setCellStyle(cellStyleCommon);
+                        if(!StringUtils.isEmpty(tyEvent.getGps())&&tyEvent.getGps().split(",").length==2){
+                            HSSFCell comCell6 = comRow.createCell(6);
+                            comCell6.setCellValue(tyEvent.getGps().split(",")[0]);
+                            comCell6.setCellStyle(cellStyleCommon);
+                            HSSFCell comCell7 = comRow.createCell(7);
+                            comCell7.setCellValue(tyEvent.getGps().split(",")[1]);
+                            comCell7.setCellStyle(cellStyleCommon);
+                        }
                         i++;
                     }
                 }else{
@@ -257,6 +265,14 @@ public class ExportFileController extends BaseWxController{
                     HSSFCell comCell5 = comRow.createCell(5);
                     comCell5.setCellValue(tyEvent.getGps());
                     comCell5.setCellStyle(cellStyleCommon);
+                    if(!StringUtils.isEmpty(tyEvent.getGps())&&tyEvent.getGps().split(",").length==2){
+                        HSSFCell comCell6 = comRow.createCell(6);
+                        comCell6.setCellValue(tyEvent.getGps().split(",")[0]);
+                        comCell6.setCellStyle(cellStyleCommon);
+                        HSSFCell comCell7 = comRow.createCell(7);
+                        comCell7.setCellValue(tyEvent.getGps().split(",")[1]);
+                        comCell7.setCellStyle(cellStyleCommon);
+                    }
                     i++;
                 }
             }

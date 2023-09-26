@@ -190,6 +190,11 @@ public class TurbidityExample {
             return (Criteria) this;
         }
 
+        public Criteria andDateTimeEqualTo(String value,String type) {
+            addCriterion("DATE_FORMAT(date_time,'"+type+"') =", value, "dateTime");
+            return (Criteria) this;
+        }
+
         public Criteria andDateTimeNotEqualTo(Date value) {
             addCriterion("date_time <>", value, "dateTime");
             return (Criteria) this;

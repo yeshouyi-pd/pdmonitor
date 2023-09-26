@@ -245,52 +245,52 @@ public class MeteorologicalDataExample {
             return (Criteria) this;
         }
 
-        public Criteria andWinddirectionEqualTo(Double value) {
+        public Criteria andWinddirectionEqualTo(String value) {
             addCriterion("winddirection =", value, "winddirection");
             return (Criteria) this;
         }
 
-        public Criteria andWinddirectionNotEqualTo(Double value) {
+        public Criteria andWinddirectionNotEqualTo(String value) {
             addCriterion("winddirection <>", value, "winddirection");
             return (Criteria) this;
         }
 
-        public Criteria andWinddirectionGreaterThan(Double value) {
+        public Criteria andWinddirectionGreaterThan(String value) {
             addCriterion("winddirection >", value, "winddirection");
             return (Criteria) this;
         }
 
-        public Criteria andWinddirectionGreaterThanOrEqualTo(Double value) {
+        public Criteria andWinddirectionGreaterThanOrEqualTo(String value) {
             addCriterion("winddirection >=", value, "winddirection");
             return (Criteria) this;
         }
 
-        public Criteria andWinddirectionLessThan(Double value) {
+        public Criteria andWinddirectionLessThan(String value) {
             addCriterion("winddirection <", value, "winddirection");
             return (Criteria) this;
         }
 
-        public Criteria andWinddirectionLessThanOrEqualTo(Double value) {
+        public Criteria andWinddirectionLessThanOrEqualTo(String value) {
             addCriterion("winddirection <=", value, "winddirection");
             return (Criteria) this;
         }
 
-        public Criteria andWinddirectionIn(List<Double> values) {
+        public Criteria andWinddirectionIn(List<String> values) {
             addCriterion("winddirection in", values, "winddirection");
             return (Criteria) this;
         }
 
-        public Criteria andWinddirectionNotIn(List<Double> values) {
+        public Criteria andWinddirectionNotIn(List<String> values) {
             addCriterion("winddirection not in", values, "winddirection");
             return (Criteria) this;
         }
 
-        public Criteria andWinddirectionBetween(Double value1, Double value2) {
+        public Criteria andWinddirectionBetween(String value1, String value2) {
             addCriterion("winddirection between", value1, value2, "winddirection");
             return (Criteria) this;
         }
 
-        public Criteria andWinddirectionNotBetween(Double value1, Double value2) {
+        public Criteria andWinddirectionNotBetween(String value1, String value2) {
             addCriterion("winddirection not between", value1, value2, "winddirection");
             return (Criteria) this;
         }
@@ -787,6 +787,11 @@ public class MeteorologicalDataExample {
 
         public Criteria andCjsjEqualTo(Date value) {
             addCriterion("cjsj =", value, "cjsj");
+            return (Criteria) this;
+        }
+
+        public Criteria andCjsjEqualTo(String value,String type) {
+            addCriterion("DATE_FORMAT(cjsj,'"+type+"') =", value, "cjsj");
             return (Criteria) this;
         }
 
