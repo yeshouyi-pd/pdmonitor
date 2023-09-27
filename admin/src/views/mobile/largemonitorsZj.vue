@@ -6,6 +6,8 @@
         <img src="/largemonitors/assets/imgs/左上角title.png" alt="">
         <span>
           <div @click="chooseProject" style="cursor: pointer;">主页</div>
+          <div style="padding: 0 5px;">/</div>
+          <div @click="chooseEnvironment" style="cursor: pointer;">环境</div>
         </span>
       </div>
     </header>
@@ -459,6 +461,9 @@ export default {
     },
     chooseProject(){
       window.location.href = "/admin/chooseProject";
+    },
+    chooseEnvironment(){
+      window.location.href = "/mobile/environmentDp";
     },
     toTyDp(){
       window.location.href = "/mobile/largemonitorsTy";

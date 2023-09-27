@@ -1,6 +1,11 @@
 <template>
   <div class="page-first-div">
     <div class="left-div">
+      <div style="height: 6.1%;display: flex;flex-direction: row;align-items: center;margin-left: 20px;">
+        <div v-on:click="back()" style="color: rgb(255, 255, 255);font-size: 16px;border: 1px solid #043769;background-color:rgb(10,33,61);width: 15%;text-align: center;padding: 5px 0;cursor: pointer">
+          返回
+        </div>
+      </div>
       <div class="left-content-div">
         <div class="left-top">
           <div class="title-name-div">
@@ -102,7 +107,7 @@
       <div class="center-content-bottom" id="centerBottomEchart"></div>
     </div>
     <div class="right-div">
-      <div class="left-content-div">
+      <div class="left-content-div" style="margin-top: 10%;">
         <div class="left-top">
           <div class="title-name-div">
             <span style="padding-top:0%;">气象数据</span>
@@ -191,6 +196,9 @@ export default {
     _this.centerBottomData();
   },
   methods: {
+    back(){
+      window.location.href = "/mobile/largemonitorsZj";
+    },
     clickMapPoint(sbbh){
 
     },
@@ -513,7 +521,6 @@ export default {
   width: 96%;
   height: 93%;
   margin: auto;
-  margin-top: 10%;
 }
 .center-div{
   width: 40%;
