@@ -266,7 +266,7 @@
                         }else{
                           _this.$router.push("/mobile/largemonitors")
                         }
-                        //_this.$router.push("/admin/chooseProject")
+                        //_this.$router.push("/mobile/environmentDp")
                       }
 
                     } else {
