@@ -12,9 +12,12 @@ import com.pd.server.util.SendSmsTool;
 import com.pd.server.util.UuidUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -31,10 +34,22 @@ public class WaterEquipShjService extends AbstractScanRequest{
 
     private static final String key = "cf14f9b74227147206b3239500cbb7c0";
 
+
+    public  static RedisTemplate redisTstaticemplate;
+
+
+    @Resource
+    private RedisTemplate redisTemplate;
+
+    @PostConstruct
+    protected void init() {
+        redisTstaticemplate = redisTemplate;
+    }
+
     /**
      * 设备心跳包
      * @param jsonParam
-     * @return
+     * @return+
      * @throws Exception
      */
     public String request(JSONObject jsonParam) throws Exception {
@@ -71,10 +86,20 @@ public class WaterEquipShjService extends AbstractScanRequest{
             String phoneNum = attrMapper.selectByAttrKey("heartPhone");
             if(!StringUtils.isEmpty(sbbhHeart)&&sbbhHeart.contains(sbbh)){
                 if(!StringUtils.isEmpty(msg) && !msg.equals("0,0") && !StringUtils.isEmpty(listWater.get(0).getBz())){
-                    long realDistance = getDistance(msg,listWater.get(0).getBz());
-                    if(realDistance>Long.parseLong(distance)){
-                        //发送短信
-                        SendSmsTool.sendSms("1860261",sbbh,phoneNum);
+                    if(!StringUtils.isEmpty(redisTstaticemplate.opsForValue().get("XT"+sbbh))){
+                        String cs = (String) redisTstaticemplate.opsForValue().get("XT"+sbbh);
+                        if(Integer.parseInt(cs)>30){
+                            long realDistance = getDistance(msg,listWater.get(0).getBz());
+                            if(realDistance>Long.parseLong(distance)){
+                                //发送短信
+                                SendSmsTool.sendSms("1860261",sbbh,phoneNum);
+                            }
+                            redisTstaticemplate.opsForValue().set("XT"+sbbh, "0");
+                        }else{
+                            redisTstaticemplate.opsForValue().set("XT"+sbbh, String.valueOf(Integer.parseInt(cs)+1));
+                        }
+                    }else{
+                        redisTstaticemplate.opsForValue().set("XT"+sbbh, "0");
                     }
                 }
             }
@@ -133,7 +158,7 @@ public class WaterEquipShjService extends AbstractScanRequest{
     }
 
     public static void main(String[] args){
-        long distance = getDistance("114.465302,40.004717","116.481028,39.98");
+        long distance = getDistance("117.729483166667,30.851357","117.73000,30.84791");
         System.out.println(distance);
     }
 }
