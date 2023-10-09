@@ -143,7 +143,7 @@ import Times from "../../components/times";
 import Pagination from "../../components/pagination";
 
 export default {
-  name: '',
+  name: 'equipment-file-event',
   components: {Pagination,Times},
   data: function (){
     return {

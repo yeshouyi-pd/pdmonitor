@@ -69,6 +69,7 @@ import MeteorologicalData from "./views/environment/meteorologicalData.vue";
 import Turbidity from "./views/environment/turbidity.vue";
 import CurrentMeter from "./views/environment/currentMeter.vue";
 import EnvironmentDp from "./views/mobile/environmentDp.vue";
+import VideoDp from "./views/mobile/videoDp.vue";
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -103,6 +104,9 @@ export default new Router({
     },{
         path: "/mobile/environmentDp",
         component: EnvironmentDp
+    },{
+        path: "/mobile/videoDp",
+        component: VideoDp
     },{
         path: "/admin/chooseProject",
         name: "/admin/chooseProject",

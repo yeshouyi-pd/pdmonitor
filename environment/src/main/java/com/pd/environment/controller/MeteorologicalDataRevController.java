@@ -6,6 +6,7 @@ import com.pd.server.main.dto.ResponseDto;
 import com.pd.server.main.service.MeteorologicalDataService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -96,11 +97,20 @@ public class MeteorologicalDataRevController {
             if(jsonObject.get("solarintensity")!=null){
                 meteorologicalDataDto.setSolarintensity((Double)jsonObject.get("solarintensity")==5.877471754111438E-39?0.0:formatDouble((Double)jsonObject.get("solarintensity")));
             }
-            meteorologicalDataDto.setCjsj(new Date());
-            meteorologicalDataDto.setBz("RPCDA4016");
+            if(StringUtils.isEmpty(jsonObject.get("jcsj"))){
+                meteorologicalDataDto.setCjsj(jsonObject.getDate("jcsj"));
+            }else{
+                meteorologicalDataDto.setCjsj(new Date());
+            }
+            if(StringUtils.isEmpty(jsonObject.get("sbbh"))){
+                meteorologicalDataDto.setBz(jsonObject.getString("sbbh"));
+            }else{
+                meteorologicalDataDto.setBz("RPCDA4016");
+            }
             meteorologicalDataService.save(meteorologicalDataDto);
         }catch (Exception e){
             LOG.error("接收到的数据："+JSONObject.toJSONString(jsonObject)+"====错误原因："+e.getMessage());
+            responseDto.setSuccess(false);
         }
         return responseDto;
     }

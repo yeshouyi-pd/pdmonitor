@@ -45,7 +45,7 @@ public class TypeUtils {
     public static final String KEY_25 = "KEY_25";
     public static final String KEY_26 = "KEY_26";
     public static final String KEY_27 = "KEY_27";
-
+    public static final String KEY_28 = "KEY_28";
 
     public static final String ZZ_1 = "^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}.txt$";
     public static final String ZZ_2 = "^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}.jpg$";
@@ -74,6 +74,7 @@ public class TypeUtils {
     public static final String ZZ_25 ="^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{1,}_A4_\\w{1,}.mp4$";
     public static final String ZZ_26 ="^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_predation_\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_predation_\\d{1,}_A4.txt$";
     public static final String ZZ_27 ="^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_predation_\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_predation_\\d{1,}_A4_\\w{1,}.mp4$";
+    public static final String ZZ_28 ="^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{1,}_A1_\\w{1,}.mp4$";
 
     public static Map<String,String> patternmap = new HashMap<>();
     static {
@@ -104,6 +105,7 @@ public class TypeUtils {
         patternmap.put(KEY_25,ZZ_25);
         patternmap.put(KEY_26,ZZ_26);
         patternmap.put(KEY_27,ZZ_27);
+        patternmap.put(KEY_28,ZZ_28);
     }
 
 

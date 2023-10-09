@@ -1,175 +1,177 @@
 <template>
-  <div class="page-first-div">
-    <div class="left-div">
-      <div style="height: 6.1%;display: flex;flex-direction: row;align-items: center;margin-left: 20px;">
-        <div v-on:click="back()" style="color: rgb(255, 255, 255);font-size: 16px;border: 1px solid #043769;background-color:rgb(10,33,61);width: 15%;text-align: center;padding: 5px 0;cursor: pointer">
-          返回
+  <div style="width: 100%;height: 100%;background-image: url('/static/image/environment/dpbg.png');background-size: 100%;margin: auto">
+    <div class="page-first-div">
+      <div class="left-div">
+        <div style="height: 6.1%;display: flex;flex-direction: row;align-items: center;margin-left: 20px;">
+          <div v-on:click="back()" style="color: rgb(255, 255, 255);font-size: 16px;border: 1px solid #043769;background-color:rgb(10,33,61);width: 15%;text-align: center;padding: 5px 0;cursor: pointer">
+            返回
+          </div>
+        </div>
+        <div class="left-content-div">
+          <div class="left-top">
+            <div class="title-name-div">
+              <span style="padding-top:0%;">设备情况</span>
+            </div>
+            <div class="left-top-content">
+              <div class="content-box">
+                <img src="/static/image/environment/jcy.png" />
+                <div>
+                  <span>监测仪器数量</span><br/>
+                  <span>5</span>
+                </div>
+              </div>
+              <div class="content-box">
+                <img src="/static/image/environment/jcy.png" />
+                <div>
+                  <span>数据总量</span><br/>
+                  <span>343</span>
+                </div>
+              </div>
+            </div>
+            <div class="left-top-content">
+              <div class="content-box">
+                <img src="/static/image/environment/jcy.png" />
+                <div>
+                  <span>当前站点</span><br/>
+                  <span style="color: yellow;">{{curSbmc}}</span>
+                </div>
+              </div>
+              <div class="content-box">
+                <img src="/static/image/environment/jcy.png" />
+                <div>
+                  <span>水听器数量</span><br/>
+                  <span>15</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="left-center">
+            <div class="title-name-div" style="height: 10%">
+              <span>海流计监测数据</span>
+            </div>
+            <div class="center-content-div">
+              <div class="center-content-item-first">
+                <div style="width: 15%;margin: auto;">序号</div>
+                <div style="width: 35%;margin: auto;">数据项</div>
+                <div style="width: 50%;margin: auto;">数值</div>
+              </div>
+              <div class="center-content-item">
+                <div style="width: 15%;margin: auto;">1</div>
+                <div style="width: 35%;margin: auto;">Abs速度</div>
+                <div style="width: 50%;margin: auto;color: yellow;">{{currentMeter.absSpeed}}m/s</div>
+              </div>
+              <div class="center-content-item">
+                <div style="width: 15%;margin: auto;">2</div>
+                <div style="width: 35%;margin: auto;">方向</div>
+                <div style="width: 50%;margin: auto;color: yellow;">{{currentMeter.direction}}</div>
+              </div>
+              <div class="center-content-item">
+                <div style="width: 15%;margin: auto;">3</div>
+                <div style="width: 35%;margin: auto;">倾斜度X</div>
+                <div style="width: 50%;margin: auto;color: yellow;">{{currentMeter.tiltX}}</div>
+              </div>
+              <div class="center-content-item">
+                <div style="width: 15%;margin: auto;">4</div>
+                <div style="width: 35%;margin: auto;">倾斜度Y</div>
+                <div style="width: 50%;margin: auto;color: yellow;">{{currentMeter.tiltY}}</div>
+              </div>
+              <div class="center-content-item">
+                <div style="width: 15%;margin: auto;">5</div>
+                <div style="width: 35%;margin: auto;">最大倾斜度</div>
+                <div style="width: 50%;margin: auto;color: yellow;">{{currentMeter.maxTilt}}</div>
+              </div>
+              <div class="center-content-item">
+                <div style="width: 15%;margin: auto;">6</div>
+                <div style="width: 35%;margin: auto;">标准倾斜度</div>
+                <div style="width: 50%;margin: auto;color: yellow;">{{currentMeter.stdTilt}}</div>
+              </div>
+              <div class="center-content-item">
+                <div style="width: 15%;margin: auto;">7</div>
+                <div style="width: 35%;margin: auto;">Sp标准</div>
+                <div style="width: 50%;margin: auto;color: yellow;">{{currentMeter.spStd}}</div>
+              </div>
+            </div>
+          </div>
+          <div class="left-bottom">
+            <div class="title-name-div">
+              <span>温盐度浊度仪数据</span>
+            </div>
+            <div class="bottom-content" id="leftBottomEchart"></div>
+          </div>
         </div>
       </div>
-      <div class="left-content-div">
-        <div class="left-top">
-          <div class="title-name-div">
-            <span style="padding-top:0%;">设备情况</span>
-          </div>
-          <div class="left-top-content">
-            <div class="content-box">
-              <img src="/static/image/environment/jcy.png" />
-              <div>
-                <span>监测仪器数量</span><br/>
-                <span>5</span>
-              </div>
-            </div>
-            <div class="content-box">
-              <img src="/static/image/environment/jcy.png" />
-              <div>
-                <span>数据总量</span><br/>
-                <span>343</span>
-              </div>
-            </div>
-          </div>
-          <div class="left-top-content">
-            <div class="content-box">
-              <img src="/static/image/environment/jcy.png" />
-              <div>
-                <span>当前站点</span><br/>
-                <span style="color: yellow;">{{curSbmc}}</span>
-              </div>
-            </div>
-            <div class="content-box">
-              <img src="/static/image/environment/jcy.png" />
-              <div>
-                <span>水听器数量</span><br/>
-                <span>15</span>
-              </div>
-            </div>
-          </div>
+      <div class="center-div">
+        <div class="dp-title">动态观测平台</div>
+        <div class="map-div">
+          <EquipmentAMap v-bind:height-max="heightMax" :click-map-point="clickMapPoint"></EquipmentAMap>
         </div>
-        <div class="left-center">
-          <div class="title-name-div" style="height: 10%">
-            <span>海流计监测数据</span>
-          </div>
-          <div class="center-content-div">
-            <div class="center-content-item-first">
-              <div style="width: 15%;margin: auto;">序号</div>
-              <div style="width: 35%;margin: auto;">数据项</div>
-              <div style="width: 50%;margin: auto;">数值</div>
-            </div>
-            <div class="center-content-item">
-              <div style="width: 15%;margin: auto;">1</div>
-              <div style="width: 35%;margin: auto;">Abs速度</div>
-              <div style="width: 50%;margin: auto;color: yellow;">{{currentMeter.absSpeed}}m/s</div>
-            </div>
-            <div class="center-content-item">
-              <div style="width: 15%;margin: auto;">2</div>
-              <div style="width: 35%;margin: auto;">方向</div>
-              <div style="width: 50%;margin: auto;color: yellow;">{{currentMeter.direction}}</div>
-            </div>
-            <div class="center-content-item">
-              <div style="width: 15%;margin: auto;">3</div>
-              <div style="width: 35%;margin: auto;">倾斜度X</div>
-              <div style="width: 50%;margin: auto;color: yellow;">{{currentMeter.tiltX}}</div>
-            </div>
-            <div class="center-content-item">
-              <div style="width: 15%;margin: auto;">4</div>
-              <div style="width: 35%;margin: auto;">倾斜度Y</div>
-              <div style="width: 50%;margin: auto;color: yellow;">{{currentMeter.tiltY}}</div>
-            </div>
-            <div class="center-content-item">
-              <div style="width: 15%;margin: auto;">5</div>
-              <div style="width: 35%;margin: auto;">最大倾斜度</div>
-              <div style="width: 50%;margin: auto;color: yellow;">{{currentMeter.maxTilt}}</div>
-            </div>
-            <div class="center-content-item">
-              <div style="width: 15%;margin: auto;">6</div>
-              <div style="width: 35%;margin: auto;">标准倾斜度</div>
-              <div style="width: 50%;margin: auto;color: yellow;">{{currentMeter.stdTilt}}</div>
-            </div>
-            <div class="center-content-item">
-              <div style="width: 15%;margin: auto;">7</div>
-              <div style="width: 35%;margin: auto;">Sp标准</div>
-              <div style="width: 50%;margin: auto;color: yellow;">{{currentMeter.spStd}}</div>
-            </div>
-          </div>
-        </div>
-        <div class="left-bottom">
-          <div class="title-name-div">
-            <span>温盐度浊度仪数据</span>
-          </div>
-          <div class="bottom-content" id="leftBottomEchart"></div>
-        </div>
+        <div class="center-content-bottom" id="centerBottomEchart"></div>
       </div>
-    </div>
-    <div class="center-div">
-      <div class="dp-title">动态观测平台</div>
-      <div class="map-div">
-        <EquipmentAMap v-bind:height-max="heightMax" :click-map-point="clickMapPoint"></EquipmentAMap>
-      </div>
-      <div class="center-content-bottom" id="centerBottomEchart"></div>
-    </div>
-    <div class="right-div">
-      <div class="left-content-div" style="margin-top: 10%;">
-        <div class="left-top">
-          <div class="title-name-div">
-            <span style="padding-top:0%;">气象数据</span>
-          </div>
-          <div class="right-top-content" style="margin: 1% auto 0;">
-            <div class="right-top-box">
-              <img src="/static/image/environment/fs.png" />
-              <div>
-                <span>风速</span><br/>
-                <span>{{meteorological.speed}}m/s</span>
+      <div class="right-div">
+        <div class="left-content-div" style="margin-top: 10%;">
+          <div class="left-top">
+            <div class="title-name-div">
+              <span style="padding-top:0%;">气象数据</span>
+            </div>
+            <div class="right-top-content" style="margin: 1% auto 0;">
+              <div class="right-top-box">
+                <img src="/static/image/environment/fs.png" />
+                <div>
+                  <span>风速</span><br/>
+                  <span>{{meteorological.speed}}m/s</span>
+                </div>
+              </div>
+              <div class="right-top-box" style="margin:0 1%;">
+                <img src="/static/image/environment/wd.png" />
+                <div>
+                  <span>气温</span><br/>
+                  <span>{{meteorological.temperature}}℃</span>
+                </div>
+              </div>
+              <div class="right-top-box">
+                <img src="/static/image/environment/qy.png" />
+                <div>
+                  <span>气压</span><br/>
+                  <span>{{meteorological.pressure}}hPa</span>
+                </div>
               </div>
             </div>
-            <div class="right-top-box" style="margin:0 1%;">
-              <img src="/static/image/environment/wd.png" />
-              <div>
-                <span>气温</span><br/>
-                <span>{{meteorological.temperature}}℃</span>
+            <div class="right-top-content" style="margin: 1% auto 0;">
+              <div class="right-top-box">
+                <img src="/static/image/environment/fx.png" />
+                <div>
+                  <span>风向</span><br/>
+                  <span>{{meteorological.winddirection}}</span>
+                </div>
               </div>
-            </div>
-            <div class="right-top-box">
-              <img src="/static/image/environment/qy.png" />
-              <div>
-                <span>气压</span><br/>
-                <span>{{meteorological.pressure}}hPa</span>
+              <div class="right-top-box" style="margin:0 1%;">
+                <img src="/static/image/environment/sd.png" />
+                <div>
+                  <span>湿度</span><br/>
+                  <span>{{meteorological.humidity}}%</span>
+                </div>
               </div>
-            </div>
-          </div>
-          <div class="right-top-content" style="margin: 1% auto 0;">
-            <div class="right-top-box">
-              <img src="/static/image/environment/fx.png" />
-              <div>
-                <span>风向</span><br/>
-                <span>{{meteorological.winddirection}}</span>
-              </div>
-            </div>
-            <div class="right-top-box" style="margin:0 1%;">
-              <img src="/static/image/environment/sd.png" />
-              <div>
-                <span>湿度</span><br/>
-                <span>{{meteorological.humidity}}%</span>
-              </div>
-            </div>
-            <div class="right-top-box">
-              <img src="/static/image/environment/tyg.png" />
-              <div>
-                <span>太阳光强度</span><br/>
-                <span>{{meteorological.solarintensity}}W/m2</span>
+              <div class="right-top-box">
+                <img src="/static/image/environment/tyg.png" />
+                <div>
+                  <span>太阳光强度</span><br/>
+                  <span>{{meteorological.solarintensity}}W/m2</span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="left-center">
-          <div class="title-name-div" style="height: 10%">
-            <span>温度数据</span>
+          <div class="left-center">
+            <div class="title-name-div" style="height: 10%">
+              <span>温度数据</span>
+            </div>
+            <div class="center-content-div" id="rightCenterEchart"></div>
           </div>
-          <div class="center-content-div" id="rightCenterEchart"></div>
-        </div>
-        <div class="left-bottom">
-          <div class="title-name-div">
-            <span>湿度数据</span>
+          <div class="left-bottom">
+            <div class="title-name-div">
+              <span>湿度数据</span>
+            </div>
+            <div class="bottom-content" id="rightBottomEchart"></div>
           </div>
-          <div class="bottom-content" id="rightBottomEchart"></div>
         </div>
       </div>
     </div>
@@ -378,7 +380,7 @@ export default {
         },
         yAxis: [
           {
-            name: '风速,风速',
+            name: '风速,风向',
             axisLine: {
               lineStyle: {
                 color: '#fff'
@@ -503,13 +505,10 @@ export default {
   }
 }
 </script>
-<style>
+<style scoped>
 .page-first-div{
   width: 1745px;
   height: 851px;
-  background-image: url("/static/image/environment/dpbg.png");
-  background-size: 100%;
-  display: flex;
   overflow: auto;
 }
 .left-div{
