@@ -84,7 +84,10 @@ public class ShjJsonConstant {
              * 趸船gps
              */
             put("PontoonGPS","com.pd.server.main.service.shj.PontoonGPSShjService");
-
+            /**
+             * 岸上视频剪切回调接口
+             */
+            put("VideoEvent","com.pd.server.main.service.shj.VideoEventShjService");
         }
     };
 

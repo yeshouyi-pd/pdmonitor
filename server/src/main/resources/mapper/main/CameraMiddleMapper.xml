@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.pd.server.main.mapper.VideoEventMapper">
-  <resultMap id="BaseResultMap" type="com.pd.server.main.domain.VideoEvent">
+<mapper namespace="com.pd.server.main.mapper.CameraMiddleMapper">
+  <resultMap id="BaseResultMap" type="com.pd.server.main.domain.CameraMiddle">
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
-    <result column="kssj" jdbcType="VARCHAR" property="kssj" />
-    <result column="jssj" jdbcType="VARCHAR" property="jssj" />
-    <result column="rq" jdbcType="VARCHAR" property="rq" />
-    <result column="wjlj" jdbcType="VARCHAR" property="wjlj" />
-    <result column="wjmc" jdbcType="VARCHAR" property="wjmc" />
-    <result column="sfysp" jdbcType="INTEGER" property="sfysp" />
+    <result column="jqsj" jdbcType="VARCHAR" property="jqsj" />
+    <result column="jgsj" jdbcType="VARCHAR" property="jgsj" />
+    <result column="ip" jdbcType="VARCHAR" property="ip" />
+    <result column="port" jdbcType="VARCHAR" property="port" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="camerapws" jdbcType="VARCHAR" property="camerapws" />
+    <result column="tdh" jdbcType="VARCHAR" property="tdh" />
+    <result column="dvrip" jdbcType="VARCHAR" property="dvrip" />
+    <result column="sfjq" jdbcType="VARCHAR" property="sfjq" />
     <result column="bz" jdbcType="VARCHAR" property="bz" />
     <result column="sm" jdbcType="VARCHAR" property="sm" />
   </resultMap>
@@ -72,15 +75,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, sbbh, kssj, jssj, rq, wjlj, wjmc, sfysp, bz, sm
+    id, sbbh, jqsj, jgsj, ip, port, username, camerapws, tdh, dvrip, sfjq, bz, sm
   </sql>
-  <select id="selectByExample" parameterType="com.pd.server.main.domain.VideoEventExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.pd.server.main.domain.CameraMiddleExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from video_event
+    from camera_middle
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -91,29 +94,31 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from video_event
+    from camera_middle
     where id = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    delete from video_event
+    delete from camera_middle
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.pd.server.main.domain.VideoEventExample">
-    delete from video_event
+  <delete id="deleteByExample" parameterType="com.pd.server.main.domain.CameraMiddleExample">
+    delete from camera_middle
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.pd.server.main.domain.VideoEvent">
-    insert into video_event (id, sbbh, kssj, 
-      jssj, rq, wjlj, wjmc, 
-      sfysp, bz, sm)
-    values (#{id,jdbcType=VARCHAR}, #{sbbh,jdbcType=VARCHAR}, #{kssj,jdbcType=VARCHAR}, 
-      #{jssj,jdbcType=VARCHAR}, #{rq,jdbcType=VARCHAR}, #{wjlj,jdbcType=VARCHAR}, #{wjmc,jdbcType=VARCHAR}, 
-      #{sfysp,jdbcType=INTEGER}, #{bz,jdbcType=VARCHAR}, #{sm,jdbcType=VARCHAR})
+  <insert id="insert" parameterType="com.pd.server.main.domain.CameraMiddle">
+    insert into camera_middle (id, sbbh, jqsj, 
+      jgsj, ip, port, username, 
+      camerapws, tdh, dvrip, 
+      sfjq, bz, sm)
+    values (#{id,jdbcType=VARCHAR}, #{sbbh,jdbcType=VARCHAR}, #{jqsj,jdbcType=VARCHAR}, 
+      #{jgsj,jdbcType=VARCHAR}, #{ip,jdbcType=VARCHAR}, #{port,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, 
+      #{camerapws,jdbcType=VARCHAR}, #{tdh,jdbcType=VARCHAR}, #{dvrip,jdbcType=VARCHAR}, 
+      #{sfjq,jdbcType=VARCHAR}, #{bz,jdbcType=VARCHAR}, #{sm,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.pd.server.main.domain.VideoEvent">
-    insert into video_event
+  <insert id="insertSelective" parameterType="com.pd.server.main.domain.CameraMiddle">
+    insert into camera_middle
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
@@ -121,23 +126,32 @@
       <if test="sbbh != null">
         sbbh,
       </if>
-      <if test="kssj != null">
-        kssj,
+      <if test="jqsj != null">
+        jqsj,
       </if>
-      <if test="jssj != null">
-        jssj,
+      <if test="jgsj != null">
+        jgsj,
       </if>
-      <if test="rq != null">
-        rq,
+      <if test="ip != null">
+        ip,
       </if>
-      <if test="wjlj != null">
-        wjlj,
+      <if test="port != null">
+        port,
       </if>
-      <if test="wjmc != null">
-        wjmc,
+      <if test="username != null">
+        username,
       </if>
-      <if test="sfysp != null">
-        sfysp,
+      <if test="camerapws != null">
+        camerapws,
+      </if>
+      <if test="tdh != null">
+        tdh,
+      </if>
+      <if test="dvrip != null">
+        dvrip,
+      </if>
+      <if test="sfjq != null">
+        sfjq,
       </if>
       <if test="bz != null">
         bz,
@@ -153,23 +167,32 @@
       <if test="sbbh != null">
         #{sbbh,jdbcType=VARCHAR},
       </if>
-      <if test="kssj != null">
-        #{kssj,jdbcType=VARCHAR},
+      <if test="jqsj != null">
+        #{jqsj,jdbcType=VARCHAR},
       </if>
-      <if test="jssj != null">
-        #{jssj,jdbcType=VARCHAR},
+      <if test="jgsj != null">
+        #{jgsj,jdbcType=VARCHAR},
       </if>
-      <if test="rq != null">
-        #{rq,jdbcType=VARCHAR},
+      <if test="ip != null">
+        #{ip,jdbcType=VARCHAR},
       </if>
-      <if test="wjlj != null">
-        #{wjlj,jdbcType=VARCHAR},
+      <if test="port != null">
+        #{port,jdbcType=VARCHAR},
       </if>
-      <if test="wjmc != null">
-        #{wjmc,jdbcType=VARCHAR},
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
       </if>
-      <if test="sfysp != null">
-        #{sfysp,jdbcType=INTEGER},
+      <if test="camerapws != null">
+        #{camerapws,jdbcType=VARCHAR},
+      </if>
+      <if test="tdh != null">
+        #{tdh,jdbcType=VARCHAR},
+      </if>
+      <if test="dvrip != null">
+        #{dvrip,jdbcType=VARCHAR},
+      </if>
+      <if test="sfjq != null">
+        #{sfjq,jdbcType=VARCHAR},
       </if>
       <if test="bz != null">
         #{bz,jdbcType=VARCHAR},
@@ -179,14 +202,14 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.pd.server.main.domain.VideoEventExample" resultType="java.lang.Long">
-    select count(*) from video_event
+  <select id="countByExample" parameterType="com.pd.server.main.domain.CameraMiddleExample" resultType="java.lang.Long">
+    select count(*) from camera_middle
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update video_event
+    update camera_middle
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=VARCHAR},
@@ -194,23 +217,32 @@
       <if test="record.sbbh != null">
         sbbh = #{record.sbbh,jdbcType=VARCHAR},
       </if>
-      <if test="record.kssj != null">
-        kssj = #{record.kssj,jdbcType=VARCHAR},
+      <if test="record.jqsj != null">
+        jqsj = #{record.jqsj,jdbcType=VARCHAR},
       </if>
-      <if test="record.jssj != null">
-        jssj = #{record.jssj,jdbcType=VARCHAR},
+      <if test="record.jgsj != null">
+        jgsj = #{record.jgsj,jdbcType=VARCHAR},
       </if>
-      <if test="record.rq != null">
-        rq = #{record.rq,jdbcType=VARCHAR},
+      <if test="record.ip != null">
+        ip = #{record.ip,jdbcType=VARCHAR},
       </if>
-      <if test="record.wjlj != null">
-        wjlj = #{record.wjlj,jdbcType=VARCHAR},
+      <if test="record.port != null">
+        port = #{record.port,jdbcType=VARCHAR},
       </if>
-      <if test="record.wjmc != null">
-        wjmc = #{record.wjmc,jdbcType=VARCHAR},
+      <if test="record.username != null">
+        username = #{record.username,jdbcType=VARCHAR},
       </if>
-      <if test="record.sfysp != null">
-        sfysp = #{record.sfysp,jdbcType=INTEGER},
+      <if test="record.camerapws != null">
+        camerapws = #{record.camerapws,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tdh != null">
+        tdh = #{record.tdh,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dvrip != null">
+        dvrip = #{record.dvrip,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sfjq != null">
+        sfjq = #{record.sfjq,jdbcType=VARCHAR},
       </if>
       <if test="record.bz != null">
         bz = #{record.bz,jdbcType=VARCHAR},
@@ -224,44 +256,56 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update video_event
+    update camera_middle
     set id = #{record.id,jdbcType=VARCHAR},
       sbbh = #{record.sbbh,jdbcType=VARCHAR},
-      kssj = #{record.kssj,jdbcType=VARCHAR},
-      jssj = #{record.jssj,jdbcType=VARCHAR},
-      rq = #{record.rq,jdbcType=VARCHAR},
-      wjlj = #{record.wjlj,jdbcType=VARCHAR},
-      wjmc = #{record.wjmc,jdbcType=VARCHAR},
-      sfysp = #{record.sfysp,jdbcType=INTEGER},
+      jqsj = #{record.jqsj,jdbcType=VARCHAR},
+      jgsj = #{record.jgsj,jdbcType=VARCHAR},
+      ip = #{record.ip,jdbcType=VARCHAR},
+      port = #{record.port,jdbcType=VARCHAR},
+      username = #{record.username,jdbcType=VARCHAR},
+      camerapws = #{record.camerapws,jdbcType=VARCHAR},
+      tdh = #{record.tdh,jdbcType=VARCHAR},
+      dvrip = #{record.dvrip,jdbcType=VARCHAR},
+      sfjq = #{record.sfjq,jdbcType=VARCHAR},
       bz = #{record.bz,jdbcType=VARCHAR},
       sm = #{record.sm,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.pd.server.main.domain.VideoEvent">
-    update video_event
+  <update id="updateByPrimaryKeySelective" parameterType="com.pd.server.main.domain.CameraMiddle">
+    update camera_middle
     <set>
       <if test="sbbh != null">
         sbbh = #{sbbh,jdbcType=VARCHAR},
       </if>
-      <if test="kssj != null">
-        kssj = #{kssj,jdbcType=VARCHAR},
+      <if test="jqsj != null">
+        jqsj = #{jqsj,jdbcType=VARCHAR},
       </if>
-      <if test="jssj != null">
-        jssj = #{jssj,jdbcType=VARCHAR},
+      <if test="jgsj != null">
+        jgsj = #{jgsj,jdbcType=VARCHAR},
       </if>
-      <if test="rq != null">
-        rq = #{rq,jdbcType=VARCHAR},
+      <if test="ip != null">
+        ip = #{ip,jdbcType=VARCHAR},
       </if>
-      <if test="wjlj != null">
-        wjlj = #{wjlj,jdbcType=VARCHAR},
+      <if test="port != null">
+        port = #{port,jdbcType=VARCHAR},
       </if>
-      <if test="wjmc != null">
-        wjmc = #{wjmc,jdbcType=VARCHAR},
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
       </if>
-      <if test="sfysp != null">
-        sfysp = #{sfysp,jdbcType=INTEGER},
+      <if test="camerapws != null">
+        camerapws = #{camerapws,jdbcType=VARCHAR},
+      </if>
+      <if test="tdh != null">
+        tdh = #{tdh,jdbcType=VARCHAR},
+      </if>
+      <if test="dvrip != null">
+        dvrip = #{dvrip,jdbcType=VARCHAR},
+      </if>
+      <if test="sfjq != null">
+        sfjq = #{sfjq,jdbcType=VARCHAR},
       </if>
       <if test="bz != null">
         bz = #{bz,jdbcType=VARCHAR},
@@ -272,15 +316,18 @@
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.pd.server.main.domain.VideoEvent">
-    update video_event
+  <update id="updateByPrimaryKey" parameterType="com.pd.server.main.domain.CameraMiddle">
+    update camera_middle
     set sbbh = #{sbbh,jdbcType=VARCHAR},
-      kssj = #{kssj,jdbcType=VARCHAR},
-      jssj = #{jssj,jdbcType=VARCHAR},
-      rq = #{rq,jdbcType=VARCHAR},
-      wjlj = #{wjlj,jdbcType=VARCHAR},
-      wjmc = #{wjmc,jdbcType=VARCHAR},
-      sfysp = #{sfysp,jdbcType=INTEGER},
+      jqsj = #{jqsj,jdbcType=VARCHAR},
+      jgsj = #{jgsj,jdbcType=VARCHAR},
+      ip = #{ip,jdbcType=VARCHAR},
+      port = #{port,jdbcType=VARCHAR},
+      username = #{username,jdbcType=VARCHAR},
+      camerapws = #{camerapws,jdbcType=VARCHAR},
+      tdh = #{tdh,jdbcType=VARCHAR},
+      dvrip = #{dvrip,jdbcType=VARCHAR},
+      sfjq = #{sfjq,jdbcType=VARCHAR},
       bz = #{bz,jdbcType=VARCHAR},
       sm = #{sm,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}

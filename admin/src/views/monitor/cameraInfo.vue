@@ -67,7 +67,7 @@
             <th>摄像头编号</th>
             <th>摄像头名称</th>
             <th>摄像头IP</th>
-            <th>端口号</th>
+            <th>摄像头端口</th>
             <th>摄像头用户名</th>
             <th>摄像头密码</th>
             <th>通道号</th>
@@ -82,7 +82,6 @@
             <td>{{alldept|optionDCNArray(cameraInfo.deptcode)}}</td>
             <td>{{cameraInfo.sm2}}</td>
             <td>{{cameraInfo.sm3}}</td>
-            <td>{{cameraInfo.ip}}</td>
             <td>{{cameraInfo.ip}}</td>
             <td>{{cameraInfo.port}}</td>
             <td>{{cameraInfo.username}}</td>

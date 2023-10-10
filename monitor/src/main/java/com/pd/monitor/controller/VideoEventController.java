@@ -43,6 +43,7 @@ public class VideoEventController {
                 ValidatorUtil.length(videoEventDto.getJssj(), "结束时间", 1, 25);
                 ValidatorUtil.length(videoEventDto.getRq(), "日期", 1, 10);
                 ValidatorUtil.length(videoEventDto.getWjlj(), "文件路径", 1, 255);
+                ValidatorUtil.length(videoEventDto.getWjmc(), "文件名称", 1, 50);
                 ValidatorUtil.length(videoEventDto.getBz(), "备注", 1, 25);
                 ValidatorUtil.length(videoEventDto.getSm(), "说明", 1, 25);
 
