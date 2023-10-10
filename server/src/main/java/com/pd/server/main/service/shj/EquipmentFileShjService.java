@@ -3,12 +3,11 @@ package com.pd.server.main.service.shj;
 import com.alibaba.fastjson.JSONObject;
 import com.pd.server.config.SpringUtil;
 import com.pd.server.main.domain.*;
+import com.pd.server.main.dto.CameraMiddleDto;
 import com.pd.server.main.dto.PointerDayDto;
 import com.pd.server.main.dto.PointerSecondDto;
 import com.pd.server.main.mapper.*;
-import com.pd.server.main.service.AttrService;
-import com.pd.server.main.service.PointerDayService;
-import com.pd.server.main.service.PointerSecondService;
+import com.pd.server.main.service.*;
 import com.pd.server.util.*;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -212,6 +211,10 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                 JSONObject result = new JSONObject();
                 result.put("data",data);
                 result.put("entity",entity);
+                //白海豚写剪切视频的事件，李响读了去剪切视频
+                if(("1001,1007,1009,1010,1020,1022,1024,1026".contains(entity.getType()))&&sbbh.contains("RPCD")){
+                    saveNewEvent(entity);
+                }
                 //推送文件
                 if("JXYSA4001".equals(sbbh)&&!pushData){
                     PushFile.pushFile1(entity.getTplj());
@@ -234,6 +237,35 @@ public class EquipmentFileShjService extends AbstractScanRequest{
             return true;
         }
         return false;
+    }
+
+    public static void saveNewEvent(EquipmentFile record){
+        AttrService attrService = SpringUtil.getBean(AttrService.class);
+        CameraInfoService cameraInfoService = SpringUtil.getBean(CameraInfoService.class);
+        CameraMiddleService cameraMiddleService = SpringUtil.getBean(CameraMiddleService.class);
+        List<CameraInfo> cameraInfoList = cameraInfoService.findBySbbh(record.getSbbh());
+        for(CameraInfo cameraInfo: cameraInfoList){
+            CameraMiddleDto cameraMiddle = new CameraMiddleDto();
+            cameraMiddle.setSbbh(record.getSbbh());//设备编号
+            cameraMiddle.setIp(cameraInfo.getIp());//摄像头ip
+            cameraMiddle.setPort(cameraInfo.getPort()+"");//摄像头端口号
+            cameraMiddle.setUsername(cameraInfo.getUsername());//摄像头用户名
+            cameraMiddle.setCamerapws(cameraInfo.getCamerapws());//摄像头密码
+            cameraMiddle.setTdh(cameraInfo.getSbdk()+"");//通道号
+            cameraMiddle.setDvrip(cameraInfo.getDvrip());//所属DVR的IP（备用地址）
+            if("1001,1007,1009,1010".contains(record.getType())){
+                cameraMiddle.setJgsj(attrService.findByAttrKey("spjqjgsj"));//视频剪切间隔时间
+                String[] arr = record.getWjmc().split("_");
+                cameraMiddle.setJqsj(arr[0]+"-"+arr[1]+"-"+arr[2]+" "+arr[3]+":"+arr[4]+":"+arr[5]);//剪切时间
+            }else if("1020,1022,1024,1026".contains(record.getType())){
+                String temp = record.getTplj().substring(record.getTplj().lastIndexOf("/")+1,record.getTplj().lastIndexOf("_A4.txt"));
+                String[] arr = temp.split("_");
+                String kssj = arr[0]+"-"+arr[1]+"-"+arr[2]+" "+arr[3]+":"+arr[4]+":"+arr[5];
+                String jssj = "1020".equals(record.getType())||"1026".equals(record.getType())?arr[7]+"-"+arr[8]+"-"+arr[9]+" "+arr[10]+":"+arr[11]+":"+arr[12]:arr[6]+"-"+arr[7]+"-"+arr[8]+" "+arr[9]+":"+arr[10]+":"+arr[11];
+                cameraMiddle.setJqsj(kssj+","+jssj);
+            }
+            cameraMiddleService.save(cameraMiddle);
+        }
     }
 
 

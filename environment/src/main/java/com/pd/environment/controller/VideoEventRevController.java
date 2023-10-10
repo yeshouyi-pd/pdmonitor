@@ -22,10 +22,9 @@ public class VideoEventRevController {
     private static final Logger LOG = LoggerFactory.getLogger(VideoEventRevController.class);
     public static final String BUSINESS_NAME = "接收分析后的视频文件";
 
-    public static final String ZZ_21 ="^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_predation_\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{1,}_A4_\\w{1,}_\\w{1,}.mp4$";
-    public static final String ZZ_23 ="^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_predation_\\d{1,}_A4_\\w{1,}_\\w{1,}.mp4$";
-    public static final String ZZ_25 ="^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{1,}_A4_\\w{1,}_\\w{1,}.mp4$";
-    public static final String ZZ_27 ="^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_predation_\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_predation_\\d{1,}_A4_\\w{1,}_\\w{1,}.mp4$";
+
+    public static final String ZZ_29 ="^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{1,}_A1_\\w{1,}_\\w{1,}.mp4$";
+    public static final String ZZ_30 ="^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{1,}_A4_\\w{1,}_\\w{1,}.mp4$";
 
     @Resource
     private VideoEventService videoEventService;
@@ -49,15 +48,8 @@ public class VideoEventRevController {
             }
             String sbbh = jsonObject.getString("sbbh");
             String wjlj = jsonObject.getString("wjlj");
-            String kssj = "";
-            String jssj = "";
-            String temp = wjlj.substring(wjlj.lastIndexOf("/")+1,wjlj.lastIndexOf("_A4"));
-            kssj = temp.substring(0,4)+"-"+temp.substring(5,7)+"-"+temp.substring(8,10)+" "+temp.substring(11,13)+":"+temp.substring(14,16)+":"+temp.substring(17,19);
-            if( Pattern.matches(ZZ_21, wjlj) || Pattern.matches(ZZ_27, wjlj) ){
-                jssj = temp.substring(30,34)+"-"+temp.substring(35,37)+"-"+temp.substring(38,40)+" "+temp.substring(41,43)+":"+temp.substring(44,46)+":"+temp.substring(47,49);
-            }else if( Pattern.matches(ZZ_23, wjlj) || Pattern.matches(ZZ_25, wjlj) ){
-                jssj = temp.substring(20,24)+"-"+temp.substring(25,27)+"-"+temp.substring(28,30)+" "+temp.substring(31,33)+":"+temp.substring(34,36)+":"+temp.substring(37,39);
-            }else{
+            String wjmclj = wjlj.substring(wjlj.lastIndexOf("/")+1);
+            if(!Pattern.matches(ZZ_29, wjmclj) && !Pattern.matches(ZZ_30, wjmclj)){
                 responseDto.setCode("4000");
                 responseDto.setSuccess(false);
                 responseDto.setMessage("文件名称命名错误");
@@ -65,10 +57,12 @@ public class VideoEventRevController {
             }
             VideoEventDto videoEventDto = new VideoEventDto();
             videoEventDto.setSbbh(sbbh);
-            videoEventDto.setKssj(kssj);
-            videoEventDto.setJssj(jssj);
+            videoEventDto.setKssj(wjmclj.substring(0,4)+"-"+wjmclj.substring(5,7)+"-"+wjmclj.substring(8,10)+" "+wjmclj.substring(11,13)+":"+wjmclj.substring(14,16)+":"+wjmclj.substring(17,19));
+            videoEventDto.setJssj(wjmclj.substring(20,24)+"-"+wjmclj.substring(25,27)+"-"+wjmclj.substring(28,30)+" "+wjmclj.substring(31,33)+":"+wjmclj.substring(34,36)+":"+wjmclj.substring(37,39));
             videoEventDto.setRq(videoEventDto.getKssj().substring(0,10));
             videoEventDto.setWjlj(wjlj);
+            videoEventDto.setWjmc(wjmclj.substring(0,39));
+            videoEventDto.setSfysp(0);//不是原始视频
             videoEventService.save(videoEventDto);
             responseDto.setCode("0000");
             responseDto.setSuccess(true);

@@ -13,6 +13,10 @@ public class VideoEvent {
 
     private String wjlj;
 
+    private String wjmc;
+
+    private Integer sfysp;
+
     private String bz;
 
     private String sm;
@@ -65,6 +69,22 @@ public class VideoEvent {
         this.wjlj = wjlj;
     }
 
+    public String getWjmc() {
+        return wjmc;
+    }
+
+    public void setWjmc(String wjmc) {
+        this.wjmc = wjmc;
+    }
+
+    public Integer getSfysp() {
+        return sfysp;
+    }
+
+    public void setSfysp(Integer sfysp) {
+        this.sfysp = sfysp;
+    }
+
     public String getBz() {
         return bz;
     }
@@ -93,6 +113,8 @@ public class VideoEvent {
         sb.append(", jssj=").append(jssj);
         sb.append(", rq=").append(rq);
         sb.append(", wjlj=").append(wjlj);
+        sb.append(", wjmc=").append(wjmc);
+        sb.append(", sfysp=").append(sfysp);
         sb.append(", bz=").append(bz);
         sb.append(", sm=").append(sm);
         sb.append("]");
