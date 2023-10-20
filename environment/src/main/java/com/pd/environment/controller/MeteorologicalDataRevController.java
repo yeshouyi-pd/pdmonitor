@@ -97,12 +97,12 @@ public class MeteorologicalDataRevController {
             if(jsonObject.get("solarintensity")!=null){
                 meteorologicalDataDto.setSolarintensity((Double)jsonObject.get("solarintensity")==5.877471754111438E-39?0.0:formatDouble((Double)jsonObject.get("solarintensity")));
             }
-            if(StringUtils.isEmpty(jsonObject.get("jcsj"))){
+            if(!StringUtils.isEmpty(jsonObject.get("jcsj"))){
                 meteorologicalDataDto.setCjsj(jsonObject.getDate("jcsj"));
             }else{
                 meteorologicalDataDto.setCjsj(new Date());
             }
-            if(StringUtils.isEmpty(jsonObject.get("sbbh"))){
+            if(!StringUtils.isEmpty(jsonObject.get("sbbh"))){
                 meteorologicalDataDto.setBz(jsonObject.getString("sbbh"));
             }else{
                 meteorologicalDataDto.setBz("RPCDA4016");

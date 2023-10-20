@@ -666,7 +666,7 @@ export default {
       // if("RPCDA4016"==content[3]){
       //   $("#form-modal").modal("show");
       // }
-      //_this.clickMapPoint(content[3]);
+      _this.clickMapPoint(content[2],content[3]);
       let info = document.createElement("div");
       info.className = "custom-info input-card content-window-card";
 

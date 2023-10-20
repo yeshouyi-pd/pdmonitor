@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 100%;height: 100%;background-image: url('/static/image/environment/dpbg.png');background-size: 100%;margin: auto">
+  <div style="width: 100%;height: 936px;background-image: url('/static/image/environment/dpbg.png');background-size: 100%;margin: auto">
     <div class="page-first-div">
       <div class="left-div">
         <div style="height: 6.1%;display: flex;flex-direction: row;align-items: center;margin-left: 20px;">
@@ -16,15 +16,15 @@
               <div class="content-box">
                 <img src="/static/image/environment/jcy.png" />
                 <div>
-                  <span>监测仪器数量</span><br/>
-                  <span>5</span>
+                  <span>设备点位</span><br/>
+                  <span style="color: yellow;">{{curSbmc}}</span>
                 </div>
               </div>
               <div class="content-box">
                 <img src="/static/image/environment/jcy.png" />
                 <div>
-                  <span>数据总量</span><br/>
-                  <span>343</span>
+                  <span>监测仪器数量</span><br/>
+                  <span>5</span>
                 </div>
               </div>
             </div>
@@ -32,8 +32,8 @@
               <div class="content-box">
                 <img src="/static/image/environment/jcy.png" />
                 <div>
-                  <span>当前站点</span><br/>
-                  <span style="color: yellow;">{{curSbmc}}</span>
+                  <span>设备编号</span><br/>
+                  <span style="color: yellow;">{{curSbbh}}</span>
                 </div>
               </div>
               <div class="content-box">
@@ -184,11 +184,12 @@ export default {
   components:{EquipmentAMap},
   data: function (){
     return {
-      heightMax:450,
+      heightMax:500,
       curSbbh:'RPCDA4016',
       curSbmc:'RPCDA4016',
       currentMeter:{},
-      meteorological:{}
+      meteorological:{},
+      intervalId:null
     }
   },
   mounted() {
@@ -196,24 +197,53 @@ export default {
     _this.leftCenterData();
     _this.leftBottomData();
     _this.centerBottomData();
+    _this.dataRefreh();
   },
   methods: {
+    // 定时刷新数据函数
+    dataRefreh() {
+      let _this = this;
+      // 计时器正在进行中，退出函数
+      if (_this.intervalId != null) {
+        return;
+      }
+      // 计时器为空，操作
+      _this.intervalId = setInterval(() => {
+        console.log("刷新" + new Date());
+        _this.leftCenterData();
+        _this.leftBottomData();
+        _this.centerBottomData();
+      }, 900000);
+    },
+    // 停止定时器
+    clear() {
+      let _this = this;
+      clearInterval(_this.intervalId); //清除计时器
+      _this.intervalId = null; //设置为null
+    },
     back(){
+      let _this = this;
+      _this.clear();
       window.location.href = "/mobile/largemonitorsZj";
     },
-    clickMapPoint(sbbh){
-
+    clickMapPoint(sbmc,sbbh){
+      let _this = this;
+      _this.curSbmc = sbmc;
+      _this.curSbbh = sbbh;
+      _this.leftCenterData();
+      _this.leftBottomData();
+      _this.centerBottomData();
     },
     leftCenterData(){
       let _this = this;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getCurrentMeterTodayData/RPCDA4016', {}).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getCurrentMeterTodayData/'+_this.curSbbh, {}).then((response)=>{
         Loading.hide();
         _this.currentMeter = response.data.content;
       })
     },
     leftBottomData(){
       let _this = this;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getTurbidityTodayData/RPCDA4016', {}).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getTurbidityTodayData/'+_this.curSbbh, {}).then((response)=>{
         Loading.hide();
         let turbiditys = response.data.content;
         let data = [];
@@ -265,7 +295,7 @@ export default {
           {
             name: '盐度(PSU)',
             symbolSize: function (data) {
-              return data[1]*20;
+              return data[1]*2;
             },
             data: data,
             type: 'scatter'
@@ -277,7 +307,7 @@ export default {
     },
     centerBottomData(){
       let _this = this;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getMeteorologicalTodayData/RPCDA4016', {}).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getMeteorologicalTodayData/'+_this.curSbbh, {}).then((response)=>{
         Loading.hide();
         let meteorologicals = response.data.content;
         let data = [];
@@ -507,8 +537,9 @@ export default {
 </script>
 <style scoped>
 .page-first-div{
-  width: 1745px;
-  height: 851px;
+  width: 100%;
+  height: 100%;
+  display: flex;
   overflow: auto;
 }
 .left-div{
@@ -612,11 +643,11 @@ export default {
   text-align: center;
   font-size: 24px;
   color: #fff;
-  height: 73px;
-  line-height: 73px;
+  height: 83px;
+  line-height: 83px;
 }
 .center-content-bottom{
-  height: 327px;
+  height: 347px;
 }
 .right-top-content{
   height: 40%;
