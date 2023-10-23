@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pd.server.main.mapper.WaterQualityNewMapper">
+  <resultMap id="BaseResultMap" type="com.pd.server.main.domain.WaterQualityNew">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="cjsj" jdbcType="TIMESTAMP" property="cjsj" />
+    <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
+    <result column="oxidative" jdbcType="VARCHAR" property="oxidative" />
+    <result column="chlorophyll" jdbcType="VARCHAR" property="chlorophyll" />
+    <result column="ph" jdbcType="VARCHAR" property="ph" />
+    <result column="ad" jdbcType="VARCHAR" property="ad" />
+    <result column="bz" jdbcType="VARCHAR" property="bz" />
+    <result column="sm" jdbcType="VARCHAR" property="sm" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, cjsj, sbbh, oxidative, chlorophyll, ph, ad, bz, sm
+  </sql>
+  <select id="selectByExample" parameterType="com.pd.server.main.domain.WaterQualityNewExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from water_quality_new
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from water_quality_new
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from water_quality_new
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pd.server.main.domain.WaterQualityNewExample">
+    delete from water_quality_new
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pd.server.main.domain.WaterQualityNew">
+    insert into water_quality_new (id, cjsj, sbbh, 
+      oxidative, chlorophyll, ph, 
+      ad, bz, sm)
+    values (#{id,jdbcType=VARCHAR}, #{cjsj,jdbcType=TIMESTAMP}, #{sbbh,jdbcType=VARCHAR}, 
+      #{oxidative,jdbcType=VARCHAR}, #{chlorophyll,jdbcType=VARCHAR}, #{ph,jdbcType=VARCHAR}, 
+      #{ad,jdbcType=VARCHAR}, #{bz,jdbcType=VARCHAR}, #{sm,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pd.server.main.domain.WaterQualityNew">
+    insert into water_quality_new
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="cjsj != null">
+        cjsj,
+      </if>
+      <if test="sbbh != null">
+        sbbh,
+      </if>
+      <if test="oxidative != null">
+        oxidative,
+      </if>
+      <if test="chlorophyll != null">
+        chlorophyll,
+      </if>
+      <if test="ph != null">
+        ph,
+      </if>
+      <if test="ad != null">
+        ad,
+      </if>
+      <if test="bz != null">
+        bz,
+      </if>
+      <if test="sm != null">
+        sm,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="cjsj != null">
+        #{cjsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sbbh != null">
+        #{sbbh,jdbcType=VARCHAR},
+      </if>
+      <if test="oxidative != null">
+        #{oxidative,jdbcType=VARCHAR},
+      </if>
+      <if test="chlorophyll != null">
+        #{chlorophyll,jdbcType=VARCHAR},
+      </if>
+      <if test="ph != null">
+        #{ph,jdbcType=VARCHAR},
+      </if>
+      <if test="ad != null">
+        #{ad,jdbcType=VARCHAR},
+      </if>
+      <if test="bz != null">
+        #{bz,jdbcType=VARCHAR},
+      </if>
+      <if test="sm != null">
+        #{sm,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pd.server.main.domain.WaterQualityNewExample" resultType="java.lang.Long">
+    select count(*) from water_quality_new
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update water_quality_new
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cjsj != null">
+        cjsj = #{record.cjsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.sbbh != null">
+        sbbh = #{record.sbbh,jdbcType=VARCHAR},
+      </if>
+      <if test="record.oxidative != null">
+        oxidative = #{record.oxidative,jdbcType=VARCHAR},
+      </if>
+      <if test="record.chlorophyll != null">
+        chlorophyll = #{record.chlorophyll,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ph != null">
+        ph = #{record.ph,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ad != null">
+        ad = #{record.ad,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bz != null">
+        bz = #{record.bz,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sm != null">
+        sm = #{record.sm,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update water_quality_new
+    set id = #{record.id,jdbcType=VARCHAR},
+      cjsj = #{record.cjsj,jdbcType=TIMESTAMP},
+      sbbh = #{record.sbbh,jdbcType=VARCHAR},
+      oxidative = #{record.oxidative,jdbcType=VARCHAR},
+      chlorophyll = #{record.chlorophyll,jdbcType=VARCHAR},
+      ph = #{record.ph,jdbcType=VARCHAR},
+      ad = #{record.ad,jdbcType=VARCHAR},
+      bz = #{record.bz,jdbcType=VARCHAR},
+      sm = #{record.sm,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pd.server.main.domain.WaterQualityNew">
+    update water_quality_new
+    <set>
+      <if test="cjsj != null">
+        cjsj = #{cjsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sbbh != null">
+        sbbh = #{sbbh,jdbcType=VARCHAR},
+      </if>
+      <if test="oxidative != null">
+        oxidative = #{oxidative,jdbcType=VARCHAR},
+      </if>
+      <if test="chlorophyll != null">
+        chlorophyll = #{chlorophyll,jdbcType=VARCHAR},
+      </if>
+      <if test="ph != null">
+        ph = #{ph,jdbcType=VARCHAR},
+      </if>
+      <if test="ad != null">
+        ad = #{ad,jdbcType=VARCHAR},
+      </if>
+      <if test="bz != null">
+        bz = #{bz,jdbcType=VARCHAR},
+      </if>
+      <if test="sm != null">
+        sm = #{sm,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pd.server.main.domain.WaterQualityNew">
+    update water_quality_new
+    set cjsj = #{cjsj,jdbcType=TIMESTAMP},
+      sbbh = #{sbbh,jdbcType=VARCHAR},
+      oxidative = #{oxidative,jdbcType=VARCHAR},
+      chlorophyll = #{chlorophyll,jdbcType=VARCHAR},
+      ph = #{ph,jdbcType=VARCHAR},
+      ad = #{ad,jdbcType=VARCHAR},
+      bz = #{bz,jdbcType=VARCHAR},
+      sm = #{sm,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

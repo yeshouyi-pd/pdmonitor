@@ -70,6 +70,8 @@ import Turbidity from "./views/environment/turbidity.vue";
 import CurrentMeter from "./views/environment/currentMeter.vue";
 import EnvironmentDp from "./views/mobile/environmentDp.vue";
 import VideoDp from "./views/mobile/videoDp.vue";
+import WaterQualityNew from "./views/environment/waterQualityNew.vue";
+import WaveData from "./views/environment/waveData.vue";
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -360,6 +362,14 @@ export default new Router({
             path: "environment/currentMeter",
             name: "environment/currentMeter",
             component: CurrentMeter
+        },{
+            path: "environment/waterQualityNew",
+            name: "environment/waterQualityNew",
+            component: WaterQualityNew
+        },{
+            path: "environment/waveData",
+            name: "environment/waveData",
+            component: WaveData
         }]
     }]
 })

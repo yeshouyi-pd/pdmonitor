@@ -3,14 +3,19 @@
     <div class="page-first-div">
       <div class="left-box">
         <div class="left-box-item">
-          <div class="left-video-box">
+          <div style="height: 5%;margin-top: 10px;display: flex;flex-direction: row;align-items: center;margin-left: 20px;">
+            <div v-on:click="back()" style="color: rgb(255, 255, 255);font-size: 16px;border: 1px solid #043769;background-color:rgb(10,33,61);width: 15%;text-align: center;padding: 5px 0;cursor: pointer">
+              返回
+            </div>
+          </div>
+          <div class="left-video-box" style="height: 88%;">
             <video autoplay="autoplay" loop="loop" style="width: 100%;height: 100%">
               <source class="video" src="/video/11.mp4" type="video/mp4" />
             </video>
           </div>
         </div>
         <div class="left-box-item">
-          <div class="left-video-box">
+          <div class="left-video-box" style="height: 88%;margin-top: 12%;">
             <video autoplay="autoplay" loop="loop" style="width: 100%;height: 100%">
               <source class="video" src="/video/11.mp4" type="video/mp4" />
             </video>
@@ -131,7 +136,10 @@ export default {
 
   },
   methods: {
-
+    back(){
+      let _this = this;
+      window.location.href = "/mobile/largemonitorsZj";
+    }
   }
 }
 </script>

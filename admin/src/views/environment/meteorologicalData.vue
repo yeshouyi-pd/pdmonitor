@@ -34,6 +34,15 @@
                 <tbody  >
                 <tr  >
                   <td style="width: 15%" >
+                    所在位置：
+                  </td>
+                  <td style="width: 25%;">
+                    <select v-model="meteorologicalDataDto.bz" class="form-control">
+                      <option value="" selected>请选择</option>
+                      <option v-for="(item,index) in zdysbList" :value="item.key">{{item.value}}</option>
+                    </select>
+                  </td>
+                  <td style="width: 15%" >
                     采集日期：
                   </td>
                   <td style="width: 25%;">
@@ -62,6 +71,7 @@
         <table id="simple-table" class="table  table-bordered table-hover">
           <thead>
           <tr>
+            <th>所在位置</th>
             <th>风速(m/s)</th>
             <th>风向(度)</th>
             <th>温度(摄氏度)</th>
@@ -77,6 +87,7 @@
           </thead>
           <tbody>
           <tr v-for="meteorologicalData in meteorologicalDatas">
+            <td>{{zdysbList|optionKVArray(meteorologicalData.bz)}}</td>
             <td>{{meteorologicalData.speed}}</td>
             <td>{{meteorologicalData.winddirection}}</td>
             <td>{{meteorologicalData.temperature}}</td>
@@ -100,6 +111,14 @@
         <table style="font-size: 1.1em;width:100%;margin: 20px 0" class="text-right" >
           <tbody>
             <tr>
+              <td style="width: 15%" >
+                所在位置：
+              </td>
+              <td style="width: 25%;">
+                <select v-model="cursbbh" class="form-control">
+                  <option v-for="(item,index) in zdysbList" :value="item.key">{{item.value}}</option>
+                </select>
+              </td>
               <td style="width:10%">
                 采集日期：
               </td>
@@ -139,7 +158,20 @@
         meteorologicalDataDto:{},
         defaultShow:true,
         etime:'',
-        stime:''
+        stime:'',
+        cursbbh:'RPCDA4016',
+        zdysbList:[
+          {key:"RPCDA4005", value:"3号航标"},
+          {key:"RPCDA4012", value:"4号航标"},
+          {key:"RPCDA4003", value:"5号航标"},
+          {key:"RPCDA4006-4", value:"平台4"},
+          {key:"RPCDA4009-3", value:"平台3"},
+          {key:"RPCDA4001", value:"8号航标"},
+          {key:"RPCDA4010", value:"10号航标"},
+          {key:"RPCDA4008", value:"11号航标"},
+          {key:"RPCDA4002", value:"淇澳岛"},
+          {key:"RPCDA4016", value:"RPCDA4016"}
+        ]
       }
     },
     mounted() {
@@ -165,6 +197,7 @@
         let obj = {};
         obj.stime = _this.stime;
         obj.etime = _this.etime;
+        obj.bz = _this.cursbbh;
         _this.$forceUpdate();
         _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/meteorologicalData/getAllDataByTime',obj).then((response)=>{
           Loading.hide();
@@ -325,3 +358,13 @@
     }
   }
 </script>
+<style scoped>
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover{
+  background-color: #fff;
+  color: #576373;
+  border-top: 2px solid #4C8FBD;
+}
+.nav-tabs>li>a, .nav-tabs>li>a:focus{
+  background-color: #fff;
+}
+</style>

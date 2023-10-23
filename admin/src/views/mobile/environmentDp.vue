@@ -168,9 +168,43 @@
           </div>
           <div class="left-bottom">
             <div class="title-name-div">
-              <span>湿度数据</span>
+              <span>人工智能预测模块</span>
             </div>
-            <div class="bottom-content" id="rightBottomEchart"></div>
+            <div style="width:90%;box-sizing: content-box;margin-left: 5%;margin-top: 2%;">
+              <table class="table-bordered" style="border-collapse: collapse;">
+                <thead style="background-color: #0B61A4;color: #fff">
+                  <tr>
+                    <td style="width: 15%">时间(明天)</td>
+                    <td>00:00-03:00</td>
+                    <td>03:00-06:00</td>
+                    <td>06:00-09:00</td>
+                    <td>09:00-12:00</td>
+                    <td>12:00-15:00</td>
+                    <td>18:00-18:00</td>
+                    <td>18:00-21:00</td>
+                    <td>21:00-24:00</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style="background-color: #C260D3;color: #fff;">港珠澳大桥一号</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                  </tr>
+                  <tr>
+                    <td style="background-color: #FF5151;color: #fff;">港珠澳大桥二号</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                  </tr>
+                  <tr>
+                    <td style="background-color: #FF7B2C;color: #fff;">港珠澳大桥三号</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                  </tr>
+                  <tr>
+                    <td style="background-color: #FBB435;color: #000000;">港珠澳大桥四号</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                  </tr>
+                  <tr>
+                    <td style="background-color: #05A82E;color: #fff;">港珠澳大桥五号</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+<!--            <div class="bottom-content" id="rightBottomEchart"></div>-->
           </div>
         </div>
       </div>
@@ -333,8 +367,8 @@ export default {
           data2.push(dataItem2)
         }
         _this.initCenterBottomEchart(data);
-        _this.rightCenterEchart(data1);
-        _this.rightBottomEchart(data2);
+        _this.rightCenterEchart(data1,data2);
+        //_this.rightBottomEchart(data2);
       })
     },
     initCenterBottomEchart(data){
@@ -410,7 +444,7 @@ export default {
         },
         yAxis: [
           {
-            name: '风速,风向',
+            name: '风速',
             axisLine: {
               lineStyle: {
                 color: '#fff'
@@ -424,16 +458,16 @@ export default {
           }
         ],
         series: [
-          {
-            type: 'custom',
-            renderItem: renderArrow,
-            encode: {
-              x: dims.time,
-              y: dims.windSpeed
-            },
-            data: data,
-            z: 10
-          },
+          // {
+          //   type: 'custom',
+          //   renderItem: renderArrow,
+          //   encode: {
+          //     x: dims.time,
+          //     y: dims.windSpeed
+          //   },
+          //   data: data,
+          //   z: 10
+          // },
           {
             type: 'line',
             symbol: 'none',
@@ -472,7 +506,7 @@ export default {
           }
         },
         yAxis: {
-          name: '温度',
+          name: '温度/湿度',
           type: 'value',
           axisLine: {
             lineStyle: {
@@ -485,6 +519,13 @@ export default {
           {
             data: data,
             type: 'line'
+          },
+          {
+            data: data1,
+            type: 'bar',
+            itemStyle: {
+              borderRadius: 50,
+            }
           }
         ]
       };
