@@ -20,7 +20,7 @@
       <!-- query start -->
       <div class="widget-box">
         <div class="widget-header">
-          <h4 class="widget-title">海流计数据查询</h4>
+          <h4 class="widget-title">波浪数据查询</h4>
           <div class="widget-toolbar">
             <a href="#" data-action="collapse">
               <i class="ace-icon fa fa-chevron-up"></i>
@@ -33,6 +33,15 @@
               <table  style="font-size: 1.1em;" class="text-right  " >
                 <tbody  >
                 <tr  >
+                  <td style="width: 15%" >
+                    所在位置：
+                  </td>
+                  <td style="width: 25%;">
+                    <select v-model="waveDataDto.sbbh" class="form-control">
+                      <option value="" selected>请选择</option>
+                      <option v-for="(item,index) in zdysbList" :value="item.key">{{item.value}}</option>
+                    </select>
+                  </td>
                   <td style="width: 15%" >
                     采集日期：
                   </td>
@@ -62,43 +71,19 @@
           <thead>
           <tr>
             <th>所在位置</th>
-            <th>产品编号</th>
-            <th>序列号</th>
-            <th>abs速度</th>
-            <th>方向</th>
-            <th>北</th>
-            <th>东</th>
-            <th>朝向</th>
-            <th>倾斜度X</th>
-            <th>倾斜度Y</th>
-            <th>Sp标准</th>
-            <th>力度</th>
-            <th>平计数</th>
-            <th>Abs倾斜度</th>
-            <th>最大倾斜度</th>
-            <th>标准倾斜度</th>
+            <th>有效波高(m)</th>
+            <th>波向(°)</th>
+            <th>波周期</th>
             <th>采集时间</th>
           </tr>
           </thead>
           <tbody>
-          <tr v-for="currentMeter in currentMeters">
-            <td>{{currentMeter.bz}}</td>
-            <td>{{currentMeter.productNumber}}</td>
-            <td>{{currentMeter.serialNumber}}</td>
-            <td>{{currentMeter.absSpeed}}</td>
-            <td>{{currentMeter.direction}}</td>
-            <td>{{currentMeter.north}}</td>
-            <td>{{currentMeter.east}}</td>
-            <td>{{currentMeter.heading}}</td>
-            <td>{{currentMeter.tiltX}}</td>
-            <td>{{currentMeter.tiltY}}</td>
-            <td>{{currentMeter.spStd}}</td>
-            <td>{{currentMeter.strength}}</td>
-            <td>{{currentMeter.pingCount}}</td>
-            <td>{{currentMeter.absTilt}}</td>
-            <td>{{currentMeter.maxTilt}}</td>
-            <td>{{currentMeter.stdTilt}}</td>
-            <td>{{currentMeter.cjsj}}</td>
+          <tr v-for="waveData in waveDatas">
+            <td>{{zdysbList|optionKVArray(waveData.sbbh)}}</td>
+            <td>{{waveData.waveH}}</td>
+            <td>{{waveData.waveDirection}}</td>
+            <td>{{waveData.wavePeriod}}</td>
+            <td>{{waveData.cjsj}}</td>
           </tr>
           </tbody>
         </table>
@@ -110,28 +95,36 @@
       <div>
         <table style="font-size: 1.1em;width:100%;margin: 20px 0" class="text-right" >
           <tbody>
-          <tr>
-            <td style="width:10%">
-              采集日期：
-            </td>
-            <td style="width: 20%">
-              <times v-bind:startTime="startTimeTb"
-                     v-bind:endTime="endTimeTb"
-                     start-id="currentMeterTbStartId"
-                     end-id="currentMeterTbEndId"
-                     v-bind:evalue="etime"
-                     v-bind:svalue="stime"></times>
-            </td>
-            <td style="width: 20%;" class="text-center">
-              <button type="button" v-on:click="getAllDataByTime()" class="btn btn-sm btn-info btn-round" style="margin-right: 10px;">
-                <i class="ace-icon fa fa-book"></i>
-                查询
-              </button>
-            </td>
-          </tr>
+            <tr>
+              <td style="width: 15%" >
+                所在位置：
+              </td>
+              <td style="width: 25%;">
+                <select v-model="cursbbh" class="form-control">
+                  <option v-for="(item,index) in zdysbList" :value="item.key">{{item.value}}</option>
+                </select>
+              </td>
+              <td style="width:10%">
+                采集日期：
+              </td>
+              <td style="width: 20%">
+                <times v-bind:startTime="startTimeTb"
+                       v-bind:endTime="endTimeTb"
+                       start-id="waveDataTbStartId"
+                       end-id="waveDataTbEndId"
+                       v-bind:evalue="etime"
+                       v-bind:svalue="stime"></times>
+              </td>
+              <td style="width: 20%;" class="text-center">
+                <button type="button" v-on:click="getAllDataByTime()" class="btn btn-sm btn-info btn-round" style="margin-right: 10px;">
+                  <i class="ace-icon fa fa-book"></i>
+                  查询
+                </button>
+              </td>
+            </tr>
           </tbody>
         </table>
-        <div id="echartCurrentMeter"  style='height: 500px;'></div>
+        <div id="echartwaveData"  style='height: 500px;'></div>
       </div>
     </div>
 
@@ -142,15 +135,28 @@ import Pagination from "../../components/pagination";
 import Times from "../../components/times";
 export default {
   components: {Pagination, Times},
-  name: "current-meter",
+  name: "waveData",
   data: function() {
     return {
-      currentMeters:[],
-      currentMeter:{},
-      currentMeterDto:{},
+      waveDatas:[],
+      waveData:{},
+      waveDataDto:{},
       defaultShow:true,
       etime:'',
-      stime:''
+      stime:'',
+      cursbbh:'RPCDA4016',
+      zdysbList:[
+        {key:"RPCDA4005", value:"3号航标"},
+        {key:"RPCDA4012", value:"4号航标"},
+        {key:"RPCDA4003", value:"5号航标"},
+        {key:"RPCDA4006-4", value:"平台4"},
+        {key:"RPCDA4009-3", value:"平台3"},
+        {key:"RPCDA4001", value:"8号航标"},
+        {key:"RPCDA4010", value:"10号航标"},
+        {key:"RPCDA4008", value:"11号航标"},
+        {key:"RPCDA4002", value:"淇澳岛"},
+        {key:"RPCDA4016", value:"RPCDA4016"}
+      ]
     }
   },
   mounted() {
@@ -172,47 +178,36 @@ export default {
       let _this = this;
       Loading.show();
       let obj = {};
+      obj.sbbh = _this.cursbbh;
       obj.stime = _this.stime;
       obj.etime = _this.etime;
       _this.$forceUpdate();
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/currentMeter/getAllDataByTime',obj).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waveData/getAllDataByTime',obj).then((response)=>{
         Loading.hide();
         let resp = response.data;
         let xAxisDatas = [];
         let seriesData1 = [];
         let seriesData2 = [];
         let seriesData3 = [];
-        let seriesData4 = [];
-        let seriesData5 = [];
-        let seriesData6 = [];
-        let seriesData7 = [];
-        let seriesData8 = [];
-        let seriesData9 = [];
         for(let i=0;i<resp.content.length;i++){
-          let currentMeter = resp.content[i];
-          xAxisDatas.push(currentMeter.cjsj);
-          seriesData1.push(currentMeter.absSpeed);
-          seriesData2.push(currentMeter.tiltX);
-          seriesData3.push(currentMeter.tiltY);
-          seriesData4.push(currentMeter.spStd);
-          seriesData5.push(currentMeter.strength);
-          seriesData6.push(currentMeter.pingCount);
-          seriesData7.push(currentMeter.absTilt);
-          seriesData8.push(currentMeter.maxTilt);
-          seriesData9.push(currentMeter.stdTilt);
+          let waveData = resp.content[i];
+          xAxisDatas.push(waveData.cjsj);
+          seriesData1.push(waveData.waveH);
+          seriesData2.push(waveData.waveDirection);
+          seriesData3.push(waveData.wavePeriod);
         }
         _this.$nextTick(function (){
-          _this.initEchartData(xAxisDatas,seriesData1,seriesData2,seriesData3,seriesData4,seriesData5,seriesData6,seriesData7,seriesData8,seriesData9);
+          _this.initEchartData(xAxisDatas,seriesData1,seriesData2,seriesData3);
         })
       })
     },
-    initEchartData(xAxisDatas,seriesData1,seriesData2,seriesData3,seriesData4,seriesData5,seriesData6,seriesData7,seriesData8,seriesData9){
+    initEchartData(xAxisDatas,seriesData1,seriesData2,seriesData3){
       let option = {
         tooltip: {
           trigger: 'axis'
         },
         legend: {
-          data: ["abs速度","倾斜度X","倾斜度Y","Sp标准","力度","平计数","Abs倾斜度","最大倾斜度","标准倾斜度"]
+          data: ["有效波高(m)","波向(°)","波周期"]
         },
         grid: {
           left: '3%',
@@ -229,65 +224,35 @@ export default {
         },
         series: [
           {
-            name: 'abs速度',
+            name: '有效波高(m)',
             type: 'line',
             data: seriesData1
           },
           {
-            name: '倾斜度X',
+            name: '波向(°)',
             type: 'line',
             data: seriesData2
           },
           {
-            name: '倾斜度Y',
+            name: '波周期',
             type: 'line',
             data: seriesData3
-          },
-          {
-            name: 'Sp标准',
-            type: 'line',
-            data: seriesData4
-          },
-          {
-            name: '力度',
-            type: 'line',
-            data: seriesData5
-          },
-          {
-            name: '平计数',
-            type: 'line',
-            data: seriesData6
-          },
-          {
-            name: 'Abs倾斜度',
-            type: 'line',
-            data: seriesData7
-          },
-          {
-            name: '最大倾斜度',
-            type: 'line',
-            data: seriesData8
-          },
-          {
-            name: '标准倾斜度',
-            type: 'line',
-            data: seriesData9
           }
         ]
       };
-      let echartsData = echarts.init(document.getElementById("echartCurrentMeter"));
+      let echartsData = echarts.init(document.getElementById("echartwaveData"));
       echartsData.setOption(option);
     },
     list(page){
       let _this = this;
       Loading.show();
-      _this.currentMeterDto.page = page;
-      _this.currentMeterDto.size = _this.$refs.pagination.size;
+      _this.waveDataDto.page = page;
+      _this.waveDataDto.size = _this.$refs.pagination.size;
       _this.$forceUpdate();
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/currentMeter/list', _this.currentMeterDto).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waveData/list', _this.waveDataDto).then((response)=>{
         Loading.hide();
         let resp = response.data;
-        _this.currentMeters = resp.content.list;
+        _this.waveDatas = resp.content.list;
         _this.$refs.pagination.render(page, resp.content.total);
 
       })
@@ -313,7 +278,7 @@ export default {
      */
     startTime(rep){
       let _this = this;
-      _this.currentMeterDto.stime = rep;
+      _this.waveDataDto.stime = rep;
       _this.$forceUpdate();
     },
     /**
@@ -321,7 +286,7 @@ export default {
      */
     endTime(rep){
       let _this = this;
-      _this.currentMeterDto.etime = rep;
+      _this.waveDataDto.etime = rep;
       _this.$forceUpdate();
     }
   }

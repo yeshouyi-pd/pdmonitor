@@ -460,3 +460,13 @@ export default {
   }
 }
 </script>
+<style scoped>
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover{
+  background-color: #fff;
+  color: #576373;
+  border-top: 2px solid #4C8FBD;
+}
+.nav-tabs>li>a, .nav-tabs>li>a:focus{
+  background-color: #fff;
+}
+</style>

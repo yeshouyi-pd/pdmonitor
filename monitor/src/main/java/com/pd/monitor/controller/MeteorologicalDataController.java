@@ -39,6 +39,9 @@ public class MeteorologicalDataController {
         if(!StringUtils.isEmpty(pageDto.getEtime())){
             ca.andCjsjLessThanOrEqualTo(pageDto.getEtime(),"%Y-%m-%d");
         }
+        if(!StringUtils.isEmpty(pageDto.getBz())){
+            ca.andBzEqualTo(pageDto.getBz());
+        }
         meteorologicalDataExample.setOrderByClause(" cjsj desc ");
         List<MeteorologicalData> meteorologicalDataList = meteorologicalDataService.selectByExample(meteorologicalDataExample);
         responseDto.setContent(meteorologicalDataList);
@@ -59,6 +62,9 @@ public class MeteorologicalDataController {
         }
         if(!StringUtils.isEmpty(pageDto.getEtime())){
             ca.andCjsjLessThanOrEqualTo(pageDto.getEtime(),"%Y-%m-%d");
+        }
+        if(!StringUtils.isEmpty(pageDto.getBz())){
+            ca.andBzEqualTo(pageDto.getBz());
         }
         meteorologicalDataExample.setOrderByClause(" cjsj desc ");
         List<MeteorologicalData> meteorologicalDataList = meteorologicalDataService.selectByExample(meteorologicalDataExample);

@@ -34,13 +34,12 @@
                 <tbody  >
                 <tr  >
                   <td style="width: 15%" >
-                    设备编号：
+                    所在位置：
                   </td>
                   <td style="width: 25%;">
                     <select v-model="turbidityDto.bz" class="form-control">
-                      <option value="RPCDA4016">RPCDA4016</option>
-                      <option value="ZDY21001">ZDY21001</option>
-                      <option value="ZDY21002">ZDY21002</option>
+                      <option value="" selected>请选择</option>
+                      <option v-for="(item,index) in zdysbList" :value="item.key">{{item.value}}</option>
                     </select>
                   </td>
                   <td style="width: 15%" >
@@ -71,6 +70,7 @@
         <table id="simple-table" class="table  table-bordered table-hover">
           <thead>
           <tr>
+            <th>所在位置</th>
             <th>浊度高量程</th>
             <th>浊度低量程</th>
             <th>深度(m)</th>
@@ -83,6 +83,7 @@
           </thead>
           <tbody>
           <tr v-for="turbidity in turbiditys">
+            <td>{{zdysbList|optionKVArray(turbidity.bz)}}</td>
             <td>{{turbidity.turbidityH}}</td>
             <td>{{turbidity.turibidityL}}</td>
             <td>{{turbidity.depth}}</td>
@@ -104,13 +105,11 @@
           <tbody>
             <tr>
               <td style="width: 15%" >
-                设备编号：
+                所在位置：
               </td>
               <td style="width: 25%;">
-                <select v-model="sbbh" class="form-control">
-                  <option value="RPCDA4016">RPCDA4016</option>
-                  <option value="ZDY21001">ZDY21001</option>
-                  <option value="ZDY21002">ZDY21002</option>
+                <select v-model="cursbbh" class="form-control">
+                  <option v-for="(item,index) in zdysbList" :value="item.key">{{item.value}}</option>
                 </select>
               </td>
               <td style="width:10%">
@@ -151,9 +150,21 @@ export default {
       turbidity:{},
       turbidityDto:{},
       defaultShow:true,
-      sbbh:'RPCDA4016',
       etime:'',
-      stime:''
+      stime:'',
+      cursbbh:'RPCDA4016',
+      zdysbList:[
+        {key:"RPCDA4005", value:"3号航标"},
+        {key:"RPCDA4012", value:"4号航标"},
+        {key:"RPCDA4003", value:"5号航标"},
+        {key:"RPCDA4006-4", value:"平台4"},
+        {key:"RPCDA4009-3", value:"平台3"},
+        {key:"RPCDA4001", value:"8号航标"},
+        {key:"RPCDA4010", value:"10号航标"},
+        {key:"RPCDA4008", value:"11号航标"},
+        {key:"RPCDA4002", value:"淇澳岛"},
+        {key:"RPCDA4016", value:"RPCDA4016"}
+      ]
     }
   },
   mounted() {
@@ -175,7 +186,7 @@ export default {
       let _this = this;
       Loading.show();
       let obj = {};
-      obj.bz = _this.sbbh;
+      obj.bz = _this.cursbbh;
       obj.stime = _this.stime;
       obj.etime = _this.etime;
       _this.$forceUpdate();
@@ -317,3 +328,13 @@ export default {
   }
 }
 </script>
+<style scoped>
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover{
+  background-color: #fff;
+  color: #576373;
+  border-top: 2px solid #4C8FBD;
+}
+.nav-tabs>li>a, .nav-tabs>li>a:focus{
+  background-color: #fff;
+}
+</style>

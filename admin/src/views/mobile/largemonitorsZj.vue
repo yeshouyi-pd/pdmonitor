@@ -3,11 +3,13 @@
     <header style="position: relative;">
       <img src="/largemonitors/assets/imgs/headertitle.png" style="position: absolute;left: 30%;top:20px;width: 750px;">
       <div class="lefttitle">
-        <img src="/largemonitors/assets/imgs/左上角title.png" alt="">
+        <img src="/largemonitors/assets/imgs/左上角title.png" alt="" style="width: 220px;">
         <span>
           <div @click="chooseProject" style="cursor: pointer;">主页</div>
           <div style="padding: 0 5px;">/</div>
           <div @click="chooseEnvironment" style="cursor: pointer;">环境</div>
+          <div style="padding: 0 5px;">/</div>
+          <div @click="chooseVideo" style="cursor: pointer;">视频</div>
         </span>
       </div>
     </header>
@@ -461,6 +463,9 @@ export default {
     },
     chooseProject(){
       window.location.href = "/admin/chooseProject";
+    },
+    chooseVideo(){
+      window.location.href = "/mobile/videoDp";
     },
     chooseEnvironment(){
       window.location.href = "/mobile/environmentDp";

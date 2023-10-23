@@ -239,6 +239,7 @@ export default {
     optionKV,
     formatSecond,
     optionMapKV,
+    optionKVArray,
     formatFileSize,
     formatDate,
     formatDateTime,
