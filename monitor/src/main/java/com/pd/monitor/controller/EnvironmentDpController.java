@@ -45,7 +45,7 @@ public class EnvironmentDpController {
         }
         //ca.andCjsjEqualTo("2023-10-01","%Y-%m-%d");
         ca.andCjsjEqualTo(DateUtils.getDateToStrFormat(new Date(),"yyyy-MM-dd"),"%Y-%m-%d");
-        example.setOrderByClause(" cjsj desc ");
+        example.setOrderByClause(" cjsj ");
         List<WaveData> lists = waveDataService.selectByExample(example);
         responseDto.setContent(lists);
         return responseDto;
@@ -59,9 +59,9 @@ public class EnvironmentDpController {
         if(!StringUtils.isEmpty(sbbh)){
             ca.andSbbhEqualTo(sbbh);
         }
-        //ca.andCjsjEqualTo("2023-10-01","%Y-%m-%d");
+        //ca.andCjsjEqualTo("2023-10-20","%Y-%m-%d");
         ca.andCjsjEqualTo(DateUtils.getDateToStrFormat(new Date(),"yyyy-MM-dd"),"%Y-%m-%d");
-        example.setOrderByClause(" cjsj desc ");
+        example.setOrderByClause(" cjsj ");
         List<WaterQualityNew> lists = waterQualityNewService.selectByExample(example);
         responseDto.setContent(lists);
         return responseDto;
@@ -77,7 +77,7 @@ public class EnvironmentDpController {
         }
         //ca.andCjsjEqualTo("2023-10-01","%Y-%m-%d");
         ca.andCjsjEqualTo(DateUtils.getDateToStrFormat(new Date(),"yyyy-MM-dd"),"%Y-%m-%d");
-        example.setOrderByClause(" cjsj desc ");
+        example.setOrderByClause(" cjsj ");
         List<MeteorologicalData> lists = meteorologicalDataService.selectByExample(example);
         responseDto.setContent(lists);
         return responseDto;
@@ -93,7 +93,7 @@ public class EnvironmentDpController {
         }
         //ca.andDateTimeEqualTo("2023-10-01","%Y-%m-%d");
         ca.andDateTimeEqualTo(DateUtils.getDateToStrFormat(new Date(),"yyyy-MM-dd"),"%Y-%m-%d");
-        turbidityExample.setOrderByClause(" date_time desc ");
+        turbidityExample.setOrderByClause(" date_time ");
         List<Turbidity> lists = turbidityService.selectByExample(turbidityExample);
         responseDto.setContent(lists);
         return responseDto;
@@ -110,7 +110,7 @@ public class EnvironmentDpController {
         }
         //ca.andCjsjEqualTo("2023-09-26","%Y-%m-%d");
         ca.andCjsjEqualTo(DateUtils.getDateToStrFormat(new Date(),"yyyy-MM-dd"),"%Y-%m-%d");
-        currentMeterExample.setOrderByClause(" cjsj desc ");
+        currentMeterExample.setOrderByClause(" cjsj ");
         List<CurrentMeter> currentMeterList = currentMeterService.selectByExample(currentMeterExample);
         if(currentMeterList.size()>0){
             currentMeter = currentMeterList.get(0);
