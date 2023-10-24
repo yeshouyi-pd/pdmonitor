@@ -878,7 +878,7 @@ export default {
   letter-spacing: 2px;
 }
 .center-content-bottom{
-  height: 312px;
+  height: calc(45vh - 115px);
   margin-top: 10px;
   background-color: #0F3A56;
 }

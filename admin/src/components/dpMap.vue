@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div :style="{height: heightMax + 'px'}">
+    <div style="height: 55vh">
       <div id="equipmentamap" style="width:100%;height: 100%" ></div>
     </div>
   </div>
