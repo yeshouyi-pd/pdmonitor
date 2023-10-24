@@ -16,15 +16,17 @@
               <div class="content-box">
                 <img src="/static/image/environment/jcy.png" />
                 <div>
-                  <span>设备点位</span><br/>
-                  <span style="color: yellow;">{{zdysbList|optionKVArray(curSbbh)}}</span>
+                  <span>设备编号</span><br/>
+                  <select v-model="curSbbh" @change="changeData" class="form-control" style="background-color: #13225E;color: yellow;border-color: #34B9DF;">
+                    <option style="color: yellow;" v-for="item in zdysbList" :value="item.key">{{item.key}}</option>
+                  </select>
                 </div>
               </div>
               <div class="content-box">
                 <img src="/static/image/environment/jcy.png" />
                 <div>
-                  <span>监测仪器数量</span><br/>
-                  <span>5</span>
+                  <span>设备点位</span><br/>
+                  <span style="color: yellow;">{{zdysbList|optionKVArray(curSbbh)}}</span>
                 </div>
               </div>
             </div>
@@ -32,11 +34,8 @@
               <div class="content-box">
                 <img src="/static/image/environment/jcy.png" />
                 <div>
-                  <span>设备编号</span><br/>
-<!--                  <span style="color: yellow;">{{curSbbh}}</span>-->
-                  <select v-model="curSbbh" @change="changeData" class="form-control" style="background-color: #13225E;color: yellow;border-color: #34B9DF;">
-                    <option style="color: yellow;" v-for="item in zdysbList" :value="item.key">{{item.key}}</option>
-                  </select>
+                  <span>当前日期</span><br/>
+                  <span>{{curDate}}</span>
                 </div>
               </div>
               <div class="content-box">
@@ -227,6 +226,7 @@ export default {
   components:{EquipmentAMap},
   data: function (){
     return {
+      curDate:'',
       heightMax:510,
       curSbbh:'RPCDA4016',
       curSbmc:'RPCDA4016',
@@ -250,6 +250,7 @@ export default {
   },
   mounted() {
     let _this = this;
+    _this.curDate = Tool.dateFormat("yyyy-MM-dd",new Date());
     _this.leftCenterData();
     _this.leftBottomData();
     _this.centerBottomData();
@@ -635,7 +636,7 @@ export default {
         let seriesData3 = [];
         for(let i=0;i<resp.content.length;i++){
           let waveData = resp.content[i];
-          xAxisDatas.push(waveData.cjsj);
+          xAxisDatas.push(waveData.cjsj.substring(11,waveData.cjsj.length));
           seriesData1.push(waveData.waveH);
           seriesData2.push(waveData.waveDirection);
           seriesData3.push(waveData.wavePeriod);
@@ -663,6 +664,7 @@ export default {
         },
         xAxis: {
           type: 'category',
+          data: xAxisDatas,
           axisLine: {
             lineStyle: {
               type: "solid",
