@@ -52,8 +52,7 @@ export default {
         _this.amap = new AMap.Map('equipmentamap', {
           center: [113.73,22.30],
           resizeEnable: true,
-          zoom: 10,
-          mapStyle: _this.mapStyle
+          zoom: 12
         });
         let polygonArr = new Array();//多边形覆盖物节点坐标数组
         polygonArr.push([113.666667, 22.4]);

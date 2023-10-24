@@ -1,15 +1,15 @@
 <template>
-  <div style="width: 100%;height: 936px;background-image: url('/static/image/environment/dpbg.png');background-size: 100%;margin: auto">
+  <div style="width: 1920px;height: 100vh;background-image: url('/static/image/environment/dpbg.png');background-size: 100%;margin: auto">
     <div class="page-first-div">
       <div class="left-div">
-        <div style="height: 6.1%;display: flex;flex-direction: row;align-items: center;margin-left: 20px;">
+        <div style="height: 4.1%;display: flex;flex-direction: row;align-items: center;margin-left: 20px;">
           <div v-on:click="back()" style="color: rgb(255, 255, 255);font-size: 16px;border: 1px solid #043769;background-color:rgb(10,33,61);width: 15%;text-align: center;padding: 5px 0;cursor: pointer">
             返回
           </div>
         </div>
         <div class="left-content-div">
           <div class="left-top">
-            <div class="title-name-div">
+            <div class="title-name-div" style="height: 20%;">
               <span style="padding-top:0%;">设备情况</span>
             </div>
             <div class="left-top-content">
@@ -17,7 +17,7 @@
                 <img src="/static/image/environment/jcy.png" />
                 <div>
                   <span>设备点位</span><br/>
-                  <span style="color: yellow;">{{curSbmc}}</span>
+                  <span style="color: yellow;">{{zdysbList|optionKVArray(curSbbh)}}</span>
                 </div>
               </div>
               <div class="content-box">
@@ -33,7 +33,10 @@
                 <img src="/static/image/environment/jcy.png" />
                 <div>
                   <span>设备编号</span><br/>
-                  <span style="color: yellow;">{{curSbbh}}</span>
+<!--                  <span style="color: yellow;">{{curSbbh}}</span>-->
+                  <select v-model="curSbbh" @change="changeData" class="form-control" style="background-color: #13225E;color: yellow;border-color: #34B9DF;">
+                    <option style="color: yellow;" v-for="item in zdysbList" :value="item.key">{{item.key}}</option>
+                  </select>
                 </div>
               </div>
               <div class="content-box">
@@ -47,7 +50,7 @@
           </div>
           <div class="left-center">
             <div class="title-name-div" style="height: 10%">
-              <span>海流计监测数据</span>
+              <span style="padding-top:1%;">海流计监测数据</span>
             </div>
             <div class="center-content-div">
               <div class="center-content-item-first">
@@ -105,12 +108,18 @@
         <div class="map-div">
           <EquipmentAMap v-bind:height-max="heightMax" :click-map-point="clickMapPoint"></EquipmentAMap>
         </div>
-        <div class="center-content-bottom" id="centerBottomEchart"></div>
+<!--        <div class="center-content-bottom" id="centerBottomEchart"></div>-->
+        <div class="center-content-bottom">
+          <div class="title-name-div">
+            <span style="padding-top: 1%;">水质数据</span>
+          </div>
+          <div class="center-bottom-div" id="centerBottomEchart"></div>
+        </div>
       </div>
       <div class="right-div">
-        <div class="left-content-div" style="margin-top: 10%;">
+        <div class="left-content-div" style="margin-top: 8%;">
           <div class="left-top">
-            <div class="title-name-div">
+            <div class="title-name-div" style="height: 20%;">
               <span style="padding-top:0%;">气象数据</span>
             </div>
             <div class="right-top-content" style="margin: 1% auto 0;">
@@ -162,7 +171,7 @@
           </div>
           <div class="left-center">
             <div class="title-name-div" style="height: 10%">
-              <span>温度数据</span>
+              <span style="padding-top: 1%;">海浪数据</span>
             </div>
             <div class="center-content-div" id="rightCenterEchart"></div>
           </div>
@@ -218,12 +227,25 @@ export default {
   components:{EquipmentAMap},
   data: function (){
     return {
-      heightMax:500,
+      heightMax:510,
       curSbbh:'RPCDA4016',
       curSbmc:'RPCDA4016',
       currentMeter:{},
       meteorological:{},
-      intervalId:null
+      intervalId:null,
+      zdysbbhList:['RPCDA4005','RPCDA4012','RPCDA4003','RPCDA4006-4','RPCDA4009-3','RPCDA4001','RPCDA4010','RPCDA4008','RPCDA4002','RPCDA4016'],
+      zdysbList:[
+        {key:"RPCDA4005", value:"3号航标"},
+        {key:"RPCDA4012", value:"4号航标"},
+        {key:"RPCDA4003", value:"5号航标"},
+        {key:"RPCDA4006-4", value:"平台4"},
+        {key:"RPCDA4009-3", value:"平台3"},
+        {key:"RPCDA4001", value:"8号航标"},
+        {key:"RPCDA4010", value:"10号航标"},
+        {key:"RPCDA4008", value:"11号航标"},
+        {key:"RPCDA4002", value:"淇澳岛"},
+        {key:"RPCDA4016", value:"RPCDA4016"}
+      ]
     }
   },
   mounted() {
@@ -231,9 +253,18 @@ export default {
     _this.leftCenterData();
     _this.leftBottomData();
     _this.centerBottomData();
+    _this.rightTopData();
+    _this.rightCenterData();
     _this.dataRefreh();
   },
   methods: {
+    changeData(){
+      let _this = this;
+      _this.leftBottomData();
+      _this.centerBottomData();
+      _this.rightTopData();
+      _this.rightCenterData();
+    },
     // 定时刷新数据函数
     dataRefreh() {
       let _this = this;
@@ -247,6 +278,8 @@ export default {
         _this.leftCenterData();
         _this.leftBottomData();
         _this.centerBottomData();
+        _this.rightTopData();
+        _this.rightCenterData();
       }, 900000);
     },
     // 停止定时器
@@ -262,23 +295,124 @@ export default {
     },
     clickMapPoint(sbmc,sbbh){
       let _this = this;
-      _this.curSbmc = sbmc;
-      _this.curSbbh = sbbh;
-      _this.leftCenterData();
-      _this.leftBottomData();
-      _this.centerBottomData();
+      if(_this.zdysbbhList.includes(sbbh)){
+        //_this.curSbmc = sbmc;
+        _this.curSbbh = sbbh;
+        _this.leftBottomData();
+        _this.centerBottomData();
+        _this.rightTopData();
+        _this.rightCenterData();
+      }else{
+        Toast.error("该站点没有环境数据！");
+      }
     },
     leftCenterData(){
       let _this = this;
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getCurrentMeterTodayData/'+_this.curSbbh, {}).then((response)=>{
-        Loading.hide();
         _this.currentMeter = response.data.content;
       })
+    },
+    centerBottomData(){
+      let _this = this;
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getWaterQualityNewTodayData/'+_this.curSbbh, {}).then((response)=>{
+        let waterQualityNews = response.data.content;
+        let xAxisDatas = [];
+        let seriesData1 = [];
+        let seriesData2 = [];
+        let seriesData3 = [];
+        let seriesData4 = [];
+        for(let i=0;i<waterQualityNews.length;i++){
+          let waterQualityNew = waterQualityNews[i];
+          xAxisDatas.push(waterQualityNew.cjsj.substring(11,waterQualityNew.cjsj.length));
+          seriesData1.push(waterQualityNew.oxidative);
+          seriesData2.push(waterQualityNew.chlorophyll);
+          seriesData3.push(waterQualityNew.ph);
+          seriesData4.push(waterQualityNew.ad);
+        }
+        _this.initCenterBottomEchartData(xAxisDatas,seriesData1,seriesData2,seriesData3,seriesData4);
+      })
+    },
+    initCenterBottomEchartData(xAxisDatas,seriesData1,seriesData2,seriesData3,seriesData4){
+      let option = {
+        tooltip: {
+          trigger: 'axis'
+        },
+        legend: {
+          data: ["溶解氧","叶绿素","ph","氨氮"],
+          textStyle: {
+            color: "#fff"
+          }
+        },
+        grid: {
+          bottom: '20px',
+          top: '40px',
+          left: '25px',
+          right: '18px'
+        },
+        xAxis: {
+          type: 'category',
+          axisLine: {
+            lineStyle: {
+              type: "solid",
+              color: "#fff"
+            }
+          },
+          data: xAxisDatas
+        },
+        yAxis: {
+          type: 'value',
+          axisLine: {
+            lineStyle: {
+              type: "solid",
+              color: "#fff"
+            }
+          }
+        },
+        series: [
+          {
+            name: '溶解氧',
+            type: 'line',
+            data: seriesData1,
+            symbolSize: 7,
+            lineStyle: {
+              width: 6
+            }
+          },
+          {
+            name: '叶绿素',
+            type: 'line',
+            data: seriesData2,
+            symbolSize: 7,
+            lineStyle: {
+              width: 6
+            }
+          },
+          {
+            name: 'ph',
+            type: 'line',
+            data: seriesData3,
+            symbolSize: 7,
+            lineStyle: {
+              width: 6
+            }
+          },
+          {
+            name: '氨氮',
+            type: 'line',
+            data: seriesData4,
+            symbolSize: 7,
+            lineStyle: {
+              width: 6
+            },
+          }
+        ]
+      };
+      let echartsData = echarts.init(document.getElementById("centerBottomEchart"));
+      echartsData.setOption(option);
     },
     leftBottomData(){
       let _this = this;
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getTurbidityTodayData/'+_this.curSbbh, {}).then((response)=>{
-        Loading.hide();
         let turbiditys = response.data.content;
         let data = [];
         for(let i=0;i<turbiditys.length;i++){
@@ -295,13 +429,14 @@ export default {
       let option = {
         grid: {
           bottom: '20px',
-          top: '40px'
+          top: '40px',
+          left: '25px',
+          right: '18px'
         },
         legend: {
-          top: 10,
-          data: ['盐度(PSU)'],
+          data: ['盐度'],
           textStyle: {
-            color: '#fff'
+            color: "#fff"
           }
         },
         tooltip: {
@@ -327,47 +462,50 @@ export default {
         },
         series: [
           {
-            name: '盐度(PSU)',
-            symbolSize: function (data) {
-              return data[1]*2;
-            },
+            name: '盐度',
+            type: 'line',
             data: data,
-            type: 'scatter'
+            symbolSize: 7,
+            lineStyle: {
+              width: 6
+            },
+            itemStyle: {
+              color: "rgba(237, 22, 22, 1)"
+            }
           }
         ]
       };
       let echartsData = echarts.init(document.getElementById("leftBottomEchart"));
       echartsData.setOption(option);
     },
-    centerBottomData(){
+    rightTopData(){
       let _this = this;
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getMeteorologicalTodayData/'+_this.curSbbh, {}).then((response)=>{
-        Loading.hide();
         let meteorologicals = response.data.content;
-        let data = [];
-        let data1 = [];
-        let data2 = [];
+        // let data = [];
+        // let data1 = [];
+        // let data2 = [];
         if(meteorologicals.length>0){
           _this.meteorological = meteorologicals[0];
         }
-        for(let i=0;i<meteorologicals.length;i++){
-          let meteorological = meteorologicals[i];
-          let dataItem = [];//风速和风向
-          dataItem.push(meteorological.cjsj);
-          dataItem.push(meteorological.speed);
-          dataItem.push(meteorological.winddirection);
-          data.push(dataItem);
-          let dataItem1 = [];//温度
-          dataItem1.push(meteorological.cjsj.substring(11,meteorological.cjsj.length));
-          dataItem1.push(meteorological.temperature);
-          data1.push(dataItem1)
-          let dataItem2 = [];//湿度
-          dataItem2.push(meteorological.cjsj.substring(11,meteorological.cjsj.length));
-          dataItem2.push(meteorological.humidity);
-          data2.push(dataItem2)
-        }
-        _this.initCenterBottomEchart(data);
-        _this.rightCenterEchart(data1,data2);
+        // for(let i=0;i<meteorologicals.length;i++){
+        //   let meteorological = meteorologicals[i];
+        //   let dataItem = [];//风速和风向
+        //   dataItem.push(meteorological.cjsj);
+        //   dataItem.push(meteorological.speed);
+        //   dataItem.push(meteorological.winddirection);
+        //   data.push(dataItem);
+        //   let dataItem1 = [];//温度
+        //   dataItem1.push(meteorological.cjsj.substring(11,meteorological.cjsj.length));
+        //   dataItem1.push(meteorological.temperature);
+        //   data1.push(dataItem1)
+        //   let dataItem2 = [];//湿度
+        //   dataItem2.push(meteorological.cjsj.substring(11,meteorological.cjsj.length));
+        //   dataItem2.push(meteorological.humidity);
+        //   data2.push(dataItem2)
+        // }
+        // _this.initCenterBottomEchart(data);
+        // _this.rightCenterEchart(data1,data2);
         //_this.rightBottomEchart(data2);
       })
     },
@@ -487,7 +625,25 @@ export default {
       let echartsData = echarts.init(document.getElementById("centerBottomEchart"));
       echartsData.setOption(option);
     },
-    rightCenterEchart(data){
+    rightCenterData(){
+      let _this = this;
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getWaveDataTodayData/'+_this.curSbbh, {}).then((response)=>{
+        let resp = response.data;
+        let xAxisDatas = [];
+        let seriesData1 = [];
+        let seriesData2 = [];
+        let seriesData3 = [];
+        for(let i=0;i<resp.content.length;i++){
+          let waveData = resp.content[i];
+          xAxisDatas.push(waveData.cjsj);
+          seriesData1.push(waveData.waveH);
+          seriesData2.push(waveData.waveDirection);
+          seriesData3.push(waveData.wavePeriod);
+        }
+        _this.rightCenterEchart(xAxisDatas,seriesData1,seriesData2,seriesData3);
+      })
+    },
+    rightCenterEchart(xAxisDatas,seriesData1,seriesData2,seriesData3){
       let _this = this;
       let option = {
         grid: {
@@ -495,6 +651,15 @@ export default {
           top: '40px',
           left: '30px',
           right: '10px'
+        },
+        tooltip: {
+          trigger: 'axis'
+        },
+        legend: {
+          data: ["有效波高(m)","波向(°)","波周期"],
+          textStyle: {
+            color: "#fff"
+          }
         },
         xAxis: {
           type: 'category',
@@ -506,7 +671,6 @@ export default {
           }
         },
         yAxis: {
-          name: '温度/湿度',
           type: 'value',
           axisLine: {
             lineStyle: {
@@ -517,14 +681,30 @@ export default {
         },
         series: [
           {
-            data: data,
-            type: 'line'
+            name: '有效波高(m)',
+            type: 'line',
+            data: seriesData1,
+            symbolSize: 7,
+            lineStyle: {
+              width: 6
+            }
           },
           {
-            data: data1,
-            type: 'bar',
-            itemStyle: {
-              borderRadius: 50,
+            name: '波向(°)',
+            type: 'line',
+            data: seriesData2,
+            symbolSize: 7,
+            lineStyle: {
+              width: 6
+            }
+          },
+          {
+            name: '波周期',
+            type: 'line',
+            data: seriesData3,
+            symbolSize: 7,
+            lineStyle: {
+              width: 6
             }
           }
         ]
@@ -581,7 +761,6 @@ export default {
   width: 100%;
   height: 100%;
   display: flex;
-  overflow: auto;
 }
 .left-div{
   width: 30%;
@@ -604,14 +783,20 @@ export default {
 .left-top{
   width: 100%;
   height: 20%;
+  margin: 10px 0;
+  background-color: #0F3A56;
+  padding: 10px 0;
 }
 .left-center{
   width: 100%;
-  height: 44%;
+  height: 40%;
+  background-color: #0F3A56;
+  margin-bottom: 10px;
 }
 .left-bottom{
   width: 100%;
-  height: 36%;
+  height: 37.2%;
+  background-color: #0F3A56;
 }
 .title-name-div{
   color: #fff;
@@ -620,6 +805,9 @@ export default {
   background-size: 90% 100%;
   background-position: center;
   height: 15%;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 1px;
 }
 .title-name-div span{
   margin-left: 5%;
@@ -627,7 +815,7 @@ export default {
   display: block;
 }
 .left-top-content{
-  height: 40%;
+  height: 38%;
   display: flex;
   flex-direction: row;
   margin-top: 1%;
@@ -637,10 +825,10 @@ export default {
   width: 42.5%;
   margin-left: 5%;
   display: flex;
-  background-color: rgb(10,33,61);
+  background-color: rgb(14,141,252);
 }
 .content-box img{
-  width: 20%;
+  width: 18%;
   height: 70%;
   margin-top: 4%;
   margin-left: 4%;
@@ -682,16 +870,23 @@ export default {
 .dp-title{
   width: 100%;
   text-align: center;
-  font-size: 24px;
+  font-size: 30px;
+  font-weight: 600;
   color: #fff;
   height: 83px;
   line-height: 83px;
+  letter-spacing: 2px;
 }
 .center-content-bottom{
-  height: 347px;
+  height: 312px;
+  margin-top: 10px;
+  background-color: #0F3A56;
+}
+.center-bottom-div{
+  height: 85%;
 }
 .right-top-content{
-  height: 40%;
+  height: 38%;
   width: 96%;
   display: flex;
   flex-direction: row;
