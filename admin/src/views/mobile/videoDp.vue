@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 100%;height: 100%;background-image: url('/static/image/environment/bg02.png');background-size: 100%;margin: auto">
+  <div style="width: 1920px;height: 100vh;background-image: url('/static/image/environment/bg02.png');background-size: 100%;margin: auto">
     <div class="page-first-div">
       <div class="left-box">
         <div class="left-box-item">
@@ -15,7 +15,7 @@
           </div>
         </div>
         <div class="left-box-item">
-          <div class="left-video-box" style="height: 88%;margin-top: 12%;">
+          <div class="left-video-box" style="height: 88%;margin-top: 10%;">
             <video autoplay="autoplay" loop="loop" style="width: 100%;height: 100%">
               <source class="video" src="/video/11.mp4" type="video/mp4" />
             </video>
@@ -145,8 +145,8 @@ export default {
 </script>
 <style scoped>
 .page-first-div{
-  width: 1745px;
-  height: 850px;
+  width: 100%;
+  height: 100%;
   overflow: auto;
   display: flex;
   flex-direction: row;
@@ -166,7 +166,7 @@ export default {
   width: 95%;
   height: 95%;
   margin-left: 5%;
-  margin-top: 5%;
+  margin-top: 3%;
   background-color: rgb(7,14,40);
 }
 .right-box{
