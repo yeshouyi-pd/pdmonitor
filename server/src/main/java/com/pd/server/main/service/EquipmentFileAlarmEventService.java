@@ -159,4 +159,7 @@ public class EquipmentFileAlarmEventService {
         equipmentFileAlarmEventMapper.deleteByPrimaryKey(id);
     }
 
+    public void deleteByExample(EquipmentFileAlarmEventExample example){
+        equipmentFileAlarmEventMapper.deleteByExample(example);
+    }
 }

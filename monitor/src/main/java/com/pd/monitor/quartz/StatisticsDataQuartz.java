@@ -6,6 +6,8 @@ import com.pd.server.main.dto.EquipmentFileAlarmEventDto;
 import com.pd.server.main.dto.EventCameraInfoDto;
 import com.pd.server.main.dto.PredationNumDto;
 import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
+import com.pd.server.main.dto.basewx.my.NoTodaySbbhDto;
+import com.pd.server.main.dto.basewx.my.PredationStaticticsDto;
 import com.pd.server.main.service.*;
 import com.pd.server.util.CopyUtil;
 import com.pd.server.util.DateTools;
@@ -42,6 +44,13 @@ public class StatisticsDataQuartz {
     private PredationNumService predationNumService;
     @Resource
     private WaterEquipmentService waterEquipmentService;
+    @Resource
+    private EquipmentFileService equipmentFileService;
+
+//    @Scheduled(cron = "0 55 10 * * ? ")
+//    public void test() throws ParseException {
+//        loop();
+//    }
 
     //每天凌晨30分执行
     //1.出现次数统计(appear_numbers)
@@ -50,21 +59,30 @@ public class StatisticsDataQuartz {
     //4.清除EquipmentFileToday表中昨天的数据
     @Scheduled(cron = "0 30 0 * * ? ")
     public void loop() throws ParseException {
-        //出现次数统计(appearNumbers)
         String beforeDayStr = DateTools.getFormatDate(DateUtil.getDaysLater(new Date(),-1),"yyyy-MM-dd");
-        EquipmentFileTodayExample example = new EquipmentFileTodayExample();
-        EquipmentFileTodayExample.Criteria ca = example.createCriteria();
-        ca.andRqEqualTo(beforeDayStr);
-        ca.andTxtlxEqualTo("1");
-        List<AlarmNumbersDto> lists = equipmentFileTodayService.statisticsAlarmNums(example);
-        for(AlarmNumbersDto item : lists){
-            AppearNumbersDto dto = CopyUtil.copy(item,AppearNumbersDto.class);
-            dto.setBjsj(item.getFz().substring(0,10));
-            appearNumbersService.save(dto);
-        }
-        //出现事件统计，捕食次数统计
-        //为什么捕食次数统计要放在出现事件统计完以后进行，因为捕食次数统计中包含了事件次数，需要从出现事件统计中获取
-        alarmEvent(lists,example);
+
+        //不是今天的数据
+        EquipmentFileTodayExample noTodayExample = new EquipmentFileTodayExample();
+        EquipmentFileTodayExample.Criteria noTodayCa = noTodayExample.createCriteria();
+        noTodayCa.andRqLessThanOrEqualTo(beforeDayStr);
+        noTodayCa.andTxtlxEqualTo("1");
+        List<NoTodaySbbhDto> noTodaySbbhDtoList = equipmentFileTodayService.noTodaySbbhDtoList(noTodayExample);
+        noTodaySbbhDtoList(noTodaySbbhDtoList);
+//
+//        //出现次数统计(appearNumbers)
+//        EquipmentFileTodayExample example = new EquipmentFileTodayExample();
+//        EquipmentFileTodayExample.Criteria ca = example.createCriteria();
+//        ca.andRqEqualTo(beforeDayStr);
+//        ca.andTxtlxEqualTo("1");
+//        List<AlarmNumbersDto> lists = equipmentFileTodayService.statisticsAlarmNums(example);
+//        for(AlarmNumbersDto item : lists){
+//            AppearNumbersDto dto = CopyUtil.copy(item,AppearNumbersDto.class);
+//            dto.setBjsj(item.getFz().substring(0,10));
+//            appearNumbersService.save(dto);
+//        }
+//        //出现事件统计，捕食次数统计
+//        //为什么捕食次数统计要放在出现事件统计完以后进行，因为捕食次数统计中包含了事件次数，需要从出现事件统计中获取
+//        alarmEvent(lists,example);
     }
 
     //出现事件统计(equipment_file_alarm_event)，然后在进行捕食次数统计(predation_num表中包含事件次数)
@@ -174,6 +192,7 @@ public class StatisticsDataQuartz {
             EquipmentFileTodayExample.Criteria ca1 = example1.createCriteria();
             ca1.andRqEqualTo(alarmNumbersDto.getBjsj());
             ca1.andJczlEqualTo("1");
+            ca1.andTxtlxEqualTo("1");
             ca1.andSbbhEqualTo(alarmNumbersDto.getSbbh());
             List<EquipmentFileToday> predationList = equipmentFileTodayService.listAll(example1);
             PredationNumDto dto = new PredationNumDto();
@@ -218,6 +237,152 @@ public class StatisticsDataQuartz {
         }
     }
 
+    public void noTodaySbbhDtoList(List<NoTodaySbbhDto> list){
+        WaterEquipmentExample exampleTemp = new WaterEquipmentExample();
+        exampleTemp.createCriteria().andDqzlEqualTo("A4");
+        List<String> sbbha4 = waterEquipmentService.findSbbh(exampleTemp);
+        for(NoTodaySbbhDto noTodaySbbhDto : list){
+            AppearNumbersExample appearDelExample = new AppearNumbersExample();
+            AppearNumbersExample.Criteria appearDelCa = appearDelExample.createCriteria();
+            appearDelCa.andSbbhEqualTo(noTodaySbbhDto.getSbbh());
+            appearDelCa.andBjsjEqualTo(noTodaySbbhDto.getRq());
+            appearNumbersService.deleteByExample(appearDelExample);
+            EquipmentFileAlarmEventExample alarmEventDelExample = new EquipmentFileAlarmEventExample();
+            EquipmentFileAlarmEventExample.Criteria alarmEventDelCa = alarmEventDelExample.createCriteria();
+            alarmEventDelCa.andSbbhEqualTo(noTodaySbbhDto.getSbbh());
+            alarmEventDelCa.andBjsjEqualTo(noTodaySbbhDto.getRq());
+            equipmentFileAlarmEventService.deleteByExample(alarmEventDelExample);
+            PredationNumExample predationDelExample = new PredationNumExample();
+            PredationNumExample.Criteria predationDelCa = predationDelExample.createCriteria();
+            predationDelCa.andSbbhEqualTo(noTodaySbbhDto.getSbbh());
+            predationDelCa.andCjsjEqualTo(noTodaySbbhDto.getRq()+" 00:00:00");
+            predationNumService.deleteByExample(predationDelExample);
+            //出现次数统计(appearNumbers)
+            EquipmentFileExample example = new EquipmentFileExample();
+            EquipmentFileExample.Criteria ca = example.createCriteria();
+            ca.andRqEqualTo(noTodaySbbhDto.getRq());
+            ca.andTxtlxEqualTo("1");
+            ca.andSbbhEqualTo(noTodaySbbhDto.getSbbh());
+            List<AlarmNumbersDto> lists = equipmentFileService.statisticsAlarmNums(example);
+            for(AlarmNumbersDto item : lists){
+                AppearNumbersDto dto = CopyUtil.copy(item,AppearNumbersDto.class);
+                dto.setBjsj(item.getFz().substring(0,10));
+                appearNumbersService.save(dto);
+            }
+            List<AlarmNumbersDto> listsTemp = lists.stream().sorted(Comparator.comparing(AlarmNumbersDto::getFz)).collect(Collectors.toList());
+            List<AlarmNumbersDto> resultList = new ArrayList<>();
+            if(!CollectionUtils.isEmpty(listsTemp)){
+                AlarmNumbersDto firstEntity = listsTemp.get(0);
+                String curDateStr = firstEntity.getFz();
+                //String lastDateStr = laterThreeMinute(curDateStr);
+                Integer bjsl = firstEntity.getAlarmNum();
+                for(int i=1;i<listsTemp.size();i++){
+                    AlarmNumbersDto entity = listsTemp.get(i);
+                    AlarmNumbersDto beforeEntity = listsTemp.get(i-1);
+                    String beforeDateStr = beforeEntity.getFz();
+                    String nextDateStr = entity.getFz();
+                    if(entity.getSbbh().equals(firstEntity.getSbbh())){
+                        if(isOverThreeMinute(beforeDateStr, nextDateStr)){
+                            bjsl = bjsl + entity.getAlarmNum();
+                        }else {
+                            AlarmNumbersDto result = new AlarmNumbersDto();
+                            result.setDeptcode(entity.getDeptcode());
+                            result.setSbbh(entity.getSbbh());
+                            result.setBjsj(curDateStr+" 至 "+beforeDateStr);
+                            result.setAlarmNum(bjsl);
+                            resultList.add(result);
+                            firstEntity = entity;
+                            curDateStr = firstEntity.getFz();
+                            bjsl = firstEntity.getAlarmNum();
+                        }
+                    }else {
+                        AlarmNumbersDto result = new AlarmNumbersDto();
+                        result.setDeptcode(firstEntity.getDeptcode());
+                        result.setSbbh(firstEntity.getSbbh());
+                        result.setBjsj(curDateStr+" 至 "+beforeDateStr);
+                        result.setAlarmNum(bjsl);
+                        resultList.add(result);
+                        firstEntity = entity;
+                        curDateStr = firstEntity.getFz();
+                        bjsl = firstEntity.getAlarmNum();
+                    }
+                    if(i==listsTemp.size()-1){
+                        AlarmNumbersDto result = new AlarmNumbersDto();
+                        result.setDeptcode(entity.getDeptcode());
+                        result.setSbbh(entity.getSbbh());
+                        result.setBjsj(curDateStr+" 至 "+nextDateStr);
+                        result.setAlarmNum(bjsl);
+                        resultList.add(result);
+                    }
+                }
+                if(listsTemp.size()==1){
+                    AlarmNumbersDto result = new AlarmNumbersDto();
+                    result.setDeptcode(firstEntity.getDeptcode());
+                    result.setSbbh(firstEntity.getSbbh());
+                    result.setBjsj(curDateStr+" 至 "+curDateStr);
+                    result.setAlarmNum(bjsl);
+                    resultList.add(result);
+                }
+            }
+            for(int i=0;i<resultList.size();i++){
+                AlarmNumbersDto alarmNumbersDto = resultList.get(i);
+                EquipmentFileAlarmEventDto entity = new EquipmentFileAlarmEventDto();
+                entity.setId(UuidUtil.getShortUuid());
+                entity.setDeptcode(alarmNumbersDto.getDeptcode());
+                entity.setSbbh(alarmNumbersDto.getSbbh());
+                entity.setEventTime(alarmNumbersDto.getBjsj());
+                entity.setAlarmNum(alarmNumbersDto.getAlarmNum());
+                entity.setBjsj(alarmNumbersDto.getBjsj().substring(0,10));
+                entity.setXh(i+1);
+                String[] arr = entity.getEventTime().split(" 至 ");
+                String kssj = arr[0]+":00";
+                String jssj = arr[1]+":00";
+                if(sbbha4.contains(noTodaySbbhDto.getSbbh())){
+                    //统计头数
+                    EquipmentFileExample tsExample = new EquipmentFileExample();
+                    EquipmentFileExample.Criteria tsCa = tsExample.createCriteria();
+                    tsCa.andSbbhEqualTo(noTodaySbbhDto.getSbbh());
+                    tsCa.andTxtlxEqualTo("4");
+                    tsCa.andFzGreaterThanOrEqualTo(arr[0]);
+                    tsCa.andFzLessThanOrEqualTo(arr[1]);
+                    Integer tsCount = equipmentFileService.countTsByExample(tsExample);
+                    if(!StringUtils.isEmpty(tsCount)){
+                        entity.setSm1(String.valueOf(tsCount));
+                    }
+                }
+                equipmentFileAlarmEventService.insert(entity);
+            }
+            WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
+            waterEquipmentExample.createCriteria().andSbsnEqualTo(noTodaySbbhDto.getSbbh());
+            List<WaterEquipment> waterEquipments = waterEquipmentService.list(waterEquipmentExample);
+            //捕食次数
+            EquipmentFileExample example1 = new EquipmentFileExample();
+            EquipmentFileExample.Criteria ca1 = example1.createCriteria();
+            ca1.andRqEqualTo(noTodaySbbhDto.getRq());
+            ca1.andTxtlxEqualTo("1");
+            ca1.andSbbhEqualTo(noTodaySbbhDto.getSbbh());
+            PredationStaticticsDto predationStaticticsDto = equipmentFileService.predationStatictics(example1);
+            PredationNumDto dto = new PredationNumDto();
+            dto.setPredationNum(predationStaticticsDto.getBscs());
+            dto.setAlarmNum(predationStaticticsDto.getCxcs());
+            dto.setDeptcode(waterEquipments.get(0).getDeptcode());
+            dto.setCjsj(DateUtil.toDate(noTodaySbbhDto.getRq(),"yyyy-MM-dd"));
+            dto.setSbbh(noTodaySbbhDto.getSbbh());
+            EquipmentFileAlarmEventExample eventExample = new EquipmentFileAlarmEventExample();
+            EquipmentFileAlarmEventExample.Criteria eventCa = eventExample.createCriteria();
+            eventCa.andSbbhEqualTo(noTodaySbbhDto.getSbbh());
+            eventCa.andBjsjEqualTo(noTodaySbbhDto.getRq());
+            long alarmCount = equipmentFileAlarmEventService.alarmCount(eventExample);
+            dto.setSm1(StringUtils.isEmpty(alarmCount)?"0":Long.toString(alarmCount));
+            if(sbbha4.contains(noTodaySbbhDto.getSbbh())){
+                Integer tsCount = equipmentFileAlarmEventService.countTsByExample(eventExample);
+                dto.setSm2(StringUtils.isEmpty(tsCount)?"0":String.valueOf(tsCount));
+            }
+            predationNumService.save(dto);
+        }
+        clearTodayData();
+    }
+
 //    public void saveEventCameraInfo(EquipmentFileAlarmEventDto entity, String key, String kssj, String jssj){
 //        if(kssj.equals(jssj)){
 //            jssj = DateUtil.getFormatDate(DateUtil.getMinutesLater(DateUtil.toDate(jssj,"yyyy-MM-dd HH:mm:ss"),1),"yyyy-MM-dd HH:mm:ss");
@@ -252,9 +417,4 @@ public class StatisticsDataQuartz {
         return false;
     }
 
-
-    @Scheduled(cron = "0 47 14 * * ? ")
-    public void test() throws ParseException {
-        loop();
-    }
 }

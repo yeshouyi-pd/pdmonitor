@@ -6,6 +6,7 @@ import com.pd.server.main.domain.EquipmentFileToday;
 import com.pd.server.main.domain.EquipmentFileTodayExample;
 import com.pd.server.main.dto.*;
 import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
+import com.pd.server.main.dto.basewx.my.NoTodaySbbhDto;
 import com.pd.server.main.dto.basewx.my.SmsIntDto;
 import com.pd.server.main.mapper.EquipmentFileTodayMapper;
 import com.pd.server.util.CopyUtil;
@@ -59,6 +60,10 @@ public class EquipmentFileTodayService {
 
     public List<EquipmentFileToday> listAllDw(EquipmentFileTodayExample equipmentFileTodayExample){
         return equipmentFileTodayMapper.selectByExampleDw(equipmentFileTodayExample);
+    }
+
+    public List<NoTodaySbbhDto> noTodaySbbhDtoList(EquipmentFileTodayExample example){
+        return equipmentFileTodayMapper.noTodaySbbhDtoList(example);
     }
 
     /**

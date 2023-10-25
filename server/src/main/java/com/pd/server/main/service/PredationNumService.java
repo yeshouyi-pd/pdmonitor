@@ -85,4 +85,7 @@ public class PredationNumService {
         predationNumMapper.deleteByPrimaryKey(id);
     }
 
+    public void deleteByExample(PredationNumExample example){
+        predationNumMapper.deleteByExample(example);
+    }
 }
