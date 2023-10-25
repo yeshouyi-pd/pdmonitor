@@ -73,6 +73,12 @@
     <result column="sumTs" jdbcType="INTEGER" property="sumTs" />
   </resultMap>
 
+  <resultMap id="PredaionStatistics" type="com.pd.server.main.dto.basewx.my.PredationStaticticsDto">
+    <result column="deptcode" jdbcType="VARCHAR" property="deptcode" />
+    <result column="cxcs" jdbcType="INTEGER" property="cxcs" />
+    <result column="bscs" jdbcType="INTEGER" property="bscs" />
+  </resultMap>
+
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -856,6 +862,20 @@
 
   <select id="sendSmsQueryXz" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultMap="SmsInt">
     SELECT sbbh,COUNT(*) bjcs FROM  equipment_file
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+
+  <select id="countTsByExample" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultType="java.lang.Integer">
+    select sum(ts) from equipment_file
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+
+  <select id="predationStatictics" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultMap="PredaionStatistics">
+    select count(1) 'cxcs',count(case WHEN jczl='1' then 1 end) 'bscs' from equipment_file
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>

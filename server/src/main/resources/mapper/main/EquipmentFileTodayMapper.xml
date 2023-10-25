@@ -52,6 +52,11 @@
     <result column="bjcs" jdbcType="INTEGER" property="bjcs" />
     <result column="sumTs" jdbcType="INTEGER" property="sumTs" />
   </resultMap>
+
+  <resultMap id="NoTodaySbbh" type="com.pd.server.main.dto.basewx.my.NoTodaySbbhDto">
+    <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
+    <result column="rq" jdbcType="VARCHAR" property="rq" />
+  </resultMap>
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -659,6 +664,13 @@
 
   <select id="sendSmsQueryXz" parameterType="com.pd.server.main.domain.EquipmentFileTodayExample" resultMap="SmsInt">
     SELECT sbbh,COUNT(*) bjcs,sum(ts) sumTs FROM  equipment_file_today
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+
+  <select id="noTodaySbbhDtoList" parameterType="com.pd.server.main.domain.EquipmentFileTodayExample" resultMap="NoTodaySbbh">
+    select DISTINCT rq,sbbh from equipment_file_today
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>

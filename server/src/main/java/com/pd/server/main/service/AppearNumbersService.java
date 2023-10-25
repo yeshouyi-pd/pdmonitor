@@ -66,4 +66,8 @@ public class AppearNumbersService {
         appearNumbersMapper.deleteByPrimaryKey(id);
     }
 
+    public void deleteByExample(AppearNumbersExample example){
+        appearNumbersMapper.deleteByExample(example);
+    }
+
 }

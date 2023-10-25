@@ -260,6 +260,11 @@ public class PredationNumExample {
             return (Criteria) this;
         }
 
+        public Criteria andCjsjEqualTo(String value) {
+            addCriterion("cjsj =", value, "cjsj");
+            return (Criteria) this;
+        }
+
         public Criteria andCjsjEqualTo(String value, String type) {
             addCriterion("DATE_FORMAT(cjsj,'"+type+"') =", value, "cjsj");
             return (Criteria) this;

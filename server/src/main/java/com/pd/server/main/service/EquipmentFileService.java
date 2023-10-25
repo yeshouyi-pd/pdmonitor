@@ -6,6 +6,7 @@ import com.pd.server.main.domain.EquipmentFileTodayExample;
 import com.pd.server.main.domain.WaterQualityResultExample;
 import com.pd.server.main.dto.*;
 import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
+import com.pd.server.main.dto.basewx.my.PredationStaticticsDto;
 import com.pd.server.main.dto.basewx.my.SmsIntDto;
 import com.pd.server.main.mapper.EquipmentFileMapper;
 import com.pd.server.util.CopyUtil;
@@ -149,5 +150,13 @@ public class EquipmentFileService {
 
     public List<SmsIntDto> sendSmsQueryXz(EquipmentFileExample example){
         return equipmentFileMapper.sendSmsQueryXz(example);
+    }
+
+    public Integer countTsByExample(EquipmentFileExample example){
+        return equipmentFileMapper.countTsByExample(example);
+    }
+
+    public PredationStaticticsDto predationStatictics(EquipmentFileExample example){
+        return equipmentFileMapper.predationStatictics(example);
     }
 }

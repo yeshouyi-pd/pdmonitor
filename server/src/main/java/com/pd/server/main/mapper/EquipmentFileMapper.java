@@ -7,6 +7,7 @@ import java.util.List;
 import com.pd.server.main.domain.EquipmentFileTodayExample;
 import com.pd.server.main.dto.*;
 import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
+import com.pd.server.main.dto.basewx.my.PredationStaticticsDto;
 import com.pd.server.main.dto.basewx.my.SmsIntDto;
 import org.apache.ibatis.annotations.Param;
 
@@ -75,4 +76,8 @@ public interface EquipmentFileMapper {
     List<SmsIntDto> sendSmsQuery(EquipmentFileExample example);
 
     List<SmsIntDto> sendSmsQueryXz(EquipmentFileExample example);
+
+    Integer countTsByExample(EquipmentFileExample example);
+
+    PredationStaticticsDto predationStatictics(EquipmentFileExample example);
 }
