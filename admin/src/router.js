@@ -72,6 +72,7 @@ import EnvironmentDp from "./views/mobile/environmentDp.vue";
 import VideoDp from "./views/mobile/videoDp.vue";
 import WaterQualityNew from "./views/environment/waterQualityNew.vue";
 import WaveData from "./views/environment/waveData.vue";
+import EnvironmentNewDp from "./views/mobile/environmentNewDp";
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -106,6 +107,9 @@ export default new Router({
     },{
         path: "/mobile/environmentDp",
         component: EnvironmentDp
+    },{
+        path: "/mobile/environmentNewDp",
+        component: EnvironmentNewDp
     },{
         path: "/mobile/videoDp",
         component: VideoDp

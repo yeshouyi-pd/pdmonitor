@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 1920px;height: 100vh;background-image: url('/static/image/environment/dpbg.png');background-size: 100%;margin: auto">
+  <div style="width: 1920px;height: 100vh;background-image: url('/static/image/environment/dpbg.png');background-size: 100% 100%;margin: auto">
     <div class="page-first-div">
       <div class="left-div">
         <div style="height: 4.1%;display: flex;flex-direction: row;align-items: center;margin-left: 20px;">
@@ -309,13 +309,13 @@ export default {
     },
     leftCenterData(){
       let _this = this;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getCurrentMeterTodayData/'+_this.curSbbh, {}).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getCurrentMeterData', {"bz":_this.curSbbh}).then((response)=>{
         _this.currentMeter = response.data.content;
       })
     },
     centerBottomData(){
       let _this = this;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getWaterQualityNewTodayData/'+_this.curSbbh, {}).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getWaterQualityNewData', {"sbbh":_this.curSbbh}).then((response)=>{
         let waterQualityNews = response.data.content;
         let xAxisDatas = [];
         let seriesData1 = [];
@@ -413,20 +413,23 @@ export default {
     },
     leftBottomData(){
       let _this = this;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getTurbidityTodayData/'+_this.curSbbh, {}).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getTurbidityData', {"bz":_this.curSbbh}).then((response)=>{
         let turbiditys = response.data.content;
-        let data = [];
+        let xAxisData = [];
+        let data1 = [];
+        let data2 = [];
+        let data3 = [];
         for(let i=0;i<turbiditys.length;i++){
           let turbidity = turbiditys[i];
-          let dataItem = [];
-          dataItem.push(turbidity.dateTime.substring(11,turbidity.dateTime.length));
-          dataItem.push(turbidity.salinity);
-          data.push(dataItem);
+          xAxisData.push(turbidity.dateTime.substring(11,turbidity.dateTime.length));
+          data1.push(turbidity.salinity);
+          data2.push(turbidity.temperature);
+          data3.push(turbidity.depth);
         }
-        _this.initLeftBottomEchart(data);
+        _this.initLeftBottomEchart(xAxisData,data1,data2,data3);
       })
     },
-    initLeftBottomEchart(data){
+    initLeftBottomEchart(xAxisData,data1,data2,data3){
       let option = {
         grid: {
           bottom: '20px',
@@ -435,7 +438,7 @@ export default {
           right: '18px'
         },
         legend: {
-          data: ['盐度'],
+          data: ['盐度','温度','深度'],
           textStyle: {
             color: "#fff"
           }
@@ -445,6 +448,7 @@ export default {
         },
         xAxis: {
           type: 'category',
+          data: xAxisData,
           axisLine: {
             lineStyle: {
               type: "solid",
@@ -465,13 +469,37 @@ export default {
           {
             name: '盐度',
             type: 'line',
-            data: data,
+            data: data1,
             symbolSize: 7,
             lineStyle: {
               width: 6
             },
             itemStyle: {
-              color: "rgba(237, 22, 22, 1)"
+              color: "blue"
+            }
+          },
+          {
+            name: '温度',
+            type: 'line',
+            data: data2,
+            symbolSize: 7,
+            lineStyle: {
+              width: 6
+            },
+            itemStyle: {
+              color: "green"
+            }
+          },
+          {
+            name: '深度',
+            type: 'line',
+            data: data3,
+            symbolSize: 7,
+            lineStyle: {
+              width: 6
+            },
+            itemStyle: {
+              color: "red"
             }
           }
         ]
@@ -481,7 +509,7 @@ export default {
     },
     rightTopData(){
       let _this = this;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getMeteorologicalTodayData/'+_this.curSbbh, {}).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getMeteorologicalData', {"bz":_this.curSbbh}).then((response)=>{
         let meteorologicals = response.data.content;
         // let data = [];
         // let data1 = [];
@@ -628,7 +656,7 @@ export default {
     },
     rightCenterData(){
       let _this = this;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getWaveDataTodayData/'+_this.curSbbh, {}).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getWaveDataData', {"sbbh":_this.curSbbh}).then((response)=>{
         let resp = response.data;
         let xAxisDatas = [];
         let seriesData1 = [];
