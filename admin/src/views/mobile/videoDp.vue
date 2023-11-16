@@ -9,16 +9,12 @@
             </div>
           </div>
           <div class="left-video-box" style="height: 88%;">
-            <video autoplay="autoplay" loop="loop" style="width: 100%;height: 100%">
-              <source class="video" src="/video/11.mp4" type="video/mp4" />
-            </video>
+            <iframe ref="firstIframe" @click="vueSendMsg(1,'firstIframe')" v-trigger width="100%" height="100%" src="http://119.3.2.53:9909/" scrolling="no" frameborder="0"></iframe>
           </div>
         </div>
         <div class="left-box-item">
           <div class="left-video-box" style="height: 88%;margin-top: 10%;">
-            <video autoplay="autoplay" loop="loop" style="width: 100%;height: 100%">
-              <source class="video" src="/video/11.mp4" type="video/mp4" />
-            </video>
+            <iframe ref="secondIframe" @click="vueSendMsg(3,'secondIframe')" v-trigger width="100%" height="100%" src="http://119.3.2.53:9909/" scrolling="no" frameborder="0"></iframe>
           </div>
         </div>
         <div class="left-box-item">
@@ -135,10 +131,28 @@ export default {
   mounted() {
 
   },
+  directives: {
+    trigger: {
+      inserted (el, pinging) {
+        el.click()
+      }
+    }
+  },
   methods: {
     back(){
       let _this = this;
       window.location.href = "/mobile/largemonitorsZj";
+    },
+    vueSendMsg(tdh,numIframe) {
+      setTimeout(() =>{
+        const iframeWindow = this.$refs[numIframe].contentWindow
+        iframeWindow.postMessage({
+          cmd: 'myVue',
+          params: {
+            tdh: tdh
+          }
+        }, '*')
+      }, 1000)
     }
   }
 }
