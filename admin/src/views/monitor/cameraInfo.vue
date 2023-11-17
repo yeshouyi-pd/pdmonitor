@@ -71,7 +71,7 @@
             <th>摄像头用户名</th>
             <th>摄像头密码</th>
             <th>通道号</th>
-            <th>所属DVR的IP</th>
+            <th>NVR的IP</th>
             <th>是否大屏显示</th>
             <th>操作</th>
           </tr>
@@ -175,7 +175,7 @@
                 <div class="col-sm-4">
                   <input v-model="cameraInfo.sbdk" class="form-control">
                 </div>
-                <label class="col-sm-2 control-label">所属DVR的IP</label>
+                <label class="col-sm-2 control-label">NVR的IP</label>
                 <div class="col-sm-4">
                   <input v-model="cameraInfo.dvrip" class="form-control">
                 </div>
