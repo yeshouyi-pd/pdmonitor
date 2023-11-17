@@ -9,6 +9,7 @@ import Role from  "./views/admin/role.vue"
 import Dept from  "./views/admin/dept.vue"
 import Codeset from  "./views/admin/codeset.vue"
 import Attr from  "./views/admin/attr.vue"
+import SysLog from "./views/admin/sysLog.vue"
 import WaterData from "./views/monitor/waterData.vue"
 import WaterEquipment from "./views/monitor/waterEquipment.vue"
 import WaterQuality from "./views/monitor/waterQuality.vue"
@@ -174,6 +175,10 @@ export default new Router({
             path: "system/attr",
             name:"system/attr",
             component:Attr
+        },{
+            path: "system/sysLog",
+            name:"system/sysLog",
+            component:SysLog
         },{
             path: "monitor/waterData",
             name:"monitor/waterData",

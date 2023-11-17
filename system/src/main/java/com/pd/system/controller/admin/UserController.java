@@ -1,6 +1,7 @@
 package com.pd.system.controller.admin;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.pd.server.config.RedisCode;
@@ -10,6 +11,7 @@ import com.pd.server.main.dto.LoginUserDto;
 import com.pd.server.main.dto.PageDto;
 import com.pd.server.main.dto.ResponseDto;
 import com.pd.server.main.dto.UserDto;
+import com.pd.server.main.service.SysLogService;
 import com.pd.server.main.service.UserService;
 import com.pd.server.util.CopyUtil;
 import com.pd.server.util.UuidUtil;
@@ -41,6 +43,8 @@ public static final String BUSINESS_NAME = "用户";
 
 @Resource
 private UserService userService;
+@Resource
+private SysLogService sysLogService;
 
 @Resource
 public RedisTemplate redisTemplate;
@@ -147,6 +151,9 @@ return responseDto;
             responseDto.setSuccess(false);
             responseDto.setMessage("验证码已过期");
             LOG.info("用户登录失败，验证码已过期");
+            sysLogService.addLog(userDto.getLoginName() ,request.getRemoteAddr(),"用户登录","登录",
+                    "1" ,"", JSONObject.toJSONString(userDto),"",
+                    "用户登录失败，验证码已过期","1");
             return responseDto;
         }
         /**
@@ -157,6 +164,9 @@ return responseDto;
             responseDto.setSuccess(false);
             responseDto.setMessage("验证码不对");
             LOG.info("用户登录失败，验证码不对");
+            sysLogService.addLog(userDto.getLoginName() ,request.getRemoteAddr(),"用户登录","登录",
+                    "1" ,"", JSONObject.toJSONString(userDto),"",
+                    "验证码不对","1");
             return responseDto;
         } else {
             // 验证通过后，移除验证码
@@ -199,6 +209,9 @@ return responseDto;
 
          //request.getSession().setAttribute(Constants.LOGIN_USER,loginUserDto);
         responseDto.setContent(loginUserDto);
+        sysLogService.addLog(userDto.getLoginName() ,request.getRemoteAddr(),"用户登录","登录",
+                "0" ,"", JSONObject.toJSONString(userDto),"",
+                "","1");
         return responseDto;
     }
 
