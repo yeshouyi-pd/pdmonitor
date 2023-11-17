@@ -190,6 +190,7 @@ export default {
   text-align: center;
   color: #fff;
   margin-top: 2%;
+  font-size: 16px;
 }
 .right-box{
   width: 50%;
