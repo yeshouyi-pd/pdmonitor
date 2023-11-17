@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pd.server.main.mapper.SysLogMapper">
+  <resultMap id="BaseResultMap" type="com.pd.server.main.domain.SysLog">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="czr" jdbcType="VARCHAR" property="czr" />
+    <result column="czip" jdbcType="VARCHAR" property="czip" />
+    <result column="czcd" jdbcType="VARCHAR" property="czcd" />
+    <result column="czsm" jdbcType="VARCHAR" property="czsm" />
+    <result column="czjg" jdbcType="CHAR" property="czjg" />
+    <result column="czsbyy" jdbcType="VARCHAR" property="czsbyy" />
+    <result column="czsj" jdbcType="TIMESTAMP" property="czsj" />
+    <result column="cztj" jdbcType="VARCHAR" property="cztj" />
+    <result column="qqsj" jdbcType="VARCHAR" property="qqsj" />
+    <result column="ffsj" jdbcType="VARCHAR" property="ffsj" />
+    <result column="rzlx" jdbcType="CHAR" property="rzlx" />
+    <result column="yj" jdbcType="CHAR" property="yj" />
+    <result column="f1" jdbcType="VARCHAR" property="f1" />
+    <result column="f2" jdbcType="VARCHAR" property="f2" />
+    <result column="jyw" jdbcType="VARCHAR" property="jyw" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, czr, czip, czcd, czsm, czjg, czsbyy, czsj, cztj, qqsj, ffsj, rzlx, yj, f1, f2, 
+    jyw
+  </sql>
+  <select id="selectByExample" parameterType="com.pd.server.main.domain.SysLogExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from sys_log
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sys_log
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from sys_log
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pd.server.main.domain.SysLogExample">
+    delete from sys_log
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pd.server.main.domain.SysLog">
+    insert into sys_log (id, czr, czip, 
+      czcd, czsm, czjg, czsbyy, 
+      czsj, cztj, qqsj, 
+      ffsj, rzlx, yj, f1, 
+      f2, jyw)
+    values (#{id,jdbcType=VARCHAR}, #{czr,jdbcType=VARCHAR}, #{czip,jdbcType=VARCHAR}, 
+      #{czcd,jdbcType=VARCHAR}, #{czsm,jdbcType=VARCHAR}, #{czjg,jdbcType=CHAR}, #{czsbyy,jdbcType=VARCHAR}, 
+      #{czsj,jdbcType=TIMESTAMP}, #{cztj,jdbcType=VARCHAR}, #{qqsj,jdbcType=VARCHAR}, 
+      #{ffsj,jdbcType=VARCHAR}, #{rzlx,jdbcType=CHAR}, #{yj,jdbcType=CHAR}, #{f1,jdbcType=VARCHAR}, 
+      #{f2,jdbcType=VARCHAR}, #{jyw,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pd.server.main.domain.SysLog">
+    insert into sys_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="czr != null">
+        czr,
+      </if>
+      <if test="czip != null">
+        czip,
+      </if>
+      <if test="czcd != null">
+        czcd,
+      </if>
+      <if test="czsm != null">
+        czsm,
+      </if>
+      <if test="czjg != null">
+        czjg,
+      </if>
+      <if test="czsbyy != null">
+        czsbyy,
+      </if>
+      <if test="czsj != null">
+        czsj,
+      </if>
+      <if test="cztj != null">
+        cztj,
+      </if>
+      <if test="qqsj != null">
+        qqsj,
+      </if>
+      <if test="ffsj != null">
+        ffsj,
+      </if>
+      <if test="rzlx != null">
+        rzlx,
+      </if>
+      <if test="yj != null">
+        yj,
+      </if>
+      <if test="f1 != null">
+        f1,
+      </if>
+      <if test="f2 != null">
+        f2,
+      </if>
+      <if test="jyw != null">
+        jyw,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="czr != null">
+        #{czr,jdbcType=VARCHAR},
+      </if>
+      <if test="czip != null">
+        #{czip,jdbcType=VARCHAR},
+      </if>
+      <if test="czcd != null">
+        #{czcd,jdbcType=VARCHAR},
+      </if>
+      <if test="czsm != null">
+        #{czsm,jdbcType=VARCHAR},
+      </if>
+      <if test="czjg != null">
+        #{czjg,jdbcType=CHAR},
+      </if>
+      <if test="czsbyy != null">
+        #{czsbyy,jdbcType=VARCHAR},
+      </if>
+      <if test="czsj != null">
+        #{czsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cztj != null">
+        #{cztj,jdbcType=VARCHAR},
+      </if>
+      <if test="qqsj != null">
+        #{qqsj,jdbcType=VARCHAR},
+      </if>
+      <if test="ffsj != null">
+        #{ffsj,jdbcType=VARCHAR},
+      </if>
+      <if test="rzlx != null">
+        #{rzlx,jdbcType=CHAR},
+      </if>
+      <if test="yj != null">
+        #{yj,jdbcType=CHAR},
+      </if>
+      <if test="f1 != null">
+        #{f1,jdbcType=VARCHAR},
+      </if>
+      <if test="f2 != null">
+        #{f2,jdbcType=VARCHAR},
+      </if>
+      <if test="jyw != null">
+        #{jyw,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pd.server.main.domain.SysLogExample" resultType="java.lang.Long">
+    select count(*) from sys_log
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update sys_log
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.czr != null">
+        czr = #{record.czr,jdbcType=VARCHAR},
+      </if>
+      <if test="record.czip != null">
+        czip = #{record.czip,jdbcType=VARCHAR},
+      </if>
+      <if test="record.czcd != null">
+        czcd = #{record.czcd,jdbcType=VARCHAR},
+      </if>
+      <if test="record.czsm != null">
+        czsm = #{record.czsm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.czjg != null">
+        czjg = #{record.czjg,jdbcType=CHAR},
+      </if>
+      <if test="record.czsbyy != null">
+        czsbyy = #{record.czsbyy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.czsj != null">
+        czsj = #{record.czsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.cztj != null">
+        cztj = #{record.cztj,jdbcType=VARCHAR},
+      </if>
+      <if test="record.qqsj != null">
+        qqsj = #{record.qqsj,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ffsj != null">
+        ffsj = #{record.ffsj,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rzlx != null">
+        rzlx = #{record.rzlx,jdbcType=CHAR},
+      </if>
+      <if test="record.yj != null">
+        yj = #{record.yj,jdbcType=CHAR},
+      </if>
+      <if test="record.f1 != null">
+        f1 = #{record.f1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.f2 != null">
+        f2 = #{record.f2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.jyw != null">
+        jyw = #{record.jyw,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update sys_log
+    set id = #{record.id,jdbcType=VARCHAR},
+      czr = #{record.czr,jdbcType=VARCHAR},
+      czip = #{record.czip,jdbcType=VARCHAR},
+      czcd = #{record.czcd,jdbcType=VARCHAR},
+      czsm = #{record.czsm,jdbcType=VARCHAR},
+      czjg = #{record.czjg,jdbcType=CHAR},
+      czsbyy = #{record.czsbyy,jdbcType=VARCHAR},
+      czsj = #{record.czsj,jdbcType=TIMESTAMP},
+      cztj = #{record.cztj,jdbcType=VARCHAR},
+      qqsj = #{record.qqsj,jdbcType=VARCHAR},
+      ffsj = #{record.ffsj,jdbcType=VARCHAR},
+      rzlx = #{record.rzlx,jdbcType=CHAR},
+      yj = #{record.yj,jdbcType=CHAR},
+      f1 = #{record.f1,jdbcType=VARCHAR},
+      f2 = #{record.f2,jdbcType=VARCHAR},
+      jyw = #{record.jyw,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pd.server.main.domain.SysLog">
+    update sys_log
+    <set>
+      <if test="czr != null">
+        czr = #{czr,jdbcType=VARCHAR},
+      </if>
+      <if test="czip != null">
+        czip = #{czip,jdbcType=VARCHAR},
+      </if>
+      <if test="czcd != null">
+        czcd = #{czcd,jdbcType=VARCHAR},
+      </if>
+      <if test="czsm != null">
+        czsm = #{czsm,jdbcType=VARCHAR},
+      </if>
+      <if test="czjg != null">
+        czjg = #{czjg,jdbcType=CHAR},
+      </if>
+      <if test="czsbyy != null">
+        czsbyy = #{czsbyy,jdbcType=VARCHAR},
+      </if>
+      <if test="czsj != null">
+        czsj = #{czsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cztj != null">
+        cztj = #{cztj,jdbcType=VARCHAR},
+      </if>
+      <if test="qqsj != null">
+        qqsj = #{qqsj,jdbcType=VARCHAR},
+      </if>
+      <if test="ffsj != null">
+        ffsj = #{ffsj,jdbcType=VARCHAR},
+      </if>
+      <if test="rzlx != null">
+        rzlx = #{rzlx,jdbcType=CHAR},
+      </if>
+      <if test="yj != null">
+        yj = #{yj,jdbcType=CHAR},
+      </if>
+      <if test="f1 != null">
+        f1 = #{f1,jdbcType=VARCHAR},
+      </if>
+      <if test="f2 != null">
+        f2 = #{f2,jdbcType=VARCHAR},
+      </if>
+      <if test="jyw != null">
+        jyw = #{jyw,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pd.server.main.domain.SysLog">
+    update sys_log
+    set czr = #{czr,jdbcType=VARCHAR},
+      czip = #{czip,jdbcType=VARCHAR},
+      czcd = #{czcd,jdbcType=VARCHAR},
+      czsm = #{czsm,jdbcType=VARCHAR},
+      czjg = #{czjg,jdbcType=CHAR},
+      czsbyy = #{czsbyy,jdbcType=VARCHAR},
+      czsj = #{czsj,jdbcType=TIMESTAMP},
+      cztj = #{cztj,jdbcType=VARCHAR},
+      qqsj = #{qqsj,jdbcType=VARCHAR},
+      ffsj = #{ffsj,jdbcType=VARCHAR},
+      rzlx = #{rzlx,jdbcType=CHAR},
+      yj = #{yj,jdbcType=CHAR},
+      f1 = #{f1,jdbcType=VARCHAR},
+      f2 = #{f2,jdbcType=VARCHAR},
+      jyw = #{jyw,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

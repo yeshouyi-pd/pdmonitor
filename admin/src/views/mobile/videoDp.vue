@@ -169,7 +169,7 @@ export default {
   flex-direction: row;
 }
 .left-box{
-  width: 50%;
+  width: 60%;
   height: 100%;
   display: flex;
   flex-direction: row;
@@ -193,7 +193,7 @@ export default {
   font-size: 16px;
 }
 .right-box{
-  width: 50%;
+  width: 40%;
   height: 100%;
   display: flex;
   flex-direction: column;
