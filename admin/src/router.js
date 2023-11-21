@@ -71,6 +71,7 @@ import Turbidity from "./views/environment/turbidity.vue";
 import CurrentMeter from "./views/environment/currentMeter.vue";
 import EnvironmentDp from "./views/mobile/environmentDp.vue";
 import VideoDp from "./views/mobile/videoDp.vue";
+import VideoNewDp from "./views/mobile/videoNewDp.vue";
 import WaterQualityNew from "./views/environment/waterQualityNew.vue";
 import WaveData from "./views/environment/waveData.vue";
 import EnvironmentNewDp from "./views/mobile/environmentNewDp";
@@ -114,6 +115,9 @@ export default new Router({
     },{
         path: "/mobile/videoDp",
         component: VideoDp
+    },{
+        path: "/mobile/videoNewDp",
+        component: VideoNewDp
     },{
         path: "/admin/chooseProject",
         name: "/admin/chooseProject",

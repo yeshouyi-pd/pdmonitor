@@ -465,7 +465,7 @@ export default {
       window.location.href = "/admin/chooseProject";
     },
     chooseVideo(){
-      window.location.href = "/mobile/videoDp";
+      window.location.href = "/mobile/videoNewDp";
     },
     chooseEnvironment(){
       window.location.href = "/mobile/environmentDp";
