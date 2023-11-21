@@ -262,7 +262,7 @@
                         _this.$router.push("/mobile/mindex")
                       }else{
                         if(_this.LOCAL_ZHBHT){
-                          _this.$router.push("/mobile/videoDp")
+                          _this.$router.push("/mobile/videoNewDp")
                         }else{
                           _this.$router.push("/mobile/largemonitors")
                         }

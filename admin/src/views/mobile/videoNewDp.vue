@@ -15,35 +15,36 @@
     </header>
     <div class="page-first-div">
       <div class="left-box">
-        <div class="left-box-item">
-<!--          <div style="height: 5%;margin-top: 10px;display: flex;flex-direction: row;align-items: center;margin-left: 20px;">-->
-<!--            <div v-on:click="back()" style="color: rgb(255, 255, 255);font-size: 16px;border: 1px solid #043769;background-color:rgb(10,33,61);width: 15%;text-align: center;padding: 5px 0;cursor: pointer">-->
-<!--              返回-->
-<!--            </div>-->
+        <iframe width="100%" height="100%" src="http://119.3.2.53:9909/" scrolling="no" frameborder="0"></iframe>
+<!--        <div class="left-box-item">-->
+<!--          &lt;!&ndash;          <div style="height: 5%;margin-top: 10px;display: flex;flex-direction: row;align-items: center;margin-left: 20px;">&ndash;&gt;-->
+<!--          &lt;!&ndash;            <div v-on:click="back()" style="color: rgb(255, 255, 255);font-size: 16px;border: 1px solid #043769;background-color:rgb(10,33,61);width: 15%;text-align: center;padding: 5px 0;cursor: pointer">&ndash;&gt;-->
+<!--          &lt;!&ndash;              返回&ndash;&gt;-->
+<!--          &lt;!&ndash;            </div>&ndash;&gt;-->
+<!--          &lt;!&ndash;          </div>&ndash;&gt;-->
+<!--          <div class="left-video-box">-->
+<!--            <iframe ref="firstIframe" @click="vueSendMsg(4,'firstIframe')" v-trigger width="100%" height="100%" src="http://119.3.2.53:9909/" scrolling="no" frameborder="0"></iframe>-->
 <!--          </div>-->
-          <div class="left-video-box">
-            <iframe ref="firstIframe" @click="vueSendMsg(4,'firstIframe')" v-trigger width="100%" height="100%" src="http://119.3.2.53:9909/" scrolling="no" frameborder="0"></iframe>
-          </div>
-          <div class="left-text-style">7号浮标</div>
-        </div>
-        <div class="left-box-item">
-          <div class="left-video-box">
-            <iframe ref="secondIframe" @click="vueSendMsg(7,'secondIframe')" v-trigger width="100%" height="100%" src="http://119.3.2.53:9909/" scrolling="no" frameborder="0"></iframe>
-          </div>
-          <div class="left-text-style">8号浮标</div>
-        </div>
-        <div class="left-box-item">
-          <div class="left-video-box">
-            <iframe ref="threeIframe" @click="vueSendMsg(9,'threeIframe')" v-trigger width="100%" height="100%" src="http://119.3.2.53:9909/" scrolling="no" frameborder="0"></iframe>
-          </div>
-          <div class="left-text-style">5号浮标</div>
-        </div>
-        <div class="left-box-item">
-          <div class="left-video-box">
-            <iframe ref="fourIframe" @click="vueSendMsg(10,'fourIframe')" v-trigger width="100%" height="100%" src="http://119.3.2.53:9909/" scrolling="no" frameborder="0"></iframe>
-          </div>
-          <div class="left-text-style">4号浮标</div>
-        </div>
+<!--          <div class="left-text-style">7号浮标</div>-->
+<!--        </div>-->
+<!--        <div class="left-box-item">-->
+<!--          <div class="left-video-box">-->
+<!--            <iframe ref="secondIframe" @click="vueSendMsg(7,'secondIframe')" v-trigger width="100%" height="100%" src="http://119.3.2.53:9909/" scrolling="no" frameborder="0"></iframe>-->
+<!--          </div>-->
+<!--          <div class="left-text-style">8号浮标</div>-->
+<!--        </div>-->
+<!--        <div class="left-box-item">-->
+<!--          <div class="left-video-box">-->
+<!--            <iframe ref="threeIframe" @click="vueSendMsg(9,'threeIframe')" v-trigger width="100%" height="100%" src="http://119.3.2.53:9909/" scrolling="no" frameborder="0"></iframe>-->
+<!--          </div>-->
+<!--          <div class="left-text-style">5号浮标</div>-->
+<!--        </div>-->
+<!--        <div class="left-box-item">-->
+<!--          <div class="left-video-box">-->
+<!--            <iframe ref="fourIframe" @click="vueSendMsg(10,'fourIframe')" v-trigger width="100%" height="100%" src="http://119.3.2.53:9909/" scrolling="no" frameborder="0"></iframe>-->
+<!--          </div>-->
+<!--          <div class="left-text-style">4号浮标</div>-->
+<!--        </div>-->
       </div>
       <div class="right-box">
         <div class="right-top-box">
@@ -52,7 +53,7 @@
           </video>
         </div>
         <div class="right-bottom-box">
-          <div style="height: 414px;width: 95%;overflow:auto;margin-top: 1%;margin-left: 3%;color: #82CF48;font-size: 16px;">
+          <div style="height: 414px;width: 97%;overflow:auto;margin-top: 1%;margin-left: 1%;color: #82CF48;font-size: 16px;">
             <table id="simple-table" class="table  table-bordered table-hover" >
               <thead>
               <tr>
@@ -198,9 +199,9 @@ export default {
   flex-direction: column;
 }
 .right-top-box{
-  width: 95%;
+  width: 97%;
   height: 49%;
-  margin-left: 3%;
+  margin-left: 1%;
 }
 .right-bottom-box{
   width: 100%;
