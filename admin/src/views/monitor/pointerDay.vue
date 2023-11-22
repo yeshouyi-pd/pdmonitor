@@ -35,6 +35,10 @@
                     <i class="ace-icon fa fa-refresh"></i>
                     重置
                   </a>
+                  <button type="button" v-on:click="exportExcle()" class="btn btn-sm btn-warning btn-round" style="margin-right: 10px;">
+                    <i class="ace-icon fa fa-leaf"></i>
+                    导出
+                  </button>
                 </td>
               </tr>
               </tbody>
@@ -91,10 +95,31 @@ export default {
     // _this.pointerDayDto.cjsj = Tool.dateFormat("yyyy-MM-dd hh:mm:ss");
     // _this.$forceUpdate();
     // _this.listAll();
+    _this.list(1);
     _this.$refs.pagination.size = 10;
-    _this.list();
   },
   methods: {
+    exportExcle(){
+      let _this = this;
+      let param = "";
+      if("460100"!=Tool.getLoginUser().deptcode){
+        param+="&xmbh="+Tool.getLoginUser().xmbh;
+      }
+      if(!Tool.isEmpty(_this.pointerDayDto.sm)){
+        param+="&sbbh="+_this.pointerDayDto.sm;
+      }
+      if(!Tool.isEmpty(_this.pointerDayDto.stime)){
+        param+="&stime="+_this.pointerDayDto.stime;
+      }
+      if(!Tool.isEmpty(_this.pointerDayDto.etime)){
+        param+="&etime="+_this.pointerDayDto.etime;
+      }
+      if(Tool.isEmpty(param)){
+        window.location.href = process.env.VUE_APP_SERVER + '/monitor/export/exportPointerDay';
+      }else{
+        window.location.href = process.env.VUE_APP_SERVER + '/monitor/export/exportPointerDay?'+param.substring(1,param.length);
+      }
+    },
     /**
      *开始时间
      */
