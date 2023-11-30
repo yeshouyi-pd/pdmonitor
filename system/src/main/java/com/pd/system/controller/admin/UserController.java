@@ -5,6 +5,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.pd.server.config.RedisCode;
+import com.pd.server.exception.BusinessException;
+import com.pd.server.exception.BusinessExceptionCode;
 import com.pd.server.main.domain.User;
 import com.pd.server.main.domain.UserExample;
 import com.pd.server.main.dto.LoginUserDto;
@@ -93,8 +95,14 @@ public ResponseDto list(@RequestBody UserDto userDto) {
             ca.andRodeEqualTo(userDto.getRode());
         }
     }
+    if(!StringUtils.isEmpty(userDto.getXmbm())&&"002".equals(userDto.getXmbm())){
+        ca.andRodeEqualTo("00000001");
+    }
     if(!"00000000".equals(loginUserDto.getRode())){
         ca.andRodeNotEqualTo("00000000");
+        if(!StringUtils.isEmpty(userDto.getXmbm())&&"zhuhai".equals(userDto.getXmbm())){
+            ca.andRodeNotEqualTo("00000001");
+        }
     }
     List<User> userList = userService.list(userExample);
     PageInfo<User> pageInfo = new PageInfo<>(userList);
@@ -147,13 +155,14 @@ return responseDto;
 
         String imageCode = (String) redisTemplate.opsForValue().get(userDto.getImageCodeToken());
         LOG.info("从redis中获取到的验证码：{}", imageCode);
+        String xmbh = userDto.getXmbm();
         if (StringUtils.isEmpty(imageCode)) {
             responseDto.setSuccess(false);
             responseDto.setMessage("验证码已过期");
             LOG.info("用户登录失败，验证码已过期");
             sysLogService.addLog(userDto.getLoginName() ,request.getRemoteAddr(),"用户登录","登录",
                     "1" ,"", JSONObject.toJSONString(userDto),"",
-                    "用户登录失败，验证码已过期","1");
+                    "用户登录失败，验证码已过期","1",xmbh);
             return responseDto;
         }
         /**
@@ -166,7 +175,7 @@ return responseDto;
             LOG.info("用户登录失败，验证码不对");
             sysLogService.addLog(userDto.getLoginName() ,request.getRemoteAddr(),"用户登录","登录",
                     "1" ,"", JSONObject.toJSONString(userDto),"",
-                    "验证码不对","1");
+                    "验证码不对","1",xmbh);
             return responseDto;
         } else {
             // 验证通过后，移除验证码
@@ -179,6 +188,9 @@ return responseDto;
         userDto.setPassword(DigestUtils.md5DigestAsHex(userDto.getPassword().getBytes()));
 
         LoginUserDto loginUserDto = userService.login(userDto);
+        if(!StringUtils.isEmpty(xmbh)&&!loginUserDto.getRode().equals("00000001")){
+            throw new BusinessException(BusinessExceptionCode.LOGIN_USER_ERROR);
+        }
         String token = UuidUtil.getShortUuid();
         loginUserDto.setToken(token);
 
@@ -211,7 +223,7 @@ return responseDto;
         responseDto.setContent(loginUserDto);
         sysLogService.addLog(userDto.getLoginName() ,request.getRemoteAddr(),"用户登录","登录",
                 "0" ,"", JSONObject.toJSONString(userDto),"",
-                "","1");
+                "","1",xmbh);
         return responseDto;
     }
 

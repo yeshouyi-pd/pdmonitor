@@ -2,66 +2,122 @@ package com.pd.server.main.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Date;
-
-public class UserDto  extends PageDto{
+public class UserVideoDto extends PageDto{
 
     /**
-     * id
-     */
+    * id
+    */
     private String id;
 
     /**
-     * 登陆名
-     */
+    * 登陆名
+    */
     private String loginName;
 
     /**
-     * 昵称
-     */
+    * 昵称
+    */
     private String name;
 
     /**
-     * 密码
-     */
+    * 密码
+    */
     private String password;
 
+    /**
+    * 部门
+    */
     private String deptcode;
 
+    /**
+    * 角色
+    */
     private String rode;
 
+    /**
+    * 手机号码
+    */
     private String tel;
-    @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
-    private Date yhyxq;
-    @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
-    private Date mmyxq;
 
+    /**
+    * 用户有效期
+    */
+    @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
+    private String yhyxq;
+
+    /**
+    * 密码有效期
+    */
+    @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
+    private String mmyxq;
+
+    /**
+    * 是否警员| 'Y' 是 'N'否
+    */
     private String sfjy;
 
+    /**
+    * 身份证号码
+    */
     private String sfzhm;
 
+    /**
+    * 警员编号
+    */
     private String jjbh;
 
+    /**
+    * ip开始
+    */
     private String ipstart;
 
+    /**
+    * ip结束
+    */
     private String ipend;
 
+    /**
+    * MAC
+    */
     private String mac;
 
+    /**
+    * 是否启用| 'Y' 是 'N'否
+    */
     private String zt;
-    @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
-    private Date createTime;
-    @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
-    private Date updateTime;
-    @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
-    private Date lastloginTime;
 
+    /**
+    * 创建时间
+    */
+    @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
+    private String createTime;
+
+    /**
+    * 修改时间
+    */
+    @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
+    private String updateTime;
+
+    /**
+    * 最后登录成功时间
+    */
+    @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
+    private String lastloginTime;
+
+    /**
+    * 登录失败次数
+    */
     private Integer sbcs;
 
+    /**
+    * 预警|1 正常 2 异常
+    */
     private String yj;
 
+    /**
+    * 校验位
+    */
     private String jyw;
     /**
      * 验证码
@@ -111,22 +167,6 @@ public class UserDto  extends PageDto{
         this.password = password;
     }
 
-    public String getImageCode() {
-        return imageCode;
-    }
-
-    public void setImageCode(String imageCode) {
-        this.imageCode = imageCode;
-    }
-
-    public String getImageCodeToken() {
-        return imageCodeToken;
-    }
-
-    public void setImageCodeToken(String imageCodeToken) {
-        this.imageCodeToken = imageCodeToken;
-    }
-
     public String getDeptcode() {
         return deptcode;
     }
@@ -151,19 +191,19 @@ public class UserDto  extends PageDto{
         this.tel = tel;
     }
 
-    public Date getYhyxq() {
+    public String getYhyxq() {
         return yhyxq;
     }
 
-    public void setYhyxq(Date yhyxq) {
+    public void setYhyxq(String yhyxq) {
         this.yhyxq = yhyxq;
     }
 
-    public Date getMmyxq() {
+    public String getMmyxq() {
         return mmyxq;
     }
 
-    public void setMmyxq(Date mmyxq) {
+    public void setMmyxq(String mmyxq) {
         this.mmyxq = mmyxq;
     }
 
@@ -223,27 +263,27 @@ public class UserDto  extends PageDto{
         this.zt = zt;
     }
 
-    public Date getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
-    public Date getUpdateTime() {
+    public String getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
+    public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
     }
 
-    public Date getLastloginTime() {
+    public String getLastloginTime() {
         return lastloginTime;
     }
 
-    public void setLastloginTime(Date lastloginTime) {
+    public void setLastloginTime(String lastloginTime) {
         this.lastloginTime = lastloginTime;
     }
 
@@ -269,6 +309,22 @@ public class UserDto  extends PageDto{
 
     public void setJyw(String jyw) {
         this.jyw = jyw;
+    }
+
+    public String getImageCode() {
+        return imageCode;
+    }
+
+    public void setImageCode(String imageCode) {
+        this.imageCode = imageCode;
+    }
+
+    public String getImageCodeToken() {
+        return imageCodeToken;
+    }
+
+    public void setImageCodeToken(String imageCodeToken) {
+        this.imageCodeToken = imageCodeToken;
     }
 
     public String getOldPwd() {
@@ -297,14 +353,34 @@ public class UserDto  extends PageDto{
 
     @Override
     public String toString() {
-        return "UserDto{" +
-                "id='" + id + '\'' +
-                ", loginName='" + loginName + '\'' +
-                ", name='" + name + '\'' +
-                ", deptcode='" + deptcode + '\'' +
-                ", rode='" + rode + '\'' +
-                ", imageCode='" + imageCode + '\'' +
-                ", imageCodeToken='" + imageCodeToken + '\'' +
-                '}';
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" [");
+        sb.append("Hash = ").append(hashCode());
+            sb.append(", id=").append(id);
+            sb.append(", loginName=").append(loginName);
+            sb.append(", name=").append(name);
+            sb.append(", password=").append(password);
+            sb.append(", deptcode=").append(deptcode);
+            sb.append(", rode=").append(rode);
+            sb.append(", tel=").append(tel);
+            sb.append(", yhyxq=").append(yhyxq);
+            sb.append(", mmyxq=").append(mmyxq);
+            sb.append(", sfjy=").append(sfjy);
+            sb.append(", sfzhm=").append(sfzhm);
+            sb.append(", jjbh=").append(jjbh);
+            sb.append(", ipstart=").append(ipstart);
+            sb.append(", ipend=").append(ipend);
+            sb.append(", mac=").append(mac);
+            sb.append(", zt=").append(zt);
+            sb.append(", createTime=").append(createTime);
+            sb.append(", updateTime=").append(updateTime);
+            sb.append(", lastloginTime=").append(lastloginTime);
+            sb.append(", sbcs=").append(sbcs);
+            sb.append(", yj=").append(yj);
+            sb.append(", jyw=").append(jyw);
+        sb.append("]");
+        return sb.toString();
     }
+
 }

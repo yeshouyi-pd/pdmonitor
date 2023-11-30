@@ -267,6 +267,7 @@ public class StatisticsDataQuartz {
             for(AlarmNumbersDto item : lists){
                 AppearNumbersDto dto = CopyUtil.copy(item,AppearNumbersDto.class);
                 dto.setBjsj(item.getFz().substring(0,10));
+                dto.setXs(item.getFz().substring(0,13));
                 appearNumbersService.save(dto);
             }
             List<AlarmNumbersDto> listsTemp = lists.stream().sorted(Comparator.comparing(AlarmNumbersDto::getFz)).collect(Collectors.toList());

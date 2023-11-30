@@ -6,10 +6,6 @@
         <img src="/largemonitors/assets/imgs/左上角title.png" alt="" style="width: 250px;">
         <span>
           <div @click="chooseProject" style="cursor: pointer;">主页</div>
-          <div style="padding: 0 5px;">/</div>
-          <div @click="chooseEnvironment" style="cursor: pointer;">环境</div>
-          <div style="padding: 0 5px;">/</div>
-          <div @click="back" style="cursor: pointer;">定点监测</div>
         </span>
       </div>
     </header>
@@ -142,7 +138,13 @@ export default {
       window.location.href = "/mobile/largemonitorsZj";
     },
     chooseProject(){
-      window.location.href = "/admin/chooseProject";
+      //window.location.href = "/admin/chooseProject";
+      let _this = this;
+      _this.user = Tool.getLoginUser();
+      _this.user.xmbh = "002";
+      _this.$forceUpdate();
+      Tool.setLoginUser(_this.user);
+      _this.$router.push("/welcome");
     },
     chooseEnvironment(){
       window.location.href = "/mobile/environmentDp";

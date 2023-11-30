@@ -10,6 +10,8 @@ public enum RedisCode {
 
     USERCODENAME("user_code_name"),//用户缓存
 
+    USERVIDEOCODENAME("uservideo_code_name"),//用户缓存
+
     ISWORKINGDAY("is_wory_day"),//是否是工作日
 
     ATTRECODEKEY("attr_code_key"),//系统参数管理
@@ -19,6 +21,8 @@ public enum RedisCode {
     STATICPATH("staticpath"),//静态路径地址
 
     AllUSER("alluser"),//所有用户
+
+    ALLVIDEOUSER("allvideouser"),//所有的视频用户
 
     SBSNCENTERCODE("sbsncentercode"),//设备sn对应的部门信息
 
