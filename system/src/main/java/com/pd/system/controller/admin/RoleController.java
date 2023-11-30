@@ -12,6 +12,8 @@ import com.pd.server.main.service.RoleService;
 import com.pd.server.util.CopyUtil;
 import com.pd.server.util.ValidatorUtil;
 import com.pd.system.controller.conf.BaseController;
+import io.netty.util.internal.StringUtil;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +35,7 @@ public class RoleController extends BaseController {
      * 列表查询
      */
     @PostMapping("/list")
-    public ResponseDto list(@RequestBody PageDto pageDto) {
+    public ResponseDto list(@RequestBody RoleDto pageDto) {
         ResponseDto responseDto = new ResponseDto();
         LoginUserDto user = getRequestHeader();
         PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
@@ -41,6 +43,9 @@ public class RoleController extends BaseController {
         RoleExample.Criteria ca = roleExample.createCriteria();
         if(!"00000000".equals(user.getRode())){
             ca.andIdNotEqualTo("00000000");
+            if(!StringUtils.isEmpty(pageDto.getDesc())&&"zhuhai".equals(pageDto.getDesc())){
+                ca.andIdNotEqualTo("00000001");
+            }
         }
         List<Role> roleList = roleService.list(roleExample);
         PageInfo<Role> pageInfo = new PageInfo<>(roleList);

@@ -1,31 +1,14 @@
-package com.pd.server.main.dto;
-
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-import org.springframework.format.annotation.DateTimeFormat;
+package com.pd.server.main.domain;
 
 import java.util.Date;
 
-public class UserDto  extends PageDto{
-
-    /**
-     * id
-     */
+public class UserVideo {
     private String id;
 
-    /**
-     * 登陆名
-     */
     private String loginName;
 
-    /**
-     * 昵称
-     */
     private String name;
 
-    /**
-     * 密码
-     */
     private String password;
 
     private String deptcode;
@@ -33,9 +16,9 @@ public class UserDto  extends PageDto{
     private String rode;
 
     private String tel;
-    @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
+
     private Date yhyxq;
-    @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
+
     private Date mmyxq;
 
     private String sfjy;
@@ -51,11 +34,11 @@ public class UserDto  extends PageDto{
     private String mac;
 
     private String zt;
-    @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
+
     private Date createTime;
-    @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
+
     private Date updateTime;
-    @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
+
     private Date lastloginTime;
 
     private Integer sbcs;
@@ -63,21 +46,6 @@ public class UserDto  extends PageDto{
     private String yj;
 
     private String jyw;
-    /**
-     * 验证码
-     */
-    private String imageCode;
-
-    /**
-     * 图片验证码token
-     */
-    private String imageCodeToken;
-
-    private String oldPwd;
-
-    private String newPwd;
-
-    private String xmbm;//项目编号
 
     public String getId() {
         return id;
@@ -109,22 +77,6 @@ public class UserDto  extends PageDto{
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getImageCode() {
-        return imageCode;
-    }
-
-    public void setImageCode(String imageCode) {
-        this.imageCode = imageCode;
-    }
-
-    public String getImageCodeToken() {
-        return imageCodeToken;
-    }
-
-    public void setImageCodeToken(String imageCodeToken) {
-        this.imageCodeToken = imageCodeToken;
     }
 
     public String getDeptcode() {
@@ -271,40 +223,35 @@ public class UserDto  extends PageDto{
         this.jyw = jyw;
     }
 
-    public String getOldPwd() {
-        return oldPwd;
-    }
-
-    public void setOldPwd(String oldPwd) {
-        this.oldPwd = oldPwd;
-    }
-
-    public String getNewPwd() {
-        return newPwd;
-    }
-
-    public void setNewPwd(String newPwd) {
-        this.newPwd = newPwd;
-    }
-
-    public String getXmbm() {
-        return xmbm;
-    }
-
-    public void setXmbm(String xmbm) {
-        this.xmbm = xmbm;
-    }
-
     @Override
     public String toString() {
-        return "UserDto{" +
-                "id='" + id + '\'' +
-                ", loginName='" + loginName + '\'' +
-                ", name='" + name + '\'' +
-                ", deptcode='" + deptcode + '\'' +
-                ", rode='" + rode + '\'' +
-                ", imageCode='" + imageCode + '\'' +
-                ", imageCodeToken='" + imageCodeToken + '\'' +
-                '}';
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" [");
+        sb.append("Hash = ").append(hashCode());
+        sb.append(", id=").append(id);
+        sb.append(", loginName=").append(loginName);
+        sb.append(", name=").append(name);
+        sb.append(", password=").append(password);
+        sb.append(", deptcode=").append(deptcode);
+        sb.append(", rode=").append(rode);
+        sb.append(", tel=").append(tel);
+        sb.append(", yhyxq=").append(yhyxq);
+        sb.append(", mmyxq=").append(mmyxq);
+        sb.append(", sfjy=").append(sfjy);
+        sb.append(", sfzhm=").append(sfzhm);
+        sb.append(", jjbh=").append(jjbh);
+        sb.append(", ipstart=").append(ipstart);
+        sb.append(", ipend=").append(ipend);
+        sb.append(", mac=").append(mac);
+        sb.append(", zt=").append(zt);
+        sb.append(", createTime=").append(createTime);
+        sb.append(", updateTime=").append(updateTime);
+        sb.append(", lastloginTime=").append(lastloginTime);
+        sb.append(", sbcs=").append(sbcs);
+        sb.append(", yj=").append(yj);
+        sb.append(", jyw=").append(jyw);
+        sb.append("]");
+        return sb.toString();
     }
 }

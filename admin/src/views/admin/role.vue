@@ -115,9 +115,11 @@
     data: function() {
       return {
         role: {},
+        roleDto: {},
         roles: [],
         resources: [],
         zTree: {},
+        LOCAL_ZHBHT:LOCAL_ZHBHT
       }
     },
     mounted: function() {
@@ -153,10 +155,12 @@
       list(page) {
         let _this = this;
         Loading.show();
-        _this.$ajax.post(process.env.VUE_APP_SERVER + '/system/admin/role/list', {
-          page: page,
-          size: _this.$refs.pagination.size,
-        }).then((response)=>{
+        _this.roleDto.page = page;
+        _this.roleDto.size = _this.$refs.pagination.size;
+        if(_this.LOCAL_ZHBHT){
+          _this.roleDto.desc = "zhuhai";
+        }
+        _this.$ajax.post(process.env.VUE_APP_SERVER + '/system/admin/role/list', _this.roleDto).then((response)=>{
           Loading.hide();
           let resp = response.data;
           _this.roles = resp.content.list;

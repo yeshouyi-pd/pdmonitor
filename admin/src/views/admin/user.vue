@@ -260,7 +260,8 @@ export default {
         users: [],
         roles:[],
         checktrees:[],
-        alldept:[]
+        alldept:[],
+        LOCAL_ZHBHT:LOCAL_ZHBHT
       }
     },
     mounted: function() {
@@ -347,6 +348,9 @@ export default {
         Loading.show();
         _this.queryuser.page=page;
         _this.queryuser.size=_this.$refs.pagination.size;
+        if(_this.LOCAL_ZHBHT){
+          _this.queryuser.xmbm="zhuhai";
+        }
         _this.$forceUpdate();
         _this.$ajax.post(process.env.VUE_APP_SERVER + '/system/admin/user/list', _this.queryuser).then((response)=>{
           Loading.hide();

@@ -270,14 +270,17 @@ export default {
       JYXM_DW:JYXM_DW,
       zccs:0,
       bscs:0,
-      eventSbbhMap:null
+      eventSbbhMap:null,
+      LOCAL_VIDEO:LOCAL_VIDEO
     }
   },
   mounted:function(){
     let _this = this;
-    _this.getSzjcx();
-    _this.getLatestDate();
-    _this.getWarningDate();
+    if(!LOCAL_VIDEO){
+      _this.getSzjcx();
+      _this.getLatestDate();
+      _this.getWarningDate();
+    }
     _this.getPieChart();
   },
   methods: {
