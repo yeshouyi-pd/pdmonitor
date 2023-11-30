@@ -119,7 +119,7 @@ export default {
   components: {Pagination,Times},
   data: function (){
     return {
-
+      LOCAL_VIDEO:LOCAL_VIDEO
     }
   },
   mounted() {
@@ -138,13 +138,16 @@ export default {
       window.location.href = "/mobile/largemonitorsZj";
     },
     chooseProject(){
-      //window.location.href = "/admin/chooseProject";
       let _this = this;
-      _this.user = Tool.getLoginUser();
-      _this.user.xmbh = "002";
-      _this.$forceUpdate();
-      Tool.setLoginUser(_this.user);
-      _this.$router.push("/welcome");
+      if(_this.LOCAL_VIDEO){
+        _this.user = Tool.getLoginUser();
+        _this.user.xmbh = "002";
+        _this.$forceUpdate();
+        Tool.setLoginUser(_this.user);
+        _this.$router.push("/welcome");
+      }else{
+        window.location.href = "/admin/chooseProject";
+      }
     },
     chooseEnvironment(){
       window.location.href = "/mobile/environmentDp";

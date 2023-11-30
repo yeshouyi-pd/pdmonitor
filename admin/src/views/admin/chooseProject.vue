@@ -58,7 +58,7 @@ export default {
         Loading.hide();
         let resp = response.data;
         _this.xmbhs = resp.content;
-        if(_this.localZhbht){
+        if(_this.localZhbht&&_this.xmbhs.includes("002")){
           _this.xmbhs.splice(_this.xmbhs.indexOf("002"),1);
         }
         _this.$forceUpdate();
