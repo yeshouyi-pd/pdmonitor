@@ -88,6 +88,23 @@
       order by ${orderByClause}
     </if>
   </select>
+  <select id="selectByPage"  parameterType="map" resultMap="BaseResultMap">
+    select a.id, a.sbbh, a.kssj, a.jssj, a.rq, a.wjlj, a.wjmc, a.sfysp, a.bz, a.sm  from video_event a
+    where a.sfysp=1 and a.id in (select max(c.id) from video_event c where c.sfysp=1 GROUP BY c.wjmc)
+    <if test="(record.sbbh == null or record.sbbh =='') and record.xmbh != null and record.xmbh !=''">
+      and a.sbbh in (select b.sbsn from water_pro_equip b FORCE index(sbsn) where b.xmbh = #{record.xmbh,jdbcType=VARCHAR}),
+    </if>
+    <if test="record.sbbh != null and record.sbbh !=''">
+      and a.sbbh = #{record.sbbh,jdbcType=VARCHAR},
+    </if>
+    <if test="record.stime != null and record.stime !=''">
+      AND a.rq &gt;= #{record.stime,jdbcType=VARCHAR}
+    </if>
+    <if test="record.etime != null and record.etime !=''">
+      AND a.rq &lt;= #{record.etime,jdbcType=VARCHAR}
+    </if>
+    order by a.kssj desc
+  </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />

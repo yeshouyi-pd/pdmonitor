@@ -1,7 +1,7 @@
 package com.pd.server.main.dto;
 
 
-public class VideoEventDto {
+public class VideoEventDto extends PageDto{
 
     /**
     * 
@@ -52,6 +52,8 @@ public class VideoEventDto {
     * 说明
     */
     private String sm;
+
+    private String xmbh;
 
     public String getId() {
         return id;
@@ -133,6 +135,13 @@ public class VideoEventDto {
         this.sm = sm;
     }
 
+    public String getXmbh() {
+        return xmbh;
+    }
+
+    public void setXmbh(String xmbh) {
+        this.xmbh = xmbh;
+    }
 
     @Override
     public String toString() {

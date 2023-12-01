@@ -24,14 +24,12 @@ public class VideoEventService {
     /**
     * 列表查询
     */
-    public void list(PageDto pageDto) {
-    PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
-        VideoEventExample videoEventExample = new VideoEventExample();
-        List<VideoEvent> videoEventList = videoEventMapper.selectByExample(videoEventExample);
-        PageInfo<VideoEvent> pageInfo = new PageInfo<>(videoEventList);
-        pageDto.setTotal(pageInfo.getTotal());
-        List<VideoEventDto> videoEventDtoList = CopyUtil.copyList(videoEventList, VideoEventDto.class);
-        pageDto.setList(videoEventDtoList);
+    public List<VideoEvent> selectByExample(VideoEventExample example) {
+        return videoEventMapper.selectByExample(example);
+    }
+
+    public List<VideoEvent> selectByPage(VideoEventDto videoEventDto){
+        return videoEventMapper.selectByPage(videoEventDto);
     }
 
     /**

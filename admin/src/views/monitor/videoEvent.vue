@@ -68,12 +68,12 @@
           <td>{{item.jssj}}</td>
           <td>
             <div class="hidden-sm hidden-xs btn-group">
-              <button :id="item.id" v-on:click="watchVideo(item)" class="btn btn-xs btn-info" style="margin-left: 10px;">
+              <button :id="item.id" v-on:click="watchVideo(item.sbbh,item.wjmc,'1')" class="btn btn-xs btn-info" style="margin-left: 10px;">
                 <i class="ace-icon fa  fa-video-camera bigger-120">查看原视频</i>
               </button>
-<!--              <button :id="'xz'+item.id" v-on:click="explainVideo(item)" class="btn btn-xs btn-info" style="margin-left: 10px;">-->
-<!--                <i class="ace-icon fa fa-volume-down bigger-120">查看分析视频</i>-->
-<!--              </button>-->
+              <button :id="'xz'+item.id" v-on:click="watchVideo(item.sbbh,item.wjmc,'0')" class="btn btn-xs btn-info" style="margin-left: 10px;">
+                <i class="ace-icon fa fa-volume-down bigger-120">查看分析视频</i>
+              </button>
             </div>
           </td>
         </tr>
@@ -87,10 +87,32 @@
         <div class="modal-content" style="width: 100%;margin: auto">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">历史回放</h4>
+            <h4 class="modal-title">视频回放</h4>
           </div>
           <div class="modal-body" :style="'height: '+videoHeight+'px;overflow-y: auto;width:100%;'" id="playbox">
 
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-white btn-default btn-round" data-dismiss="modal">
+              <i class="ace-icon fa fa-times"></i>
+              关闭
+            </button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div id="video-modal-explain" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document" style="width: 80%">
+        <div class="modal-content" style="width: 100%;margin: auto">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">分析视频回放</h4>
+          </div>
+          <div class="modal-body">
+            <video controls preload="auto" width="100%" height="350px" autoplay="autoplay" v-for="item in videoDatas">
+              <source :src="item.wjlj" type="video/mp4">
+            </video>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-white btn-default btn-round" data-dismiss="modal">
@@ -117,42 +139,23 @@ export default {
       videoEvents:[],
       deptMap: [],
       waterEquipments: [],
-      myChart:null,
-      intervalId:'',
-      showBtn:false,
-      echartsData:[],
-      title:[],
-      videos:[],
       videoHeight:400,
       zhbht:LOCAL_ZHBHT,
-      ldTime:'',
       userDto:null,
       shj:LOCAL_SSBRL,
       timeHandle:null,
-      canPlay:false
+      canPlay:false,
+      videoDatas:[]
     }
   },
   mounted() {
     let _this = this;
     _this.userDto = Tool.getLoginUser();
     _this.deptMap = Tool.getDeptUser();
-    console.log( _this.deptMap);
     _this.$refs.pagination.size = 10;
     _this.$forceUpdate();
     _this.list(1);
     _this.findDeviceInfo();
-    //监听模态框关闭
-    $('#echart-modal').on('hidden.bs.modal', function () {
-      //先消除再创建
-      if(_this.myChart!=null){
-        _this.myChart.dispose();
-      }
-      if (_this.intervalId != null) {
-        clearInterval(_this.intervalId); //清除计时器
-        _this.intervalId = null; //设置为null
-      }
-      _this.showBtn = false;
-    });
     //监听模态框关闭
     $('#video-modal').on('hidden.bs.modal', function () {
       clearTimeout(_this.timeHandle);
@@ -181,9 +184,9 @@ export default {
       }
     },
     //是否有视频
-    hasVideo(id){
+    hasExplainVideo(id,sbbh,wjmc,sfysp){
       let _this = this;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/videoEvent/videoList', {'id':id}).then((response)=> {
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/videoEvent/videoList', {'sbbh':sbbh,'wjmc':wjmc,'sfysp':sfysp}).then((response)=> {
         let resp = response.data;
         let videoDatas = resp.content;
         if(videoDatas.length>0){
@@ -196,21 +199,48 @@ export default {
       })
     },
     //历史回放
-    watchVideo(id){
+    watchVideo(sbbh,wjmc,sfysp){
       let _this = this;
       $("#playbox").empty();
       _this.canPlay = false;
-      _this.videoHeight = '400';
-      _this.getPlayUrl(obj.sbbh,obj.tplj.substring(obj.tplj.lastIndexOf("/")+1),true);
+      Loading.show();
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/videoEvent/videoList', {'sbbh':sbbh,'wjmc':wjmc,'sfysp':sfysp}).then((response)=>{
+        let resp = response.data;
+        // if("1"==sfysp){
+        //
+        // }else{
+        //   _this.videoDatas = resp.content;
+        //   $("#video-modal-explain").modal("show");
+        // }
+        let videoDatas = resp.content;
+        if(videoDatas.length>0){
+          if(videoDatas.length>=2){
+            _this.videoHeight = '761';
+          }else{
+            _this.videoHeight = '400';
+          }
+          let isLast = false;
+          for(let i=0;i<videoDatas.length;i++){
+            let obj = videoDatas[i];
+            if(i==videoDatas.length-1){
+              isLast = true;
+            }
+            _this.getPlayUrl(obj.sbbh,obj.wjlj.substring(obj.wjlj.lastIndexOf("/")+1),isLast);
+          }
+        }else{
+          Loading.hide();
+          Toast.error("未找到对应视频！");
+        }
+      })
     },
     getPlayUrl(sbid,filename,isLast){
       let _this = this;
-      let url = '';
-      if(_this.shj){
-        url="http://49.239.193.146:49053/FileInfo.asmx/GetPlayUrl";
-      }else{
-        url="http://49.239.193.146:49082/FileInfo.asmx/GetPlayUrl";
-      }
+      let url = 'http://49.239.193.146:49082/FileInfo.asmx/GetPlayUrl';
+      // if(_this.shj){
+      //   url="http://49.239.193.146:49053/FileInfo.asmx/GetPlayUrl";
+      // }else{
+      //   url="http://49.239.193.146:49082/FileInfo.asmx/GetPlayUrl";
+      // }
       $.post(url,{"sbid": sbid,"filename":filename,"fbl":"1080","fhfs":"1"}, function (data, status) {
         if(status&&!(data.getElementsByTagName('Mesg')[0].childNodes[0].nodeValue.includes('不存在')||data.getElementsByTagName('Mesg')[0].childNodes[0].nodeValue.includes('文件大小为0'))){
           if(_this.fileExists(data.getElementsByTagName('PlayUrl')[0].childNodes[0].nodeValue)){
@@ -318,14 +348,12 @@ export default {
         _this.$refs.pagination.render(page, resp.content.total);
         _this.$nextTick(function (){
           for(let i=0;i<_this.videoEvents.length;i++){
-            _this.hasVideo(_this.videoEvents[i].id);
+            let obj = _this.videoEvents[i];
+            _this.hasExplainVideo(obj.id,obj.sbbh,obj.wjmc,"0");
           }
         });
       })
-    },
-    explainVideo(){
-
-    },
+    }
   }
 }
 </script>
