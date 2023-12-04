@@ -1,14 +1,23 @@
 package com.pd.server.main.service.shj;
 
 import com.alibaba.fastjson.JSONObject;
+import com.pd.server.config.RedisCode;
 import com.pd.server.config.SpringUtil;
+import com.pd.server.main.domain.WaterEquipment;
+import com.pd.server.main.domain.WaterEquipmentExample;
 import com.pd.server.main.dto.VideoEventDto;
+import com.pd.server.main.mapper.WaterEquipmentMapper;
 import com.pd.server.main.service.VideoEventService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 @Service
@@ -17,6 +26,18 @@ public class VideoEventShjService extends AbstractScanRequest {
     private static final Logger LOG = LoggerFactory.getLogger(VideoEventShjService.class);
     public static final String ZZ_28 ="^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{1,}_A1_\\w{1,}.mp4$";
     public static final String ZZ_24 ="^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{1,}_A4_\\w{1,}.mp4$";
+
+    public  static RedisTemplate redisTstaticemplate;
+
+
+    @Resource
+    private RedisTemplate redisTemplate;
+
+    @PostConstruct
+    protected void init() {
+        redisTstaticemplate = redisTemplate;
+    }
+
 
     /**
      * 岸上视频剪切回调接口
@@ -34,6 +55,7 @@ public class VideoEventShjService extends AbstractScanRequest {
                 data = "图片路径格式错误";
                 return data;
             }
+            Map<String,String> map = (Map<String, String>) redisTstaticemplate.opsForValue().get(RedisCode.SBSNCENTERCODE);
             VideoEventService videoEventService = SpringUtil.getBean(VideoEventService.class);
             VideoEventDto videoEventDto = new VideoEventDto();
             videoEventDto.setSbbh(sbbh);
@@ -43,6 +65,7 @@ public class VideoEventShjService extends AbstractScanRequest {
             videoEventDto.setWjlj(tplj);
             videoEventDto.setWjmc(wjmclj.substring(0,39));
             videoEventDto.setSfysp(1);
+            videoEventDto.setBz(map.get(sbbh));
             videoEventService.save(videoEventDto);
             data = "保存成功";
         }catch (Exception e){

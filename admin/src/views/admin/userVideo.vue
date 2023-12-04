@@ -3,7 +3,7 @@
     <!-- query start -->
     <div class="widget-box">
       <div class="widget-header">
-        <h4 class="widget-title">代码管理</h4>
+        <h4 class="widget-title">视频用户管理</h4>
       </div>
       <div class="widget-body">
         <div class="widget-main">
@@ -18,18 +18,13 @@
                   <input class="input-sm" type="text"  v-model="queryuser.loginName"/>
                 </td>
                 <td style="width: 10%" >
-                  姓名：
+                  用户名称：
                 </td>
                 <td style="width: 10%">
                   <input class="input-sm" type="text"   v-model="queryuser.name"/>
                 </td>
-                <td  colspan="2" >
-
-                </td>
-              </tr>
-              <tr  >
                 <td style="width:8%" >
-                  状态：
+                  是否启用：
                 </td>
                 <td style="width: 10%">
                   <div class="radio" style="text-align: left">
@@ -81,6 +76,7 @@
           <th>账号</th>
           <th>用户名称</th>
           <th>部门</th>
+          <th>是否启用</th>
           <th>操作</th>
         </tr>
         </thead>
@@ -94,6 +90,7 @@
               {{deptc.deptname}}
             </template>
           </td>
+          <td><span v-if="user.zt=='Y'">启用</span><span v-if="user.zt=='N'">禁用</span></td>
           <td>
             <div class="hidden-sm hidden-xs btn-group">
 

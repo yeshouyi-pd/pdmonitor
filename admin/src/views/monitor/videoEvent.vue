@@ -61,7 +61,7 @@
         </thead>
         <tbody>
         <tr v-for="item in videoEvents">
-          <td>{{deptMap|optionMapKV(item.deptcode)}}</td>
+          <td>{{deptMap|optionMapKV(item.bz)}}</td>
           <td>{{waterEquipments|optionNSArray(item.sbbh)}}</td>
           <td>{{item.sbbh}}</td>
           <td>{{item.kssj}}</td>
@@ -338,9 +338,9 @@ export default {
       Loading.show();
       _this.videoEventDto.page = page;
       _this.videoEventDto.size = _this.$refs.pagination.size;
-      if("460100"!=Tool.getLoginUser().deptcode){
-        _this.videoEventDto.xmbh=Tool.getLoginUser().xmbh;
-      }
+      // if("460100"!=Tool.getLoginUser().deptcode){
+      //   _this.videoEventDto.xmbh=Tool.getLoginUser().xmbh;
+      // }
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/videoEvent/list', _this.videoEventDto).then((response)=>{
         Loading.hide();
         let resp = response.data;

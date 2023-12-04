@@ -64,43 +64,43 @@
                 <td>3号浮标</td>
                 <td>2023-10-09 14:04:01</td>
                 <td>2023-10-09 14:07:34</td>
-                <td>查看视频</td>
+                <td style="cursor: pointer;">查看视频</td>
               </tr>
               <tr>
                 <td>3号浮标</td>
                 <td>2023-10-09 14:04:01</td>
                 <td>2023-10-09 14:07:34</td>
-                <td>查看视频</td>
+                <td style="cursor: pointer;">查看视频</td>
               </tr>
               <tr>
                 <td>3号浮标</td>
                 <td>2023-10-09 14:04:01</td>
                 <td>2023-10-09 14:07:34</td>
-                <td>查看视频</td>
+                <td style="cursor: pointer;">查看视频</td>
               </tr>
               <tr>
                 <td>3号浮标</td>
                 <td>2023-10-09 14:04:01</td>
                 <td>2023-10-09 14:07:34</td>
-                <td>查看视频</td>
+                <td style="cursor: pointer;">查看视频</td>
               </tr>
               <tr>
                 <td>3号浮标</td>
                 <td>2023-10-09 14:04:01</td>
                 <td>2023-10-09 14:07:34</td>
-                <td>查看视频</td>
+                <td style="cursor: pointer;">查看视频</td>
               </tr>
               <tr>
                 <td>3号浮标</td>
                 <td>2023-10-09 14:04:01</td>
                 <td>2023-10-09 14:07:34</td>
-                <td>查看视频</td>
+                <td style="cursor: pointer;">查看视频</td>
               </tr>
               <tr>
                 <td>3号浮标</td>
                 <td>2023-10-09 14:04:01</td>
                 <td>2023-10-09 14:07:34</td>
-                <td>查看视频</td>
+                <td style="cursor: pointer;">查看视频</td>
               </tr>
               </tbody>
             </table>

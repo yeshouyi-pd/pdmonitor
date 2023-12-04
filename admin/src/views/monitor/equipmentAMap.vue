@@ -74,6 +74,7 @@
                 centerLoction:[113.63,22.24],
                 amap:'',
                 zhbht:LOCAL_ZHBHT,
+                zhsp:LOCAL_VIDEO,
                 environmentType:1,
                 sbbh:"RPCDA4016"
             }
@@ -458,7 +459,7 @@
             },
             createAmap(){
                 let _this = this;
-                if(_this.zhbht){
+                if(_this.zhbht || _this.zhsp){
                   _this.amap = new AMap.Map('equipmentamap', {
                     center: [113.73,22.30],
                     resizeEnable: true,
@@ -600,7 +601,7 @@
                                 zIndex: 101,
                                 map: _this.amap
                             });
-                            if(_this.zhbht){
+                            if(_this.zhbht || _this.zhsp){
                               marker.setLabel({
                                 direction:'center',
                                 offset: new AMap.Pixel(10, 0),  //设置文本标注偏移量
