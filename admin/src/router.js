@@ -79,6 +79,7 @@ import WaveData from "./views/environment/waveData.vue";
 import EnvironmentNewDp from "./views/mobile/environmentNewDp";
 import VideoEvent from "./views/monitor/videoEvent.vue";
 import ForecastNum from "./views/monitor/forecastNum.vue";
+import SeaSurfaceSalinity from "./views/monitor/seaSurfaceSalinity.vue";
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -399,6 +400,10 @@ export default new Router({
             path: "monitor/forecastNum",
             name: "monitor/forecastNum",
             component: ForecastNum
+        },{
+            path: "monitor/seaSurfaceSalinity",
+            name: "monitor/seaSurfaceSalinity",
+            component: SeaSurfaceSalinity
         }]
     }]
 })
