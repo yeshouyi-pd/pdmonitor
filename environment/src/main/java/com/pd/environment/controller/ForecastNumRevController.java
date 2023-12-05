@@ -22,7 +22,7 @@ import java.util.Map;
 public class ForecastNumRevController {
 
     private static final Logger LOG = LoggerFactory.getLogger(CurrentMeterRevController.class);
-    public static final String BUSINESS_NAME = "江豚出现次数预测数据";
+    public static final String BUSINESS_NAME = "接收江豚出现次数预测数据";
 
     @Resource
     private ForecastNumService forecastNumService;
@@ -59,6 +59,8 @@ public class ForecastNumRevController {
             forecastNumDto.setCxrq(cxsj.substring(0,10));
             forecastNumDto.setDepcode(map.get(sbbh));
             forecastNumService.save(forecastNumDto);
+            responseDto.setSuccess(true);
+            responseDto.setMessage("保存成功");
         }catch (Exception e){
             LOG.error("接收到的数据："+JSONObject.toJSONString(jsonObject)+"====错误原因："+e.getMessage());
             responseDto.setMessage(e.getMessage());
