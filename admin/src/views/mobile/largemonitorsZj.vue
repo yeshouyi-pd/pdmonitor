@@ -217,7 +217,7 @@ export default {
     //获取所有的设备，因为要用到设备的位置
     _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getDevice').then((res)=>{
       let response = res.data;
-      _this.devices = response.content;
+      _this.devices = response.content.list;
       _this.$forceUpdate();
       _this.a4Device = response.content.a4List;
       _this.$forceUpdate();

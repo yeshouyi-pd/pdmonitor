@@ -18,6 +18,8 @@ import org.springframework.util.CollectionUtils;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -163,4 +165,53 @@ public class WxRedisConfig implements CommandLineRunner {
         map = allmap.get(type);
         return map;
     }
+
+    /**
+     * 获取当前OS下的存储路径
+     */
+    public static String getPicStorePath() {
+        Map<String,String> map = (Map<String, String>) redisTstaticemplate.opsForValue().get(RedisCode.ATTRECODEKEY);
+        if (getMacos().toLowerCase().contains("windows")) {
+            picStorePath= map.get("pathwindows");
+        } else {
+            picStorePath= map.get("pathliunx");
+        }
+        return picStorePath;
+    }
+
+    /**
+     * 创建目录
+     * @param sysstorePath
+     * @return
+     */
+    public static String createFileDriectory(String sysstorePath){
+        String picDirectory = "";
+        java.io.File storePath = new java.io.File(sysstorePath);
+        if (!storePath.exists() && !storePath.isDirectory()) {
+            LOG.info("创建目录-----------" + storePath.getAbsoluteFile());
+            storePath.mkdir();
+            if (!getMacos().toLowerCase().contains("windows")) {//当前系统不是windows 则授权
+                try {
+                    Runtime.getRuntime().exec("chmod 775 -R " + storePath);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        picDirectory = sysstorePath  + DateTools.getYM() + "/";
+        java.io.File file = new File(picDirectory);
+        if (!file.exists() && !file.isDirectory()) {
+            LOG.info("创建目录-----------" + file.getAbsoluteFile());
+            file.mkdir();
+            if (!getMacos().toLowerCase().contains("windows")) {//当前系统不是windows 则授权
+                try {
+                    Runtime.getRuntime().exec("chmod 775 -R " + file);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return picDirectory;
+    }
+
 }
