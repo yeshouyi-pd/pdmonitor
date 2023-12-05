@@ -374,7 +374,7 @@ export default {
                 || !Validator.length(_this.user.name, "用户名称", 1, 50)
                 || !Validator.require(_this.user.name, "用户名称")
                 || !Validator.require(_this.user.yj, "能否下载")
-                || (!Validator.require(_this.user.password, "密码") && Tool.isEmpty(_this.user.id))
+                || (!Validator.require(_this.user.password, "密码"))
 
         ) {
           return;
