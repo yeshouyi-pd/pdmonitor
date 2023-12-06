@@ -32,6 +32,10 @@ public class VideoEventService {
         return videoEventMapper.selectByPage(videoEventDto);
     }
 
+    public List<VideoEvent> selectByDp(VideoEventExample example,Integer limitNum) {
+        return videoEventMapper.selectByDp(example, limitNum);
+    }
+
     /**
     * 保存，id有值时更新，无值时新增
     */

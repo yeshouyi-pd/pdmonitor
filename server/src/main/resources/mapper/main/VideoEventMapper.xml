@@ -88,6 +88,13 @@
       order by ${orderByClause}
     </if>
   </select>
+  <select id="selectByDp" resultMap="BaseResultMap">
+    select id, sbbh, kssj, jssj, rq, wjlj, wjmc, sfysp, bz, sm from video_event
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+    order by kssj desc limit #{limitNum,jdbcType=INTEGER}
+  </select>
   <select id="selectByPage"  parameterType="map" resultMap="BaseResultMap">
     select a.id, a.sbbh, a.kssj, a.jssj, a.rq, a.wjlj, a.wjmc, a.sfysp, a.bz, a.sm  from video_event a
     where a.sfysp=1 and a.id in (select max(c.id) from video_event c where c.sfysp=1 GROUP BY c.wjmc)

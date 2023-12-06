@@ -2,7 +2,7 @@
   <div class="wrap" id="app">
     <header style="position: relative;">
       <img src="/largemonitors/assets/imgs/headertitle.png" style="position: absolute;left: 30%;top:20px;width: 750px;">
-      <div class="lefttitle">
+      <div class="lefttitle" v-if="!LOCAL_VIDEO">
         <img src="/largemonitors/assets/imgs/左上角title.png" alt="" style="width: 220px;">
         <span>
           <div @click="chooseProject" style="cursor: pointer;">主页</div>
@@ -11,6 +11,9 @@
           <div style="padding: 0 5px;">/</div>
           <div @click="chooseVideo" style="cursor: pointer;">视频</div>
         </span>
+      </div>
+      <div class="lefttitle"  v-if="LOCAL_VIDEO"  style="top: 15px;left: 25px;color: #fff;display: flex;">
+        <div class="title-item" @click="chooseVideo">返回</div>
       </div>
     </header>
     <div class="content">
@@ -160,6 +163,7 @@ export default {
   components:{EquipmentAMap,Swiper},
   data: function (){
     return {
+      LOCAL_VIDEO:LOCAL_VIDEO,
       config: {
         headerBGC: "#1F2C94",
         oddRowBGC: "#1F2C94",
@@ -942,5 +946,15 @@ body {
 }
 /deep/.el-progress-circle__track {
   stroke: #061073;
+}
+.title-item{
+  width: 80px;
+  padding: 5px;
+  border: 1px solid #4AAFE3;
+  text-align: center;
+  font-size: 18px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #4AAFE3;
 }
 </style>

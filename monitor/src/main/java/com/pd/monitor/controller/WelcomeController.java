@@ -10,6 +10,7 @@ import com.pd.server.main.dto.basewx.my.PredationNumDwDto;
 import com.pd.server.main.service.*;
 import com.pd.server.util.DateUtil;
 import com.pd.server.util.DateUtils;
+import jdk.internal.util.xml.impl.Attrs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
@@ -44,7 +45,8 @@ public class WelcomeController extends BaseWxController{
      */
     @Resource
     private WaterEquipmentService waterEquipmentService;
-
+    @Resource
+    private AttrService attrService;
     @Resource
     private EquipmentFileTodayService equipmentFileTodayService;
     @Resource
@@ -57,6 +59,41 @@ public class WelcomeController extends BaseWxController{
     private PredationNumService predationNumService;
     @Resource
     private EquipmentFileEventService equipmentFileEventService;
+    @Resource
+    private VideoEventService videoEventService;
+
+    @PostMapping("/getExplainVideoEvent")
+    public ResponseDto getExplainVideoEvent(@RequestBody VideoEventDto videoEventDto){
+        ResponseDto responseDto = new ResponseDto();
+        String limitNumStr = attrService.findByAttrKey("limitNum");
+        Integer limitNum = 10;
+        if(!StringUtils.isEmpty(limitNumStr)){
+            limitNum = Integer.parseInt(limitNumStr);
+        }
+        VideoEventExample example = new VideoEventExample();
+        VideoEventExample.Criteria ca = example.createCriteria();
+        if(!StringUtils.isEmpty(videoEventDto.getSbbh())){
+            ca.andSbbhEqualTo(videoEventDto.getSbbh());
+        }
+        if(!StringUtils.isEmpty(videoEventDto.getWjmc())){
+            ca.andWjmcEqualTo(videoEventDto.getWjmc());
+        }
+        if(!StringUtils.isEmpty(videoEventDto.getRq())){
+            ca.andRqEqualTo(videoEventDto.getRq());
+        }
+        if(!StringUtils.isEmpty(videoEventDto.getStime())){
+            ca.andRqGreaterThanOrEqualTo(videoEventDto.getStime());
+        }
+        if(!StringUtils.isEmpty(videoEventDto.getEtime())){
+            ca.andRqLessThanOrEqualTo(videoEventDto.getEtime());
+        }
+        if(!StringUtils.isEmpty(videoEventDto.getSfysp())){
+            ca.andSfyspEqualTo(videoEventDto.getSfysp());
+        }
+        List<VideoEvent> lists = videoEventService.selectByDp(example, limitNum);
+        responseDto.setContent(lists);
+        return responseDto;
+    }
 
     /**
      * 大屏 捕食行为
