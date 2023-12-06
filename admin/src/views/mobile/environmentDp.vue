@@ -226,6 +226,7 @@ export default {
   components:{EquipmentAMap},
   data: function (){
     return {
+      LOCAL_VIDEO:LOCAL_VIDEO,
       curDate:'',
       heightMax:510,
       curSbbh:'RPCDA4016',
@@ -292,7 +293,11 @@ export default {
     back(){
       let _this = this;
       _this.clear();
-      window.location.href = "/mobile/largemonitorsZj";
+      if(_this.LOCAL_VIDEO){
+        window.location.href = "/mobile/videoNewDp";
+      }else{
+        window.location.href = "/mobile/largemonitorsZj";
+      }
     },
     clickMapPoint(sbmc,sbbh){
       let _this = this;

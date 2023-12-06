@@ -20,6 +20,8 @@ public interface VideoEventMapper {
 
     List<VideoEvent> selectByExample(VideoEventExample example);
 
+    List<VideoEvent> selectByDp(@Param("example") VideoEventExample example,@Param("limitNum") Integer limitNum);
+
     List<VideoEvent> selectByPage(@Param("record") VideoEventDto record);
 
     VideoEvent selectByPrimaryKey(String id);
