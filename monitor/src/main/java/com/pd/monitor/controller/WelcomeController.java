@@ -10,7 +10,6 @@ import com.pd.server.main.dto.basewx.my.PredationNumDwDto;
 import com.pd.server.main.service.*;
 import com.pd.server.util.DateUtil;
 import com.pd.server.util.DateUtils;
-import jdk.internal.util.xml.impl.Attrs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;

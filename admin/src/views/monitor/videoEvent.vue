@@ -165,9 +165,6 @@ export default {
     exportExcle(){
       let _this = this;
       let param = "";
-      if("460100"!=Tool.getLoginUser().deptcode){
-        param+="&xmbh="+Tool.getLoginUser().xmbh;
-      }
       if(!Tool.isEmpty(_this.videoEventDto.sbbh)){
         param+="&sbbh="+_this.videoEventDto.sbbh;
       }
@@ -191,10 +188,8 @@ export default {
         let videoDatas = resp.content;
         if(videoDatas.length>0){
           $("#xz"+id).attr("style","display:block");
-          $("#"+id).attr("style","display:block");
         }else {
           $("#xz"+id).attr("style","display:none");
-          $("#"+id).attr("style","display:none");
         }
       })
     },
@@ -302,11 +297,6 @@ export default {
       let _this = this;
       Loading.show();
       let data = {};
-      if("460100"==Tool.getLoginUser().deptcode){
-        data = {'sblb':'0001','dqzl':'A1,A4'};
-      }else{
-        data = {'sblb':'0001','dqzl':'A1,A4','xmbh':Tool.getLoginUser().xmbh};
-      }
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/findAll', data).then((response)=>{
         Loading.hide();
         _this.waterEquipments = response.data.content;

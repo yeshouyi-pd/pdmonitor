@@ -87,7 +87,7 @@ public class ShjController{
                     }
                 }
             }
-            if("参数错误".equals(data)){
+            if("参数错误".equals(data) || data.contains("错误")){
                 returnObject.put("returnCode", ShjJsonConstant.CODE_4000);
                 returnObject.put("returnMsg", ShjJsonConstant.MSG_4000);
             }else if("系统异常".equals(data)){
