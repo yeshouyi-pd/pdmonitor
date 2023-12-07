@@ -207,11 +207,6 @@ export default {
       let _this = this;
       Loading.show();
       let data = {};
-      if("460100"==Tool.getLoginUser().deptcode){
-        data = {'sblb':'0001','dqzl':'A1,A4'};
-      }else{
-        data = {'sblb':'0001','dqzl':'A1,A4','xmbh':Tool.getLoginUser().xmbh};
-      }
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/findAll', data).then((response)=>{
         Loading.hide();
         _this.waterEquipments = response.data.content;

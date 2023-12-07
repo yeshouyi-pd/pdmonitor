@@ -60,7 +60,7 @@ public class SeaSurfaceSalinityRevController {
             String filename = new Date().getTime() + "_" + UuidUtil.getShortUuid() + ".jpg";
             Base64Image.GenerateImage(imgBase64.substring(imgBase64.lastIndexOf(",")+1), fileDriectory + filename);
             SeaSurfaceSalinityDto entity = new SeaSurfaceSalinityDto();
-            entity.setImgUrl("/system/f/" + DateTools.getYM() + "/"+ DateTools.getYM() + "/"+ filename);
+            entity.setImgUrl("http://49.239.193.146:50091/system/f/" + DateTools.getYM() + "/"+ filename);
             entity.setTprq(tprq);
             seaSurfaceSalinityService.save(entity);
             responseDto.setSuccess(true);
