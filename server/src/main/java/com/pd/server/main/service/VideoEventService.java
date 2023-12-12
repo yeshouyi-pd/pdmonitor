@@ -60,7 +60,7 @@ public class VideoEventService {
     * 更新
     */
     private void update(VideoEvent videoEvent) {
-        videoEventMapper.updateByPrimaryKey(videoEvent);
+        videoEventMapper.updateByPrimaryKeySelective(videoEvent);
     }
 
     /**
@@ -70,4 +70,11 @@ public class VideoEventService {
         videoEventMapper.deleteByPrimaryKey(id);
     }
 
+    public void updateItem(VideoEvent videoEvent){
+        videoEventMapper.updateByPrimaryKeySelective(videoEvent);
+    }
+
+    public void saveItem(VideoEvent videoEvent){
+        videoEventMapper.insert(videoEvent);
+    }
 }

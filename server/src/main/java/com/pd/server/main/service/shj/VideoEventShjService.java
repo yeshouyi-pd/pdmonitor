@@ -1,13 +1,16 @@
 package com.pd.server.main.service.shj;
 
+import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.pd.server.config.RedisCode;
 import com.pd.server.config.SpringUtil;
+import com.pd.server.main.domain.VideoEvent;
 import com.pd.server.main.domain.WaterEquipment;
 import com.pd.server.main.domain.WaterEquipmentExample;
 import com.pd.server.main.dto.VideoEventDto;
 import com.pd.server.main.mapper.WaterEquipmentMapper;
 import com.pd.server.main.service.VideoEventService;
+import com.pd.server.util.UuidUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -16,6 +19,7 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -57,16 +61,18 @@ public class VideoEventShjService extends AbstractScanRequest {
             }
             Map<String,String> map = (Map<String, String>) redisTstaticemplate.opsForValue().get(RedisCode.SBSNCENTERCODE);
             VideoEventService videoEventService = SpringUtil.getBean(VideoEventService.class);
-            VideoEventDto videoEventDto = new VideoEventDto();
-            videoEventDto.setSbbh(sbbh);
-            videoEventDto.setKssj(wjmclj.substring(0,4)+"-"+wjmclj.substring(5,7)+"-"+wjmclj.substring(8,10)+" "+wjmclj.substring(11,13)+":"+wjmclj.substring(14,16)+":"+wjmclj.substring(17,19));
-            videoEventDto.setJssj(wjmclj.substring(20,24)+"-"+wjmclj.substring(25,27)+"-"+wjmclj.substring(28,30)+" "+wjmclj.substring(31,33)+":"+wjmclj.substring(34,36)+":"+wjmclj.substring(37,39));
-            videoEventDto.setRq(wjmclj.substring(0,4)+"-"+wjmclj.substring(5,7)+"-"+wjmclj.substring(8,10));
-            videoEventDto.setWjlj(tplj);
-            videoEventDto.setWjmc(wjmclj.substring(0,39));
-            videoEventDto.setSfysp(1);
-            videoEventDto.setBz(map.get(sbbh));
-            videoEventService.save(videoEventDto);
+            VideoEvent videoEvent = new VideoEvent();
+            videoEvent.setId(UuidUtil.getShortUuid());
+            videoEvent.setSbbh(sbbh);
+            videoEvent.setKssj(wjmclj.substring(0,4)+"-"+wjmclj.substring(5,7)+"-"+wjmclj.substring(8,10)+" "+wjmclj.substring(11,13)+":"+wjmclj.substring(14,16)+":"+wjmclj.substring(17,19));
+            videoEvent.setJssj(wjmclj.substring(20,24)+"-"+wjmclj.substring(25,27)+"-"+wjmclj.substring(28,30)+" "+wjmclj.substring(31,33)+":"+wjmclj.substring(34,36)+":"+wjmclj.substring(37,39));
+            videoEvent.setRq(wjmclj.substring(0,4)+"-"+wjmclj.substring(5,7)+"-"+wjmclj.substring(8,10));
+            videoEvent.setWjlj(tplj);
+            videoEvent.setWjmc(wjmclj.substring(0,39));
+            videoEvent.setSfysp(1);
+            videoEvent.setBz(map.get(sbbh));
+            videoEventService.saveItem(videoEvent);
+            sendDataToAnalysis(videoEvent);
             data = "保存成功";
         }catch (Exception e){
             LOG.error("VideoEventShjService:"+e.getMessage());
@@ -74,4 +80,22 @@ public class VideoEventShjService extends AbstractScanRequest {
         }
         return data;
     }
+
+    private void sendDataToAnalysis(VideoEvent videoEvent){
+        VideoEventService videoEventService = SpringUtil.getBean(VideoEventService.class);
+        try {
+            HashMap<String, Object> paramMap = new HashMap<>();
+            paramMap.put("equip_num", videoEvent.getSbbh());
+            paramMap.put("address", videoEvent.getWjlj());
+            String result= HttpUtil.post("http://192.168.3.11:8080/detect", paramMap);
+            LOG.error("算法分析返回："+result);
+            videoEvent.setSm("0");
+        }catch (Exception e){
+            LOG.error("请求算法分析失败："+e.getMessage());
+            videoEvent.setSm("1");
+        }
+        videoEventService.updateItem(videoEvent);
+    }
+
+
 }
