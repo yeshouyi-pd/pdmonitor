@@ -7,9 +7,9 @@
 <!--        <span>-->
 <!--          <div @click="chooseProject" style="cursor: pointer;">主页</div>-->
 <!--        </span>-->
-        <div class="title-item" @click="chooseProject">主页</div>
-        <div class="title-item" @click="chooseEnvironment" style="margin-left: 10px;">环境</div>
-        <div class="title-item" @click="chooseLargemonitors" style="margin-left: 10px;width: 90px;">定点监测</div>
+        <div class="title-item" @click="back">返回</div>
+        <div v-if="!LOCAL_VIDEO" class="title-item" @click="chooseEnvironment" style="margin-left: 10px;">环境</div>
+        <div v-if="!LOCAL_VIDEO" class="title-item" @click="chooseLargemonitors" style="margin-left: 10px;width: 90px;">定点监测</div>
       </div>
     </header>
     <div class="page-first-div">
@@ -25,24 +25,6 @@
 <!--            <iframe ref="firstIframe" @click="vueSendMsg(4,'firstIframe')" v-trigger width="100%" height="100%" src="http://119.3.2.53:9909/" scrolling="no" frameborder="0"></iframe>-->
 <!--          </div>-->
 <!--          <div class="left-text-style">7号浮标</div>-->
-<!--        </div>-->
-<!--        <div class="left-box-item">-->
-<!--          <div class="left-video-box">-->
-<!--            <iframe ref="secondIframe" @click="vueSendMsg(7,'secondIframe')" v-trigger width="100%" height="100%" src="http://119.3.2.53:9909/" scrolling="no" frameborder="0"></iframe>-->
-<!--          </div>-->
-<!--          <div class="left-text-style">8号浮标</div>-->
-<!--        </div>-->
-<!--        <div class="left-box-item">-->
-<!--          <div class="left-video-box">-->
-<!--            <iframe ref="threeIframe" @click="vueSendMsg(9,'threeIframe')" v-trigger width="100%" height="100%" src="http://119.3.2.53:9909/" scrolling="no" frameborder="0"></iframe>-->
-<!--          </div>-->
-<!--          <div class="left-text-style">5号浮标</div>-->
-<!--        </div>-->
-<!--        <div class="left-box-item">-->
-<!--          <div class="left-video-box">-->
-<!--            <iframe ref="fourIframe" @click="vueSendMsg(10,'fourIframe')" v-trigger width="100%" height="100%" src="http://119.3.2.53:9909/" scrolling="no" frameborder="0"></iframe>-->
-<!--          </div>-->
-<!--          <div class="left-text-style">4号浮标</div>-->
 <!--        </div>-->
       </div>
       <div class="right-box">
@@ -151,18 +133,10 @@ export default {
     },
     back(){
       let _this = this;
-      window.location.href = "/mobile/largemonitorsZj";
-    },
-    chooseProject(){
-      let _this = this;
       if(_this.LOCAL_VIDEO){
-        _this.user = Tool.getLoginUser();
-        _this.user.xmbh = "002";
-        _this.$forceUpdate();
-        Tool.setLoginUser(_this.user);
-        _this.$router.push("/welcome");
+        window.location.href = "/mobile/environmentDp";
       }else{
-        window.location.href = "/admin/chooseProject";
+        window.location.href = "/admin/largemonitorsZj";
       }
     },
     chooseEnvironment(){

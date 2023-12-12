@@ -29,6 +29,7 @@ export default {
       centerLoction:[113.63,22.24],
       amap:'',
       zhbht:LOCAL_ZHBHT,
+      zhbhtsp:LOCAL_VIDEO,
       environmentType:1,
       sbbh:"RPCDA4016"
     }
@@ -48,7 +49,7 @@ export default {
   methods:{
     createAmap(){
       let _this = this;
-      if(_this.zhbht){
+      if(_this.zhbht || _this.zhbhtsp){
         _this.amap = new AMap.Map('equipmentamap', {
           center: [113.73,22.30],
           resizeEnable: true,
