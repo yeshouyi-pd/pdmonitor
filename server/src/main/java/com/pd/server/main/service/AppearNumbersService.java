@@ -4,6 +4,7 @@ import com.pd.server.main.domain.AppearNumbers;
 import com.pd.server.main.domain.AppearNumbersExample;
 import com.pd.server.main.dto.AppearNumbersDto;
 import com.pd.server.main.dto.PageDto;
+import com.pd.server.main.dto.basewx.my.AppearNumDpDto;
 import com.pd.server.main.mapper.AppearNumbersMapper;
 import com.pd.server.util.CopyUtil;
 import com.pd.server.util.UuidUtil;
@@ -30,6 +31,10 @@ public class AppearNumbersService {
 
     public List<AppearNumbers> selectByExampleSpecial(AppearNumbersDto record) {
         return appearNumbersMapper.selectByExampleSpecial(record);
+    }
+
+    public List<AppearNumDpDto> listSumAlarmNumByXs(AppearNumbersExample example) {
+        return appearNumbersMapper.listSumAlarmNumByXs(example);
     }
 
     /**

@@ -247,7 +247,7 @@
                             LocalStorage.set(LOCAL_KEY_REMEMBER_USER,null);
                         }
 
-                      _this.$router.push("/mobile/videoNewDp")
+                      _this.$router.push("/mobile/environmentDp")
 
                     } else {
                         _this.user.password="";

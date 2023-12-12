@@ -2,7 +2,9 @@ package com.pd.monitor.controller;
 
 import com.pd.server.main.domain.*;
 import com.pd.server.main.dto.*;
+import com.pd.server.main.dto.basewx.my.AppearNumDpDto;
 import com.pd.server.main.service.*;
+import com.pd.server.util.DateUtil;
 import com.pd.server.util.DateUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -10,9 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("/environmentDp")
@@ -31,6 +31,72 @@ public class EnvironmentDpController {
     private WaterQualityNewService waterQualityNewService;
     @Resource
     private WaveDataService waveDataService;
+    @Resource
+    private VideoEventService videoEventService;
+    @Resource
+    private AttrService attrService;
+    @Resource
+    private AppearNumbersService appearNumbersService;
+    @Resource
+    private ForecastNumService forecastNumService;
+
+
+    @PostMapping("/getHourCxcsBySbbh")
+    public ResponseDto getHourCxcsBySbbh(@RequestBody AppearNumbersDto appearNumbersDto){
+        ResponseDto responseDto = new ResponseDto();
+        AppearNumbersExample example = new AppearNumbersExample();
+        AppearNumbersExample.Criteria ca = example.createCriteria();
+        ca.andSbbhEqualTo(appearNumbersDto.getSbbh());
+        if(!StringUtils.isEmpty(appearNumbersDto.getStime())){
+            ca.andBjsjGreaterThanOrEqualTo(appearNumbersDto.getStime());
+        }else{
+            ca.andBjsjLessThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(),-4),"yyyy-MM-dd"));
+        }
+        if(!StringUtils.isEmpty(appearNumbersDto.getEtime())){
+            ca.andBjsjLessThanOrEqualTo(appearNumbersDto.getEtime());
+        }else {
+            ca.andBjsjLessThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(),-1),"yyyy-MM-dd"));
+        }
+        List<AppearNumDpDto> lists = appearNumbersService.listSumAlarmNumByXs(example);
+        ForecastNumExample forecastNumExample = new ForecastNumExample();
+        ForecastNumExample.Criteria forecastNumCa = forecastNumExample.createCriteria();
+        forecastNumCa.andSbbhEqualTo(appearNumbersDto.getSbbh());
+        forecastNumCa.andCxrqGreaterThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(),1),"yyyy-MM-dd"));
+        forecastNumExample.setOrderByClause(" cxsj desc ");
+        List<ForecastNum> listForecast = forecastNumService.selectByExample(forecastNumExample);
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("history", lists);
+        resultMap.put("forecast", listForecast);
+        responseDto.setContent(resultMap);
+        return responseDto;
+    }
+
+    @PostMapping("/getVideoEvent")
+    public ResponseDto getVideoEvent(@RequestBody VideoEventDto videoEventDto){
+        ResponseDto responseDto = new ResponseDto();
+        VideoEventExample example = new VideoEventExample();
+        VideoEventExample.Criteria ca = example.createCriteria();
+        ca.andSfyspEqualTo(0);
+        ca.andRqEqualTo(DateUtils.getDateToStrFormat(new Date(),"yyyy-MM-dd"));
+        example.setOrderByClause(" kssj desc ");
+        List<VideoEvent> lists = videoEventService.selectByExample(example);
+        if(lists.size()<=0){
+            VideoEventExample limitExample = new VideoEventExample();
+            VideoEventExample.Criteria limitCa = limitExample.createCriteria();
+            limitCa.andSfyspEqualTo(0);
+            limitExample.setOrderByClause(" kssj desc ");
+            String limitNumStr = attrService.findByAttrKey("limitNum");
+            Integer limitNum = 10;
+            if(!org.springframework.util.StringUtils.isEmpty(limitNumStr)){
+                limitNum = Integer.parseInt(limitNumStr);
+            }
+            List<VideoEvent> listslimit = videoEventService.selectByDp(limitExample, limitNum);
+            responseDto.setContent(listslimit);
+            return responseDto;
+        }
+        responseDto.setContent(lists);
+        return responseDto;
+    }
 
     @PostMapping("/getWaveDataData")
     public ResponseDto getWaveDataData(@RequestBody WaveDataDto waveDataDto){
