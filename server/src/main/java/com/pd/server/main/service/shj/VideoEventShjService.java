@@ -1,5 +1,6 @@
 package com.pd.server.main.service.shj;
 
+import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.pd.server.config.RedisCode;
@@ -84,10 +85,12 @@ public class VideoEventShjService extends AbstractScanRequest {
     private void sendDataToAnalysis(VideoEvent videoEvent){
         VideoEventService videoEventService = SpringUtil.getBean(VideoEventService.class);
         try {
-            HashMap<String, Object> paramMap = new HashMap<>();
-            paramMap.put("equip_num", videoEvent.getSbbh());
-            paramMap.put("address", videoEvent.getWjlj());
-            String result= HttpUtil.post("http://192.168.3.11:8080/detect", paramMap);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("equip_num", videoEvent.getSbbh());
+            jsonObject.put("address", videoEvent.getWjlj());
+            String result = HttpRequest.post("http://192.168.3.11:8080/detect")
+                    .body(jsonObject.toJSONString())
+                    .execute().body();
             LOG.error("算法分析返回："+result);
             videoEvent.setSm("0");
         }catch (Exception e){
