@@ -76,6 +76,26 @@ public class MeteorologicalDataDto extends PageDto{
     */
     private String sm;
 
+    /**
+     * 短波辐射
+     */
+    private Double shortwave;
+
+    /**
+     * 长波辐射
+     */
+    private Double longwave;
+
+    /**
+     * 东向风速
+     */
+    private Double uwindSpeed;
+
+    /**
+     * 北向风速
+     */
+    private Double vwindSpeed;
+
     public String getId() {
         return id;
     }
@@ -188,6 +208,37 @@ public class MeteorologicalDataDto extends PageDto{
         this.sm = sm;
     }
 
+    public Double getShortwave() {
+        return shortwave;
+    }
+
+    public void setShortwave(Double shortwave) {
+        this.shortwave = shortwave;
+    }
+
+    public Double getLongwave() {
+        return longwave;
+    }
+
+    public void setLongwave(Double longwave) {
+        this.longwave = longwave;
+    }
+
+    public Double getUwindSpeed() {
+        return uwindSpeed;
+    }
+
+    public void setUwindSpeed(Double uwindSpeed) {
+        this.uwindSpeed = uwindSpeed;
+    }
+
+    public Double getVwindSpeed() {
+        return vwindSpeed;
+    }
+
+    public void setVwindSpeed(Double vwindSpeed) {
+        this.vwindSpeed = vwindSpeed;
+    }
 
     @Override
     public String toString() {
@@ -209,6 +260,10 @@ public class MeteorologicalDataDto extends PageDto{
             sb.append(", cjsj=").append(cjsj);
             sb.append(", bz=").append(bz);
             sb.append(", sm=").append(sm);
+            sb.append(", shortwave=").append(shortwave);
+            sb.append(", longwave=").append(longwave);
+            sb.append(", uwindSpeed=").append(uwindSpeed);
+            sb.append(", vwindSpeed=").append(vwindSpeed);
         sb.append("]");
         return sb.toString();
     }

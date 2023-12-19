@@ -269,6 +269,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                 cameraMiddle.setJqsj(kssj+","+jssj);
             }
             cameraMiddle.setSfjq("0");
+            cameraMiddle.setBz("1");
             cameraMiddleService.save(cameraMiddle);
         }
     }
