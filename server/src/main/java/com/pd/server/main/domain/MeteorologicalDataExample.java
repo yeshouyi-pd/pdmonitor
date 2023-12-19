@@ -275,6 +275,16 @@ public class MeteorologicalDataExample {
             return (Criteria) this;
         }
 
+        public Criteria andWinddirectionLike(String value) {
+            addCriterion("winddirection like", value, "winddirection");
+            return (Criteria) this;
+        }
+
+        public Criteria andWinddirectionNotLike(String value) {
+            addCriterion("winddirection not like", value, "winddirection");
+            return (Criteria) this;
+        }
+
         public Criteria andWinddirectionIn(List<String> values) {
             addCriterion("winddirection in", values, "winddirection");
             return (Criteria) this;
@@ -987,6 +997,246 @@ public class MeteorologicalDataExample {
 
         public Criteria andSmNotBetween(String value1, String value2) {
             addCriterion("sm not between", value1, value2, "sm");
+            return (Criteria) this;
+        }
+
+        public Criteria andShortwaveIsNull() {
+            addCriterion("shortwave is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andShortwaveIsNotNull() {
+            addCriterion("shortwave is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andShortwaveEqualTo(Double value) {
+            addCriterion("shortwave =", value, "shortwave");
+            return (Criteria) this;
+        }
+
+        public Criteria andShortwaveNotEqualTo(Double value) {
+            addCriterion("shortwave <>", value, "shortwave");
+            return (Criteria) this;
+        }
+
+        public Criteria andShortwaveGreaterThan(Double value) {
+            addCriterion("shortwave >", value, "shortwave");
+            return (Criteria) this;
+        }
+
+        public Criteria andShortwaveGreaterThanOrEqualTo(Double value) {
+            addCriterion("shortwave >=", value, "shortwave");
+            return (Criteria) this;
+        }
+
+        public Criteria andShortwaveLessThan(Double value) {
+            addCriterion("shortwave <", value, "shortwave");
+            return (Criteria) this;
+        }
+
+        public Criteria andShortwaveLessThanOrEqualTo(Double value) {
+            addCriterion("shortwave <=", value, "shortwave");
+            return (Criteria) this;
+        }
+
+        public Criteria andShortwaveIn(List<Double> values) {
+            addCriterion("shortwave in", values, "shortwave");
+            return (Criteria) this;
+        }
+
+        public Criteria andShortwaveNotIn(List<Double> values) {
+            addCriterion("shortwave not in", values, "shortwave");
+            return (Criteria) this;
+        }
+
+        public Criteria andShortwaveBetween(Double value1, Double value2) {
+            addCriterion("shortwave between", value1, value2, "shortwave");
+            return (Criteria) this;
+        }
+
+        public Criteria andShortwaveNotBetween(Double value1, Double value2) {
+            addCriterion("shortwave not between", value1, value2, "shortwave");
+            return (Criteria) this;
+        }
+
+        public Criteria andLongwaveIsNull() {
+            addCriterion("longwave is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLongwaveIsNotNull() {
+            addCriterion("longwave is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLongwaveEqualTo(Double value) {
+            addCriterion("longwave =", value, "longwave");
+            return (Criteria) this;
+        }
+
+        public Criteria andLongwaveNotEqualTo(Double value) {
+            addCriterion("longwave <>", value, "longwave");
+            return (Criteria) this;
+        }
+
+        public Criteria andLongwaveGreaterThan(Double value) {
+            addCriterion("longwave >", value, "longwave");
+            return (Criteria) this;
+        }
+
+        public Criteria andLongwaveGreaterThanOrEqualTo(Double value) {
+            addCriterion("longwave >=", value, "longwave");
+            return (Criteria) this;
+        }
+
+        public Criteria andLongwaveLessThan(Double value) {
+            addCriterion("longwave <", value, "longwave");
+            return (Criteria) this;
+        }
+
+        public Criteria andLongwaveLessThanOrEqualTo(Double value) {
+            addCriterion("longwave <=", value, "longwave");
+            return (Criteria) this;
+        }
+
+        public Criteria andLongwaveIn(List<Double> values) {
+            addCriterion("longwave in", values, "longwave");
+            return (Criteria) this;
+        }
+
+        public Criteria andLongwaveNotIn(List<Double> values) {
+            addCriterion("longwave not in", values, "longwave");
+            return (Criteria) this;
+        }
+
+        public Criteria andLongwaveBetween(Double value1, Double value2) {
+            addCriterion("longwave between", value1, value2, "longwave");
+            return (Criteria) this;
+        }
+
+        public Criteria andLongwaveNotBetween(Double value1, Double value2) {
+            addCriterion("longwave not between", value1, value2, "longwave");
+            return (Criteria) this;
+        }
+
+        public Criteria andUwindSpeedIsNull() {
+            addCriterion("uwind_speed is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUwindSpeedIsNotNull() {
+            addCriterion("uwind_speed is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUwindSpeedEqualTo(Double value) {
+            addCriterion("uwind_speed =", value, "uwindSpeed");
+            return (Criteria) this;
+        }
+
+        public Criteria andUwindSpeedNotEqualTo(Double value) {
+            addCriterion("uwind_speed <>", value, "uwindSpeed");
+            return (Criteria) this;
+        }
+
+        public Criteria andUwindSpeedGreaterThan(Double value) {
+            addCriterion("uwind_speed >", value, "uwindSpeed");
+            return (Criteria) this;
+        }
+
+        public Criteria andUwindSpeedGreaterThanOrEqualTo(Double value) {
+            addCriterion("uwind_speed >=", value, "uwindSpeed");
+            return (Criteria) this;
+        }
+
+        public Criteria andUwindSpeedLessThan(Double value) {
+            addCriterion("uwind_speed <", value, "uwindSpeed");
+            return (Criteria) this;
+        }
+
+        public Criteria andUwindSpeedLessThanOrEqualTo(Double value) {
+            addCriterion("uwind_speed <=", value, "uwindSpeed");
+            return (Criteria) this;
+        }
+
+        public Criteria andUwindSpeedIn(List<Double> values) {
+            addCriterion("uwind_speed in", values, "uwindSpeed");
+            return (Criteria) this;
+        }
+
+        public Criteria andUwindSpeedNotIn(List<Double> values) {
+            addCriterion("uwind_speed not in", values, "uwindSpeed");
+            return (Criteria) this;
+        }
+
+        public Criteria andUwindSpeedBetween(Double value1, Double value2) {
+            addCriterion("uwind_speed between", value1, value2, "uwindSpeed");
+            return (Criteria) this;
+        }
+
+        public Criteria andUwindSpeedNotBetween(Double value1, Double value2) {
+            addCriterion("uwind_speed not between", value1, value2, "uwindSpeed");
+            return (Criteria) this;
+        }
+
+        public Criteria andVwindSpeedIsNull() {
+            addCriterion("vwind_speed is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andVwindSpeedIsNotNull() {
+            addCriterion("vwind_speed is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andVwindSpeedEqualTo(Double value) {
+            addCriterion("vwind_speed =", value, "vwindSpeed");
+            return (Criteria) this;
+        }
+
+        public Criteria andVwindSpeedNotEqualTo(Double value) {
+            addCriterion("vwind_speed <>", value, "vwindSpeed");
+            return (Criteria) this;
+        }
+
+        public Criteria andVwindSpeedGreaterThan(Double value) {
+            addCriterion("vwind_speed >", value, "vwindSpeed");
+            return (Criteria) this;
+        }
+
+        public Criteria andVwindSpeedGreaterThanOrEqualTo(Double value) {
+            addCriterion("vwind_speed >=", value, "vwindSpeed");
+            return (Criteria) this;
+        }
+
+        public Criteria andVwindSpeedLessThan(Double value) {
+            addCriterion("vwind_speed <", value, "vwindSpeed");
+            return (Criteria) this;
+        }
+
+        public Criteria andVwindSpeedLessThanOrEqualTo(Double value) {
+            addCriterion("vwind_speed <=", value, "vwindSpeed");
+            return (Criteria) this;
+        }
+
+        public Criteria andVwindSpeedIn(List<Double> values) {
+            addCriterion("vwind_speed in", values, "vwindSpeed");
+            return (Criteria) this;
+        }
+
+        public Criteria andVwindSpeedNotIn(List<Double> values) {
+            addCriterion("vwind_speed not in", values, "vwindSpeed");
+            return (Criteria) this;
+        }
+
+        public Criteria andVwindSpeedBetween(Double value1, Double value2) {
+            addCriterion("vwind_speed between", value1, value2, "vwindSpeed");
+            return (Criteria) this;
+        }
+
+        public Criteria andVwindSpeedNotBetween(Double value1, Double value2) {
+            addCriterion("vwind_speed not between", value1, value2, "vwindSpeed");
             return (Criteria) this;
         }
     }
