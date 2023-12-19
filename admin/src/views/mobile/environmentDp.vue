@@ -111,7 +111,7 @@
         </div>
       </div>
       <div class="center-div">
-        <div class="dp-title">实时监测系统</div>
+        <div class="dp-title">中华白海豚环境耦合实时监测系统</div>
         <div class="map-div">
           <EquipmentAMap v-bind:height-max="heightMax" :click-map-point="clickMapPoint"></EquipmentAMap>
         </div>
@@ -270,7 +270,19 @@ export default {
         align: ['center', 'center', 'center', 'center'],
         header: ['设备名称', '开始时间', '结束时间', '视频'],
         data: []
-      }
+      },
+      tdhList:[
+        {key:"1", value:"1"},
+        {key:"2", value:"3"},
+        {key:"3", value:"5"},
+        {key:"4", value:"7"},
+        {key:"5", value:"9"},
+        {key:"6", value:"11"},
+        {key:"7", value:"13"},
+        {key:"8", value:"15"},
+        {key:"9", value:"17"},
+        {key:"10", value:"19"}
+      ]
     }
   },
   mounted() {
@@ -342,9 +354,12 @@ export default {
     clickMapPoint(sbmc,sbbh){
       let _this = this;
       if(sbbh.includes("RPCD")){
-        _this.curSbmc = sbmc;
-        _this.curSbbh = sbbh;
+        // _this.curSbmc = sbmc;
+        // _this.curSbbh = sbbh;
         _this.getAlarmNum(sbbh);
+      }else if(sbmc.includes("摄像头")){
+        let tdh = _this.optionKVArray(_this.tdhList,sbbh);
+        window.location.href = "/mobile/videoNewDp?tdh="+tdh;
       }else {
         Toast.error("该站点没有数据！");
       }
@@ -912,7 +927,7 @@ export default {
     getPlayUrl(sbbh,wjlj){
       let _this = this;
       $("#playbox").empty();
-      let url = 'http://49.239.193.146:49082/FileInfo.asmx/GetPlayUrl';
+      let url = 'http://49.239.193.146:59088/FileInfo.asmx/GetPlayUrl';
       $.post(url,{"sbid": sbbh,"filename":wjlj.substring(wjlj.lastIndexOf("/")+1),"fbl":"1080","fhfs":"1"}, function (data, status) {
         if(status&&!(data.getElementsByTagName('Mesg')[0].childNodes[0].nodeValue.includes('不存在')||data.getElementsByTagName('Mesg')[0].childNodes[0].nodeValue.includes('文件大小为0'))){
           let video = document.createElement("video");
@@ -940,6 +955,19 @@ export default {
         }
       })
     },
+    optionKVArray(list, key){
+      if (!list || !key) {
+        return "";
+      } else {
+        let result = "";
+        for (let i = 0; i < list.length; i++) {
+          if (key === list[i]["key"]) {
+            result = list[i]["value"];
+          }
+        }
+        return result;
+      }
+    }
   }
 }
 </script>

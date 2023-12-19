@@ -230,7 +230,7 @@ export default {
     },
     getPlayUrl(sbid,filename,isLast){
       let _this = this;
-      let url = 'http://49.239.193.146:49082/FileInfo.asmx/GetPlayUrl';
+      let url = 'http://49.239.193.146:59088/FileInfo.asmx/GetPlayUrl';
       // if(_this.shj){
       //   url="http://49.239.193.146:49053/FileInfo.asmx/GetPlayUrl";
       // }else{

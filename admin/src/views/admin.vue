@@ -47,7 +47,7 @@
                       </li>
 
                     <li class="light-blue dropdown-modal"   v-if="LOCAL_VIDEO">
-                      <router-link to="/mobile/videoNewDp">
+                      <router-link to="/mobile/environmentDp">
                         <a class=" dropdown-toggle" style="cursor: pointer;">
                           <font color="white">返回大屏</font>
                         </a>

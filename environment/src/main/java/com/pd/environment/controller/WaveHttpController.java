@@ -36,11 +36,20 @@ public class WaveHttpController {
     public ResponseDto saveData(@RequestBody JSONObject jsonObject) {
         ResponseDto responseDto = new ResponseDto();
         try {
-            if(StringUtils.isEmpty(jsonObject.get("waveH")) || StringUtils.isEmpty(jsonObject.get("waveDirection"))
-                    || StringUtils.isEmpty(jsonObject.get("wavePeriod")) || StringUtils.isEmpty(jsonObject.get("sbbh"))
-                    || StringUtils.isEmpty(jsonObject.get("cjsj")) ){
+            if(jsonObject.isEmpty()){
+                responseDto.setSuccess(false);
+                responseDto.setMessage("无效数据");
+                return responseDto;
+            }
+            if(StringUtils.isEmpty(jsonObject.get("sbbh")) || StringUtils.isEmpty(jsonObject.get("cjsj")) ){
                 responseDto.setSuccess(false);
                 responseDto.setMessage("参数错误");
+                return responseDto;
+            }
+            if(StringUtils.isEmpty(jsonObject.get("waveH")) && StringUtils.isEmpty(jsonObject.get("waveDirection"))
+                    && StringUtils.isEmpty(jsonObject.get("wavePeriod")) ){
+                responseDto.setSuccess(false);
+                responseDto.setMessage("无效数据");
                 return responseDto;
             }
             String cjsj = jsonObject.getString("cjsj");

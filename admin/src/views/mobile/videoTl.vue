@@ -1,61 +1,59 @@
 <template>
   <div style="width: 1920px;height: 100vh;background-image: url('/static/image/environment/bg02.png');background-size: 100%;margin: auto">
     <header style="position: relative;background: none">
-      <img src="/largemonitors/assets/imgs/headertitle2.png" style="position: absolute;left: 30%;top:20px;width: 750px;">
+      <img src="/largemonitors/assets/imgs/headertitle1.png" style="position: absolute;left: 30%;top:20px;width: 750px;">
       <div class="lefttitle" style="top: 15px;left: 25px;color: #fff;display: flex;">
-<!--        <img src="/largemonitors/assets/imgs/左上角title.png" alt="" style="width: 250px;">-->
-<!--        <span>-->
-<!--          <div @click="chooseProject" style="cursor: pointer;">主页</div>-->
-<!--        </span>-->
+        <!--        <img src="/largemonitors/assets/imgs/左上角title.png" alt="" style="width: 250px;">-->
+        <!--        <span>-->
+        <!--          <div @click="chooseProject" style="cursor: pointer;">主页</div>-->
+        <!--        </span>-->
         <div class="title-item" @click="back">返回</div>
-        <div v-if="!LOCAL_VIDEO" class="title-item" @click="chooseEnvironment" style="margin-left: 10px;">环境</div>
-        <div v-if="!LOCAL_VIDEO" class="title-item" @click="chooseLargemonitors" style="margin-left: 10px;width: 90px;">定点监测</div>
       </div>
     </header>
     <div class="page-first-div">
       <div class="left-box">
-        <iframe ref="firstIframe" @click="vueSendMsg('firstIframe')" v-trigger  width="100%" height="100%" src="http://119.3.2.53:9909/" scrolling="no" frameborder="0"></iframe>
-<!--        <div class="left-box-item">-->
-<!--          &lt;!&ndash;          <div style="height: 5%;margin-top: 10px;display: flex;flex-direction: row;align-items: center;margin-left: 20px;">&ndash;&gt;-->
-<!--          &lt;!&ndash;            <div v-on:click="back()" style="color: rgb(255, 255, 255);font-size: 16px;border: 1px solid #043769;background-color:rgb(10,33,61);width: 15%;text-align: center;padding: 5px 0;cursor: pointer">&ndash;&gt;-->
-<!--          &lt;!&ndash;              返回&ndash;&gt;-->
-<!--          &lt;!&ndash;            </div>&ndash;&gt;-->
-<!--          &lt;!&ndash;          </div>&ndash;&gt;-->
-<!--          <div class="left-video-box">-->
-<!--            <iframe ref="firstIframe" @click="vueSendMsg(4,'firstIframe')" v-trigger width="100%" height="100%" src="http://119.3.2.53:9909/" scrolling="no" frameborder="0"></iframe>-->
-<!--          </div>-->
-<!--          <div class="left-text-style">7号浮标</div>-->
-<!--        </div>-->
+        <iframe width="100%" height="100%" src="http://119.3.2.53:8808/" scrolling="no" frameborder="0"></iframe>
+        <!--        <div class="left-box-item">-->
+        <!--          &lt;!&ndash;          <div style="height: 5%;margin-top: 10px;display: flex;flex-direction: row;align-items: center;margin-left: 20px;">&ndash;&gt;-->
+        <!--          &lt;!&ndash;            <div v-on:click="back()" style="color: rgb(255, 255, 255);font-size: 16px;border: 1px solid #043769;background-color:rgb(10,33,61);width: 15%;text-align: center;padding: 5px 0;cursor: pointer">&ndash;&gt;-->
+        <!--          &lt;!&ndash;              返回&ndash;&gt;-->
+        <!--          &lt;!&ndash;            </div>&ndash;&gt;-->
+        <!--          &lt;!&ndash;          </div>&ndash;&gt;-->
+        <!--          <div class="left-video-box">-->
+        <!--            <iframe ref="firstIframe" @click="vueSendMsg(4,'firstIframe')" v-trigger width="100%" height="100%" src="http://119.3.2.53:9909/" scrolling="no" frameborder="0"></iframe>-->
+        <!--          </div>-->
+        <!--          <div class="left-text-style">7号浮标</div>-->
+        <!--        </div>-->
       </div>
-      <div class="right-box">
-        <div class="right-top-box" id="playbox">
+<!--      <div class="right-box">-->
+<!--        <div class="right-top-box" id="playbox">-->
 <!--          <video autoplay="autoplay" loop="loop" style="width: 100%;height: 100%" controls>-->
 <!--            <source class="video" title="主监控位" src="/video/12.mp4" type="video/mp4" />-->
 <!--          </video>-->
-        </div>
-        <div class="right-bottom-box">
-          <div style="height: 414px;width: 97%;overflow:auto;margin-top: 1%;margin-left: 1%;color: #82CF48;font-size: 16px;">
-            <table id="simple-table" class="table  table-bordered" >
-              <thead>
-              <tr>
-                <td>设备名称</td>
-                <td>开始时间</td>
-                <td>结束时间</td>
-                <td>视频</td>
-              </tr>
-              </thead>
-              <tbody>
-              <tr v-for="item in videoEvents">
-                <td>{{devices|optionNSArray(item.sbbh)}}</td>
-                <td>{{item.kssj}}</td>
-                <td>{{item.jssj}}</td>
-                <td style="cursor: pointer;" v-on:click="getPlayUrl(item)">查看视频</td>
-              </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+<!--        </div>-->
+<!--        <div class="right-bottom-box">-->
+<!--          <div style="height: 414px;width: 97%;overflow:auto;margin-top: 1%;margin-left: 1%;color: #82CF48;font-size: 16px;">-->
+<!--            <table id="simple-table" class="table  table-bordered" >-->
+<!--              <thead>-->
+<!--              <tr>-->
+<!--                <td>设备名称</td>-->
+<!--                <td>开始时间</td>-->
+<!--                <td>结束时间</td>-->
+<!--                <td>视频</td>-->
+<!--              </tr>-->
+<!--              </thead>-->
+<!--              <tbody>-->
+<!--              <tr v-for="item in videoEvents">-->
+<!--                <td>{{devices|optionNSArray(item.sbbh)}}</td>-->
+<!--                <td>{{item.kssj}}</td>-->
+<!--                <td>{{item.jssj}}</td>-->
+<!--                <td style="cursor: pointer;" v-on:click="getPlayUrl(item)">查看视频</td>-->
+<!--              </tr>-->
+<!--              </tbody>-->
+<!--            </table>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
     </div>
   </div>
 </template>
@@ -70,22 +68,15 @@ export default {
     return {
       LOCAL_VIDEO:LOCAL_VIDEO,
       devices:[],
-      videoEvents:[],
-      tdh:''
+      videoEvents:[]
     }
   },
   created() {
     let _this = this;
-    if(!Tool.isEmpty(location.search)){
-      const query = location.search.substring(1); // 获取跳转路径参数字符串，去掉问号
-      const reg = new RegExp(`(^|&)tdh=([^&]*)(&|$)`); // 匹配id参数的正则表达式
-      const tdh = query.match(reg)[2]; // 获取跳转路径参数tdh的值
-      _this.tdh = tdh;
-    }
     //获取所有的设备，因为要用到设备的位置
     _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getDevice').then((res)=>{
-        let response = res.data;
-        _this.devices = response.content.list;
+      let response = res.data;
+      _this.devices = response.content.list;
     })
   },
   mounted() {
@@ -102,7 +93,6 @@ export default {
   methods: {
     getPlayUrl(item){
       let _this = this;
-      Loading.show();
       $("#playbox").empty();
       let url = 'http://49.239.193.146:59088/FileInfo.asmx/GetPlayUrl';
       $.post(url,{"sbid": item.sbbh,"filename":item.wjlj.substring(item.wjlj.lastIndexOf("/")+1),"fbl":"1080","fhfs":"1"}, function (data, status) {
@@ -126,16 +116,14 @@ export default {
             });
           }
           document.getElementById('playbox').appendChild(video);
-          Loading.hide();
         }else{
           Toast.error("未找到源文件或文件大小为0，无法转码！");
-          Loading.hide();
         }
       })
     },
     getExplainVideoEvent(){
       let _this = this;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/welcome/getExplainVideoEvent', {sfysp:0}).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/welcome/getExplainVideoEvent', {sfysp:1}).then((response)=>{
         let resp = response.data;
         _this.videoEvents = resp.content;
         _this.getPlayUrl(_this.videoEvents[0]);
@@ -143,28 +131,15 @@ export default {
     },
     back(){
       let _this = this;
-      if(_this.LOCAL_VIDEO){
-        window.location.href = "/mobile/environmentDp";
-      }else{
-        window.location.href = "/admin/largemonitorsZj";
-      }
+      window.location.href = "/mobile/largemonitors";
     },
-    chooseEnvironment(){
-      window.location.href = "/mobile/environmentDp";
-    },
-    chooseLargemonitors(){
-      let _this = this;
-      window.location.href = "/mobile/largemonitorsZj";
-    },
-    vueSendMsg(numIframe) {
-      let _this = this;
-      console.log(_this.tdh);
+    vueSendMsg(tdh,numIframe) {
       setTimeout(() =>{
         const iframeWindow = this.$refs[numIframe].contentWindow
         iframeWindow.postMessage({
           cmd: 'myVue',
           params: {
-            tdh: _this.tdh
+            tdh: tdh
           }
         }, '*')
       }, 1000)
@@ -190,7 +165,7 @@ export default {
   flex-direction: row;
 }
 .left-box{
-  width: 60%;
+  width: 100%;
   height: 100%;
   display: flex;
   flex-direction: row;
