@@ -11,6 +11,7 @@ import com.pd.server.main.domain.WaterEquipmentExample;
 import com.pd.server.main.dto.VideoEventDto;
 import com.pd.server.main.mapper.WaterEquipmentMapper;
 import com.pd.server.main.service.VideoEventService;
+import com.pd.server.util.SendPostUtil;
 import com.pd.server.util.UuidUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,7 +74,9 @@ public class VideoEventShjService extends AbstractScanRequest {
             videoEvent.setSfysp(1);
             videoEvent.setBz(map.get(sbbh));
             videoEventService.saveItem(videoEvent);
-            sendDataToAnalysis(videoEvent);
+            if(sbbh.contains("RPCD")){
+                sendDataToAnalysis(videoEvent);
+            }
             data = "保存成功";
         }catch (Exception e){
             LOG.error("VideoEventShjService:"+e.getMessage());
@@ -85,13 +88,11 @@ public class VideoEventShjService extends AbstractScanRequest {
     private void sendDataToAnalysis(VideoEvent videoEvent){
         VideoEventService videoEventService = SpringUtil.getBean(VideoEventService.class);
         try {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("equip_num", videoEvent.getSbbh());
-            jsonObject.put("address", videoEvent.getWjlj());
-            String result = HttpRequest.post("http://192.168.3.11:8080/detect")
-                    .body(jsonObject.toJSONString())
-                    .execute().body();
-            LOG.error("算法分析返回："+result);
+            Map<String, Object> requestParam = new HashMap<String, Object>();
+            requestParam.put("equip_num",videoEvent.getSbbh());
+            requestParam.put("address",videoEvent.getWjlj());
+            JSONObject result = SendPostUtil.sendPost("http://192.168.3.11:8080/detect",requestParam);
+            LOG.error("算法分析返回："+result.toJSONString());
             videoEvent.setSm("0");
         }catch (Exception e){
             LOG.error("请求算法分析失败："+e.getMessage());

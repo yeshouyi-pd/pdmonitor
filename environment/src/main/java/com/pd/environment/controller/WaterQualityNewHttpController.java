@@ -36,11 +36,20 @@ public class WaterQualityNewHttpController {
     public ResponseDto saveData(@RequestBody JSONObject jsonObject) {
         ResponseDto responseDto = new ResponseDto();
         try {
-            if(StringUtils.isEmpty(jsonObject.get("oxidative")) || StringUtils.isEmpty(jsonObject.get("chlorophyll"))
-                    || StringUtils.isEmpty(jsonObject.get("ph")) || StringUtils.isEmpty(jsonObject.get("ad"))
-                    || StringUtils.isEmpty(jsonObject.get("cjsj")) || StringUtils.isEmpty(jsonObject.get("sbbh")) ){
+            if(jsonObject.isEmpty()){
+                responseDto.setSuccess(false);
+                responseDto.setMessage("无效数据");
+                return responseDto;
+            }
+            if(StringUtils.isEmpty(jsonObject.get("cjsj")) || StringUtils.isEmpty(jsonObject.get("sbbh")) ){
                 responseDto.setSuccess(false);
                 responseDto.setMessage("参数错误");
+                return responseDto;
+            }
+            if(StringUtils.isEmpty(jsonObject.get("oxidative")) && StringUtils.isEmpty(jsonObject.get("chlorophyll"))
+                    && StringUtils.isEmpty(jsonObject.get("ph")) && StringUtils.isEmpty(jsonObject.get("ad"))){
+                responseDto.setSuccess(false);
+                responseDto.setMessage("无效数据");
                 return responseDto;
             }
             String cjsj = jsonObject.getString("cjsj");

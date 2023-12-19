@@ -6,10 +6,10 @@
         <img src="/largemonitors/assets/imgs/左上角title.png" alt="" style="width: 220px;">
         <span>
           <div @click="chooseProject" style="cursor: pointer;">主页</div>
-          <div style="padding: 0 5px;">/</div>
-          <div @click="chooseEnvironment" style="cursor: pointer;">环境</div>
-          <div style="padding: 0 5px;">/</div>
-          <div @click="chooseVideo" style="cursor: pointer;">视频</div>
+<!--          <div style="padding: 0 5px;">/</div>-->
+<!--          <div @click="chooseEnvironment" style="cursor: pointer;">环境</div>-->
+<!--          <div style="padding: 0 5px;">/</div>-->
+<!--          <div @click="chooseVideo" style="cursor: pointer;">视频</div>-->
         </span>
       </div>
       <div class="lefttitle"  v-if="LOCAL_VIDEO"  style="top: 15px;left: 25px;color: #fff;display: flex;">

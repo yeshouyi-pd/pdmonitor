@@ -212,7 +212,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                 result.put("data",data);
                 result.put("entity",entity);
                 //白海豚写剪切视频的事件，李响读了去剪切视频
-                if(("1001,1007,1009,1010,1020,1022,1024,1026".contains(entity.getType()))&&sbbh.contains("RPCD")){
+                if(("1001,1007,1009,1010,1020,1022,1024,1026".contains(entity.getType()))&&(sbbh.contains("RPCD") || "tl001,tl002,tl003".contains(sbbh))){
                     saveNewEvent(entity);
                 }
                 //推送文件
