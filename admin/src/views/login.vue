@@ -7,7 +7,13 @@
           <p>中华白海豚种群数量分布定点声学监测项目</p>
           </span>
         </div>
-        <div v-if="LOCAL_SSBRL" class="center" style="margin-top: 7%;margin-bottom: 5.5%">
+        <div v-if="LOCAL_VIDEO" class="center" style="margin-top: 7%;margin-bottom: 4%">
+          <span :style="'font-size:'+fontsize+'px'">
+          <p>广东省中华白海豚国家重要湿地
+          <p>中华白海豚种群数量分布视频监测项目</p>
+          </span>
+        </div>
+        <div v-if="LOCAL_SSBRL || LOCAL_TLBHQ" class="center" style="margin-top: 7%;margin-bottom: 5.5%">
           <span :style="'font-size:'+fontsize+'px;margin-left:30%;'">
             <img :style="'height:'+imgsize+'px;margin-top: -8px;margin-right:10px;'" src="/static/PRCD13.png"/>
             <span>水生哺乳类声影像智慧监测管理平台</span>
@@ -63,7 +69,7 @@
           </div><!-- /.widget-body -->
         </div><!-- /.login-box -->
         <div style="margin-top: 10%;text-align: center">
-          <div v-if="LOCAL_ZHBHT">
+          <div v-if="LOCAL_ZHBHT || LOCAL_VIDEO">
             <img height="40px;" src="/static/image/loginButtom.png"/>
             <div style="margin-top: 5px;">广东珠江口中华白海豚国家级自然保护区管理局</div>
           </div>
@@ -73,9 +79,10 @@
       <div v-if="isMobileflag" class="main-content" style="width: 100%;height: 100%;background-image: url('/static/image/loginbg.jpg');background-size: 100% 100%;">
         <div class="center" style="margin-top: 15%">
         <span :style="'font-size:'+fontsize+'px'">
-          <p v-if="LOCAL_ZHBHT">广东省中华白海豚国家重要湿地
+          <p v-if="LOCAL_ZHBHT || LOCAL_VIDEO">广东省中华白海豚国家重要湿地
           <p v-if="LOCAL_ZHBHT">中华白海豚种群数量分布定点声学监测项目</p>
-          <span v-if="LOCAL_SSBRL">水生哺乳类声影像智慧监测管理平台V1.0</span>
+          <p v-if="LOCAL_VIDEO">中华白海豚种群数量分布视频监测项目</p>
+          <span v-if="LOCAL_SSBRL || LOCAL_TLBHQ">水生哺乳类声影像智慧监测管理平台V1.0</span>
         </span>
         </div>
         <div id="login-box" class="login-box visible widget-box no-border" style="margin-top: 20%;">
@@ -128,7 +135,7 @@
           </div><!-- /.widget-body -->
         </div><!-- /.login-box -->
         <div style="margin-top: 10%;text-align: center">
-          <div v-if="LOCAL_ZHBHT">
+          <div v-if="LOCAL_ZHBHT || LOCAL_VIDEO">
             <img  v-if="!isMobileflag" height="40px;" src="/static/image/loginButtom.png"/>
             <div>广东珠江口中华白海豚国家级自然保护区管理局</div>
           </div>
@@ -158,7 +165,9 @@
               margintop:'8%',
               maxHeight:'',
               LOCAL_ZHBHT:LOCAL_ZHBHT,
-              LOCAL_SSBRL:LOCAL_SSBRL
+              LOCAL_SSBRL:LOCAL_SSBRL,
+              LOCAL_VIDEO:LOCAL_VIDEO,
+              LOCAL_TLBHQ:LOCAL_TLBHQ
             }
         },
         mounted:function(){//mounted初始化方法
@@ -263,10 +272,11 @@
                       }else{
                         if(_this.LOCAL_ZHBHT){
                           _this.$router.push("/mobile/largemonitorsZj")
-                        }else{
+                        }else if(_this.LOCAL_SSBRL || _this.LOCAL_TLBHQ){
                           _this.$router.push("/mobile/largemonitors")
+                        }else if(_this.LOCAL_VIDEO){
+                          _this.$router.push("/mobile/environmentDp")
                         }
-                        //_this.$router.push("/mobile/environmentDp")
                       }
 
                     } else {

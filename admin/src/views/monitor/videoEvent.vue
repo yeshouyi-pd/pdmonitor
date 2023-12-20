@@ -67,12 +67,17 @@
           <td>{{item.kssj}}</td>
           <td>{{item.jssj}}</td>
           <td>
-            <div class="hidden-sm hidden-xs btn-group">
+            <div v-if="LOCAL_VIDEO || LOCAL_ZHBHT" class="hidden-sm hidden-xs btn-group">
               <button :id="item.id" v-on:click="watchVideo(item.sbbh,item.wjmc,'1')" class="btn btn-xs btn-info" style="margin-left: 10px;">
                 <i class="ace-icon fa  fa-video-camera bigger-120">查看原视频</i>
               </button>
               <button :id="'xz'+item.id" v-on:click="watchVideo(item.sbbh,item.wjmc,'0')" class="btn btn-xs btn-info" style="margin-left: 10px;">
                 <i class="ace-icon fa fa-volume-down bigger-120">查看分析视频</i>
+              </button>
+            </div>
+            <div v-if="LOCAL_SSBRL || LOCAL_TLBHQ" class="hidden-sm hidden-xs btn-group">
+              <button :id="item.id" v-on:click="watchVideo(item.sbbh,item.wjmc,'1')" class="btn btn-xs btn-info" style="margin-left: 10px;">
+                <i class="ace-icon fa  fa-video-camera bigger-120">查看视频</i>
               </button>
             </div>
           </td>
@@ -140,9 +145,11 @@ export default {
       deptMap: [],
       waterEquipments: [],
       videoHeight:400,
-      zhbht:LOCAL_ZHBHT,
+      LOCAL_ZHBHT:LOCAL_ZHBHT,
       userDto:null,
-      shj:LOCAL_SSBRL,
+      LOCAL_SSBRL:LOCAL_SSBRL,
+      LOCAL_TLBHQ:LOCAL_TLBHQ,
+      LOCAL_VIDEO:LOCAL_VIDEO,
       timeHandle:null,
       canPlay:false,
       videoDatas:[]
@@ -201,12 +208,6 @@ export default {
       Loading.show();
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/videoEvent/videoList', {'sbbh':sbbh,'wjmc':wjmc,'sfysp':sfysp}).then((response)=>{
         let resp = response.data;
-        // if("1"==sfysp){
-        //
-        // }else{
-        //   _this.videoDatas = resp.content;
-        //   $("#video-modal-explain").modal("show");
-        // }
         let videoDatas = resp.content;
         if(videoDatas.length>0){
           if(videoDatas.length>=2){
@@ -231,11 +232,11 @@ export default {
     getPlayUrl(sbid,filename,isLast){
       let _this = this;
       let url = 'http://49.239.193.146:59088/FileInfo.asmx/GetPlayUrl';
-      // if(_this.shj){
-      //   url="http://49.239.193.146:49053/FileInfo.asmx/GetPlayUrl";
-      // }else{
-      //   url="http://49.239.193.146:49082/FileInfo.asmx/GetPlayUrl";
-      // }
+      if(_this.LOCAL_ZHBHT || _this.LOCAL_VIDEO){
+        url="http://49.239.193.146:59088/FileInfo.asmx/GetPlayUrl";
+      }else if(_this.LOCAL_TLBHQ){
+        url="http://111.38.21.161:7003/FileInfo.asmx/GetPlayUrl";
+      }
       $.post(url,{"sbid": sbid,"filename":filename,"fbl":"1080","fhfs":"1"}, function (data, status) {
         if(status&&!(data.getElementsByTagName('Mesg')[0].childNodes[0].nodeValue.includes('不存在')||data.getElementsByTagName('Mesg')[0].childNodes[0].nodeValue.includes('文件大小为0'))){
           if(_this.fileExists(data.getElementsByTagName('PlayUrl')[0].childNodes[0].nodeValue)){
@@ -300,7 +301,6 @@ export default {
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/findAll', data).then((response)=>{
         Loading.hide();
         _this.waterEquipments = response.data.content;
-        console.log(_this.waterEquipments);
         _this.$forceUpdate();
       })
     },
@@ -328,20 +328,19 @@ export default {
       Loading.show();
       _this.videoEventDto.page = page;
       _this.videoEventDto.size = _this.$refs.pagination.size;
-      // if("460100"!=Tool.getLoginUser().deptcode){
-      //   _this.videoEventDto.xmbh=Tool.getLoginUser().xmbh;
-      // }
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/videoEvent/list', _this.videoEventDto).then((response)=>{
         Loading.hide();
         let resp = response.data;
         _this.videoEvents = resp.content.list;
         _this.$refs.pagination.render(page, resp.content.total);
-        _this.$nextTick(function (){
-          for(let i=0;i<_this.videoEvents.length;i++){
-            let obj = _this.videoEvents[i];
-            _this.hasExplainVideo(obj.id,obj.sbbh,obj.wjmc,"0");
-          }
-        });
+        if(_this.LOCAL_ZHBHT || _this.LOCAL_VIDEO){
+          _this.$nextTick(function (){
+            for(let i=0;i<_this.videoEvents.length;i++){
+              let obj = _this.videoEvents[i];
+              _this.hasExplainVideo(obj.id,obj.sbbh,obj.wjmc,"0");
+            }
+          });
+        }
       })
     }
   }

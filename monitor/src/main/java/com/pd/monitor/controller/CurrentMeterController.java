@@ -39,6 +39,9 @@ public class CurrentMeterController {
         if(!StringUtils.isEmpty(pageDto.getEtime())){
             ca.andCjsjLessThanOrEqualTo(pageDto.getEtime(),"%Y-%m-%d");
         }
+        if(!StringUtils.isEmpty(pageDto.getBz())){
+            ca.andBzEqualTo(pageDto.getBz());
+        }
         currentMeterExample.setOrderByClause(" cjsj desc ");
         List<CurrentMeter> currentMeterList = currentMeterService.selectByExample(currentMeterExample);
         responseDto.setContent(currentMeterList);
@@ -59,6 +62,9 @@ public class CurrentMeterController {
         }
         if(!StringUtils.isEmpty(pageDto.getEtime())){
             ca.andCjsjLessThanOrEqualTo(pageDto.getEtime(),"%Y-%m-%d");
+        }
+        if(!StringUtils.isEmpty(pageDto.getBz())){
+            ca.andBzEqualTo(pageDto.getBz());
         }
         currentMeterExample.setOrderByClause(" cjsj desc ");
         List<CurrentMeter> currentMeterList = currentMeterService.selectByExample(currentMeterExample);

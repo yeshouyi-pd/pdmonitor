@@ -28,8 +28,10 @@ export default {
       errorCount:0,
       centerLoction:[113.63,22.24],
       amap:'',
-      zhbht:LOCAL_ZHBHT,
-      zhbhtsp:LOCAL_VIDEO,
+      LOCAL_ZHBHT:LOCAL_ZHBHT,
+      LOCAL_SSBRL:LOCAL_SSBRL,
+      LOCAL_VIDEO:LOCAL_VIDEO,
+      LOCAL_TLBHQ:LOCAL_TLBHQ,
       environmentType:1,
       sbbh:"RPCDA4016"
     }
@@ -49,7 +51,7 @@ export default {
   methods:{
     createAmap(){
       let _this = this;
-      if(_this.zhbht || _this.zhbhtsp){
+      if(_this.LOCAL_ZHBHT || _this.LOCAL_VIDEO){
         _this.amap = new AMap.Map('equipmentamap', {
           center: [113.73,22.30],
           resizeEnable: true,
@@ -152,12 +154,21 @@ export default {
         });
         text2.setMap(_this.amap);
       }else{
-        _this.amap = new AMap.Map('equipmentamap', {
-          center: [114.299945,30.593221],
-          resizeEnable: true,
-          zoom: 5,
-          mapStyle: _this.mapStyle
-        });
+        if(_this.LOCAL_SSBRL){
+          _this.amap = new AMap.Map('equipmentamap', {
+            center: [114.299945,30.593221],
+            resizeEnable: true,
+            zoom: 5,
+            mapStyle: _this.mapStyle
+          });
+        }else if(_this.LOCAL_TLBHQ){
+          _this.amap = new AMap.Map('equipmentamap', {
+            center: [117.773,31.0355],
+            resizeEnable: true,
+            zoom: 7,
+            mapStyle: _this.mapStyle
+          });
+        }
       }
     },
     findDeviceInfo(){
