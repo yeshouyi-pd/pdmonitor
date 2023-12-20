@@ -293,14 +293,14 @@ export default {
     let _this = this;
     _this.curDate = Tool.dateFormat("yyyy-MM-dd",new Date());
     if(_this.$xhHisData.rq==_this.curDate){
-      _this.dtime = _this.dtimeIndex[_this.$xhHisData.index];
+      _this.dtime = _this.dtimeList[_this.$xhHisData.index];
     }else{
       _this.$xhHisData.rq = _this.curDate;
       _this.$xhHisData.index++;
       if(_this.$xhHisData.index>10){
         _this.$xhHisData.index = 0;
       }
-      _this.dtime = _this.dtimeIndex[_this.$xhHisData.index];
+      _this.dtime = _this.dtimeList[_this.$xhHisData.index];
     }
     _this.leftCenterData();
     _this.leftBottomData();

@@ -94,7 +94,7 @@
           </thead>
           <tbody>
           <tr v-for="currentMeter in currentMeters">
-            <td>{{zdysbList|optionKVArray(meteorologicalData.bz)}}</td>
+            <td>{{zdysbList|optionKVArray(currentMeter.bz)}}</td>
             <td>{{currentMeter.productNumber}}</td>
             <td>{{currentMeter.serialNumber}}</td>
             <td>{{currentMeter.absSpeed}}</td>

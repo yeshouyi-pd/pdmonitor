@@ -25,35 +25,41 @@
         <!--          <div class="left-text-style">7号浮标</div>-->
         <!--        </div>-->
       </div>
-<!--      <div class="right-box">-->
-<!--        <div class="right-top-box" id="playbox">-->
-<!--          <video autoplay="autoplay" loop="loop" style="width: 100%;height: 100%" controls>-->
-<!--            <source class="video" title="主监控位" src="/video/12.mp4" type="video/mp4" />-->
-<!--          </video>-->
-<!--        </div>-->
-<!--        <div class="right-bottom-box">-->
-<!--          <div style="height: 414px;width: 97%;overflow:auto;margin-top: 1%;margin-left: 1%;color: #82CF48;font-size: 16px;">-->
-<!--            <table id="simple-table" class="table  table-bordered" >-->
-<!--              <thead>-->
-<!--              <tr>-->
-<!--                <td>设备名称</td>-->
-<!--                <td>开始时间</td>-->
-<!--                <td>结束时间</td>-->
-<!--                <td>视频</td>-->
-<!--              </tr>-->
-<!--              </thead>-->
-<!--              <tbody>-->
+      <div class="right-box">
+        <div class="right-top-box" id="playbox">
+          <video autoplay="autoplay" loop="loop" style="width: 100%;height: 100%" controls>
+            <source class="video" title="主监控位" src="/video/12.mp4" type="video/mp4" />
+          </video>
+        </div>
+        <div class="right-bottom-box">
+          <div style="height: 414px;width: 97%;overflow:auto;margin-top: 1%;margin-left: 1%;color: #82CF48;font-size: 16px;">
+            <table id="simple-table" class="table  table-bordered" >
+              <thead>
+              <tr>
+                <td>设备名称</td>
+                <td>开始时间</td>
+                <td>结束时间</td>
+                <td>视频</td>
+              </tr>
+              </thead>
+              <tbody>
 <!--              <tr v-for="item in videoEvents">-->
 <!--                <td>{{devices|optionNSArray(item.sbbh)}}</td>-->
 <!--                <td>{{item.kssj}}</td>-->
 <!--                <td>{{item.jssj}}</td>-->
 <!--                <td style="cursor: pointer;" v-on:click="getPlayUrl(item)">查看视频</td>-->
 <!--              </tr>-->
-<!--              </tbody>-->
-<!--            </table>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
+                  <tr>
+                    <td>铜陵保护区2</td>
+                    <td>2023-12-19 19:16:47</td>
+                    <td>2023-12-19 19:17:47</td>
+                    <td style="cursor: pointer;" v-on:click="getPlayUrl()">查看视频</td>
+                  </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -91,10 +97,14 @@ export default {
     }
   },
   methods: {
-    getPlayUrl(item){
+    getPlayUrl(){
       let _this = this;
+      let item = {
+        'sbbh':'tl002',
+        'wjlj':'http://111.38.21.161:7003/tempData/tl002/2023_12_19_19_16_47_2023_12_19_19_17_47_0_A1_TD2.mp4'
+      }
       $("#playbox").empty();
-      let url = 'http://49.239.193.146:59088/FileInfo.asmx/GetPlayUrl';
+      let url = 'http://111.38.21.161:7003/FileInfo.asmx/GetPlayUrl';
       $.post(url,{"sbid": item.sbbh,"filename":item.wjlj.substring(item.wjlj.lastIndexOf("/")+1),"fbl":"1080","fhfs":"1"}, function (data, status) {
         if(status&&!(data.getElementsByTagName('Mesg')[0].childNodes[0].nodeValue.includes('不存在')||data.getElementsByTagName('Mesg')[0].childNodes[0].nodeValue.includes('文件大小为0'))){
           let video = document.createElement("video");
@@ -165,7 +175,7 @@ export default {
   flex-direction: row;
 }
 .left-box{
-  width: 100%;
+  width: 60%;
   height: 100%;
   display: flex;
   flex-direction: row;
