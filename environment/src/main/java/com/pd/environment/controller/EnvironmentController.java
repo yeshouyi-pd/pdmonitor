@@ -61,20 +61,20 @@ public class EnvironmentController {
                 meteorologicalDataDto.setLongwave(jsonObject.getDouble("long_wave"));
                 meteorologicalDataDto.setUwindSpeed(jsonObject.getDouble("uwind_speed"));
                 meteorologicalDataDto.setVwindSpeed(jsonObject.getDouble("vwind_speed"));
-                meteorologicalDataDto.setCjsj(jsonObject.getDate("cjsj"));
+                meteorologicalDataDto.setCjsj(jsonObject.getDate("jcsj"));
                 meteorologicalDataDto.setBz(jsonObject.getString("sbbh"));
                 meteorologicalDataService.save(meteorologicalDataDto);
                 TurbidityDto turbidityDto = new TurbidityDto();
                 turbidityDto.setTemperature(jsonObject.getDouble("temperature").toString());
                 turbidityDto.setSalinity(jsonObject.getDouble("salinity").toString());
-                turbidityDto.setDateTime(jsonObject.getDate("cjsj"));
+                turbidityDto.setDateTime(jsonObject.getDate("jcsj"));
                 turbidityDto.setBz(jsonObject.getString("sbbh"));
                 turbidityService.save(turbidityDto);
                 CurrentMeterDto currentMeterDto = new CurrentMeterDto();
                 currentMeterDto.setUspeed(jsonObject.getDouble("u"));
                 currentMeterDto.setVspeed(jsonObject.getDouble("v"));
                 currentMeterDto.setZetaData(jsonObject.getDouble("zeta"));
-                currentMeterDto.setCjsj(jsonObject.getDate("cjsj"));
+                currentMeterDto.setCjsj(jsonObject.getDate("jcsj"));
                 currentMeterDto.setBz(jsonObject.getString("sbbh"));
                 currentMeterService.save(currentMeterDto);
             }
