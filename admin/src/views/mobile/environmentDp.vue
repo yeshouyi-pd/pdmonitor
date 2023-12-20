@@ -300,9 +300,9 @@ export default {
   methods: {
     changeData(){
       let _this = this;
-      _this.leftBottomData();
+      //_this.leftBottomData();
       _this.rightBottomData();
-      _this.rightTopData();
+      //_this.rightTopData();
       _this.rightCenterData();
     },
     // 定时刷新数据函数
@@ -317,9 +317,9 @@ export default {
         console.log("刷新" + new Date());
         _this.leftCenterData();
         _this.leftBottomData();
-        _this.rightBottomData();
+        //_this.rightBottomData();
         _this.rightTopData();
-        _this.rightCenterData();
+        //_this.rightCenterData();
       }, 900000);
     },
     // 停止定时器
@@ -456,7 +456,7 @@ export default {
     },
     rightBottomData(){
       let _this = this;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getWaterQualityNewData', {"sbbh":_this.curSbbh}).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getWaterQualityNewData', {"sbbh":_this.curSbbh,'stime':'2023-10-15'}).then((response)=>{
         let waterQualityNews = response.data.content;
         let xAxisDatas = [];
         let seriesData1 = [];
@@ -797,7 +797,7 @@ export default {
     },
     rightCenterData(){
       let _this = this;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getWaveDataData', {"sbbh":_this.curSbbh}).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getWaveDataData', {"sbbh":_this.curSbbh,'stime':'2023-10-15'}).then((response)=>{
         let resp = response.data;
         let xAxisDatas = [];
         let seriesData1 = [];
