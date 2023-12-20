@@ -245,12 +245,12 @@ export default {
       LOCAL_VIDEO:LOCAL_VIDEO,
       curDate:'',
       heightMax:510,
-      curSbbh:'RPCDA4016',
-      curSbmc:'RPCDA4016',
+      curSbbh:'RPCDA4000',
+      curSbmc:'RPCDA4000',
       currentMeter:{},
       meteorological:{},
       intervalId:null,
-      zdysbbhList:['RPCDA4005','RPCDA4012','RPCDA4003','RPCDA4006-4','RPCDA4009-3','RPCDA4001','RPCDA4010','RPCDA4008','RPCDA4002','RPCDA4016'],
+      zdysbbhList:['RPCDA4005','RPCDA4012','RPCDA4003','RPCDA4006-4','RPCDA4009-3','RPCDA4001','RPCDA4010','RPCDA4008','RPCDA4002','RPCDA4016','RPCDA4000'],
       zdysbList:[
         {key:"RPCDA4005", value:"3号航标"},
         {key:"RPCDA4012", value:"4号航标"},
@@ -261,7 +261,8 @@ export default {
         {key:"RPCDA4010", value:"10号航标"},
         {key:"RPCDA4008", value:"11号航标"},
         {key:"RPCDA4002", value:"淇澳岛"},
-        {key:"RPCDA4016", value:"RPCDA4016"}
+        {key:"RPCDA4016", value:"珠海A4016"},
+        {key:"RPCDA4000", value:"三米标"}
       ],
       config: {
         headerBGC: "#054F7F",
@@ -282,12 +283,25 @@ export default {
         {key:"8", value:"15"},
         {key:"9", value:"17"},
         {key:"10", value:"19"}
-      ]
+      ],
+      dtimeList:['2023-10-25','2023-10-24','2023-10-23','2023-10-22','2023-10-21','2023-10-20','2023-10-19','2023-10-18','2023-10-17','2023-10-16','2023-10-15'],
+      dtimeIndex:0,
+      dtime:''
     }
   },
   mounted() {
     let _this = this;
     _this.curDate = Tool.dateFormat("yyyy-MM-dd",new Date());
+    if(_this.$xhHisData.rq==_this.curDate){
+      _this.dtime = _this.dtimeIndex[_this.$xhHisData.index];
+    }else{
+      _this.$xhHisData.rq = _this.curDate;
+      _this.$xhHisData.index++;
+      if(_this.$xhHisData.index>10){
+        _this.$xhHisData.index = 0;
+      }
+      _this.dtime = _this.dtimeIndex[_this.$xhHisData.index];
+    }
     _this.leftCenterData();
     _this.leftBottomData();
     _this.rightBottomData();
@@ -456,7 +470,7 @@ export default {
     },
     rightBottomData(){
       let _this = this;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getWaterQualityNewData', {"sbbh":_this.curSbbh,'stime':'2023-10-15'}).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getWaterQualityNewData', {"sbbh":_this.curSbbh,'stime':_this.dtime}).then((response)=>{
         let waterQualityNews = response.data.content;
         let xAxisDatas = [];
         let seriesData1 = [];
@@ -797,7 +811,7 @@ export default {
     },
     rightCenterData(){
       let _this = this;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getWaveDataData', {"sbbh":_this.curSbbh,'stime':'2023-10-15'}).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getWaveDataData', {"sbbh":_this.curSbbh,'stime':_this.dtime}).then((response)=>{
         let resp = response.data;
         let xAxisDatas = [];
         let seriesData1 = [];

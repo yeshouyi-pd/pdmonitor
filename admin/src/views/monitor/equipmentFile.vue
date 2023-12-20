@@ -252,7 +252,7 @@ export default {
       Loading.show();
       _this.equipmentFileDto.page=page;
       _this.equipmentFileDto.size=_this.$refs.pagination.size;
-      if("460100"!=Tool.getLoginUser().deptcode){
+      if("460100"!=Tool.getLoginUser().deptcode && _this.shj){
         _this.equipmentFileDto.xmbh=Tool.getLoginUser().xmbh;
       }
       _this.$forceUpdate();

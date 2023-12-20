@@ -26,11 +26,15 @@
                       <img style="height: 40px;margin-top: -8px;" src="/static/image/RPCD512-1.png"/>
                       水生哺乳类声影像智慧监测管理平台V1.0
                     </small>
+                    <small  v-if="LOCAL_TLBHQ">
+                      <img style="height: 40px;margin-top: -8px;" src="/static/image/RPCD512-1.png"/>
+                      水生哺乳类声影像智慧监测管理平台V1.0
+                    </small>
                   </a>
               </div>
               <div class="navbar-buttons navbar-header pull-right" role="navigation">
                   <ul class="nav ace-nav">
-                      <li class="light-blue dropdown-modal" v-if="!LOCAL_VIDEO">
+                      <li class="light-blue dropdown-modal" v-if="LOCAL_ZHBHT || LOCAL_SSBRL || LOCAL_TLBHQ">
                         <router-link to="/admin/chooseProject">
                           <a class=" dropdown-toggle" style="cursor: pointer;">
                             <font color="white">返回项目选择</font>
@@ -54,7 +58,7 @@
                       </router-link>
                     </li>
 
-                      <li class="light-blue dropdown-modal"   v-if="LOCAL_SSBRL">
+                      <li class="light-blue dropdown-modal"   v-if="LOCAL_SSBRL || LOCAL_TLBHQ">
                         <router-link to="/mobile/largemonitors">
                           <a class=" dropdown-toggle" style="cursor: pointer;">
                             <font color="white">返回大屏</font>
@@ -69,18 +73,6 @@
                           </a>
                         </router-link>
                       </li>
-
-<!--                      <li class="light-blue dropdown-modal" v-on:click="downloadVideo()">-->
-<!--                          <a   class=" dropdown-toggle" style="cursor: pointer;">-->
-<!--                              <font color="white">下载监控插件</font>-->
-<!--                          </a>-->
-<!--                      </li>-->
-
-<!--                      <li class="light-blue dropdown-modal" v-on:click="downloadOperationManual()">-->
-<!--                        <a   class=" dropdown-toggle" style="cursor: pointer;">-->
-<!--                          <font color="white">下载操作手册</font>-->
-<!--                        </a>-->
-<!--                      </li>-->
 
                       <li class="light-blue dropdown-modal">
                         <router-link to="/welcome">
@@ -284,7 +276,8 @@
                 isRouterAlive:true,
               LOCAL_ZHBHT:LOCAL_ZHBHT,
               LOCAL_SSBRL:LOCAL_SSBRL,
-              LOCAL_VIDEO:LOCAL_VIDEO
+              LOCAL_VIDEO:LOCAL_VIDEO,
+              LOCAL_TLBHQ:LOCAL_TLBHQ
             }
         },
         provide(){
