@@ -98,6 +98,21 @@
     </if>
     order by kssj desc
   </select>
+  <select id="selectByDw" parameterType="com.pd.server.main.domain.EquipmentFileEventExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from equipment_file_event
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    limit 1
+  </select>
   <select id="selectByExample" parameterType="com.pd.server.main.domain.EquipmentFileEventExample" resultMap="BaseResultMap">
     select
     <if test="distinct">

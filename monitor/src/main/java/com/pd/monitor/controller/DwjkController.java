@@ -57,6 +57,49 @@ public class DwjkController extends BaseWxController {
     private WaterEquipmentService waterEquipmentService;
 
     /**
+     * 当天最近的一条聚类信息
+     */
+    @PostMapping("/lastEventBySbbh")
+    public ResponseDto lastEventBySbbh(@RequestBody JSONObject qqcs){
+        ResponseDto responseDto = new ResponseDto();
+        InterfaceLogDto interfaceLog = new InterfaceLogDto();
+        try {
+            if(StringUtils.isEmpty(qqcs.get("sbbh"))){
+                responseDto.setCode("4000");
+                responseDto.setContent("设备sn不能为空。");
+                interfaceLog.setFhsj(responseDto.toString());
+                interfaceLogService.save(interfaceLog);
+                return responseDto;
+            }
+            EquipmentFileEventExample example = new EquipmentFileEventExample();
+            EquipmentFileEventExample.Criteria ca = example.createCriteria();
+            ca.andSbbhEqualTo(qqcs.get("sbbh").toString());
+            ca.andRqEqualTo(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd"));
+            example.setOrderByClause(" kssj desc ");
+            List<EquipmentFileEvent> equipmentFileEvents = equipmentFileEventService.selectByDw(example);
+            if(equipmentFileEvents.size()>0){
+                EquipmentFileEvent equipmentFileEvent = equipmentFileEvents.get(0);
+                EventDwDto eventDwDto = new EventDwDto();
+                eventDwDto.setSbbh(equipmentFileEvent.getSbbh());
+                eventDwDto.setSbwz("116.05429,29.44149");
+                eventDwDto.setCxsj(DateUtil.toDate(equipmentFileEvent.getJssj(),"yyyy-MM-dd HH:mm:ss"));
+                eventDwDto.setSbwz(equipmentFileEvent.getJtnr());
+                responseDto.setContent(eventDwDto);
+            }else {
+                responseDto.setContent(null);
+            }
+            responseDto.setCode("0000");
+
+        }catch (Exception e){
+            responseDto.setCode("2001");
+            interfaceLog.setFhsj("系统异常："+e.getMessage());
+            interfaceLogService.save(interfaceLog);
+        }
+        return responseDto;
+    }
+
+
+    /**
      * 江豚图片查询
      */
     @PostMapping("/list")
