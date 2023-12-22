@@ -245,8 +245,8 @@ export default {
       LOCAL_VIDEO:LOCAL_VIDEO,
       curDate:'',
       heightMax:510,
-      curSbbh:'RPCDA4000',
-      curSbmc:'RPCDA4000',
+      curSbbh:'RPCDA4016',
+      curSbmc:'RPCDA4016',
       currentMeter:{},
       meteorological:{},
       intervalId:null,
@@ -464,7 +464,7 @@ export default {
     },
     leftCenterData(){
       let _this = this;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getCurrentMeterData', {"bz":_this.curSbbh}).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getCurrentMeterData', {"bz":"RPCDA4000"}).then((response)=>{
         _this.currentMeter = response.data.content;
       })
     },
@@ -568,7 +568,7 @@ export default {
     },
     leftBottomData(){
       let _this = this;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getTurbidityData', {"bz":_this.curSbbh}).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getTurbidityData', {"bz":"RPCDA4000"}).then((response)=>{
         let turbiditys = response.data.content;
         let xAxisData = [];
         let data1 = [];
@@ -664,7 +664,7 @@ export default {
     },
     rightTopData(){
       let _this = this;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getMeteorologicalData', {"bz":_this.curSbbh}).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getMeteorologicalData', {"bz":"RPCDA4000"}).then((response)=>{
         let meteorologicals = response.data.content;
         // let data = [];
         // let data1 = [];
