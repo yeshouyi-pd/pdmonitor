@@ -83,7 +83,7 @@ public class DwjkController extends BaseWxController {
                 eventDwDto.setSbbh(equipmentFileEvent.getSbbh());
                 eventDwDto.setSbwz("116.05429,29.44149");
                 eventDwDto.setCxsj(DateUtil.toDate(equipmentFileEvent.getJssj(),"yyyy-MM-dd HH:mm:ss"));
-                eventDwDto.setSbwz(equipmentFileEvent.getJtnr());
+                eventDwDto.setFwj(equipmentFileEvent.getJtnr());
                 responseDto.setContent(eventDwDto);
             }else {
                 responseDto.setContent(null);

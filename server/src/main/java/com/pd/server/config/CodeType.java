@@ -37,7 +37,7 @@ public class CodeType {
     public final static String FSZL_CODE = "14";
 
     /**
-     * 无人机设备
+     * 南京无人机设备
      */
     public final static String WRJSB_CODE = "15";
 
@@ -46,5 +46,8 @@ public class CodeType {
      */
     public final static String DXNR_CODE = "16";
 
-
+    /**
+     * 鄱阳湖无人机设备
+     */
+    public final static String PYHWRJSB_CODE = "17";
 }
