@@ -129,6 +129,8 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                     equipmentFileEventMapper.insertSelective(fileEvent);
                     //南京设备对接无人机
                     pushMqMsg(sbbh,entity.getSm1());
+                    //鄱阳湖对接无人机
+                    pushMqMsgPyh(sbbh,entity.getSm1());
                 }else {
                     if(!kssj.equals(jssj)){
                         EquipmentFileEventMapper equipmentFileEventMapper = SpringUtil.getBean(EquipmentFileEventMapper.class);
@@ -145,6 +147,8 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                         equipmentFileEventMapper.insertSelective(fileEvent);
                         //南京设备对接无人机
                         pushMqMsg(sbbh,entity.getSm1());
+                        //鄱阳湖对接无人机
+                        pushMqMsgPyh(sbbh,entity.getSm1());
                         //推送文件
                         if("JXYSA4001".equals(sbbh)&&!pushData){
                             PushFile.pushFile1(entity.getTplj());
@@ -161,6 +165,11 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                 dto.setCreateTime(new Date());
                 dto.setBz(deptcode);
                 service.save(dto);
+                data="保存成功";
+                JSONObject result = new JSONObject();
+                result.put("data",data);
+                result.put("entity",entity);
+                return result.toJSONString();
             }else if("1019".equals(entity.getType())){//指针数据每天
                 PointerDayService service = SpringUtil.getBean(PointerDayService.class);
                 PointerDayDto dto = new PointerDayDto();
@@ -170,6 +179,11 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                 dto.setCreateTime(new Date());
                 dto.setBz(deptcode);
                 service.save(dto);
+                data="保存成功";
+                JSONObject result = new JSONObject();
+                result.put("data",data);
+                result.put("entity",entity);
+                return result.toJSONString();
             }
             String predationsbsn = attrService.findByAttrKey("predationsbsn");
             if(predationsbsn.contains(sbbh)&&tplj.contains("txt")&&("1001".equals(typeUtil.get(TypeUtils.TYPE))||"1007".equals(typeUtil.get(TypeUtils.TYPE)))){
@@ -293,11 +307,34 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                 channel.basicPublish("",MQUtil.QUEUE_NAME,null,message.getBytes("UTF-8"));
                 channel.close();
                 connection.close();
-                LOG.error("无人机数据已发送："+message);
+                LOG.error("南京无人机数据已发送："+message);
             }
         }catch (Exception e){
-            LOG.error("无人机数据错误："+e.getMessage());
+            LOG.error("南京无人机数据错误："+e.getMessage());
         }
     }
 
+    public static void pushMqMsgPyh(String sbbh,String jtnr){
+        try {
+            CodesetMapper codesetMapper = SpringUtil.getBean(CodesetMapper.class);
+            CodesetExample codesetExample = new CodesetExample();
+            CodesetExample.Criteria codesetCa = codesetExample.createCriteria();
+            codesetCa.andTypeEqualTo("17");
+            List<Codeset> list = codesetMapper.selectByExample(codesetExample);
+            Map<String,String> codesetMap = list==null?new HashMap<>():list.stream().collect(Collectors.toMap(p -> p.getCode(), p -> p.getName()));
+            Set<String> nja4sbsn = codesetMap.keySet();
+            if(nja4sbsn!= null && nja4sbsn.contains(sbbh)){
+                Connection connection = MQUtil.getConnectionpYH();
+                Channel channel = connection.createChannel();
+                channel.queueDeclare(MQUtil.QUEUE_NAME_PYH,true,false,false,null);
+                String message = sbbh+"&"+codesetMap.get(sbbh)+"@"+jtnr;
+                channel.basicPublish("",MQUtil.QUEUE_NAME_PYH,null,message.getBytes("UTF-8"));
+                channel.close();
+                connection.close();
+                LOG.error("鄱阳湖无人机数据已发送："+message);
+            }
+        }catch (Exception e){
+            LOG.error("鄱阳湖无人机数据错误："+e.getMessage());
+        }
+    }
 }
