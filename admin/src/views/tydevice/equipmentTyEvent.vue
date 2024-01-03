@@ -38,6 +38,10 @@
                     <i class="ace-icon fa fa-leaf"></i>
                     导出
                   </button>
+                  <button type="button" v-on:click="sendMessage()" class="btn btn-sm btn-purple btn-round" style="margin-right: 10px;">
+                    <i class="ace-icon fa fa-envelope"></i>
+                    发送短信
+                  </button>
                 </td>
               </tr>
               </tbody>
@@ -160,6 +164,19 @@ export default {
     _this.findDeviceInfo();
   },
   methods: {
+    sendMessage(){
+      let _this = this;
+      Loading.show();
+      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentTyEvent/sendMessage', {}).then((response)=>{
+        Loading.hide();
+        let resp = response.data;
+        if (resp.success) {
+          Toast.success("发送短信成功！");
+        }else{
+          Toast.success("发送短信失败！");
+        }
+      })
+    },
     exportExcle(){
       let _this = this;
       let param = "";
