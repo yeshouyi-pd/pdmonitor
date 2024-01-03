@@ -99,7 +99,7 @@
     select a.id, a.sbbh, a.kssj, a.jssj, a.rq, a.wjlj, a.wjmc, a.sfysp, a.bz, a.sm  from video_event a
     where a.sfysp=1 and a.id in (select max(c.id) from video_event c where c.sfysp=1 GROUP BY c.wjmc)
     <if test="record.sbbh != null and record.sbbh !=''">
-      and a.sbbh = #{record.sbbh,jdbcType=VARCHAR},
+      and a.sbbh = #{record.sbbh,jdbcType=VARCHAR}
     </if>
     <if test="record.stime != null and record.stime !=''">
       AND a.rq &gt;= #{record.stime,jdbcType=VARCHAR}
