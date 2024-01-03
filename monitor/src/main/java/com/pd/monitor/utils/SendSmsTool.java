@@ -42,8 +42,10 @@ public class SendSmsTool {
             req.setSign(signName);
             req.setTemplateID(templateId);
 //            String[] templateParamSet = {"A4001","145dB"};
-            String[] templateParamSet = params.split("-");
-            req.setTemplateParamSet(templateParamSet);
+            if(!StringUtils.isEmpty(params)){
+                String[] templateParamSet = params.split("-");
+                req.setTemplateParamSet(templateParamSet);
+            }
 //            String[] phoneNumberSet = {"+8618827512017","+8618827512017"};
             String[] phoneNumberSet = attrMap.get("phoneNumber").split(",");
             req.setPhoneNumberSet(phoneNumberSet);
@@ -92,23 +94,25 @@ public class SendSmsTool {
             req.setSign(signName);
             req.setTemplateID(templateId);
 //            String[] templateParamSet = {"A4001","145dB"};
-            String[] templateParamSet = params.split("-");
-            req.setTemplateParamSet(templateParamSet);
+           if(!StringUtils.isEmpty(params)){
+               String[] templateParamSet = params.split("-");
+               req.setTemplateParamSet(templateParamSet);
+           }
 //            String[] phoneNumberSet = {"+8618827512017","+8618827512017"};
             String[] phoneNumberSet = phoneNum.split(",");
             req.setPhoneNumberSet(phoneNumberSet);
             req.setSessionContext("");
             req.setExtendCode("");
             req.setSenderId("");
-            if(!StringUtils.isEmpty(attrMap.get("phoneNumber"))){
+            if(!StringUtils.isEmpty(phoneNum)){
                 SendSmsResponse res = client.SendSms(req);
                 JSONObject resultJson = JSON.parseObject(SendSmsResponse.toJsonString(res));
                 LOG.error("短信返回数据："+resultJson);
             }
-            return true;
         } catch (Exception e) {
             e.printStackTrace();
             LOG.error("发送短信失败："+e.getMessage());
+            return false;
         } finally {
             templateId = null;
             params = null;
@@ -119,10 +123,11 @@ public class SendSmsTool {
             signName = null;
             System.gc();
         }
-        return false;
+        return true;
     }
 
     public static void main(String[] args) {
-        sendSms("1823144","A4001-145dB", "");
+        Boolean falge = SendSmsTool.sendSms("2037275","","+8618827512017");
+
     }
 }

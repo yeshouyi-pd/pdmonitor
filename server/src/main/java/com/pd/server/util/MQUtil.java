@@ -45,7 +45,7 @@ public class MQUtil {
         Connection connection = MQUtil.getConnectionpYH();
         Channel channel = connection.createChannel();
         channel.queueDeclare(MQUtil.QUEUE_NAME_PYH,true,false,false,null);
-        String message = "STS001&116.05429,29.44149@022_11_08_07_57_01-0:218.483/2022_11_08_07_58_09-0:225.254";
+        String message = "NJA4001&118.73123,32.08157@2023_12_26_09_51_12-0:348.748/2023_12_26_09_51_13-0:188.738,1:351.486/2023_12_26_09_51_17-0:351.052";
         channel.basicPublish("",MQUtil.QUEUE_NAME_PYH,null,message.getBytes("UTF-8"));
         channel.close();
         connection.close();
