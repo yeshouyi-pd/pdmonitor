@@ -164,6 +164,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                 dto.setSm(sbbh);
                 dto.setCreateTime(new Date());
                 dto.setBz(deptcode);
+                dto.setBz1(cjsj.substring(0,10));
                 service.save(dto);
                 data="保存成功";
                 JSONObject result = new JSONObject();
@@ -178,6 +179,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                 dto.setSm(sbbh);
                 dto.setCreateTime(new Date());
                 dto.setBz(deptcode);
+                dto.setBz1(cjsj.substring(0,10));
                 service.save(dto);
                 data="保存成功";
                 JSONObject result = new JSONObject();

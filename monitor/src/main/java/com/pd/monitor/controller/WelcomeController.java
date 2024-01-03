@@ -663,9 +663,10 @@ public class WelcomeController extends BaseWxController{
         ResponseDto responseDto = new ResponseDto();
         PointerSecondExample example = new PointerSecondExample();
         PointerSecondExample.Criteria ca = example.createCriteria();
-        if(!StringUtils.isEmpty(jsonObject.get("type"))&&"zjglj".equals(jsonObject.get("type"))){
+        if(!StringUtils.isEmpty(jsonObject.get("type"))&&"zjglj".equals(jsonObject.get("type"))&&!StringUtils.isEmpty(jsonObject.get("sbbh"))){
             ca.andSmEqualTo(jsonObject.getString("sbbh"));
         }
+        ca.andBz1EqualTo(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd"));
         PointerSecond entity = pointerSecondService.selectByDp(example);
         responseDto.setContent(entity);
         return responseDto;
@@ -676,9 +677,10 @@ public class WelcomeController extends BaseWxController{
         ResponseDto responseDto = new ResponseDto();
         PointerDayExample example = new PointerDayExample();
         PointerDayExample.Criteria ca = example.createCriteria();
-        if(!StringUtils.isEmpty(jsonObject.get("type"))&&"zjglj".equals(jsonObject.get("type"))){
+        if(!StringUtils.isEmpty(jsonObject.get("type"))&&"zjglj".equals(jsonObject.get("type"))&&!StringUtils.isEmpty(jsonObject.get("sbbh"))){
             ca.andSmEqualTo(jsonObject.getString("sbbh"));
         }
+        ca.andBz1EqualTo(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd"));
         PointerDay entity = pointerDayService.selectByDp(example);
         responseDto.setContent(entity);
         return responseDto;

@@ -1,6 +1,8 @@
 package com.pd.monitor.quartz;
 
 import com.pd.server.main.domain.WaterEquiplog;
+import com.pd.server.main.domain.WaterEquiplogExample;
+import com.pd.server.main.domain.WaterEquipmentExample;
 import com.pd.server.main.dto.DeviceStateLogDto;
 import com.pd.server.main.service.DeviceStateLogService;
 import com.pd.server.main.service.WaterEquiplogService;
@@ -19,7 +21,7 @@ import java.util.List;
 @EnableScheduling
 public class DeviceStateLogQuartz {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TyEquipmentFileQuartz.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DeviceStateLogQuartz.class);
 
     @Resource
     private DeviceStateLogService deviceStateLogService;
@@ -45,6 +47,7 @@ public class DeviceStateLogQuartz {
             }
             deviceStateLogService.save(deviceStateLogDto);
         }
+        waterEquiplogList.clear();
     }
 
 //    @Scheduled(cron = "0 */3 * * * ? ")

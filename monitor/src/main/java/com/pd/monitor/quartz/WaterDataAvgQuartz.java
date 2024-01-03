@@ -52,6 +52,7 @@ public class WaterDataAvgQuartz {
             }
             avgMapper.insert(entity);
         }
+        list.clear();
     }
 
     /**

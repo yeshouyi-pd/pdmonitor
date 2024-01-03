@@ -469,9 +469,6 @@
              */
             getPieChart() {
               let _this = this;
-              // _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/welcome/predationStatistics',{}).then((res)=>{
-              //   _this.initPieEChart(res.data.content);
-              // })
                 _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getPieChart').then((res)=>{
                     let response = res.data;
                     let data = response.content;
