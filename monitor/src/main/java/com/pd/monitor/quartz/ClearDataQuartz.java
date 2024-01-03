@@ -26,17 +26,17 @@ public class ClearDataQuartz {
     private WaterEquiplogService waterEquiplogService;
 
     /* 每天凌晨6点开始清理数据 */
-    @Scheduled(cron = "0 0 6 * * ? ")
+    //@Scheduled(cron = "0 0 6 * * ? ")
     public void clearData(){
         /**
          * 清除6个月之前的日志数据(interface_log表)
          */
-        InterfaceLogExample logExample = new InterfaceLogExample();
-        logExample.createCriteria().andQqsjLessThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getMonthBeforeOrLater(-6),"yyyy-MM-dd"));
-        List<InterfaceLog> logList = interfaceLogService.listAll(logExample);
-        for(InterfaceLog entity : logList){
-            interfaceLogService.delete(entity.getId());
-        }
+//        InterfaceLogExample logExample = new InterfaceLogExample();
+//        logExample.createCriteria().andQqsjLessThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getMonthBeforeOrLater(-6),"yyyy-MM-dd"));
+//        List<InterfaceLog> logList = interfaceLogService.listAll(logExample);
+//        for(InterfaceLog entity : logList){
+//            interfaceLogService.delete(entity.getId());
+//        }
         /**
          * 清除1个月之前的心跳包数据(water_equiplog表)表中每个设备只有一条数据，对于新数据只做更新不做新增所以没有必要再删除
          */

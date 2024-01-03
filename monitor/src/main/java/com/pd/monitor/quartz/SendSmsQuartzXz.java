@@ -52,6 +52,12 @@ public class SendSmsQuartzXz {
         List<SmsIntDto> list = equipmentFileService.sendSmsQueryXz(todayExample);
         String bjcs = list.size()>0?list.get(0).getBjcs()+"":"0";
         SendSmsTool.sendSms("1929099","新洲WH001设备-昨日20点至今日8点"+"-"+bjcs, phoneNum);
+        lasthour = null;
+        nowhour = null;
+        phoneNum = null;
+        bjcs = null;
+        list.clear();
+        System.gc();
     }
 
     /**
@@ -73,6 +79,12 @@ public class SendSmsQuartzXz {
         List<SmsIntDto> list = equipmentFileTodayService.sendSmsQueryXz(todayExample);
         String bjcs = list.size()>0?list.get(0).getBjcs()+"":"0";
         SendSmsTool.sendSms("1929099","新洲WH001设备-今日8点至11点30分"+"-"+bjcs, phoneNum);
+        lasthour = null;
+        nowhour = null;
+        phoneNum = null;
+        bjcs = null;
+        list.clear();
+        System.gc();
     }
 
     /**
@@ -94,6 +106,12 @@ public class SendSmsQuartzXz {
         List<SmsIntDto> list = equipmentFileTodayService.sendSmsQueryXz(todayExample);
         String bjcs = list.size()>0?list.get(0).getBjcs()+"":"0";
         SendSmsTool.sendSms("1929099","新洲WH001设备-今日11点30分至17点30分"+"-"+bjcs, phoneNum);
+        lasthour = null;
+        nowhour = null;
+        phoneNum = null;
+        bjcs = null;
+        list.clear();
+        System.gc();
     }
 
     /**
@@ -115,6 +133,12 @@ public class SendSmsQuartzXz {
         List<SmsIntDto> list = equipmentFileTodayService.sendSmsQueryXz(todayExample);
         String bjcs = list.size()>0?list.get(0).getBjcs()+"":"0";
         SendSmsTool.sendSms("1929099","新洲WH001设备-今日17点30分至20点"+"-"+bjcs, phoneNum);
+        lasthour = null;
+        nowhour = null;
+        phoneNum = null;
+        bjcs = null;
+        list.clear();
+        System.gc();
     }
 
 //    /**
