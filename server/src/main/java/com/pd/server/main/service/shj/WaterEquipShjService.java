@@ -35,15 +35,26 @@ public class WaterEquipShjService extends AbstractScanRequest{
     private static final String key = "cf14f9b74227147206b3239500cbb7c0";
 
 
-    public  static RedisTemplate redisTstaticemplate;
-
+    public static RedisTemplate redisTstaticemplate;
+    public static WaterEquiplogMapper waterEquiplogMapperStatic;
+    public static WaterEquipmentMapper waterEquipmentMapperStatic;
+    public static AttrMapper attrMapperStatic;
 
     @Resource
     private RedisTemplate redisTemplate;
+    @Resource
+    private WaterEquiplogMapper waterEquiplogMapper;
+    @Resource
+    private WaterEquipmentMapper waterEquipmentMapper;
+    @Resource
+    private AttrMapper attrMapper;
 
     @PostConstruct
     protected void init() {
         redisTstaticemplate = redisTemplate;
+        waterEquiplogMapperStatic = waterEquiplogMapper;
+        waterEquipmentMapperStatic = waterEquipmentMapper;
+        attrMapperStatic = attrMapper;
     }
 
     /**
@@ -60,12 +71,9 @@ public class WaterEquipShjService extends AbstractScanRequest{
             data = "参数错误";
             return data;
         }
-        WaterEquiplogMapper waterEquiplogMapper = SpringUtil.getBean(WaterEquiplogMapper.class);
-        WaterEquipmentMapper waterEquipmentMapper = SpringUtil.getBean(WaterEquipmentMapper.class);
-        AttrMapper attrMapper = SpringUtil.getBean(AttrMapper.class);
         WaterEquipmentExample example = new WaterEquipmentExample();
         example.createCriteria().andSbsnEqualTo(sbbh);
-        List<WaterEquipment> listWater = waterEquipmentMapper.selectByExample(example);
+        List<WaterEquipment> listWater = waterEquipmentMapperStatic.selectByExample(example);
         if(listWater.size() == 0){
             data = "设备未备案";
             return data;
@@ -80,17 +88,17 @@ public class WaterEquipShjService extends AbstractScanRequest{
             record.setRespmsg("保存成功");
             record.setSm1(listWater.get(0).getSbcj());
             record.setSm2(listWater.get(0).getSbmc());
-            waterEquiplogMapper.updateBySbbhSelective(record);
-            String sbbhHeart = attrMapper.selectByAttrKey("sbbhHeart");
-            String distance = attrMapper.selectByAttrKey("distance");
-            String phoneNum = attrMapper.selectByAttrKey("heartPhone");
+            waterEquiplogMapperStatic.updateBySbbhSelective(record);
+            String sbbhHeart = attrMapperStatic.selectByAttrKey("sbbhHeart");
             if(!StringUtils.isEmpty(sbbhHeart)&&sbbhHeart.contains(sbbh)){
                 if(!StringUtils.isEmpty(msg) && !msg.equals("0,0") && !StringUtils.isEmpty(listWater.get(0).getBz())){
                     if(!StringUtils.isEmpty(redisTstaticemplate.opsForValue().get("XT"+sbbh))){
                         String cs = (String) redisTstaticemplate.opsForValue().get("XT"+sbbh);
                         if(Integer.parseInt(cs)>30){
+                            String distance = attrMapperStatic.selectByAttrKey("distance");
                             long realDistance = getDistance(msg,listWater.get(0).getBz());
                             if(realDistance>Long.parseLong(distance)){
+                                String phoneNum = attrMapperStatic.selectByAttrKey("heartPhone");
                                 //发送短信
                                 SendSmsTool.sendSms("1860261",sbbh,phoneNum);
                             }
@@ -105,7 +113,7 @@ public class WaterEquipShjService extends AbstractScanRequest{
             }
             AttrExample attrExample = new AttrExample();
             attrExample.createCriteria().andAttrcodeEqualTo("reqinterval");
-            List<Attr> list = attrMapper.selectByExample(attrExample);
+            List<Attr> list = attrMapperStatic.selectByExample(attrExample);
             if(list.size() == 0){
                 data = "60";
             }else{
