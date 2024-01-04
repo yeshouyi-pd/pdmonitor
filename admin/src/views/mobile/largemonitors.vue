@@ -489,8 +489,8 @@ export default {
         _this.getThreeDayTs();//左下角最近三天的总头数
         _this.getA4AndA2JL();//中间下方，获取A2设备和A4设备聚类
         _this.getRightTopData();//右上角获取当日声学侦测次数、事件(群次)、捕食次数
-        _this.getPointerDay();
-        _this.getPointerSecond();
+        //_this.getPointerDay();
+        //_this.getPointerSecond();
       }, 600000);
     },
     // 停止定时器
