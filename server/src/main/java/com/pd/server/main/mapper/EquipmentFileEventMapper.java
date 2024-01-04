@@ -21,6 +21,8 @@ public interface EquipmentFileEventMapper {
 
     List<EquipmentFileEvent> selectByExampleExport(@Param("record") EquipmentFileEventDto record);
 
+    List<EquipmentFileEvent> selectByDw(EquipmentFileEventExample example);
+
     List<EquipmentFileEvent> selectByExample(EquipmentFileEventExample example);
 
     List<EquipmentFileEvent> selectByExampleSpecial(@Param("record") EquipmentFileEventDto record);

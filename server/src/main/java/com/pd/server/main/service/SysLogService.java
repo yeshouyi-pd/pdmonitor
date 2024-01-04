@@ -36,7 +36,7 @@ public class SysLogService {
      */
     public  void addLog(String czr ,String czip,String czcd,String czsm,
                               String czjg ,String czsbyy,String cctj,String qqsj,
-                              String ffsj,String rzlx){
+                              String ffsj,String rzlx,String f1){
         SysLog sysLog = new SysLog();
         sysLog.setId(UuidUtil.getShortUuid());
         sysLog.setCzsj(new Date());
@@ -50,6 +50,7 @@ public class SysLogService {
         sysLog.setQqsj(qqsj);
         sysLog.setFfsj(ffsj);
         sysLog.setRzlx(rzlx);
+        sysLog.setF1(f1);
         sysLogMapper.insert(sysLog);
 
     }

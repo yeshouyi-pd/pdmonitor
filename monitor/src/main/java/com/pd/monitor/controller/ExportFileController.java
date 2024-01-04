@@ -11,6 +11,7 @@ import com.pd.server.main.dto.PredationNumDto;
 import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
 import com.pd.server.main.service.*;
 import com.pd.server.util.DateUtil;
+import com.pd.server.util.DateUtils;
 import org.apache.poi.hssf.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,6 +57,218 @@ public class ExportFileController extends BaseWxController{
     private EquipmentTyEventService equipmentTyEventService;
     @Resource
     private EquipmentFileEventService equipmentFileEventService;
+    @Resource
+    private PointerDayService pointerDayService;
+    @Resource
+    private PointerSecondService pointerSecondService;
+
+    /**
+     * 实时水下环境指针预警数据
+     */
+    @GetMapping("/exportPointerSecond")
+    public void exportPointerSecond(HttpServletRequest request, HttpServletResponse response){
+        try {
+            List<String> sbbhs = new ArrayList<>();
+            if(!StringUtils.isEmpty(request.getParameter("xmbh"))){
+                sbbhs = waterProEquipService.findSbsnByXmbh(request.getParameter("xmbh"));
+            }
+            PointerSecondExample example = new PointerSecondExample();
+            PointerSecondExample.Criteria ca = example.createCriteria();
+            if(!StringUtils.isEmpty(request.getParameter("sbbh"))){
+                ca.andSmEqualTo(request.getParameter("sbbh"));
+            }
+            if(!StringUtils.isEmpty(request.getParameter("stime"))){
+                ca.andCjsjGreaterThanOrEqualTo(request.getParameter("stime")+" 00:00:00");
+            }
+            if(!StringUtils.isEmpty(request.getParameter("etime"))){
+                ca.andCjsjLessThanOrEqualTo(request.getParameter("etime")+" 23:59:59");
+            }
+            example.setOrderByClause(" cjsj desc ");
+            List<PointerSecond> lists = pointerSecondService.selectByExample(example);
+            //导出
+            HSSFWorkbook workbook = new HSSFWorkbook();
+            //设置公共单元格样式
+            HSSFCellStyle cellStyleCommon = workbook.createCellStyle();
+            cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_LEFT);
+            cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+            // 创建一个工作表
+            String fileName = "实时水下环境指针预警数据(" + new Date().getTime() + ").xls";
+            HSSFSheet sheet = workbook.createSheet("预警数据");
+            // 自适应列宽度
+            sheet.autoSizeColumn(1, true);
+            sheet.setDefaultColumnWidth(18);
+            sheet.setDefaultRowHeight((short)(40*10));
+            // 添加表头行
+            HSSFRow titleRow = sheet.createRow(0);//第1行
+            List<String> titleStrList = Arrays.asList("设备名称","设备编号","预警数值","预警时间");
+            for(int i=0;i<titleStrList.size();i++){
+                HSSFCell cell = titleRow.createCell(i);
+                cell.setCellValue(titleStrList.get(i));
+                cell.setCellStyle(cellStyleCommon);
+            }
+            WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
+            WaterEquipmentExample.Criteria caEquip = waterEquipmentExample.createCriteria();
+            caEquip.andSblbEqualTo("0001");
+            List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(waterEquipmentExample);
+            Map<String, String> mapSbxh = waterEquipmentList.stream().collect(Collectors.toMap(p -> p.getSbsn(), p -> p.getSbmc()));
+            int i=0;
+            for(PointerSecond pointerSecond : lists){
+                if(!StringUtils.isEmpty(request.getParameter("xmbh"))){
+                    if(sbbhs.contains(pointerSecond.getSm())){
+                        HSSFRow comRow = sheet.createRow(i+1);
+                        HSSFCell comCell0 = comRow.createCell(0);
+                        comCell0.setCellValue(mapSbxh.get(pointerSecond.getSm()));
+                        comCell0.setCellStyle(cellStyleCommon);
+                        HSSFCell comCell1 = comRow.createCell(1);
+                        comCell1.setCellValue(pointerSecond.getSm());
+                        comCell1.setCellStyle(cellStyleCommon);
+                        HSSFCell comCell2 = comRow.createCell(2);
+                        comCell2.setCellValue(pointerSecond.getDecibelValue());
+                        comCell2.setCellStyle(cellStyleCommon);
+                        HSSFCell comCell3 = comRow.createCell(3);
+                        comCell3.setCellValue(DateUtil.getFormatDate(pointerSecond.getCjsj(),"yyyy-MM-dd HH:mm:ss"));
+                        comCell3.setCellStyle(cellStyleCommon);
+                        i++;
+                    }
+                }else{
+                    HSSFRow comRow = sheet.createRow(i+1);
+                    HSSFCell comCell0 = comRow.createCell(0);
+                    comCell0.setCellValue(mapSbxh.get(pointerSecond.getSm()));
+                    comCell0.setCellStyle(cellStyleCommon);
+                    HSSFCell comCell1 = comRow.createCell(1);
+                    comCell1.setCellValue(pointerSecond.getSm());
+                    comCell1.setCellStyle(cellStyleCommon);
+                    HSSFCell comCell2 = comRow.createCell(2);
+                    comCell2.setCellValue(pointerSecond.getDecibelValue());
+                    comCell2.setCellStyle(cellStyleCommon);
+                    HSSFCell comCell3 = comRow.createCell(3);
+                    comCell3.setCellValue(DateUtil.getFormatDate(pointerSecond.getCjsj(),"yyyy-MM-dd HH:mm:ss"));
+                    comCell3.setCellStyle(cellStyleCommon);
+                    i++;
+                }
+            }
+            response.setHeader("content-Type", "application/vnd.ms-excel");
+            // 下载文件的默认名称
+            String agent = request.getHeader("User-Agent");
+            if (agent.contains("MSIE") || agent.contains("Trident") || agent.contains("Edge")) {
+                response.setHeader("Content-Disposition",
+                        "attachment; filename=" + URLEncoder.encode(fileName, "UTF-8"));
+            } else {
+                response.setHeader("Content-Disposition",
+                        "attachment; filename=\"" + new String((fileName).getBytes("UTF-8"), "ISO-8859-1") + "\"");
+            }
+            response.setCharacterEncoding("utf-8");
+            ServletOutputStream out = response.getOutputStream();
+            workbook.write(out);
+            out.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 当日水下环境指针预警数据
+     */
+    @GetMapping("/exportPointerDay")
+    public void exportPointerDay(HttpServletRequest request, HttpServletResponse response){
+        try {
+            List<String> sbbhs = new ArrayList<>();
+            if(!StringUtils.isEmpty(request.getParameter("xmbh"))){
+                sbbhs = waterProEquipService.findSbsnByXmbh(request.getParameter("xmbh"));
+            }
+            PointerDayExample example = new PointerDayExample();
+            PointerDayExample.Criteria ca = example.createCriteria();
+            if(!StringUtils.isEmpty(request.getParameter("sbbh"))){
+                ca.andSmEqualTo(request.getParameter("sbbh"));
+            }
+            if(!StringUtils.isEmpty(request.getParameter("stime"))){
+                ca.andCjsjGreaterThanOrEqualTo(request.getParameter("stime")+" 00:00:00");
+            }
+            if(!StringUtils.isEmpty(request.getParameter("etime"))){
+                ca.andCjsjLessThanOrEqualTo(request.getParameter("etime")+" 23:59:59");
+            }
+            example.setOrderByClause(" cjsj desc ");
+            List<PointerDay> lists = pointerDayService.selectByExample(example);
+            //导出
+            HSSFWorkbook workbook = new HSSFWorkbook();
+            //设置公共单元格样式
+            HSSFCellStyle cellStyleCommon = workbook.createCellStyle();
+            cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_LEFT);
+            cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+            // 创建一个工作表
+            String fileName = "当日水下环境指针预警数据(" + new Date().getTime() + ").xls";
+            HSSFSheet sheet = workbook.createSheet("预警数据");
+            // 自适应列宽度
+            sheet.autoSizeColumn(1, true);
+            sheet.setDefaultColumnWidth(18);
+            sheet.setDefaultRowHeight((short)(40*10));
+            // 添加表头行
+            HSSFRow titleRow = sheet.createRow(0);//第1行
+            List<String> titleStrList = Arrays.asList("设备名称","设备编号","预警数值","预警时间");
+            for(int i=0;i<titleStrList.size();i++){
+                HSSFCell cell = titleRow.createCell(i);
+                cell.setCellValue(titleStrList.get(i));
+                cell.setCellStyle(cellStyleCommon);
+            }
+            WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
+            WaterEquipmentExample.Criteria caEquip = waterEquipmentExample.createCriteria();
+            caEquip.andSblbEqualTo("0001");
+            List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(waterEquipmentExample);
+            Map<String, String> mapSbxh = waterEquipmentList.stream().collect(Collectors.toMap(p -> p.getSbsn(), p -> p.getSbmc()));
+            int i=0;
+            for(PointerDay pointerDay : lists){
+                if(!StringUtils.isEmpty(request.getParameter("xmbh"))){
+                    if(sbbhs.contains(pointerDay.getSm())){
+                        HSSFRow comRow = sheet.createRow(i+1);
+                        HSSFCell comCell0 = comRow.createCell(0);
+                        comCell0.setCellValue(mapSbxh.get(pointerDay.getSm()));
+                        comCell0.setCellStyle(cellStyleCommon);
+                        HSSFCell comCell1 = comRow.createCell(1);
+                        comCell1.setCellValue(pointerDay.getSm());
+                        comCell1.setCellStyle(cellStyleCommon);
+                        HSSFCell comCell2 = comRow.createCell(2);
+                        comCell2.setCellValue(pointerDay.getDecibelValue());
+                        comCell2.setCellStyle(cellStyleCommon);
+                        HSSFCell comCell3 = comRow.createCell(3);
+                        comCell3.setCellValue(DateUtil.getFormatDate(pointerDay.getCjsj(),"yyyy-MM-dd HH:mm:ss"));
+                        comCell3.setCellStyle(cellStyleCommon);
+                        i++;
+                    }
+                }else{
+                    HSSFRow comRow = sheet.createRow(i+1);
+                    HSSFCell comCell0 = comRow.createCell(0);
+                    comCell0.setCellValue(mapSbxh.get(pointerDay.getSm()));
+                    comCell0.setCellStyle(cellStyleCommon);
+                    HSSFCell comCell1 = comRow.createCell(1);
+                    comCell1.setCellValue(pointerDay.getSm());
+                    comCell1.setCellStyle(cellStyleCommon);
+                    HSSFCell comCell2 = comRow.createCell(2);
+                    comCell2.setCellValue(pointerDay.getDecibelValue());
+                    comCell2.setCellStyle(cellStyleCommon);
+                    HSSFCell comCell3 = comRow.createCell(3);
+                    comCell3.setCellValue(DateUtil.getFormatDate(pointerDay.getCjsj(),"yyyy-MM-dd HH:mm:ss"));
+                    comCell3.setCellStyle(cellStyleCommon);
+                    i++;
+                }
+            }
+            response.setHeader("content-Type", "application/vnd.ms-excel");
+            // 下载文件的默认名称
+            String agent = request.getHeader("User-Agent");
+            if (agent.contains("MSIE") || agent.contains("Trident") || agent.contains("Edge")) {
+                response.setHeader("Content-Disposition",
+                        "attachment; filename=" + URLEncoder.encode(fileName, "UTF-8"));
+            } else {
+                response.setHeader("Content-Disposition",
+                        "attachment; filename=\"" + new String((fileName).getBytes("UTF-8"), "ISO-8859-1") + "\"");
+            }
+            response.setCharacterEncoding("utf-8");
+            ServletOutputStream out = response.getOutputStream();
+            workbook.write(out);
+            out.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
     /**
      * A4设备聚类事件

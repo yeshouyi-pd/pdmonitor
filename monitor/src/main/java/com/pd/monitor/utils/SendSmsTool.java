@@ -22,10 +22,12 @@ public class SendSmsTool {
     public static final Logger LOG = LoggerFactory.getLogger(SendSmsTool.class);
 
     public static Boolean sendSmsNotPhone(String templateId, String params){
+        Map<String, String> attrMap = WxRedisConfig.getAttrMap();
+        String secretId = attrMap.get("secretId");
+        String secretKey = attrMap.get("secretKey");
+        String sdkAppId = attrMap.get("sdkAppId");
+        String signName = attrMap.get("signName");
         try {
-            Map<String, String> attrMap = WxRedisConfig.getAttrMap();
-            String secretId = attrMap.get("secretId");
-            String secretKey = attrMap.get("secretKey");
             Credential cred = new Credential(secretId, secretKey);
             HttpProfile httpProfile = new HttpProfile();
             httpProfile.setReqMethod("POST");
@@ -36,23 +38,20 @@ public class SendSmsTool {
             clientProfile.setHttpProfile(httpProfile);
             SmsClient client = new SmsClient(cred, "ap-guangzhou",clientProfile);
             SendSmsRequest req = new SendSmsRequest();
-            String sdkAppId = attrMap.get("sdkAppId");
             req.setSmsSdkAppid(sdkAppId);
-            String signName = attrMap.get("signName");
             req.setSign(signName);
             req.setTemplateID(templateId);
 //            String[] templateParamSet = {"A4001","145dB"};
-            String[] templateParamSet = params.split("-");
-            req.setTemplateParamSet(templateParamSet);
+            if(!StringUtils.isEmpty(params)){
+                String[] templateParamSet = params.split("-");
+                req.setTemplateParamSet(templateParamSet);
+            }
 //            String[] phoneNumberSet = {"+8618827512017","+8618827512017"};
             String[] phoneNumberSet = attrMap.get("phoneNumber").split(",");
             req.setPhoneNumberSet(phoneNumberSet);
-            String sessionContext = "";
-            req.setSessionContext(sessionContext);
-            String extendCode = "";
-            req.setExtendCode(extendCode);
-            String senderid = "";
-            req.setSenderId(senderid);
+            req.setSessionContext("");
+            req.setExtendCode("");
+            req.setSenderId("");
             if(!StringUtils.isEmpty(attrMap.get("phoneNumber"))){
                 SendSmsResponse res = client.SendSms(req);
                 JSONObject resultJson = JSON.parseObject(SendSmsResponse.toJsonString(res));
@@ -62,15 +61,25 @@ public class SendSmsTool {
         } catch (Exception e) {
             e.printStackTrace();
             LOG.error("发送短信失败："+e.getMessage());
+        } finally {
+            templateId = null;
+            params = null;
+            secretId = null;
+            secretKey = null;
+            sdkAppId = null;
+            signName = null;
+            System.gc();
         }
         return false;
     }
 
     public static Boolean sendSms(String templateId, String params, String phoneNum){
+        Map<String, String> attrMap = WxRedisConfig.getAttrMap();
+        String secretId = attrMap.get("secretId");
+        String secretKey = attrMap.get("secretKey");
+        String sdkAppId = attrMap.get("sdkAppId");
+        String signName = attrMap.get("signName");
         try {
-            Map<String, String> attrMap = WxRedisConfig.getAttrMap();
-            String secretId = attrMap.get("secretId");
-            String secretKey = attrMap.get("secretKey");
             Credential cred = new Credential(secretId, secretKey);
             HttpProfile httpProfile = new HttpProfile();
             httpProfile.setReqMethod("POST");
@@ -81,37 +90,44 @@ public class SendSmsTool {
             clientProfile.setHttpProfile(httpProfile);
             SmsClient client = new SmsClient(cred, "ap-guangzhou",clientProfile);
             SendSmsRequest req = new SendSmsRequest();
-            String sdkAppId = attrMap.get("sdkAppId");
             req.setSmsSdkAppid(sdkAppId);
-            String signName = attrMap.get("signName");
             req.setSign(signName);
             req.setTemplateID(templateId);
 //            String[] templateParamSet = {"A4001","145dB"};
-            String[] templateParamSet = params.split("-");
-            req.setTemplateParamSet(templateParamSet);
+           if(!StringUtils.isEmpty(params)){
+               String[] templateParamSet = params.split("-");
+               req.setTemplateParamSet(templateParamSet);
+           }
 //            String[] phoneNumberSet = {"+8618827512017","+8618827512017"};
             String[] phoneNumberSet = phoneNum.split(",");
             req.setPhoneNumberSet(phoneNumberSet);
-            String sessionContext = "";
-            req.setSessionContext(sessionContext);
-            String extendCode = "";
-            req.setExtendCode(extendCode);
-            String senderid = "";
-            req.setSenderId(senderid);
-            if(!StringUtils.isEmpty(attrMap.get("phoneNumber"))){
+            req.setSessionContext("");
+            req.setExtendCode("");
+            req.setSenderId("");
+            if(!StringUtils.isEmpty(phoneNum)){
                 SendSmsResponse res = client.SendSms(req);
                 JSONObject resultJson = JSON.parseObject(SendSmsResponse.toJsonString(res));
                 LOG.error("短信返回数据："+resultJson);
             }
-            return true;
         } catch (Exception e) {
             e.printStackTrace();
             LOG.error("发送短信失败："+e.getMessage());
+            return false;
+        } finally {
+            templateId = null;
+            params = null;
+            phoneNum = null;
+            secretId = null;
+            secretKey = null;
+            sdkAppId = null;
+            signName = null;
+            System.gc();
         }
-        return false;
+        return true;
     }
 
     public static void main(String[] args) {
-        sendSms("1823144","A4001-145dB", "");
+        Boolean falge = SendSmsTool.sendSms("2037275","","+8618827512017");
+
     }
 }

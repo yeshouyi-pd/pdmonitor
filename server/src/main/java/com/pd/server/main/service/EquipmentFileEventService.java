@@ -26,6 +26,10 @@ public class EquipmentFileEventService {
         return equipmentFileEventMapper.selectByExampleExport(record);
     }
 
+    public List<EquipmentFileEvent> selectByDw(EquipmentFileEventExample example) {
+        return equipmentFileEventMapper.selectByDw(example);
+    }
+
     /**
     * 列表查询
     */

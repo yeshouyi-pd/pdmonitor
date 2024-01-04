@@ -2,7 +2,15 @@
   <div style="width: 1920px;height: 100vh;background-image: url('/static/image/environment/dpbg.png');background-size: 100% 100%;margin: auto">
     <div class="page-first-div">
       <div class="left-div">
-        <div style="height: 4.1%;display: flex;flex-direction: row;align-items: center;margin-left: 20px;">
+        <div v-if="LOCAL_VIDEO" style="height: 4.1%;display: flex;flex-direction: row;align-items: center;margin-left: 20px;">
+          <div v-on:click="mianNew()" style="color: rgb(255, 255, 255);font-size: 16px;border: 1px solid #043769;background-color:rgb(10,33,61);width: 15%;text-align: center;padding: 5px 0;cursor: pointer">
+            主页
+          </div>
+          <div v-on:click="videoNew()" style="color: rgb(255, 255, 255);font-size: 16px;border: 1px solid #043769;background-color:rgb(10,33,61);width: 15%;text-align: center;padding: 5px 0;cursor: pointer;margin-left: 10px;">
+            视频
+          </div>
+        </div>
+        <div v-else style="height: 4.1%;display: flex;flex-direction: row;align-items: center;margin-left: 20px;">
           <div v-on:click="back()" style="color: rgb(255, 255, 255);font-size: 16px;border: 1px solid #043769;background-color:rgb(10,33,61);width: 15%;text-align: center;padding: 5px 0;cursor: pointer">
             返回
           </div>
@@ -103,16 +111,17 @@
         </div>
       </div>
       <div class="center-div">
-        <div class="dp-title">动态观测平台</div>
+        <div class="dp-title">中华白海豚环境耦合实时监测系统</div>
         <div class="map-div">
           <EquipmentAMap v-bind:height-max="heightMax" :click-map-point="clickMapPoint"></EquipmentAMap>
         </div>
-<!--        <div class="center-content-bottom" id="centerBottomEchart"></div>-->
         <div class="center-content-bottom">
           <div class="title-name-div">
-            <span style="padding-top: 1%;">水质数据</span>
+            <span style="padding-top: 1%;">分析视频</span>
           </div>
-          <div class="center-bottom-div" id="centerBottomEchart"></div>
+          <div class="center-bottom-div">
+            <dv-scroll-board class="sc-div" :config="config" style="width:100% ;height:96%" ref="scrollBoard"/>
+          </div>
         </div>
       </div>
       <div class="right-div">
@@ -176,47 +185,54 @@
           </div>
           <div class="left-bottom">
             <div class="title-name-div">
-              <span>人工智能预测模块</span>
+              <span style="padding-top: 1%;">水质数据</span>
             </div>
-            <div style="width:90%;box-sizing: content-box;margin-left: 5%;margin-top: 2%;">
-              <table class="table-bordered" style="border-collapse: collapse;">
-                <thead style="background-color: #0B61A4;color: #fff">
-                  <tr>
-                    <td style="width: 15%">时间(明天)</td>
-                    <td>00:00-03:00</td>
-                    <td>03:00-06:00</td>
-                    <td>06:00-09:00</td>
-                    <td>09:00-12:00</td>
-                    <td>12:00-15:00</td>
-                    <td>18:00-18:00</td>
-                    <td>18:00-21:00</td>
-                    <td>21:00-24:00</td>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td style="background-color: #C260D3;color: #fff;">港珠澳大桥一号</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-                  </tr>
-                  <tr>
-                    <td style="background-color: #FF5151;color: #fff;">港珠澳大桥二号</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-                  </tr>
-                  <tr>
-                    <td style="background-color: #FF7B2C;color: #fff;">港珠澳大桥三号</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-                  </tr>
-                  <tr>
-                    <td style="background-color: #FBB435;color: #000000;">港珠澳大桥四号</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-                  </tr>
-                  <tr>
-                    <td style="background-color: #05A82E;color: #fff;">港珠澳大桥五号</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-<!--            <div class="bottom-content" id="rightBottomEchart"></div>-->
+            <div class="center-bottom-div" id="rightBottomEchart"></div>
           </div>
         </div>
       </div>
     </div>
+
+    <div id="video-modal" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document" style="width: 80%;height: 90%;">
+        <div class="modal-content" style="width: 100%;height: 100%;margin: auto">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">分析视频</h4>
+          </div>
+          <div class="modal-body" style="height: 88%;overflow-y: auto;width:100%;" id="playbox">
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-white btn-default btn-round" data-dismiss="modal">
+              <i class="ace-icon fa fa-times"></i>
+              关闭
+            </button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div id="alarm-num-modal" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document" style="width: 80%;height: 90%;">
+        <div class="modal-content" style="width: 100%;height: 100%;margin: auto;">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">出现次数</h4>
+          </div>
+          <div class="modal-body" style="height: 88%;width: 100%;" id="alarmNumEcharts">
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-white btn-default btn-round" data-dismiss="modal">
+              <i class="ace-icon fa fa-times"></i>
+              关闭
+            </button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
   </div>
 </template>
 <script>
@@ -226,6 +242,7 @@ export default {
   components:{EquipmentAMap},
   data: function (){
     return {
+      LOCAL_VIDEO:LOCAL_VIDEO,
       curDate:'',
       heightMax:510,
       curSbbh:'RPCDA4016',
@@ -233,7 +250,7 @@ export default {
       currentMeter:{},
       meteorological:{},
       intervalId:null,
-      zdysbbhList:['RPCDA4005','RPCDA4012','RPCDA4003','RPCDA4006-4','RPCDA4009-3','RPCDA4001','RPCDA4010','RPCDA4008','RPCDA4002','RPCDA4016'],
+      zdysbbhList:['RPCDA4005','RPCDA4012','RPCDA4003','RPCDA4006-4','RPCDA4009-3','RPCDA4001','RPCDA4010','RPCDA4008','RPCDA4002','RPCDA4016','RPCDA4000'],
       zdysbList:[
         {key:"RPCDA4005", value:"3号航标"},
         {key:"RPCDA4012", value:"4号航标"},
@@ -244,26 +261,62 @@ export default {
         {key:"RPCDA4010", value:"10号航标"},
         {key:"RPCDA4008", value:"11号航标"},
         {key:"RPCDA4002", value:"淇澳岛"},
-        {key:"RPCDA4016", value:"RPCDA4016"}
-      ]
+        {key:"RPCDA4016", value:"珠海A4016"},
+        {key:"RPCDA4000", value:"三米标"}
+      ],
+      config: {
+        headerBGC: "#054F7F",
+        oddRowBGC: "#054F7F",
+        evenRowBGC: "",
+        align: ['center', 'center', 'center', 'center'],
+        header: ['设备名称', '开始时间', '结束时间', '视频'],
+        data: []
+      },
+      tdhList:[
+        {key:"1", value:"1"},
+        {key:"2", value:"3"},
+        {key:"3", value:"5"},
+        {key:"4", value:"7"},
+        {key:"5", value:"9"},
+        {key:"6", value:"11"},
+        {key:"7", value:"13"},
+        {key:"8", value:"15"},
+        {key:"9", value:"17"},
+        {key:"10", value:"19"}
+      ],
+      dtimeList:['2023-10-25','2023-10-24','2023-10-23','2023-10-22','2023-10-21','2023-10-20','2023-10-19','2023-10-18','2023-10-17','2023-10-16','2023-10-15'],
+      dtimeIndex:0,
+      dtime:''
     }
   },
   mounted() {
     let _this = this;
     _this.curDate = Tool.dateFormat("yyyy-MM-dd",new Date());
+    if(_this.$xhHisData.rq==_this.curDate){
+      _this.dtime = _this.dtimeList[_this.$xhHisData.index];
+    }else{
+      _this.$xhHisData.rq = _this.curDate;
+      _this.$xhHisData.index++;
+      if(_this.$xhHisData.index>10){
+        _this.$xhHisData.index = 0;
+      }
+      _this.dtime = _this.dtimeList[_this.$xhHisData.index];
+    }
     _this.leftCenterData();
     _this.leftBottomData();
-    _this.centerBottomData();
+    _this.rightBottomData();
     _this.rightTopData();
     _this.rightCenterData();
+    _this.centerBottomData();
     _this.dataRefreh();
+    window.getPlayUrl = _this.getPlayUrl;
   },
   methods: {
     changeData(){
       let _this = this;
-      _this.leftBottomData();
-      _this.centerBottomData();
-      _this.rightTopData();
+      //_this.leftBottomData();
+      _this.rightBottomData();
+      //_this.rightTopData();
       _this.rightCenterData();
     },
     // 定时刷新数据函数
@@ -278,9 +331,9 @@ export default {
         console.log("刷新" + new Date());
         _this.leftCenterData();
         _this.leftBottomData();
-        _this.centerBottomData();
+        //_this.rightBottomData();
         _this.rightTopData();
-        _this.rightCenterData();
+        //_this.rightCenterData();
       }, 900000);
     },
     // 停止定时器
@@ -294,28 +347,130 @@ export default {
       _this.clear();
       window.location.href = "/mobile/largemonitorsZj";
     },
-    clickMapPoint(sbmc,sbbh){
+    mianNew(){
       let _this = this;
-      if(_this.zdysbbhList.includes(sbbh)){
-        //_this.curSbmc = sbmc;
-        _this.curSbbh = sbbh;
-        _this.leftBottomData();
-        _this.centerBottomData();
-        _this.rightTopData();
-        _this.rightCenterData();
+      _this.clear();
+      if(_this.LOCAL_VIDEO){
+        _this.user = Tool.getLoginUser();
+        _this.user.xmbh = "002";
+        _this.$forceUpdate();
+        Tool.setLoginUser(_this.user);
+        _this.$router.push("/welcome");
       }else{
-        Toast.error("该站点没有环境数据！");
+        window.location.href = "/admin/chooseProject";
       }
     },
-    leftCenterData(){
+    videoNew(){
       let _this = this;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getCurrentMeterData', {"bz":_this.curSbbh}).then((response)=>{
-        _this.currentMeter = response.data.content;
+      _this.clear();
+      window.location.href = "/mobile/videoNewDp";
+    },
+    clickMapPoint(sbmc,sbbh){
+      let _this = this;
+      if(sbbh.includes("RPCD")){
+        // _this.curSbmc = sbmc;
+        // _this.curSbbh = sbbh;
+        _this.getAlarmNum(sbbh);
+      }else if(sbmc.includes("摄像头")){
+        let tdh = _this.optionKVArray(_this.tdhList,sbbh);
+        window.location.href = "/mobile/videoNewDp?tdh="+tdh;
+      }else {
+        Toast.error("该站点没有数据！");
+      }
+      // if(_this.zdysbbhList.includes(sbbh)){
+      //   //_this.curSbmc = sbmc;
+      //   _this.curSbbh = sbbh;
+      //   _this.leftBottomData();
+      //   _this.rightBottomData();
+      //   _this.rightTopData();
+      //   _this.rightCenterData();
+      // }else{
+      //   Toast.error("该站点没有环境数据！");
+      // }
+    },
+    getAlarmNum(sbbh){
+      let _this = this;
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getHourCxcsBySbbh',{'sbbh':sbbh}).then((res)=>{
+        $("#alarm-num-modal").modal("show");
+        let response = res.data;
+        let historyTem = response.content.history;
+        let forecastTem = response.content.history;
+        let history = [];
+        let forecast = [];
+        for(let i=0;i<historyTem.length;i++){
+          history.push([historyTem[i].xs,historyTem[i].sumAlarmNum])
+        }
+        for(let i=0;i<forecastTem.length;i++){
+          forecast.push([forecastTem[i].cxsj,forecastTem[i].cxcs])
+        }
+        _this.initAlarmNumEcharts(history,forecast);
       })
+    },
+    initAlarmNumEcharts(history, forecast){
+      let _this = this;
+      let option = {
+        tooltip: {
+          trigger: 'axis'
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis: {
+          type: 'category',
+          name: '时间'
+        },
+        yAxis: {
+          type: 'value',
+          name: '次数'
+        },
+        series: [
+          {
+            type: 'line',
+            data: history
+          },
+          {
+            type: 'line',
+            itemStyle: {
+              color: "rgba(255, 0, 0, 1)"
+            },
+            lineStyle: {
+              color: "rgba(245, 9, 9, 1)"
+            },
+            data: forecast
+          }
+        ]
+      };
+      setTimeout(function (){
+        let echartsData = echarts.init(document.getElementById("alarmNumEcharts"));
+        echartsData.setOption(option);
+      },1000)
     },
     centerBottomData(){
       let _this = this;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getWaterQualityNewData', {"sbbh":_this.curSbbh}).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getVideoEvent',{}).then((res)=>{
+        let response = res.data;
+        let eventDatas = response.content;
+        let rolldata = []
+        for(let i=0;i<eventDatas.length;i++){
+          let item = eventDatas[i];
+          let arrItem = [item.sbbh,item.kssj,item.jssj, `<div class="btn-detail" onclick="getPlayUrl('${item.sbbh}','${item.wjlj}')">查看视频</div>`];
+          rolldata.push(arrItem);
+        }
+        this.$refs['scrollBoard'].updateRows(rolldata, 0);
+      })
+    },
+    leftCenterData(){
+      let _this = this;
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getCurrentMeterData', {"bz":"RPCDA4000"}).then((response)=>{
+        _this.currentMeter = response.data.content;
+      })
+    },
+    rightBottomData(){
+      let _this = this;
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getWaterQualityNewData', {"sbbh":_this.curSbbh,'stime':_this.dtime}).then((response)=>{
         let waterQualityNews = response.data.content;
         let xAxisDatas = [];
         let seriesData1 = [];
@@ -408,12 +563,12 @@ export default {
           }
         ]
       };
-      let echartsData = echarts.init(document.getElementById("centerBottomEchart"));
+      let echartsData = echarts.init(document.getElementById("rightBottomEchart"));
       echartsData.setOption(option);
     },
     leftBottomData(){
       let _this = this;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getTurbidityData', {"bz":_this.curSbbh}).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getTurbidityData', {"bz":"RPCDA4000"}).then((response)=>{
         let turbiditys = response.data.content;
         let xAxisData = [];
         let data1 = [];
@@ -509,7 +664,7 @@ export default {
     },
     rightTopData(){
       let _this = this;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getMeteorologicalData', {"bz":_this.curSbbh}).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getMeteorologicalData', {"bz":"RPCDA4000"}).then((response)=>{
         let meteorologicals = response.data.content;
         // let data = [];
         // let data1 = [];
@@ -656,7 +811,7 @@ export default {
     },
     rightCenterData(){
       let _this = this;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getWaveDataData', {"sbbh":_this.curSbbh}).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getWaveDataData', {"sbbh":_this.curSbbh,'stime':_this.dtime}).then((response)=>{
         let resp = response.data;
         let xAxisDatas = [];
         let seriesData1 = [];
@@ -782,6 +937,50 @@ export default {
       };
       let echartsData = echarts.init(document.getElementById("rightBottomEchart"));
       echartsData.setOption(option);
+    },
+    getPlayUrl(sbbh,wjlj){
+      let _this = this;
+      $("#playbox").empty();
+      let url = 'http://49.239.193.146:59088/FileInfo.asmx/GetPlayUrl';
+      $.post(url,{"sbid": sbbh,"filename":wjlj.substring(wjlj.lastIndexOf("/")+1),"fbl":"1080","fhfs":"1"}, function (data, status) {
+        if(status&&!(data.getElementsByTagName('Mesg')[0].childNodes[0].nodeValue.includes('不存在')||data.getElementsByTagName('Mesg')[0].childNodes[0].nodeValue.includes('文件大小为0'))){
+          let video = document.createElement("video");
+          video.setAttribute("width","100%");
+          video.setAttribute("height","100%");
+          video.setAttribute("controls","controls");
+          video.setAttribute("autoplay","autoplay");
+          if(Hls.isSupported()) {
+            let hls = new Hls();
+            hls.loadSource(data.getElementsByTagName('PlayUrl')[0].childNodes[0].nodeValue);
+            hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED,function() {
+              video.play();
+            });
+          } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = data.getElementsByTagName('PlayUrl')[0].childNodes[0].nodeValue;
+            video.addEventListener('loadedmetadata',function() {
+              video.play();
+            });
+          }
+          document.getElementById('playbox').appendChild(video);
+          $("#video-modal").modal("show");
+        }else{
+          Toast.error("未找到源文件或文件大小为0，无法转码！");
+        }
+      })
+    },
+    optionKVArray(list, key){
+      if (!list || !key) {
+        return "";
+      } else {
+        let result = "";
+        for (let i = 0; i < list.length; i++) {
+          if (key === list[i]["key"]) {
+            result = list[i]["value"];
+          }
+        }
+        return result;
+      }
     }
   }
 }
@@ -914,6 +1113,8 @@ export default {
 }
 .center-bottom-div{
   height: 85%;
+  width: 90%;
+  margin-left: 5%;
 }
 .right-top-content{
   height: 38%;
@@ -936,5 +1137,9 @@ export default {
   width: 70%;
   margin: auto;
   color: #fff;
+}
+/deep/.header{
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
 }
 </style>

@@ -1,11 +1,17 @@
 package com.pd.environment.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.pd.server.config.SpringUtil;
+import com.pd.server.main.domain.WaterEquipment;
+import com.pd.server.main.domain.WaterEquipmentExample;
 import com.pd.server.main.dto.ResponseDto;
 import com.pd.server.main.dto.VideoEventDto;
+import com.pd.server.main.mapper.WaterEquipmentMapper;
 import com.pd.server.main.service.VideoEventService;
+import com.pd.server.main.service.WaterEquipmentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.regex.Pattern;
 
 @RestController
@@ -28,6 +35,8 @@ public class VideoEventRevController {
 
     @Resource
     private VideoEventService videoEventService;
+    @Resource
+    private WaterEquipmentService waterEquipmentService;
 
     /**
      * 保存数据
@@ -55,6 +64,16 @@ public class VideoEventRevController {
                 responseDto.setMessage("文件名称命名错误");
                 return responseDto;
             }
+            WaterEquipmentExample example = new WaterEquipmentExample();
+            WaterEquipmentExample.Criteria ca = example.createCriteria();
+            ca.andSbsnEqualTo(sbbh);
+            List<WaterEquipment> lists = waterEquipmentService.list(example);
+            if(lists==null || lists.isEmpty()){
+                responseDto.setCode("4000");
+                responseDto.setSuccess(false);
+                responseDto.setMessage("设备编号不存在");
+                return responseDto;
+            }
             VideoEventDto videoEventDto = new VideoEventDto();
             videoEventDto.setSbbh(sbbh);
             videoEventDto.setKssj(wjmclj.substring(0,4)+"-"+wjmclj.substring(5,7)+"-"+wjmclj.substring(8,10)+" "+wjmclj.substring(11,13)+":"+wjmclj.substring(14,16)+":"+wjmclj.substring(17,19));
@@ -63,6 +82,7 @@ public class VideoEventRevController {
             videoEventDto.setWjlj(wjlj);
             videoEventDto.setWjmc(wjmclj.substring(0,39));
             videoEventDto.setSfysp(0);//不是原始视频
+            videoEventDto.setBz(lists.get(0).getDeptcode());
             videoEventService.save(videoEventDto);
             responseDto.setCode("0000");
             responseDto.setSuccess(true);

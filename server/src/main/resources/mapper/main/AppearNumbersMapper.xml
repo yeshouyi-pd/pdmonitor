@@ -16,6 +16,10 @@
     <result column="sm2" jdbcType="VARCHAR" property="sm2" />
     <result column="sm3" jdbcType="VARCHAR" property="sm3" />
   </resultMap>
+  <resultMap id="AppearNumDpDto" type="com.pd.server.main.dto.basewx.my.AppearNumDpDto">
+    <result column="sumAlarmNum" jdbcType="INTEGER" property="sumAlarmNum" />
+    <result column="xs" jdbcType="VARCHAR" property="xs" />
+  </resultMap>
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -104,6 +108,13 @@
       AND a.fz &lt;= #{record.etime,jdbcType=VARCHAR}
     </if>
     order by fz desc
+  </select>
+  <select id="listSumAlarmNumByXs" parameterType="com.pd.server.main.domain.AppearNumbersExample" resultMap="AppearNumDpDto">
+    select xs,sum(alarm_num) as sumAlarmNum from appear_numbers
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    group by xs order by xs desc
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 

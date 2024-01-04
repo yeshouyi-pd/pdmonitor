@@ -3,6 +3,8 @@ package com.pd.server.main.mapper;
 import com.pd.server.main.domain.VideoEvent;
 import com.pd.server.main.domain.VideoEventExample;
 import java.util.List;
+
+import com.pd.server.main.dto.VideoEventDto;
 import org.apache.ibatis.annotations.Param;
 
 public interface VideoEventMapper {
@@ -17,6 +19,10 @@ public interface VideoEventMapper {
     int insertSelective(VideoEvent record);
 
     List<VideoEvent> selectByExample(VideoEventExample example);
+
+    List<VideoEvent> selectByDp(@Param("example") VideoEventExample example,@Param("limitNum") Integer limitNum);
+
+    List<VideoEvent> selectByPage(@Param("record") VideoEventDto record);
 
     VideoEvent selectByPrimaryKey(String id);
 

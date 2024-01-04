@@ -16,6 +16,10 @@
     <result column="cjsj" jdbcType="TIMESTAMP" property="cjsj" />
     <result column="bz" jdbcType="VARCHAR" property="bz" />
     <result column="sm" jdbcType="VARCHAR" property="sm" />
+    <result column="shortwave" jdbcType="DOUBLE" property="shortwave" />
+    <result column="longwave" jdbcType="DOUBLE" property="longwave" />
+    <result column="uwind_speed" jdbcType="DOUBLE" property="uwindSpeed" />
+    <result column="vwind_speed" jdbcType="DOUBLE" property="vwindSpeed" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -77,7 +81,8 @@
   </sql>
   <sql id="Base_Column_List">
     id, speed, winddirection, temperature, humidity, pressure, minuterainfall, hourrainfall, 
-    dayrainfall, rainfallaccumulation, solarintensity, cjsj, bz, sm
+    dayrainfall, rainfallaccumulation, solarintensity, cjsj, bz, sm, shortwave, longwave, 
+    uwind_speed, vwind_speed
   </sql>
   <select id="selectByExample" parameterType="com.pd.server.main.domain.MeteorologicalDataExample" resultMap="BaseResultMap">
     select
@@ -114,12 +119,14 @@
       temperature, humidity, pressure, 
       minuterainfall, hourrainfall, dayrainfall, 
       rainfallaccumulation, solarintensity, cjsj, 
-      bz, sm)
-    values (#{id,jdbcType=VARCHAR}, #{speed,jdbcType=DOUBLE}, #{winddirection,jdbcType=VARCHAR},
+      bz, sm, shortwave, longwave, 
+      uwind_speed, vwind_speed)
+    values (#{id,jdbcType=VARCHAR}, #{speed,jdbcType=DOUBLE}, #{winddirection,jdbcType=VARCHAR}, 
       #{temperature,jdbcType=DOUBLE}, #{humidity,jdbcType=DOUBLE}, #{pressure,jdbcType=DOUBLE}, 
       #{minuterainfall,jdbcType=DOUBLE}, #{hourrainfall,jdbcType=DOUBLE}, #{dayrainfall,jdbcType=DOUBLE}, 
       #{rainfallaccumulation,jdbcType=DOUBLE}, #{solarintensity,jdbcType=DOUBLE}, #{cjsj,jdbcType=TIMESTAMP}, 
-      #{bz,jdbcType=VARCHAR}, #{sm,jdbcType=VARCHAR})
+      #{bz,jdbcType=VARCHAR}, #{sm,jdbcType=VARCHAR}, #{shortwave,jdbcType=DOUBLE}, #{longwave,jdbcType=DOUBLE}, 
+      #{uwindSpeed,jdbcType=DOUBLE}, #{vwindSpeed,jdbcType=DOUBLE})
   </insert>
   <insert id="insertSelective" parameterType="com.pd.server.main.domain.MeteorologicalData">
     insert into meteorological_data
@@ -166,6 +173,18 @@
       <if test="sm != null">
         sm,
       </if>
+      <if test="shortwave != null">
+        shortwave,
+      </if>
+      <if test="longwave != null">
+        longwave,
+      </if>
+      <if test="uwindSpeed != null">
+        uwind_speed,
+      </if>
+      <if test="vwindSpeed != null">
+        vwind_speed,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -209,6 +228,18 @@
       </if>
       <if test="sm != null">
         #{sm,jdbcType=VARCHAR},
+      </if>
+      <if test="shortwave != null">
+        #{shortwave,jdbcType=DOUBLE},
+      </if>
+      <if test="longwave != null">
+        #{longwave,jdbcType=DOUBLE},
+      </if>
+      <if test="uwindSpeed != null">
+        #{uwindSpeed,jdbcType=DOUBLE},
+      </if>
+      <if test="vwindSpeed != null">
+        #{vwindSpeed,jdbcType=DOUBLE},
       </if>
     </trim>
   </insert>
@@ -263,6 +294,18 @@
       <if test="record.sm != null">
         sm = #{record.sm,jdbcType=VARCHAR},
       </if>
+      <if test="record.shortwave != null">
+        shortwave = #{record.shortwave,jdbcType=DOUBLE},
+      </if>
+      <if test="record.longwave != null">
+        longwave = #{record.longwave,jdbcType=DOUBLE},
+      </if>
+      <if test="record.uwindSpeed != null">
+        uwind_speed = #{record.uwindSpeed,jdbcType=DOUBLE},
+      </if>
+      <if test="record.vwindSpeed != null">
+        vwind_speed = #{record.vwindSpeed,jdbcType=DOUBLE},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -283,7 +326,11 @@
       solarintensity = #{record.solarintensity,jdbcType=DOUBLE},
       cjsj = #{record.cjsj,jdbcType=TIMESTAMP},
       bz = #{record.bz,jdbcType=VARCHAR},
-      sm = #{record.sm,jdbcType=VARCHAR}
+      sm = #{record.sm,jdbcType=VARCHAR},
+      shortwave = #{record.shortwave,jdbcType=DOUBLE},
+      longwave = #{record.longwave,jdbcType=DOUBLE},
+      uwind_speed = #{record.uwindSpeed,jdbcType=DOUBLE},
+      vwind_speed = #{record.vwindSpeed,jdbcType=DOUBLE}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -330,6 +377,18 @@
       <if test="sm != null">
         sm = #{sm,jdbcType=VARCHAR},
       </if>
+      <if test="shortwave != null">
+        shortwave = #{shortwave,jdbcType=DOUBLE},
+      </if>
+      <if test="longwave != null">
+        longwave = #{longwave,jdbcType=DOUBLE},
+      </if>
+      <if test="uwindSpeed != null">
+        uwind_speed = #{uwindSpeed,jdbcType=DOUBLE},
+      </if>
+      <if test="vwindSpeed != null">
+        vwind_speed = #{vwindSpeed,jdbcType=DOUBLE},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -347,7 +406,11 @@
       solarintensity = #{solarintensity,jdbcType=DOUBLE},
       cjsj = #{cjsj,jdbcType=TIMESTAMP},
       bz = #{bz,jdbcType=VARCHAR},
-      sm = #{sm,jdbcType=VARCHAR}
+      sm = #{sm,jdbcType=VARCHAR},
+      shortwave = #{shortwave,jdbcType=DOUBLE},
+      longwave = #{longwave,jdbcType=DOUBLE},
+      uwind_speed = #{uwindSpeed,jdbcType=DOUBLE},
+      vwind_speed = #{vwindSpeed,jdbcType=DOUBLE}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

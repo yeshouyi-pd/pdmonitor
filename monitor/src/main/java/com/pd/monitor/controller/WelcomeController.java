@@ -44,7 +44,8 @@ public class WelcomeController extends BaseWxController{
      */
     @Resource
     private WaterEquipmentService waterEquipmentService;
-
+    @Resource
+    private AttrService attrService;
     @Resource
     private EquipmentFileTodayService equipmentFileTodayService;
     @Resource
@@ -57,6 +58,41 @@ public class WelcomeController extends BaseWxController{
     private PredationNumService predationNumService;
     @Resource
     private EquipmentFileEventService equipmentFileEventService;
+    @Resource
+    private VideoEventService videoEventService;
+
+    @PostMapping("/getExplainVideoEvent")
+    public ResponseDto getExplainVideoEvent(@RequestBody VideoEventDto videoEventDto){
+        ResponseDto responseDto = new ResponseDto();
+        String limitNumStr = attrService.findByAttrKey("limitNum");
+        Integer limitNum = 10;
+        if(!StringUtils.isEmpty(limitNumStr)){
+            limitNum = Integer.parseInt(limitNumStr);
+        }
+        VideoEventExample example = new VideoEventExample();
+        VideoEventExample.Criteria ca = example.createCriteria();
+        if(!StringUtils.isEmpty(videoEventDto.getSbbh())){
+            ca.andSbbhEqualTo(videoEventDto.getSbbh());
+        }
+        if(!StringUtils.isEmpty(videoEventDto.getWjmc())){
+            ca.andWjmcEqualTo(videoEventDto.getWjmc());
+        }
+        if(!StringUtils.isEmpty(videoEventDto.getRq())){
+            ca.andRqEqualTo(videoEventDto.getRq());
+        }
+        if(!StringUtils.isEmpty(videoEventDto.getStime())){
+            ca.andRqGreaterThanOrEqualTo(videoEventDto.getStime());
+        }
+        if(!StringUtils.isEmpty(videoEventDto.getEtime())){
+            ca.andRqLessThanOrEqualTo(videoEventDto.getEtime());
+        }
+        if(!StringUtils.isEmpty(videoEventDto.getSfysp())){
+            ca.andSfyspEqualTo(videoEventDto.getSfysp());
+        }
+        List<VideoEvent> lists = videoEventService.selectByDp(example, limitNum);
+        responseDto.setContent(lists);
+        return responseDto;
+    }
 
     /**
      * 大屏 捕食行为
@@ -627,9 +663,10 @@ public class WelcomeController extends BaseWxController{
         ResponseDto responseDto = new ResponseDto();
         PointerSecondExample example = new PointerSecondExample();
         PointerSecondExample.Criteria ca = example.createCriteria();
-        if(!StringUtils.isEmpty(jsonObject.get("type"))&&"zjglj".equals(jsonObject.get("type"))){
+        if(!StringUtils.isEmpty(jsonObject.get("type"))&&"zjglj".equals(jsonObject.get("type"))&&!StringUtils.isEmpty(jsonObject.get("sbbh"))){
             ca.andSmEqualTo(jsonObject.getString("sbbh"));
         }
+        ca.andBz1EqualTo(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd"));
         PointerSecond entity = pointerSecondService.selectByDp(example);
         responseDto.setContent(entity);
         return responseDto;
@@ -640,9 +677,10 @@ public class WelcomeController extends BaseWxController{
         ResponseDto responseDto = new ResponseDto();
         PointerDayExample example = new PointerDayExample();
         PointerDayExample.Criteria ca = example.createCriteria();
-        if(!StringUtils.isEmpty(jsonObject.get("type"))&&"zjglj".equals(jsonObject.get("type"))){
+        if(!StringUtils.isEmpty(jsonObject.get("type"))&&"zjglj".equals(jsonObject.get("type"))&&!StringUtils.isEmpty(jsonObject.get("sbbh"))){
             ca.andSmEqualTo(jsonObject.getString("sbbh"));
         }
+        ca.andBz1EqualTo(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd"));
         PointerDay entity = pointerDayService.selectByDp(example);
         responseDto.setContent(entity);
         return responseDto;
