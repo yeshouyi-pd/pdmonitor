@@ -1,7 +1,6 @@
 package com.pd.server.main.service.shj;
 
 import com.alibaba.fastjson.JSONObject;
-import com.pd.server.config.SpringUtil;
 import com.pd.server.main.domain.*;
 import com.pd.server.main.dto.PointerDayDto;
 import com.pd.server.main.dto.PointerSecondDto;
@@ -17,12 +16,44 @@ import com.pd.server.util.UuidUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 @Service
 public class EquipmentFileTyShjService extends AbstractScanRequest{
+
+    public static EquipmentTyEventMapper equipmentTyEventMapperStatic;
+    public static EquipmentFileTyMapper equipmentFileTyMapperStatic;
+    public static EquipmentFileTyTodayMapper todayMapperStatic;
+    public static WaterEquipmentMapper waterEquipmentMapperStatic;
+    public static PointerSecondService pointerSecondServiceStatic;
+    public static PointerDayService pointerDayServiceStatic;
+
+    @Resource
+    private EquipmentTyEventMapper equipmentTyEventMapper;
+    @Resource
+    private EquipmentFileTyMapper equipmentFileTyMapper;
+    @Resource
+    private EquipmentFileTyTodayMapper todayMapper;
+    @Resource
+    private WaterEquipmentMapper waterEquipmentMapper;
+    @Resource
+    private PointerSecondService pointerSecondService;
+    @Resource
+    private PointerDayService pointerDayService;
+
+    @PostConstruct
+    protected void init() {
+        equipmentTyEventMapperStatic = equipmentTyEventMapper;
+        equipmentFileTyMapperStatic = equipmentFileTyMapper;
+        todayMapperStatic = todayMapper;
+        waterEquipmentMapperStatic = waterEquipmentMapper;
+        pointerSecondServiceStatic = pointerSecondService;
+        pointerDayServiceStatic = pointerDayService;
+    }
 
     /**
      * 拖曳设备文件
@@ -41,20 +72,16 @@ public class EquipmentFileTyShjService extends AbstractScanRequest{
         }
         try {
             JSONObject obj = JSONObject.parseObject(sm1);
-            EquipmentTyEventMapper equipmentTyEventMapper = SpringUtil.getBean(EquipmentTyEventMapper.class);
-            EquipmentFileTyMapper equipmentFileTyMapper = SpringUtil.getBean(EquipmentFileTyMapper.class);
-            EquipmentFileTyTodayMapper todayMapper = SpringUtil.getBean(EquipmentFileTyTodayMapper.class);
             EquipmentFileTyTodayExample exampleFile = new EquipmentFileTyTodayExample();
             EquipmentFileTyTodayExample.Criteria caFile = exampleFile.createCriteria();
             caFile.andTpljEqualTo(tplj);
             caFile.andSbbhEqualTo(sbbh);
-            List<EquipmentFileTyToday> comment = todayMapper.selectByExample(exampleFile);
+            List<EquipmentFileTyToday> comment = todayMapperStatic.selectByExample(exampleFile);
             if(comment==null || comment.isEmpty()){
-                WaterEquipmentMapper waterEquipmentMapper = SpringUtil.getBean(WaterEquipmentMapper.class);
                 WaterEquipmentExample example = new WaterEquipmentExample();
                 WaterEquipmentExample.Criteria ca = example.createCriteria();
                 ca.andSbsnEqualTo(sbbh);
-                List<WaterEquipment> lists = waterEquipmentMapper.selectByExample(example);
+                List<WaterEquipment> lists = waterEquipmentMapperStatic.selectByExample(example);
                 if(lists==null || lists.isEmpty()){
                     data="设备编号不存在";
                     return data;
@@ -98,28 +125,26 @@ public class EquipmentFileTyShjService extends AbstractScanRequest{
                     tyEvent.setRq(wjmc.substring(0,4)+"-"+wjmc.substring(5,7)+"-"+wjmc.substring(8,10));
                     tyEvent.setTs(entity.getTs());
                     tyEvent.setBz(entity.getId());
-                    equipmentTyEventMapper.insert(tyEvent);
+                    equipmentTyEventMapperStatic.insert(tyEvent);
                 }else if("1018".equals(entity.getType())){//指针数据每秒
-                    PointerSecondService service = SpringUtil.getBean(PointerSecondService.class);
                     PointerSecondDto dto = new PointerSecondDto();
                     dto.setDecibelValue(entity.getTs());
                     dto.setCjsj(DateUtil.toDate(cjsj,"yyyy-MM-dd HH:mm:ss"));
                     dto.setSm(sbbh);
                     dto.setCreateTime(new Date());
                     dto.setBz(deptcode);
-                    service.save(dto);
+                    pointerSecondServiceStatic.save(dto);
                 }else if("1019".equals(entity.getType())){//指针数据每天
-                    PointerDayService service = SpringUtil.getBean(PointerDayService.class);
                     PointerDayDto dto = new PointerDayDto();
                     dto.setDecibelValue(entity.getTs());
                     dto.setCjsj(DateUtil.toDate(cjsj,"yyyy-MM-dd HH:mm:ss"));
                     dto.setSm(sbbh);
                     dto.setCreateTime(new Date());
                     dto.setBz(deptcode);
-                    service.save(dto);
+                    pointerDayServiceStatic.save(dto);
                 }
-                equipmentFileTyMapper.insert(entity);
-                todayMapper.insertEquipTy(entity);
+                equipmentFileTyMapperStatic.insert(entity);
+                todayMapperStatic.insertEquipTy(entity);
                 data="保存成功";
                 JSONObject result = new JSONObject();
                 result.put("data",data);
@@ -133,7 +158,7 @@ public class EquipmentFileTyShjService extends AbstractScanRequest{
             }
         }catch (Exception e){
             JSONObject result = new JSONObject();
-            result.put("data",data);
+            result.put("data",e.getMessage());
             return result.toJSONString();
         }
     }

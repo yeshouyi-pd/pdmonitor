@@ -59,23 +59,14 @@ public class ShjController{
                 ContainerSingleton.putInstance(methodname,shjRequest);
             }
             data = shjRequest.request(jsonObject.getJSONObject("data"));
-            if("EquipmentFileByTy".equals(methodname)){
-                JSONObject result = JSONObject.parseObject(data);
-                data = result.getString("data");
-                if("保存成功".equals(data)){
-                    JSONObject entity = result.getJSONObject("entity");
-                    entity.remove("sm1");
-                    WebSocketServer.sendInfo(entity.toJSONString(),null);
-                }
-            }
             if("EquipmentFile".equals(methodname)||"EquipmentFileByTy".equals(methodname)){
                 JSONObject result = JSONObject.parseObject(data);
                 data = result.getString("data");
                 if("保存成功".equals(data)){
                     JSONObject entity = result.getJSONObject("entity");
+                    //向页面推送数据
+                    WebSocketServer.sendInfo(entity.toJSONString(),null);
                     if(("A4001".equals(entity.getString("sbbh"))||"A4002".equals(entity.getString("sbbh"))||"A4003".equals(entity.getString("sbbh")))&&("1019".equals(entity.getString("type")))){
-                        //向页面推送数据
-                        WebSocketServer.sendInfo(entity.toJSONString(),null);
                         //发送短信
                         String templateId = "1018".equals(entity.getString("type"))?"1823144":"1847667";
                         String sbmc = "";
@@ -87,8 +78,8 @@ public class ShjController{
                             sbmc = "上游3";
                         }
                         SendSmsTool.sendSmsNotPhone(templateId,sbmc+"-"+entity.getString("ts")+"dB");
-                        entity.remove("sm1");
                     }
+                    entity.remove("sm1");
                 }
             }
             if("参数错误".equals(data) || data.contains("错误")){
