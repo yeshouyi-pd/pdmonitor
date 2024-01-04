@@ -38,6 +38,20 @@ public class EquipmentFileShjService extends AbstractScanRequest{
         redisTstaticemplate = redisTemplate;
     }
 
+    public  static AttrService attrService = SpringUtil.getBean(AttrService.class);
+    public  static   EquipmentFileMapper equipmentFileMapper = SpringUtil.getBean(EquipmentFileMapper.class);
+    public  static EquipmentFileTodayMapper todayMapper = SpringUtil.getBean(EquipmentFileTodayMapper.class);
+    public  static WaterEquipmentMapper waterEquipmentMapper = SpringUtil.getBean(WaterEquipmentMapper.class);
+    public  static EquipmentFileEventMapper equipmentFileEventMapper = SpringUtil.getBean(EquipmentFileEventMapper.class);
+
+    public  static   PointerSecondService pointerSecondService = SpringUtil.getBean(PointerSecondService.class);
+
+    public  static  PointerDayService pointerDayService = SpringUtil.getBean(PointerDayService.class);
+
+    public  static  CameraInfoService cameraInfoService = SpringUtil.getBean(CameraInfoService.class);
+    public  static  CameraMiddleService cameraMiddleService = SpringUtil.getBean(CameraMiddleService.class);
+
+    public  static  CodesetMapper codesetMapper = SpringUtil.getBean(CodesetMapper.class);
     /**
      * 设备文件
      * @param jsonParam
@@ -53,16 +67,15 @@ public class EquipmentFileShjService extends AbstractScanRequest{
             data = "参数错误";
             return data;
         }
-        AttrService attrService = SpringUtil.getBean(AttrService.class);
-        EquipmentFileMapper equipmentFileMapper = SpringUtil.getBean(EquipmentFileMapper.class);
-        EquipmentFileTodayMapper todayMapper = SpringUtil.getBean(EquipmentFileTodayMapper.class);
+
+
         EquipmentFileTodayExample exampleTodayFile = new EquipmentFileTodayExample();
         EquipmentFileTodayExample.Criteria caFile = exampleTodayFile.createCriteria();
         caFile.andTpljEqualTo(tplj);
         caFile.andSbbhEqualTo(sbbh);
         List<EquipmentFileToday> comment = todayMapper.selectByExample(exampleTodayFile);
         if(comment==null || comment.isEmpty()){
-            WaterEquipmentMapper waterEquipmentMapper = SpringUtil.getBean(WaterEquipmentMapper.class);
+
             WaterEquipmentExample example = new WaterEquipmentExample();
             WaterEquipmentExample.Criteria ca = example.createCriteria();
             ca.andSbsnEqualTo(sbbh);
@@ -115,7 +128,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                 String jssj = "1020".equals(entity.getType())||"1026".equals(entity.getType())?arr[7]+"-"+arr[8]+"-"+arr[9]+" "+arr[10]+":"+arr[11]+":"+arr[12]:arr[6]+"-"+arr[7]+"-"+arr[8]+" "+arr[9]+":"+arr[10]+":"+arr[11];
                 String eventsbsn = attrService.findByAttrKey("eventsbsn");
                 if(eventsbsn.contains(sbbh)){
-                    EquipmentFileEventMapper equipmentFileEventMapper = SpringUtil.getBean(EquipmentFileEventMapper.class);
+
                     EquipmentFileEvent fileEvent = new EquipmentFileEvent();
                     fileEvent.setId(UuidUtil.getShortUuid());
                     fileEvent.setSbbh(sbbh);
@@ -131,7 +144,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                     pushMqMsg(sbbh,entity.getSm1());
                 }else {
                     if(!kssj.equals(jssj)){
-                        EquipmentFileEventMapper equipmentFileEventMapper = SpringUtil.getBean(EquipmentFileEventMapper.class);
+
                         EquipmentFileEvent fileEvent = new EquipmentFileEvent();
                         fileEvent.setId(UuidUtil.getShortUuid());
                         fileEvent.setSbbh(sbbh);
@@ -153,27 +166,27 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                     }
                 }
             }else if("1018".equals(entity.getType())){//指针数据每秒
-                PointerSecondService service = SpringUtil.getBean(PointerSecondService.class);
+
                 PointerSecondDto dto = new PointerSecondDto();
                 dto.setDecibelValue(entity.getTs());
                 dto.setCjsj(DateUtil.toDate(cjsj,"yyyy-MM-dd HH:mm:ss"));
                 dto.setSm(sbbh);
                 dto.setCreateTime(new Date());
                 dto.setBz(deptcode);
-                service.save(dto);
+                pointerSecondService.save(dto);
             }else if("1019".equals(entity.getType())){//指针数据每天
-                PointerDayService service = SpringUtil.getBean(PointerDayService.class);
+
                 PointerDayDto dto = new PointerDayDto();
                 dto.setDecibelValue(entity.getTs());
                 dto.setCjsj(DateUtil.toDate(cjsj,"yyyy-MM-dd HH:mm:ss"));
                 dto.setSm(sbbh);
                 dto.setCreateTime(new Date());
                 dto.setBz(deptcode);
-                service.save(dto);
+                pointerDayService.save(dto);
             }
             String predationsbsn = attrService.findByAttrKey("predationsbsn");
             if(predationsbsn.contains(sbbh)&&tplj.contains("txt")&&("1001".equals(typeUtil.get(TypeUtils.TYPE))||"1007".equals(typeUtil.get(TypeUtils.TYPE)))){
-                //RedisTemplate redisTemplate = SpringUtil.getBean(RedisTemplate.class);
+
                 //判断是否是雾报(前后三分钟都没有报警的数据是雾报数据，雾报数据不保存)
                 EquipmentFile beforeEntity = new EquipmentFile();
                 LOG.error("缓存中的数据："+redisTstaticemplate.opsForValue().get(sbbh+"WB"));
@@ -231,7 +244,6 @@ public class EquipmentFileShjService extends AbstractScanRequest{
         Date begin = DateUtil.toDate(curDateStr,"yyyy-MM-dd HH:mm");
         Date end = DateUtil.toDate(nextDateStr,"yyyy-MM-dd HH:mm");
         long minute=(end.getTime()-begin.getTime())/(1000*60);//除以1000是为了转换成秒
-        AttrService attrService = SpringUtil.getBean(AttrService.class);
         String predationInterval = attrService.findByAttrKey("predationInterval");
         if(minute<=Integer.parseInt(predationInterval)){
             return true;
@@ -240,9 +252,8 @@ public class EquipmentFileShjService extends AbstractScanRequest{
     }
 
     public static void saveNewEvent(EquipmentFile record){
-        AttrService attrService = SpringUtil.getBean(AttrService.class);
-        CameraInfoService cameraInfoService = SpringUtil.getBean(CameraInfoService.class);
-        CameraMiddleService cameraMiddleService = SpringUtil.getBean(CameraMiddleService.class);
+
+
         List<CameraInfo> cameraInfoList = cameraInfoService.findBySbbh(record.getSbbh());
         for(CameraInfo cameraInfo: cameraInfoList){
             CameraMiddleDto cameraMiddle = new CameraMiddleDto();
@@ -272,7 +283,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
 
     public static void pushMqMsg(String sbbh,String jtnr){
         try {
-            CodesetMapper codesetMapper = SpringUtil.getBean(CodesetMapper.class);
+
             CodesetExample codesetExample = new CodesetExample();
             CodesetExample.Criteria codesetCa = codesetExample.createCriteria();
             codesetCa.andTypeEqualTo("15");
