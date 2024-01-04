@@ -101,6 +101,12 @@ public class CurrentMeterDto extends PageDto{
     */
     private String sm;
 
+    private Double uspeed;
+
+    private Double vspeed;
+
+    private Double zetaData;
+
     public String getId() {
         return id;
     }
@@ -253,6 +259,29 @@ public class CurrentMeterDto extends PageDto{
         this.sm = sm;
     }
 
+    public Double getUspeed() {
+        return uspeed;
+    }
+
+    public void setUspeed(Double uspeed) {
+        this.uspeed = uspeed;
+    }
+
+    public Double getVspeed() {
+        return vspeed;
+    }
+
+    public void setVspeed(Double vspeed) {
+        this.vspeed = vspeed;
+    }
+
+    public Double getZetaData() {
+        return zetaData;
+    }
+
+    public void setZetaData(Double zetaData) {
+        this.zetaData = zetaData;
+    }
 
     @Override
     public String toString() {
@@ -279,6 +308,9 @@ public class CurrentMeterDto extends PageDto{
             sb.append(", cjsj=").append(cjsj);
             sb.append(", bz=").append(bz);
             sb.append(", sm=").append(sm);
+            sb.append(", uspeed=").append(uspeed);
+            sb.append(", vspeed=").append(vspeed);
+            sb.append(", zetaData=").append(zetaData);
         sb.append("]");
         return sb.toString();
     }

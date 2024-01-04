@@ -82,6 +82,10 @@
             <th>24小时雨量(mm)</th>
             <th>测量雨量累加值(mm)</th>
             <th>太阳光强度(W/m2)</th>
+            <th>短波辐射</th>
+            <th>长波辐射</th>
+            <th>东向风速</th>
+            <th>北向风速</th>
             <th>采集时间</th>
           </tr>
           </thead>
@@ -98,6 +102,10 @@
             <td>{{meteorologicalData.dayrainfall}}</td>
             <td>{{meteorologicalData.rainfallaccumulation}}</td>
             <td>{{meteorologicalData.solarintensity}}</td>
+            <td>{{meteorologicalData.shortwave}}</td>
+            <td>{{meteorologicalData.longwave}}</td>
+            <td>{{meteorologicalData.uwindSpeed}}</td>
+            <td>{{meteorologicalData.vwindSpeed}}</td>
             <td>{{meteorologicalData.cjsj}}</td>
           </tr>
           </tbody>
@@ -159,18 +167,27 @@
         defaultShow:true,
         etime:'',
         stime:'',
-        cursbbh:'RPCDA4016',
+        cursbbh:'RPCDA4000',
         zdysbList:[
-          {key:"RPCDA4005", value:"3号航标"},
-          {key:"RPCDA4012", value:"4号航标"},
+          {key:"RPCDA4001", value:"8号航标"},
+          {key:"RPCDA4002", value:"珠海A4002"},
           {key:"RPCDA4003", value:"5号航标"},
+          {key:"RPCDA4004", value:"2号航标"},
+          {key:"RPCDA4005", value:"3号航标"},
+          {key:"RPCDA4006", value:"6号航标"},
+          {key:"RPCDA4007", value:"9号航标"},
+          {key:"RPCDA4008", value:"11号航标"},
+          {key:"RPCDA4009", value:"7号航标"},
+          {key:"RPCDA4010", value:"10号航标"},
+          {key:"RPCDA4011", value:"12号航标"},
+          {key:"RPCDA4012", value:"4号航标"},
+          {key:"RPCDA4013", value:"1号航标"},
+          {key:"RPCDA4014", value:"14号航标"},
+          {key:"RPCDA4015", value:"13号航标"},
+          {key:"RPCDA4016", value:"珠海A4016"},
           {key:"RPCDA4006-4", value:"平台4"},
           {key:"RPCDA4009-3", value:"平台3"},
-          {key:"RPCDA4001", value:"8号航标"},
-          {key:"RPCDA4010", value:"10号航标"},
-          {key:"RPCDA4008", value:"11号航标"},
-          {key:"RPCDA4002", value:"淇澳岛"},
-          {key:"RPCDA4016", value:"RPCDA4016"}
+          {key:"RPCDA4000", value:"三米标"}
         ]
       }
     },

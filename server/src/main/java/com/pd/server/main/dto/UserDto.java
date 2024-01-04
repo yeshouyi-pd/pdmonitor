@@ -77,6 +77,7 @@ public class UserDto  extends PageDto{
 
     private String newPwd;
 
+    private String xmbm;//项目编号
 
     public String getId() {
         return id;
@@ -284,6 +285,14 @@ public class UserDto  extends PageDto{
 
     public void setNewPwd(String newPwd) {
         this.newPwd = newPwd;
+    }
+
+    public String getXmbm() {
+        return xmbm;
+    }
+
+    public void setXmbm(String xmbm) {
+        this.xmbm = xmbm;
     }
 
     @Override

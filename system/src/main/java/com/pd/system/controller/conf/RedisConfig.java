@@ -36,6 +36,7 @@ public class RedisConfig  implements CommandLineRunner {
 
     public  static RedisTemplate  redisTstaticemplate;
 
+    public  static  UserVideoMapper userVideostaticMapper;
 
     public  static  UserMapper UserstaticMapper;
 
@@ -58,6 +59,9 @@ public class RedisConfig  implements CommandLineRunner {
     private UserMapper userMapper;
 
     @Resource
+    private UserVideoMapper userVideoMapper;
+
+    @Resource
     private MyDeptMapper myDeptMapper;
 
     @Resource
@@ -72,6 +76,7 @@ public class RedisConfig  implements CommandLineRunner {
         redisTstaticemplate = redisTemplate;
         deptstaticMapper    = deptMapper;
         UserstaticMapper = userMapper;
+        userVideostaticMapper = userVideoMapper;
         myDeptstaticMapper =myDeptMapper;
         attrstaticMapper =attrMapper;
         waterProEquipStaticMapper = waterProEquipMapper;
@@ -94,6 +99,7 @@ public class RedisConfig  implements CommandLineRunner {
         init_code();//加载部门缓存
         init_dept();//加载部门
         init_user();//加载用户缓存
+        init_uservideo();//加载用户缓存
         init_xmbhsbsn();//加载项目编号对应的设备编号
         init_attr();//加载系统参数
     }
@@ -184,6 +190,32 @@ public class RedisConfig  implements CommandLineRunner {
         return true;
 
     }
+
+    /**
+     *加载视频用户
+     * @return
+     */
+
+    public synchronized static boolean init_uservideo() {
+        try {
+            UserVideoExample example  = new  UserVideoExample();
+            UserVideoExample.Criteria ca = example.createCriteria();
+            List<UserVideo> list = userVideostaticMapper.selectByExample(example);
+            if(!CollectionUtils.isEmpty(list)){
+                Map<String, String>  map = new LinkedHashMap<String,String>();
+                for(UserVideo vo  :list){
+                    map.put(vo.getLoginName(),vo.getName());
+                }
+                redisTstaticemplate.opsForValue().set(RedisCode.USERVIDEOCODENAME, map);//将参数信息写入redis缓存
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+
+    }
+
     /**
      * 加载部门
      * @return

@@ -2,7 +2,9 @@ package com.pd.monitor.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.pd.monitor.utils.SendSmsTool;
 import com.pd.monitor.wx.conf.BaseWxController;
+import com.pd.monitor.wx.conf.WxRedisConfig;
 import com.pd.server.main.domain.EquipmentFileTy;
 import com.pd.server.main.domain.EquipmentFileTyToday;
 import com.pd.server.main.domain.EquipmentTyEvent;
@@ -38,6 +40,20 @@ public class EquipmentTyEventController extends BaseWxController {
     private EquipmentFileTyService equipmentFileTyService;
     @Resource
     private EquipmentFileTyTodayService equipmentFileTyTodayService;
+
+    @GetMapping("/sendMessage")
+    public ResponseDto sendMessage(){
+        ResponseDto responseDto = new ResponseDto();
+        Map<String, String> attrMap = WxRedisConfig.getAttrMap();
+        String tyPhone = attrMap.get("tyPhone");
+        Boolean falge = SendSmsTool.sendSms("2037275","",tyPhone);
+        if(falge){
+            responseDto.setSuccess(true);
+        }else{
+            responseDto.setSuccess(false);
+        }
+        return responseDto;
+    }
 
     @GetMapping("/getTodayEvent/{sbbh}")
     public ResponseDto getTodayEvent(@PathVariable String sbbh){

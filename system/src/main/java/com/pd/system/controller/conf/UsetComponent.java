@@ -53,4 +53,33 @@ public class UsetComponent {
         }
 
     }
+
+    @Scheduled(cron = "0 */2 * * * ?")
+    public void removeUservideoToken(){
+        Object userobject =  redisTemplate.opsForValue().get(RedisCode.ALLVIDEOUSER);
+        Map<String,String> usermap = new HashMap<String,String>();
+        if(null != userobject && userobject instanceof Map<?,?>){
+            usermap = (Map<String, String>) userobject;
+            if(!CollectionUtils.isEmpty(usermap)&&!CollectionUtils.isEmpty(usermap.entrySet())){
+                Iterator<Map.Entry<String, String>> iterator = usermap.entrySet().iterator();
+                while (iterator.hasNext()) {
+                    Map.Entry<String, String> entry = iterator.next();
+                    Object object = redisTemplate.opsForValue().get(entry.getValue());
+                    if(null == object){
+                        iterator.remove();
+                    }
+                }
+//                Set<Map.Entry<String, String>> entrySet = usermap.entrySet();
+//                for (Map.Entry<String, String> entry : entrySet) {
+//                    Object object = redisTemplate.opsForValue().get(entry.getValue());
+//                    if(null == object){
+//                        usermap.remove(entry.getKey());
+//                    }
+//                }
+                redisTemplate.opsForValue().set(RedisCode.ALLVIDEOUSER, usermap);
+            }
+
+        }
+
+    }
 }

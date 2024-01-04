@@ -106,7 +106,7 @@ public class MeteorologicalDataRevController {
             if(!StringUtils.isEmpty(jsonObject.get("sbbh"))){
                 meteorologicalDataDto.setBz(jsonObject.getString("sbbh"));
             }else{
-                meteorologicalDataDto.setBz("RPCDA4016");
+                meteorologicalDataDto.setBz("RPCDA4000");
             }
             meteorologicalDataService.save(meteorologicalDataDto);
         }catch (Exception e){

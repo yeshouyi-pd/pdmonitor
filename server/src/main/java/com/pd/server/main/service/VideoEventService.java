@@ -24,14 +24,16 @@ public class VideoEventService {
     /**
     * 列表查询
     */
-    public void list(PageDto pageDto) {
-    PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
-        VideoEventExample videoEventExample = new VideoEventExample();
-        List<VideoEvent> videoEventList = videoEventMapper.selectByExample(videoEventExample);
-        PageInfo<VideoEvent> pageInfo = new PageInfo<>(videoEventList);
-        pageDto.setTotal(pageInfo.getTotal());
-        List<VideoEventDto> videoEventDtoList = CopyUtil.copyList(videoEventList, VideoEventDto.class);
-        pageDto.setList(videoEventDtoList);
+    public List<VideoEvent> selectByExample(VideoEventExample example) {
+        return videoEventMapper.selectByExample(example);
+    }
+
+    public List<VideoEvent> selectByPage(VideoEventDto videoEventDto){
+        return videoEventMapper.selectByPage(videoEventDto);
+    }
+
+    public List<VideoEvent> selectByDp(VideoEventExample example,Integer limitNum) {
+        return videoEventMapper.selectByDp(example, limitNum);
     }
 
     /**
@@ -58,7 +60,7 @@ public class VideoEventService {
     * 更新
     */
     private void update(VideoEvent videoEvent) {
-        videoEventMapper.updateByPrimaryKey(videoEvent);
+        videoEventMapper.updateByPrimaryKeySelective(videoEvent);
     }
 
     /**
@@ -68,4 +70,11 @@ public class VideoEventService {
         videoEventMapper.deleteByPrimaryKey(id);
     }
 
+    public void updateItem(VideoEvent videoEvent){
+        videoEventMapper.updateByPrimaryKeySelective(videoEvent);
+    }
+
+    public void saveItem(VideoEvent videoEvent){
+        videoEventMapper.insert(videoEvent);
+    }
 }

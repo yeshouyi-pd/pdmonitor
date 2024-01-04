@@ -54,6 +54,10 @@ public class DataInvalidQuartz {
             }
             waterEquipmentService.updateZt(equipment);
         }
+        reqinterval = null;
+        reqintervalextend = null;
+        waterList.clear(); // 清空列表
+        System.gc();
     }
 
 }

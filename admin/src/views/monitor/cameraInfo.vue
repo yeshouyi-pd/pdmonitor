@@ -67,9 +67,9 @@
             <th>摄像头编号</th>
             <th>摄像头名称</th>
             <th>摄像头IP</th>
-            <th>摄像头端口</th>
-            <th>摄像头用户名</th>
-            <th>摄像头密码</th>
+            <th>NVR端口</th>
+            <th>NVR用户名</th>
+            <th>NVR密码</th>
             <th>通道号</th>
             <th>NVR的IP</th>
             <th>是否大屏显示</th>
@@ -155,17 +155,17 @@
                 <div class="col-sm-4">
                   <input v-model="cameraInfo.ip" class="form-control">
                 </div>
-                <label class="col-sm-2 control-label">端口号</label>
+                <label class="col-sm-2 control-label">NVR端口号</label>
                 <div class="col-sm-4">
                   <input v-model="cameraInfo.port" class="form-control">
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-2 control-label">摄像头用户名</label>
+                <label class="col-sm-2 control-label">NVR用户名</label>
                 <div class="col-sm-4">
                   <input v-model="cameraInfo.username" class="form-control">
                 </div>
-                <label class="col-sm-2 control-label">摄像头密码</label>
+                <label class="col-sm-2 control-label">NVR密码</label>
                 <div class="col-sm-4">
                   <input v-model="cameraInfo.camerapws" class="form-control">
                 </div>

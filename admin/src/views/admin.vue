@@ -18,7 +18,15 @@
                       <img style="height: 28px;margin-top: -8px;" src="/static/image/loginButtom.png"/>
                       中华白海豚种群数量分布定点声学监测平台V1.0
                     </small>
+                    <small  v-if="LOCAL_VIDEO">
+                      <img style="height: 28px;margin-top: -8px;" src="/static/image/loginButtom.png"/>
+                      中华白海豚种群数量分布视频监测平台V1.0
+                    </small>
                     <small  v-if="LOCAL_SSBRL">
+                      <img style="height: 40px;margin-top: -8px;" src="/static/image/RPCD512-1.png"/>
+                      水生哺乳类声影像智慧监测管理平台V1.0
+                    </small>
+                    <small  v-if="LOCAL_TLBHQ">
                       <img style="height: 40px;margin-top: -8px;" src="/static/image/RPCD512-1.png"/>
                       水生哺乳类声影像智慧监测管理平台V1.0
                     </small>
@@ -26,7 +34,7 @@
               </div>
               <div class="navbar-buttons navbar-header pull-right" role="navigation">
                   <ul class="nav ace-nav">
-                      <li class="light-blue dropdown-modal">
+                      <li class="light-blue dropdown-modal" v-if="LOCAL_ZHBHT || LOCAL_SSBRL || LOCAL_TLBHQ">
                         <router-link to="/admin/chooseProject">
                           <a class=" dropdown-toggle" style="cursor: pointer;">
                             <font color="white">返回项目选择</font>
@@ -42,7 +50,15 @@
                           </router-link>
                       </li>
 
-                      <li class="light-blue dropdown-modal"   v-if="LOCAL_SSBRL">
+                    <li class="light-blue dropdown-modal"   v-if="LOCAL_VIDEO">
+                      <router-link to="/mobile/environmentDp">
+                        <a class=" dropdown-toggle" style="cursor: pointer;">
+                          <font color="white">返回大屏</font>
+                        </a>
+                      </router-link>
+                    </li>
+
+                      <li class="light-blue dropdown-modal"   v-if="LOCAL_SSBRL || LOCAL_TLBHQ">
                         <router-link to="/mobile/largemonitors">
                           <a class=" dropdown-toggle" style="cursor: pointer;">
                             <font color="white">返回大屏</font>
@@ -57,18 +73,6 @@
                           </a>
                         </router-link>
                       </li>
-
-                      <li class="light-blue dropdown-modal" v-on:click="downloadVideo()">
-                          <a   class=" dropdown-toggle" style="cursor: pointer;">
-                              <font color="white">下载监控插件</font>
-                          </a>
-                      </li>
-
-<!--                      <li class="light-blue dropdown-modal" v-on:click="downloadOperationManual()">-->
-<!--                        <a   class=" dropdown-toggle" style="cursor: pointer;">-->
-<!--                          <font color="white">下载操作手册</font>-->
-<!--                        </a>-->
-<!--                      </li>-->
 
                       <li class="light-blue dropdown-modal">
                         <router-link to="/welcome">
@@ -271,7 +275,9 @@
               newPwd:'',
                 isRouterAlive:true,
               LOCAL_ZHBHT:LOCAL_ZHBHT,
-              LOCAL_SSBRL:LOCAL_SSBRL
+              LOCAL_SSBRL:LOCAL_SSBRL,
+              LOCAL_VIDEO:LOCAL_VIDEO,
+              LOCAL_TLBHQ:LOCAL_TLBHQ
             }
         },
         provide(){
@@ -349,7 +355,11 @@
             Loading.show();
             _this.loginUser.oldPwd = hex_md5(_this.oldPwd +KEY);
             _this.loginUser.newPwd = hex_md5(_this.newPwd +KEY);
-            _this.$ajax.post(process.env.VUE_APP_SERVER + '/system/admin/user/changePwd', _this.loginUser).then((response)=>{
+            let url = '/system/admin/user/changePwd';
+            if(_this.LOCAL_VIDEO){
+              url = '/system/admin/userVideo/changePwd';
+            }
+            _this.$ajax.post(process.env.VUE_APP_SERVER + url, _this.loginUser).then((response)=>{
               Loading.hide();
               let resp = response.data;
               if (resp.success) {
@@ -419,6 +429,10 @@
             logout(){
                 let _this  =this;
                 Loading.show();
+                let url = '/system/admin/user/logout';
+                if(_this.LOCAL_VIDEO){
+                  url = '/system/admin/userVideo/logout';
+                }
                 _this.$ajax.get(process.env.VUE_APP_SERVER + '/system/admin/user/logout/'+_this.loginUser.token).then((response)=>{
                     Loading.hide();
                     let resp = response.data;

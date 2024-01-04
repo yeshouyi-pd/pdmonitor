@@ -27,6 +27,9 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Aspect
 @Component
@@ -77,6 +80,7 @@ public class LogAspect {
         Field field;
         String businessName = "";
         String czr="";
+        String xmbh="";
         //直接java反射得到方法
         try {
             Method method= clazz.getMethod("getRequestHeader");
@@ -86,6 +90,12 @@ public class LogAspect {
                 if(null!= loginUserDto){
                     if(!StringUtils.isEmpty(loginUserDto.getLoginName())){
                         czr = loginUserDto.getLoginName();
+                        Map<String, List<String>> xmbhsbsns = loginUserDto.getXmbhsbsns();
+                        Set<String> xmbhs = xmbhsbsns.keySet();
+                        for(String tem : xmbhs){
+                            xmbh = tem;
+                            break;
+                        }
                     }
                 }
             }
@@ -132,7 +142,7 @@ public class LogAspect {
         if(!StringUtils.isEmpty(czr) && !StringUtils.isEmpty(businessName)){
             sysLogService.addLog(czr ,request.getRemoteAddr(),businessName+"["+thisurlMethod+"]",nameCn,
                     "1" ,"",JSONObject.toJSONString(arguments, excludefilter),"",
-                    "","1");
+                    "","1",xmbh);
         }
         LOG.info("请求参数: {}", JSONObject.toJSONString(arguments, excludefilter)); // 为空的会不打印，但是像图片等长字段也会打印
     }

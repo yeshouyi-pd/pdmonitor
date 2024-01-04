@@ -75,17 +75,31 @@
             return {
               zcStates:[],
               ycStates:[],
+              intervalId:'',
+              LOCAL_ZHBHT:LOCAL_ZHBHT,
+              LOCAL_VIDEO:LOCAL_VIDEO,
               waterEquipmentDto:{},
               restartinterval:10000
             }
         },
         mounted: function() {
           let _this = this;
+          if (_this.intervalId != null) {
+            clearInterval(_this.intervalId); //清除计时器
+            _this.intervalId = null; //设置为null
+          }
           _this.findByAttrKey();
           _this.getWaterState();
           _this.dataRefreh();
         },
-        methods: {
+        destroyed() {
+          let _this = this;
+          if (_this.intervalId != null) {
+            clearInterval(_this.intervalId); //清除计时器
+            _this.intervalId = null; //设置为null
+          }
+        },
+      methods: {
           findByAttrKey(){
             let _this = this;
             _this.$ajax.post(process.env.VUE_APP_SERVER + '/system/admin/attr/findByAttrKey/restartinterval').then((response)=>{
@@ -166,8 +180,10 @@
            */
           getWaterState(){
             let _this = this;
-            if("460100"!=Tool.getLoginUser().deptcode){
-              _this.waterEquipmentDto.xmbh = Tool.getLoginUser().xmbh;
+            if(!_this.LOCAL_ZHBHT && !_this.LOCAL_VIDEO){
+              if("460100"!=Tool.getLoginUser().deptcode){
+                _this.waterEquipmentDto.xmbh = Tool.getLoginUser().xmbh;
+              }
             }
             _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterEquiplog/getWaterState',_this.waterEquipmentDto).then((res) => {
               let response = res.data.content;

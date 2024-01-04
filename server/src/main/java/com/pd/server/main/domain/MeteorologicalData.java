@@ -34,6 +34,14 @@ public class MeteorologicalData {
 
     private String sm;
 
+    private Double shortwave;
+
+    private Double longwave;
+
+    private Double uwindSpeed;
+
+    private Double vwindSpeed;
+
     public String getId() {
         return id;
     }
@@ -146,6 +154,38 @@ public class MeteorologicalData {
         this.sm = sm;
     }
 
+    public Double getShortwave() {
+        return shortwave;
+    }
+
+    public void setShortwave(Double shortwave) {
+        this.shortwave = shortwave;
+    }
+
+    public Double getLongwave() {
+        return longwave;
+    }
+
+    public void setLongwave(Double longwave) {
+        this.longwave = longwave;
+    }
+
+    public Double getUwindSpeed() {
+        return uwindSpeed;
+    }
+
+    public void setUwindSpeed(Double uwindSpeed) {
+        this.uwindSpeed = uwindSpeed;
+    }
+
+    public Double getVwindSpeed() {
+        return vwindSpeed;
+    }
+
+    public void setVwindSpeed(Double vwindSpeed) {
+        this.vwindSpeed = vwindSpeed;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -166,6 +206,10 @@ public class MeteorologicalData {
         sb.append(", cjsj=").append(cjsj);
         sb.append(", bz=").append(bz);
         sb.append(", sm=").append(sm);
+        sb.append(", shortwave=").append(shortwave);
+        sb.append(", longwave=").append(longwave);
+        sb.append(", uwindSpeed=").append(uwindSpeed);
+        sb.append(", vwindSpeed=").append(vwindSpeed);
         sb.append("]");
         return sb.toString();
     }

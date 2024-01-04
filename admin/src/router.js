@@ -1,9 +1,11 @@
 import  Vue from "vue"
 import Router from "vue-router"
 import Login from  "./views/login.vue"
+import LoginVideo from "./views/loginVideo"
 import Admin from  "./views/admin.vue"
 import Welcome from  "./views/admin/welcome.vue"
 import User from  "./views/admin/user.vue"
+import UserVideo from  "./views/admin/userVideo.vue"
 import Resource from  "./views/admin/resource.vue"
 import Role from  "./views/admin/role.vue"
 import Dept from  "./views/admin/dept.vue"
@@ -75,6 +77,10 @@ import VideoNewDp from "./views/mobile/videoNewDp.vue";
 import WaterQualityNew from "./views/environment/waterQualityNew.vue";
 import WaveData from "./views/environment/waveData.vue";
 import EnvironmentNewDp from "./views/mobile/environmentNewDp";
+import VideoEvent from "./views/monitor/videoEvent.vue";
+import ForecastNum from "./views/monitor/forecastNum.vue";
+import SeaSurfaceSalinity from "./views/monitor/seaSurfaceSalinity.vue";
+import VideoTl from "./views/mobile/videoTl.vue";
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -90,13 +96,13 @@ export default new Router({
     base:process.env.BASE_URL,
     routes:[{
         path: "*",
-        redirect: "/login",
+        redirect: "/loginVideo",
     },{
         path: "",
-        redirect: "/login",
+        redirect: "/loginVideo",
     },{
-        path: "/login",
-        component:Login
+        path: "/loginVideo",
+        component:LoginVideo
     },{
         path: "/mobile/largemonitorsTy",
         component: LargemonitorsTy
@@ -118,6 +124,9 @@ export default new Router({
     },{
         path: "/mobile/videoNewDp",
         component: VideoNewDp
+    },{
+        path: "/mobile/videoTl",
+        component: VideoTl
     },{
         path: "/admin/chooseProject",
         name: "/admin/chooseProject",
@@ -159,6 +168,10 @@ export default new Router({
             path: "system/user",
             name:"system/user",
             component:User
+        },{
+            path: "system/userVideo",
+            name: "system/userVideo",
+            component:UserVideo
         },{
             path: "system/resource",
             name:"system/resource",
@@ -383,6 +396,18 @@ export default new Router({
             path: "environment/waveData",
             name: "environment/waveData",
             component: WaveData
+        },{
+            path: "monitor/videoEvent",
+            name: "monitor/videoEvent",
+            component: VideoEvent
+        },{
+            path: "monitor/forecastNum",
+            name: "monitor/forecastNum",
+            component: ForecastNum
+        },{
+            path: "monitor/seaSurfaceSalinity",
+            name: "monitor/seaSurfaceSalinity",
+            component: SeaSurfaceSalinity
         }]
     }]
 })

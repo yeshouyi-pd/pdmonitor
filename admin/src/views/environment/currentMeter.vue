@@ -34,6 +34,15 @@
                 <tbody  >
                 <tr  >
                   <td style="width: 15%" >
+                    所在位置：
+                  </td>
+                  <td style="width: 25%;">
+                    <select v-model="currentMeterDto.bz" class="form-control">
+                      <option value="" selected>请选择</option>
+                      <option v-for="(item,index) in zdysbList" :value="item.key">{{item.value}}</option>
+                    </select>
+                  </td>
+                  <td style="width: 15%" >
                     采集日期：
                   </td>
                   <td style="width: 25%;">
@@ -77,12 +86,15 @@
             <th>Abs倾斜度</th>
             <th>最大倾斜度</th>
             <th>标准倾斜度</th>
+            <th>东向流速</th>
+            <th>北向流速</th>
+            <th>海面高度</th>
             <th>采集时间</th>
           </tr>
           </thead>
           <tbody>
           <tr v-for="currentMeter in currentMeters">
-            <td>{{currentMeter.bz}}</td>
+            <td>{{zdysbList|optionKVArray(currentMeter.bz)}}</td>
             <td>{{currentMeter.productNumber}}</td>
             <td>{{currentMeter.serialNumber}}</td>
             <td>{{currentMeter.absSpeed}}</td>
@@ -98,6 +110,9 @@
             <td>{{currentMeter.absTilt}}</td>
             <td>{{currentMeter.maxTilt}}</td>
             <td>{{currentMeter.stdTilt}}</td>
+            <td>{{currentMeter.uspeed}}</td>
+            <td>{{currentMeter.vspeed}}</td>
+            <td>{{currentMeter.zetaData}}</td>
             <td>{{currentMeter.cjsj}}</td>
           </tr>
           </tbody>
@@ -111,6 +126,14 @@
         <table style="font-size: 1.1em;width:100%;margin: 20px 0" class="text-right" >
           <tbody>
           <tr>
+            <td style="width: 15%" >
+              所在位置：
+            </td>
+            <td style="width: 25%;">
+              <select v-model="cursbbh" class="form-control">
+                <option v-for="(item,index) in zdysbList" :value="item.key">{{item.value}}</option>
+              </select>
+            </td>
             <td style="width:10%">
               采集日期：
             </td>
@@ -150,7 +173,29 @@ export default {
       currentMeterDto:{},
       defaultShow:true,
       etime:'',
-      stime:''
+      stime:'',
+      cursbbh:'RPCDA4000',
+      zdysbList:[
+        {key:"RPCDA4001", value:"8号航标"},
+        {key:"RPCDA4002", value:"珠海A4002"},
+        {key:"RPCDA4003", value:"5号航标"},
+        {key:"RPCDA4004", value:"2号航标"},
+        {key:"RPCDA4005", value:"3号航标"},
+        {key:"RPCDA4006", value:"6号航标"},
+        {key:"RPCDA4007", value:"9号航标"},
+        {key:"RPCDA4008", value:"11号航标"},
+        {key:"RPCDA4009", value:"7号航标"},
+        {key:"RPCDA4010", value:"10号航标"},
+        {key:"RPCDA4011", value:"12号航标"},
+        {key:"RPCDA4012", value:"4号航标"},
+        {key:"RPCDA4013", value:"1号航标"},
+        {key:"RPCDA4014", value:"14号航标"},
+        {key:"RPCDA4015", value:"13号航标"},
+        {key:"RPCDA4016", value:"珠海A4016"},
+        {key:"RPCDA4006-4", value:"平台4"},
+        {key:"RPCDA4009-3", value:"平台3"},
+        {key:"RPCDA4000", value:"三米标"}
+      ]
     }
   },
   mounted() {
@@ -174,6 +219,7 @@ export default {
       let obj = {};
       obj.stime = _this.stime;
       obj.etime = _this.etime;
+      obj.bz = _this.cursbbh;
       _this.$forceUpdate();
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/currentMeter/getAllDataByTime',obj).then((response)=>{
         Loading.hide();

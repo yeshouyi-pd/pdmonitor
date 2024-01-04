@@ -2,15 +2,18 @@
   <div class="wrap" id="app">
     <header style="position: relative;">
       <img src="/largemonitors/assets/imgs/headertitle.png" style="position: absolute;left: 30%;top:20px;width: 750px;">
-      <div class="lefttitle">
+      <div class="lefttitle" v-if="!LOCAL_VIDEO">
         <img src="/largemonitors/assets/imgs/左上角title.png" alt="" style="width: 220px;">
         <span>
           <div @click="chooseProject" style="cursor: pointer;">主页</div>
-          <div style="padding: 0 5px;">/</div>
-          <div @click="chooseEnvironment" style="cursor: pointer;">环境</div>
-          <div style="padding: 0 5px;">/</div>
-          <div @click="chooseVideo" style="cursor: pointer;">视频</div>
+<!--          <div style="padding: 0 5px;">/</div>-->
+<!--          <div @click="chooseEnvironment" style="cursor: pointer;">环境</div>-->
+<!--          <div style="padding: 0 5px;">/</div>-->
+<!--          <div @click="chooseVideo" style="cursor: pointer;">视频</div>-->
         </span>
+      </div>
+      <div class="lefttitle"  v-if="LOCAL_VIDEO"  style="top: 15px;left: 25px;color: #fff;display: flex;">
+        <div class="title-item" @click="chooseVideo">返回</div>
       </div>
     </header>
     <div class="content">
@@ -160,6 +163,7 @@ export default {
   components:{EquipmentAMap,Swiper},
   data: function (){
     return {
+      LOCAL_VIDEO:LOCAL_VIDEO,
       config: {
         headerBGC: "#1F2C94",
         oddRowBGC: "#1F2C94",
@@ -192,10 +196,10 @@ export default {
       videoData:[],
       videoHeight:140,
       a4Device:[],
-      curTopSbbh:'RPCDA4001',
-      curEventSbbh:'RPCDA4001',
+      curTopSbbh:'',
+      curEventSbbh:'',
       a4chart:null,
-      curBottomSbbh:'RPCDA4001',
+      curBottomSbbh:'',
       topDayType:'4',
       eventDayType:'3',
       canPlay:false,
@@ -217,7 +221,7 @@ export default {
     //获取所有的设备，因为要用到设备的位置
     _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getDevice').then((res)=>{
       let response = res.data;
-      _this.devices = response.content;
+      _this.devices = response.content.list;
       _this.$forceUpdate();
       _this.a4Device = response.content.a4List;
       _this.$forceUpdate();
@@ -248,7 +252,7 @@ export default {
       //_this.getSevenDayEvent();//左下角最近7天的总事件
       _this.getAlarmEventData();//右中最近7天的总事件
       _this.getRightTopData();//右上角获取当日声学侦测次数、事件(群次)、捕食次数
-      _this.getPointer();
+      //_this.getPointer();
     },
     getPointer(){
       let _this = this;
@@ -451,7 +455,7 @@ export default {
         _this.getAlarmEventData();//右中最近7天的总事件
         _this.getA4AndA2JL();//中间下方，获取A2设备和A4设备聚类
         _this.getRightTopData();//右上角获取当日声学侦测次数、事件(群次)、捕食次数
-        _this.getPointer();
+        //_this.getPointer();
         _this.getVideoDataNew();
       }, 300000);
     },
@@ -942,5 +946,15 @@ body {
 }
 /deep/.el-progress-circle__track {
   stroke: #061073;
+}
+.title-item{
+  width: 80px;
+  padding: 5px;
+  border: 1px solid #4AAFE3;
+  text-align: center;
+  font-size: 18px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #4AAFE3;
 }
 </style>

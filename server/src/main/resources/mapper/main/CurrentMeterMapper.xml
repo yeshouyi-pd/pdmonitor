@@ -21,6 +21,9 @@
     <result column="cjsj" jdbcType="TIMESTAMP" property="cjsj" />
     <result column="bz" jdbcType="VARCHAR" property="bz" />
     <result column="sm" jdbcType="VARCHAR" property="sm" />
+    <result column="uspeed" jdbcType="DOUBLE" property="uspeed" />
+    <result column="vspeed" jdbcType="DOUBLE" property="vspeed" />
+    <result column="zeta_data" jdbcType="DOUBLE" property="zetaData" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -82,7 +85,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, product_number, serial_number, abs_speed, direction, north, east, heading, tilt_x, 
-    tilt_y, sp_std, strength, ping_count, abs_tilt, max_tilt, std_tilt, cjsj, bz, sm
+    tilt_y, sp_std, strength, ping_count, abs_tilt, max_tilt, std_tilt, cjsj, bz, sm, uspeed, vspeed, zeta_data
   </sql>
   <select id="selectByExample" parameterType="com.pd.server.main.domain.CurrentMeterExample" resultMap="BaseResultMap">
     select
@@ -121,14 +124,14 @@
       tilt_y, sp_std, strength, 
       ping_count, abs_tilt, max_tilt, 
       std_tilt, cjsj, bz, 
-      sm)
+      sm, uspeed, vspeed, zeta_data)
     values (#{id,jdbcType=VARCHAR}, #{productNumber,jdbcType=VARCHAR}, #{serialNumber,jdbcType=VARCHAR}, 
       #{absSpeed,jdbcType=VARCHAR}, #{direction,jdbcType=VARCHAR}, #{north,jdbcType=VARCHAR}, 
       #{east,jdbcType=VARCHAR}, #{heading,jdbcType=VARCHAR}, #{tiltX,jdbcType=VARCHAR}, 
       #{tiltY,jdbcType=VARCHAR}, #{spStd,jdbcType=VARCHAR}, #{strength,jdbcType=VARCHAR}, 
       #{pingCount,jdbcType=VARCHAR}, #{absTilt,jdbcType=VARCHAR}, #{maxTilt,jdbcType=VARCHAR}, 
       #{stdTilt,jdbcType=VARCHAR}, #{cjsj,jdbcType=TIMESTAMP}, #{bz,jdbcType=VARCHAR}, 
-      #{sm,jdbcType=VARCHAR})
+      #{sm,jdbcType=VARCHAR}, #{uspeed,jdbcType=DOUBLE}, #{vspeed,jdbcType=DOUBLE}, #{zetaData,jdbcType=DOUBLE})
   </insert>
   <insert id="insertSelective" parameterType="com.pd.server.main.domain.CurrentMeter">
     insert into current_meter
@@ -190,6 +193,15 @@
       <if test="sm != null">
         sm,
       </if>
+      <if test="sm != null">
+        uspeed,
+      </if>
+      <if test="sm != null">
+        vspeed,
+      </if>
+      <if test="sm != null">
+        zeta_data,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -248,6 +260,15 @@
       </if>
       <if test="sm != null">
         #{sm,jdbcType=VARCHAR},
+      </if>
+      <if test="uspeed != null">
+        #{uspeed,jdbcType=DOUBLE},
+      </if>
+      <if test="vspeed != null">
+        #{vspeed,jdbcType=DOUBLE},
+      </if>
+      <if test="zetaData != null">
+        #{zetaData,jdbcType=DOUBLE},
       </if>
     </trim>
   </insert>
@@ -317,6 +338,15 @@
       <if test="record.sm != null">
         sm = #{record.sm,jdbcType=VARCHAR},
       </if>
+      <if test="record.uspeed != null">
+        uspeed = #{record.uspeed,jdbcType=DOUBLE},
+      </if>
+      <if test="record.vspeed != null">
+        vspeed = #{record.vspeed,jdbcType=DOUBLE},
+      </if>
+      <if test="record.zetaData != null">
+        zeta_data = #{record.zetaData,jdbcType=DOUBLE},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -342,7 +372,10 @@
       std_tilt = #{record.stdTilt,jdbcType=VARCHAR},
       cjsj = #{record.cjsj,jdbcType=TIMESTAMP},
       bz = #{record.bz,jdbcType=VARCHAR},
-      sm = #{record.sm,jdbcType=VARCHAR}
+      sm = #{record.sm,jdbcType=VARCHAR},
+      uspeed = #{record.uspeed,jdbcType=DOUBLE},
+      vspeed = #{record.vspeed,jdbcType=DOUBLE},
+      zeta_data = #{record.zetaData,jdbcType=DOUBLE}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -404,6 +437,15 @@
       <if test="sm != null">
         sm = #{sm,jdbcType=VARCHAR},
       </if>
+      <if test="uspeed != null">
+        uspeed = #{uspeed,jdbcType=DOUBLE},
+      </if>
+      <if test="vspeed != null">
+        vspeed = #{vspeed,jdbcType=DOUBLE},
+      </if>
+      <if test="zetaData != null">
+        zeta_data = #{zetaData,jdbcType=DOUBLE},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -426,7 +468,10 @@
       std_tilt = #{stdTilt,jdbcType=VARCHAR},
       cjsj = #{cjsj,jdbcType=TIMESTAMP},
       bz = #{bz,jdbcType=VARCHAR},
-      sm = #{sm,jdbcType=VARCHAR}
+      sm = #{sm,jdbcType=VARCHAR},
+      uspeed = #{uspeed,jdbcType=DOUBLE},
+      vspeed = #{vspeed,jdbcType=DOUBLE},
+      zeta_data = #{zetaData,jdbcType=DOUBLE}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

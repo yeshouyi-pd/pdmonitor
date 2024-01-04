@@ -6,9 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.HashMap;
 
 public class PushFile {
@@ -18,7 +15,7 @@ public class PushFile {
     public static void pushFile1(String fileurl){
         HashMap<String, Object> paramMap = new HashMap<>();
         try {
-           // long size = HttpUtil.downloadFile(fileurl, FileUtil.file("C:/file"));
+            HttpUtil.downloadFile(fileurl, FileUtil.file("C:/file"));
             String uploadUrl = "http://171.34.76.171:8880/sonar_dolphin/api/recognize/sonar_dolphin/record/acceptance_file"; // 远程服务器上传URL
             File file = new File("C:\\file\\"+fileurl.substring(fileurl.lastIndexOf("/")+1));
 

@@ -3,7 +3,7 @@ package com.pd.server.main.dto;
 
 import java.util.List;
 
-public class RoleDto {
+public class RoleDto extends PageDto{
 
     /**
      * id
