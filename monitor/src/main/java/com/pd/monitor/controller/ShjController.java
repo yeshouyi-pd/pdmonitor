@@ -1,6 +1,7 @@
 package com.pd.monitor.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.pd.monitor.utils.ContainerSingleton;
 import com.pd.monitor.utils.SendSmsTool;
 import com.pd.monitor.wx.conf.BaseWxController;
 import com.pd.monitor.wx.conf.WxRedisConfig;
@@ -9,6 +10,7 @@ import com.pd.server.config.CodeType;
 import com.pd.server.config.SpringUtil;
 import com.pd.server.main.domain.InterfaceLog;
 import com.pd.server.main.mapper.InterfaceLogMapper;
+import com.pd.server.main.service.PointerSecondService;
 import com.pd.server.main.service.shj.AbstractScanRequest;
 import com.pd.server.util.UuidUtil;
 import org.apache.commons.lang.StringUtils;
@@ -51,9 +53,11 @@ public class ShjController{
             if(null != checkpam){
                 return checkpam;
             }
-            String actionName = ShjJsonConstant.commandMap.get(methodname);
-            Class<?> shjClass =  Class.forName(actionName);
-            AbstractScanRequest shjRequest = (AbstractScanRequest)shjClass.getConstructor().newInstance();
+            AbstractScanRequest shjRequest = ContainerSingleton.singletonMap.get(methodname);
+            if(null ==  shjRequest){
+                shjRequest = (AbstractScanRequest) SpringUtil.getBean( ShjJsonConstant.commandMap.get(methodname));
+                ContainerSingleton.putInstance(methodname,shjRequest);
+            }
             data = shjRequest.request(jsonObject.getJSONObject("data"));
             if("EquipmentFileByTy".equals(methodname)){
                 JSONObject result = JSONObject.parseObject(data);

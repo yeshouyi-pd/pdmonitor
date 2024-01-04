@@ -16,11 +16,12 @@ public class PushFile {
     private static final Logger LOG = LoggerFactory.getLogger(PushFile.class);
 
     public static void pushFile1(String fileurl){
+        HashMap<String, Object> paramMap = new HashMap<>();
         try {
-            long size = HttpUtil.downloadFile(fileurl, FileUtil.file("C:/file"));
+           // long size = HttpUtil.downloadFile(fileurl, FileUtil.file("C:/file"));
             String uploadUrl = "http://171.34.76.171:8880/sonar_dolphin/api/recognize/sonar_dolphin/record/acceptance_file"; // 远程服务器上传URL
             File file = new File("C:\\file\\"+fileurl.substring(fileurl.lastIndexOf("/")+1));
-            HashMap<String, Object> paramMap = new HashMap<>();
+
             //文件上传只需将参数中的键指定（默认file），值设为文件对象即可，对于使用者来说，文件上传与普通表单提交并无区别
             paramMap.put("file", file);
             String result= HttpUtil.post(uploadUrl, paramMap);
@@ -28,6 +29,9 @@ public class PushFile {
             file.delete();
         }catch (Exception e){
             LOG.error("向江西赣江推送文件错误："+e.getMessage()+"---"+fileurl);
+        }finally {
+            paramMap.remove("file");
+
         }
     }
 

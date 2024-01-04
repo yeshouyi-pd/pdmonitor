@@ -1,5 +1,9 @@
 package com.pd.monitor.wx.wxutlis.utils;
 
+import com.pd.monitor.controller.DeviceMonitorDataShjService;
+import com.pd.server.main.service.shj.*;
+import org.apache.poi.ss.formula.functions.T;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,53 +45,53 @@ public class ShjJsonConstant {
     /**
      * 对应的操作名称与类的对应
      */
-    public static Map<String, String> commandMap = new HashMap<String, String>() {
+    public static Map<String, Class> commandMap = new HashMap<String, Class>() {
         private static final long serialVersionUID = 1L;
         {
             /**
              * 设备文件
              */
-            put("EquipmentFile", "com.pd.server.main.service.shj.EquipmentFileShjService");
+            put("EquipmentFile", EquipmentFileShjService.class);
             /**
              * 拖曳(A2)设备文件
              */
-            put("EquipmentFileByTy", "com.pd.server.main.service.shj.EquipmentFileTyShjService");
+            put("EquipmentFileByTy", EquipmentFileTyShjService.class);
             /**
              * 设备请求时间间隔
              */
-            put("ReqInterval", "com.pd.server.main.service.shj.ReqIntervalShjService");
+            put("ReqInterval", ReqIntervalShjService.class);
             /**
              * 设备心跳包
              */
-            put("WaterEquip", "com.pd.server.main.service.shj.WaterEquipShjService");
+            put("WaterEquip", WaterEquipShjService.class);
             /**
              * 非实时数据上传
              */
-            put("WaterRawfile", "com.pd.server.main.service.shj.WaterRawfileShjService");
+            put("WaterRawfile", WaterRawfileShjService.class);
             /**
              * 群次数据回传
              */
-            put("GroupEvent", "com.pd.server.main.service.shj.GroupEventShjService");
+            put("GroupEvent", GroupEventShjService.class);
             /**
              * 指针数据回传（每秒）
              */
-            put("PointerSecond", "com.pd.server.main.service.shj.PointerSecondShjService");
+            put("PointerSecond", PointerSecondShjService.class);
             /**
              * 指针数据回传（每天）
              */
-            put("PointerDay", "com.pd.server.main.service.shj.PointerDayShjService");
+            put("PointerDay", PointerDayShjService.class);
             /**
              * 设备监测数据回传
              */
-            put("DeviceMonitorData","com.pd.server.main.service.shj.DeviceMonitorDataShjService");
+            put("DeviceMonitorData", DeviceMonitorDataShjService.class);
             /**
              * 趸船gps
              */
-            put("PontoonGPS","com.pd.server.main.service.shj.PontoonGPSShjService");
+            put("PontoonGPS",PontoonGPSShjService.class);
             /**
              * 岸上视频剪切回调接口
              */
-            put("VideoEvent","com.pd.server.main.service.shj.VideoEventShjService");
+            put("VideoEvent",VideoEventShjService.class);
         }
     };
 
