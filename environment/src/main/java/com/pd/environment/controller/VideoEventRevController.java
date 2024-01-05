@@ -1,6 +1,7 @@
 package com.pd.environment.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.mysql.cj.log.Log;
 import com.pd.server.config.SpringUtil;
 import com.pd.server.main.domain.WaterEquipment;
 import com.pd.server.main.domain.WaterEquipmentExample;
@@ -44,6 +45,7 @@ public class VideoEventRevController {
     @PostMapping("/saveData")
     public ResponseDto saveData(@RequestBody JSONObject jsonObject) {
         ResponseDto responseDto = new ResponseDto();
+        LOG.error("算法分析到海豚后的回调数据："+jsonObject.toJSONString());
         try {
             if(!StringUtils.isEmpty(jsonObject.getString("sbbh"))){
                 responseDto.setCode("4000");
