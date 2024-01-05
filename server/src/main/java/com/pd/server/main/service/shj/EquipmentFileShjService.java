@@ -93,15 +93,12 @@ public class EquipmentFileShjService extends AbstractScanRequest{
             data = "参数错误";
             return data;
         }
-
-
         EquipmentFileTodayExample exampleTodayFile = new EquipmentFileTodayExample();
         EquipmentFileTodayExample.Criteria caFile = exampleTodayFile.createCriteria();
         caFile.andTpljEqualTo(tplj);
         caFile.andSbbhEqualTo(sbbh);
         List<EquipmentFileToday> comment = todayMapperStatic.selectByExample(exampleTodayFile);
         if(comment==null || comment.isEmpty()){
-
             WaterEquipmentExample example = new WaterEquipmentExample();
             WaterEquipmentExample.Criteria ca = example.createCriteria();
             ca.andSbsnEqualTo(sbbh);
@@ -154,7 +151,6 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                 String jssj = "1020".equals(entity.getType())||"1026".equals(entity.getType())?arr[7]+"-"+arr[8]+"-"+arr[9]+" "+arr[10]+":"+arr[11]+":"+arr[12]:arr[6]+"-"+arr[7]+"-"+arr[8]+" "+arr[9]+":"+arr[10]+":"+arr[11];
                 String eventsbsn = attrServiceStatic.findByAttrKey("eventsbsn");
                 if(eventsbsn.contains(sbbh)){
-
                     EquipmentFileEvent fileEvent = new EquipmentFileEvent();
                     fileEvent.setId(UuidUtil.getShortUuid());
                     fileEvent.setSbbh(sbbh);
@@ -170,7 +166,6 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                     pushMqMsg(sbbh,entity.getSm1());
                 }else {
                     if(!kssj.equals(jssj)){
-
                         EquipmentFileEvent fileEvent = new EquipmentFileEvent();
                         fileEvent.setId(UuidUtil.getShortUuid());
                         fileEvent.setSbbh(sbbh);
@@ -192,7 +187,6 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                     }
                 }
             }else if("1018".equals(entity.getType())){//指针数据每秒
-
                 PointerSecondDto dto = new PointerSecondDto();
                 dto.setDecibelValue(entity.getTs());
                 dto.setCjsj(DateUtil.toDate(cjsj,"yyyy-MM-dd HH:mm:ss"));
@@ -201,7 +195,6 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                 dto.setBz(deptcode);
                 pointerSecondServiceStatic.save(dto);
             }else if("1019".equals(entity.getType())){//指针数据每天
-
                 PointerDayDto dto = new PointerDayDto();
                 dto.setDecibelValue(entity.getTs());
                 dto.setCjsj(DateUtil.toDate(cjsj,"yyyy-MM-dd HH:mm:ss"));
@@ -212,7 +205,6 @@ public class EquipmentFileShjService extends AbstractScanRequest{
             }
             String predationsbsn = attrServiceStatic.findByAttrKey("predationsbsn");
             if(predationsbsn.contains(sbbh)&&tplj.contains("txt")&&("1001".equals(typeUtil.get(TypeUtils.TYPE))||"1007".equals(typeUtil.get(TypeUtils.TYPE)))){
-
                 //判断是否是雾报(前后三分钟都没有报警的数据是雾报数据，雾报数据不保存)
                 EquipmentFile beforeEntity = new EquipmentFile();
                 LOG.error("缓存中的数据："+redisTstaticemplate.opsForValue().get(sbbh+"WB"));
@@ -278,8 +270,6 @@ public class EquipmentFileShjService extends AbstractScanRequest{
     }
 
     public static void saveNewEvent(EquipmentFile record){
-
-
         List<CameraInfo> cameraInfoList = cameraInfoServiceStatic.findBySbbh(record.getSbbh());
         for(CameraInfo cameraInfo: cameraInfoList){
             CameraMiddleDto cameraMiddle = new CameraMiddleDto();
@@ -309,7 +299,6 @@ public class EquipmentFileShjService extends AbstractScanRequest{
 
     public static void pushMqMsg(String sbbh,String jtnr){
         try {
-
             CodesetExample codesetExample = new CodesetExample();
             CodesetExample.Criteria codesetCa = codesetExample.createCriteria();
             codesetCa.andTypeEqualTo("15");
