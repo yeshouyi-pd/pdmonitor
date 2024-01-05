@@ -86,6 +86,7 @@ public class VideoEventShjService extends AbstractScanRequest {
     }
 
     private void sendDataToAnalysis(VideoEvent videoEvent){
+        LOG.error("给算法发送数据-----------");
         VideoEventService videoEventService = SpringUtil.getBean(VideoEventService.class);
         try {
             Map<String, Object> requestParam = new HashMap<String, Object>();
