@@ -32,7 +32,7 @@ public class WaterEquipShjService extends AbstractScanRequest{
 
     private static final Logger LOG = LoggerFactory.getLogger(WaterEquipShjService.class);
 
-    private static final String key = "cf14f9b74227147206b3239500cbb7c0";
+    private static final String key = "39340ac3d444a24d3ef8a72b3089ec73";
 
 
     public static RedisTemplate redisTstaticemplate;
