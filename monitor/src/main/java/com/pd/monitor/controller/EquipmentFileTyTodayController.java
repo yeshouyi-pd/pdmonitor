@@ -48,7 +48,7 @@ public class EquipmentFileTyTodayController extends BaseWxController {
 //            ca.andDeptcodeIn(depts);
 //        }
         ca.andSbbhEqualTo(sbbh);
-        ca.andWjlxEqualTo("3");
+        ca.andTxtlxEqualTo("1");
         TyDataDto dto = equipmentFileTyTodayService.selectTyData(example);
         responseDto.setContent(dto);
         return responseDto;

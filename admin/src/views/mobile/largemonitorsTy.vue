@@ -156,7 +156,7 @@ export default {
           }else{
             let data = JSON.parse(msg.data);
             if(_this.curSbsn==data.sbbh){
-              if(data.wjlx=='3'){
+              if(data.txtlx=='1'){
                 _this.topData.cxcs++;
                 if(data.type=='1009'||data.type=='1007'){
                   _this.topData.bscs++;
