@@ -61,7 +61,7 @@ public class EquipmentFileTyController extends BaseWxController {
         if(!StringUtils.isEmpty(pageDto.getSbbh())){
             ca.andSbbhEqualTo(pageDto.getSbbh());
         }
-        ca.andWjlxEqualTo("3");
+        ca.andTxtlxEqualTo("1");
         example.setOrderByClause(" cjsj desc ");
         List<EquipmentFileTy> lists = new ArrayList<>();
         if(!StringUtils.isEmpty(pageDto.getXmbh())){
