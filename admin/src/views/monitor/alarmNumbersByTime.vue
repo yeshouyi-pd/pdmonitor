@@ -31,10 +31,14 @@
                     <i class="ace-icon fa fa-book"></i>
                     查询
                   </button>
-                  <a href="javascript:location.replace(location.href);"  class="btn btn-sm   btn-success btn-round">
+                  <a href="javascript:location.replace(location.href);"  class="btn btn-sm   btn-success btn-round" style="margin-right: 10px;">
                     <i class="ace-icon fa fa-refresh"></i>
                     重置
                   </a>
+                  <button type="button" v-on:click="exportExcel()" class="btn btn-sm btn-info btn-round" style="margin-right: 10px;">
+                    <i class="ace-icon fa fa-download"></i>
+                    导出
+                  </button>
                 </td>
               </tr>
               </tbody>
@@ -96,6 +100,26 @@ export default {
     _this.findDeviceInfo();
   },
   methods: {
+    exportExcel(){
+      let _this = this;
+      let paramsStr = "";
+      if("460100"==Tool.getLoginUser().deptcode){
+        paramsStr = "deptcode="+Tool.getLoginUser().deptcode;
+      }else{
+        paramsStr = "deptcode="+Tool.getLoginUser().deptcode+"&xmbh="+Tool.getLoginUser().xmbh;
+      }
+      if(Tool.isNotEmpty(_this.alarmNumbersDto.stime)){
+        paramsStr = paramsStr + "&stime="+_this.alarmNumbersDto.stime;
+      }
+      if(Tool.isNotEmpty(_this.alarmNumbersDto.etime)){
+        paramsStr = paramsStr + "&etime="+_this.alarmNumbersDto.etime;
+      }
+      if(Tool.isNotEmpty(_this.alarmNumbersDto.sbbh)){
+        paramsStr = paramsStr + "&sbbh="+_this.alarmNumbersDto.sbbh;
+      }
+      let url = process.env.VUE_APP_SERVER + '/monitor/export/exportAlarmEvent?'+paramsStr;
+      window.location.href = url;
+    },
     findDeviceInfo(){
       let _this = this;
       Loading.show();
