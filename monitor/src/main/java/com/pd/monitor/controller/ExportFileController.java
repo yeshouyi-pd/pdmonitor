@@ -4,10 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.pd.monitor.wx.conf.BaseWxController;
 import com.pd.server.config.RedisCode;
 import com.pd.server.main.domain.*;
-import com.pd.server.main.dto.EquipmentFileEventDto;
-import com.pd.server.main.dto.EquipmentTyEventDto;
-import com.pd.server.main.dto.LoginUserDto;
-import com.pd.server.main.dto.PredationNumDto;
+import com.pd.server.main.dto.*;
 import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
 import com.pd.server.main.service.*;
 import com.pd.server.util.DateUtil;
@@ -61,6 +58,199 @@ public class ExportFileController extends BaseWxController{
     private PointerDayService pointerDayService;
     @Resource
     private PointerSecondService pointerSecondService;
+    @Resource
+    private AppearNumbersService appearNumbersService;
+
+    /**
+     * 出现次数导出
+     */
+    @GetMapping("/exportAlarmNumber")
+    public void exportAlarmNumber(HttpServletRequest request, HttpServletResponse response){
+        try {
+            AppearNumbersDto dto = new AppearNumbersDto();
+            AppearNumbersExample example = new AppearNumbersExample();
+            AppearNumbersExample.Criteria ca = example.createCriteria();
+            if(!StringUtils.isEmpty(request.getParameter("stime"))){
+                ca.andFzGreaterThanOrEqualTo(request.getParameter("stime"));
+                dto.setStime(request.getParameter("stime"));
+            }
+            if(!StringUtils.isEmpty(request.getParameter("etime"))){
+                ca.andFzLessThanOrEqualTo(request.getParameter("etime"));
+                dto.setEtime(request.getParameter("etime"));
+            }
+            if(!StringUtils.isEmpty(request.getParameter("sbbh"))){
+                ca.andSbbhEqualTo(request.getParameter("sbbh"));
+                dto.setSbbh(request.getParameter("sbbh"));
+            }
+            example.setOrderByClause(" fz desc ");
+            List<AppearNumbers> appearNumbersList = new ArrayList<>();
+            if(!StringUtils.isEmpty(request.getParameter("xmbh"))){
+                dto.setXmbh(request.getParameter("xmbh"));
+                appearNumbersList = appearNumbersService.selectByExampleSpecial(dto);
+            }else{
+                appearNumbersList = appearNumbersService.list(example);
+            }
+            //导出
+            HSSFWorkbook workbook = new HSSFWorkbook();
+            //设置公共单元格样式
+            HSSFCellStyle cellStyleCommon = workbook.createCellStyle();
+            cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_LEFT);
+            cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+            // 创建一个工作表
+            String fileName = "出现次数(" + new Date().getTime() + ").xls";
+            HSSFSheet sheet = workbook.createSheet("出现次数");
+            // 自适应列宽度
+            sheet.autoSizeColumn(1, true);
+            sheet.setDefaultColumnWidth(18);
+            sheet.setDefaultRowHeight((short)(40*10));
+            // 添加表头行
+            HSSFRow titleRow = sheet.createRow(0);//第1行
+            List<String> titleStrList = Arrays.asList("监测点","设备名称","设备sn","出现时间","出现次数");
+            for(int i=0;i<titleStrList.size();i++){
+                HSSFCell cell = titleRow.createCell(i);
+                cell.setCellValue(titleStrList.get(i));
+                cell.setCellStyle(cellStyleCommon);
+            }
+            Map<String,String> mapDept = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.DEPTCODENAME);
+            WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
+            WaterEquipmentExample.Criteria caEquip = waterEquipmentExample.createCriteria();
+            caEquip.andSblbEqualTo("0001");
+            List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(waterEquipmentExample);
+            Map<String, String> mapSbxh = waterEquipmentList.stream().collect(Collectors.toMap(p -> p.getSbsn(), p -> p.getSbmc()));
+            for(int i=0;i<appearNumbersList.size();i++){
+                AppearNumbers appearNumbers = appearNumbersList.get(i);
+                HSSFRow comRow = sheet.createRow(i+1);
+                HSSFCell comCell0 = comRow.createCell(0);
+                comCell0.setCellValue(mapDept.get(appearNumbers.getDeptcode()));
+                comCell0.setCellStyle(cellStyleCommon);
+                HSSFCell comCell1 = comRow.createCell(1);
+                comCell1.setCellValue(mapSbxh.get(appearNumbers.getSbbh()));
+                comCell1.setCellStyle(cellStyleCommon);
+                HSSFCell comCell2 = comRow.createCell(2);
+                comCell2.setCellValue(appearNumbers.getSbbh());
+                comCell2.setCellStyle(cellStyleCommon);
+                HSSFCell comCell3 = comRow.createCell(3);
+                comCell3.setCellValue(appearNumbers.getFz());
+                comCell3.setCellStyle(cellStyleCommon);
+                HSSFCell comCell4 = comRow.createCell(4);
+                comCell4.setCellValue(appearNumbers.getAlarmNum());
+                comCell4.setCellStyle(cellStyleCommon);
+            }
+            response.setHeader("content-Type", "application/vnd.ms-excel");
+            // 下载文件的默认名称
+            String agent = request.getHeader("User-Agent");
+            if (agent.contains("MSIE") || agent.contains("Trident") || agent.contains("Edge")) {
+                response.setHeader("Content-Disposition",
+                        "attachment; filename=" + URLEncoder.encode(fileName, "UTF-8"));
+            } else {
+                response.setHeader("Content-Disposition",
+                        "attachment; filename=\"" + new String((fileName).getBytes("UTF-8"), "ISO-8859-1") + "\"");
+            }
+            response.setCharacterEncoding("utf-8");
+            ServletOutputStream out = response.getOutputStream();
+            workbook.write(out);
+            out.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 出现事件导出
+     */
+    @GetMapping("/exportAlarmEvent")
+    public void exportAlarmEvent(HttpServletRequest request, HttpServletResponse response){
+        try {
+            EquipmentFileAlarmEventDto dto = new EquipmentFileAlarmEventDto();
+            EquipmentFileAlarmEventExample example = new EquipmentFileAlarmEventExample();
+            EquipmentFileAlarmEventExample.Criteria ca = example.createCriteria();
+            if(!StringUtils.isEmpty(request.getParameter("sbbh"))){
+                ca.andSbbhEqualTo(request.getParameter("sbbh"));
+                dto.setSbbh(request.getParameter("sbbh"));
+            }
+            if(!StringUtils.isEmpty(request.getParameter("stime"))){
+                ca.andBjsjGreaterThanOrEqualTo(request.getParameter("stime"));
+                dto.setStime(request.getParameter("stime"));
+            }
+            if(!StringUtils.isEmpty(request.getParameter("etime"))){
+                ca.andBjsjLessThanOrEqualTo(request.getParameter("etime"));
+                dto.setEtime(request.getParameter("etime"));
+            }
+            example.setOrderByClause(" bjsj desc,xh desc ");
+            List<EquipmentFileAlarmEvent> equipmentFileAlarmEventList = new ArrayList<>();
+            if(!StringUtils.isEmpty(request.getParameter("xmbh"))){
+                dto.setXmbh(request.getParameter("xmbh"));
+                equipmentFileAlarmEventList = equipmentFileAlarmEventService.selectByExampleSpecial(dto);
+            }else{
+                equipmentFileAlarmEventList = equipmentFileAlarmEventService.list(example);
+            }
+            //导出
+            HSSFWorkbook workbook = new HSSFWorkbook();
+            //设置公共单元格样式
+            HSSFCellStyle cellStyleCommon = workbook.createCellStyle();
+            cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_LEFT);
+            cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+            // 创建一个工作表
+            String fileName = "出现事件(" + new Date().getTime() + ").xls";
+            HSSFSheet sheet = workbook.createSheet("出现事件");
+            // 自适应列宽度
+            sheet.autoSizeColumn(1, true);
+            sheet.setDefaultColumnWidth(18);
+            sheet.setDefaultRowHeight((short)(40*10));
+            // 添加表头行
+            HSSFRow titleRow = sheet.createRow(0);//第1行
+            List<String> titleStrList = Arrays.asList("监测点","设备名称","设备sn","出现时间","出现次数","事件次数");
+            for(int i=0;i<titleStrList.size();i++){
+                HSSFCell cell = titleRow.createCell(i);
+                cell.setCellValue(titleStrList.get(i));
+                cell.setCellStyle(cellStyleCommon);
+            }
+            Map<String,String> mapDept = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.DEPTCODENAME);
+            WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
+            WaterEquipmentExample.Criteria caEquip = waterEquipmentExample.createCriteria();
+            caEquip.andSblbEqualTo("0001");
+            List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(waterEquipmentExample);
+            Map<String, String> mapSbxh = waterEquipmentList.stream().collect(Collectors.toMap(p -> p.getSbsn(), p -> p.getSbmc()));
+            for(int i=0;i<equipmentFileAlarmEventList.size();i++){
+                EquipmentFileAlarmEvent alarmEvent = equipmentFileAlarmEventList.get(i);
+                HSSFRow comRow = sheet.createRow(i+1);
+                HSSFCell comCell0 = comRow.createCell(0);
+                comCell0.setCellValue(mapDept.get(alarmEvent.getDeptcode()));
+                comCell0.setCellStyle(cellStyleCommon);
+                HSSFCell comCell1 = comRow.createCell(1);
+                comCell1.setCellValue(mapSbxh.get(alarmEvent.getSbbh()));
+                comCell1.setCellStyle(cellStyleCommon);
+                HSSFCell comCell2 = comRow.createCell(2);
+                comCell2.setCellValue(alarmEvent.getSbbh());
+                comCell2.setCellStyle(cellStyleCommon);
+                HSSFCell comCell3 = comRow.createCell(3);
+                comCell3.setCellValue(alarmEvent.getEventTime());
+                comCell3.setCellStyle(cellStyleCommon);
+                HSSFCell comCell4 = comRow.createCell(4);
+                comCell4.setCellValue(alarmEvent.getAlarmNum());
+                comCell4.setCellStyle(cellStyleCommon);
+                HSSFCell comCell5 = comRow.createCell(5);
+                comCell5.setCellValue(1);
+                comCell5.setCellStyle(cellStyleCommon);
+            }
+            response.setHeader("content-Type", "application/vnd.ms-excel");
+            // 下载文件的默认名称
+            String agent = request.getHeader("User-Agent");
+            if (agent.contains("MSIE") || agent.contains("Trident") || agent.contains("Edge")) {
+                response.setHeader("Content-Disposition",
+                        "attachment; filename=" + URLEncoder.encode(fileName, "UTF-8"));
+            } else {
+                response.setHeader("Content-Disposition",
+                        "attachment; filename=\"" + new String((fileName).getBytes("UTF-8"), "ISO-8859-1") + "\"");
+            }
+            response.setCharacterEncoding("utf-8");
+            ServletOutputStream out = response.getOutputStream();
+            workbook.write(out);
+            out.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
     /**
      * 实时水下环境指针预警数据
