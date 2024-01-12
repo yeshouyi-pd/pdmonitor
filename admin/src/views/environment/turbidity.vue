@@ -73,7 +73,7 @@
             <th>所在位置</th>
             <th>浊度高量程</th>
             <th>浊度低量程</th>
-            <th>深度(m)</th>
+            <th>深度(bar)</th>
             <th>温度(℃)</th>
             <th>电导率(mS/cm)</th>
             <th>盐度(PSU)</th>
