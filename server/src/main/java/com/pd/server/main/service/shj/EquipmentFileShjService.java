@@ -291,6 +291,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                 String jssj = "1020".equals(record.getType())||"1026".equals(record.getType())?arr[7]+"-"+arr[8]+"-"+arr[9]+" "+arr[10]+":"+arr[11]+":"+arr[12]:arr[6]+"-"+arr[7]+"-"+arr[8]+" "+arr[9]+":"+arr[10]+":"+arr[11];
                 cameraMiddle.setJqsj(kssj+","+jssj);
             }
+            cameraMiddle.setSfjq("0");
             cameraMiddleServiceStatic.save(cameraMiddle);
         }
     }
