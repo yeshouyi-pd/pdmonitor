@@ -293,6 +293,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                 cameraMiddle.setJgsj("0");
             }
             cameraMiddle.setSfjq("0");
+            cameraMiddle.setBz("1");//默认预置位
             cameraMiddleServiceStatic.save(cameraMiddle);
         }
     }
