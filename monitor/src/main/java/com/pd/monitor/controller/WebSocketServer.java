@@ -92,7 +92,7 @@ public class WebSocketServer {
      * @throws IOException
      */
     public static void sendInfo(String message,String sid) throws IOException{
-        log.error("推送消息到窗口"+sid+",推送内容："+message);
+        //log.error("推送消息到窗口"+sid+",推送内容："+message);
         for (WebSocketServer item : webSocketSet){
             try {
                 //这里可以设定只推送给这个sid的，为null则全部推送

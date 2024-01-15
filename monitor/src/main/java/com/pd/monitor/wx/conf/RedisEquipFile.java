@@ -36,18 +36,20 @@ public class RedisEquipFile extends BaseWxController {
     @Scheduled(cron = "0 05 0 * * ? ")
     public void loopTemplate(){
         String predationsbsn = attrService.findByAttrKey("predationsbsn");
-        String[] arr = predationsbsn.split(",");
-        System.out.println("arr"+arr);
-        for(String sbbh : arr){
-            if(!StringUtils.isEmpty(redisTemplate.opsForValue().get(sbbh+"WB"))){
-                String entityJson = (String) redisTemplate.opsForValue().get(sbbh+"WB");
-                LOG.error("entityJson:" + entityJson);
-                EquipmentFile entity = JSONObject.parseObject(entityJson, EquipmentFile.class);
-                EquipmentFileToday lastFile = equipmentFileTodayMapper.selectLastOneBySbbh(sbbh);
-                if(!StringUtils.isEmpty(entity.getCjsj())&&!StringUtils.isEmpty(lastFile.getCjsj())&&isOverMinute(DateUtil.getFormatDate(lastFile.getCjsj(),"yyyy-MM-dd HH:mm:ss"),DateUtil.getFormatDate(entity.getCjsj(),"yyyy-MM-dd HH:mm:ss"))){
-                    equipmentFileMapper.insert(entity);
-                    equipmentFileTodayMapper.insertEquipFile(entity);
-                    redisTemplate.delete(sbbh+"WB");
+        if(!StringUtils.isEmpty(predationsbsn)){
+            String[] arr = predationsbsn.split(",");
+            System.out.println("arr"+arr);
+            for(String sbbh : arr){
+                if(!StringUtils.isEmpty(redisTemplate.opsForValue().get(sbbh+"WB"))){
+                    String entityJson = (String) redisTemplate.opsForValue().get(sbbh+"WB");
+                    LOG.error("entityJson:" + entityJson);
+                    EquipmentFile entity = JSONObject.parseObject(entityJson, EquipmentFile.class);
+                    EquipmentFileToday lastFile = equipmentFileTodayMapper.selectLastOneBySbbh(sbbh);
+                    if(!StringUtils.isEmpty(entity.getCjsj())&&!StringUtils.isEmpty(lastFile.getCjsj())&&isOverMinute(DateUtil.getFormatDate(lastFile.getCjsj(),"yyyy-MM-dd HH:mm:ss"),DateUtil.getFormatDate(entity.getCjsj(),"yyyy-MM-dd HH:mm:ss"))){
+                        equipmentFileMapper.insert(entity);
+                        equipmentFileTodayMapper.insertEquipFile(entity);
+                        redisTemplate.delete(sbbh+"WB");
+                    }
                 }
             }
         }
