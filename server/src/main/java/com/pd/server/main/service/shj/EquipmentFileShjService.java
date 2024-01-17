@@ -270,6 +270,10 @@ public class EquipmentFileShjService extends AbstractScanRequest{
     }
 
     public static void saveNewEvent(EquipmentFile record){
+        String[] arr = record.getTplj().substring(record.getTplj().lastIndexOf("/")+1,record.getTplj().lastIndexOf("_A4.txt")).split("_");
+        if(Integer.parseInt(arr[3])<6 || Integer.parseInt(arr[3])>19){
+            return;
+        }
         List<CameraInfo> cameraInfoList = cameraInfoServiceStatic.findBySbbh(record.getSbbh());
         for(CameraInfo cameraInfo: cameraInfoList){
             CameraMiddleDto cameraMiddle = new CameraMiddleDto();
@@ -282,11 +286,8 @@ public class EquipmentFileShjService extends AbstractScanRequest{
             cameraMiddle.setDvrip(cameraInfo.getDvrip());//所属DVR的IP（备用地址）
             if("1001,1007,1009,1010".contains(record.getType())){
                 cameraMiddle.setJgsj(attrServiceStatic.findByAttrKey("spjqjgsj"));//视频剪切间隔时间
-                String[] arr = record.getWjmc().split("_");
                 cameraMiddle.setJqsj(arr[0]+"-"+arr[1]+"-"+arr[2]+" "+arr[3]+":"+arr[4]+":"+arr[5]);//剪切时间
             }else if("1020,1022,1024,1026".contains(record.getType())){
-                String temp = record.getTplj().substring(record.getTplj().lastIndexOf("/")+1,record.getTplj().lastIndexOf("_A4.txt"));
-                String[] arr = temp.split("_");
                 String kssj = arr[0]+"-"+arr[1]+"-"+arr[2]+" "+arr[3]+":"+arr[4]+":"+arr[5];
                 String jssj = "1020".equals(record.getType())||"1026".equals(record.getType())?arr[7]+"-"+arr[8]+"-"+arr[9]+" "+arr[10]+":"+arr[11]+":"+arr[12]:arr[6]+"-"+arr[7]+"-"+arr[8]+" "+arr[9]+":"+arr[10]+":"+arr[11];
                 cameraMiddle.setJqsj(kssj+","+jssj);
