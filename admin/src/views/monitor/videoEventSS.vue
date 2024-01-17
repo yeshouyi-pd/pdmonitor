@@ -2,7 +2,7 @@
   <div>
     <div class="widget-box">
       <div class="widget-header">
-        <h4 class="widget-title">视频事件查询</h4>
+        <h4 class="widget-title">实时视频分析查询</h4>
       </div>
       <div class="widget-body">
         <div class="widget-main">
@@ -34,10 +34,10 @@
                     <i class="ace-icon fa fa-refresh"></i>
                     重置
                   </a>
-<!--                  <button type="button" v-on:click="exportExcle()" class="btn btn-sm btn-warning btn-round" style="margin-right: 10px;">-->
-<!--                    <i class="ace-icon fa fa-leaf"></i>-->
-<!--                    导出-->
-<!--                  </button>-->
+                  <!--                  <button type="button" v-on:click="exportExcle()" class="btn btn-sm btn-warning btn-round" style="margin-right: 10px;">-->
+                  <!--                    <i class="ace-icon fa fa-leaf"></i>-->
+                  <!--                    导出-->
+                  <!--                  </button>-->
                 </td>
               </tr>
               </tbody>
@@ -67,19 +67,9 @@
           <td>{{item.kssj}}</td>
           <td>{{item.jssj}}</td>
           <td>
-            <div v-if="LOCAL_VIDEO || LOCAL_ZHBHT" class="hidden-sm hidden-xs btn-group">
-              <button :id="item.id" v-on:click="watchVideo(item.sbbh,item.wjmc,'1')" class="btn btn-xs btn-info" style="margin-left: 10px;">
-                <i class="ace-icon fa  fa-video-camera bigger-120">查看原视频</i>
-              </button>
-              <button :id="'xz'+item.id" v-on:click="watchVideo(item.sbbh,item.wjmc,'0')" class="btn btn-xs btn-info" style="margin-left: 10px;">
-                <i class="ace-icon fa fa-volume-down bigger-120">查看分析视频</i>
-              </button>
-            </div>
-            <div v-if="LOCAL_SSBRL || LOCAL_TLBHQ" class="hidden-sm hidden-xs btn-group">
-              <button :id="item.id" v-on:click="watchVideo(item.sbbh,item.wjmc,'1')" class="btn btn-xs btn-info" style="margin-left: 10px;">
-                <i class="ace-icon fa  fa-video-camera bigger-120">查看视频</i>
-              </button>
-            </div>
+            <button v-on:click="watchVideo(item.sbbh,item.wjmc,'2')" class="btn btn-xs btn-info" style="margin-left: 10px;">
+              <i class="ace-icon fa fa-volume-down bigger-120">查看分析视频</i>
+            </button>
           </td>
         </tr>
         </tbody>
@@ -107,27 +97,6 @@
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
-    <div id="video-modal-explain" class="modal fade" tabindex="-1" role="dialog">
-      <div class="modal-dialog" role="document" style="width: 80%">
-        <div class="modal-content" style="width: 100%;margin: auto">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">分析视频回放</h4>
-          </div>
-          <div class="modal-body">
-            <video controls preload="auto" width="100%" height="350px" autoplay="autoplay" v-for="item in videoDatas">
-              <source :src="item.wjlj" type="video/mp4">
-            </video>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-white btn-default btn-round" data-dismiss="modal">
-              <i class="ace-icon fa fa-times"></i>
-              关闭
-            </button>
-          </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
   </div>
 </template>
 <script>
@@ -135,7 +104,7 @@ import Times from "../../components/times";
 import Pagination from "../../components/pagination";
 
 export default {
-  name: 'video-event',
+  name: 'video-event-ss',
   components: {Pagination,Times},
   data: function (){
     return {
@@ -145,11 +114,7 @@ export default {
       deptMap: [],
       waterEquipments: [],
       videoHeight:400,
-      LOCAL_ZHBHT:LOCAL_ZHBHT,
       userDto:null,
-      LOCAL_SSBRL:LOCAL_SSBRL,
-      LOCAL_TLBHQ:LOCAL_TLBHQ,
-      LOCAL_VIDEO:LOCAL_VIDEO,
       timeHandle:null,
       canPlay:false,
       videoDatas:[]
@@ -186,19 +151,6 @@ export default {
       }else{
         window.location.href = process.env.VUE_APP_SERVER + '/monitor/export/exportFileEvent?'+param.substring(1,param.length);
       }
-    },
-    //是否有视频
-    hasExplainVideo(id,sbbh,wjmc,sfysp){
-      let _this = this;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/videoEvent/videoList', {'sbbh':sbbh,'wjmc':wjmc,'sfysp':sfysp}).then((response)=> {
-        let resp = response.data;
-        let videoDatas = resp.content;
-        if(videoDatas.length>0){
-          $("#xz"+id).attr("style","display:block");
-        }else {
-          $("#xz"+id).attr("style","display:none");
-        }
-      })
     },
     //历史回放
     watchVideo(sbbh,wjmc,sfysp){
@@ -328,19 +280,12 @@ export default {
       Loading.show();
       _this.videoEventDto.page = page;
       _this.videoEventDto.size = _this.$refs.pagination.size;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/videoEvent/list', _this.videoEventDto).then((response)=>{
+      _this.videoEventDto.sfysp = 2;
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/videoEvent/listSs', _this.videoEventDto).then((response)=>{
         Loading.hide();
         let resp = response.data;
         _this.videoEvents = resp.content.list;
         _this.$refs.pagination.render(page, resp.content.total);
-        if(_this.LOCAL_ZHBHT || _this.LOCAL_VIDEO){
-          _this.$nextTick(function (){
-            for(let i=0;i<_this.videoEvents.length;i++){
-              let obj = _this.videoEvents[i];
-              _this.hasExplainVideo(obj.id,obj.sbbh,obj.wjmc,"0");
-            }
-          });
-        }
       })
     }
   }

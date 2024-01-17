@@ -64,6 +64,37 @@ public class VideoEventController {
     }
 
     /**
+     * 列表查询
+     */
+    @PostMapping("/listSs")
+    public ResponseDto listSs(@RequestBody VideoEventDto pageDto) {
+        ResponseDto responseDto = new ResponseDto();
+        PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
+        VideoEventExample example = new VideoEventExample();
+        VideoEventExample.Criteria ca = example.createCriteria();
+        if(!StringUtils.isEmpty(pageDto.getSbbh())){
+            ca.andSbbhEqualTo(pageDto.getSbbh());
+        }
+        if(!StringUtils.isEmpty(pageDto.getSfysp())){
+            ca.andSfyspEqualTo(pageDto.getSfysp());
+        }
+        if(!StringUtils.isEmpty(pageDto.getStime())){
+            ca.andRqLessThanOrEqualTo(pageDto.getStime());
+        }
+        if(!StringUtils.isEmpty(pageDto.getEtime())){
+            ca.andRqLessThanOrEqualTo(pageDto.getEtime());
+        }
+        example.setOrderByClause(" kssj desc ");
+        List<VideoEvent> videoEventList = videoEventService.selectByExample(example);
+        PageInfo<VideoEvent> pageInfo = new PageInfo<>(videoEventList);
+        pageDto.setTotal(pageInfo.getTotal());
+        List<VideoEventDto> videoEventDtoList = CopyUtil.copyList(videoEventList, VideoEventDto.class);
+        pageDto.setList(videoEventDtoList);
+        responseDto.setContent(pageDto);
+        return responseDto;
+    }
+
+    /**
     * 保存，id有值时更新，无值时新增
     */
     @PostMapping("/save")
