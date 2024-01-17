@@ -57,8 +57,7 @@ public class DownloadAudioController {
         List<EquipmentFile> lists = equipmentFileService.listAll(example);
         if (lists.size() != 0) {
             // 创建临时路径,存放压缩文件
-            String picStorePath = (String) redisTemplate.opsForValue().get(RedisCode.STATICPATH);//静态路径地址
-            String zipFilePath = picStorePath+"\\我的zip.zip";
+            String zipFilePath = attrService.findByAttrKey("downloadPath")+"\\我的zip.zip";
             // 压缩输出流,包装流,将临时文件输出流包装成压缩流,将所有文件输出到这里,打成zip包
             ZipOutputStream zipOut = new ZipOutputStream(new FileOutputStream(zipFilePath));
             // 循环调用压缩文件方法,将一个一个需要下载的文件打入压缩文件包
@@ -111,8 +110,7 @@ public class DownloadAudioController {
 //        paths.add("C:\\Users\\Administrator\\Desktop\\2022_09_28_09_24_06_2022_09_28_09_24_08_1_A2_TD33.mp4");
         if (lists.size() != 0) {
             // 创建临时路径,存放压缩文件
-            String picStorePath = (String) redisTemplate.opsForValue().get(RedisCode.STATICPATH);//静态路径地址
-            String zipFilePath = "D:\\file\\我的zip.zip";
+            String zipFilePath = attrService.findByAttrKey("downloadPath")+"\\我的zip.zip";
             // 压缩输出流,包装流,将临时文件输出流包装成压缩流,将所有文件输出到这里,打成zip包
             ZipOutputStream zipOut = new ZipOutputStream(new FileOutputStream(zipFilePath));
             // 循环调用压缩文件方法,将一个一个需要下载的文件打入压缩文件包
