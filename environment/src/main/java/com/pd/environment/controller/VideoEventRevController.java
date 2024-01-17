@@ -83,18 +83,22 @@ public class VideoEventRevController {
             videoEventDto.setRq(videoEventDto.getKssj().substring(0,10));
             videoEventDto.setWjlj(wjlj);
             videoEventDto.setWjmc(wjmclj.substring(0,39));
-            videoEventDto.setSfysp(0);//不是原始视频
+            videoEventDto.setSfysp(!StringUtils.isEmpty(jsonObject.getString("sssp"))?2:0);//0分析视频2实时视频
             videoEventDto.setBz(lists.get(0).getDeptcode());
             videoEventService.save(videoEventDto);
             responseDto.setCode("0000");
             responseDto.setSuccess(true);
             responseDto.setMessage("保存成功");
-            return responseDto;
         }catch (Exception e){
             responseDto.setCode("2001");
             responseDto.setSuccess(false);
             responseDto.setMessage("系统出错，请联系管理员");
             return responseDto;
+        }finally {
+
         }
+        return responseDto;
     }
+
+
 }

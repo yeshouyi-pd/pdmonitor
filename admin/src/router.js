@@ -81,6 +81,7 @@ import VideoEvent from "./views/monitor/videoEvent.vue";
 import ForecastNum from "./views/monitor/forecastNum.vue";
 import SeaSurfaceSalinity from "./views/monitor/seaSurfaceSalinity.vue";
 import VideoTl from "./views/mobile/videoTl.vue";
+import VideoEventSS from "./views/monitor/videoEventSS.vue";
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -408,6 +409,10 @@ export default new Router({
             path: "monitor/seaSurfaceSalinity",
             name: "monitor/seaSurfaceSalinity",
             component: SeaSurfaceSalinity
+        },{
+            path: "monitor/videoEventSS",
+            name: "monitor/videoEventSS",
+            component: VideoEventSS
         }]
     }]
 })
