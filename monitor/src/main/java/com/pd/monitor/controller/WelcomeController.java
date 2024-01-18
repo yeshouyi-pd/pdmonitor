@@ -72,7 +72,7 @@ public class WelcomeController extends BaseWxController{
         VideoEventExample example = new VideoEventExample();
         VideoEventExample.Criteria ca = example.createCriteria();
         if(!StringUtils.isEmpty(videoEventDto.getSbbh())){
-            ca.andSbbhEqualTo(videoEventDto.getSbbh());
+            ca.andSbbhIn(Arrays.asList(videoEventDto.getSbbh().split(",")));
         }
         if(!StringUtils.isEmpty(videoEventDto.getWjmc())){
             ca.andWjmcEqualTo(videoEventDto.getWjmc());
@@ -92,64 +92,6 @@ public class WelcomeController extends BaseWxController{
         List<VideoEvent> lists = videoEventService.selectByDp(example, limitNum);
         responseDto.setContent(lists);
         return responseDto;
-    }
-
-    /**
-     * 大屏 捕食行为
-     */
-    @PostMapping("/predationStatistics")
-    public ResponseDto predationStatistics(@RequestBody EquipmentFileDto equipmentFileDto){
-        ResponseDto responseDto = new ResponseDto();
-        List<Map<String,Object>> resultList = new ArrayList<>();
-        LoginUserDto user = getRequestHeader();
-        List<String> list = getUpdeptcode(user.getDeptcode());
-        //查询出最近100条出现次数
-        EquipmentFileExample example = new EquipmentFileExample();
-        EquipmentFileExample.Criteria ca = example.createCriteria();
-        if(!StringUtils.isEmpty(list)&&list.size()>0){
-            ca.andDeptcodeIn(list);
-        }
-        if(!StringUtils.isEmpty(equipmentFileDto.getDeptcode())){
-            ca.andDeptcodeEqualTo(equipmentFileDto.getDeptcode());
-        }
-        if(!StringUtils.isEmpty(equipmentFileDto.getSbbh())){
-            ca.andSbbhEqualTo(equipmentFileDto.getSbbh());
-        }
-        if(!StringUtils.isEmpty(equipmentFileDto.getXmbh())){
-            if(!CollectionUtils.isEmpty(user.getXmbhsbsns().get(equipmentFileDto.getXmbh()))){
-                ca.andSbbhIn(user.getXmbhsbsns().get(equipmentFileDto.getXmbh()));
-            }
-        }
-        ca.andTpljLike("%png%");
-        example.setOrderByClause(" cjsj desc ");
-        List<EquipmentFile> allList = equipmentFileService.listBylimit(example);
-        List<EquipmentFile> predationList = allList.stream().filter(entity -> entity.getTplj().contains("predation")).collect(Collectors.toList());
-        Map<String,Object> resultMap = new HashMap<>();
-        resultMap.put("name", "捕食行为");
-        resultMap.put("value",predationList.size());
-        resultList.add(resultMap);
-        Map<String,Object> resultMap1 = new HashMap<>();
-        resultMap1.put("name", "侦测数据");
-        resultMap1.put("value",allList.size());
-        resultList.add(resultMap1);
-        responseDto.setContent(resultList);
-        return responseDto;
-    }
-
-    /**
-     * 计算结果百分比，保留2位小数
-     *
-     * @param v1 除数
-     * @param v2 被除数
-     * @return
-     */
-    private static String calculateResultOfPercent(double v1, double v2) {
-        if (v2 == 0) {
-            return "0%";
-        }
-
-        DecimalFormat df = new DecimalFormat("#.##");
-        return df.format(v1 / v2);
     }
 
     /**

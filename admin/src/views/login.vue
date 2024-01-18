@@ -10,7 +10,7 @@
         <div v-if="LOCAL_VIDEO" class="center" style="margin-top: 7%;margin-bottom: 4%">
           <span :style="'font-size:'+fontsize+'px'">
           <p>广东省中华白海豚国家重要湿地
-          <p>中华白海豚种群数量分布视频监测项目</p>
+          <p>中华白海豚环境耦合实时监测系统</p>
           </span>
         </div>
         <div v-if="LOCAL_SSBRL || LOCAL_TLBHQ" class="center" style="margin-top: 7%;margin-bottom: 5.5%">
@@ -81,7 +81,7 @@
         <span :style="'font-size:'+fontsize+'px'">
           <p v-if="LOCAL_ZHBHT || LOCAL_VIDEO">广东省中华白海豚国家重要湿地
           <p v-if="LOCAL_ZHBHT">中华白海豚种群数量分布定点声学监测项目</p>
-          <p v-if="LOCAL_VIDEO">中华白海豚种群数量分布视频监测项目</p>
+          <p v-if="LOCAL_VIDEO">中华白海豚环境耦合实时监测系统</p>
           <span v-if="LOCAL_SSBRL || LOCAL_TLBHQ">水生哺乳类声影像智慧监测管理平台V1.0</span>
         </span>
         </div>

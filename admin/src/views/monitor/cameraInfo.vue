@@ -65,14 +65,14 @@
             <th>设备sn</th>
             <th>所属机构</th>
             <th>摄像头编号</th>
-            <th>摄像头名称</th>
+            <th>设备名称</th>
             <th>摄像头IP</th>
-            <th>NVR端口</th>
+            <th>NVR剪切端口</th>
             <th>NVR用户名</th>
             <th>NVR密码</th>
             <th>通道号</th>
             <th>NVR的IP</th>
-            <th>是否大屏显示</th>
+            <th>预置位</th>
             <th>操作</th>
           </tr>
         </thead>
@@ -88,7 +88,7 @@
             <td>{{cameraInfo.camerapws}}</td>
             <td>{{cameraInfo.sbdk}}</td>
             <td>{{cameraInfo.dvrip}}</td>
-            <td><span v-if="cameraInfo.sm1==1">是</span><span v-else>否</span></td>
+            <td>{{cameraInfo.sm4}}</td>
             <td>
               <div class="hidden-sm hidden-xs btn-group">
                 <button v-on:click="edit(cameraInfo)" class="btn btn-xs btn-info">
@@ -145,7 +145,7 @@
                 <div class="col-sm-4">
                   <input v-model="cameraInfo.sm2" class="form-control" v-bind:disabled="cameraInfo.id">
                 </div>
-                <label class="col-sm-2 control-label">摄像头名称</label>
+                <label class="col-sm-2 control-label">设备名称</label>
                 <div class="col-sm-4">
                   <input v-model="cameraInfo.sm3" class="form-control" v-bind:disabled="cameraInfo.id">
                 </div>
@@ -155,7 +155,7 @@
                 <div class="col-sm-4">
                   <input v-model="cameraInfo.ip" class="form-control">
                 </div>
-                <label class="col-sm-2 control-label">NVR端口号</label>
+                <label class="col-sm-2 control-label">NVR剪切端口</label>
                 <div class="col-sm-4">
                   <input v-model="cameraInfo.port" class="form-control">
                 </div>
@@ -181,18 +181,9 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-2 control-label">是否大屏显示</label>
+                <label class="col-sm-2 control-label">预置位</label>
                 <div class="col-sm-4">
-                  <div class="radio">
-                    <label>
-                      <input name="form-field-radio" type="radio" class="ace"  value="0" v-model="cameraInfo.sm1"/>
-                      <span class="lbl">否</span>
-                    </label>
-                    <label>
-                      <input name="form-field-radio" type="radio" class="ace"  value="1" v-model="cameraInfo.sm1"/>
-                      <span class="lbl">是</span>
-                    </label>
-                  </div>
+                  <input v-model="cameraInfo.sm4" class="form-control">
                 </div>
               </div>
             </form>

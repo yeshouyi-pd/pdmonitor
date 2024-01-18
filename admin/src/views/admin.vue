@@ -20,7 +20,7 @@
                     </small>
                     <small  v-if="LOCAL_VIDEO">
                       <img style="height: 28px;margin-top: -8px;" src="/static/image/loginButtom.png"/>
-                      中华白海豚种群数量分布视频监测平台V1.0
+                      中华白海豚环境耦合实时监测系统
                     </small>
                     <small  v-if="LOCAL_SSBRL">
                       <img style="height: 40px;margin-top: -8px;" src="/static/image/RPCD512-1.png"/>

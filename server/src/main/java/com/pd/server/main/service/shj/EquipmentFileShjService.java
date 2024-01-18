@@ -290,11 +290,14 @@ public class EquipmentFileShjService extends AbstractScanRequest{
             }else if("1020,1022,1024,1026".contains(record.getType())){
                 String kssj = arr[0]+"-"+arr[1]+"-"+arr[2]+" "+arr[3]+":"+arr[4]+":"+arr[5];
                 String jssj = "1020".equals(record.getType())||"1026".equals(record.getType())?arr[7]+"-"+arr[8]+"-"+arr[9]+" "+arr[10]+":"+arr[11]+":"+arr[12]:arr[6]+"-"+arr[7]+"-"+arr[8]+" "+arr[9]+":"+arr[10]+":"+arr[11];
+                if(kssj.equals(jssj)){
+                    return;
+                }
                 cameraMiddle.setJqsj(kssj+","+jssj);
                 cameraMiddle.setJgsj("0");
             }
             cameraMiddle.setSfjq("0");
-            cameraMiddle.setBz("1");//默认预置位
+            cameraMiddle.setBz(cameraInfo.getSm4());//默认预置位
             cameraMiddleServiceStatic.save(cameraMiddle);
         }
     }

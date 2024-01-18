@@ -71,12 +71,12 @@ public class CameraInfoService {
     */
     private void insert(CameraInfo cameraInfo) {
         cameraInfo.setId(UuidUtil.getShortUuid());
-        CameraInfoExample example = new CameraInfoExample();
-        example.createCriteria().andSm2EqualTo(cameraInfo.getSm2());
-        List<CameraInfo> list = cameraInfoMapper.selectByExample(example);
-        if (!CollectionUtils.isEmpty(list)) {
-            throw new BusinessException(BusinessExceptionCode.DEPT_CODE_EXIST);
-        }
+//        CameraInfoExample example = new CameraInfoExample();
+//        example.createCriteria().andSm2EqualTo(cameraInfo.getSm2());
+//        List<CameraInfo> list = cameraInfoMapper.selectByExample(example);
+//        if (!CollectionUtils.isEmpty(list)) {
+//            throw new BusinessException(BusinessExceptionCode.DEPT_CODE_EXIST);
+//        }
         cameraInfoMapper.insert(cameraInfo);
     }
 

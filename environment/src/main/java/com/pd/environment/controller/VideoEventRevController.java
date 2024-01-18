@@ -85,6 +85,9 @@ public class VideoEventRevController {
             videoEventDto.setWjmc(wjmclj.substring(0,39));
             videoEventDto.setSfysp(!StringUtils.isEmpty(jsonObject.getString("sssp"))?2:0);//0分析视频2实时视频
             videoEventDto.setBz(lists.get(0).getDeptcode());
+            if(!StringUtils.isEmpty(jsonObject.getString("sxtip"))){//算法分析用
+                videoEventDto.setSxtip(jsonObject.getString("sxtip"));
+            }
             videoEventService.save(videoEventDto);
             responseDto.setCode("0000");
             responseDto.setSuccess(true);

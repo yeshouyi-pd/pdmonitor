@@ -71,16 +71,29 @@ export default {
       LOCAL_VIDEO:LOCAL_VIDEO,
       devices:[],
       videoEvents:[],
-      tdh:''
+      tdh:'',
+      sbbhSxt:'',
+      sbbhSxtList:[
+        {key:"1", value:"RPCDA4004,RPCDA4013"},
+        {key:"2", value:"RPCDA4005,RPCDA4012"},
+        {key:"3", value:"RPCDA4003"},
+        {key:"4", value:"RPCDA4006"},
+        {key:"5", value:"RPCDA4009"},
+        {key:"6", value:"RPCDA4001"},
+        {key:"7", value:"RPCDA4001,RPCDA4007"},
+        {key:"8", value:"RPCDA4010,RPCDA4008"},
+        {key:"9", value:"RPCDA4016"},
+        {key:"10", value:"RPCDA4016"}
+      ],
+      sbbh:''
     }
   },
   created() {
     let _this = this;
     if(!Tool.isEmpty(location.search)){
-      const query = location.search.substring(1); // 获取跳转路径参数字符串，去掉问号
-      const reg = new RegExp(`(^|&)tdh=([^&]*)(&|$)`); // 匹配id参数的正则表达式
-      const tdh = query.match(reg)[2]; // 获取跳转路径参数tdh的值
-      _this.tdh = tdh;
+      const params = new URLSearchParams(location.search);
+      _this.tdh = params.get("tdh");
+      _this.sbbhSxt = params.get("sbbh");
     }
     //获取所有的设备，因为要用到设备的位置
     _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getDevice').then((res)=>{
@@ -135,10 +148,12 @@ export default {
     },
     getExplainVideoEvent(){
       let _this = this;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/welcome/getExplainVideoEvent', {sfysp:0}).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/welcome/getExplainVideoEvent', {sfysp:0,sbbh:_this.optionKVArray(_this.sbbhSxtList,_this.sbbhSxt)}).then((response)=>{
         let resp = response.data;
         _this.videoEvents = resp.content;
-        _this.getPlayUrl(_this.videoEvents[0]);
+        if(_this.videoEvents.length()>0){
+          _this.getPlayUrl(_this.videoEvents[0]);
+        }
       })
     },
     back(){
@@ -168,6 +183,19 @@ export default {
           }
         }, '*')
       }, 1000)
+    },
+    optionKVArray(list, key){
+      if (!list || !key) {
+        return "";
+      } else {
+        let result = "";
+        for (let i = 0; i < list.length; i++) {
+          if (key === list[i]["key"]) {
+            result = list[i]["value"];
+          }
+        }
+        return result;
+      }
     }
   }
 }
