@@ -151,7 +151,7 @@ export default {
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/welcome/getExplainVideoEvent', {sfysp:0,sbbh:_this.optionKVArray(_this.sbbhSxtList,_this.sbbhSxt)}).then((response)=>{
         let resp = response.data;
         _this.videoEvents = resp.content;
-        if(_this.videoEvents.length()>0){
+        if(_this.videoEvents.length>0){
           _this.getPlayUrl(_this.videoEvents[0]);
         }
       })
