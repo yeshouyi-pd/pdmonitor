@@ -21,6 +21,8 @@ public class VideoEvent {
 
     private String sm;
 
+    private String sxtip;
+
     public String getId() {
         return id;
     }
@@ -101,6 +103,14 @@ public class VideoEvent {
         this.sm = sm;
     }
 
+    public String getSxtip() {
+        return sxtip;
+    }
+
+    public void setSxtip(String sxtip) {
+        this.sxtip = sxtip;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -117,6 +127,7 @@ public class VideoEvent {
         sb.append(", sfysp=").append(sfysp);
         sb.append(", bz=").append(bz);
         sb.append(", sm=").append(sm);
+        sb.append(", sxtip=").append(sxtip);
         sb.append("]");
         return sb.toString();
     }

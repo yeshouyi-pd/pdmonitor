@@ -57,7 +57,7 @@ public class CameraInfoController extends BaseWxController {
         if(!CollectionUtils.isEmpty(deptList)){
             ca.andDeptcodeIn(deptList);
         }
-        cameraInfoExample.setOrderByClause(" cjsj desc ");
+        cameraInfoExample.setOrderByClause(" sm2 ");
         List<CameraInfo> cameraInfoList = cameraInfoService.list(cameraInfoExample);
         PageInfo<CameraInfo> pageInfo = new PageInfo<>(cameraInfoList);
         pageDto.setTotal(pageInfo.getTotal());

@@ -12,6 +12,7 @@
     <result column="sfysp" jdbcType="INTEGER" property="sfysp" />
     <result column="bz" jdbcType="VARCHAR" property="bz" />
     <result column="sm" jdbcType="VARCHAR" property="sm" />
+    <result column="sxtip" jdbcType="VARCHAR" property="sxtip" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -72,7 +73,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, sbbh, kssj, jssj, rq, wjlj, wjmc, sfysp, bz, sm
+    id, sbbh, kssj, jssj, rq, wjlj, wjmc, sfysp, bz, sm, sxtip
   </sql>
   <select id="selectByExample" parameterType="com.pd.server.main.domain.VideoEventExample" resultMap="BaseResultMap">
     select
@@ -89,14 +90,14 @@
     </if>
   </select>
   <select id="selectByDp" resultMap="BaseResultMap">
-    select id, sbbh, kssj, jssj, rq, wjlj, wjmc, sfysp, bz, sm from video_event
+    select id, sbbh, kssj, jssj, rq, wjlj, wjmc, sfysp, bz, sm, sxtip from video_event
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
     order by kssj desc limit #{limitNum,jdbcType=INTEGER}
   </select>
   <select id="selectByPage"  parameterType="map" resultMap="BaseResultMap">
-    select a.id, a.sbbh, a.kssj, a.jssj, a.rq, a.wjlj, a.wjmc, a.sfysp, a.bz, a.sm  from video_event a
+    select a.id, a.sbbh, a.kssj, a.jssj, a.rq, a.wjlj, a.wjmc, a.sfysp, a.bz, a.sm, a.sxtip  from video_event a
     where a.sfysp=1 and a.id in (select max(c.id) from video_event c where c.sfysp=1 GROUP BY c.wjmc)
     <if test="record.sbbh != null and record.sbbh !=''">
       and a.sbbh = #{record.sbbh,jdbcType=VARCHAR}
@@ -128,10 +129,10 @@
   <insert id="insert" parameterType="com.pd.server.main.domain.VideoEvent">
     insert into video_event (id, sbbh, kssj, 
       jssj, rq, wjlj, wjmc, 
-      sfysp, bz, sm)
+      sfysp, bz, sm, sxtip)
     values (#{id,jdbcType=VARCHAR}, #{sbbh,jdbcType=VARCHAR}, #{kssj,jdbcType=VARCHAR}, 
       #{jssj,jdbcType=VARCHAR}, #{rq,jdbcType=VARCHAR}, #{wjlj,jdbcType=VARCHAR}, #{wjmc,jdbcType=VARCHAR}, 
-      #{sfysp,jdbcType=INTEGER}, #{bz,jdbcType=VARCHAR}, #{sm,jdbcType=VARCHAR})
+      #{sfysp,jdbcType=INTEGER}, #{bz,jdbcType=VARCHAR}, #{sm,jdbcType=VARCHAR}, #{sxtip,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.pd.server.main.domain.VideoEvent">
     insert into video_event
@@ -166,6 +167,9 @@
       <if test="sm != null">
         sm,
       </if>
+      <if test="sxtip != null">
+        sxtip,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -197,6 +201,9 @@
       </if>
       <if test="sm != null">
         #{sm,jdbcType=VARCHAR},
+      </if>
+      <if test="sxtip != null">
+        #{sxtip,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -239,6 +246,9 @@
       <if test="record.sm != null">
         sm = #{record.sm,jdbcType=VARCHAR},
       </if>
+      <if test="record.sxtip != null">
+        sxtip = #{record.sxtip,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -255,7 +265,8 @@
       wjmc = #{record.wjmc,jdbcType=VARCHAR},
       sfysp = #{record.sfysp,jdbcType=INTEGER},
       bz = #{record.bz,jdbcType=VARCHAR},
-      sm = #{record.sm,jdbcType=VARCHAR}
+      sm = #{record.sm,jdbcType=VARCHAR},
+      sxtip = #{record.sxtip,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -290,6 +301,9 @@
       <if test="sm != null">
         sm = #{sm,jdbcType=VARCHAR},
       </if>
+      <if test="sxtip != null">
+        sxtip = #{sxtip,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -303,7 +317,8 @@
       wjmc = #{wjmc,jdbcType=VARCHAR},
       sfysp = #{sfysp,jdbcType=INTEGER},
       bz = #{bz,jdbcType=VARCHAR},
-      sm = #{sm,jdbcType=VARCHAR}
+      sm = #{sm,jdbcType=VARCHAR},
+      sxtip = #{sxtip,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

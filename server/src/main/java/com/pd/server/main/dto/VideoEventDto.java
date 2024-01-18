@@ -53,6 +53,8 @@ public class VideoEventDto extends PageDto{
     */
     private String sm;
 
+    private String sxtip;
+
     private String xmbh;
 
     public String getId() {
@@ -135,6 +137,14 @@ public class VideoEventDto extends PageDto{
         this.sm = sm;
     }
 
+    public String getSxtip() {
+        return sxtip;
+    }
+
+    public void setSxtip(String sxtip) {
+        this.sxtip = sxtip;
+    }
+
     public String getXmbh() {
         return xmbh;
     }
@@ -159,6 +169,7 @@ public class VideoEventDto extends PageDto{
             sb.append(", sfysp=").append(sfysp);
             sb.append(", bz=").append(bz);
             sb.append(", sm=").append(sm);
+            sb.append(", sxtip=").append(sxtip);
         sb.append("]");
         return sb.toString();
     }

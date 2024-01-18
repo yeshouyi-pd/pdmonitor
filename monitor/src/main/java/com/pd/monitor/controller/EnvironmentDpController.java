@@ -50,7 +50,7 @@ public class EnvironmentDpController {
         if(!StringUtils.isEmpty(appearNumbersDto.getStime())){
             ca.andBjsjGreaterThanOrEqualTo(appearNumbersDto.getStime());
         }else{
-            ca.andBjsjLessThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(),-4),"yyyy-MM-dd"));
+            ca.andBjsjGreaterThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(),-4),"yyyy-MM-dd"));
         }
         if(!StringUtils.isEmpty(appearNumbersDto.getEtime())){
             ca.andBjsjLessThanOrEqualTo(appearNumbersDto.getEtime());

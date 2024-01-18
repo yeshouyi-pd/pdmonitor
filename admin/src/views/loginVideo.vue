@@ -4,7 +4,7 @@
         <div class="center" style="margin-top: 7%;margin-bottom: 4%">
           <span :style="'font-size:'+fontsize+'px'">
           <p>广东省中华白海豚国家重要湿地
-          <p>中华白海豚种群数量分布视频监测平台</p>
+          <p>中华白海豚环境耦合实时监测系统</p>
           </span>
         </div>
         <div id="login-box1" class="login-box visible widget-box no-border" style="width: 475px;margin-left: 55%;">
@@ -67,7 +67,7 @@
         <div class="center" style="margin-top: 15%">
         <span :style="'font-size:'+fontsize+'px'">
           <p>广东省中华白海豚国家重要湿地
-          <p>中华白海豚种群数量分布视频监测平台</p>
+          <p>中华白海豚环境耦合实时监测系统</p>
         </span>
         </div>
         <div id="login-box" class="login-box visible widget-box no-border" style="margin-top: 20%;">

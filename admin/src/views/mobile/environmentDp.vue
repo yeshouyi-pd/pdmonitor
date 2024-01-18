@@ -261,8 +261,8 @@ export default {
         {key:"RPCDA4010", value:"10号航标"},
         {key:"RPCDA4008", value:"11号航标"},
         {key:"RPCDA4002", value:"淇澳岛"},
-        {key:"RPCDA4016", value:"珠海A4016"},
-        {key:"RPCDA4000", value:"三米标"}
+        {key:"RPCDA4016", value:"三米标"},
+        {key:"RPCDA4000", value:"保护区楼顶气象站"}
       ],
       config: {
         headerBGC: "#054F7F",
@@ -363,7 +363,7 @@ export default {
     videoNew(){
       let _this = this;
       _this.clear();
-      window.location.href = "/mobile/videoNewDp";
+      window.location.href = "/mobile/videoNewDp?tdh=1&sbbh=1";
     },
     clickMapPoint(sbmc,sbbh){
       let _this = this;
@@ -373,7 +373,7 @@ export default {
         _this.getAlarmNum(sbbh);
       }else if(sbmc.includes("摄像头")){
         let tdh = _this.optionKVArray(_this.tdhList,sbbh);
-        window.location.href = "/mobile/videoNewDp?tdh="+tdh;
+        window.location.href = "/mobile/videoNewDp?tdh="+tdh+"&sbbh="+sbbh;
       }else {
         Toast.error("该站点没有数据！");
       }

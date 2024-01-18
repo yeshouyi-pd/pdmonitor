@@ -67,7 +67,7 @@
           <td>{{item.kssj}}</td>
           <td>{{item.jssj}}</td>
           <td>
-            <button v-on:click="watchVideo(item.sbbh,item.wjmc,'2')" class="btn btn-xs btn-info" style="margin-left: 10px;">
+            <button v-on:click="watchVideo(item.wjlj)" class="btn btn-xs btn-info" style="margin-left: 10px;">
               <i class="ace-icon fa fa-volume-down bigger-120">查看分析视频</i>
             </button>
           </td>
@@ -113,11 +113,12 @@ export default {
       videoEvents:[],
       deptMap: [],
       waterEquipments: [],
-      videoHeight:400,
+      videoHeight:500,
       userDto:null,
       timeHandle:null,
       canPlay:false,
-      videoDatas:[]
+      videoDatas:[],
+      wjlj:''
     }
   },
   mounted() {
@@ -153,98 +154,18 @@ export default {
       }
     },
     //历史回放
-    watchVideo(sbbh,wjmc,sfysp){
+    watchVideo(wjlj){
       let _this = this;
       $("#playbox").empty();
-      _this.canPlay = false;
-      Loading.show();
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/videoEvent/videoList', {'sbbh':sbbh,'wjmc':wjmc,'sfysp':sfysp}).then((response)=>{
-        let resp = response.data;
-        let videoDatas = resp.content;
-        if(videoDatas.length>0){
-          if(videoDatas.length>=2){
-            _this.videoHeight = '761';
-          }else{
-            _this.videoHeight = '400';
-          }
-          let isLast = false;
-          for(let i=0;i<videoDatas.length;i++){
-            let obj = videoDatas[i];
-            if(i==videoDatas.length-1){
-              isLast = true;
-            }
-            _this.getPlayUrl(obj.sbbh,obj.wjlj.substring(obj.wjlj.lastIndexOf("/")+1),isLast);
-          }
-        }else{
-          Loading.hide();
-          Toast.error("未找到对应视频！");
-        }
-      })
-    },
-    getPlayUrl(sbid,filename,isLast){
-      let _this = this;
-      let url = 'http://49.239.193.146:59088/FileInfo.asmx/GetPlayUrl';
-      if(_this.LOCAL_ZHBHT || _this.LOCAL_VIDEO){
-        url="http://49.239.193.146:59088/FileInfo.asmx/GetPlayUrl";
-      }else if(_this.LOCAL_TLBHQ){
-        url="http://111.38.21.161:7003/FileInfo.asmx/GetPlayUrl";
-      }
-      $.post(url,{"sbid": sbid,"filename":filename,"fbl":"1080","fhfs":"1"}, function (data, status) {
-        if(status&&!(data.getElementsByTagName('Mesg')[0].childNodes[0].nodeValue.includes('不存在')||data.getElementsByTagName('Mesg')[0].childNodes[0].nodeValue.includes('文件大小为0'))){
-          if(_this.fileExists(data.getElementsByTagName('PlayUrl')[0].childNodes[0].nodeValue)){
-            Loading.hide();
-            let video = document.createElement("video");
-            video.setAttribute("width","100%");
-            video.setAttribute("height","350px");
-            video.setAttribute("controls","controls");
-            if(Hls.isSupported()) {
-              let hls = new Hls();
-              hls.loadSource(data.getElementsByTagName('PlayUrl')[0].childNodes[0].nodeValue);
-              hls.attachMedia(video);
-              hls.on(Hls.Events.MANIFEST_PARSED,function() {
-                video.play();
-              });
-            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-              video.src = data.getElementsByTagName('PlayUrl')[0].childNodes[0].nodeValue;
-              video.addEventListener('loadedmetadata',function() {
-                video.play();
-              });
-            }
-            document.getElementById('playbox').appendChild(video);
-            $("#video-modal").modal("show");
-            _this.canPlay = true;
-          }else {
-            clearTimeout(_this.timeHandle);
-            _this.timeHandle = setTimeout(function (){_this.getPlayUrl(sbid,filename)}, 10000);
-          }
-        }else{
-          if(isLast&&!_this.canPlay){
-            Loading.hide();
-            Toast.error("未找到源文件或文件大小为0，无法转码！");
-          }
-        }
-      })
-    },
-    fileExists(url) {
-      let isFlag;
-      $.ajax({
-        url: url,
-        async: false,
-        type: 'HEAD',
-        error: function () {
-          isFlag=0;
-          return;
-        },
-        success: function () {
-          isFlag=1;
-          return;
-        }
-      });
-      if(isFlag==1){
-        return true;
-      }else{
-        return false;
-      }
+      _this.wjlj = wjlj;
+      let video = document.createElement("video");
+      video.setAttribute("width","100%");
+      video.setAttribute("height","450px");
+      video.setAttribute("controls","controls");
+      video.src = wjlj;
+      document.getElementById('playbox').appendChild(video);
+      $("#video-modal").modal("show");
+      video.play();
     },
     findDeviceInfo(){
       let _this = this;
