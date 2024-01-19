@@ -279,11 +279,11 @@ public class EquipmentFileShjService extends AbstractScanRequest{
             CameraMiddleDto cameraMiddle = new CameraMiddleDto();
             cameraMiddle.setSbbh(record.getSbbh());//设备编号
             cameraMiddle.setIp(cameraInfo.getIp());//摄像头ip
-            cameraMiddle.setPort(cameraInfo.getPort()+"");//摄像头端口号
-            cameraMiddle.setUsername(cameraInfo.getUsername());//摄像头用户名
-            cameraMiddle.setCamerapws(cameraInfo.getCamerapws());//摄像头密码
+            cameraMiddle.setPort(cameraInfo.getPort()+"");//nvr剪切端口
+            cameraMiddle.setUsername(cameraInfo.getUsername());//nvr用户名
+            cameraMiddle.setCamerapws(cameraInfo.getCamerapws());//nvr密码
             cameraMiddle.setTdh(cameraInfo.getSbdk()+"");//通道号
-            cameraMiddle.setDvrip(cameraInfo.getDvrip());//所属DVR的IP（备用地址）
+            cameraMiddle.setDvrip(cameraInfo.getDvrip());//nvrip
             if("1001,1007,1009,1010".contains(record.getType())){
                 cameraMiddle.setJgsj(attrServiceStatic.findByAttrKey("spjqjgsj"));//视频剪切间隔时间
                 cameraMiddle.setJqsj(arr[0]+"-"+arr[1]+"-"+arr[2]+" "+arr[3]+":"+arr[4]+":"+arr[5]);//剪切时间
