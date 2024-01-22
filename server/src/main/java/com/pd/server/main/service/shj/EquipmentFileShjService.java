@@ -215,12 +215,20 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                         equipmentFileMapperStatic.insert(beforeEntity);
                         todayMapperStatic.insertEquipFile(beforeEntity);
                         redisTstaticemplate.opsForValue().set(sbbh+"WB", JSONObject.toJSONString(entity));
+                        //白海豚写剪切视频的事件，李响读了去剪切视频
+                        if(("1001,1007,1009,1010,1020,1022,1024,1026".contains(beforeEntity.getType()))&&sbbh.contains("RPCD")){
+                            saveNewEvent(beforeEntity);
+                        }
                     }else{
                         try{
                             EquipmentFile lastFile = equipmentFileMapperStatic.selectLastOneBySbbh(sbbh);
                             if(!StringUtils.isEmpty(beforeEntity.getCjsj())&&!StringUtils.isEmpty(lastFile.getCjsj())&&isOverThreeMinute(DateUtil.getFormatDate(lastFile.getCjsj(),"yyyy-MM-dd HH:mm:ss"),DateUtil.getFormatDate(beforeEntity.getCjsj(),"yyyy-MM-dd HH:mm:ss"))){
                                 equipmentFileMapperStatic.insert(beforeEntity);
                                 todayMapperStatic.insertEquipFile(beforeEntity);
+                                //白海豚写剪切视频的事件，李响读了去剪切视频
+                                if(("1001,1007,1009,1010,1020,1022,1024,1026".contains(beforeEntity.getType()))&&sbbh.contains("RPCD")){
+                                    saveNewEvent(beforeEntity);
+                                }
                             }
                         }catch (Exception e){
                             LOG.error("错误："+e.getMessage());
