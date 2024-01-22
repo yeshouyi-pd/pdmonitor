@@ -279,7 +279,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
 
     public static void saveNewEvent(EquipmentFile record){
         LOG.error("剪切视频数据："+JSONObject.toJSONString(record));
-        String[] arr = record.getTplj().substring(record.getTplj().lastIndexOf("/")+1,record.getTplj().lastIndexOf("_A4.txt")).split("_");
+        String[] arr = record.getWjmc().split("_");
         if(Integer.parseInt(arr[3])<6 || Integer.parseInt(arr[3])>19){
             return;
         }
