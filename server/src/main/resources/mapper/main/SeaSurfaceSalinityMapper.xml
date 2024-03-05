@@ -69,6 +69,9 @@
   <sql id="Base_Column_List">
     id, img_url, tprq, bz, sm
   </sql>
+  <select id="selectLastOne" resultMap="BaseResultMap">
+    select id, img_url, tprq, bz, sm from sea_surface_salinity order by tprq desc limit 1
+  </select>
   <select id="selectByExample" parameterType="com.pd.server.main.domain.SeaSurfaceSalinityExample" resultMap="BaseResultMap">
     select
     <if test="distinct">

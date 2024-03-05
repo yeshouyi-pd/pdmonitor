@@ -39,7 +39,17 @@ public class EnvironmentDpController {
     private AppearNumbersService appearNumbersService;
     @Resource
     private ForecastNumService forecastNumService;
+    @Resource
+    private SeaSurfaceSalinityService seaSurfaceSalinityService;
 
+
+    @GetMapping("/getSeaSurfacePic")
+    public ResponseDto getSeaSurfacePic(){
+        ResponseDto responseDto = new ResponseDto();
+        SeaSurfaceSalinity seaSurfaceSalinity = seaSurfaceSalinityService.selectLastOne();
+        responseDto.setContent(seaSurfaceSalinity);
+        return responseDto;
+    }
 
     @PostMapping("/getHourCxcsBySbbh")
     public ResponseDto getHourCxcsBySbbh(@RequestBody AppearNumbersDto appearNumbersDto){

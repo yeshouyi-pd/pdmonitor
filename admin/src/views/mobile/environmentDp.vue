@@ -116,12 +116,13 @@
           <EquipmentAMap v-bind:height-max="heightMax" :click-map-point="clickMapPoint"></EquipmentAMap>
         </div>
         <div class="center-content-bottom">
-          <div class="title-name-div">
-            <span style="padding-top: 1%;">分析视频</span>
-          </div>
-          <div class="center-bottom-div">
-            <dv-scroll-board class="sc-div" :config="config" style="width:100% ;height:96%" ref="scrollBoard"/>
-          </div>
+<!--          <div class="title-name-div">-->
+<!--            <span style="padding-top: 1%;">分析视频</span>-->
+<!--          </div>-->
+<!--          <div class="center-bottom-div">-->
+<!--            <dv-scroll-board class="sc-div" :config="config" style="width:100% ;height:96%" ref="scrollBoard"/>-->
+<!--          </div>-->
+          <img :src="tempUrl" style="width: 100%;height: 100%;"/>
         </div>
       </div>
       <div class="right-div">
@@ -286,7 +287,8 @@ export default {
       ],
       dtimeList:['2023-10-25','2023-10-24','2023-10-23','2023-10-22','2023-10-21','2023-10-20','2023-10-19','2023-10-18','2023-10-17','2023-10-16','2023-10-15'],
       dtimeIndex:0,
-      dtime:''
+      dtime:'',
+      tempUrl:''
     }
   },
   mounted() {
@@ -302,6 +304,7 @@ export default {
       }
       _this.dtime = _this.dtimeList[_this.$xhHisData.index];
     }
+    _this.getSeaSurfacePic();
     _this.leftCenterData();
     _this.leftBottomData();
     _this.rightBottomData();
@@ -312,6 +315,13 @@ export default {
     window.getPlayUrl = _this.getPlayUrl;
   },
   methods: {
+    //获取海表盐度图片
+    getSeaSurfacePic(){
+      let _this = this;
+      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getSeaSurfacePic', {}).then((response)=>{
+        _this.tempUrl = response.data.content.imgUrl;
+      })
+    },
     changeData(){
       let _this = this;
       //_this.leftBottomData();
@@ -1107,7 +1117,7 @@ export default {
   letter-spacing: 2px;
 }
 .center-content-bottom{
-  height: calc(45vh - 115px);
+  height: calc(60vh - 115px);
   margin-top: 10px;
   background-color: #0F3A56;
 }

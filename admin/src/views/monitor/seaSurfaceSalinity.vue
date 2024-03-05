@@ -104,8 +104,8 @@
     </div><!-- /.modal -->
 
     <div id="form-modal1" class="modal fade" tabindex="-1" role="dialog">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
+      <div class="modal-dialog" role="document" style="width: 50%">
+        <div class="modal-content" style="width: 100%;margin: auto">
           <div class="modal-body">
             <img :src="tempUrl"/>
           </div>

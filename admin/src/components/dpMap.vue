@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div style="height: 55vh">
+    <div style="height: 40vh">
       <div id="equipmentamap" style="width:100%;height: 100%" ></div>
     </div>
   </div>
