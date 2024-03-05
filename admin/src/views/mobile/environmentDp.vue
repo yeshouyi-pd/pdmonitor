@@ -57,7 +57,7 @@
           </div>
           <div class="left-center">
             <div class="title-name-div" style="height: 10%">
-              <span style="padding-top:1%;">海流计监测数据</span>
+              <span style="padding-top:1%;">海流计监测数据 <b style="color: red">三米标</b></span>
             </div>
             <div class="center-content-div">
               <div class="center-content-item-first">
@@ -104,7 +104,7 @@
           </div>
           <div class="left-bottom">
             <div class="title-name-div">
-              <span>温盐度浊度仪数据</span>
+              <span>温盐度浊度仪数据 <b style="color: red">三米标</b></span>
             </div>
             <div class="bottom-content" id="leftBottomEchart"></div>
           </div>
@@ -128,7 +128,7 @@
         <div class="left-content-div" style="margin-top: 8%;">
           <div class="left-top">
             <div class="title-name-div" style="height: 20%;">
-              <span style="padding-top:0%;">气象数据</span>
+              <span style="padding-top:0%;">气象数据 <b style="color: red">三米标</b></span>
             </div>
             <div class="right-top-content" style="margin: 1% auto 0;">
               <div class="right-top-box">
@@ -179,13 +179,13 @@
           </div>
           <div class="left-center">
             <div class="title-name-div" style="height: 10%">
-              <span style="padding-top: 1%;">海浪数据</span>
+              <span style="padding-top: 1%;">海浪数据 <b style="color: red">{{zdysbList|optionKVArray(curSbbh)}}</b></span>
             </div>
             <div class="center-content-div" id="rightCenterEchart"></div>
           </div>
           <div class="left-bottom">
             <div class="title-name-div">
-              <span style="padding-top: 1%;">水质数据</span>
+              <span style="padding-top: 1%;">水质数据 <b style="color: red">{{zdysbList|optionKVArray(curSbbh)}}</b></span>
             </div>
             <div class="center-bottom-div" id="rightBottomEchart"></div>
           </div>

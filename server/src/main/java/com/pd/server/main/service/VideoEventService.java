@@ -21,6 +21,10 @@ public class VideoEventService {
     @Resource
     private VideoEventMapper videoEventMapper;
 
+    public VideoEvent selectById(String id){
+        return videoEventMapper.selectByPrimaryKey(id);
+    }
+
     /**
     * 列表查询
     */

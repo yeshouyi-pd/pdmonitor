@@ -107,27 +107,6 @@
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
-    <div id="video-modal-explain" class="modal fade" tabindex="-1" role="dialog">
-      <div class="modal-dialog" role="document" style="width: 80%">
-        <div class="modal-content" style="width: 100%;margin: auto">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">分析视频回放</h4>
-          </div>
-          <div class="modal-body">
-            <video controls preload="auto" width="100%" height="350px" autoplay="autoplay" v-for="item in videoDatas">
-              <source :src="item.wjlj" type="video/mp4">
-            </video>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-white btn-default btn-round" data-dismiss="modal">
-              <i class="ace-icon fa fa-times"></i>
-              关闭
-            </button>
-          </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
   </div>
 </template>
 <script>
@@ -152,7 +131,8 @@ export default {
       LOCAL_VIDEO:LOCAL_VIDEO,
       timeHandle:null,
       canPlay:false,
-      videoDatas:[]
+      videoDatas:[],
+      ischeck:false
     }
   },
   mounted() {
@@ -166,6 +146,10 @@ export default {
     //监听模态框关闭
     $('#video-modal').on('hidden.bs.modal', function () {
       clearTimeout(_this.timeHandle);
+      if(_this.ischeck){
+        _this.list(1);
+        _this.ischeck = false;
+      }
     });
   },
   methods: {
@@ -213,7 +197,7 @@ export default {
           if(videoDatas.length>=2){
             _this.videoHeight = '761';
           }else{
-            _this.videoHeight = '400';
+            _this.videoHeight = '450';
           }
           let isLast = false;
           for(let i=0;i<videoDatas.length;i++){
@@ -221,7 +205,7 @@ export default {
             if(i==videoDatas.length-1){
               isLast = true;
             }
-            _this.getPlayUrl(obj.sbbh,obj.wjlj.substring(obj.wjlj.lastIndexOf("/")+1),isLast);
+            _this.getPlayUrl(obj.sbbh,obj.wjlj.substring(obj.wjlj.lastIndexOf("/")+1),isLast,obj.sm,obj.id);
           }
         }else{
           Loading.hide();
@@ -229,7 +213,7 @@ export default {
         }
       })
     },
-    getPlayUrl(sbid,filename,isLast){
+    getPlayUrl(sbid,filename,isLast,sm,id){
       let _this = this;
       let url = 'http://49.239.193.146:59088/FileInfo.asmx/GetPlayUrl';
       if(_this.LOCAL_ZHBHT || _this.LOCAL_VIDEO){
@@ -242,6 +226,7 @@ export default {
           if(_this.fileExists(data.getElementsByTagName('PlayUrl')[0].childNodes[0].nodeValue)){
             Loading.hide();
             let video = document.createElement("video");
+            video.setAttribute("id","video"+id);
             video.setAttribute("width","100%");
             video.setAttribute("height","350px");
             video.setAttribute("controls","controls");
@@ -259,6 +244,26 @@ export default {
               });
             }
             document.getElementById('playbox').appendChild(video);
+            if(!Tool.isEmpty(sm)&&sm!='1'){
+              let div = document.createElement("div");
+              div.setAttribute("id","fx"+id);
+              div.setAttribute("style","margin-bottom:10px;");
+              div.innerHTML = "<button name='"+id+"' id=\"checkPass\" type=\"button\" class=\"btn btn-lg btn-success\" >\n" +
+                  "              <i class=\"ace-icon fa fa-check\"></i>\n" +
+                  "              核查通过\n" +
+                  "            </button>\n" +
+                  "            <button name='"+id+"' id=\"checkUnpass\" type=\"button\" class=\"btn btn-lg btn-danger\" style=\"margin-left:20px;\">\n" +
+                  "              <i class=\"ace-icon fa fa-times\"></i>\n" +
+                  "              核查不通过\n" +
+                  "            </button>";
+              document.getElementById('playbox').appendChild(div);
+              document.getElementById("checkPass").onclick = function (params) {
+                _this.checkSave(params.target.getAttribute('name'),'1');
+              }
+              document.getElementById("checkUnpass").onclick = function (params) {
+                _this.checkSave(params.target.getAttribute('name'),'2');
+              }
+            }
             $("#video-modal").modal("show");
             _this.canPlay = true;
           }else {
@@ -270,6 +275,25 @@ export default {
             Loading.hide();
             Toast.error("未找到源文件或文件大小为0，无法转码！");
           }
+        }
+      })
+    },
+    checkSave(id,sm){
+      let _this = this;
+      _this.ischeck = true;
+      Loading.show();
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/videoEvent/checkSave', {'id':id,'sm':sm}).then((response)=>{
+        Loading.hide();
+        let resp = response.data;
+        if(resp.success){
+          if(sm=='2'){
+            $("#video"+id).remove();
+          }
+          Toast.success("保存成功");
+          $("#fx"+id).empty();
+        }else{
+          Loading.hide();
+          Toast.error("保存失败");
         }
       })
     },
