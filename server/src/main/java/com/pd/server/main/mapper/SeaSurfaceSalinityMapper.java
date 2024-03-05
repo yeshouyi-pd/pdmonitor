@@ -16,6 +16,8 @@ public interface SeaSurfaceSalinityMapper {
 
     int insertSelective(SeaSurfaceSalinity record);
 
+    SeaSurfaceSalinity selectLastOne();
+
     List<SeaSurfaceSalinity> selectByExample(SeaSurfaceSalinityExample example);
 
     SeaSurfaceSalinity selectByPrimaryKey(String id);

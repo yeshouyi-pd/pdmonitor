@@ -21,6 +21,11 @@ public class SeaSurfaceSalinityService {
     @Resource
     private SeaSurfaceSalinityMapper seaSurfaceSalinityMapper;
 
+
+    public SeaSurfaceSalinity selectLastOne() {
+        return seaSurfaceSalinityMapper.selectLastOne();
+    }
+
     /**
     * 列表查询
     */
