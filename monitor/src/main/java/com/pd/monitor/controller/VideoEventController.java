@@ -28,6 +28,21 @@ public class VideoEventController {
     @Resource
     private VideoEventService videoEventService;
 
+    @PostMapping("/checkSave")
+    public ResponseDto checkSave(@RequestBody VideoEventDto videoEventDto){
+        ResponseDto responseDto = new ResponseDto();
+        if(!StringUtils.isEmpty(videoEventDto.getSm())&&"1".equals(videoEventDto.getSm())){
+            //核查通过
+            VideoEvent videoEvent = videoEventService.selectById(videoEventDto.getId());
+            videoEvent.setSm("1");
+            videoEventService.updateItem(videoEvent);
+        }else if(!StringUtils.isEmpty(videoEventDto.getSm())&&"2".equals(videoEventDto.getSm())){
+            //核查不通过
+            videoEventService.delete(videoEventDto.getId());
+        }
+        return responseDto;
+    }
+
     @PostMapping("/videoList")
     public ResponseDto videoList(@RequestBody VideoEventDto pageDto){
         ResponseDto responseDto = new ResponseDto();

@@ -76,6 +76,7 @@ public class VideoEventShjService extends AbstractScanRequest {
             if(!StringUtils.isEmpty(jsonParam.getString("ip"))){
                 videoEvent.setSxtip(jsonParam.getString("ip"));
             }
+            videoEvent.setSm("0");
             videoEventService.saveItem(videoEvent);
             if(sbbh.contains("RPCD")){
                 sendDataToAnalysis(videoEvent);
@@ -96,7 +97,7 @@ public class VideoEventShjService extends AbstractScanRequest {
             requestParam.put("equip_num",videoEvent.getSbbh());
             requestParam.put("address",videoEvent.getWjlj());
             requestParam.put("sxtip",videoEvent.getSxtip());
-            JSONObject result = SendPostUtil.sendPost("http://192.168.3.11:8080/detect",requestParam);
+            JSONObject result = SendPostUtil.sendPost("http://192.168.3.11:5000/detect",requestParam);
             LOG.error("算法分析返回："+result.toJSONString());
             videoEvent.setSm("0");
         }catch (Exception e){

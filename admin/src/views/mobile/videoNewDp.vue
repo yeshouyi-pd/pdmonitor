@@ -15,6 +15,7 @@
     <div class="page-first-div">
       <div class="left-box">
         <iframe ref="firstIframe" @click="vueSendMsg('firstIframe')" v-trigger  width="100%" height="100%" src="http://119.3.2.53:9909/" scrolling="no" frameborder="0"></iframe>
+<!--        <iframe ref="firstIframe" @click="vueSendMsg('firstIframe')" v-trigger  width="100%" height="100%" src="http://127.0.0.1:80/" scrolling="no" frameborder="0"></iframe>-->
 <!--        <div class="left-box-item">-->
 <!--          &lt;!&ndash;          <div style="height: 5%;margin-top: 10px;display: flex;flex-direction: row;align-items: center;margin-left: 20px;">&ndash;&gt;-->
 <!--          &lt;!&ndash;            <div v-on:click="back()" style="color: rgb(255, 255, 255);font-size: 16px;border: 1px solid #043769;background-color:rgb(10,33,61);width: 15%;text-align: center;padding: 5px 0;cursor: pointer">&ndash;&gt;-->
@@ -85,7 +86,21 @@ export default {
         {key:"9", value:"RPCDA4016"},
         {key:"10", value:"RPCDA4016"}
       ],
-      sbbh:''
+      sbbhTdh:'',
+      sbbhTdhList:[
+        {key:"0", value:"RPCDA4004,RPCDA4013"},
+        {key:"2", value:"RPCDA4005,RPCDA4012"},
+        {key:"4", value:"RPCDA4003"},
+        {key:"6", value:"RPCDA4006"},
+        {key:"8", value:"RPCDA4009"},
+        {key:"10", value:"RPCDA4001"},
+        {key:"12", value:"RPCDA4001,RPCDA4007"},
+        {key:"14", value:"RPCDA4010,RPCDA4008"},
+        {key:"16", value:"RPCDA4016"},
+        {key:"18", value:"RPCDA4016"}
+      ],
+      sbbh:'',
+      firstEnter:true
     }
   },
   created() {
@@ -103,7 +118,9 @@ export default {
   },
   mounted() {
     let _this = this;
+    window.addEventListener("message",this.onMessage);
     _this.getExplainVideoEvent();
+    _this.firstEnter = false;
   },
   directives: {
     trigger: {
@@ -113,6 +130,14 @@ export default {
     }
   },
   methods: {
+    onMessage(e){
+      let _this = this;
+      let param = JSON.parse(e.data);
+      _this.sbbhTdh = param.data;
+      if(!_this.firstEnter){
+        _this.getExplainVideoEvent();
+      }
+    },
     getPlayUrl(item){
       let _this = this;
       Loading.show();
@@ -148,7 +173,7 @@ export default {
     },
     getExplainVideoEvent(){
       let _this = this;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/welcome/getExplainVideoEvent', {sfysp:0,sbbh:_this.optionKVArray(_this.sbbhSxtList,_this.sbbhSxt)}).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/welcome/getExplainVideoEvent', {sfysp:0,sbbh:_this.optionKVArray(_this.sbbhTdhList,_this.sbbhTdh)}).then((response)=>{
         let resp = response.data;
         _this.videoEvents = resp.content;
         if(_this.videoEvents.length>0){

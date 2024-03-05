@@ -49,7 +49,7 @@ public class VideoEventDto extends PageDto{
     private String bz;
 
     /**
-    * 说明
+    * 说明(是否已核查)|1已核查0未核查
     */
     private String sm;
 

@@ -88,6 +88,7 @@ public class VideoEventRevController {
             if(!StringUtils.isEmpty(jsonObject.getString("sxtip"))){//算法分析用
                 videoEventDto.setSxtip(jsonObject.getString("sxtip"));
             }
+            videoEventDto.setSm("0");
             videoEventService.save(videoEventDto);
             responseDto.setCode("0000");
             responseDto.setSuccess(true);
