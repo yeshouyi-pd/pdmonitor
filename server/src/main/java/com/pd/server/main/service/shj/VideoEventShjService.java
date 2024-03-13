@@ -99,10 +99,10 @@ public class VideoEventShjService extends AbstractScanRequest {
             requestParam.put("sxtip",videoEvent.getSxtip());
             JSONObject result = SendPostUtil.sendPost("http://192.168.3.11:5000/detect",requestParam);
             LOG.error("算法分析返回："+result.toJSONString());
-            videoEvent.setSm("0");
+            //videoEvent.setSm("0");
         }catch (Exception e){
             LOG.error("请求算法分析失败："+e.getMessage());
-            videoEvent.setSm("1");
+            //videoEvent.setSm("1");
         }
         videoEventService.updateItem(videoEvent);
     }
