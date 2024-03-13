@@ -173,7 +173,7 @@ export default {
     },
     getExplainVideoEvent(){
       let _this = this;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/welcome/getExplainVideoEvent', {sfysp:0,sbbh:_this.optionKVArray(_this.sbbhTdhList,_this.sbbhTdh)}).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/welcome/getExplainVideoEvent', {sm:'1',sfysp:0,sbbh:_this.optionKVArray(_this.sbbhTdhList,_this.sbbhTdh)}).then((response)=>{
         let resp = response.data;
         _this.videoEvents = resp.content;
         if(_this.videoEvents.length>0){
