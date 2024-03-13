@@ -310,7 +310,7 @@ export default {
     _this.rightBottomData();
     _this.rightTopData();
     _this.rightCenterData();
-    _this.centerBottomData();
+    //_this.centerBottomData();
     _this.dataRefreh();
     window.getPlayUrl = _this.getPlayUrl;
   },
