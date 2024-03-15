@@ -67,7 +67,7 @@
           <td>{{item.kssj}}</td>
           <td>{{item.jssj}}</td>
           <td>
-            <button v-on:click="watchVideo(item.wjlj)" class="btn btn-xs btn-info" style="margin-left: 10px;">
+            <button v-on:click="watchVideo(item.wjlj,item.id,item.sm)" class="btn btn-xs btn-info" style="margin-left: 10px;">
               <i class="ace-icon fa fa-volume-down bigger-120">查看分析视频</i>
             </button>
           </td>
@@ -113,7 +113,7 @@ export default {
       videoEvents:[],
       deptMap: [],
       waterEquipments: [],
-      videoHeight:500,
+      videoHeight:550,
       userDto:null,
       timeHandle:null,
       canPlay:false,
@@ -154,18 +154,58 @@ export default {
       }
     },
     //历史回放
-    watchVideo(wjlj){
+    watchVideo(wjlj,id,sm){
       let _this = this;
       $("#playbox").empty();
       _this.wjlj = wjlj;
       let video = document.createElement("video");
+      video.setAttribute("id","video"+id);
       video.setAttribute("width","100%");
       video.setAttribute("height","450px");
       video.setAttribute("controls","controls");
       video.src = wjlj;
       document.getElementById('playbox').appendChild(video);
+      if(!Tool.isEmpty(sm)&&sm!='1'){
+        let div = document.createElement("div");
+        div.setAttribute("id","fx"+id);
+        div.setAttribute("style","margin-bottom:10px;");
+        div.innerHTML = "<button name='"+id+"' id=\"checkPass\" type=\"button\" class=\"btn btn-lg btn-success\" >\n" +
+            "              <i class=\"ace-icon fa fa-check\"></i>\n" +
+            "              核查通过\n" +
+            "            </button>\n" +
+            "            <button name='"+id+"' id=\"checkUnpass\" type=\"button\" class=\"btn btn-lg btn-danger\" style=\"margin-left:20px;\">\n" +
+            "              <i class=\"ace-icon fa fa-times\"></i>\n" +
+            "              核查不通过\n" +
+            "            </button>";
+        document.getElementById('playbox').appendChild(div);
+        document.getElementById("checkPass").onclick = function (params) {
+          _this.checkSave(params.target.getAttribute('name'),'1');
+        }
+        document.getElementById("checkUnpass").onclick = function (params) {
+          _this.checkSave(params.target.getAttribute('name'),'2');
+        }
+      }
       $("#video-modal").modal("show");
       video.play();
+    },
+    checkSave(id,sm){
+      let _this = this;
+      _this.ischeck = true;
+      Loading.show();
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/videoEvent/checkSave', {'id':id,'sm':sm}).then((response)=>{
+        Loading.hide();
+        let resp = response.data;
+        if(resp.success){
+          if(sm=='2'){
+            $("#video"+id).remove();
+          }
+          Toast.success("保存成功");
+          $("#fx"+id).empty();
+        }else{
+          Loading.hide();
+          Toast.error("保存失败");
+        }
+      })
     },
     findDeviceInfo(){
       let _this = this;

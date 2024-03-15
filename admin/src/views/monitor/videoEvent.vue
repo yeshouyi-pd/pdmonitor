@@ -14,7 +14,7 @@
                   设备名称：
                 </td>
                 <td style="width: 15%">
-                  <select v-model="videoEventDto.sbbh" class="form-control" id="form-field-select-1">
+                  <select v-model="videoEventDto.sbbh" class="form-control">
                     <option value="" selected>请选择</option>
                     <option v-for="item in waterEquipments" :value="item.sbsn">{{item.sbmc}}</option>
                   </select>
@@ -24,6 +24,15 @@
                 </td>
                 <td style="width: 15%;">
                   <times v-bind:startTime="startTime" v-bind:endTime="endTime" start-id="rStime" end-id="rEtime"></times>
+                </td>
+                <td style="width:10%">
+                  类型：
+                </td>
+                <td style="width: 15%">
+                  <select v-model="videoEventDto.sfysp" class="form-control">
+                    <option value="1">全部</option>
+                    <option value="0">分析视频</option>
+                  </select>
                 </td>
                 <td  style="width: 20%" class="text-center">
                   <button type="button" v-on:click="list(1)" class="btn btn-sm btn-info btn-round" style="margin-right: 10px;">
@@ -56,6 +65,7 @@
           <th>设备sn</th>
           <th>开始时间</th>
           <th>结束时间</th>
+          <th>摄像头名称</th>
           <th style="width: 18%;">操作</th>
         </tr>
         </thead>
@@ -66,17 +76,18 @@
           <td>{{item.sbbh}}</td>
           <td>{{item.kssj}}</td>
           <td>{{item.jssj}}</td>
+          <td>{{sxtipToMc|optionMapKV(item.sxtip)}}</td>
           <td>
             <div v-if="LOCAL_VIDEO || LOCAL_ZHBHT" class="hidden-sm hidden-xs btn-group">
-              <button :id="item.id" v-on:click="watchVideo(item.sbbh,item.wjmc,'1')" class="btn btn-xs btn-info" style="margin-left: 10px;">
+              <button :id="item.id" v-on:click="watchVideo(item.sbbh,item.wjmc,'1',item.sxtip)" class="btn btn-xs btn-info" style="margin-left: 10px;">
                 <i class="ace-icon fa  fa-video-camera bigger-120">查看原视频</i>
               </button>
-              <button :id="'xz'+item.id" v-on:click="watchVideo(item.sbbh,item.wjmc,'0')" class="btn btn-xs btn-info" style="margin-left: 10px;">
+              <button :id="'xz'+item.id" v-on:click="watchVideo(item.sbbh,item.wjmc,'0',item.sxtip)" class="btn btn-xs btn-info" style="margin-left: 10px;">
                 <i class="ace-icon fa fa-volume-down bigger-120">查看分析视频</i>
               </button>
             </div>
             <div v-if="LOCAL_SSBRL || LOCAL_TLBHQ" class="hidden-sm hidden-xs btn-group">
-              <button :id="item.id" v-on:click="watchVideo(item.sbbh,item.wjmc,'1')" class="btn btn-xs btn-info" style="margin-left: 10px;">
+              <button :id="item.id" v-on:click="watchVideo(item.sbbh,item.wjmc,'1',item.sxtip)" class="btn btn-xs btn-info" style="margin-left: 10px;">
                 <i class="ace-icon fa  fa-video-camera bigger-120">查看视频</i>
               </button>
             </div>
@@ -119,7 +130,9 @@ export default {
   data: function (){
     return {
       equipmentFileEvent:{},
-      videoEventDto:{},
+      videoEventDto:{
+        sfysp:1
+      },
       videoEvents:[],
       deptMap: [],
       waterEquipments: [],
@@ -132,7 +145,19 @@ export default {
       timeHandle:null,
       canPlay:false,
       videoDatas:[],
-      ischeck:false
+      ischeck:false,
+      sxtipToMc:{
+        '11.252.220.131':'1号摄像头',
+        '11.252.220.132':'2号摄像头',
+        '11.252.220.133':'3号摄像头',
+        '11.252.220.134':'4号摄像头',
+        '11.252.220.135':'5号摄像头',
+        '11.252.220.136':'6号摄像头',
+        '11.252.220.137':'7号摄像头',
+        '11.252.220.138':'8号摄像头',
+        '192.168.3.21':'9号摄像头',
+        '192.168.3.22':'10号摄像头',
+      }
     }
   },
   mounted() {
@@ -185,12 +210,12 @@ export default {
       })
     },
     //历史回放
-    watchVideo(sbbh,wjmc,sfysp){
+    watchVideo(sbbh,wjmc,sfysp,sxtip){
       let _this = this;
       $("#playbox").empty();
       _this.canPlay = false;
       Loading.show();
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/videoEvent/videoList', {'sbbh':sbbh,'wjmc':wjmc,'sfysp':sfysp}).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/videoEvent/videoList', {'sbbh':sbbh,'wjmc':wjmc,'sfysp':sfysp,'sxtip':sxtip}).then((response)=>{
         let resp = response.data;
         let videoDatas = resp.content;
         if(videoDatas.length>0){
@@ -352,7 +377,7 @@ export default {
       Loading.show();
       _this.videoEventDto.page = page;
       _this.videoEventDto.size = _this.$refs.pagination.size;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/videoEvent/list', _this.videoEventDto).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/videoEvent/listSs', _this.videoEventDto).then((response)=>{
         Loading.hide();
         let resp = response.data;
         _this.videoEvents = resp.content.list;

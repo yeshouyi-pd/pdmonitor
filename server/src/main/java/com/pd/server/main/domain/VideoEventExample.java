@@ -793,6 +793,11 @@ public class VideoEventExample {
             addCriterion("sm not between", value1, value2, "sm");
             return (Criteria) this;
         }
+
+        public Criteria andSxtipEqualTo(String value) {
+            addCriterion("sxtip =", value, "sxtip");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {
