@@ -201,11 +201,15 @@ public class DateUtil {
     // ===================================================
 
     public static void main(String[] args) {
-//        SimpleDateFormat sdf = new SimpleDateFormat("yy-MM-dd HH-mm-ss");
-//        String str = sdf.format(new Date());
-//        System.out.println(sdf.format(getNextDay(new Date())));
-//        System.out.println(sdf.format(getYearBefore(new Date())));
-//        System.out.println(sdf.format(getMinutesLater(new Date(),-5)));
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        //String str = sdf.format(new Date());
+        //System.out.println(sdf.format(getNextDay(new Date())));
+        //System.out.println(sdf.format(getYearBefore(new Date())));
+        System.out.println(sdf.format(getSecondLater(DateUtil.toDate("2024-03-19 08:50:00","yyyy-MM-dd HH:mm:ss"),-180)));
+        System.out.println(sdf.format(getSecondLater(DateUtil.toDate("2024-03-19 08:50:00","yyyy-MM-dd HH:mm:ss"),180)));
+        System.out.println(sdf.format(getSecondLater(DateUtil.toDate("2024-03-19 08:56:05","yyyy-MM-dd HH:mm:ss"),0)));
+        System.out.println(sdf.format(getSecondLater(DateUtil.toDate("2024-03-19 08:56:05","yyyy-MM-dd HH:mm:ss"),180)));
+
         String str = "2022_09_08_14_29_43_2022_09_08_14_29_46_1_A2.txt";//\d{n,}
         //2022_09_05_20_18_16.jpg
         //2022_09_05_20_18_16.png
@@ -345,6 +349,13 @@ public class DateUtil {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(date);
         calendar.add(calendar.MINUTE, count);
+        return calendar.getTime();
+    }
+
+    public static Date getSecondLater(Date date,int count){
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(date);
+        calendar.add(calendar.SECOND, count);
         return calendar.getTime();
     }
 
