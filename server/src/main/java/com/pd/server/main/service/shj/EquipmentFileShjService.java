@@ -280,7 +280,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
     public static void saveNewEvent(EquipmentFile record){
         LOG.error("剪切视频数据："+JSONObject.toJSONString(record));
         String[] arr = record.getWjmc().split("_");
-        if(Integer.parseInt(arr[3])<6 || Integer.parseInt(arr[3])>19){
+        if(Integer.parseInt(arr[3])<Integer.parseInt(attrServiceStatic.findByAttrKey("zskssj")) || Integer.parseInt(arr[3])>Integer.parseInt(attrServiceStatic.findByAttrKey("wsjssj"))){
             return;
         }
         List<CameraInfo> cameraInfoList = cameraInfoServiceStatic.findBySbbh(record.getSbbh());
@@ -294,8 +294,14 @@ public class EquipmentFileShjService extends AbstractScanRequest{
             cameraMiddle.setTdh(cameraInfo.getSbdk()+"");//通道号
             cameraMiddle.setDvrip(cameraInfo.getDvrip());//nvrip
             if("1001,1007,1009,1010".contains(record.getType())){
-                cameraMiddle.setJgsj(attrServiceStatic.findByAttrKey("spjqjgsj"));//视频剪切间隔时间
-                cameraMiddle.setJqsj(arr[0]+"-"+arr[1]+"-"+arr[2]+" "+arr[3]+":"+arr[4]+":"+arr[5]);//剪切时间
+                //cameraMiddle.setJgsj(attrServiceStatic.findByAttrKey("spjqjgsjq"));//视频剪切间隔时间往前推的时间
+                //cameraMiddle.setJgsj(attrServiceStatic.findByAttrKey("spjqjgsj"));//视频剪切间隔时间往后推的时间
+                String temp = arr[0]+"-"+arr[1]+"-"+arr[2]+" "+arr[3]+":"+arr[4]+":"+arr[5];
+                String kssj = DateUtil.getFormatDate(DateUtil.getSecondLater(DateUtil.toDate(temp,"yyyy-MM-dd HH:mm:ss"),Integer.parseInt(attrServiceStatic.findByAttrKey("spjqjgsjq"))),"yyyy-MM-dd HH:mm:ss");
+                String jssj = DateUtil.getFormatDate(DateUtil.getSecondLater(DateUtil.toDate(temp,"yyyy-MM-dd HH:mm:ss"),Integer.parseInt(attrServiceStatic.findByAttrKey("spjqjgsj"))),"yyyy-MM-dd HH:mm:ss");
+                cameraMiddle.setJqsj(kssj+","+jssj);
+                cameraMiddle.setJgsj("0");
+                //cameraMiddle.setJqsj(arr[0]+"-"+arr[1]+"-"+arr[2]+" "+arr[3]+":"+arr[4]+":"+arr[5]);//剪切时间
             }else if("1020,1022,1024,1026".contains(record.getType())){
                 String kssj = arr[0]+"-"+arr[1]+"-"+arr[2]+" "+arr[3]+":"+arr[4]+":"+arr[5];
                 String jssj = "1020".equals(record.getType())||"1026".equals(record.getType())?arr[7]+"-"+arr[8]+"-"+arr[9]+" "+arr[10]+":"+arr[11]+":"+arr[12]:arr[6]+"-"+arr[7]+"-"+arr[8]+" "+arr[9]+":"+arr[10]+":"+arr[11];
