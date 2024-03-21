@@ -132,7 +132,7 @@ export default {
       seaSurfaceSalinity:{},
       seaSurfaceSalinityDto:{},
       seaSurfaceSalinitys:[],
-      picSuffixs:['png','jpg'],
+      picSuffixs:['png','jpg','gif'],
       imgUrl:'',
       tempUrl:''
     }
