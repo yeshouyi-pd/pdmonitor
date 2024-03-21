@@ -20,6 +20,9 @@ import org.springframework.util.StringUtils;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,6 +41,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
     public static CameraInfoService cameraInfoServiceStatic;
     public static CameraMiddleService cameraMiddleServiceStatic;
     public static CodesetMapper codesetMapperStatic;
+    public static ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(10);
 
     @Resource
     private RedisTemplate redisTemplate;
@@ -252,6 +256,11 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                 result.put("entity",entity);
                 //白海豚写剪切视频的事件，李响读了去剪切视频
                 if(("1001,1007,1009,1010,1020,1022,1024,1026".contains(entity.getType()))&&sbbh.contains("RPCD")){
+//                    if("A4".equals(lists.get(0).getDqzl())&&"1020,1022,1024,1026".contains(entity.getType())){
+//                        saveNewEvent(entity);
+//                    }else if("A1".equals(lists.get(0).getDqzl())){
+//                        saveNewEvent(entity);
+//                    }
                     saveNewEvent(entity);
                 }
                 //推送文件
@@ -279,41 +288,79 @@ public class EquipmentFileShjService extends AbstractScanRequest{
 
     public static void saveNewEvent(EquipmentFile record){
         LOG.error("剪切视频数据："+JSONObject.toJSONString(record));
+        System.out.println("1:"+DateUtil.getFormatDate(new Date(),"yyyy-MM-dd HH:mm:ss"));
         String[] arr = record.getWjmc().split("_");
         if(Integer.parseInt(arr[3])<Integer.parseInt(attrServiceStatic.findByAttrKey("zskssj")) || Integer.parseInt(arr[3])>Integer.parseInt(attrServiceStatic.findByAttrKey("wsjssj"))){
             return;
         }
-        List<CameraInfo> cameraInfoList = cameraInfoServiceStatic.findBySbbh(record.getSbbh());
-        for(CameraInfo cameraInfo: cameraInfoList){
-            CameraMiddleDto cameraMiddle = new CameraMiddleDto();
-            cameraMiddle.setSbbh(record.getSbbh());//设备编号
-            cameraMiddle.setIp(cameraInfo.getIp());//摄像头ip
-            cameraMiddle.setPort(cameraInfo.getPort()+"");//nvr剪切端口
-            cameraMiddle.setUsername(cameraInfo.getUsername());//nvr用户名
-            cameraMiddle.setCamerapws(cameraInfo.getCamerapws());//nvr密码
-            cameraMiddle.setTdh(cameraInfo.getSbdk()+"");//通道号
-            cameraMiddle.setDvrip(cameraInfo.getDvrip());//nvrip
-            if("1001,1007,1009,1010".contains(record.getType())){
-                //cameraMiddle.setJgsj(attrServiceStatic.findByAttrKey("spjqjgsjq"));//视频剪切间隔时间往前推的时间
-                //cameraMiddle.setJgsj(attrServiceStatic.findByAttrKey("spjqjgsj"));//视频剪切间隔时间往后推的时间
-                String temp = arr[0]+"-"+arr[1]+"-"+arr[2]+" "+arr[3]+":"+arr[4]+":"+arr[5];
-                String kssj = DateUtil.getFormatDate(DateUtil.getSecondLater(DateUtil.toDate(temp,"yyyy-MM-dd HH:mm:ss"),Integer.parseInt(attrServiceStatic.findByAttrKey("spjqjgsjq"))),"yyyy-MM-dd HH:mm:ss");
-                String jssj = DateUtil.getFormatDate(DateUtil.getSecondLater(DateUtil.toDate(temp,"yyyy-MM-dd HH:mm:ss"),Integer.parseInt(attrServiceStatic.findByAttrKey("spjqjgsj"))),"yyyy-MM-dd HH:mm:ss");
-                cameraMiddle.setJqsj(kssj+","+jssj);
-                cameraMiddle.setJgsj("0");
-                //cameraMiddle.setJqsj(arr[0]+"-"+arr[1]+"-"+arr[2]+" "+arr[3]+":"+arr[4]+":"+arr[5]);//剪切时间
-            }else if("1020,1022,1024,1026".contains(record.getType())){
-                String kssj = arr[0]+"-"+arr[1]+"-"+arr[2]+" "+arr[3]+":"+arr[4]+":"+arr[5];
-                String jssj = "1020".equals(record.getType())||"1026".equals(record.getType())?arr[7]+"-"+arr[8]+"-"+arr[9]+" "+arr[10]+":"+arr[11]+":"+arr[12]:arr[6]+"-"+arr[7]+"-"+arr[8]+" "+arr[9]+":"+arr[10]+":"+arr[11];
-                if(kssj.equals(jssj)){
-                    return;
+        String temp = arr[0]+"-"+arr[1]+"-"+arr[2]+" "+arr[3]+":"+arr[4]+":"+arr[5];
+        String temJssj = (String) redisTstaticemplate.opsForValue().get("JQ"+record.getSbbh());
+        if(StringUtils.isEmpty(temJssj) || !StringUtils.isEmpty(temJssj)&&DateUtil.toDate(temp,"yyyy-MM-dd HH:mm:ss").getTime()>DateUtil.toDate(temJssj,"yyyy-MM-dd HH:mm:ss").getTime()){
+            List<CameraInfo> cameraInfoList = cameraInfoServiceStatic.findBySbbh(record.getSbbh());
+            String jssj = "";
+            for(CameraInfo cameraInfo: cameraInfoList){
+                CameraMiddleDto cameraMiddle = new CameraMiddleDto();
+                cameraMiddle.setSbbh(record.getSbbh());//设备编号
+                cameraMiddle.setIp(cameraInfo.getIp());//摄像头ip
+                cameraMiddle.setPort(cameraInfo.getPort()+"");//nvr剪切端口
+                cameraMiddle.setUsername(cameraInfo.getUsername());//nvr用户名
+                cameraMiddle.setCamerapws(cameraInfo.getCamerapws());//nvr密码
+                cameraMiddle.setTdh(cameraInfo.getSbdk()+"");//通道号
+                cameraMiddle.setDvrip(cameraInfo.getDvrip());//nvrip
+                if("1001,1007,1009,1010".contains(record.getType())){
+                    //cameraMiddle.setJgsj(attrServiceStatic.findByAttrKey("spjqjgsjq"));//视频剪切间隔时间往前推的时间
+                    //cameraMiddle.setJgsj(attrServiceStatic.findByAttrKey("spjqjgsj"));//视频剪切间隔时间往后推的时间
+                    String kssj = DateUtil.getFormatDate(DateUtil.getSecondLater(DateUtil.toDate(temp,"yyyy-MM-dd HH:mm:ss"),Integer.parseInt(attrServiceStatic.findByAttrKey("spjqjgsjq"))),"yyyy-MM-dd HH:mm:ss");
+                    jssj = DateUtil.getFormatDate(DateUtil.getSecondLater(DateUtil.toDate(temp,"yyyy-MM-dd HH:mm:ss"),Integer.parseInt(attrServiceStatic.findByAttrKey("spjqjgsj"))),"yyyy-MM-dd HH:mm:ss");
+                    cameraMiddle.setJqsj(kssj+","+jssj);
+                    cameraMiddle.setJgsj("0");
+                    //cameraMiddle.setJqsj(arr[0]+"-"+arr[1]+"-"+arr[2]+" "+arr[3]+":"+arr[4]+":"+arr[5]);//剪切时间
+                }else if("1020,1022,1024,1026".contains(record.getType())){
+                    arr = record.getTplj().substring(record.getTplj().lastIndexOf("/")+1,record.getTplj().lastIndexOf("_A4.txt")).split("_");
+                    jssj = "1020".equals(record.getType())||"1026".equals(record.getType())?arr[7]+"-"+arr[8]+"-"+arr[9]+" "+arr[10]+":"+arr[11]+":"+arr[12]:arr[6]+"-"+arr[7]+"-"+arr[8]+" "+arr[9]+":"+arr[10]+":"+arr[11];
+                    if(temp.equals(jssj)){
+                        return;
+                    }
+                    cameraMiddle.setJqsj(temp+","+jssj);
+                    cameraMiddle.setJgsj("0");
                 }
-                cameraMiddle.setJqsj(kssj+","+jssj);
-                cameraMiddle.setJgsj("0");
+                cameraMiddle.setSfjq("0");
+                cameraMiddle.setBz(cameraInfo.getSm4());//默认预置位
+                if("1001,1007,1009,1010".contains(record.getType())){
+                    // 提交一个延迟执行的任务
+                    scheduledExecutorService.schedule(() -> {
+                        System.out.println("2:"+DateUtil.getFormatDate(new Date(),"yyyy-MM-dd HH:mm:ss"));
+                        cameraMiddleServiceStatic.save(cameraMiddle);
+                    }, Integer.parseInt(attrServiceStatic.findByAttrKey("spjqjgsj")), TimeUnit.SECONDS);
+                }else{
+                    System.out.println("3:"+DateUtil.getFormatDate(new Date(),"yyyy-MM-dd HH:mm:ss"));
+                    cameraMiddleServiceStatic.save(cameraMiddle);
+                }
+
             }
-            cameraMiddle.setSfjq("0");
-            cameraMiddle.setBz(cameraInfo.getSm4());//默认预置位
-            cameraMiddleServiceStatic.save(cameraMiddle);
+            redisTstaticemplate.opsForValue().set("JQ"+record.getSbbh(), jssj);
+        }else if("1020,1022,1024,1026".contains(record.getType())){
+            arr = record.getTplj().substring(record.getTplj().lastIndexOf("/")+1,record.getTplj().lastIndexOf("_A4.txt")).split("_");
+            String jssj = "1020".equals(record.getType())||"1026".equals(record.getType())?arr[7]+"-"+arr[8]+"-"+arr[9]+" "+arr[10]+":"+arr[11]+":"+arr[12]:arr[6]+"-"+arr[7]+"-"+arr[8]+" "+arr[9]+":"+arr[10]+":"+arr[11];
+            if(StringUtils.isEmpty(temJssj) || !StringUtils.isEmpty(temJssj)&&(DateUtil.toDate(temJssj,"yyyy-MM-dd HH:mm:ss").getTime()-DateUtil.toDate(temp,"yyyy-MM-dd HH:mm:ss").getTime()>5000 && DateUtil.toDate(jssj,"yyyy-MM-dd HH:mm:ss").getTime()-DateUtil.toDate(temJssj,"yyyy-MM-dd HH:mm:ss").getTime()>5000)){
+                List<CameraInfo> cameraInfoList = cameraInfoServiceStatic.findBySbbh(record.getSbbh());
+                for(CameraInfo cameraInfo: cameraInfoList){
+                    CameraMiddleDto cameraMiddle = new CameraMiddleDto();
+                    cameraMiddle.setSbbh(record.getSbbh());//设备编号
+                    cameraMiddle.setIp(cameraInfo.getIp());//摄像头ip
+                    cameraMiddle.setPort(cameraInfo.getPort()+"");//nvr剪切端口
+                    cameraMiddle.setUsername(cameraInfo.getUsername());//nvr用户名
+                    cameraMiddle.setCamerapws(cameraInfo.getCamerapws());//nvr密码
+                    cameraMiddle.setTdh(cameraInfo.getSbdk()+"");//通道号
+                    cameraMiddle.setDvrip(cameraInfo.getDvrip());//nvrip
+                    cameraMiddle.setJqsj(StringUtils.isEmpty(temJssj)?temp:temJssj+","+jssj);
+                    cameraMiddle.setJgsj("0");
+                    cameraMiddle.setSfjq("0");
+                    cameraMiddle.setBz(cameraInfo.getSm4());//默认预置位
+                    cameraMiddleServiceStatic.save(cameraMiddle);
+                }
+                redisTstaticemplate.opsForValue().set("JQ"+record.getSbbh(), jssj);
+            }
         }
     }
 
