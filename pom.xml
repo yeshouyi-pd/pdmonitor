@@ -226,6 +226,11 @@
 				<!-- 注意这里是import -->
 				<scope>import</scope>
 			</dependency>
+			<dependency>
+				<groupId>com.sun.jna</groupId>
+				<artifactId>jna</artifactId>
+				<version>3.0.9</version>
+			</dependency>
 
 		</dependencies>
 	</dependencyManagement>
