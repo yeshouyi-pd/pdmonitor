@@ -1,0 +1,23 @@
+Begin Time:2024-03-25T14:50:54.641
+[2024-03-25T14:50:54.641 info Netsdk:69989 9716:13116 AVNetSDKMgr.cpp:504]Load avnetsdk library dynamically
+[2024-03-25T14:50:54.644 info Netsdk:69989 9716:13116 AVNetSDKMgr.cpp:549]avnetsdk module handle: 0000000022650000
+
+[2024-03-25T14:50:54.644 info Netsdk:69989 9716:13116 AVNetSDKMgr.cpp:823]Load configsdk dynamically
+[2024-03-25T14:50:54.645 info Netsdk:69989 9716:13116 netsdk.cpp:302]Enter CLIENT_SetAutoReconnect:[cbAutoConnect=0000000001380050, dwUser=0000000000000000].
+[2024-03-25T14:50:54.645 info Netsdk:69989 9716:13116 netsdk.cpp:304]Leave CLIENT_SetAutoReconnect.
+[2024-03-25T14:50:54.646 info Netsdk:69989 9716:13116 netsdk.cpp:326]Enter CLIENT_SetConnectTime:[nWaitTime=5000, nTryTimes=1].
+[2024-03-25T14:50:54.646 info Netsdk:69989 9716:13116 netsdk.cpp:339]Leave CLIENT_SetConnectTime.
+[2024-03-25T14:50:54.646 info Netsdk:69989 9716:13116 netsdk.cpp:352]Enter CLIENT_SetNetworkParam:[nWaittime=0, nConnectTime=10000, nConnectTryNum=0, nSubConnectSpaceTime=0, nGetDevInfoTime=3000, nConnectBufSize=0, nGetConnInfoTime=3000, nSearchRecordTime=0, nsubDisconnetTime=0, byNetType=0, byPlaybackBufSize=0, bDetectDisconnTime=0, bKeepLifeInterval=0, nPicBufSize=0].
+[2024-03-25T14:50:54.646 info Netsdk:69989 9716:13116 netsdk.cpp:367]Leave CLIENT_SetNetworkParam.
+[2024-03-25T14:50:54.647 info Netsdk:69989 9716:13116 netsdk.cpp:991]Enter CLIENT_LoginWithHighLevelSecurity. pstInParam:0000000001226B80, pstOutParam:000000000125DC30.
+[2024-03-25T14:50:54.647 info Netsdk:69989 9716:13116 netsdk.cpp:1007]IP:49.239.193.148, port:43489, SpeCap:0, CapParam:0000000000000000, TLSCap:0
+[2024-03-25T14:50:54.689 info Netsdk:69989 9716:13116 TPTCPClient.cpp:540]Connect Client Ip : 192.168.10.133 
+[2024-03-25T14:50:54.689 info Netsdk:69989 9716:13116 TPTCPClient.cpp:541]Connect Client Port : 61533
+[2024-03-25T14:50:55.317 info Netsdk:69989 9716:13116 netsdk.cpp:1054]Leave CLIENT_LoginWithHighLevelSecurity. error:0, login ID:000000001DBB3EA0.
+[2024-03-25T14:50:55.322 info Netsdk:69989 9716:13116 netsdk.cpp:5265]Enter CLIENT_DHPTZControlEx. [lLoginID=000000001DBB3EA0, nChannelID=0, dwPTZCommand=0, param1=0, param2=5, param3=0, dwStop=0.]
+[2024-03-25T14:50:55.322 info Netsdk:69989 9716:13116 netsdk.cpp:5288]Leave CLIENT_DHPTZControlEx.ret:1.
+[2024-03-25T14:50:55.322 info Netsdk:69989 9716:13116 netsdk.cpp:5265]Enter CLIENT_DHPTZControlEx. [lLoginID=000000001DBB3EA0, nChannelID=0, dwPTZCommand=0, param1=0, param2=0, param3=0, dwStop=1.]
+[2024-03-25T14:50:55.322 info Netsdk:69989 9716:13116 netsdk.cpp:5288]Leave CLIENT_DHPTZControlEx.ret:1.
+[2024-03-25T14:50:55.322 info Netsdk:69989 9716:13116 netsdk.cpp:1075]Enter CLIENT_Logout. lLoginID:000000001DBB3EA0.
+[2024-03-25T14:50:55.323 error Netsdk:69989 9716:13116 TPTCPClient.cpp:748]Device is not online, ip:49.239.193.148
+[2024-03-25T14:50:55.323 info Netsdk:69989 9716:13116 netsdk.cpp:1097]Leave CLIENT_Logout. ret:1

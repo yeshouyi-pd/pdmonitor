@@ -1,0 +1,15 @@
+Begin Time:2024-03-26T10:42:16.909
+[2024-03-26T10:42:16.909 info Netsdk:69989 11660:13288 AVNetSDKMgr.cpp:504]Load avnetsdk library dynamically
+[2024-03-26T10:42:16.912 info Netsdk:69989 11660:13288 AVNetSDKMgr.cpp:549]avnetsdk module handle: 000000002B6F0000
+
+[2024-03-26T10:42:16.912 info Netsdk:69989 11660:13288 AVNetSDKMgr.cpp:823]Load configsdk dynamically
+[2024-03-26T10:42:16.914 info Netsdk:69989 11660:13288 netsdk.cpp:302]Enter CLIENT_SetAutoReconnect:[cbAutoConnect=0000000003800050, dwUser=0000000000000000].
+[2024-03-26T10:42:16.914 info Netsdk:69989 11660:13288 netsdk.cpp:304]Leave CLIENT_SetAutoReconnect.
+[2024-03-26T10:42:16.915 info Netsdk:69989 11660:13288 netsdk.cpp:326]Enter CLIENT_SetConnectTime:[nWaitTime=5000, nTryTimes=1].
+[2024-03-26T10:42:16.915 info Netsdk:69989 11660:13288 netsdk.cpp:339]Leave CLIENT_SetConnectTime.
+[2024-03-26T10:42:16.915 info Netsdk:69989 11660:13288 netsdk.cpp:352]Enter CLIENT_SetNetworkParam:[nWaittime=0, nConnectTime=10000, nConnectTryNum=0, nSubConnectSpaceTime=0, nGetDevInfoTime=3000, nConnectBufSize=0, nGetConnInfoTime=3000, nSearchRecordTime=0, nsubDisconnetTime=0, byNetType=0, byPlaybackBufSize=0, bDetectDisconnTime=0, bKeepLifeInterval=0, nPicBufSize=0].
+[2024-03-26T10:42:16.915 info Netsdk:69989 11660:13288 netsdk.cpp:367]Leave CLIENT_SetNetworkParam.
+[2024-03-26T10:42:16.915 info Netsdk:69989 11660:13288 netsdk.cpp:8736]Enter CLIENT_SetSnapRevCallBack. [OnSnapRevMessage=0000000003800090, dwUser=0000000000000000.]
+[2024-03-26T10:42:16.916 info Netsdk:69989 11660:13288 netsdk.cpp:8739]Leave CLIENT_SetSnapRevCallBack.
+[2024-03-26T10:42:16.917 info Netsdk:69989 11660:13288 netsdk.cpp:8375]Enter CLIENT_ListenServer. [ip=192.168.10.133, port=9500, nTimeout=1000, cbListen=00000000038000D0, dwUserData=0000000000000000.]
+[2024-03-26T10:42:16.917 info Netsdk:69989 11660:13288 netsdk.cpp:8379]Leave CLIENT_ListenServer.[ret=665290816.]
