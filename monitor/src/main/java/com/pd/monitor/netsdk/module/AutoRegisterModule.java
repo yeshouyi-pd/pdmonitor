@@ -6,6 +6,9 @@ import com.pd.monitor.netsdk.lib.NetSDKLib;
 import com.pd.monitor.netsdk.lib.ToolKits;
 import com.pd.monitor.netsdk.utils.DeviceListUtil;
 import com.sun.jna.Pointer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.List;
@@ -29,6 +32,8 @@ public class AutoRegisterModule {
     // 抓图回调
     public static FSnapReceiveCallback captureCallback = new FSnapReceiveCallback();
 
+    private static final Logger log = LoggerFactory.getLogger(AutoRegisterModule.class);
+
     /**
      * 开启服务
      * @param address 本地IP地址
@@ -37,15 +42,19 @@ public class AutoRegisterModule {
     public static boolean startServer(String address, int port) {
         //SDK初始化，并设置回调
         boolean flag = LoginModule.init(disConnectCallback, haveReConnect);
+        log.error(flag+"");
         LoginModule.netSdk.CLIENT_SetSnapRevCallBack(captureCallback, null);
         if (flag){
             System.out.println("服务启动成功");
+            log.error("服务启动成功");
         }
         mServerHandler = DHNetSdkLib.CLIENT_ListenServer(address, port, 1000, serviceCallback, null);
         if (0 == mServerHandler.longValue()) {
             System.err.println("Failed to start server." + ToolKits.getErrorCodePrint());
+            log.error("Failed to start server." + ToolKits.getErrorCodePrint());
         } else {
             System.out.printf("Start server, [Server address %s][Server port %d]\n", address, port);
+            log.error("Start server "+ address + "---" + port);
         }
         return mServerHandler.longValue() != 0;
     }

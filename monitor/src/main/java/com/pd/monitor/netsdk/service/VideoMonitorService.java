@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import static com.pd.monitor.netsdk.module.OperationModule.getRealPlayHandleByDeviceId;
@@ -26,9 +27,9 @@ import static com.pd.monitor.netsdk.module.OperationModule.getRealPlayHandleByDe
 @Slf4j
 public class VideoMonitorService {
 
-    @Autowired
+    @Resource
     private FDownloadDataCallBack fDownLoadPosCallBack;
-    @Autowired
+    @Resource
     private FRealDataCallback FRealDataCallback;
 
 

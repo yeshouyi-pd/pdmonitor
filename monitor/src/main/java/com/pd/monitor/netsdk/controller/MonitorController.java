@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 import static com.pd.monitor.netsdk.utils.DeviceListUtil.getDeviceList;
@@ -24,7 +25,7 @@ import static com.pd.monitor.netsdk.utils.DeviceListUtil.getDeviceList;
 @RestController
 public class MonitorController {
 
-    @Autowired
+    @Resource
     private VideoMonitorService videoMonitorService;
 
     @PostMapping("/start")
