@@ -3,6 +3,10 @@ package com.pd.monitor.netsdk.module;
 import com.pd.monitor.netsdk.lib.NetSDKLib;
 import com.pd.monitor.netsdk.lib.NetSDKLib.NET_IN_LOGIN_WITH_HIGHLEVEL_SECURITY;
 import com.pd.monitor.netsdk.lib.ToolKits;
+import com.sun.jna.Pointer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 
 /**
@@ -18,8 +22,16 @@ public class LoginModule {
     // 登陆句柄
     public static NetSDKLib.LLong m_hLoginHandle = new NetSDKLib.LLong(0);
 
+    // 网络断线处理
+    public static DisConnect disConnect = new DisConnect();
+
+    // 设备连接恢复，实现设备连接恢复接口
+    public static HaveReConnect haveReConnect = new HaveReConnect();
+
     private static boolean bInit    = false;
     private static boolean bLogopen = false;
+
+    private static final Logger LOG = LoggerFactory.getLogger(RealPlayModule.class);
 
     /**
      * 初始化
@@ -27,7 +39,7 @@ public class LoginModule {
     public static boolean init(NetSDKLib.fDisConnect disConnect, NetSDKLib.fHaveReConnect haveReConnect) {
         bInit = netSdk.CLIENT_Init(disConnect, null);
         if(!bInit) {
-            System.out.println("Initialize SDK failed");
+            LOG.error("Initialize SDK failed");
             return false;
         }
 
@@ -45,7 +57,7 @@ public class LoginModule {
         setLog.bSetPrintStrategy = 1;
         bLogopen = netSdk.CLIENT_LogOpen(setLog);
         if(!bLogopen ) {
-            System.err.println("Failed to open NetSDK log");
+            LOG.error("Failed to open NetSDK log");
         }
 
         // 设置断线重连回调接口，设置过断线重连成功回调函数后，当设备出现断线情况，SDK内部会自动进行重连操作
@@ -99,9 +111,9 @@ public class LoginModule {
 
         m_hLoginHandle = netSdk.CLIENT_LoginWithHighLevelSecurity(pstInParam, pstOutParam);
         if(m_hLoginHandle.longValue() == 0) {
-            System.err.printf("Login Device[%s] Port[%d]Failed. %s\n", m_strIp, m_nPort, ToolKits.getErrorCodePrint());
+            LOG.error("Login Device["+m_strIp+"] Port["+m_nPort+"]Failed."+ToolKits.getErrorCodePrint());
         } else {
-            System.out.println("Login Success [ " + m_strIp + " ]");
+            LOG.error("Login Success [ " + m_strIp + " ]");
         }
 
         return m_hLoginHandle.longValue() == 0? false:true;
@@ -122,5 +134,23 @@ public class LoginModule {
         }
 
         return bRet;
+    }
+
+    // 设备断线回调: 通过 CLIENT_Init 设置该回调函数，当设备出现断线时，SDK会调用该函数
+    private static class DisConnect implements NetSDKLib.fDisConnect
+    {
+        public void invoke(NetSDKLib.LLong m_hLoginHandle, String pchDVRIP, int nDVRPort, Pointer dwUser)
+        {
+            System.out.printf("Device[%s] Port[%d] DisConnect!\n", pchDVRIP, nDVRPort);
+        }
+    }
+
+    // 网络连接恢复，设备重连成功回调
+    // 通过 CLIENT_SetAutoReconnect 设置该回调函数，当已断线的设备重连成功时，SDK会调用该函数
+    private static class HaveReConnect implements NetSDKLib.fHaveReConnect {
+        public void invoke(NetSDKLib.LLong m_hLoginHandle, String pchDVRIP, int nDVRPort, Pointer dwUser)
+        {
+            System.out.printf("ReConnect Device[%s] Port[%d]\n", pchDVRIP, nDVRPort);
+        }
     }
 }

@@ -1,14 +1,13 @@
-package com.pd.monitor.netsdk.websocket;
+package com.pd.monitor.netsdk.websocketServer;
 
-import com.pd.monitor.netsdk.lib.NetSDKLib;
+import com.pd.monitor.netsdk.module.LoginModule;
 import com.pd.monitor.netsdk.module.OperationModule;
-import com.pd.monitor.netsdk.module.DevicesModule;
 import com.pd.monitor.netsdk.po.RealPlayInfo;
 import com.pd.monitor.netsdk.service.VideoMonitorService;
-import com.pd.monitor.netsdk.utils.DeviceListUtil;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
@@ -25,10 +24,22 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author xutongxue
  * @date 2023/8/23 13:36
  */
-@ServerEndpoint("/device/monitor/{device}/{channel}")
+@ServerEndpoint("/device/monitor/{device}/{channel}/{sid}")
 @Component
-@Slf4j
 public class WebSocketServerDh {
+    private static ConfigurableApplicationContext applicationContext;
+
+    public static void setApplicationContext(ConfigurableApplicationContext context) {
+        applicationContext = context;
+    }
+
+    /**
+     * 与某个客户端的连接会话，需要通过它来给客户端发送数据
+     */
+    public static Session session;
+
+    private static WebSocketServerDh instance;
+
     public static VideoMonitorService service;
     /**
      * 静态变量,用来记录当前在线连接数。应该把它设计成线程安全
@@ -43,6 +54,9 @@ public class WebSocketServerDh {
      */
     public static CopyOnWriteArrayList<String> sessionList = new CopyOnWriteArrayList<>();
 
+    private static final Logger log = LoggerFactory.getLogger(WebSocketServerDh.class);
+
+    public static String sid;
 
     /**
      * 有websocket client连接
@@ -51,10 +65,12 @@ public class WebSocketServerDh {
      * @param session
      */
     @OnOpen
-    public void OnOpen(@PathParam("device") String device, @PathParam("channel") String channel, Session session)  throws InterruptedException {
-        log.info("{}{}：websocket连接进入",device,channel);
+    public void OnOpen(@PathParam("device") String device, @PathParam("channel") String channel, @PathParam("sid") String sid, Session session)  throws InterruptedException {
+        log.info("websocket连接进入"+sid);
+        this.session = session; // 保存客户端连接的Session对象
+        this.sid = sid;
         //设备ID+通道组成唯一性标识
-        String uuid = device + channel;
+        String uuid = sid;
         if (sessions.containsKey(uuid)) {
             sessions.put(uuid, session);
         } else {
@@ -71,32 +87,37 @@ public class WebSocketServerDh {
      * @param session websocket连接对象
      */
     @OnClose
-    public void onClose(@PathParam("device") String device, @PathParam("channel") String channel, Session session){
-        System.out.println("websocket 断开" + device);
-        String uuid = device + channel;
-        DevicesModule devicesModule = DeviceListUtil.getDeviceModuleByDeviceId(device);
-        if (sessions.containsKey(uuid)) {
-            try{
-                    long handle = OperationModule.findRealPlayInfoByDeviceIdAndChannelNum(uuid);
-                    RealPlayInfo realPlayInfo = OperationModule.findRealPlayInfo(handle);
-                    if(realPlayInfo != null){
-                        System.out.println(uuid + ":websocket 断开连接！");
-                        boolean b = false;
-                        if("1".equals(realPlayInfo.getType())){
-                            b = devicesModule.stopPlay(new NetSDKLib.LLong(handle));
-                        }else if("2".equals(realPlayInfo.getType())){
-                            b = service.stopReport(new NetSDKLib.LLong(handle),realPlayInfo.getDeviceId());
-                        }
-                        if(b){
-                            sessions.remove(uuid);
-                            subOnlineCount();
-                            OperationModule.removeRealPlayInfo(handle);
-                        }
-                }
-            }catch (Exception e){
-                e.printStackTrace();
-            }
+    public void onClose(@PathParam("device") String device, @PathParam("channel") String channel, @PathParam("sid") String sid, Session session){
+        System.out.println("websocket 断开" + sid);
+        subOnlineCount();
+        log.error("有一连接关闭！当前在线人数为"+getOnlineCount());
+        if(getOnlineCount()==0){
+            LoginModule.logout();
         }
+//        String uuid = sid;
+//        DevicesModule devicesModule = DeviceListUtil.getDeviceModuleByDeviceId(device);
+//        if (sessions.containsKey(uuid)) {
+//            try{
+//                    long handle = OperationModule.findRealPlayInfoByDeviceIdAndChannelNum(device+channel);
+//                    RealPlayInfo realPlayInfo = OperationModule.findRealPlayInfo(handle);
+//                    if(realPlayInfo != null){
+//                        System.out.println(uuid + ":websocket 断开连接！");
+//                        boolean b = false;
+//                        if("1".equals(realPlayInfo.getType())){
+//                            b = devicesModule.stopPlay(new NetSDKLib.LLong(handle));
+//                        }else if("2".equals(realPlayInfo.getType())){
+//                            b = service.stopReport(new NetSDKLib.LLong(handle),realPlayInfo.getDeviceId());
+//                        }
+//                        if(b){
+//                            sessions.remove(uuid);
+//                            subOnlineCount();
+//                            OperationModule.removeRealPlayInfo(handle);
+//                        }
+//                }
+//            }catch (Exception e){
+//                e.printStackTrace();
+//            }
+//        }
     }
 
     /**
@@ -167,7 +188,7 @@ public class WebSocketServerDh {
             System.out.println("连接已断开");
         }
         String key = realPlayInfo.getDeviceId()+realPlayInfo.getChannel();
-        Session session = sessions.get(key);
+        Session session = sessions.get(this.sid);
         if (session != null) {
             synchronized (session) {
                 try {
@@ -200,7 +221,7 @@ public class WebSocketServerDh {
             //连接已断开
         }
         String key = realPlayInfo.getDeviceId()+realPlayInfo.getChannel()+realPlayInfo.getOdate();
-        Session session = sessions.get(key);
+        Session session = sessions.get(this.sid);
         if (session != null) {
             synchronized (session) {
                 try {
@@ -216,6 +237,48 @@ public class WebSocketServerDh {
         }
     }
 
+    /**
+     * 实现服务器主动推送
+     */
+    public void sendMessageToOne(long realPlayHandler, ByteBuffer buffer) throws IOException {
+        if (realPlayHandler == 0) {
+            log.error("loginHandler is invalid.please check.", this);
+            return;
+        }
+        for(String key : sessions.keySet()){
+            Session session = sessions.get(key);
+            if (session != null && session.isOpen()) { // 确保session不为null
+                synchronized (session) {
+                    try {
+                        session.getBasicRemote().sendBinary(buffer);
+                        byte[] bytes=new byte[buffer.limit()];
+                        buffer.get(bytes);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }else {
+                log.info("session is null.please check."+key);
+            }
+        }
+    }
+
+    public static void sendBuffer(byte[] bytes, long realPlayHandler) {
+        WebSocketServerDh wsServerEndpoint = new WebSocketServerDh();
+        /**
+         * 发送流数据
+         * 使用pBuffer.getByteBuffer(0,dwBufSize)得到的是一个指向native pointer的ByteBuffer对象,其数据存储在native,
+         * 而webSocket发送的数据需要存储在ByteBuffer的成员变量hb，使用pBuffer的getByteBuffer得到的ByteBuffer其hb为null
+         * 所以，需要先得到pBuffer的字节数组,手动创建一个ByteBuffer
+         */
+        ByteBuffer buffer = ByteBuffer.wrap(bytes);
+        try {
+            wsServerEndpoint.sendMessageToOne(realPlayHandler, buffer);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void sendMessageToAll(ByteBuffer buffer) {
 
         for (Session session : sessions.values()) {
@@ -225,7 +288,9 @@ public class WebSocketServerDh {
                      * tomcat的原因,使用session.getAsyncRemote()会报Writing FULL WAITING error
                      * 需要使用session.getBasicRemote()
                      */
-                    session.getBasicRemote().sendBinary(buffer);
+                    if (session != null && session.isOpen()) {
+                        session.getBasicRemote().sendBinary(buffer);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -238,7 +303,7 @@ public class WebSocketServerDh {
      *
      * @param realPlayHandler 预览句柄
      */
-    public void closeSession(long realPlayHandler) {
+    public void closeSession(String realPlayHandler) {
         try {
             Session session = sessions.get(realPlayHandler);
             if (session != null) {

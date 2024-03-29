@@ -84,7 +84,7 @@ export default {
       console.log("启动监听服务");
       const url1 = "http://" + this.serverIp + ":" + this.wsPort + "/monitor/monitorManager/start"; // 设置POST请求的URL
       const data = {
-        serverIp: this.serverIp,
+        serverIp: "192.168.3.10",
         port: 9500,
       }; // 设置POST请求的数据
       try {

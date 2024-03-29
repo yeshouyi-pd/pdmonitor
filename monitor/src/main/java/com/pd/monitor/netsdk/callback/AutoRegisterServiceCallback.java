@@ -1,9 +1,12 @@
 package com.pd.monitor.netsdk.callback;
 
 import com.pd.monitor.netsdk.lib.NetSDKLib;
+import com.pd.monitor.netsdk.module.AutoRegisterModule;
 import com.pd.monitor.netsdk.module.DevicesModule;
 import com.pd.monitor.netsdk.utils.DeviceListUtil;
 import com.sun.jna.Pointer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.UnsupportedEncodingException;
@@ -17,6 +20,8 @@ import java.util.concurrent.Executors;
  */
 @Component
 public class AutoRegisterServiceCallback implements NetSDKLib.fServiceCallBack {
+    private static final Logger log = LoggerFactory.getLogger(AutoRegisterModule.class);
+
     @Override
     public int invoke(NetSDKLib.LLong lHandle, final String pIp, final int wPort,
                       int lCommand, Pointer pParam, int dwParamLen,
@@ -31,7 +36,7 @@ public class AutoRegisterServiceCallback implements NetSDKLib.fServiceCallBack {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-
+        log.error("Register Device Info:"+"address:"+pIp+",port:"+wPort+",DeviceID:"+deviceId);
         System.out.printf("Register Device Info [Device address %s][port %s][DeviceID %s] \n", pIp, wPort, deviceId);
         switch(lCommand) {
             case NetSDKLib.EM_LISTEN_TYPE.NET_DVR_DISCONNECT: {  // 验证期间设备断线回调

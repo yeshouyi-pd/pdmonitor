@@ -6,12 +6,12 @@ import com.pd.monitor.netsdk.lib.NetSDKLib;
 import com.pd.monitor.netsdk.module.DevicesModule;
 import com.pd.monitor.netsdk.po.DeviceInfo;
 import com.pd.monitor.netsdk.service.VideoMonitorService;
-import com.pd.monitor.netsdk.websocket.WebSocketServerDh;
+import com.pd.monitor.netsdk.websocketServer.WebSocketServerDh;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +27,7 @@ import static com.pd.monitor.netsdk.utils.DeviceListUtil.getDeviceModuleByDevice
 @RequestMapping("/previewManager")
 @RestController
 public class PreviewController {
-    @Autowired
+    @Resource
     private VideoMonitorService videoMonitorService;
 
 

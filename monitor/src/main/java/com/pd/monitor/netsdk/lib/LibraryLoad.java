@@ -1,5 +1,7 @@
 package com.pd.monitor.netsdk.lib;
 
+import org.springframework.stereotype.Component;
+
 import java.io.*;
 
 /**
@@ -8,6 +10,7 @@ import java.io.*;
  * @description 动态库加载
  * @date 2020/11/14
  */
+@Component
 public class LibraryLoad {
   private static final String ARCH_WINDOWS = "win";
   private static final String ARCH_LINUX = "linux";

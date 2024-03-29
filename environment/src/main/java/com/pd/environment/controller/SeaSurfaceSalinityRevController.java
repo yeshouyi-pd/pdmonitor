@@ -55,9 +55,10 @@ public class SeaSurfaceSalinityRevController {
                 responseDto.setMessage("图片日期格式错误");
                 return responseDto;
             }
+            String base64FirstStr = imgBase64.substring(0,imgBase64.lastIndexOf(",")+1);
             Map<String,String> map = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.ATTRECODEKEY);
             String fileDriectory = createFileDriectory(map.get("pathwindows"));
-            String filename = new Date().getTime() + "_" + UuidUtil.getShortUuid() + ".jpg";
+            String filename = new Date().getTime() + "_" + UuidUtil.getShortUuid() + "."+base64FirstStr.substring(base64FirstStr.lastIndexOf("/")+1,base64FirstStr.indexOf(";"));
             Base64Image.GenerateImage(imgBase64.substring(imgBase64.lastIndexOf(",")+1), fileDriectory + filename);
             SeaSurfaceSalinityDto entity = new SeaSurfaceSalinityDto();
             entity.setImgUrl("http://49.239.193.146:50091/system/f/" + DateTools.getYM() + "/"+ filename);

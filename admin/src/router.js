@@ -82,7 +82,7 @@ import ForecastNum from "./views/monitor/forecastNum.vue";
 import SeaSurfaceSalinity from "./views/monitor/seaSurfaceSalinity.vue";
 import VideoTl from "./views/mobile/videoTl.vue";
 import VideoEventSS from "./views/monitor/videoEventSS.vue";
-import testDhVideo from "./views/testDhVideo.vue";
+import testDhVideo from "./views/testDhVideo1.vue";
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {

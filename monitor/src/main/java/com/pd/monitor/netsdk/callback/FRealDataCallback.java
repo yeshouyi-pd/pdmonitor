@@ -3,7 +3,7 @@ package com.pd.monitor.netsdk.callback;
 import com.pd.monitor.netsdk.lib.NetSDKLib;
 import com.pd.monitor.netsdk.module.OperationModule;
 import com.pd.monitor.netsdk.po.RealPlayInfo;
-import com.pd.monitor.netsdk.websocket.WebSocketServerDh;
+import com.pd.monitor.netsdk.websocketServer.WebSocketServerDh;
 import com.sun.jna.Pointer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

@@ -7,11 +7,11 @@ import com.pd.monitor.netsdk.po.VideoDateInfo;
 import com.pd.monitor.netsdk.service.VideoMonitorService;
 import com.pd.monitor.netsdk.utils.Result;
 import com.pd.monitor.netsdk.utils.ResultUtils;
-import com.pd.monitor.netsdk.websocket.WebSocketServerDh;
+import com.pd.monitor.netsdk.websocketServer.WebSocketServerDh;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +28,7 @@ import static com.pd.monitor.netsdk.utils.DateUtil.getOdate;
 @RestController
 public class ReplayController {
 
-    @Autowired
+    @Resource
     private VideoMonitorService videoMonitorService;
 
     @PostMapping("/play")

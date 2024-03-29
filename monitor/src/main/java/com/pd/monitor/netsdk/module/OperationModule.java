@@ -9,7 +9,7 @@ import com.pd.monitor.netsdk.lib.enumeration.ENUMERROR;
 import com.pd.monitor.netsdk.po.ChannelInfo;
 import com.pd.monitor.netsdk.po.RealPlayInfo;
 import com.pd.monitor.netsdk.po.VideoDateInfo;
-import com.pd.monitor.netsdk.websocket.WebSocketServerDh;
+import com.pd.monitor.netsdk.websocketServer.WebSocketServerDh;
 import com.sun.jna.Memory;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;
