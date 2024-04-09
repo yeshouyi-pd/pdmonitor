@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -26,7 +27,8 @@ public class SendSmsTool {
     public static Boolean sendSms(String templateId, String params, String phoneNumber){
         AttrMapper attrMapper = SpringUtil.getBean(AttrMapper.class);
         List<Attr> attrList = attrMapper.selectByExample(null);
-        Map<String, String> attrMap = attrList.stream().collect(Collectors.toMap(p -> p.getAttrcode(), p -> p.getAttrkey()));
+        Map<String, String> attrMap = attrList.stream().collect(HashMap::new,
+                (map, item) -> map.put(item.getAttrcode(), item.getAttrkey()), HashMap::putAll);
         String secretId = attrMap.get("secretId");
         String secretKey = attrMap.get("secretKey");
         String sdkAppId = attrMap.get("sdkAppId");
