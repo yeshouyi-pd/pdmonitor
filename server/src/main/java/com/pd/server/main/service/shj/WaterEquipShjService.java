@@ -97,6 +97,7 @@ public class WaterEquipShjService extends AbstractScanRequest{
                         if(Integer.parseInt(cs)>30){
                             String distance = attrMapperStatic.selectByAttrKey("distance");
                             long realDistance = getDistance(msg,listWater.get(0).getBz());
+                            LOG.error("高德地图计算真实差距------------>"+realDistance);
                             if(realDistance>Long.parseLong(distance)){
                                 String phoneNum = attrMapperStatic.selectByAttrKey("heartPhone");
                                 //发送短信
@@ -131,7 +132,6 @@ public class WaterEquipShjService extends AbstractScanRequest{
         try {
             String queryUrl = "https://restapi.amap.com/v3/distance?key="+key+"&type=0&origins="+startLonLat+"&destination="+endLonLat;
             String queryResult = getResponse(queryUrl);
-            LOG.error("高德地图返回------------>"+queryResult);
             JSONObject job = JSONObject.parseObject(queryResult);
             if("OK".equals(job.getString("info"))){
                 JSONArray ja = job.getJSONArray("results");
@@ -168,5 +168,8 @@ public class WaterEquipShjService extends AbstractScanRequest{
     public static void main(String[] args){
         long distance = getDistance("117.729483166667,30.851357","117.73000,30.84791");
         System.out.println(distance);
+        if(distance>Long.parseLong("300")){
+            System.out.println(true);
+        }
     }
 }
