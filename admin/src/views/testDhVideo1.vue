@@ -43,7 +43,6 @@ export default {
     //this.setupWebSocket();
     this.openvideoElement();
     this.getLogin();
-
   },
   methods: {
     async getLogin(){
@@ -67,15 +66,19 @@ export default {
           this.flvPlayer = flvjs.createPlayer({
             type: 'flv',					//媒体类型
             url: 'ws://'+this.serverIp +':'+this.wsPort+'/monitor/device/monitor/1/0/'+new Date().getTime(),	//flv格式媒体URL
+            //url:'http://192.168.10.133:19091/system/f/202403/file.flv',
             isLive: true,					//数据源是否为直播流
             hasAudio: false,				//数据源是否包含有音频
             hasVideo: true,					//数据源是否包含有视频
             enableStashBuffer: true,
           },{
             enableStashBuffer: false,
-            stashInitialSize: 128,
+            stashInitialSize: 1024,
           });
-          flvjs.getFeatureList();
+          // this.flvPlayer = flvjs.createPlayer({
+          //   type: 'flv',
+          //   url: 'http://192.168.10.133:19091/system/f/202403/file.flv' // 替换为本地文件的URL
+          // });
           this.flvPlayer.attachMediaElement(videoElement);	//将播放实例注册到节点
           this.flvPlayer.load(); 					//加载数据流
           this.flvPlayer.play();					//播放数据流

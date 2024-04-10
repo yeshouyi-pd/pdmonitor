@@ -7,7 +7,7 @@
 </template>
 <script>
 export default {
-  name:'equipment-amap',
+  name:'equipment-amap-old',
   props: {
     heightMax: {
       default: ""
@@ -32,6 +32,7 @@ export default {
       LOCAL_SSBRL:LOCAL_SSBRL,
       LOCAL_VIDEO:LOCAL_VIDEO,
       LOCAL_TLBHQ:LOCAL_TLBHQ,
+      environmentType:1,
       sbbh:"RPCDA4016"
     }
   },
@@ -45,92 +46,113 @@ export default {
     let _this = this;
     _this.createAmap();
     _this.deptMap = Tool.getDeptUser();
-    if(_this.LOCAL_ZHBHT || _this.LOCAL_VIDEO){
-      _this.findDeviceInfoNew();
-    }else{
-      _this.findDeviceInfo();
-    }
+    _this.findDeviceInfo();
   },
   methods:{
     createAmap(){
       let _this = this;
       if(_this.LOCAL_ZHBHT || _this.LOCAL_VIDEO){
-        _this.amap = new L.Map('equipmentamap');
-        let osmUrl='/oms/{z}/{x}/{y}.png';
-        let osm = new L.TileLayer(osmUrl, {minZoom: 9, maxZoom: 12});
-        _this.amap.addLayer(osm);
-        _this.amap.setView(new L.LatLng(22.30,113.73),12);
-        // 创建多边形的坐标数组
-        let latlngs = [
-          [22.4,113.666667],
-          [22.4,113.716667],
-          [22.183333,113.716667],
-          [22.183333,113.666667]
-        ];
-        // 创建多边形并添加到地图上
-        L.polygon(latlngs, {
-          color: '#6A8F71', // 边界颜色
-          opacity: 0.2, //线透明度
-          weight: 3,    //线宽
-          fillColor: '#85C5A0', // 填充颜色
+        _this.amap = new AMap.Map('equipmentamap', {
+          center: [113.73,22.30],
+          resizeEnable: true,
+          zoom: 12
+        });
+        let polygonArr = new Array();//多边形覆盖物节点坐标数组
+        polygonArr.push([113.666667, 22.4]);
+        polygonArr.push([113.716667, 22.4]);
+        polygonArr.push([113.716667, 22.183333]);
+        polygonArr.push([113.666667, 22.183333]);
+        let  polygon = new AMap.Polygon({
+          path: polygonArr,//设置多边形边界路径
+          strokeColor: "#6A8F71", //线颜色
+          strokeOpacity: 0.2, //线透明度
+          strokeWeight: 3,    //线宽
+          fillColor: "#85C5A0", //填充色
           fillOpacity: 0.35//填充透明度
-        }).addTo(_this.amap);
-        // 创建多边形的坐标数组
-        let latlngs2 = [
-          [22.4,113.716667],
-          [22.4,113.869444],
-          [22.366667,113.869444],
-          [22.366667,113.766667],
-          [22.216667,113.766667],
-          [22.216667,113.816667],
-          [22.183333,113.833333],
-          [22.183333,113.716667]
-        ];
-        // 创建多边形并添加到地图上
-        L.polygon(latlngs2, {
-          color: '#76987C', // 边界颜色
-          opacity: 0.2, //线透明度
-          weight: 3,    //线宽
-          fillColor: '#BFE39B', // 填充颜色
+        });
+        let polygonArr2 = new Array();//多边形覆盖物节点坐标数组
+        polygonArr2.push([113.716667, 22.4]);
+        polygonArr2.push([113.869444, 22.4]);
+        polygonArr2.push([113.869444, 22.366667]);
+        polygonArr2.push([113.766667, 22.366667]);
+        polygonArr2.push([113.766667, 22.216667]);
+        polygonArr2.push([113.816667, 22.216667]);
+        polygonArr2.push([113.833333, 22.183333]);
+        polygonArr2.push([113.716667, 22.183333]);
+        let  polygon2 = new AMap.Polygon({
+          path: polygonArr2,//设置多边形边界路径
+          strokeColor: "#76987C", //线颜色
+          strokeOpacity: 0.2, //线透明度
+          strokeWeight: 3,    //线宽
+          fillColor: "#BFE39B", //填充色
           fillOpacity: 0.35//填充透明度
-        }).addTo(_this.amap);
-        // 创建多边形的坐标数组
-        let latlngs3 = [
-          [22.366667,113.869444],
-          [22.333333,113.869444],
-          [22.273056,113.847778],
-          [22.266667,113.838889],
-          [22.216667,113.816667],
-          [22.216667,113.766667],
-          [22.366667,113.766667]
-        ];
-        // 创建多边形并添加到地图上
-        L.polygon(latlngs3, {
-          color: '#908983', // 边界颜色
-          opacity: 0.2, //线透明度
-          weight: 3,    //线宽
-          fillColor: '#B59A8F', // 填充颜色
+        });
+        let polygonArr3 = new Array();//多边形覆盖物节点坐标数组
+        polygonArr3.push([113.869444, 22.366667]);
+        polygonArr3.push([113.869444, 22.333333]);
+        polygonArr3.push([113.847778, 22.273056]);
+        polygonArr3.push([113.838889, 22.266667]);
+        polygonArr3.push([113.816667, 22.216667]);
+        polygonArr3.push([113.766667, 22.216667]);
+        polygonArr3.push([113.766667, 22.366667]);
+        let  polygon3 = new AMap.Polygon({
+          path: polygonArr3,//设置多边形边界路径
+          strokeColor: "#908983", //线颜色
+          strokeOpacity: 0.2, //线透明度
+          strokeWeight: 3,    //线宽
+          fillColor: "#B59A8F", //填充色
           fillOpacity: 0.35//填充透明度
-        }).addTo(_this.amap);
-
-        // 创建一个纯文本提示框
-        let tooltip = L.tooltip([22.291667,113.741667], {
-          permanent: true,
-          direction: "center"
-        }).setContent("缓冲区");
-        tooltip.addTo(_this.amap);
-        // 创建一个纯文本提示框
-        let tooltip1 = L.tooltip([22.291667,113.791667], {
-          permanent: true,
-          direction: "center"
-        }).setContent("核心区");
-        tooltip1.addTo(_this.amap);
-        // 创建一个纯文本提示框
-        let tooltip2 = L.tooltip([22.291667,113.691667], {
-          permanent: true,
-          direction: "center"
-        }).setContent("实验区");
-        tooltip2.addTo(_this.amap);
+        });
+        let overlayGroup = new AMap.OverlayGroup([polygon,polygon2,polygon3])
+        _this.amap.add(overlayGroup);
+        // 创建纯文本标记
+        let text = new AMap.Text({
+          text:'实验区',
+          anchor:'center', // 设置文本标记锚点
+          style:{
+            'height': '15rem',
+            'background-color': 'rgba(133, 197, 160, 0)',
+            'text-align': 'center',
+            'font-size': '20px',
+            'border-width': 0,
+            'color': 'white',
+            'writing-mode':'vertical-lr'
+          },
+          position: [113.691667, 22.291667]
+        });
+        text.setMap(_this.amap);
+        // 创建纯文本标记
+        let text1 = new AMap.Text({
+          text:'缓冲区',
+          anchor:'center', // 设置文本标记锚点
+          style:{
+            'height': '15rem',
+            'background-color': 'rgba(133, 197, 160, 0)',
+            'text-align': 'center',
+            'font-size': '20px',
+            'border-width': 0,
+            'color': 'white',
+            'writing-mode':'vertical-lr'
+          },
+          position: [113.741667, 22.291667]
+        });
+        text1.setMap(_this.amap);
+        // 创建纯文本标记
+        let text2 = new AMap.Text({
+          text:'核心区',
+          anchor:'center', // 设置文本标记锚点
+          style:{
+            'height': '15rem',
+            'background-color': 'rgba(133, 197, 160, 0)',
+            'text-align': 'center',
+            'font-size': '20px',
+            'border-width': 0,
+            'color': 'white',
+            'writing-mode':'vertical-lr'
+          },
+          position: [113.791667, 22.291667]
+        });
+        text2.setMap(_this.amap);
       }else{
         if(_this.LOCAL_SSBRL){
           _this.amap = new AMap.Map('equipmentamap', {
@@ -148,66 +170,6 @@ export default {
           });
         }
       }
-    },
-    findDeviceInfoNew(){
-      let _this = this;
-      Loading.show();
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/findAll', {}).then((response)=>{
-        Loading.hide();
-        let devices = response.data.content;
-        for(let i=0;i<devices.length;i++){
-          if(devices[i].sbzt=='1'){
-            _this.onLineCount++;
-          }else if(devices[i].sbzt=='2'){
-            _this.offLineCount++;
-          }else if(devices[i].sbzt=='3') {
-            _this.errorCount++;
-          }
-          let icon = L.icon({
-            // iconUrl: '/largemonitors/assets/imgs/buoy.png',
-            // iconSize: [40, 40],
-            // popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
-            iconUrl: '/largemonitors/assets/imgs/buoy.png',
-            iconSize:     [40, 60], // size of the icon
-            iconAnchor:   [22, 22], // point of the icon which will correspond to marker's location
-          });
-          let cameraicon = L.icon({
-            iconUrl: '/largemonitors/assets/imgs/Camera.png',
-            iconSize: [50, 50],
-            iconAnchor:   [11, 11], // point of the icon which will correspond to marker's location
-          })
-          if("0001"==devices[i].sblb){
-            let marker = L.marker([devices[i].gps.split(',')[1], devices[i].gps.split(',')[0]], {icon: icon}).addTo(_this.amap);
-            if(!Tool.isEmpty(devices[i].fzwz)){
-              let wz = (devices[i].fzwz.includes('航')||devices[i].fzwz.includes('浮'))?devices[i].fzwz.substring(0,devices[i].fzwz.indexOf('航'))||devices[i].fzwz.substring(0,devices[i].fzwz.indexOf('浮')):devices[i].fzwz;
-              // 添加一个tooltip，并为其添加一个自定义的类名
-              marker.bindTooltip(wz, {
-                permanent: true,
-                direction: 'center',
-                className: 'my-custom-tooltip'
-              }).openTooltip();
-              // 使用on方法为标记添加点击事件
-              marker.on('click',(e)=>{
-                let popup = L.popup();
-                popup.setLatLng(e.latlng).setContent("<div>所属机构："+_this.optionMapKV(_this.deptMap,devices[i].deptcode)+"</div><div>设备点位："+devices[i].fzwz+"</div><div>设备编号："+devices[i].sbsn+"</div>",{className:'event-popup'}).openOn(this.amap);
-                _this.clickMapPoint(devices[i].fzwz,devices[i].sbsn);
-              });
-            }
-          }else if("004"==devices[i].sblb){
-            let marker = L.marker([devices[i].gps.split(',')[1], devices[i].gps.split(',')[0]], {icon: cameraicon}).addTo(_this.amap);
-            // 添加一个tooltip，并为其添加一个自定义的类名
-            marker.bindTooltip(devices[i].fzwz.substring(0,devices[i].fzwz.indexOf('摄')), {
-              permanent: true,
-              direction: 'right',
-              className: 'my-custom-tooltip'
-            }).openTooltip();
-            // 使用on方法为标记添加点击事件
-            marker.on('click',(e)=>{
-              _this.clickMapPoint(devices[i].fzwz,devices[i].sbsn);
-            });
-          }
-        }
-      })
     },
     findDeviceInfo(){
       let _this = this;
@@ -405,17 +367,6 @@ export default {
 }
 </script>
 <style scoped>
-/* 自定义tooltip样式 */
-.my-custom-tooltip {
-  background-color: #ff7800;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  text-align: center;
-  padding: 10px 15px;
-  font-size: 16px;
-  /* 更多样式根据需要添加 */
-}
 deep .amap-info{
   position: absolute;
   left: 507px;
