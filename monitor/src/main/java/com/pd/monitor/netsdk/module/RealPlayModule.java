@@ -6,6 +6,7 @@ import com.pd.monitor.controller.WaterQualityController;
 import com.pd.monitor.netsdk.frame.RealplayEx;
 import com.pd.monitor.netsdk.lib.NetSDKLib;
 import com.pd.monitor.netsdk.lib.ToolKits;
+import com.sun.jna.Memory;
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import org.slf4j.Logger;
@@ -45,7 +46,6 @@ public class RealPlayModule {
 		inParam.nChannelID = nChannelID;
 		inParam.rType = rType;
 		inParam.emDataType = emDataType;
-
 		NetSDKLib.LLong lRealHandle = LoginModule.netSdk.CLIENT_RealPlayByDataType(m_hLoginHandle,
 				inParam, outParam, 3000);
 		if (lRealHandle.longValue() != 0) {
@@ -53,8 +53,12 @@ public class RealPlayModule {
 			//设置回调的接收
 			//lRealHandle ：拉流成功的句柄
 			//你的接收回调的类里的方法 注：这里使用的是官方demo中的RealplayEx类下的接口
-			LoginModule.netSdk.CLIENT_SetRealDataCallBackEx(lRealHandle, RealplayEx.CbfRealDataCallBackEx.getInstance(),
-					null, 31);
+			//源码发现 可以自定义参数channlID  放在  Pointer  的public 构造函数里面
+			//直接通过本地方法申请4位的真是内存空间  int站4位
+			Pointer dwUser = new Memory(4);
+			dwUser.setInt(0,nChannelID); //全部用掉
+			RealplayEx.netSdk.CLIENT_SetRealDataCallBackEx(lRealHandle, RealplayEx.CbfRealDataCallBackEx.getInstance(),
+					dwUser, 31);
 			return lRealHandle;
 		} else {
 			return null;
@@ -70,16 +74,16 @@ public class RealPlayModule {
 	 */
 	public static NetSDKLib.LLong startRealPlay(int channel, int stream, Panel realPlayWindow) {
 		NetSDKLib.LLong m_hPlayHandle = LoginModule.netSdk.CLIENT_RealPlayEx(LoginModule.m_hLoginHandle, channel, Native.getComponentPointer(realPlayWindow), stream);
-	
-	    if(m_hPlayHandle.longValue() == 0) {
-	  	    System.err.println("开始实时预览失败，错误码" + ToolKits.getErrorCodePrint());
-	    } else {
-	  	    System.out.println("Success to start realplay"); 
-	    }
-	    
-	    return m_hPlayHandle;
-	} 
-	
+
+		if(m_hPlayHandle.longValue() == 0) {
+			System.err.println("开始实时预览失败，错误码" + ToolKits.getErrorCodePrint());
+		} else {
+			System.out.println("Success to start realplay");
+		}
+
+		return m_hPlayHandle;
+	}
+
 	/**
 	 * \if ENGLISH_LANG
 	 * Start RealPlay
@@ -91,7 +95,7 @@ public class RealPlayModule {
 		if(m_hPlayHandle.longValue() == 0) {
 			return;
 		}
-		
+
 		boolean bRet = LoginModule.netSdk.CLIENT_StopRealPlayEx(m_hPlayHandle);
 		if(bRet) {
 			m_hPlayHandle.setValue(0);

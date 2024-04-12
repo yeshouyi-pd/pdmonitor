@@ -5,11 +5,16 @@ import com.pd.monitor.netsdk.module.LoginModule;
 import com.pd.monitor.netsdk.module.RealPlayModule;
 import com.pd.monitor.netsdk.utils.Result;
 import com.pd.monitor.netsdk.utils.ResultUtils;
+import com.pd.monitor.netsdk.websocketServer.WebSocketServerDh;
+import com.pd.server.config.SpringUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.swing.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.ByteBuffer;
 
 @Slf4j
 @RequestMapping("/realPlayManager")
@@ -35,6 +40,7 @@ public class RealPlayController {
             if (m_hLoginHandle.longValue() == 0){
                 LoginModule.login("49.239.193.148", 43489, "admin", "admin@bht2023");
             }
+            //
             RealPlayModule.startRealPlay(LoginModule.m_hLoginHandle,nChannelID, 0, 5);
             return ResultUtils.getSuccessResult("登录成功");
         }catch (Exception e){
@@ -54,4 +60,5 @@ public class RealPlayController {
         }catch (Exception e){
         }
     }
+
 }

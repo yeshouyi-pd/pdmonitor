@@ -1,5 +1,7 @@
 package com.pd.monitor.netsdk.websocketServer;
 
+import com.alibaba.fastjson.JSONObject;
+import com.pd.monitor.netsdk.lib.NetSDKLib;
 import com.pd.monitor.netsdk.module.LoginModule;
 import com.pd.monitor.netsdk.module.OperationModule;
 import com.pd.monitor.netsdk.po.RealPlayInfo;
@@ -14,6 +16,7 @@ import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -49,6 +52,11 @@ public class WebSocketServerDh {
      * 存放每个客户端对应的WebSocket对象,根据设备realPlayHandler建立session
      */
     public static ConcurrentHashMap<String, Session> sessions = new ConcurrentHashMap<>();
+
+    /**
+     * 实时预览句柄-通道
+     */
+    public static ConcurrentHashMap<Long, Integer> lRealHandles = new ConcurrentHashMap<>();
     /**
      * 保存覆盖播放标识
      */
@@ -70,7 +78,7 @@ public class WebSocketServerDh {
         this.session = session; // 保存客户端连接的Session对象
         this.sid = sid;
         //设备ID+通道组成唯一性标识
-        String uuid = sid;
+        String uuid = sid+"-"+channel;
         if (sessions.containsKey(uuid)) {
             sessions.put(uuid, session);
         } else {
@@ -122,12 +130,11 @@ public class WebSocketServerDh {
 
     /**
      * 发生错误
-     *
-     * @param throwable e
      */
     @OnError
-    public void onError(Throwable throwable) {
-        throwable.printStackTrace();
+    public void onError(Session session, Throwable error) {
+        // 处理错误，可以记录日志或者其他操作
+        error.printStackTrace();
     }
 
     /**
@@ -240,30 +247,26 @@ public class WebSocketServerDh {
     /**
      * 实现服务器主动推送
      */
-    public void sendMessageToOne(long realPlayHandler, ByteBuffer buffer) throws IOException {
-        if (realPlayHandler == 0) {
-            log.error("loginHandler is invalid.please check.", this);
-            return;
-        }
+    public void sendMessageToOne(int nChannelID, ByteBuffer buffer) throws IOException {
+
+        //int nChannelID = lRealHandles.get(realPlayHandler);
         for(String key : sessions.keySet()){
             Session session = sessions.get(key);
             if (session != null && session.isOpen()) { // 确保session不为null
                 synchronized (session) {
-                    try {
-                        session.getBasicRemote().sendBinary(buffer);
-                        byte[] bytes=new byte[buffer.limit()];
-                        buffer.get(bytes);
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    if(key.substring(key.indexOf("-")+1,key.length()).equals(nChannelID+"")){
+                        try {
+                            session.getBasicRemote().sendBinary(buffer);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
-            }else {
-                log.info("session is null.please check."+key);
             }
         }
     }
 
-    public static void sendBuffer(byte[] bytes, long realPlayHandler) {
+    public static void sendBuffer(ByteBuffer buffer, int channel) {
         WebSocketServerDh wsServerEndpoint = new WebSocketServerDh();
         /**
          * 发送流数据
@@ -271,9 +274,9 @@ public class WebSocketServerDh {
          * 而webSocket发送的数据需要存储在ByteBuffer的成员变量hb，使用pBuffer的getByteBuffer得到的ByteBuffer其hb为null
          * 所以，需要先得到pBuffer的字节数组,手动创建一个ByteBuffer
          */
-        ByteBuffer buffer = ByteBuffer.wrap(bytes);
+        // ByteBuffer buffer = ByteBuffer.wrap(bytes);
         try {
-            wsServerEndpoint.sendMessageToOne(realPlayHandler, buffer);
+            wsServerEndpoint.sendMessageToOne(channel, buffer);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

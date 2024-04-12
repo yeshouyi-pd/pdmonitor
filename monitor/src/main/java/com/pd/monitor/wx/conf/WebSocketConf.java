@@ -22,10 +22,10 @@ public class WebSocketConf {
     public ServletServerContainerFactoryBean createWebSocketContainer() {
         ServletServerContainerFactoryBean bean = new ServletServerContainerFactoryBean();
 
-//        // 文本缓冲区大小
-//        bean.setMaxTextMessageBufferSize(8192);
-//        // 字节缓冲区大小
-//        bean.setMaxBinaryMessageBufferSize(8192);
+        // 文本缓冲区大小
+        bean.setMaxTextMessageBufferSize(1024 * 1024 * 64);
+        // 字节缓冲区大小
+        bean.setMaxBinaryMessageBufferSize(1024 * 1024 * 512);
 
         return bean;
     }
