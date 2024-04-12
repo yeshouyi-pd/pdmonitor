@@ -11,7 +11,7 @@
            style="width: 50%;height: 100%"
            @click="handleClick"
     ></video>
-    <video id="videoElementId" autoplay controls muted preload="none" style="width: 50%;height: 100%"></video>
+    <>
   </div>
 </template>
 <script>
@@ -45,6 +45,13 @@ export default {
     this.getLogin();
   },
   methods: {
+    login(){
+      let _this = this;
+      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/realPlayManager/showPanel', {
+      }).then((response)=>{
+
+      })
+    },
     async getLogin(){
       const url2 = "http://" + this.serverIp + ":" + this.wsPort + "/monitor/realPlayManager/startPlay/0"; // 设置POST请求的URL
       const data = {};
@@ -65,7 +72,7 @@ export default {
         if (flvjs.isSupported()) {
           this.flvPlayer = flvjs.createPlayer({
             type: 'flv',					//媒体类型
-            url: 'ws://'+this.serverIp +':'+this.wsPort+'/monitor/device/monitor/1/0/'+new Date().getTime(),	//flv格式媒体URL
+            url: 'ws://'+this.serverIp +':'+'9093/monitor/device/monitor/1/0/'+new Date().getTime(),	//flv格式媒体URL
             //url:'http://192.168.10.133:19091/system/f/202403/file.flv',
             isLive: true,					//数据源是否为直播流
             hasAudio: false,				//数据源是否包含有音频

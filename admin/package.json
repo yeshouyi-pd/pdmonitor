@@ -13,6 +13,7 @@
     "@jiaminghi/data-view": "^2.10.0",
     "axios": "^0.19.2",
     "bootstrap-table": "^1.18.3",
+    "coordtransform": "^2.1.2",
     "core-js": "^3.6.5",
     "crypto-js": "^4.0.0",
     "echarts": "^5.2.2",

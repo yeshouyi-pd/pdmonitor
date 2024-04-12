@@ -6,6 +6,8 @@ import com.pd.monitor.netsdk.common.CaseMenu;
 import com.pd.monitor.netsdk.lib.NetSDKLib;
 import com.pd.monitor.netsdk.lib.NetSDKLib.LLong;
 import com.pd.monitor.netsdk.lib.NetSDKLib.NET_DEVICEINFO_Ex;
+
+import java.nio.ByteBuffer;
 import java.util.Scanner;
 import java.util.concurrent.*;
 
@@ -13,34 +15,35 @@ import com.pd.monitor.netsdk.websocketServer.WebSocketServerDh;
 import com.pd.monitor.netsdk.websocketServer.WebSocketServerNewDh;
 import com.pd.monitor.netsdk.websocketServer.Websocket;
 import com.pd.server.config.SpringUtil;
+import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;
 
 import javax.annotation.Resource;
 
 public class RealplayEx {
-	public static final NetSDKLib netSdk = NetSDKLib.NETSDK_INSTANCE;
-	
-	// 登陆句柄
+    public static final NetSDKLib netSdk = NetSDKLib.NETSDK_INSTANCE;
+
+    // 登陆句柄
     private LLong loginHandle = new LLong(0);
-    
+
     // 预览预览句柄
     private static LLong lRealHandle = new LLong(0);
-    
-    
+
+
     // 设备信息扩展
     private NET_DEVICEINFO_Ex deviceInfo = new NET_DEVICEINFO_Ex();
-	
-	//private NET_TIME m_startTime = new NET_TIME(); // 开始时间
-	//private NET_TIME m_stopTime = new NET_TIME(); // 结束时间
-    
-	public void InitTest(){
-		// 初始化SDK库
+
+    //private NET_TIME m_startTime = new NET_TIME(); // 开始时间
+    //private NET_TIME m_stopTime = new NET_TIME(); // 结束时间
+
+    public void InitTest(){
+        // 初始化SDK库
         netSdk.CLIENT_Init(DisConnectCallBack.getInstance(), null);
 
         // 设置断线重连成功回调函数
         netSdk.CLIENT_SetAutoReconnect(HaveReConnectCallBack.getInstance(), null);
-        
+
         //打开日志，可选
         NetSDKLib.LOG_SET_PRINT_INFO setLog = new NetSDKLib.LOG_SET_PRINT_INFO();
         String logPath = new File(".").getAbsoluteFile().getParent() + File.separator + "sdk_log" + File.separator + "sdk.log";
@@ -50,58 +53,58 @@ public class RealplayEx {
         setLog.nPrintStrategy = 0;
         if (!netSdk.CLIENT_LogOpen(setLog)){
             System.err.println("Open SDK Log Failed!!!");
-        }        
+        }
 
-	}
-	
-	public void Login(String m_strIp,int m_nPort,String m_strUser,String m_strPassword ){
+    }
 
-		 // 登陆设备
+    public void Login(String m_strIp,int m_nPort,String m_strUser,String m_strPassword ){
+
+        // 登陆设备
         int nSpecCap = NetSDKLib.EM_LOGIN_SPAC_CAP_TYPE.EM_LOGIN_SPEC_CAP_TCP;    // TCP登入
         IntByReference nError = new IntByReference(0);
         loginHandle = netSdk.CLIENT_LoginEx2(m_strIp, m_nPort, m_strUser,
-        		m_strPassword ,nSpecCap, null, deviceInfo, nError);
+                m_strPassword ,nSpecCap, null, deviceInfo, nError);
         if (loginHandle.longValue() != 0) {
-            System.out.printf("Login Device[%s] Success!\n", m_strIp);             
+            System.out.printf("Login Device[%s] Success!\n", m_strIp);
         }
         else {
-        	System.err.printf("Login Device[%s] Fail.Error[0x%x]\n", m_strIp, netSdk.CLIENT_GetLastError()); 
+            System.err.printf("Login Device[%s] Fail.Error[0x%x]\n", m_strIp, netSdk.CLIENT_GetLastError());
             LoginOut();
         }
-	}
-	public void realplay(){
-		lRealHandle= netSdk.CLIENT_RealPlayEx(loginHandle, 0, null, 0);
+    }
+    public void realplay(){
+        lRealHandle= netSdk.CLIENT_RealPlayEx(loginHandle, 0, null, 0);
         if(lRealHandle.longValue()!=0){
-        	System.out.println("realplay success");
-        	netSdk.CLIENT_SetRealDataCallBackEx(lRealHandle, CbfRealDataCallBackEx.getInstance(),null, 31);
+            System.out.println("realplay success");
+            netSdk.CLIENT_SetRealDataCallBackEx(lRealHandle, CbfRealDataCallBackEx.getInstance(),null, 31);
         }
-	}
-	
-	public void StopRealPlay(){
-		if(netSdk.CLIENT_StopRealPlayEx(lRealHandle)){
-			System.out.println("StopRealPlay success");
-		}
-	}
-	public void LoginOut(){
-		System.out.println("End Test");
-		
-		if( loginHandle.longValue() != 0)
-		{
-			netSdk.CLIENT_Logout(loginHandle);
-		}
-		System.out.println("See You...");
-		
-		netSdk.CLIENT_Cleanup();
-		System.exit(0);
-	}
-	
-	 public void RunTest(){
-			CaseMenu menu=new CaseMenu();
-			menu.addItem((new CaseMenu.Item(this , "realplay" , "realplay")));
-			menu.addItem((new CaseMenu.Item(this , "StopRealPlay" , "StopRealPlay")));
-			menu.run();
-		}
-	 /**
+    }
+
+    public void StopRealPlay(){
+        if(netSdk.CLIENT_StopRealPlayEx(lRealHandle)){
+            System.out.println("StopRealPlay success");
+        }
+    }
+    public void LoginOut(){
+        System.out.println("End Test");
+
+        if( loginHandle.longValue() != 0)
+        {
+            netSdk.CLIENT_Logout(loginHandle);
+        }
+        System.out.println("See You...");
+
+        netSdk.CLIENT_Cleanup();
+        System.exit(0);
+    }
+
+    public void RunTest(){
+        CaseMenu menu=new CaseMenu();
+        menu.addItem((new CaseMenu.Item(this , "realplay" , "realplay")));
+        menu.addItem((new CaseMenu.Item(this , "StopRealPlay" , "StopRealPlay")));
+        menu.run();
+    }
+    /**
      * 设备断线回调
      */
     private static class DisConnectCallBack implements NetSDKLib.fDisConnect {
@@ -121,7 +124,7 @@ public class RealplayEx {
             System.out.printf("Device[%s] Port[%d] DisConnect!\n", pchDVRIP, nDVRPort);
         }
     }
-    
+
     /**
      * 设备重连回调
      */
@@ -142,7 +145,7 @@ public class RealplayEx {
 
         }
     }
-    
+
     /**
      * 实时预览数据回调函数--扩展(pBuffer内存由SDK内部申请释放)
      */
@@ -170,36 +173,32 @@ public class RealplayEx {
         @Override
         public void invoke(LLong lRealHandle, int dwDataType, Pointer pBuffer,
                            int dwBufSize, int param, Pointer dwUser) {
-            Executors.newSingleThreadExecutor().submit(new Runnable() {
-                @Override
-                public void run() {
-                    //将内容转换为字节数组
-                    byte[] buffer = pBuffer.getByteArray(0, dwBufSize);
-                    if ((dwDataType - 1000) == 5) {//回调格式为flv的流
-                        server = SpringUtil.getBean(WebSocketServerDh.class);
-                        server.sendBuffer(buffer, lRealHandle.longValue());
-                    }
+            try {
+                //实际可为通道号
+                System.out.println("重内存指针获取4字节int值"+dwUser.getInt(0));
+                int channel = dwUser.getInt(0);
+                System.out.println("C++的内存指针"+Pointer.nativeValue(dwUser));
+                //将内容转换为字节数组
+                byte[] bytes = pBuffer.getByteArray(0, dwBufSize);
+                if ((dwDataType - 1000) == 5) {//回调格式为flv的流
+                    server = SpringUtil.getBean(WebSocketServerDh.class);
+                    ByteBuffer buffer = ByteBuffer.wrap(bytes);
+                    server.sendBuffer(buffer, channel);
                 }
-            });
-            //将内容转换为字节数组
-//            byte[] buffer = pBuffer.getByteArray(0, dwBufSize);
-//            if ((dwDataType - 1000) == 5) {//回调格式为flv的流
-//                //通过websocket发送
-//                server = SpringUtil.getBean(WebSocketServerDh.class);
-//                server.sendBuffer(buffer, lRealHandle.longValue());
-//                server = SpringUtil.getBean(WebSocketServerDh.class);
-//                pool.execute(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        server.sendBuffer(buffer, lRealHandle.longValue());
-//                    }
-//                });
-//            }
+            }catch (Exception e){
+                throw e;
+            }finally {
+                //清空4字节内存 不到一位 感觉不清楚问题也不大
+                //Native.free(Pointer.nativeValue(dwUser));
+                Pointer.nativeValue(dwUser, 0);
+            }
+
+
         }
     }
-    
+
     public static void main(String []args){
-    	RealplayEx XM=new RealplayEx();
+        RealplayEx XM=new RealplayEx();
         String ip = "172.23.12.231";
         int port = 37777;
         String username = "admin";
@@ -230,9 +229,9 @@ public class RealplayEx {
                 || answer.equalsIgnoreCase("no")
                 || answer.equalsIgnoreCase("n")));
 
-    	XM.InitTest();
+        XM.InitTest();
         XM.Login(ip,port,username,password);
-	    XM.RunTest();
-	    XM.LoginOut();
+        XM.RunTest();
+        XM.LoginOut();
     }
 }
