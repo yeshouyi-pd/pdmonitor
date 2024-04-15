@@ -40,7 +40,7 @@ public class PreviewController {
             return ResultUtils.getFailResult(-99, "设备未自动注册成功，请等待1分钟再试");
         }
         try {
-            boolean b = WebSocketServerDh.sessions.containsKey(device + 0);
+            boolean b =false;
             if (!b) {
                 log.error("未获取到WebSocket服务，请先建立通道");
                 return ResultUtils.getFailResult(-99, "视频连接错误,请重新打开页面");

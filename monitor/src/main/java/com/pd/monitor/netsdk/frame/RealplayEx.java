@@ -176,7 +176,7 @@ public class RealplayEx {
             try {
                 //实际可为通道号
               // System.out.println("重内存指针获取4字节int值"+dwUser.getInt(0));
-                int channel = dwUser.getInt(0);
+             //   int channel = dwUser.getInt(0);
 
               //  System.out.println("C++的内存指针"+Pointer.nativeValue(dwUser));
                 //将内容转换为字节数组
@@ -184,14 +184,14 @@ public class RealplayEx {
                 if ((dwDataType - 1000) == 5) {//回调格式为flv的流
                     server = SpringUtil.getBean(WebSocketServerDh.class);
                     ByteBuffer buffer = ByteBuffer.wrap(bytes);
-                    server.sendBuffer(buffer, channel ,lRealHandle);
+                    server.sendBuffer(buffer ,lRealHandle);
                 }
             }catch (Exception e){
                 throw e;
             }finally {
                 //清空4字节内存 不到一位 感觉不清楚问题也不大
                 //Native.free(Pointer.nativeValue(dwUser));
-                Pointer.nativeValue(dwUser, 0);
+              //  Pointer.nativeValue(dwUser, 0);
             }
 
 

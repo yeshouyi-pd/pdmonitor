@@ -6,11 +6,14 @@ import com.pd.monitor.controller.WaterQualityController;
 import com.pd.monitor.netsdk.frame.RealplayEx;
 import com.pd.monitor.netsdk.lib.NetSDKLib;
 import com.pd.monitor.netsdk.lib.ToolKits;
+import com.pd.monitor.netsdk.websocketServer.WebSocketServerDh;
 import com.sun.jna.Memory;
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.websocket.Session;
 
 /**
  * 实时预览接口实现
@@ -40,7 +43,7 @@ public class RealPlayModule {
 	 * @return 预览句柄
 	 */
 	public static NetSDKLib.LLong startRealPlay(NetSDKLib.LLong m_hLoginHandle,
-												int nChannelID, int rType, int emDataType) {
+												int nChannelID, int rType, int emDataType, Session session) {
 		NetSDKLib.NET_IN_REALPLAY_BY_DATA_TYPE inParam = new NetSDKLib.NET_IN_REALPLAY_BY_DATA_TYPE();
 		NetSDKLib.NET_OUT_REALPLAY_BY_DATA_TYPE outParam = new NetSDKLib.NET_OUT_REALPLAY_BY_DATA_TYPE();
 		inParam.nChannelID = nChannelID;
@@ -50,15 +53,17 @@ public class RealPlayModule {
 				inParam, outParam, 3000);
 		if (lRealHandle.longValue() != 0) {
 			LOG.error("拉取预览成功 success" + lRealHandle);
+
+			WebSocketServerDh.sessionsALLong.put(session,lRealHandle);
 			//设置回调的接收
 			//lRealHandle ：拉流成功的句柄
 			//你的接收回调的类里的方法 注：这里使用的是官方demo中的RealplayEx类下的接口
 			//源码发现 可以自定义参数channlID  放在  Pointer  的public 构造函数里面
 			//直接通过本地方法申请4位的真是内存空间  int站4位
-			Pointer dwUser = new Memory(4);
-			dwUser.setInt(0,nChannelID); //全部用掉
+	/*		Pointer dwUser = new Memory(4);
+			dwUser.setInt(0,nChannelID); //全部用掉*/
 			RealplayEx.netSdk.CLIENT_SetRealDataCallBackEx(lRealHandle, RealplayEx.CbfRealDataCallBackEx.getInstance(),
-					dwUser, 31);
+					null, 31);
 			return lRealHandle;
 		} else {
 			return null;
