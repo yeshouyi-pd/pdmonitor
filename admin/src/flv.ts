@@ -1,3 +1,4 @@
+// @ts-ignore
 import { ref } from "vue";
 function flv_start(flvPlayer: flvjs.Player | null) {
     flvPlayer?.play();

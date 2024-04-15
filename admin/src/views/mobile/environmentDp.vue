@@ -274,16 +274,16 @@ export default {
         data: []
       },
       tdhList:[
-        {key:"1", value:"1"},
-        {key:"2", value:"3"},
-        {key:"3", value:"5"},
-        {key:"4", value:"7"},
-        {key:"5", value:"9"},
-        {key:"6", value:"11"},
-        {key:"7", value:"13"},
-        {key:"8", value:"15"},
-        {key:"9", value:"17"},
-        {key:"10", value:"19"}
+        {key:"1", value:"0"},
+        {key:"2", value:"2"},
+        {key:"3", value:"4"},
+        {key:"4", value:"6"},
+        {key:"5", value:"8"},
+        {key:"6", value:"10"},
+        {key:"7", value:"12"},
+        {key:"8", value:"14"},
+        {key:"9", value:"16"},
+        {key:"10", value:"18"}
       ],
       dtimeList:['2023-10-25','2023-10-24','2023-10-23','2023-10-22','2023-10-21','2023-10-20','2023-10-19','2023-10-18','2023-10-17','2023-10-16','2023-10-15'],
       dtimeIndex:0,
@@ -373,7 +373,7 @@ export default {
     videoNew(){
       let _this = this;
       _this.clear();
-      window.location.href = "/mobile/videoNewDp?tdh=1&sbbh=1";
+      window.location.href = "/mobile/videoNewDp?tdh=0&sbbh=1";
     },
     clickMapPoint(sbmc,sbbh){
       let _this = this;
