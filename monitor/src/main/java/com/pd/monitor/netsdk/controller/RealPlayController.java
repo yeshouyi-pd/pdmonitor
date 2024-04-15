@@ -33,7 +33,7 @@ public class RealPlayController {
 
     @PostMapping("/startPlay/{nChannelID}")
     public Result startPlay(@PathVariable  int nChannelID){
-        try{
+/*        try{
             // 初始化
             LoginModule.init(LoginModule.disConnect, LoginModule.haveReConnect);
             // 若未登录，先登录。
@@ -58,21 +58,10 @@ public class RealPlayController {
             return ResultUtils.getSuccessResult("登录成功");
         }catch (Exception e){
             return ResultUtils.getFailResult("登录失败");
-        }
-
+        }*/
+        return ResultUtils.getSuccessResult("登录成功");
     }
 
-    public static void main(String[] args){
-        try{
-            // 初始化
-            LoginModule.init(LoginModule.disConnect, LoginModule.haveReConnect);
-            // 若未登录，先登录。
-            if (LoginModule.m_hLoginHandle.longValue() == 0){
-                LoginModule.login("49.239.193.148", 43489, "admin", "admin@bht2023");
-            }
-            RealPlayModule.startRealPlay(LoginModule.m_hLoginHandle,0, 0, 5);
-        }catch (Exception e){
-        }
-    }
+
 
 }
