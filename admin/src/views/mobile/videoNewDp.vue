@@ -14,19 +14,73 @@
     </header>
     <div class="page-first-div">
       <div class="left-box">
-        <iframe ref="firstIframe" @click="vueSendMsg('firstIframe')" v-trigger  width="100%" height="100%" src="http://119.3.2.53:9909/" scrolling="no" frameborder="0"></iframe>
-<!--        <iframe ref="firstIframe" @click="vueSendMsg('firstIframe')" v-trigger  width="100%" height="100%" src="http://127.0.0.1:80/" scrolling="no" frameborder="0"></iframe>-->
-<!--        <div class="left-box-item">-->
-<!--          &lt;!&ndash;          <div style="height: 5%;margin-top: 10px;display: flex;flex-direction: row;align-items: center;margin-left: 20px;">&ndash;&gt;-->
-<!--          &lt;!&ndash;            <div v-on:click="back()" style="color: rgb(255, 255, 255);font-size: 16px;border: 1px solid #043769;background-color:rgb(10,33,61);width: 15%;text-align: center;padding: 5px 0;cursor: pointer">&ndash;&gt;-->
-<!--          &lt;!&ndash;              返回&ndash;&gt;-->
-<!--          &lt;!&ndash;            </div>&ndash;&gt;-->
-<!--          &lt;!&ndash;          </div>&ndash;&gt;-->
-<!--          <div class="left-video-box">-->
-<!--            <iframe ref="firstIframe" @click="vueSendMsg(4,'firstIframe')" v-trigger width="100%" height="100%" src="http://119.3.2.53:9909/" scrolling="no" frameborder="0"></iframe>-->
-<!--          </div>-->
-<!--          <div class="left-text-style">7号浮标</div>-->
-<!--        </div>-->
+        <ul class="h5-ul" id="h5_channel_list">
+          <li id="channel-0" v-on:click="changeChannel(0)">D1 桥面1可见光（11.252.220.131）</li>
+          <li id="channel-2" v-on:click="changeChannel(2)">D3 桥面2可见光（11.252.220.132）</li>
+          <li id="channel-4" v-on:click="changeChannel(4)">D5 桥面3可见光（11.252.220.133）</li>
+          <li id="channel-6" v-on:click="changeChannel(6)">D7 桥面4可见光（11.252.220.134）</li>
+          <li id="channel-8" v-on:click="changeChannel(8)">D9 桥面5可见光（11.252.220.135）</li>
+          <li id="channel-10" v-on:click="changeChannel(10)">D11 桥面6可见光（11.252.220.136）</li>
+          <li id="channel-12" v-on:click="changeChannel(12)">D13 桥面7可见光（11.252.220.137）</li>
+          <li id="channel-14" v-on:click="changeChannel(14)">D15 桥面8可见光（11.2252.220.138）</li>
+          <li id="channel-16" v-on:click="changeChannel(16)">D17 铁塔1可见光(192.168.3.21)</li>
+          <li id="channel-18" v-on:click="changeChannel(18)">D19 铁塔2可见光（192.168.3.22）</li>
+        </ul>
+        <div class="h5-left">
+          <div class="h5-play-wrap">
+            <video ref="videoElement"
+                   class="centeredVideo"
+                   id="myPlayer"
+                   preload="auto"
+                   type="rtmp/flv"
+                   autoplay
+                   muted
+                   style="width: 100%;height: 100%"
+            ></video>
+          </div>
+          <fieldset class="h5-fieldset-wrap">
+            <legend style="color: #FFFFFF;margin-bottom: 0;">云台控制</legend>
+            <div class="h5-step-wrap">
+              <span style="color:#fff;">步长(1-8):</span>
+              <select id="h5_ptz_step" style="width: 130px;"  v-model="selectedValue">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+              </select>
+            </div>
+            <div class="h5-ptz-wrap" title="云台按钮操作界面">
+              <input type="button" class="h5-button" value="左上" v-on:click="onHandlePTZ('LeftUp')">
+              <input type="button" class="h5-button" value="上" v-on:click="onHandlePTZ('Up')">
+              <input type="button" class="h5-button" value="右上" v-on:click="onHandlePTZ('RightUp')">
+              <input type="button" class="h5-button" value="左" v-on:click="onHandlePTZ('Left')">
+              <input class="h5-button" value="" style="opacity: 0;">
+              <input type="button" class="h5-button" value="右" v-on:click="onHandlePTZ('Right')">
+              <input type="button" class="h5-button" value="左下" v-on:click="onHandlePTZ('LeftDown')">
+              <input type="button" class="h5-button" value="下" v-on:click="onHandlePTZ('Down')">
+              <input type="button" class="h5-button" value="右下" v-on:click="onHandlePTZ('RightDown')">
+            </div>
+            <div class="h5-zoomfocus-wrap" title="变倍聚焦操作界面">
+              <input type="button" class="h5-button" value="变倍-" v-on:click="onHandlePTZ('ZoomWide')">
+              <input type="button" class="h5-button" value="变倍+" v-on:click="onHandlePTZ('ZoomTele')">
+              <input type="button" class="h5-button" value="聚焦-" v-on:click="onHandlePTZ('FocusFar')">
+              <input type="button" class="h5-button" value="聚焦+" v-on:click="onHandlePTZ('FocusNear')">
+              <input type="button" class="h5-button" value="光圈-" v-on:click="onHandlePTZ('IrisSmall')">
+              <input type="button" class="h5-button" value="光圈+" v-on:click="onHandlePTZ('IrisLarge')">
+            </div>
+            <div class="h5-preset-wrap" title="预置点操作界面">
+              <div class="h5-item-form" style="margin-bottom: 10px;">
+                <label style="color: #fff">预置点：</label>
+                <input type="text" id="h5_preset" v-model="yuzhidian">
+              </div>
+              <input type="button" class="h5-button" value="查看" v-on:click="onHandlePTZ('GotoPreset')">
+            </div>
+          </fieldset>
+        </div>
       </div>
       <div class="right-box">
         <div class="right-top-box" id="playbox">
@@ -63,6 +117,7 @@
 <script>
 import Pagination from "@/components/pagination";
 import Times from "@/components/times";
+import flvjs from "flv.js";
 
 export default {
   name: 'video-dp',
@@ -100,7 +155,12 @@ export default {
         {key:"18", value:"RPCDA4016"}
       ],
       sbbh:'',
-      firstEnter:true
+      firstEnter:true,
+      flvPlayer: "",
+      websocketUrl:'ws://192.168.10.133:19091/monitor/device/monitor/',
+      curChannel:0,
+      selectedValue:5,
+      yuzhidian:''
     }
   },
   created() {
@@ -121,6 +181,15 @@ export default {
     window.addEventListener("message",this.onMessage);
     _this.getExplainVideoEvent();
     _this.firstEnter = false;
+    if(_this.tdh){
+      _this.changeChannel(_this.tdh);
+    }else{
+      _this.changeChannel(0);
+    }
+  },
+  destroy(){
+    let _this = this;
+    _this.destroyVideos();
   },
   directives: {
     trigger: {
@@ -221,11 +290,172 @@ export default {
         }
         return result;
       }
+    },
+    onHandlePTZ(name){
+      let _this = this;
+      let param2 = '';
+      if(name=='GotoPreset'){
+        if(Tool.isEmpty(_this.yuzhidian) || !(/^[0-9]+$/.test(_this.yuzhidian))){
+          Toast.error("请填写数字！");
+          return;
+        }
+        param2 = _this.yuzhidian;
+      }else{
+        param2 = _this.selectedValue;
+      }
+      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/ptzController/ptzControl/'+name+"/"+_this.curChannel+"/0/"+param2, {}).then((response)=>{
+        console.log(response);
+      })
+    },
+    changeChannel(channel){
+      let _this = this;
+      document.querySelectorAll('#h5_channel_list li').forEach(item => {item.classList.remove('fn-fontBlue')});
+      $("#channel-"+channel).addClass("fn-fontBlue");
+      _this.curChannel = channel;
+      _this.openvideoElement();
+    },
+    openvideoElement(){
+      let _this = this;
+      if(_this.flvPlayer){
+        // destroy
+        _this.flvPlayer.pause();
+        _this.flvPlayer.unload();
+        _this.flvPlayer.detachMediaElement();
+        _this.flvPlayer.destroy();
+        _this.flvPlayer = null;
+      }
+      try {
+        if (flvjs.isSupported()) {
+          let videoElement = this.$refs.videoElement
+          _this.flvPlayer = flvjs.createPlayer({
+            type: 'flv',					//媒体类型
+            url: _this.websocketUrl+_this.curChannel,	//flv格式媒体URL
+            isLive: true,					//数据源是否为直播流
+            hasAudio: false,				//数据源是否包含有音频
+            hasVideo: true,					//数据源是否包含有视频
+            liveDelay: 3 // 设置3秒的实时播放延迟
+          },{
+            autoCleanupSourceBuffer: true,
+            // autoCleanupMinBackwardDuration: 60,
+            // autoCleanupMaxBackwardDuration:12,
+            enableWorker: false, //不启用分离线程
+            enableStashBuffer: false,//关闭IO隐藏缓冲区
+            stashInitialSize: 128,
+            lazyLoad: false
+          });
+          _this.flvPlayer.attachMediaElement(videoElement);	//将播放实例注册到节点
+          _this.flvPlayer.load(); 					//加载数据流
+          _this.flvPlayer.play();					//播放数据流
+          _this.flvPlayer.on(flvjs.Events.ERROR, (errType, errDetail) =>{
+            _this.openvideoElement();
+          })
+          setInterval(() => {
+            if (_this.flvPlayer.buffered && _this.flvPlayer.buffered.length) {
+              let end = _this.flvPlayer.buffered.end(0); // 获取当前buffered值
+              let diff = end - _this.flvPlayer.currentTime; // 获取buffered与currentTime的差值
+              if (diff >= 5) {// 如果差值大于等于3s 手动跳帧 这里可根据自身需求来定
+                //单个视频
+                _this.flvPlayer.currentTime = _this.flvPlayer.buffered.end(0);//手动跳帧
+              }
+            }
+          }, 5000); //5000毫秒执行一次
+        }else {
+          console.log("flvjs不支持");
+        }
+      }catch (error){
+        console.log(error);
+      }
+    },
+    destroyVideos(){
+      let _this = this;
+      if(!_this.flvPlayer) return
+      _this.flvPlayer.pause()
+      _this.flvPlayer.unload()
+      _this.flvPlayer.detachMediaElement()
+      _this.flvPlayer.destroy()
+      _this.flvPlayer = null
     }
   }
 }
 </script>
 <style scoped>
+.h5-ul {
+  /* float: left; */
+  /* background: #ccc; */
+  list-style: none;
+  /* max-height: 250px; */
+  /* overflow-y: scroll; */
+  width: 150px;
+  text-align: center;
+  margin-right: 5px;
+  /* height: 100vh; */
+  overflow-y: auto;
+}
+.h5-ul li {
+  cursor: pointer;
+  height: 60px;
+  line-height: 30px;
+  border: 1px solid #fff;
+  color: #FFFFFF;
+}
+.h5-ul li:hover {
+  background-color: #eee;
+  color: #000;
+}
+.h5-left,
+.h5-right {
+  float: left;
+  width: 980px;
+  height: 630px;
+}
+.h5-play-wrap {
+  width: 980px;
+  height: 630px;
+  background-color: #000;
+  border: 1px solid #333;
+  position: relative;
+  overflow: hidden;
+}
+.fn-fontBlue{
+  color: #4AAFE3 !important;
+}
+.h5-fieldset-wrap {
+  width: 980px;
+  padding: 10px;
+}
+.h5-step-wrap {
+  margin-bottom: 10px;
+}
+.h5-zoomfocus-wrap {
+  width: 200px;
+  float: left;
+}
+.h5-preset-wrap {
+  float: left;
+  margin-top: 10px;
+}
+.h5-ptz-wrap {
+  width: 210px;
+  float: left;
+}
+.h5-ptz-wrap .h5-button {
+  width: 60px;
+  height: 30px;
+  margin-bottom: 3px;
+}
+.h5-zoomfocus-wrap .h5-button {
+  width: 80px;
+  height: 30px;
+  margin-bottom: 3px;
+}
+.h5-preset-wrap .h5-button {
+  width: 60px;
+  height: 30px;
+  margin-bottom: 3px;
+}
+.h5-preset-wrap input {
+  width: 130px;
+}
 .title-item{
   width: 80px;
   padding: 5px;
@@ -247,7 +477,6 @@ export default {
   height: 100%;
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
 }
 .left-box-item{
   width: 50%;

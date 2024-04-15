@@ -15,10 +15,8 @@ import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * WebSocket控制器
@@ -143,30 +141,22 @@ public class WebSocketServerDh {
      * 实现服务器主动推送
      */
     public void sendMessageToOne(NetSDKLib.LLong lRealHandle, ByteBuffer buffer) throws IOException {
-
         for (Map.Entry<Session ,NetSDKLib.LLong> entry : sessionsALLong.entrySet()) {
-
-            if(entry.getValue().longValue() == lRealHandle.longValue()){
-                try {
-                    /**
-                     * tomcat的原因,使用session.getAsyncRemote()会报Writing FULL WAITING error
-                     * 需要使用session.getBasicRemote()
-                     */
-                     System.out.println("session:"+entry.getKey());
-                     entry.getKey().getBasicRemote().sendBinary(buffer);
-
-                } catch (Exception e) {
-                    e.printStackTrace();
+            if(entry.getKey()!=null && entry.getKey().isOpen()){
+                if(entry.getValue().longValue() == lRealHandle.longValue()){
+                    try {
+                        /**
+                         * tomcat的原因,使用session.getAsyncRemote()会报Writing FULL WAITING error
+                         * 需要使用session.getBasicRemote()
+                         */
+                        System.out.println("session:"+entry.getKey());
+                        entry.getKey().getBasicRemote().sendBinary(buffer);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
-
         }
-
-
-
-
-
-
     }
 
     public static void sendBuffer(ByteBuffer buffer,NetSDKLib.LLong lRealHandle) {
