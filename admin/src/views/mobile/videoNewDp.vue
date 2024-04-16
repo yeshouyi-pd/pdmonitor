@@ -54,30 +54,30 @@
               </select>
             </div>
             <div class="h5-ptz-wrap" title="云台按钮操作界面">
-              <input type="button" class="h5-button" value="左上" v-on:click="onHandlePTZ('LeftUp')">
-              <input type="button" class="h5-button" value="上" v-on:click="onHandlePTZ('Up')">
-              <input type="button" class="h5-button" value="右上" v-on:click="onHandlePTZ('RightUp')">
-              <input type="button" class="h5-button" value="左" v-on:click="onHandlePTZ('Left')">
+              <input type="button" class="h5-button" value="左上" @mousedown="onHandlePTZ('LeftUp', false)" @mouseup="onHandlePTZ('LeftUp', true)">
+              <input type="button" class="h5-button" value="上" @mousedown="onHandlePTZ('Up', false)" @mouseup="onHandlePTZ('Up', true)">
+              <input type="button" class="h5-button" value="右上" @mousedown="onHandlePTZ('RightUp', false)" @mouseup="onHandlePTZ('RightUp', true)">
+              <input type="button" class="h5-button" value="左" @mousedown="onHandlePTZ('Left', false)" @mouseup="onHandlePTZ('Left', true)">
               <input class="h5-button" value="" style="opacity: 0;">
-              <input type="button" class="h5-button" value="右" v-on:click="onHandlePTZ('Right')">
-              <input type="button" class="h5-button" value="左下" v-on:click="onHandlePTZ('LeftDown')">
-              <input type="button" class="h5-button" value="下" v-on:click="onHandlePTZ('Down')">
-              <input type="button" class="h5-button" value="右下" v-on:click="onHandlePTZ('RightDown')">
+              <input type="button" class="h5-button" value="右" @mousedown="onHandlePTZ('Right', false)" @mouseup="onHandlePTZ('Right', true)">
+              <input type="button" class="h5-button" value="左下" @mousedown="onHandlePTZ('LeftDown', false)" @mouseup="onHandlePTZ('LeftDown', true)">
+              <input type="button" class="h5-button" value="下" @mousedown="onHandlePTZ('Down', false)" @mouseup="onHandlePTZ('Down', true)">
+              <input type="button" class="h5-button" value="右下" @mousedown="onHandlePTZ('RightDown', false)" @mouseup="onHandlePTZ('RightDown', true)">
             </div>
             <div class="h5-zoomfocus-wrap" title="变倍聚焦操作界面">
-              <input type="button" class="h5-button" value="变倍-" v-on:click="onHandlePTZ('ZoomWide')">
-              <input type="button" class="h5-button" value="变倍+" v-on:click="onHandlePTZ('ZoomTele')">
-              <input type="button" class="h5-button" value="聚焦-" v-on:click="onHandlePTZ('FocusFar')">
-              <input type="button" class="h5-button" value="聚焦+" v-on:click="onHandlePTZ('FocusNear')">
-              <input type="button" class="h5-button" value="光圈-" v-on:click="onHandlePTZ('IrisSmall')">
-              <input type="button" class="h5-button" value="光圈+" v-on:click="onHandlePTZ('IrisLarge')">
+              <input type="button" class="h5-button" value="变倍-" @mousedown="onHandlePTZ('ZoomWide', false)" @mouseup="onHandlePTZ('ZoomWide', true)">
+              <input type="button" class="h5-button" value="变倍+" @mousedown="onHandlePTZ('ZoomTele', false)" @mouseup="onHandlePTZ('ZoomTele', true)">
+              <input type="button" class="h5-button" value="聚焦-" @mousedown="onHandlePTZ('FocusFar', false)" @mouseup="onHandlePTZ('FocusFar', true)">
+              <input type="button" class="h5-button" value="聚焦+" @mousedown="onHandlePTZ('FocusNear', false)" @mouseup="onHandlePTZ('FocusNear', true)">
+              <input type="button" class="h5-button" value="光圈-" @mousedown="onHandlePTZ('IrisSmall', false)" @mouseup="onHandlePTZ('IrisSmall', true)">
+              <input type="button" class="h5-button" value="光圈+" @mousedown="onHandlePTZ('IrisLarge', false)" @mouseup="onHandlePTZ('IrisLarge', true)">
             </div>
             <div class="h5-preset-wrap" title="预置点操作界面">
               <div class="h5-item-form" style="margin-bottom: 10px;">
                 <label style="color: #fff">预置点：</label>
                 <input type="text" id="h5_preset" v-model="yuzhidian">
               </div>
-              <input type="button" class="h5-button" value="查看" v-on:click="onHandlePTZ('GotoPreset')">
+              <input type="button" class="h5-button" value="查看" @mousedown="onHandlePTZ('GotoPreset', true)">
             </div>
           </fieldset>
         </div>
@@ -291,7 +291,7 @@ export default {
         return result;
       }
     },
-    onHandlePTZ(name){
+    onHandlePTZ(name, isStop){
       let _this = this;
       let param2 = '';
       if(name=='GotoPreset'){
@@ -303,9 +303,15 @@ export default {
       }else{
         param2 = _this.selectedValue;
       }
-      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/ptzController/ptzControl/'+name+"/"+_this.curChannel+"/0/"+param2, {}).then((response)=>{
-        console.log(response);
-      })
+      if(!isStop) {
+        _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/ptzController/ptzControlStart/'+name+"/"+_this.curChannel+"/0/"+param2, {}).then((response)=>{
+          console.log(response);
+        })
+      } else {
+        _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/ptzController/ptzControlEnd/'+name+"/"+_this.curChannel, {}).then((response)=>{
+          console.log(response);
+        })
+      }
     },
     changeChannel(channel){
       let _this = this;

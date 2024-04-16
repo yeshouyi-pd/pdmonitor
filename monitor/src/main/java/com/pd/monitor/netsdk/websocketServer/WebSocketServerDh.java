@@ -5,6 +5,7 @@ import com.pd.monitor.netsdk.lib.NetSDKLib;
 import com.pd.monitor.netsdk.module.LoginModule;
 import com.pd.monitor.netsdk.module.RealPlayModule;
 import com.pd.monitor.netsdk.service.VideoMonitorService;
+import com.pd.monitor.wx.conf.WxRedisConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -60,7 +61,8 @@ public class WebSocketServerDh {
             LoginModule.init(LoginModule.disConnect, LoginModule.haveReConnect);
             // 若未登录，先登录。
             if (LoginModule.m_hLoginHandle.longValue() == 0){
-                LoginModule.login("49.239.193.148", 43489, "admin", "admin@bht2023");
+                Map<String,String> attrMap = WxRedisConfig.getAttrMap();
+                LoginModule.login(attrMap.get("m_strIp"), Integer.parseInt(attrMap.get("m_nPort")), attrMap.get("m_strUser"), attrMap.get("m_strPassword"));
             }
             RealPlayModule.startRealPlay(LoginModule.m_hLoginHandle,channel, 0, 5,session);
 
