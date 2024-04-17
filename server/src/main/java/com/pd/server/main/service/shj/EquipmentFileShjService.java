@@ -255,7 +255,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                 result.put("data",data);
                 result.put("entity",entity);
                 //白海豚写剪切视频的事件，李响读了去剪切视频
-                if(("1001,1007,1009,1010,1020,1022,1024,1026".contains(entity.getType()))&&sbbh.contains("RPCD")){
+                if(("1001,1007,1009,1010,1020,1022,1024,1026".contains(entity.getType()))&&(sbbh.contains("RPCD")||sbbh.contains("tl"))){
 //                    if("A4".equals(lists.get(0).getDqzl())&&"1020,1022,1024,1026".contains(entity.getType())){
 //                        saveNewEvent(entity);
 //                    }else if("A1".equals(lists.get(0).getDqzl())){
@@ -288,7 +288,6 @@ public class EquipmentFileShjService extends AbstractScanRequest{
 
     public static void saveNewEvent(EquipmentFile record){
         LOG.error("剪切视频数据："+JSONObject.toJSONString(record));
-        System.out.println("1:"+DateUtil.getFormatDate(new Date(),"yyyy-MM-dd HH:mm:ss"));
         String[] arr = record.getWjmc().split("_");
         if(Integer.parseInt(arr[3])<Integer.parseInt(attrServiceStatic.findByAttrKey("zskssj")) || Integer.parseInt(arr[3])>Integer.parseInt(attrServiceStatic.findByAttrKey("wsjssj"))){
             return;
@@ -329,11 +328,9 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                 if("1001,1007,1009,1010".contains(record.getType())){
                     // 提交一个延迟执行的任务
                     scheduledExecutorService.schedule(() -> {
-                        System.out.println("2:"+DateUtil.getFormatDate(new Date(),"yyyy-MM-dd HH:mm:ss"));
                         cameraMiddleServiceStatic.save(cameraMiddle);
                     }, Integer.parseInt(attrServiceStatic.findByAttrKey("spjqjgsj")), TimeUnit.SECONDS);
                 }else{
-                    System.out.println("3:"+DateUtil.getFormatDate(new Date(),"yyyy-MM-dd HH:mm:ss"));
                     cameraMiddleServiceStatic.save(cameraMiddle);
                 }
 

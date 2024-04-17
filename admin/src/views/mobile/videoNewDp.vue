@@ -157,7 +157,7 @@ export default {
       sbbh:'',
       firstEnter:true,
       flvPlayer: "",
-      websocketUrl:'ws://192.168.10.133:19091/monitor/device/monitor/',
+      websocketUrl:'ws://49.239.193.146:50091/monitor/device/monitor/',
       curChannel:0,
       selectedValue:5,
       yuzhidian:''
@@ -178,8 +178,7 @@ export default {
   },
   mounted() {
     let _this = this;
-    window.addEventListener("message",this.onMessage);
-    _this.getExplainVideoEvent();
+    //window.addEventListener("message",this.onMessage);
     _this.firstEnter = false;
     if(_this.tdh){
       _this.changeChannel(_this.tdh);
@@ -279,12 +278,12 @@ export default {
       }, 1000)
     },
     optionKVArray(list, key){
-      if (!list || !key) {
+      if (!list) {
         return "";
       } else {
         let result = "";
         for (let i = 0; i < list.length; i++) {
-          if (key === list[i]["key"]) {
+          if (key == list[i]["key"]) {
             result = list[i]["value"];
           }
         }
@@ -315,6 +314,8 @@ export default {
     },
     changeChannel(channel){
       let _this = this;
+      _this.sbbhTdh = channel;
+      _this.getExplainVideoEvent();
       document.querySelectorAll('#h5_channel_list li').forEach(item => {item.classList.remove('fn-fontBlue')});
       $("#channel-"+channel).addClass("fn-fontBlue");
       _this.curChannel = channel;
