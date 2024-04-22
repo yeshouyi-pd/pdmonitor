@@ -2,12 +2,15 @@ package com.pd.monitor.controller;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.pd.monitor.wx.conf.BaseWxController;
 import com.pd.server.main.domain.*;
 import com.pd.server.main.dto.*;
 import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
 import com.pd.server.main.dto.basewx.my.PredationNumDwDto;
 import com.pd.server.main.service.*;
+import com.pd.server.util.CopyUtil;
 import com.pd.server.util.DateUtil;
 import com.pd.server.util.DateUtils;
 import org.slf4j.Logger;
@@ -60,6 +63,33 @@ public class WelcomeController extends BaseWxController{
     private EquipmentFileEventService equipmentFileEventService;
     @Resource
     private VideoEventService videoEventService;
+
+    @PostMapping("/getRealVideoEvent")
+    public ResponseDto getRealVideoEvent(@RequestBody VideoEventDto pageDto){
+        ResponseDto responseDto = new ResponseDto();
+        PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
+        VideoEventExample example = new VideoEventExample();
+        VideoEventExample.Criteria ca = example.createCriteria();
+        if(!StringUtils.isEmpty(pageDto.getSbbh())){
+            ca.andSbbhIn(Arrays.asList(pageDto.getSbbh().split(",")));
+        }
+        if(!StringUtils.isEmpty(pageDto.getStime())){
+            ca.andRqGreaterThanOrEqualTo(pageDto.getStime());
+        }
+        if(!StringUtils.isEmpty(pageDto.getEtime())){
+            ca.andRqLessThanOrEqualTo(pageDto.getEtime());
+        }
+        ca.andSfyspEqualTo(2);//实时视频
+        ca.andSmEqualTo("1");//已核查
+        example.setOrderByClause(" kssj desc ");
+        List<VideoEvent> videoEventList = videoEventService.selectByExample(example);
+        PageInfo<VideoEvent> pageInfo = new PageInfo<>(videoEventList);
+        pageDto.setTotal(pageInfo.getTotal());
+        List<VideoEventDto> videoEventDtoList = CopyUtil.copyList(videoEventList, VideoEventDto.class);
+        pageDto.setList(videoEventDtoList);
+        responseDto.setContent(pageDto);
+        return responseDto;
+    }
 
     @PostMapping("/getExplainVideoEvent")
     public ResponseDto getExplainVideoEvent(@RequestBody VideoEventDto videoEventDto){

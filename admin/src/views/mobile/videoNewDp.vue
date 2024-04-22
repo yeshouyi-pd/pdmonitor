@@ -76,8 +76,11 @@
               <div class="h5-item-form" style="margin-bottom: 10px;">
                 <label style="color: #fff">预置点：</label>
                 <input type="text" id="h5_preset" v-model="yuzhidian">
+                <input type="button" class="h5-button" value="查看" @mousedown="onHandlePTZ('GotoPreset', true)" style="margin-left: 10px;">
               </div>
-              <input type="button" class="h5-button" value="查看" @mousedown="onHandlePTZ('GotoPreset', true)">
+              <button v-on:click="getRealVideo(1)" class="btn btn-xs btn-info" style="margin-left: 10px;">
+                <i class="ace-icon fa fa-book bigger-120">查看实时分析列表</i>
+              </button>
             </div>
           </fieldset>
         </div>
@@ -104,7 +107,14 @@
                 <td>{{devices|optionNSArray(item.sbbh)}}</td>
                 <td>{{item.kssj}}</td>
                 <td>{{item.jssj}}</td>
-                <td style="cursor: pointer;" v-on:click="getPlayUrl(item)">查看视频</td>
+                <td>
+                  <button v-on:click="getPlayUrl(item)" class="btn btn-xs btn-info" >
+                    <i class="ace-icon fa fa-book bigger-120">查看</i>
+                  </button>
+                  <button v-on:click="download(item)" class="btn btn-xs btn-info" style="margin-left: 10px;">
+                    <i class="ace-icon fa fa-download bigger-120">下载</i>
+                  </button>
+                </td>
               </tr>
               </tbody>
             </table>
@@ -112,11 +122,103 @@
         </div>
       </div>
     </div>
+
+    <div id="video-modal" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document" style="width: 80%;height: 80%;">
+        <div class="modal-content" style="width: 100%;margin: auto">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">实时分析视频列表</h4>
+          </div>
+          <div class="modal-body">
+            <form style="margin-bottom: 15px;">
+              <table style="font-size: 1.1em;width:100%;" class="text-right">
+                <tbody>
+                <tr>
+                  <td style="width: 10%;">
+                    开始日期：
+                  </td>
+                  <td style="width: 15%;">
+                    <times v-bind:startTime="startTime" v-bind:endTime="endTime" v-bind:svalue="videoEventDto.stime" v-bind:evalue="videoEventDto.etime" start-id="rStime" end-id="rEtime"></times>
+                  </td>
+                  <td  style="width: 20%" class="text-center">
+                    <button type="button" v-on:click="getRealVideo(1)" class="btn btn-sm btn-info btn-round" style="margin-right: 10px;">
+                      <i class="ace-icon fa fa-book"></i>
+                      查询
+                    </button>
+                    <button type="button" v-on:click="resetRealVideo()"  class="btn btn-sm btn-info btn-round" style="margin-right: 10px;">
+                      <i class="ace-icon fa fa-book"></i>
+                      重置
+                    </button>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </form>
+            <table class="table  table-bordered table-hover">
+              <thead>
+              <tr>
+                <th>设备名称</th>
+                <th>设备sn</th>
+                <th>开始时间</th>
+                <th>结束时间</th>
+                <th style="width: 18%;">操作</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr v-for="item in videoEventsSs">
+                <td>{{devices|optionNSArray(item.sbbh)}}</td>
+                <td>{{item.sbbh}}</td>
+                <td>{{item.kssj}}</td>
+                <td>{{item.jssj}}</td>
+                <td>
+                  <button v-on:click="watchVideo(item.wjlj)" class="btn btn-xs btn-info" style="margin-left: 10px;">
+                    <i class="ace-icon fa fa-book bigger-120">查看视频</i>
+                  </button>
+                  <button v-on:click="download(item)" class="btn btn-xs btn-info" style="margin-left: 10px;">
+                    <i class="ace-icon fa fa-download bigger-120">下载</i>
+                  </button>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+            <pagination ref="pagination" v-bind:list="getRealVideo" v-bind:itemCount="10"></pagination>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-white btn-default btn-round" data-dismiss="modal">
+              <i class="ace-icon fa fa-times"></i>
+              关闭
+            </button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div id="video-modal-ss" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document" style="width: 80%">
+        <div class="modal-content" style="width: 100%;margin: auto">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">视频回放</h4>
+          </div>
+          <div class="modal-body" :style="'height: '+videoHeight+'px;overflow-y: auto;width:100%;'" id="playboxSs">
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-white btn-default btn-round" data-dismiss="modal">
+              <i class="ace-icon fa fa-times"></i>
+              关闭
+            </button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
   </div>
 </template>
 <script>
-import Pagination from "@/components/pagination";
-import Times from "@/components/times";
+import Times from "../../components/times";
+import Pagination from "../../components/pagination";
 import flvjs from "flv.js";
 
 export default {
@@ -160,7 +262,11 @@ export default {
       websocketUrl:'ws://49.239.193.146:50091/monitor/device/monitor/',
       curChannel:0,
       selectedValue:5,
-      yuzhidian:''
+      yuzhidian:'',
+      videoEventsSs:[],
+      videoEventDto:{},
+      videoHeight:550,
+      deptMap:[]
     }
   },
   created() {
@@ -178,6 +284,7 @@ export default {
   },
   mounted() {
     let _this = this;
+    _this.deptMap = Tool.getDeptUser();
     //window.addEventListener("message",this.onMessage);
     _this.firstEnter = false;
     if(_this.tdh){
@@ -185,6 +292,7 @@ export default {
     }else{
       _this.changeChannel(0);
     }
+    _this.$refs.pagination.size = 10;
   },
   destroy(){
     let _this = this;
@@ -205,6 +313,61 @@ export default {
       if(!_this.firstEnter){
         _this.getExplainVideoEvent();
       }
+    },
+    download(item){
+      let _this = this;
+      window.location.href = process.env.VUE_APP_SERVER + '/monitor/download/audio/downVideo?id='+item.id;
+    },
+    /**
+     *开始时间
+     */
+    startTime(rep){
+      let _this = this;
+      _this.videoEventDto.stime = rep;
+      _this.$forceUpdate();
+    },
+    /**
+     *结束时间
+     */
+    endTime(rep){
+      let _this = this;
+      _this.videoEventDto.etime = rep;
+      _this.$forceUpdate();
+    },
+    resetRealVideo(){
+      let _this = this;
+      _this.videoEventDto.stime = "";
+      _this.videoEventDto.etime = "";
+      _this.getRealVideo(1);
+    },
+    getRealVideo(page){
+      let _this = this;
+      Loading.show();
+      _this.videoEventDto.page = page;
+      _this.videoEventDto.size = _this.$refs.pagination.size;
+      _this.videoEventDto.sbbh=_this.optionKVArray(_this.sbbhTdhList,_this.sbbhTdh);
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/welcome/getRealVideoEvent', _this.videoEventDto).then((response)=>{
+        Loading.hide();
+        let resp = response.data;
+        _this.videoEventsSs = resp.content.list;
+        if(_this.videoEventsSs.length>0){
+          $("#video-modal").modal("show");
+        }else{
+          Toast.success("无数据！");
+        }
+      })
+    },
+    watchVideo(wjlj){
+      let _this = this;
+      $("#playboxSs").empty();
+      let video = document.createElement("video");
+      video.setAttribute("width","100%");
+      video.setAttribute("height","500px");
+      video.setAttribute("controls","controls");
+      video.src = wjlj;
+      document.getElementById('playboxSs').appendChild(video);
+      $("#video-modal-ss").modal("show");
+      video.play();
     },
     getPlayUrl(item){
       let _this = this;

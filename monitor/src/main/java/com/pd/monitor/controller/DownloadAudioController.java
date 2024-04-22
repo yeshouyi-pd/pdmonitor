@@ -43,6 +43,8 @@ public class DownloadAudioController {
     public RedisTemplate redisTemplate;
     @Resource
     public AttrService attrService;
+    @Resource
+    public VideoEventService videoEventService;
 
     @GetMapping("/downZipByWjmc")
     public void downZipByWjmc(HttpServletRequest request, HttpServletResponse response) throws Exception{
@@ -541,4 +543,37 @@ public class DownloadAudioController {
         response.getOutputStream().close();
     }
 
+
+    @GetMapping("/downVideo")
+    public void downVideo(HttpServletRequest request, HttpServletResponse response) {
+        response.setCharacterEncoding("UTF-8");
+        String filePath = attrService.findByAttrKey("filePath");
+        BufferedInputStream in = null;
+        try{
+            String id = request.getParameter("id");
+            VideoEvent videoEvent = videoEventService.selectById(id);
+            String fileName = videoEvent.getWjlj().substring(videoEvent.getWjlj().lastIndexOf('/'),videoEvent.getWjlj().length());
+            in = new BufferedInputStream(new FileInputStream(videoEvent.getWjlj().replace("http://49.239.193.146:59088/",filePath).replace("http://49.239.193.146:49082/",filePath)));
+            response.reset();
+            response.setContentType("application/octet-stream");
+            fileName = new String(fileName.getBytes(), "ISO-8859-1");
+            response.setHeader("Content-Disposition", "attachment; filename="+fileName);
+            // 将网络输入流转换为输出流
+            int i;
+            while ((i = in.read()) != -1) {
+                response.getOutputStream().write(i);
+            }
+            in.close();
+            response.getOutputStream().close();
+        }catch (IOException e){
+            try{
+                String result = "未找到该文件";
+                response.getOutputStream().write(result.getBytes());
+                in.close();
+                response.getOutputStream().close();
+            }catch (IOException exception){
+                System.out.println("关闭流失败");
+            }
+        }
+    }
 }
