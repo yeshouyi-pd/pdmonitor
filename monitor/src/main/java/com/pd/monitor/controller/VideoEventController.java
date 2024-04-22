@@ -97,10 +97,13 @@ public class VideoEventController {
             ca.andSfyspEqualTo(pageDto.getSfysp());
         }
         if(!StringUtils.isEmpty(pageDto.getStime())){
-            ca.andRqLessThanOrEqualTo(pageDto.getStime());
+            ca.andRqGreaterThanOrEqualTo(pageDto.getStime());
         }
         if(!StringUtils.isEmpty(pageDto.getEtime())){
             ca.andRqLessThanOrEqualTo(pageDto.getEtime());
+        }
+        if(!StringUtils.isEmpty(pageDto.getSm())){
+            ca.andSmEqualTo(pageDto.getSm());
         }
         example.setOrderByClause(" kssj desc ");
         List<VideoEvent> videoEventList = videoEventService.selectByExample(example);
