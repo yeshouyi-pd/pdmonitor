@@ -11,7 +11,7 @@ public class UdpConf {
 
     @Bean
     public IntegrationFlow integrationFlow(){
-        return IntegrationFlows.from(new UnicastReceivingChannelAdapter(9098))
+        return IntegrationFlows.from(new UnicastReceivingChannelAdapter(19098))
                 .handle("UdpService","handleMessage").get();
     }
 }
