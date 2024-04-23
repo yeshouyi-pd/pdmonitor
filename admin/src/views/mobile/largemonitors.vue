@@ -48,7 +48,7 @@
       </div>
       <div class="bcenter">
         <div class="h63">
-          <EquipmentAMap v-bind:height-max="heightMax"></EquipmentAMap>
+          <EquipmentAMap v-bind:height-max="heightMax" :click-map-point="clickMapPoint"></EquipmentAMap>
         </div>
         <div class="h37">
           <span>分析数据</span>
@@ -138,6 +138,17 @@ export default {
   components:{EquipmentAMap,Swiper},
   data: function (){
     return {
+      tdhList:[
+        {key:"C11", value:"9"},
+        {key:"C12", value:"5"},
+        {key:"C13", value:"3"},
+        {key:"C14", value:"29"},
+        {key:"C15", value:"27"},
+        {key:"C16", value:"25"},
+        {key:"C17", value:"23"},
+        {key:"C18", value:"19"},
+        {key:"C19", value:"15"}
+      ],
       config: {
         headerBGC: "#1F2C94",
         oddRowBGC: "#1F2C94",
@@ -205,6 +216,15 @@ export default {
     window.getVideoData = _this.getVideoData;
   },
   methods: {
+    clickMapPoint(sbmc,sbbh){
+      let _this = this;
+      if(sbbh.includes("C1")){
+        let tdh = _this.optionKVArrayNew(_this.tdhList,sbbh);
+        window.location.href = "/mobile/videoTl?tdh="+tdh+"&sbbh="+sbbh;
+      }else {
+        Toast.error("该站点没有数据！");
+      }
+    },
     toTlVideo(){
       window.location.href = "/mobile/videoTl";
     },
@@ -241,7 +261,14 @@ export default {
       if(typeof(WebSocket) == "undefined") {
         alert("您的浏览器不支持WebSocket,无法实时更新数据,请使用谷歌、火狐或IE11等浏览器!");
       }else{
-        let socketUrl="ws://119.3.2.53:9091/monitor/websocket/21_"+new Date().getTime();
+        let socketUrl="";
+        if(_this.LOCAL_SSBRL){
+          socketUrl="ws://119.3.2.53:9091/monitor/websocket/21_"+new Date().getTime();
+        }else if(_this.LOCAL_TLBHQ){
+          socketUrl="ws://111.38.21.161:7002/monitor/websocket/21_"+new Date().getTime();
+        }else{
+          socketUrl="ws://49.239.193.146:50091/monitor/websocket/21_"+new Date().getTime();
+        }
         //let socketUrl="ws://192.168.10.13:9091/monitor/websocket/21_"+new Date().getTime();
         console.log(socketUrl);
         if(socket!=null){
@@ -668,6 +695,19 @@ export default {
         for (let i = 0; i < list.length; i++) {
           if (key === list[i]["sbsn"]) {
             result = list[i]["fzwz"];
+          }
+        }
+        return result;
+      }
+    },
+    optionKVArrayNew(list, key) {
+      if (!list || !key) {
+        return "";
+      } else {
+        let result = "";
+        for (let i = 0; i < list.length; i++) {
+          if (key === list[i]["key"]) {
+            result = list[i]["value"];
           }
         }
         return result;

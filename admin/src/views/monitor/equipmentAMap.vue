@@ -158,7 +158,7 @@
                     _this.amap = new AMap.Map('equipmentamap', {
                       center: [117.773,31.0355],
                       resizeEnable: true,
-                      zoom: 7,
+                      zoom: 10,
                       mapStyle: _this.mapStyle
                     });
                   }
@@ -185,6 +185,10 @@
                         let ycicon = new AMap.Icon({
                             image: '/largemonitors/assets/imgs/ycsb.png',
                             size: new AMap.Size(29, 29)
+                        })
+                        let cameraicon = new AMap.Icon({
+                          image: '/largemonitors/assets/imgs/Camera.png',
+                          size: new AMap.Size(35, 35)
                         })
                         if("0001"==devices[i].sblb){
                             let marker = new AMap.Marker({
@@ -249,13 +253,39 @@
                                 });
                                 infoWindow.open(_this.amap, e.target.getPosition());
                             });
+                        }else if("004"==devices[i].sblb){
+                          let marker = new AMap.Marker({
+                            icon: cameraicon,
+                            position: devices[i].gps.split(','),
+                            offset: new AMap.Pixel(-12,-12),
+                            zIndex: 101,
+                            map: _this.amap
+                          });
+                          marker.setLabel({
+                            direction:'center',
+                            offset: new AMap.Pixel(10, 0),  //设置文本标注偏移量
+                            content: "<div style='color: #fff'>"+devices[i].fzwz+"</div>", //设置文本标注内容
+                          });
+                          marker.content = [];
+                          marker.content.push(devices[i].deptcode);
+                          marker.content.push(devices[i].centerCode);
+                          marker.content.push(devices[i].fzwz);
+                          marker.content.push(devices[i].sbsn);
+                          AMap.event.addListener(marker, 'click', function (e) {
+                            let infoWindow = new AMap.InfoWindow({
+                              isCustom: true,  //使用自定义窗体
+                              content: _this.createInfoWindow(e.target.content),
+                              offset: new AMap.Pixel(16, -40)
+                            });
+                            infoWindow.open(_this.amap, e.target.getPosition());
+                          });
                         }
                     }
                 })
             },
             createInfoWindow(content) {
                 let _this = this;
-                //_this.clickMapPoint(content[3]);
+                _this.clickMapPoint(content[2],content[3]);
                 let info = document.createElement("div");
                 info.className = "custom-info input-card content-window-card";
 

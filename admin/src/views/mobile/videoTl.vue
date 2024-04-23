@@ -12,7 +12,7 @@
     </header>
     <div class="page-first-div">
       <div class="left-box">
-        <iframe width="100%" height="100%" src="http://119.3.2.53:8808/" scrolling="no" frameborder="0"></iframe>
+        <iframe ref="firstIframe" @click="vueSendMsg('firstIframe')" v-trigger  width="100%" height="100%" src="http://119.3.2.53:8808/" scrolling="no" frameborder="0"></iframe>
         <!--        <div class="left-box-item">-->
         <!--          &lt;!&ndash;          <div style="height: 5%;margin-top: 10px;display: flex;flex-direction: row;align-items: center;margin-left: 20px;">&ndash;&gt;-->
         <!--          &lt;!&ndash;            <div v-on:click="back()" style="color: rgb(255, 255, 255);font-size: 16px;border: 1px solid #043769;background-color:rgb(10,33,61);width: 15%;text-align: center;padding: 5px 0;cursor: pointer">&ndash;&gt;-->
@@ -43,18 +43,20 @@
               </tr>
               </thead>
               <tbody>
-<!--              <tr v-for="item in videoEvents">-->
-<!--                <td>{{devices|optionNSArray(item.sbbh)}}</td>-->
-<!--                <td>{{item.kssj}}</td>-->
-<!--                <td>{{item.jssj}}</td>-->
-<!--                <td style="cursor: pointer;" v-on:click="getPlayUrl(item)">查看视频</td>-->
-<!--              </tr>-->
-                  <tr>
-                    <td>铜陵保护区2</td>
-                    <td>2023-12-19 19:16:47</td>
-                    <td>2023-12-19 19:17:47</td>
-                    <td style="cursor: pointer;" v-on:click="getPlayUrl()">查看视频</td>
-                  </tr>
+              <tr v-for="item in videoEvents">
+                <td>{{devices|optionNSArray(item.sbbh)}}</td>
+                <td>{{item.kssj}}</td>
+                <td>{{item.jssj}}</td>
+<!--                <td style="cursor: pointer;" v-on:click="getPlayUrl(item)">查看</td>-->
+                <td>
+                  <button v-on:click="getPlayUrl(item)" class="btn btn-xs btn-info" style="margin-left: 10px;">
+                    <i class="ace-icon fa fa-book bigger-120">查看视频</i>
+                  </button>
+                  <button v-on:click="download(item)" class="btn btn-xs btn-info" style="margin-left: 10px;">
+                    <i class="ace-icon fa fa-download bigger-120">下载</i>
+                  </button>
+                </td>
+              </tr>
               </tbody>
             </table>
           </div>
@@ -74,11 +76,18 @@ export default {
     return {
       LOCAL_VIDEO:LOCAL_VIDEO,
       devices:[],
-      videoEvents:[]
+      videoEvents:[],
+      sbbhSxt:'',//设备编号
+      tdh:0//通道号
     }
   },
   created() {
     let _this = this;
+    if(!Tool.isEmpty(location.search)){
+      const params = new URLSearchParams(location.search);
+      _this.tdh = params.get("tdh");
+      _this.sbbhSxt = params.get("sbbh");
+    }
     //获取所有的设备，因为要用到设备的位置
     _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getDevice').then((res)=>{
       let response = res.data;
@@ -97,12 +106,16 @@ export default {
     }
   },
   methods: {
-    getPlayUrl(){
+    download(item){
       let _this = this;
-      let item = {
-        'sbbh':'tl002',
-        'wjlj':'http://111.38.21.161:7003/tempData/tl002/2023_12_19_19_16_47_2023_12_19_19_17_47_0_A1_TD2.mp4'
-      }
+      window.location.href = process.env.VUE_APP_SERVER + '/monitor/download/audio/downVideo?id='+item.id;
+    },
+    getPlayUrl(item){
+      let _this = this;
+      // let item = {
+      //   'sbbh':'tl002',
+      //   'wjlj':'http://111.38.21.161:7003/tempData/tl002/2023_12_19_19_16_47_2023_12_19_19_17_47_0_A1_TD2.mp4'
+      // }
       $("#playbox").empty();
       let url = 'http://111.38.21.161:7003/FileInfo.asmx/GetPlayUrl';
       $.post(url,{"sbid": item.sbbh,"filename":item.wjlj.substring(item.wjlj.lastIndexOf("/")+1),"fbl":"1080","fhfs":"1"}, function (data, status) {
@@ -143,13 +156,14 @@ export default {
       let _this = this;
       window.location.href = "/mobile/largemonitors";
     },
-    vueSendMsg(tdh,numIframe) {
+    vueSendMsg(numIframe) {
+      let _this = this;
       setTimeout(() =>{
         const iframeWindow = this.$refs[numIframe].contentWindow
         iframeWindow.postMessage({
           cmd: 'myVue',
           params: {
-            tdh: tdh
+            tdh: _this.tdh
           }
         }, '*')
       }, 1000)

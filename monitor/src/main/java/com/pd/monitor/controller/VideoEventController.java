@@ -72,7 +72,25 @@ public class VideoEventController {
     public ResponseDto list(@RequestBody VideoEventDto pageDto) {
         ResponseDto responseDto = new ResponseDto();
         PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
-        List<VideoEvent> videoEventList = videoEventService.selectByPage(pageDto);
+        VideoEventExample example = new VideoEventExample();
+        VideoEventExample.Criteria ca = example.createCriteria();
+        if(!StringUtils.isEmpty(pageDto.getSbbh())){
+            ca.andSbbhEqualTo(pageDto.getSbbh());
+        }
+        if(!StringUtils.isEmpty(pageDto.getSfysp())){
+            ca.andSfyspEqualTo(pageDto.getSfysp());
+        }
+        if(!StringUtils.isEmpty(pageDto.getStime())){
+            ca.andRqGreaterThanOrEqualTo(pageDto.getStime());
+        }
+        if(!StringUtils.isEmpty(pageDto.getEtime())){
+            ca.andRqLessThanOrEqualTo(pageDto.getEtime());
+        }
+        if(!StringUtils.isEmpty(pageDto.getSm())){
+            ca.andSmEqualTo(pageDto.getSm());
+        }
+        example.setOrderByClause(" kssj desc ");
+        List<VideoEvent> videoEventList = videoEventService.selectByExample(example);
         PageInfo<VideoEvent> pageInfo = new PageInfo<>(videoEventList);
         pageDto.setTotal(pageInfo.getTotal());
         List<VideoEventDto> videoEventDtoList = CopyUtil.copyList(videoEventList, VideoEventDto.class);
