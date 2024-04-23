@@ -375,6 +375,8 @@ export default {
                 || !Validator.require(_this.user.name, "用户名称")
                 || !Validator.require(_this.user.yj, "能否下载")
                 || (!Validator.require(_this.user.password, "密码"))
+                || (!Validator.require(_this.user.rode, "角色"))
+                || (!Validator.require(_this.user.deptcode, "部门"))
 
         ) {
           return;
