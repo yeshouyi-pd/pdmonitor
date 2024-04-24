@@ -31,6 +31,7 @@
   <resultMap id="KVResultMap" type="com.pd.server.main.dto.basewx.my.GpsKVDto">
     <result column="gps" jdbcType="VARCHAR" property="gps" />
     <result column="ts" jdbcType="VARCHAR" property="ts" />
+    <result column="cjsj" jdbcType="TIMESTAMP" property="cjsj" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -553,7 +554,7 @@
     </if>
   </select>
   <select id="selectGpsByDto" parameterType="map" resultMap="KVResultMap">
-    select distinct(sm2) gps,ts
+    select distinct(sm2) gps,ts,cjsj
     from equipment_file_ty a
     where a.txtlx='3' and a.sbbh in (select b.sbsn from water_pro_equip b FORCE index(sbsn) where b.xmbh = #{record.xmbh,jdbcType=VARCHAR})
     <if test="record.sbbh != null and record.sbbh !=''">

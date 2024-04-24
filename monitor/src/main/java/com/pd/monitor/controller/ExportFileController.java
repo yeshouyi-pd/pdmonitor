@@ -604,7 +604,7 @@ public class ExportFileController extends BaseWxController{
             sheet.setDefaultRowHeight((short)(40*10));
             // 添加表头行
             HSSFRow titleRow = sheet.createRow(0);//第1行
-            List<String> titleStrList = Arrays.asList("设备名称","设备sn","开始时间","结束时间","头数","坐标","经度","纬度");
+            List<String> titleStrList = Arrays.asList("设备名称","设备sn","开始时间","结束时间","头数","坐标","经度","纬度","速度");
             for(int i=0;i<titleStrList.size();i++){
                 HSSFCell cell = titleRow.createCell(i);
                 cell.setCellValue(titleStrList.get(i));
@@ -646,6 +646,9 @@ public class ExportFileController extends BaseWxController{
                             comCell7.setCellValue(tyEvent.getGps().split(",")[1]);
                             comCell7.setCellStyle(cellStyleCommon);
                         }
+                        HSSFCell comCell8 = comRow.createCell(8);
+                        comCell8.setCellValue(tyEvent.getSm1());
+                        comCell8.setCellStyle(cellStyleCommon);
                         i++;
                     }
                 }else{

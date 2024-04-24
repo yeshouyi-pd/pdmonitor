@@ -25,4 +25,12 @@ public class GpsKVDto {
     public void setTs(String ts) {
         this.ts = ts;
     }
+
+    public Date getCjsj() {
+        return cjsj;
+    }
+
+    public void setCjsj(Date cjsj) {
+        this.cjsj = cjsj;
+    }
 }
