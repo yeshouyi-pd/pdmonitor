@@ -57,7 +57,7 @@
           </div>
           <div class="left-center">
             <div class="title-name-div" style="height: 10%">
-              <span style="padding-top:1%;">海流计监测数据 <b style="color: red">三米标</b></span>
+              <span style="padding-top:1%;">海流计监测数据 <b style="color: red">16号航标</b></span>
             </div>
             <div class="center-content-div">
               <div class="center-content-item-first">
@@ -104,7 +104,7 @@
           </div>
           <div class="left-bottom">
             <div class="title-name-div">
-              <span>温盐度浊度仪数据 <b style="color: red">三米标</b></span>
+              <span>温盐度浊度仪数据 <b style="color: red">16号航标</b></span>
             </div>
             <div class="bottom-content" id="leftBottomEchart"></div>
           </div>
@@ -129,7 +129,7 @@
         <div class="left-content-div" style="margin-top: 8%;">
           <div class="left-top">
             <div class="title-name-div" style="height: 20%;">
-              <span style="padding-top:0%;">气象数据 <b style="color: red">三米标</b></span>
+              <span style="padding-top:0%;">气象数据 <b style="color: red">16号航标</b></span>
             </div>
             <div class="right-top-content" style="margin: 1% auto 0;">
               <div class="right-top-box">
@@ -262,7 +262,7 @@ export default {
         {key:"RPCDA4010", value:"10号航标"},
         {key:"RPCDA4008", value:"11号航标"},
         {key:"RPCDA4002", value:"淇澳岛"},
-        {key:"RPCDA4016", value:"三米标"},
+        {key:"RPCDA4016", value:"16号航标"},
         {key:"RPCDA4000", value:"保护区楼顶气象站"}
       ],
       config: {
