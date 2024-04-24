@@ -679,6 +679,9 @@ public class ExportFileController extends BaseWxController{
                         comCell7.setCellValue(tyEvent.getGps().split(",")[1]);
                         comCell7.setCellStyle(cellStyleCommon);
                     }
+                    HSSFCell comCell8 = comRow.createCell(8);
+                    comCell8.setCellValue(tyEvent.getSm1());
+                    comCell8.setCellStyle(cellStyleCommon);
                     i++;
                 }
             }
