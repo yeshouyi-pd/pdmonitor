@@ -194,7 +194,7 @@ export default {
         {key:"RPCDA4016", value:"珠海A4016"},
         {key:"RPCDA4006-4", value:"平台4"},
         {key:"RPCDA4009-3", value:"平台3"},
-        {key:"RPCDA4000", value:"三米标"}
+        {key:"RPCDA4000", value:"16号航标"}
       ]
     }
   },
