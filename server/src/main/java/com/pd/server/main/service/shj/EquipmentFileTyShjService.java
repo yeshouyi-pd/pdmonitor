@@ -125,6 +125,8 @@ public class EquipmentFileTyShjService extends AbstractScanRequest{
                     tyEvent.setRq(wjmc.substring(0,4)+"-"+wjmc.substring(5,7)+"-"+wjmc.substring(8,10));
                     tyEvent.setTs(entity.getTs());
                     tyEvent.setBz(entity.getId());
+                    tyEvent.setSm(entity.getSm2());
+                    tyEvent.setSm1(obj.getString("sd"));
                     equipmentTyEventMapperStatic.insert(tyEvent);
                 }else if("1018".equals(entity.getType())){//指针数据每秒
                     PointerSecondDto dto = new PointerSecondDto();
