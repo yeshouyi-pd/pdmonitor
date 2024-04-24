@@ -157,7 +157,7 @@ export default {
         {key:"RPCDA4010", value:"10号航标"},
         {key:"RPCDA4008", value:"11号航标"},
         {key:"RPCDA4002", value:"淇澳岛"},
-        {key:"RPCDA4016", value:"RPCDA4016"}
+        {key:"RPCDA4016", value:"16号航标"}
       ]
     }
   },
