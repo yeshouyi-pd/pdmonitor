@@ -146,12 +146,12 @@ export default {
       window.location.href = process.env.VUE_APP_SERVER + '/monitor/download/audio/downVideo?id='+item.id;
     },
     //历史回放
-    watchVideo(id){
+    watchVideo(obj){
       let _this = this;
       $("#playbox").empty();
       _this.canPlay = false;
       _this.videoHeight = '400';
-      _this.getPlayUrl(obj.sbbh,obj.tplj.substring(obj.tplj.lastIndexOf("/")+1),true);
+      _this.getPlayUrl(obj.sbbh,obj.wjlj.substring(obj.wjlj.lastIndexOf("/")+1),true);
     },
     getPlayUrl(sbid,filename,isLast){
       let _this = this;
