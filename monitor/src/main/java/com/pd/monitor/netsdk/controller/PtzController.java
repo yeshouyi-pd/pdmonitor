@@ -1,10 +1,14 @@
 package com.pd.monitor.netsdk.controller;
 
+import com.pd.monitor.netsdk.module.LoginModule;
 import com.pd.monitor.netsdk.module.PtzControlModule;
 import com.pd.monitor.netsdk.utils.Result;
 import com.pd.monitor.netsdk.utils.ResultUtils;
+import com.pd.monitor.wx.conf.WxRedisConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 /**
  * 云台控制接口实现
@@ -18,6 +22,13 @@ public class PtzController {
 
     @GetMapping("/ptzControlStart/{type}/{nChannelID}/{lParam1}/{lParam2}")
     public Result ptzControlStart(@PathVariable String type, @PathVariable int nChannelID, @PathVariable int lParam1, @PathVariable int lParam2){
+        // 初始化
+        LoginModule.init(LoginModule.disConnect, LoginModule.haveReConnect);
+        // 若未登录，先登录。
+        if (LoginModule.m_hLoginHandle.longValue() == 0){
+            Map<String,String> attrMap = WxRedisConfig.getAttrMap();
+            LoginModule.login(attrMap.get("m_strIp"), Integer.parseInt(attrMap.get("m_nPort")), attrMap.get("m_strUser"), attrMap.get("m_strPassword"));
+        }
         if("Up".equals(type)){
             /**
              * 向上
@@ -129,6 +140,13 @@ public class PtzController {
 
     @GetMapping("/ptzControlEnd/{type}/{nChannelID}")
     public Result ptzControlEnd(@PathVariable String type, @PathVariable int nChannelID){
+        // 初始化
+        LoginModule.init(LoginModule.disConnect, LoginModule.haveReConnect);
+        // 若未登录，先登录。
+        if (LoginModule.m_hLoginHandle.longValue() == 0){
+            Map<String,String> attrMap = WxRedisConfig.getAttrMap();
+            LoginModule.login(attrMap.get("m_strIp"), Integer.parseInt(attrMap.get("m_nPort")), attrMap.get("m_strUser"), attrMap.get("m_strPassword"));
+        }
         if("Up".equals(type)){
             /**
              * 向上

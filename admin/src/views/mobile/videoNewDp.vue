@@ -76,7 +76,7 @@
               <div class="h5-item-form" style="margin-bottom: 10px;">
                 <label style="color: #fff">预置点：</label>
                 <input type="text" id="h5_preset" v-model="yuzhidian">
-                <input type="button" class="h5-button" value="查看" @mousedown="onHandlePTZ('GotoPreset', true)" style="margin-left: 10px;">
+                <input type="button" class="h5-button" value="查看" @mousedown="onHandlePTZ('GotoPreset', false)" style="margin-left: 10px;">
               </div>
               <button v-on:click="getRealVideo(1)" class="btn btn-xs btn-info" style="margin-left: 10px;">
                 <i class="ace-icon fa fa-book bigger-120">查看实时分析列表</i>
@@ -467,11 +467,17 @@ export default {
       }
       if(!isStop) {
         _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/ptzController/ptzControlStart/'+name+"/"+_this.curChannel+"/0/"+param2, {}).then((response)=>{
-          console.log(response);
+          let resp = response.data;
+          if(resp.code=='201'){
+            Toast.error(resp.message);
+          }
         })
       } else {
         _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/ptzController/ptzControlEnd/'+name+"/"+_this.curChannel, {}).then((response)=>{
-          console.log(response);
+          let resp = response.data;
+          if(resp.code=='201'){
+            Toast.error(resp.message);
+          }
         })
       }
     },
