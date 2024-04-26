@@ -30,7 +30,7 @@ public class PontoonGPSShjService extends AbstractScanRequest {
                 data = "参数错误";
                 return data;
             }
-            if(gps.equals("NaN,NaN") || gps.equals("0,0") || gps.startsWith("0.")){
+            if(gps.startsWith("NaN") || gps.equals("0,0") || gps.startsWith("0.")){
                 data = "GPS数据错误，不保存";
                 return data;
             }
