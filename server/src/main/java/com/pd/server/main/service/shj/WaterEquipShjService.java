@@ -3,13 +3,13 @@ package com.pd.server.main.service.shj;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.pd.server.config.SpringUtil;
 import com.pd.server.main.domain.*;
 import com.pd.server.main.mapper.AttrMapper;
 import com.pd.server.main.mapper.WaterEquiplogMapper;
 import com.pd.server.main.mapper.WaterEquipmentMapper;
+import com.pd.server.main.dto.LdTaskListDto;
+import com.pd.server.main.service.LdTaskListService;
 import com.pd.server.util.SendSmsTool;
-import com.pd.server.util.UuidUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -39,6 +39,7 @@ public class WaterEquipShjService extends AbstractScanRequest{
     public static WaterEquiplogMapper waterEquiplogMapperStatic;
     public static WaterEquipmentMapper waterEquipmentMapperStatic;
     public static AttrMapper attrMapperStatic;
+    public static LdTaskListService ldTaskListServiceStatic;
 
     @Resource
     private RedisTemplate redisTemplate;
@@ -48,6 +49,8 @@ public class WaterEquipShjService extends AbstractScanRequest{
     private WaterEquipmentMapper waterEquipmentMapper;
     @Resource
     private AttrMapper attrMapper;
+    @Resource
+    private LdTaskListService ldTaskListService;
 
     @PostConstruct
     protected void init() {
@@ -55,6 +58,7 @@ public class WaterEquipShjService extends AbstractScanRequest{
         waterEquiplogMapperStatic = waterEquiplogMapper;
         waterEquipmentMapperStatic = waterEquipmentMapper;
         attrMapperStatic = attrMapper;
+        ldTaskListServiceStatic = ldTaskListService;
     }
 
     /**
@@ -76,6 +80,11 @@ public class WaterEquipShjService extends AbstractScanRequest{
         List<WaterEquipment> listWater = waterEquipmentMapperStatic.selectByExample(example);
         if(listWater.size() == 0){
             data = "设备未备案";
+            return data;
+        }
+        if("0".equals(code)){
+            restartEquip(listWater.get(0));
+            data = "设备离线";
             return data;
         }
         try {
@@ -165,6 +174,29 @@ public class WaterEquipShjService extends AbstractScanRequest{
         return result.toString();
     }
 
+    //网络不通，重启设备，发送短信
+    public static void restartEquip(WaterEquipment waterEquipment) throws InterruptedException {
+        //发送短信
+        String phoneNum = attrMapperStatic.selectByAttrKey("offlinePhone");
+        SendSmsTool.sendSms("2142996",waterEquipment.getSbsn(),phoneNum);
+        //重启设备
+        if(!StringUtils.isEmpty(waterEquipment.getSbcj())){
+            String restartinterval = attrMapperStatic.selectByAttrKey("restartinterval");
+            LdTaskListDto dto = new LdTaskListDto();
+            dto.setIccid(waterEquipment.getSbcj());
+            dto.setTask("cmd:203");
+            dto.setFsdate(new Date());
+            ldTaskListServiceStatic.save(dto);
+            Thread.sleep(Long.parseLong(restartinterval));
+            LdTaskListDto dto1 = new LdTaskListDto();
+            dto1.setIccid(waterEquipment.getSbcj());
+            dto1.setTask("cmd:202");
+            dto1.setFsdate(new Date());
+            ldTaskListServiceStatic.save(dto1);
+            LOG.error("设备已重启");
+        }
+    }
+
     public static void main(String[] args){
         long distance = getDistance("117.729483166667,30.851357","117.73000,30.84791");
         System.out.println(distance);
@@ -172,4 +204,5 @@ public class WaterEquipShjService extends AbstractScanRequest{
             System.out.println(true);
         }
     }
+
 }
