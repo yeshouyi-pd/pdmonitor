@@ -9,6 +9,7 @@ import com.pd.server.main.mapper.WaterEquiplogMapper;
 import com.pd.server.main.mapper.WaterEquipmentMapper;
 import com.pd.server.main.dto.LdTaskListDto;
 import com.pd.server.main.service.LdTaskListService;
+import com.pd.server.util.DateUtil;
 import com.pd.server.util.SendSmsTool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +26,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class WaterEquipShjService extends AbstractScanRequest{
@@ -40,6 +43,7 @@ public class WaterEquipShjService extends AbstractScanRequest{
     public static WaterEquipmentMapper waterEquipmentMapperStatic;
     public static AttrMapper attrMapperStatic;
     public static LdTaskListService ldTaskListServiceStatic;
+    public static Map<String, String> sbbhrqMap = new HashMap<>();
 
     @Resource
     private RedisTemplate redisTemplate;
@@ -83,11 +87,18 @@ public class WaterEquipShjService extends AbstractScanRequest{
             return data;
         }
         if("0".equals(code)){
-            restartEquip(listWater.get(0));
+            if(!sbbhrqMap.containsKey(sbbh)){
+                restartEquip(listWater.get(0));
+            }else{
+                if(!sbbhrqMap.get(sbbh).equals(DateUtil.getYMD())){
+                    restartEquip(listWater.get(0));
+                }
+            }
             data = "设备离线";
             return data;
         }
         try {
+            sbbhrqMap.remove(sbbh);
             WaterEquiplog record = new WaterEquiplog();
             record.setSbbh(sbbh);
             record.setCode(code);
@@ -176,6 +187,7 @@ public class WaterEquipShjService extends AbstractScanRequest{
 
     //网络不通，重启设备，发送短信
     public static void restartEquip(WaterEquipment waterEquipment) throws InterruptedException {
+        sbbhrqMap.put(waterEquipment.getSbsn(), DateUtil.getYMD());
         //发送短信
         String phoneNum = attrMapperStatic.selectByAttrKey("offlinePhone");
         SendSmsTool.sendSms("2142996",waterEquipment.getSbsn(),phoneNum);
