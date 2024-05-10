@@ -18,7 +18,7 @@
                 <table style="font-size: 1.1em;width:100%" class="text-right" >
                   <tbody>
                   <tr>
-                    <td style="width: 10%;">
+                    <td style="width: 5%;">
                       设备名称：
                     </td>
                     <td style="width: 15%;">
@@ -27,13 +27,13 @@
                         <option v-for="item in waterEquipments" :value="item.sbsn">{{item.sbmc}}</option>
                       </select>
                     </td>
-                    <td style="width: 10%;">
+                    <td style="width: 5%;">
                       采集时间：
                     </td>
                     <td style="width: 25%;">
                       <times v-bind:startTime="startTime" v-bind:endTime="endTime" start-id="eqstime" end-id="eqetime"></times>
                     </td>
-                    <td style="width: 10%;">
+                    <td style="width: 5%;">
                       类型：
                     </td>
                     <td style="width: 15%;">
@@ -46,6 +46,10 @@
                       <button type="button" v-on:click="list(1)" class="btn btn-sm btn-info btn-round" style="margin-right: 10px;">
                         <i class="ace-icon fa fa-book"></i>
                         查询
+                      </button>
+                      <button type="button" v-on:click="downloadVideoZip()" class="btn btn-sm btn-info btn-round" style="margin-right: 10px;">
+                        <i class="ace-icon fa fa-download"></i>
+                        批量下载音频
                       </button>
                       <a href="javascript:location.replace(location.href);"  class="btn btn-sm btn-success btn-round">
                         <i class="ace-icon fa fa-refresh"></i>
@@ -325,6 +329,42 @@ export default {
       let _this = this;
       let url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downZipByWjmc?wjmc='+item.wjmc;
       _this.$ajax.get(url).then((response)=>{
+        if(response.data && response.data.message && response.data.message.includes("系统异常")){
+          Toast.error("系统异常，请联系管理员！");
+        }else if(response.data && response.data.includes("未找到")){
+          Toast.error("未找到对应视频！");
+        }else{
+          window.location.href = url;
+        }
+      })
+    },
+    downloadVideoZip(){
+      let _this = this;
+      if(Tool.isEmpty(_this.equipmentFileDto.sbbh)){
+        Toast.error("请选择设备编号！");
+      }
+      if(Tool.isNotEmpty(_this.equipmentFileDto.etime)&&Tool.isEmpty(_this.equipmentFileDto.stime)){
+        Toast.error("请选择采集开始日期！");
+      }
+      let paramsStr = "";
+      if(Tool.isNotEmpty(_this.equipmentFileDto.stime)){
+        paramsStr = paramsStr + "&stime="+_this.equipmentFileDto.stime;
+      }
+      if(Tool.isNotEmpty(_this.equipmentFileDto.etime)){
+        paramsStr = paramsStr + "&etime="+_this.equipmentFileDto.etime;
+      }
+      if(Tool.isNotEmpty(_this.equipmentFileDto.sbbh)){
+        paramsStr = paramsStr + "&sbbh="+_this.equipmentFileDto.sbbh;
+      }
+      //Loading.show();
+      let url = "";
+      if(_this.shj){
+        url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downVideoZip53?'+paramsStr;
+      }else{
+        url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downVideoZip?'+paramsStr;
+      }
+      _this.$ajax.get(url).then((response)=>{
+        //Loading.hide();
         if(response.data && response.data.message && response.data.message.includes("系统异常")){
           Toast.error("系统异常，请联系管理员！");
         }else if(response.data && response.data.includes("未找到")){

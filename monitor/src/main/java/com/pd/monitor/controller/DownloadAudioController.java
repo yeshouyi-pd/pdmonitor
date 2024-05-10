@@ -1,12 +1,17 @@
 package com.pd.monitor.controller;
 
+import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.ZipUtil;
+import cn.hutool.http.HttpUtil;
 import com.pd.server.config.RedisCode;
 import com.pd.server.main.domain.*;
 import com.pd.server.main.service.*;
+import com.pd.server.util.DateUtil;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +26,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -282,6 +288,185 @@ public class DownloadAudioController {
         }
         //关闭流
         fileInput.close();
+        // 需要注意的是缓冲流必须要关闭流,否则输出无效
+        bufferStream.close();
+        // 压缩流不必关闭,使用完后再关
+    }
+
+    @GetMapping("/downVideoZip")
+    public void downVideoZip(HttpServletRequest request, HttpServletResponse response) throws Exception{
+        response.setCharacterEncoding("UTF-8");
+        String fileUrl = attrService.findByAttrKey("fileUrl");//http://49.239.193.146:8082/
+        String filePath = attrService.findByAttrKey("filePath");
+        String sbbh = request.getParameter("sbbh");
+        String stime = request.getParameter("stime");
+        String etime = request.getParameter("etime");
+        EquipmentFileExample example = new EquipmentFileExample();
+        EquipmentFileExample.Criteria ca = example.createCriteria();
+        if(!StringUtils.isEmpty(sbbh)){
+            ca.andSbbhEqualTo(sbbh);
+        }
+        if(!StringUtils.isEmpty(stime)){
+            ca.andRqGreaterThanOrEqualTo(stime);
+        }else{
+            ca.andRqGreaterThanOrEqualTo(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd"));
+        }
+        if(!StringUtils.isEmpty(etime)){
+            ca.andRqLessThanOrEqualTo(etime);
+        }else{
+            ca.andRqLessThanOrEqualTo(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd"));
+        }
+        ca.andWjlxEqualTo("2");
+        List<EquipmentFile> lists = equipmentFileService.listAll(example);
+        if (lists.size() != 0) {
+            // 创建临时路径,存放压缩文件
+            String picStorePath = (String) redisTemplate.opsForValue().get(RedisCode.STATICPATH);//静态路径地址
+            String zipFilePath = picStorePath+"\\videoZip.zip";
+            // 压缩输出流,包装流,将临时文件输出流包装成压缩流,将所有文件输出到这里,打成zip包
+            ZipOutputStream zipOut = new ZipOutputStream(new FileOutputStream(zipFilePath));
+            // 循环调用压缩文件方法,将一个一个需要下载的文件打入压缩文件包
+            List<String> fileNameList = new ArrayList<>();
+            for (EquipmentFile entity : lists) {
+                // 该方法在下面定义
+                fileVideoToZip(entity.getTplj().replace(fileUrl,filePath), zipOut, fileNameList);
+            }
+            // 压缩完成后,关闭压缩流
+            zipOut.close();
+            //拼接下载默认名称并转为ISO-8859-1格式
+            String fileName = new String(("video"+new Date().getTime() +".zip").getBytes(),"ISO-8859-1");
+            response.setHeader("Content-Disposition", "attchment;filename="+fileName);
+            //该流不可以手动关闭,手动关闭下载会出问题,下载完成后会自动关闭
+            ServletOutputStream outputStream = response.getOutputStream();
+            FileInputStream inputStream = new FileInputStream(zipFilePath);
+            // 如果是SpringBoot框架,在这个路径
+            // org.apache.tomcat.util.http.fileupload.IOUtils产品
+            // 否则需要自主引入apache的 commons-io依赖
+            // copy方法为文件复制,在这里直接实现了下载效果
+            IOUtils.copy(inputStream, outputStream);
+            // 关闭输入流
+            inputStream.close();
+            //下载完成之后，删掉这个zip包
+            File fileTempZip = new File(zipFilePath);
+            fileTempZip.delete();
+        }else {
+            String result = "未找到对应数据";
+            response.getOutputStream().write(result.getBytes());
+            response.getOutputStream().close();
+        }
+
+    }
+
+    public static void fileVideoToZip(String filePath,ZipOutputStream zipOut,List<String> fileNameList) throws IOException {
+        // 需要压缩的文件
+        File file = new File(filePath);
+        // 获取文件名称,如果有特殊命名需求,可以将参数列表拓展,传fileName
+        String fileName = file.getName();
+        if(fileNameList.contains(fileName)){
+            return;
+        }
+        fileNameList.add(fileName);
+        FileInputStream fileInput = new FileInputStream(filePath);
+        // 缓冲
+        byte[] bufferArea = new byte[1024 * 10];
+        BufferedInputStream bufferStream = new BufferedInputStream(fileInput, 1024 * 10);
+        // 将当前文件作为一个zip实体写入压缩流,fileName代表压缩文件中的文件名称
+        zipOut.putNextEntry(new ZipEntry(fileName));
+        int length = 0;
+        // 最常规IO操作,不必紧张
+        while ((length = bufferStream.read(bufferArea, 0, 1024 * 10)) != -1) {
+            zipOut.write(bufferArea, 0, length);
+        }
+        //关闭流
+        fileInput.close();
+        // 需要注意的是缓冲流必须要关闭流,否则输出无效
+        bufferStream.close();
+        // 压缩流不必关闭,使用完后再关
+    }
+
+    @GetMapping("/downVideoZip53")
+    public void downVideoZip53(HttpServletRequest request, HttpServletResponse response) throws Exception{
+        response.setCharacterEncoding("UTF-8");
+        String sbbh = request.getParameter("sbbh");
+        String stime = request.getParameter("stime");
+        String etime = request.getParameter("etime");
+        EquipmentFileExample example = new EquipmentFileExample();
+        EquipmentFileExample.Criteria ca = example.createCriteria();
+        if(!StringUtils.isEmpty(sbbh)){
+            ca.andSbbhEqualTo(sbbh);
+        }
+        if(!StringUtils.isEmpty(stime)){
+            ca.andRqGreaterThanOrEqualTo(stime);
+        }else{
+            ca.andRqGreaterThanOrEqualTo(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd"));
+        }
+        if(!StringUtils.isEmpty(etime)){
+            ca.andRqLessThanOrEqualTo(etime);
+        }else{
+            ca.andRqLessThanOrEqualTo(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd"));
+        }
+        ca.andWjlxEqualTo("2");
+        List<EquipmentFile> lists = equipmentFileService.listAll(example);
+        if (lists.size() != 0) {
+            // 创建临时路径,存放压缩文件
+            String picStorePath = (String) redisTemplate.opsForValue().get(RedisCode.STATICPATH);//静态路径地址
+            String zipFilePath = picStorePath+"\\videoZip.zip";
+            //打包文件夹
+            String tempFilePath = "C:/video"+new Date().getTime();
+            FileUtil.mkdir(tempFilePath);
+            for(EquipmentFile entity: lists){
+                HttpUtil.downloadFile(entity.getTplj(), FileUtil.file(tempFilePath));
+            }
+            ZipUtil.zip(tempFilePath, zipFilePath);
+            //拼接下载默认名称并转为ISO-8859-1格式
+            String fileName = new String(("video"+new Date().getTime() +".zip").getBytes(),"ISO-8859-1");
+            response.setHeader("Content-Disposition", "attchment;filename="+fileName);
+            //该流不可以手动关闭,手动关闭下载会出问题,下载完成后会自动关闭
+            ServletOutputStream outputStream = response.getOutputStream();
+            FileInputStream inputStream = new FileInputStream(zipFilePath);
+            // 如果是SpringBoot框架,在这个路径
+            // org.apache.tomcat.util.http.fileupload.IOUtils产品
+            // 否则需要自主引入apache的 commons-io依赖
+            // copy方法为文件复制,在这里直接实现了下载效果
+            IOUtils.copy(inputStream, outputStream);
+            // 关闭输入流
+            inputStream.close();
+            //下载完成之后，删掉文件夹及目录
+            FileUtil.del(zipFilePath);
+            FileUtil.del(tempFilePath);
+        }else {
+            String result = "未找到对应数据";
+            response.getOutputStream().write(result.getBytes());
+            response.getOutputStream().close();
+        }
+
+    }
+
+    public static void fileVideoToZip53(String filePath,ZipOutputStream zipOut,List<String> fileNameList) throws IOException {
+        // 需要压缩的文件
+        // File file = new File(filePath);
+        URL url = new URL(filePath);
+        HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+        conn.setConnectTimeout(30000);
+        conn.setReadTimeout(30000);
+        // 获取文件名称,如果有特殊命名需求,可以将参数列表拓展,传fileName
+        String fileName = filePath.substring(filePath.lastIndexOf("/")+1);
+        if(fileNameList.contains(fileName)){
+            return;
+        }
+        fileNameList.add(fileName);
+        // FileInputStream fileInput = new FileInputStream(filePath);
+        // 缓冲
+        byte[] bufferArea = new byte[1024 * 10];
+        BufferedInputStream bufferStream = new BufferedInputStream(conn.getInputStream(), 1024 * 10);
+        // 将当前文件作为一个zip实体写入压缩流,fileName代表压缩文件中的文件名称
+        zipOut.putNextEntry(new ZipEntry(fileName));
+        int length = 0;
+        // 最常规IO操作,不必紧张
+        while ((length = bufferStream.read(bufferArea, 0, 1024 * 10)) != -1) {
+            zipOut.write(bufferArea, 0, length);
+        }
+        //关闭流
+        // fileInput.close();
         // 需要注意的是缓冲流必须要关闭流,否则输出无效
         bufferStream.close();
         // 压缩流不必关闭,使用完后再关

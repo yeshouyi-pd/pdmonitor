@@ -86,11 +86,14 @@ public class WaterEquipShjService extends AbstractScanRequest{
             data = "设备未备案";
             return data;
         }
+        if(!DateUtil.getYMD().equals(sbbhrqMap.get(sbbh))){
+            sbbhrqMap.remove(sbbh);
+        }
         if("0".equals(code)){
             if(!sbbhrqMap.containsKey(sbbh)){
                 restartEquip(listWater.get(0));
             }else{
-                if(!sbbhrqMap.get(sbbh).equals(DateUtil.getYMD())){
+                if(!DateUtil.getYMD().equals(sbbhrqMap.get(sbbh))){
                     restartEquip(listWater.get(0));
                 }
             }
@@ -98,7 +101,6 @@ public class WaterEquipShjService extends AbstractScanRequest{
             return data;
         }
         try {
-            sbbhrqMap.remove(sbbh);
             WaterEquiplog record = new WaterEquiplog();
             record.setSbbh(sbbh);
             record.setCode(code);
@@ -187,6 +189,7 @@ public class WaterEquipShjService extends AbstractScanRequest{
 
     //网络不通，重启设备，发送短信
     public static void restartEquip(WaterEquipment waterEquipment) throws InterruptedException {
+        LOG.error("设备网络不通，重启设备，发送短信");
         sbbhrqMap.put(waterEquipment.getSbsn(), DateUtil.getYMD());
         //发送短信
         String phoneNum = attrMapperStatic.selectByAttrKey("offlinePhone");
