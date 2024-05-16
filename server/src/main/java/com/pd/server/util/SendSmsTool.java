@@ -53,8 +53,10 @@ public class SendSmsTool {
                 req.setTemplateParamSet(templateParamSet);
             }
 //            String[] phoneNumberSet = {"+8618827512017","+8618827512017"};
-            String[] phoneNumberSet = phoneNumber.split(",");
-            req.setPhoneNumberSet(phoneNumberSet);
+            if(!StringUtils.isEmpty(phoneNumber)){
+                String[] phoneNumberSet = phoneNumber.split(",");
+                req.setPhoneNumberSet(phoneNumberSet);
+            }
             req.setSessionContext("");
             req.setExtendCode("");
             req.setSenderId("");

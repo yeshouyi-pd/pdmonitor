@@ -27,99 +27,96 @@
           <li id="channel-18" v-on:click="changeChannel(18)">D19 铁塔2可见光（192.168.3.22）</li>
         </ul>
         <div class="h5-left">
-          <div class="h5-play-wrap">
-            <video ref="videoElement"
-                   class="centeredVideo"
-                   id="myPlayer"
-                   preload="auto"
-                   type="rtmp/flv"
-                   autoplay
-                   muted
-                   style="width: 100%;height: 100%"
-            ></video>
+          <div class="right-top-box" id="playbox">
           </div>
-          <fieldset class="h5-fieldset-wrap">
-            <legend style="color: #FFFFFF;margin-bottom: 0;">云台控制</legend>
-            <div class="h5-step-wrap">
-              <span style="color:#fff;">步长(1-8):</span>
-              <select id="h5_ptz_step" style="width: 130px;"  v-model="selectedValue">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-              </select>
+          <div class="right-bottom-box">
+            <div style="height: 414px;width: 97%;overflow:auto;margin-top: 1%;margin-left: 1%;color: #82CF48;font-size: 16px;">
+              <table id="simple-table" class="table  table-bordered" >
+                <thead>
+                <tr>
+                  <td>设备名称</td>
+                  <td>开始时间</td>
+                  <td>结束时间</td>
+                  <td>视频</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="item in videoEvents">
+                  <td>{{devices|optionNSArray(item.sbbh)}}</td>
+                  <td>{{item.kssj}}</td>
+                  <td>{{item.jssj}}</td>
+                  <td>
+                    <button v-on:click="showVideo(item)" class="btn btn-xs btn-info" >
+                      <i class="ace-icon fa fa-book bigger-120">查看</i>
+                    </button>
+                    <button v-on:click="download(item)" class="btn btn-xs btn-info" style="margin-left: 10px;">
+                      <i class="ace-icon fa fa-download bigger-120">下载</i>
+                    </button>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
             </div>
-            <div class="h5-ptz-wrap" title="云台按钮操作界面">
-              <input type="button" class="h5-button" value="左上" @mousedown="onHandlePTZ('LeftUp', false)" @mouseup="onHandlePTZ('LeftUp', true)">
-              <input type="button" class="h5-button" value="上" @mousedown="onHandlePTZ('Up', false)" @mouseup="onHandlePTZ('Up', true)">
-              <input type="button" class="h5-button" value="右上" @mousedown="onHandlePTZ('RightUp', false)" @mouseup="onHandlePTZ('RightUp', true)">
-              <input type="button" class="h5-button" value="左" @mousedown="onHandlePTZ('Left', false)" @mouseup="onHandlePTZ('Left', true)">
-              <input class="h5-button" value="" style="opacity: 0;">
-              <input type="button" class="h5-button" value="右" @mousedown="onHandlePTZ('Right', false)" @mouseup="onHandlePTZ('Right', true)">
-              <input type="button" class="h5-button" value="左下" @mousedown="onHandlePTZ('LeftDown', false)" @mouseup="onHandlePTZ('LeftDown', true)">
-              <input type="button" class="h5-button" value="下" @mousedown="onHandlePTZ('Down', false)" @mouseup="onHandlePTZ('Down', true)">
-              <input type="button" class="h5-button" value="右下" @mousedown="onHandlePTZ('RightDown', false)" @mouseup="onHandlePTZ('RightDown', true)">
-            </div>
-            <div class="h5-zoomfocus-wrap" title="变倍聚焦操作界面">
-              <input type="button" class="h5-button" value="变倍-" @mousedown="onHandlePTZ('ZoomWide', false)" @mouseup="onHandlePTZ('ZoomWide', true)">
-              <input type="button" class="h5-button" value="变倍+" @mousedown="onHandlePTZ('ZoomTele', false)" @mouseup="onHandlePTZ('ZoomTele', true)">
-              <input type="button" class="h5-button" value="聚焦-" @mousedown="onHandlePTZ('FocusFar', false)" @mouseup="onHandlePTZ('FocusFar', true)">
-              <input type="button" class="h5-button" value="聚焦+" @mousedown="onHandlePTZ('FocusNear', false)" @mouseup="onHandlePTZ('FocusNear', true)">
-              <input type="button" class="h5-button" value="光圈-" @mousedown="onHandlePTZ('IrisSmall', false)" @mouseup="onHandlePTZ('IrisSmall', true)">
-              <input type="button" class="h5-button" value="光圈+" @mousedown="onHandlePTZ('IrisLarge', false)" @mouseup="onHandlePTZ('IrisLarge', true)">
-            </div>
-            <div class="h5-preset-wrap" title="预置点操作界面">
-              <div class="h5-item-form" style="margin-bottom: 10px;">
-                <label style="color: #fff">预置点：</label>
-                <input type="text" id="h5_preset" v-model="yuzhidian">
-                <input type="button" class="h5-button" value="查看" @mousedown="onHandlePTZ('GotoPreset', false)" style="margin-left: 10px;">
-              </div>
-              <button v-on:click="getRealVideo(1)" class="btn btn-xs btn-info" style="margin-left: 10px;">
-                <i class="ace-icon fa fa-book bigger-120">查看实时分析列表</i>
-              </button>
-            </div>
-          </fieldset>
+          </div>
         </div>
       </div>
       <div class="right-box">
-        <div class="right-top-box" id="playbox">
-<!--          <video autoplay="autoplay" loop="loop" style="width: 100%;height: 100%" controls>-->
-<!--            <source class="video" title="主监控位" src="/video/12.mp4" type="video/mp4" />-->
-<!--          </video>-->
+        <div class="h5-play-wrap">
+          <video ref="videoElement"
+                 class="centeredVideo"
+                 id="myPlayer"
+                 preload="auto"
+                 type="rtmp/flv"
+                 autoplay
+                 muted
+                 style="width: 100%;height: 100%"
+          ></video>
         </div>
-        <div class="right-bottom-box">
-          <div style="height: 414px;width: 97%;overflow:auto;margin-top: 1%;margin-left: 1%;color: #82CF48;font-size: 16px;">
-            <table id="simple-table" class="table  table-bordered" >
-              <thead>
-              <tr>
-                <td>设备名称</td>
-                <td>开始时间</td>
-                <td>结束时间</td>
-                <td>视频</td>
-              </tr>
-              </thead>
-              <tbody>
-              <tr v-for="item in videoEvents">
-                <td>{{devices|optionNSArray(item.sbbh)}}</td>
-                <td>{{item.kssj}}</td>
-                <td>{{item.jssj}}</td>
-                <td>
-                  <button v-on:click="getPlayUrl(item)" class="btn btn-xs btn-info" >
-                    <i class="ace-icon fa fa-book bigger-120">查看</i>
-                  </button>
-                  <button v-on:click="download(item)" class="btn btn-xs btn-info" style="margin-left: 10px;">
-                    <i class="ace-icon fa fa-download bigger-120">下载</i>
-                  </button>
-                </td>
-              </tr>
-              </tbody>
-            </table>
+        <fieldset class="h5-fieldset-wrap">
+          <legend style="color: #FFFFFF;margin-bottom: 0;">云台控制</legend>
+          <div class="h5-step-wrap">
+            <span style="color:#fff;">步长(1-8):</span>
+            <select id="h5_ptz_step" style="width: 130px;"  v-model="selectedValue">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+            </select>
           </div>
-        </div>
+          <div class="h5-ptz-wrap" title="云台按钮操作界面">
+            <input type="button" class="h5-button" value="左上" @mousedown="onHandlePTZ('LeftUp', false)" @mouseup="onHandlePTZ('LeftUp', true)">
+            <input type="button" class="h5-button" value="上" @mousedown="onHandlePTZ('Up', false)" @mouseup="onHandlePTZ('Up', true)">
+            <input type="button" class="h5-button" value="右上" @mousedown="onHandlePTZ('RightUp', false)" @mouseup="onHandlePTZ('RightUp', true)">
+            <input type="button" class="h5-button" value="左" @mousedown="onHandlePTZ('Left', false)" @mouseup="onHandlePTZ('Left', true)">
+            <input class="h5-button" value="" style="opacity: 0;">
+            <input type="button" class="h5-button" value="右" @mousedown="onHandlePTZ('Right', false)" @mouseup="onHandlePTZ('Right', true)">
+            <input type="button" class="h5-button" value="左下" @mousedown="onHandlePTZ('LeftDown', false)" @mouseup="onHandlePTZ('LeftDown', true)">
+            <input type="button" class="h5-button" value="下" @mousedown="onHandlePTZ('Down', false)" @mouseup="onHandlePTZ('Down', true)">
+            <input type="button" class="h5-button" value="右下" @mousedown="onHandlePTZ('RightDown', false)" @mouseup="onHandlePTZ('RightDown', true)">
+          </div>
+          <div class="h5-zoomfocus-wrap" title="变倍聚焦操作界面">
+            <input type="button" class="h5-button" value="变倍-" @mousedown="onHandlePTZ('ZoomWide', false)" @mouseup="onHandlePTZ('ZoomWide', true)">
+            <input type="button" class="h5-button" value="变倍+" @mousedown="onHandlePTZ('ZoomTele', false)" @mouseup="onHandlePTZ('ZoomTele', true)">
+            <input type="button" class="h5-button" value="聚焦-" @mousedown="onHandlePTZ('FocusFar', false)" @mouseup="onHandlePTZ('FocusFar', true)">
+            <input type="button" class="h5-button" value="聚焦+" @mousedown="onHandlePTZ('FocusNear', false)" @mouseup="onHandlePTZ('FocusNear', true)">
+            <input type="button" class="h5-button" value="光圈-" @mousedown="onHandlePTZ('IrisSmall', false)" @mouseup="onHandlePTZ('IrisSmall', true)">
+            <input type="button" class="h5-button" value="光圈+" @mousedown="onHandlePTZ('IrisLarge', false)" @mouseup="onHandlePTZ('IrisLarge', true)">
+          </div>
+          <div class="h5-preset-wrap" title="预置点操作界面">
+            <div class="h5-item-form" style="margin-bottom: 10px;">
+              <label style="color: #fff">预置点：</label>
+              <input type="text" id="h5_preset" v-model="yuzhidian">
+              <input type="button" class="h5-button" value="查看" @mousedown="onHandlePTZ('GotoPreset', false)" style="margin-left: 10px;">
+            </div>
+<!--            <button v-on:click="getRealVideo(1)" class="btn btn-xs btn-info" style="margin-left: 10px;">-->
+<!--              <i class="ace-icon fa fa-book bigger-120">查看实时分析列表</i>-->
+<!--            </button>-->
+          </div>
+        </fieldset>
       </div>
     </div>
 
@@ -359,15 +356,25 @@ export default {
     },
     watchVideo(wjlj){
       let _this = this;
-      $("#playboxSs").empty();
+      Loading.show();
+      $("#playbox").empty();
       let video = document.createElement("video");
       video.setAttribute("width","100%");
-      video.setAttribute("height","500px");
+      video.setAttribute("height","100%");
       video.setAttribute("controls","controls");
+      video.setAttribute("autoplay","autoplay");
+      video.setAttribute("loop","loop");
       video.src = wjlj;
-      document.getElementById('playboxSs').appendChild(video);
-      $("#video-modal-ss").modal("show");
-      video.play();
+      document.getElementById('playbox').appendChild(video);
+      Loading.hide();
+    },
+    showVideo(item){
+      let _this = this;
+      if(item.sfysp==2){
+        _this.watchVideo(item.wjlj);
+      }else{
+        _this.getPlayUrl(item);
+      }
     },
     getPlayUrl(item){
       let _this = this;
@@ -381,6 +388,7 @@ export default {
           video.setAttribute("height","100%");
           video.setAttribute("controls","controls");
           video.setAttribute("autoplay","autoplay");
+          video.setAttribute("loop","loop");
           if(Hls.isSupported()) {
             let hls = new Hls();
             hls.loadSource(data.getElementsByTagName('PlayUrl')[0].childNodes[0].nodeValue);
@@ -404,11 +412,15 @@ export default {
     },
     getExplainVideoEvent(){
       let _this = this;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/welcome/getExplainVideoEvent', {sm:'1',sfysp:0,sbbh:_this.optionKVArray(_this.sbbhTdhList,_this.sbbhTdh)}).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/welcome/getExplainVideoEvent', {sm:'1',sbbh:_this.optionKVArray(_this.sbbhTdhList,_this.sbbhTdh)}).then((response)=>{
         let resp = response.data;
         _this.videoEvents = resp.content;
         if(_this.videoEvents.length>0){
-          _this.getPlayUrl(_this.videoEvents[0]);
+          if(0==_this.videoEvents[0].sfysp){
+            _this.getPlayUrl(_this.videoEvents[0]);
+          }else if(2==_this.videoEvents[0].sfysp){
+            _this.watchVideo(_this.videoEvents[0].wjlj);
+          }
         }
       })
     },
@@ -578,14 +590,13 @@ export default {
   background-color: #eee;
   color: #000;
 }
-.h5-left,
-.h5-right {
+.h5-left{
   float: left;
   width: 980px;
-  height: 630px;
+  height: 100%;
 }
 .h5-play-wrap {
-  width: 980px;
+  /*width: 980px;*/
   height: 630px;
   background-color: #000;
   border: 1px solid #333;
@@ -596,7 +607,7 @@ export default {
   color: #4AAFE3 !important;
 }
 .h5-fieldset-wrap {
-  width: 980px;
+  /*width: 980px;*/
   padding: 10px;
 }
 .h5-step-wrap {
@@ -649,7 +660,7 @@ export default {
   flex-direction: row;
 }
 .left-box{
-  width: 60%;
+  width: 55%;
   height: 100%;
   display: flex;
   flex-direction: row;
@@ -672,7 +683,7 @@ export default {
   font-size: 16px;
 }
 .right-box{
-  width: 40%;
+  width: 44%;
   height: 100%;
   display: flex;
   flex-direction: column;
