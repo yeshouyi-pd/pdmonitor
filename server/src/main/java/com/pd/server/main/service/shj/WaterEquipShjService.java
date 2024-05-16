@@ -35,7 +35,7 @@ public class WaterEquipShjService extends AbstractScanRequest{
 
     private static final Logger LOG = LoggerFactory.getLogger(WaterEquipShjService.class);
 
-    private static final String key = "39340ac3d444a24d3ef8a72b3089ec73";
+    private static final String key = "";
 
 
     public static RedisTemplate redisTstaticemplate;
@@ -118,14 +118,20 @@ public class WaterEquipShjService extends AbstractScanRequest{
                         String cs = (String) redisTstaticemplate.opsForValue().get("XT"+sbbh);
                         if(Integer.parseInt(cs)>30){
                             String distance = attrMapperStatic.selectByAttrKey("distance");
-                            long realDistance = getDistance(msg,listWater.get(0).getBz());
-                            LOG.error("高德地图计算真实差距------------>"+realDistance);
-                            if(realDistance>Long.parseLong(distance)){
-                                String phoneNum = attrMapperStatic.selectByAttrKey("heartPhone");
-                                //发送短信
-                                SendSmsTool.sendSms("1860261",sbbh,phoneNum);
+                            String[] arr = msg.split(",");
+                            String[] arr1 = listWater.get(0).getBz().split(",");
+                            try {
+                                double realDistance = calculateDistance(Double.parseDouble(arr[1]),Double.parseDouble(arr[0]),Double.parseDouble(arr1[1]),Double.parseDouble(arr1[0]));
+                                LOG.error("高德地图计算真实差距------------>"+realDistance);
+                                if(realDistance>Long.parseLong(distance)){
+                                    String phoneNum = attrMapperStatic.selectByAttrKey("heartPhone");
+                                    //发送短信
+                                    SendSmsTool.sendSms("1860261",sbbh,phoneNum);
+                                }
+                                redisTstaticemplate.opsForValue().set("XT"+sbbh, "0");
+                            }catch (Exception e){
+                                LOG.error("出错："+e.getMessage());
                             }
-                            redisTstaticemplate.opsForValue().set("XT"+sbbh, "0");
                         }else{
                             redisTstaticemplate.opsForValue().set("XT"+sbbh, String.valueOf(Integer.parseInt(cs)+1));
                         }
@@ -149,22 +155,22 @@ public class WaterEquipShjService extends AbstractScanRequest{
         return data;
     }
 
-    //计算两点间距离
-    public static long getDistance(String startLonLat, String endLonLat){
-        try {
-            String queryUrl = "https://restapi.amap.com/v3/distance?key="+key+"&type=0&origins="+startLonLat+"&destination="+endLonLat;
-            String queryResult = getResponse(queryUrl);
-            JSONObject job = JSONObject.parseObject(queryResult);
-            if("OK".equals(job.getString("info"))){
-                JSONArray ja = job.getJSONArray("results");
-                JSONObject jsonObject = JSON.parseObject(ja.getString(0));
-                return Long.parseLong(jsonObject.get("distance").toString());
-            }else{
-                return -1;
-            }
-        }catch (Exception e){
-            return -1;
-        }
+    /**
+     * 计算两个GPS坐标之间的距离
+     * @param lat1 第一个点的纬度
+     * @param lon1 第一个点的经度
+     * @param lat2 第二个点的纬度
+     * @param lon2 第二个点的经度
+     * @return 距离（单位：米）
+     */
+    public static double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+        double latDistance = Math.toRadians(lat2 - lat1);
+        double lonDistance = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2) +
+                Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
+                        Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return 6371000 * c;
     }
 
     //发送请求
@@ -213,11 +219,12 @@ public class WaterEquipShjService extends AbstractScanRequest{
     }
 
     public static void main(String[] args){
-        long distance = getDistance("117.729483166667,30.851357","117.73000,30.84791");
-        System.out.println(distance);
-        if(distance>Long.parseLong("300")){
-            System.out.println(true);
-        }
+//        long distance = getDistance("117.729483166667,30.851357","117.73000,30.84791");
+//        System.out.println(distance);
+//        if(distance>Long.parseLong("300")){
+//            System.out.println(true);
+//        }
+        System.out.println(calculateDistance(30.851357,117.729483166667,30.84791,117.73000));
     }
 
 }

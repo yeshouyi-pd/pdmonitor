@@ -199,7 +199,6 @@ export default {
   methods: {
     findDeviceInfo(){
       let _this = this;
-      Loading.show();
       let data = {};
       if("460100"==Tool.getLoginUser().deptcode){
         data = {'sblb':'0001','dqzl':'A1,A4'};
@@ -207,7 +206,6 @@ export default {
         data = {'sblb':'0001','dqzl':'A1,A4','xmbh':Tool.getLoginUser().xmbh};
       }
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/findAll', data).then((response)=>{
-        Loading.hide();
         _this.waterEquipments = response.data.content;
       })
     },
@@ -261,10 +259,10 @@ export default {
       }
       _this.$forceUpdate();
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFile/lists',_this.equipmentFileDto).then((response)=>{
-        Loading.hide();
         let resp = response.data;
         _this.equipmentFiles = resp.content.list;
         _this.$refs.pagination.render(page, resp.content.total);
+        Loading.hide();
         //_this.getTs(_this.equipmentFiles);
       })
     },
