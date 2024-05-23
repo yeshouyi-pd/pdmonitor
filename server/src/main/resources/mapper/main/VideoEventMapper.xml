@@ -14,6 +14,12 @@
     <result column="sm" jdbcType="VARCHAR" property="sm" />
     <result column="sxtip" jdbcType="VARCHAR" property="sxtip" />
   </resultMap>
+  <resultMap id="DpResultMap" type="com.pd.server.main.dto.basewx.my.VideoEventDpDto">
+    <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
+    <result column="rq" jdbcType="VARCHAR" property="rq" />
+    <result column="yhc" jdbcType="INTEGER" property="yhc" />
+    <result column="whc" jdbcType="INTEGER" property="whc" />
+  </resultMap>
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -324,4 +330,18 @@
       sxtip = #{sxtip,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
+  <select id="selectCountByRq" parameterType="com.pd.server.main.domain.VideoEventExample" resultMap="DpResultMap">
+    select rq,sum(case when sm = '1' then 1 else 0 end) yhc,sum(case when sm = '0' then 1 else 0 end) whc from video_event
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    GROUP BY rq ORDER BY rq
+  </select>
+  <select id="selectCountBySbbh" parameterType="com.pd.server.main.domain.VideoEventExample" resultMap="DpResultMap">
+    select sbbh,sum(case when sm = '1' then 1 else 0 end) yhc,sum(case when sm = '0' then 1 else 0 end) whc from video_event
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    GROUP BY sbbh
+  </select>
 </mapper>

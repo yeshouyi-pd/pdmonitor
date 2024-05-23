@@ -5,6 +5,7 @@ import com.pd.server.main.domain.VideoEventExample;
 import java.util.List;
 
 import com.pd.server.main.dto.VideoEventDto;
+import com.pd.server.main.dto.basewx.my.VideoEventDpDto;
 import org.apache.ibatis.annotations.Param;
 
 public interface VideoEventMapper {
@@ -33,4 +34,8 @@ public interface VideoEventMapper {
     int updateByPrimaryKeySelective(VideoEvent record);
 
     int updateByPrimaryKey(VideoEvent record);
+
+    List<VideoEventDpDto> selectCountByRq(VideoEventExample example);
+
+    List<VideoEventDpDto> selectCountBySbbh(VideoEventExample example);
 }
