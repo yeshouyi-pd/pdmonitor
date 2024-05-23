@@ -1,8 +1,10 @@
 package com.pd.monitor.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.pd.server.main.domain.*;
 import com.pd.server.main.dto.*;
 import com.pd.server.main.dto.basewx.my.AppearNumDpDto;
+import com.pd.server.main.dto.basewx.my.VideoEventDpDto;
 import com.pd.server.main.service.*;
 import com.pd.server.util.DateUtil;
 import com.pd.server.util.DateUtils;
@@ -42,6 +44,46 @@ public class EnvironmentDpController {
     @Resource
     private SeaSurfaceSalinityService seaSurfaceSalinityService;
 
+
+    @PostMapping("/getVideoEventCountByRq")
+    public ResponseDto getVideoEventCountByRq(@RequestBody JSONObject jsonObject){
+        ResponseDto responseDto = new ResponseDto();
+        VideoEventExample example = new VideoEventExample();
+        VideoEventExample.Criteria ca = example.createCriteria();
+        if(!StringUtils.isEmpty(jsonObject.getString("sbbh"))){
+            ca.andSbbhEqualTo(jsonObject.getString("sbbh"));
+        }
+        if(!StringUtils.isEmpty(jsonObject.getString("stime"))){
+            ca.andRqGreaterThanOrEqualTo(jsonObject.getString("stime"));
+        }
+        if(!StringUtils.isEmpty(jsonObject.getString("etime"))){
+            ca.andRqLessThanOrEqualTo(jsonObject.getString("etime"));
+        }
+        ca.andSfyspNotEqualTo(1);
+        List<VideoEventDpDto> lists = videoEventService.selectCountByRq(example);
+        responseDto.setContent(lists);
+        return responseDto;
+    }
+
+    @PostMapping("/getVideoEventCountBySbbh")
+    public ResponseDto getVideoEventCountBySbbh(@RequestBody JSONObject jsonObject){
+        ResponseDto responseDto = new ResponseDto();
+        VideoEventExample example = new VideoEventExample();
+        VideoEventExample.Criteria ca = example.createCriteria();
+        if(!StringUtils.isEmpty(jsonObject.getString("sbbh"))){
+            ca.andSbbhEqualTo(jsonObject.getString("sbbh"));
+        }
+        if(!StringUtils.isEmpty(jsonObject.getString("stime"))){
+            ca.andRqGreaterThanOrEqualTo(jsonObject.getString("stime"));
+        }
+        if(!StringUtils.isEmpty(jsonObject.getString("etime"))){
+            ca.andRqLessThanOrEqualTo(jsonObject.getString("etime"));
+        }
+        ca.andSfyspNotEqualTo(1);
+        List<VideoEventDpDto> lists = videoEventService.selectCountBySbbh(example);
+        responseDto.setContent(lists);
+        return responseDto;
+    }
 
     @GetMapping("/getSeaSurfacePic")
     public ResponseDto getSeaSurfacePic(){

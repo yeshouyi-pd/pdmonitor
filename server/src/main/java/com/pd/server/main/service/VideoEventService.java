@@ -4,6 +4,7 @@ import com.pd.server.main.domain.VideoEvent;
 import com.pd.server.main.domain.VideoEventExample;
 import com.pd.server.main.dto.VideoEventDto;
 import com.pd.server.main.dto.PageDto;
+import com.pd.server.main.dto.basewx.my.VideoEventDpDto;
 import com.pd.server.main.mapper.VideoEventMapper;
 import com.pd.server.util.CopyUtil;
 import com.pd.server.util.UuidUtil;
@@ -23,6 +24,20 @@ public class VideoEventService {
 
     public VideoEvent selectById(String id){
         return videoEventMapper.selectByPrimaryKey(id);
+    }
+
+    /**
+     * 根据日期分组查询已审核和未审核的数据量
+     */
+    public List<VideoEventDpDto> selectCountByRq(VideoEventExample example){
+        return videoEventMapper.selectCountByRq(example);
+    }
+
+    /**
+     * 根据设备编号分钟查询已审核和未审核的数据量
+     */
+    public List<VideoEventDpDto> selectCountBySbbh(VideoEventExample example){
+        return videoEventMapper.selectCountBySbbh(example);
     }
 
     /**
