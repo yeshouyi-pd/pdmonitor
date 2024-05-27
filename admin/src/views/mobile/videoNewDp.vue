@@ -56,16 +56,76 @@
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title">在线实时预览</h4>
           </div>
-          <div class="modal-body" style="height: 85%;">
-            <video ref="videoElement"
-                   class="centeredVideo"
-                   id="myPlayer"
-                   preload="auto"
-                   type="rtmp/flv"
-                   autoplay
-                   muted
-                   style="width: 100%;height: 100%"
-            ></video>
+          <div class="modal-body" style="height: 85%;display: flex;">
+            <ul class="h5-ul" id="h5_channel_list">
+              <li id="channel-0" v-on:click="changeChannel(0)">D1 桥面1可见光（11.252.220.131）</li>
+              <li id="channel-2" v-on:click="changeChannel(2)">D3 桥面2可见光（11.252.220.132）</li>
+              <li id="channel-4" v-on:click="changeChannel(4)">D5 桥面3可见光（11.252.220.133）</li>
+              <li id="channel-6" v-on:click="changeChannel(6)">D7 桥面4可见光（11.252.220.134）</li>
+              <li id="channel-8" v-on:click="changeChannel(8)">D9 桥面5可见光（11.252.220.135）</li>
+              <li id="channel-10" v-on:click="changeChannel(10)">D11 桥面6可见光（11.252.220.136）</li>
+              <li id="channel-12" v-on:click="changeChannel(12)">D13 桥面7可见光（11.252.220.137）</li>
+              <li id="channel-14" v-on:click="changeChannel(14)">D15 桥面8可见光（11.2252.220.138）</li>
+              <li id="channel-16" v-on:click="changeChannel(16)">D17 铁塔1可见光(192.168.3.21)</li>
+              <li id="channel-18" v-on:click="changeChannel(18)">D19 铁塔2可见光（192.168.3.22）</li>
+            </ul>
+            <div style="width: calc(100% - 200px);">
+              <video ref="videoElement"
+                     class="centeredVideo"
+                     id="myPlayer"
+                     preload="auto"
+                     type="rtmp/flv"
+                     autoplay
+                     muted
+                     style="width: 100%;height: 75%"
+              ></video>
+              <fieldset class="h5-fieldset-wrap">
+                <legend style="color: #000;margin-bottom: 0;">云台控制</legend>
+                <div class="h5-step-wrap">
+                  <span style="color:#000;">步长(1-8):</span>
+                  <select id="h5_ptz_step" style="width: 230px;height: 40px;"  v-model="selectedValue">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                  </select>
+                </div>
+                <div class="h5-ptz-wrap" title="云台按钮操作界面">
+                  <input type="button" class="h5-button" value="左上" @mousedown="onHandlePTZ('LeftUp', false)" @mouseup="onHandlePTZ('LeftUp', true)">
+                  <input type="button" class="h5-button" value="上" @mousedown="onHandlePTZ('Up', false)" @mouseup="onHandlePTZ('Up', true)">
+                  <input type="button" class="h5-button" value="右上" @mousedown="onHandlePTZ('RightUp', false)" @mouseup="onHandlePTZ('RightUp', true)">
+                  <input type="button" class="h5-button" value="左" @mousedown="onHandlePTZ('Left', false)" @mouseup="onHandlePTZ('Left', true)">
+                  <input class="h5-button" value="" style="opacity: 0;">
+                  <input type="button" class="h5-button" value="右" @mousedown="onHandlePTZ('Right', false)" @mouseup="onHandlePTZ('Right', true)">
+                  <input type="button" class="h5-button" value="左下" @mousedown="onHandlePTZ('LeftDown', false)" @mouseup="onHandlePTZ('LeftDown', true)">
+                  <input type="button" class="h5-button" value="下" @mousedown="onHandlePTZ('Down', false)" @mouseup="onHandlePTZ('Down', true)">
+                  <input type="button" class="h5-button" value="右下" @mousedown="onHandlePTZ('RightDown', false)" @mouseup="onHandlePTZ('RightDown', true)">
+                </div>
+                <div class="h5-zoomfocus-wrap" title="变倍聚焦操作界面">
+                  <input type="button" class="h5-button" value="变倍-" @mousedown="onHandlePTZ('ZoomWide', false)" @mouseup="onHandlePTZ('ZoomWide', true)">
+                  <input type="button" class="h5-button" value="变倍+" @mousedown="onHandlePTZ('ZoomTele', false)" @mouseup="onHandlePTZ('ZoomTele', true)">
+                  <input type="button" class="h5-button" value="聚焦-" @mousedown="onHandlePTZ('FocusFar', false)" @mouseup="onHandlePTZ('FocusFar', true)">
+                  <input type="button" class="h5-button" value="聚焦+" @mousedown="onHandlePTZ('FocusNear', false)" @mouseup="onHandlePTZ('FocusNear', true)">
+                  <input type="button" class="h5-button" value="光圈-" @mousedown="onHandlePTZ('IrisSmall', false)" @mouseup="onHandlePTZ('IrisSmall', true)">
+                  <input type="button" class="h5-button" value="光圈+" @mousedown="onHandlePTZ('IrisLarge', false)" @mouseup="onHandlePTZ('IrisLarge', true)">
+                </div>
+                <div class="h5-preset-wrap" title="预置点操作界面">
+                  <div class="h5-item-form" id="h5-item-form" style="margin-bottom: 10px;">
+                    <span style="color: #000;width: 130px;border: none;font-size: 20px;">预置点：</span>
+                    <label id="yzd-1" name="1" @mousedown="onHandlePTZ('GotoPreset', false, $event)" >1</label>
+                    <label id="yzd-2" name="2" @mousedown="onHandlePTZ('GotoPreset', false, $event)" >2</label>
+                    <label id="yzd-3" name="3" @mousedown="onHandlePTZ('GotoPreset', false, $event)" >3</label>
+                  </div>
+                  <!--            <button v-on:click="getRealVideo(1)" class="btn btn-xs btn-info" style="margin-left: 10px;">-->
+                  <!--              <i class="ace-icon fa fa-book bigger-120">查看实时分析列表</i>-->
+                  <!--            </button>-->
+                </div>
+              </fieldset>
+            </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-white btn-default btn-round" data-dismiss="modal">
@@ -122,7 +182,9 @@ export default {
       videoEvents:[],
       curChannel:0,
       flvPlayer: "",
-      websocketUrl:'ws://49.239.193.146:50091/monitor/device/monitor/'
+      websocketUrl:'ws://49.239.193.146:50091/monitor/device/monitor/',
+      selectedValue:5,
+      yuzhidian:''
     }
   },
   watch: {
@@ -463,6 +525,9 @@ export default {
     changeChannel(channel){
       let _this = this;
       _this.curChannel = channel;
+      document.querySelectorAll('#h5_channel_list li').forEach(item => {item.classList.remove('fn-fontBlue')});
+      document.querySelectorAll('#h5-item-form label').forEach(item => {item.classList.remove('fn-fontBlue')});
+      $("#channel-"+channel).addClass("fn-fontBlue");
       _this.openvideoElement();
     },
     openvideoElement(){
@@ -525,6 +590,37 @@ export default {
       _this.flvPlayer.detachMediaElement()
       _this.flvPlayer.destroy()
       _this.flvPlayer = null
+    },
+    onHandlePTZ(name, isStop,e){
+      let _this = this;
+      let param2 = '';
+      if(name=='GotoPreset'){
+        _this.yuzhidian = e.target.innerText;
+        if(Tool.isEmpty(_this.yuzhidian) || !(/^[0-9]+$/.test(_this.yuzhidian))){
+          Toast.error("请填写数字！");
+          return;
+        }
+        document.querySelectorAll('#h5-item-form label').forEach(item => {item.classList.remove('fn-fontBlue')});
+        $("#"+e.target.id).addClass("fn-fontBlue");
+        param2 = _this.yuzhidian;
+      }else{
+        param2 = _this.selectedValue;
+      }
+      if(!isStop) {
+        _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/ptzController/ptzControlStart/'+name+"/"+_this.curChannel+"/0/"+param2, {}).then((response)=>{
+          let resp = response.data;
+          if(resp.code=='201'){
+            Toast.error(resp.message);
+          }
+        })
+      } else {
+        _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/ptzController/ptzControlEnd/'+name+"/"+_this.curChannel, {}).then((response)=>{
+          let resp = response.data;
+          if(resp.code=='201'){
+            Toast.error(resp.message);
+          }
+        })
+      }
     },
     back(){
       let _this = this;
@@ -609,5 +705,87 @@ export default {
   background-color: rgb(15,66,91);
   margin: 0.8% auto 0;
   border-radius: 10px;
+}
+.h5-ul {
+  /* float: left; */
+  /* background: #ccc; */
+  list-style: none;
+  /* max-height: 250px; */
+  /* overflow-y: scroll; */
+  width: 150px;
+  text-align: center;
+  margin-right: 5px;
+  /* height: 100vh; */
+  overflow-y: auto;
+}
+.h5-ul li {
+  cursor: pointer;
+  height: 60px;
+  line-height: 30px;
+  border: 1px solid #19D88D;
+  color: #000;
+}
+.h5-ul li:hover {
+  background-color: #19D88D;
+  color: #000;
+}
+.fn-fontBlue{
+  background-color: #19D88D !important;
+}
+.h5-fieldset-wrap {
+  /*width: 980px;*/
+  padding: 10px;
+}
+.h5-step-wrap {
+  margin-bottom: 10px;
+  float: left;
+  margin-right: 20px;
+  font-size: 20px;
+}
+.h5-zoomfocus-wrap {
+  width: 200px;
+  float: left;
+}
+.h5-preset-wrap {
+  float: left;
+  margin-top: 10px;
+}
+.h5-ptz-wrap {
+  width: 210px;
+  float: left;
+  color: #000;
+}
+.h5-ptz-wrap .h5-button {
+  width: 60px;
+  height: 30px;
+  margin-bottom: 3px;
+}
+.h5-zoomfocus-wrap .h5-button {
+  width: 80px;
+  height: 30px;
+  margin-bottom: 3px;
+}
+.h5-preset-wrap .h5-button {
+  width: 60px;
+  height: 30px;
+  margin-bottom: 3px;
+}
+.h5-item-form input{
+  display: none;
+}
+.h5-item-form label {
+  width: 80px;
+  display: inline-block;
+  height: 30px;
+  border: 1px solid #19D88D;
+  text-align: center;
+  line-height: 30px;
+  font-size: 20px;
+  color: #000;
+  margin-right: 20px;
+  cursor: pointer;
+}
+.h5-item-form label:hover {
+  background-color: #19D88D;
 }
 </style>
