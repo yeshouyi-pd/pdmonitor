@@ -23,10 +23,12 @@ import javax.annotation.Resource;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.awt.*;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
@@ -92,10 +94,22 @@ public class ExportFileController extends BaseWxController{
             }
             //导出
             HSSFWorkbook workbook = new HSSFWorkbook();
+            //设置字体大小
+            HSSFFont fontCommon = workbook.createFont();
+            fontCommon.setFontHeightInPoints((short)12); // 设置字体大小为12磅
             //设置公共单元格样式
             HSSFCellStyle cellStyleCommon = workbook.createCellStyle();
-            cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_LEFT);
+            cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_CENTER);
             cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+            cellStyleCommon.setFont(fontCommon);
+            //设置字体大小,加粗
+            HSSFFont font = workbook.createFont();
+            font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+            font.setFontHeightInPoints((short)12); // 设置字体大小为12磅
+            HSSFCellStyle cellStyleTitle = workbook.createCellStyle();
+            cellStyleTitle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+            cellStyleTitle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+            cellStyleTitle.setFont(font);
             // 创建一个工作表
             String fileName = "出现次数(" + new Date().getTime() + ").xls";
             HSSFSheet sheet = workbook.createSheet("出现次数");
@@ -109,7 +123,7 @@ public class ExportFileController extends BaseWxController{
             for(int i=0;i<titleStrList.size();i++){
                 HSSFCell cell = titleRow.createCell(i);
                 cell.setCellValue(titleStrList.get(i));
-                cell.setCellStyle(cellStyleCommon);
+                cell.setCellStyle(cellStyleTitle);
             }
             Map<String,String> mapDept = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.DEPTCODENAME);
             WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
@@ -186,10 +200,22 @@ public class ExportFileController extends BaseWxController{
             }
             //导出
             HSSFWorkbook workbook = new HSSFWorkbook();
+            //设置字体大小
+            HSSFFont fontCommon = workbook.createFont();
+            fontCommon.setFontHeightInPoints((short)12); // 设置字体大小为12磅
             //设置公共单元格样式
             HSSFCellStyle cellStyleCommon = workbook.createCellStyle();
-            cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_LEFT);
+            cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_CENTER);
             cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+            cellStyleCommon.setFont(fontCommon);
+            //设置字体加粗
+            HSSFFont font = workbook.createFont();
+            font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+            font.setFontHeightInPoints((short)12); // 设置字体大小为12磅
+            HSSFCellStyle cellStyleTitle = workbook.createCellStyle();
+            cellStyleTitle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+            cellStyleTitle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+            cellStyleTitle.setFont(font);
             // 创建一个工作表
             String fileName = "出现事件(" + new Date().getTime() + ").xls";
             HSSFSheet sheet = workbook.createSheet("出现事件");
@@ -203,7 +229,7 @@ public class ExportFileController extends BaseWxController{
             for(int i=0;i<titleStrList.size();i++){
                 HSSFCell cell = titleRow.createCell(i);
                 cell.setCellValue(titleStrList.get(i));
-                cell.setCellStyle(cellStyleCommon);
+                cell.setCellStyle(cellStyleTitle);
             }
             Map<String,String> mapDept = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.DEPTCODENAME);
             WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
@@ -277,10 +303,22 @@ public class ExportFileController extends BaseWxController{
             List<PointerSecond> lists = pointerSecondService.selectByExample(example);
             //导出
             HSSFWorkbook workbook = new HSSFWorkbook();
+            //设置字体大小
+            HSSFFont fontCommon = workbook.createFont();
+            fontCommon.setFontHeightInPoints((short)12); // 设置字体大小为12磅
             //设置公共单元格样式
             HSSFCellStyle cellStyleCommon = workbook.createCellStyle();
-            cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_LEFT);
+            cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_CENTER);
             cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+            cellStyleCommon.setFont(fontCommon);
+            //设置字体加粗
+            HSSFFont font = workbook.createFont();
+            font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+            font.setFontHeightInPoints((short)12); // 设置字体大小为12磅
+            HSSFCellStyle cellStyleTitle = workbook.createCellStyle();
+            cellStyleTitle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+            cellStyleTitle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+            cellStyleTitle.setFont(font);
             // 创建一个工作表
             String fileName = "实时水下环境指针预警数据(" + new Date().getTime() + ").xls";
             HSSFSheet sheet = workbook.createSheet("预警数据");
@@ -294,7 +332,7 @@ public class ExportFileController extends BaseWxController{
             for(int i=0;i<titleStrList.size();i++){
                 HSSFCell cell = titleRow.createCell(i);
                 cell.setCellValue(titleStrList.get(i));
-                cell.setCellStyle(cellStyleCommon);
+                cell.setCellStyle(cellStyleTitle);
             }
             WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
             WaterEquipmentExample.Criteria caEquip = waterEquipmentExample.createCriteria();
@@ -381,10 +419,22 @@ public class ExportFileController extends BaseWxController{
             List<PointerDay> lists = pointerDayService.selectByExample(example);
             //导出
             HSSFWorkbook workbook = new HSSFWorkbook();
+            //设置字体大小
+            HSSFFont fontCommon = workbook.createFont();
+            fontCommon.setFontHeightInPoints((short)12); // 设置字体大小为12磅
             //设置公共单元格样式
             HSSFCellStyle cellStyleCommon = workbook.createCellStyle();
-            cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_LEFT);
+            cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_CENTER);
             cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+            cellStyleCommon.setFont(fontCommon);
+            //设置字体加粗
+            HSSFFont font = workbook.createFont();
+            font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+            font.setFontHeightInPoints((short)12); // 设置字体大小为12磅
+            HSSFCellStyle cellStyleTitle = workbook.createCellStyle();
+            cellStyleTitle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+            cellStyleTitle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+            cellStyleTitle.setFont(font);
             // 创建一个工作表
             String fileName = "当日水下环境指针预警数据(" + new Date().getTime() + ").xls";
             HSSFSheet sheet = workbook.createSheet("预警数据");
@@ -398,7 +448,7 @@ public class ExportFileController extends BaseWxController{
             for(int i=0;i<titleStrList.size();i++){
                 HSSFCell cell = titleRow.createCell(i);
                 cell.setCellValue(titleStrList.get(i));
-                cell.setCellStyle(cellStyleCommon);
+                cell.setCellStyle(cellStyleTitle);
             }
             WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
             WaterEquipmentExample.Criteria caEquip = waterEquipmentExample.createCriteria();
@@ -483,10 +533,22 @@ public class ExportFileController extends BaseWxController{
             List<EquipmentFileEvent> equipmentFileEventList = equipmentFileEventService.selectByExampleExport(record);
             //导出
             HSSFWorkbook workbook = new HSSFWorkbook();
+            //设置字体大小
+            HSSFFont fontCommon = workbook.createFont();
+            fontCommon.setFontHeightInPoints((short)12); // 设置字体大小为12磅
             //设置公共单元格样式
             HSSFCellStyle cellStyleCommon = workbook.createCellStyle();
-            cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_LEFT);
+            cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_CENTER);
             cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+            cellStyleCommon.setFont(fontCommon);
+            //设置字体加粗
+            HSSFFont font = workbook.createFont();
+            font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+            font.setFontHeightInPoints((short)12); // 设置字体大小为12磅
+            HSSFCellStyle cellStyleTitle = workbook.createCellStyle();
+            cellStyleTitle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+            cellStyleTitle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+            cellStyleTitle.setFont(font);
             // 创建一个工作表
             String fileName = "聚类统计(" + new Date().getTime() + ").xls";
             HSSFSheet sheet = workbook.createSheet("聚类统计");
@@ -496,11 +558,12 @@ public class ExportFileController extends BaseWxController{
             sheet.setDefaultRowHeight((short)(40*10));
             // 添加表头行
             HSSFRow titleRow = sheet.createRow(0);//第1行
-            List<String> titleStrList = Arrays.asList("设备名称","设备sn","开始时间","结束时间","头数");
+            sheet.setColumnWidth(4,256*12+184);
+            List<String> titleStrList = Arrays.asList("声检测点位","设备编号","开始时间","结束时间","预估头数");
             for(int i=0;i<titleStrList.size();i++){
                 HSSFCell cell = titleRow.createCell(i);
                 cell.setCellValue(titleStrList.get(i));
-                cell.setCellStyle(cellStyleCommon);
+                cell.setCellStyle(cellStyleTitle);
             }
             WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
             WaterEquipmentExample.Criteria caEquip = waterEquipmentExample.createCriteria();
@@ -591,10 +654,22 @@ public class ExportFileController extends BaseWxController{
             List<EquipmentTyEvent> equipmentTyEventList = equipmentTyEventService.selectByExampleExport(record);
             //导出
             HSSFWorkbook workbook = new HSSFWorkbook();
+            //设置字体大小
+            HSSFFont fontCommon = workbook.createFont();
+            fontCommon.setFontHeightInPoints((short)12); // 设置字体大小为12磅
             //设置公共单元格样式
             HSSFCellStyle cellStyleCommon = workbook.createCellStyle();
-            cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_LEFT);
+            cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_CENTER);
             cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+            cellStyleCommon.setFont(fontCommon);
+            //设置字体加粗
+            HSSFFont font = workbook.createFont();
+            font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+            font.setFontHeightInPoints((short)12); // 设置字体大小为12磅
+            HSSFCellStyle cellStyleTitle = workbook.createCellStyle();
+            cellStyleTitle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+            cellStyleTitle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+            cellStyleTitle.setFont(font);
             // 创建一个工作表
             String fileName = "聚类统计(" + new Date().getTime() + ").xls";
             HSSFSheet sheet = workbook.createSheet("聚类统计");
@@ -604,11 +679,11 @@ public class ExportFileController extends BaseWxController{
             sheet.setDefaultRowHeight((short)(40*10));
             // 添加表头行
             HSSFRow titleRow = sheet.createRow(0);//第1行
-            List<String> titleStrList = Arrays.asList("设备名称","设备sn","开始时间","结束时间","头数","坐标","经度","纬度","速度");
+            List<String> titleStrList = Arrays.asList("声检测点位","设备编号","开始时间","结束时间","预估头数","坐标","经度","纬度","速度");
             for(int i=0;i<titleStrList.size();i++){
                 HSSFCell cell = titleRow.createCell(i);
                 cell.setCellValue(titleStrList.get(i));
-                cell.setCellStyle(cellStyleCommon);
+                cell.setCellStyle(cellStyleTitle);
             }
             WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
             WaterEquipmentExample.Criteria caEquip = waterEquipmentExample.createCriteria();
@@ -738,10 +813,22 @@ public class ExportFileController extends BaseWxController{
         List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(waterEquipmentExample);
         //导出
         HSSFWorkbook workbook = new HSSFWorkbook();
+        //设置字体大小
+        HSSFFont fontCommon = workbook.createFont();
+        fontCommon.setFontHeightInPoints((short)12); // 设置字体大小为12磅
         //设置公共单元格样式
         HSSFCellStyle cellStyleCommon = workbook.createCellStyle();
-        cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_LEFT);
+        cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_CENTER);
         cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+        cellStyleCommon.setFont(fontCommon);
+        //设置字体加粗
+        HSSFFont font = workbook.createFont();
+        font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+        font.setFontHeightInPoints((short)12); // 设置字体大小为12磅
+        HSSFCellStyle cellStyleTitle = workbook.createCellStyle();
+        cellStyleTitle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+        cellStyleTitle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+        cellStyleTitle.setFont(font);
         // 创建一个工作表
         String fileName = "设备运行日志(" + new Date().getTime() + ").xls";
         HSSFSheet sheet = workbook.createSheet("设备运行日志");
@@ -755,7 +842,7 @@ public class ExportFileController extends BaseWxController{
         for(int i=0;i<waterEquipmentList.size();i++){
             HSSFCell cell = titleRow.createCell(i+1);
             cell.setCellValue(waterEquipmentList.get(i).getSbmc());
-            cell.setCellStyle(cellStyleCommon);
+            cell.setCellStyle(cellStyleTitle);
             titleSbbhList.add(waterEquipmentList.get(i).getSbsn());
         }
         int rowIndex = 1;
@@ -828,10 +915,22 @@ public class ExportFileController extends BaseWxController{
         }
         //导出
         HSSFWorkbook workbook = new HSSFWorkbook();
+        //设置字体大小
+        HSSFFont fontCommon = workbook.createFont();
+        fontCommon.setFontHeightInPoints((short)12); // 设置字体大小为12磅
         //设置公共单元格样式
         HSSFCellStyle cellStyleCommon = workbook.createCellStyle();
-        cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_LEFT);
+        cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_CENTER);
         cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+        cellStyleCommon.setFont(fontCommon);
+        //设置字体加粗
+        HSSFFont font = workbook.createFont();
+        font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+        font.setFontHeightInPoints((short)12); // 设置字体大小为12磅
+        HSSFCellStyle cellStyleTitle = workbook.createCellStyle();
+        cellStyleTitle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+        cellStyleTitle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+        cellStyleTitle.setFont(font);
         // 创建一个工作表
         String fileName = "捕食统计(" + new Date().getTime() + ").xls";
         HSSFSheet sheet = workbook.createSheet("按捕食次数统计");
@@ -845,7 +944,7 @@ public class ExportFileController extends BaseWxController{
         for(int i=0;i<titleStrList.size();i++){
             HSSFCell cell = titleRow.createCell(i);
             cell.setCellValue(titleStrList.get(i));
-            cell.setCellStyle(cellStyleCommon);
+            cell.setCellStyle(cellStyleTitle);
         }
         Map<String,String> mapDept = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.DEPTCODENAME);
         WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
@@ -924,10 +1023,22 @@ public class ExportFileController extends BaseWxController{
         }
         //导出
         HSSFWorkbook workbook = new HSSFWorkbook();
+        //设置字体大小
+        HSSFFont fontCommon = workbook.createFont();
+        fontCommon.setFontHeightInPoints((short)12); // 设置字体大小为12磅
         //设置公共单元格样式
         HSSFCellStyle cellStyleCommon = workbook.createCellStyle();
-        cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_LEFT);
+        cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_CENTER);
         cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+        cellStyleCommon.setFont(fontCommon);
+        //设置字体加粗
+        HSSFFont font = workbook.createFont();
+        font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+        font.setFontHeightInPoints((short)12); // 设置字体大小为12磅
+        HSSFCellStyle cellStyleTitle = workbook.createCellStyle();
+        cellStyleTitle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+        cellStyleTitle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+        cellStyleTitle.setFont(font);
         // 创建一个工作表
         String fileName = "事件统计(" + new Date().getTime() + ").xls";
         HSSFSheet sheet = workbook.createSheet("按事件统计");
@@ -941,7 +1052,7 @@ public class ExportFileController extends BaseWxController{
         for(int i=0;i<titleStrList.size();i++){
             HSSFCell cell = titleRow.createCell(i);
             cell.setCellValue(titleStrList.get(i));
-            cell.setCellStyle(cellStyleCommon);
+            cell.setCellStyle(cellStyleTitle);
         }
         Map<String,String> mapDept = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.DEPTCODENAME);
         WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
@@ -1044,10 +1155,22 @@ public class ExportFileController extends BaseWxController{
         }
         //导出
         HSSFWorkbook workbook = new HSSFWorkbook();
+        //设置字体大小
+        HSSFFont fontCommon = workbook.createFont();
+        fontCommon.setFontHeightInPoints((short)12); // 设置字体大小为12磅
         //设置公共单元格样式
         HSSFCellStyle cellStyleCommon = workbook.createCellStyle();
-        cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_LEFT);
+        cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_CENTER);
         cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+        cellStyleCommon.setFont(fontCommon);
+        //设置字体加粗
+        HSSFFont font = workbook.createFont();
+        font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+        font.setFontHeightInPoints((short)12); // 设置字体大小为12磅
+        HSSFCellStyle cellStyleTitle = workbook.createCellStyle();
+        cellStyleTitle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+        cellStyleTitle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+        cellStyleTitle.setFont(font);
         // 创建一个工作表
         String fileName = "出现统计(" + new Date().getTime() + ").xls";
         HSSFSheet sheet = workbook.createSheet("出现时间");
@@ -1059,14 +1182,14 @@ public class ExportFileController extends BaseWxController{
         HSSFRow titileRow = sheet.createRow(0);//第1行
         HSSFCell headCell = titileRow.createCell(0);//第1行第1列
         headCell.setCellValue("出现时间");
-        headCell.setCellStyle(cellStyleCommon);
+        headCell.setCellStyle(cellStyleTitle);
         HSSFCell headCell1 = titileRow.createCell(1);//第1行第2列
         if(type.equals("minute")){
             headCell1.setCellValue("出现次数");
         }else if(type.equals("hour")){
             headCell1.setCellValue("占总侦测事件百分比");
         }
-        headCell1.setCellStyle(cellStyleCommon);
+        headCell1.setCellStyle(cellStyleTitle);
         for(int i=0;i<lists.size();i++){
             AlarmNumbersDto entity = lists.get(i);
             if(type.equals("minute")){
