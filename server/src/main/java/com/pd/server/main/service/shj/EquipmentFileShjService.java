@@ -92,6 +92,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
         String sbbh = jsonParam.getString("sbbh");
         String tplj = jsonParam.getString("tplj");
         String cjsj = jsonParam.getString("cjsj");
+        String wzlx = jsonParam.getString("wzlx");
         boolean pushData = false;
         if(StringUtils.isEmpty(sbbh)||StringUtils.isEmpty(tplj)||StringUtils.isEmpty(cjsj)){
             data = "参数错误";
@@ -124,6 +125,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
             entity.setFz(DateUtil.getFormatDate(entity.getCjsj(),"yyyy-MM-dd HH:mm"));
             entity.setLy("1");//实时数据
             entity.setDeptcode(deptcode);
+            entity.setSm6(StringUtils.isEmpty(wzlx)?"1":wzlx);//物种类型
             if(tplj.contains("predation")){
                 entity.setJczl("1");//捕食
             }

@@ -66,6 +66,7 @@ public class EquipmentFileTyShjService extends AbstractScanRequest{
         String tplj = jsonParam.getString("tplj");
         String cjsj = jsonParam.getString("cjsj");
         String sm1 = jsonParam.getString("sm1");
+        String wzlx = jsonParam.getString("wzlx");
         if(StringUtils.isEmpty(sbbh)||StringUtils.isEmpty(tplj)||StringUtils.isEmpty(cjsj)||StringUtils.isEmpty(sm1)){
             data = "参数错误";
             return data;
@@ -104,6 +105,7 @@ public class EquipmentFileTyShjService extends AbstractScanRequest{
                 if(tplj.contains("predation")){
                     entity.setJczl("1");//捕食
                 }
+                entity.setSm6(StringUtils.isEmpty(wzlx)?"1":wzlx);//物种类型
                 entity.setCreateTime(new Date());
                 //调用方法，传递文件名称，获取wjlx.type,txtlx,ts,wjmc
                 Map<String, String> typeUtil = TypeUtils.getType(tplj.substring(tplj.lastIndexOf("/")+1));
