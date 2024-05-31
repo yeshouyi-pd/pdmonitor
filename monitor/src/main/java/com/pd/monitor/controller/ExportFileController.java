@@ -101,7 +101,7 @@ public class ExportFileController extends BaseWxController{
             HSSFCellStyle cellStyleCommon = workbook.createCellStyle();
             cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_CENTER);
             cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
-            cellStyleCommon.setFont(fontCommon);
+            //cellStyleCommon.setFont(fontCommon);
             //设置字体大小,加粗
             HSSFFont font = workbook.createFont();
             font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
@@ -207,7 +207,7 @@ public class ExportFileController extends BaseWxController{
             HSSFCellStyle cellStyleCommon = workbook.createCellStyle();
             cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_CENTER);
             cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
-            cellStyleCommon.setFont(fontCommon);
+            //cellStyleCommon.setFont(fontCommon);
             //设置字体加粗
             HSSFFont font = workbook.createFont();
             font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
@@ -310,7 +310,7 @@ public class ExportFileController extends BaseWxController{
             HSSFCellStyle cellStyleCommon = workbook.createCellStyle();
             cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_CENTER);
             cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
-            cellStyleCommon.setFont(fontCommon);
+            //cellStyleCommon.setFont(fontCommon);
             //设置字体加粗
             HSSFFont font = workbook.createFont();
             font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
@@ -426,7 +426,7 @@ public class ExportFileController extends BaseWxController{
             HSSFCellStyle cellStyleCommon = workbook.createCellStyle();
             cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_CENTER);
             cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
-            cellStyleCommon.setFont(fontCommon);
+            //cellStyleCommon.setFont(fontCommon);
             //设置字体加粗
             HSSFFont font = workbook.createFont();
             font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
@@ -540,7 +540,7 @@ public class ExportFileController extends BaseWxController{
             HSSFCellStyle cellStyleCommon = workbook.createCellStyle();
             cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_CENTER);
             cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
-            cellStyleCommon.setFont(fontCommon);
+            //cellStyleCommon.setFont(fontCommon);
             //设置字体加粗
             HSSFFont font = workbook.createFont();
             font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
@@ -661,7 +661,7 @@ public class ExportFileController extends BaseWxController{
             HSSFCellStyle cellStyleCommon = workbook.createCellStyle();
             cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_CENTER);
             cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
-            cellStyleCommon.setFont(fontCommon);
+            //cellStyleCommon.setFont(fontCommon);
             //设置字体加粗
             HSSFFont font = workbook.createFont();
             font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
@@ -820,7 +820,7 @@ public class ExportFileController extends BaseWxController{
         HSSFCellStyle cellStyleCommon = workbook.createCellStyle();
         cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_CENTER);
         cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
-        cellStyleCommon.setFont(fontCommon);
+        //cellStyleCommon.setFont(fontCommon);
         //设置字体加粗
         HSSFFont font = workbook.createFont();
         font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
@@ -922,7 +922,7 @@ public class ExportFileController extends BaseWxController{
         HSSFCellStyle cellStyleCommon = workbook.createCellStyle();
         cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_CENTER);
         cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
-        cellStyleCommon.setFont(fontCommon);
+        //cellStyleCommon.setFont(fontCommon);
         //设置字体加粗
         HSSFFont font = workbook.createFont();
         font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
@@ -1030,7 +1030,7 @@ public class ExportFileController extends BaseWxController{
         HSSFCellStyle cellStyleCommon = workbook.createCellStyle();
         cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_CENTER);
         cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
-        cellStyleCommon.setFont(fontCommon);
+        //cellStyleCommon.setFont(fontCommon);
         //设置字体加粗
         HSSFFont font = workbook.createFont();
         font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
@@ -1162,7 +1162,7 @@ public class ExportFileController extends BaseWxController{
         HSSFCellStyle cellStyleCommon = workbook.createCellStyle();
         cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_CENTER);
         cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
-        cellStyleCommon.setFont(fontCommon);
+        //cellStyleCommon.setFont(fontCommon);
         //设置字体加粗
         HSSFFont font = workbook.createFont();
         font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
