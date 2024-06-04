@@ -261,18 +261,26 @@ export default {
     },
     getPointerSecond(){
       let _this = this;
-      let obj = {
-        "type":"zjglj",
-        "sbbh":_this.curBottomSbbh
-      };
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/welcome/getPointerSecond',obj).then((res)=>{
-        let response = res.data.content;
-        if(!Tool.isEmpty(response)){
-          _this.gauge1(response.decibelValue);
-        }else{
-          _this.gauge1(124);
-        }
-      })
+      // let obj = {
+      //   "type":"zjglj",
+      //   "sbbh":_this.curBottomSbbh
+      // };
+      // _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/welcome/getPointerSecond',obj).then((res)=>{
+      //   let response = res.data.content;
+      //   if(!Tool.isEmpty(response)){
+      //     _this.gauge1(response.decibelValue);
+      //   }else{
+      //     _this.gauge1(124);
+      //   }
+      // })
+      _this.getNoRequestData();
+    },
+    getNoRequestData(){
+      let _this = this;
+      _this.intervalIdTemp = setInterval(() => {
+        let value = Math.ceil(Math.random()*(115-108))+108;
+        _this.gauge1(value);
+      }, 3000);
     },
     gauge1(value) {
       let chart = echarts.init(document.getElementById('gauge1'))
