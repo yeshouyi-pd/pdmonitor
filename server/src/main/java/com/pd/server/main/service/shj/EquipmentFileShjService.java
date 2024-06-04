@@ -263,11 +263,19 @@ public class EquipmentFileShjService extends AbstractScanRequest{
 //                    }else if("A1".equals(lists.get(0).getDqzl())){
 //                        saveNewEvent(entity);
 //                    }
-                    saveNewEvent(entity);
+                    try {
+                        saveNewEvent(entity);
+                    }catch (Exception e){
+                        LOG.error("保存视频剪切出错：" + e.getMessage());
+                    }
                 }
                 //推送文件
                 if("JXYSA4001".equals(sbbh)&&!pushData){
-                    PushFile.pushFile1(entity.getTplj());
+                    try {
+                        PushFile.pushFile1(entity.getTplj());
+                    }catch (Exception e){
+                        LOG.error("推送文件3出错：" + e.getMessage());
+                    }
                 }
                 return result.toJSONString();
             }
