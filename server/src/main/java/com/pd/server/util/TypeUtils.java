@@ -45,6 +45,9 @@ public class TypeUtils {
     public static final String KEY_25 = "KEY_25";
     public static final String KEY_26 = "KEY_26";
     public static final String KEY_27 = "KEY_27";
+    public static final String KEY_29 = "KEY_29";
+    public static final String KEY_30 = "KEY_30";
+    public static final String KEY_31 = "KEY_31";
 
     public static final String ZZ_1 = "^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}.txt$";
     public static final String ZZ_2 = "^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}.jpg$";
@@ -73,6 +76,9 @@ public class TypeUtils {
     public static final String ZZ_25 ="^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{1,}_A4_\\w{1,}.mp4$";
     public static final String ZZ_26 ="^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_predation_\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_predation_\\d{1,}_A4.txt$";
     public static final String ZZ_27 ="^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_predation_\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_predation_\\d{1,}_A4_\\w{1,}.mp4$";
+    public static final String ZZ_29 ="^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{1,}.wav$";
+    public static final String ZZ_30 ="^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{1,}.jpg$";
+    public static final String ZZ_31 ="^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{1,}.png$";
 
     public static Map<String,String> patternmap = new HashMap<>();
     static {
@@ -103,6 +109,9 @@ public class TypeUtils {
         patternmap.put(KEY_25,ZZ_25);
         patternmap.put(KEY_26,ZZ_26);
         patternmap.put(KEY_27,ZZ_27);
+        patternmap.put(KEY_29,ZZ_29);
+        patternmap.put(KEY_30,ZZ_30);
+        patternmap.put(KEY_31,ZZ_31);
     }
 
 
@@ -171,8 +180,8 @@ public class TypeUtils {
                     }else if(KEY_10.equals(entry.getKey())){
                         type = "1010";
                         wjlx ="3";
-                        txtlx="2";
-                        ts=tss[6].split("\\.")[0];
+                        txtlx="1";
+                        //ts=tss[6].split("\\.")[0];//2024年5月31日之后，这个字段代表新物种(海江豚)的秒数
                     }else if(KEY_11.equals(entry.getKey())){
                         type = "1011";
                         wjlx ="3";
@@ -260,6 +269,21 @@ public class TypeUtils {
                         wjlx ="4";
                         ts=tss[14];
 
+                    }else if(KEY_29.equals(entry.getKey())){
+                        type = "1029";
+                        wjlx ="2";
+                        txtlx="1";
+                        //ts=tss[6].split("\\.")[0];//2024年5月31日之后，这个字段代表新物种(海江豚)的秒数
+                    }else if(KEY_30.equals(entry.getKey())){
+                        type = "1030";
+                        wjlx ="1";
+                        txtlx="1";
+                        //ts=tss[6].split("\\.")[0];//2024年5月31日之后，这个字段代表新物种(海江豚)的秒数
+                    }else if(KEY_31.equals(entry.getKey())){
+                        type = "1031";
+                        wjlx ="1";
+                        txtlx="1";
+                        //ts=tss[6].split("\\.")[0];//2024年5月31日之后，这个字段代表新物种(海江豚)的秒数
                     }
                     break;
                 }
@@ -312,6 +336,9 @@ public class TypeUtils {
         String u25 = "2022_10_15_23_02_36_2022_10_15_23_02_36_1_A4_TD33.mp4";
         String u26 = "2022_10_15_23_02_36_predation_2022_10_15_23_02_36_predation_1_A4.txt";
         String u27 = "2022_10_15_23_02_36_predation_2022_10_15_23_02_36_predation_1_A4_TD33.mp4";
+        String u29  = "2022_07_30_09_32_15_0.wav";
+        String u30  = "2022_07_30_09_32_15_0.jpg";
+        String u31  = "2022_07_30_09_32_15_0.png";
 
         Map<String,String> map =  getType(u12);
         Set set = map.entrySet();
