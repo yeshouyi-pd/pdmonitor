@@ -5,10 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.pd.monitor.utils.SendSmsTool;
 import com.pd.monitor.wx.conf.BaseWxController;
 import com.pd.monitor.wx.conf.WxRedisConfig;
-import com.pd.server.main.domain.EquipmentFileTy;
-import com.pd.server.main.domain.EquipmentFileTyToday;
-import com.pd.server.main.domain.EquipmentTyEvent;
-import com.pd.server.main.domain.EquipmentTyEventExample;
+import com.pd.server.main.domain.*;
 import com.pd.server.main.dto.EquipmentTyEventDto;
 import com.pd.server.main.dto.LoginUserDto;
 import com.pd.server.main.dto.ResponseDto;
@@ -144,7 +141,9 @@ public class EquipmentTyEventController extends BaseWxController {
     @DeleteMapping("/delete/{id}")
     public ResponseDto delete(@PathVariable String id) {
         ResponseDto responseDto = new ResponseDto();
+        EquipmentTyEvent equipmentFileEvent = equipmentTyEventService.selectByPrimaryKey(id);
         equipmentTyEventService.delete(id);
+        equipmentFileTyService.delete(equipmentFileEvent.getBz());
         return responseDto;
     }
 

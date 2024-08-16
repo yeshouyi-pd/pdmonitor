@@ -61,7 +61,7 @@
           <th>开始时间</th>
           <th>结束时间</th>
           <th>头数</th>
-          <th style="width: 18%;">操作</th>
+          <th style="width: 20%;">操作</th>
         </tr>
         </thead>
         <tbody>
@@ -82,6 +82,9 @@
               </button>
               <button v-on:click="downloadVedio(item.id)" class="btn btn-xs btn-info" style="margin-left: 10px;">
                 <i class="ace-icon fa fa-volume-down bigger-120">下载视频</i>
+              </button>
+              <button v-on:click="deleteInfo(item.id)" class="btn btn-xs btn-danger" title="删除">
+                <i class="ace-icon fa fa-trash-o bigger-120">删除</i>
               </button>
             </div>
           </td>
@@ -308,6 +311,22 @@ export default {
           window.location.href = url;
         }
       })
+    },
+    deleteInfo(id){
+      let _this = this;
+      Confirm.show("删除后不可恢复，确认删除？", function () {
+        Loading.show();
+        _this.$ajax.delete(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentTyEvent/delete/' + id).then((response)=>{
+          Loading.hide();
+          let resp = response.data;
+          if (resp.success) {
+            _this.list(1);
+            Toast.success("删除成功！");
+          }else{
+            Toast.warning(resp.message);
+          }
+        })
+      });
     }
   }
 }
