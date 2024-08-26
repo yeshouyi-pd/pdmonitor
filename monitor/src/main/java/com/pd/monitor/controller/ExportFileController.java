@@ -708,8 +708,9 @@ public class ExportFileController extends BaseWxController{
                         comCell3.setCellValue(tyEvent.getJssj());
                         comCell3.setCellStyle(cellStyleCommon);
                         HSSFCell comCell4 = comRow.createCell(4);
-                        comCell4.setCellValue(tyEvent.getTs());
+                        comCell4.setCellValue(Integer.parseInt(tyEvent.getTs()));
                         comCell4.setCellStyle(cellStyleCommon);
+                        comCell4.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
                         HSSFCell comCell5 = comRow.createCell(5);
                         comCell5.setCellValue(tyEvent.getGps());
                         comCell5.setCellStyle(cellStyleCommon);
@@ -741,8 +742,9 @@ public class ExportFileController extends BaseWxController{
                     comCell3.setCellValue(tyEvent.getJssj());
                     comCell3.setCellStyle(cellStyleCommon);
                     HSSFCell comCell4 = comRow.createCell(4);
-                    comCell4.setCellValue(tyEvent.getTs());
+                    comCell4.setCellValue(Integer.parseInt(tyEvent.getTs()));
                     comCell4.setCellStyle(cellStyleCommon);
+                    comCell4.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
                     HSSFCell comCell5 = comRow.createCell(5);
                     comCell5.setCellValue(tyEvent.getGps());
                     comCell5.setCellStyle(cellStyleCommon);
