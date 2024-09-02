@@ -27,6 +27,20 @@ public class VideoEventService {
     }
 
     /**
+     * 根据日期分组查询已审核和未审核的联动视频数据量，实时视频数据量
+     */
+    public List<VideoEventDpDto> selectStaticsByRq(VideoEventExample example){
+        return videoEventMapper.selectStaticsByRq(example);
+    }
+
+    /**
+     * 根据设备编号分组查询已审核和未审核的联动视频数据量，实时视频数据量
+     */
+    public List<VideoEventDpDto> selectStaticsBySbbh(VideoEventExample example){
+        return videoEventMapper.selectStaticsBySbbh(example);
+    }
+
+    /**
      * 根据日期分组查询已审核和未审核的数据量
      */
     public List<VideoEventDpDto> selectCountByRq(VideoEventExample example){

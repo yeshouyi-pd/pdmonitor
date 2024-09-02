@@ -144,6 +144,7 @@ public class EquipmentTyEventController extends BaseWxController {
         EquipmentTyEvent equipmentFileEvent = equipmentTyEventService.selectByPrimaryKey(id);
         equipmentTyEventService.delete(id);
         equipmentFileTyService.delete(equipmentFileEvent.getBz());
+        equipmentFileTyTodayService.delete(equipmentFileEvent.getBz());
         return responseDto;
     }
 

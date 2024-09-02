@@ -45,6 +45,44 @@ public class EnvironmentDpController {
     private SeaSurfaceSalinityService seaSurfaceSalinityService;
 
 
+    @PostMapping("/selectStaticsByRq")
+    public ResponseDto selectStaticsByRq(@RequestBody JSONObject jsonObject){
+        ResponseDto responseDto = new ResponseDto();
+        VideoEventExample example = new VideoEventExample();
+        VideoEventExample.Criteria ca = example.createCriteria();
+        if(!StringUtils.isEmpty(jsonObject.getString("sbbh"))){
+            ca.andSbbhEqualTo(jsonObject.getString("sbbh"));
+        }
+        if(!StringUtils.isEmpty(jsonObject.getString("stime"))){
+            ca.andRqGreaterThanOrEqualTo(jsonObject.getString("stime"));
+        }
+        if(!StringUtils.isEmpty(jsonObject.getString("etime"))){
+            ca.andRqLessThanOrEqualTo(jsonObject.getString("etime"));
+        }
+        List<VideoEventDpDto> lists = videoEventService.selectStaticsByRq(example);
+        responseDto.setContent(lists);
+        return responseDto;
+    }
+
+    @PostMapping("/selectStaticsBySbbh")
+    public ResponseDto selectStaticsBySbbh(@RequestBody JSONObject jsonObject){
+        ResponseDto responseDto = new ResponseDto();
+        VideoEventExample example = new VideoEventExample();
+        VideoEventExample.Criteria ca = example.createCriteria();
+        if(!StringUtils.isEmpty(jsonObject.getString("sbbh"))){
+            ca.andSbbhEqualTo(jsonObject.getString("sbbh"));
+        }
+        if(!StringUtils.isEmpty(jsonObject.getString("stime"))){
+            ca.andRqGreaterThanOrEqualTo(jsonObject.getString("stime"));
+        }
+        if(!StringUtils.isEmpty(jsonObject.getString("etime"))){
+            ca.andRqLessThanOrEqualTo(jsonObject.getString("etime"));
+        }
+        List<VideoEventDpDto> lists = videoEventService.selectStaticsBySbbh(example);
+        responseDto.setContent(lists);
+        return responseDto;
+    }
+
     @PostMapping("/getVideoEventCountByRq")
     public ResponseDto getVideoEventCountByRq(@RequestBody JSONObject jsonObject){
         ResponseDto responseDto = new ResponseDto();

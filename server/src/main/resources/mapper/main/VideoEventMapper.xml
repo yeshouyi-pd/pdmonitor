@@ -19,6 +19,7 @@
     <result column="rq" jdbcType="VARCHAR" property="rq" />
     <result column="yhc" jdbcType="INTEGER" property="yhc" />
     <result column="whc" jdbcType="INTEGER" property="whc" />
+    <result column="sssp" jdbcType="INTEGER" property="sssp" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -339,6 +340,20 @@
   </select>
   <select id="selectCountBySbbh" parameterType="com.pd.server.main.domain.VideoEventExample" resultMap="DpResultMap">
     select sbbh,sum(case when sm = '1' then 1 else 0 end) yhc,sum(case when sm = '0' then 1 else 0 end) whc from video_event
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    GROUP BY sbbh
+  </select>
+  <select id="selectStaticsBySbbh" parameterType="com.pd.server.main.domain.VideoEventExample" resultMap="DpResultMap">
+    select rq,sum(case when sfysp='0' then 1 else 0 end) yhc,sum(case when sfysp='1' then 1 else 0 end) whc,sum(case when sfysp='2' then 1 else 0 end) sssp from video_event
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    GROUP BY rq ORDER BY rq
+  </select>
+  <select id="selectStaticsByRq" parameterType="com.pd.server.main.domain.VideoEventExample" resultMap="DpResultMap">
+    select sbbh,sum(case when sfysp='0' then 1 else 0 end) yhc,sum(case when sfysp='1' then 1 else 0 end) whc,sum(case when sfysp='2' then 1 else 0 end) sssp from video_event
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
