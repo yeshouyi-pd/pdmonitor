@@ -10,6 +10,8 @@ public class VideoEventDpDto {
 
     private int whc;
 
+    private int sssp;//实时视频
+
     public String getSbbh() {
         return sbbh;
     }
@@ -40,5 +42,13 @@ public class VideoEventDpDto {
 
     public void setWhc(int whc) {
         this.whc = whc;
+    }
+
+    public int getSssp() {
+        return sssp;
+    }
+
+    public void setSssp(int sssp) {
+        this.sssp = sssp;
     }
 }

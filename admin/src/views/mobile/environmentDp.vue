@@ -6,6 +6,9 @@
           <div v-on:click="mianNew()" style="color: rgb(255, 255, 255);font-size: 16px;border: 1px solid #043769;background-color:rgb(10,33,61);width: 15%;text-align: center;padding: 5px 0;cursor: pointer">
             主页
           </div>
+          <div v-on:click="sgdp()" style="color: rgb(255, 255, 255);font-size: 16px;border: 1px solid #043769;background-color:rgb(10,33,61);width: 15%;text-align: center;padding: 5px 0;cursor: pointer;margin-left: 10px;">
+            声光大屏
+          </div>
           <div v-on:click="videoNew()" style="color: rgb(255, 255, 255);font-size: 16px;border: 1px solid #043769;background-color:rgb(10,33,61);width: 15%;text-align: center;padding: 5px 0;cursor: pointer;margin-left: 10px;">
             视频
           </div>
@@ -369,6 +372,11 @@ export default {
       }else{
         window.location.href = "/admin/chooseProject";
       }
+    },
+    sgdp(){
+      let _this = this;
+      _this.clear();
+      window.location.href = "/mobile/videoDp";
     },
     videoNew(){
       let _this = this;

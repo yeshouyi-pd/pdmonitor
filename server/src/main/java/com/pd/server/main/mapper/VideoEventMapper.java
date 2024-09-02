@@ -38,4 +38,8 @@ public interface VideoEventMapper {
     List<VideoEventDpDto> selectCountByRq(VideoEventExample example);
 
     List<VideoEventDpDto> selectCountBySbbh(VideoEventExample example);
+
+    List<VideoEventDpDto> selectStaticsBySbbh(VideoEventExample example);
+
+    List<VideoEventDpDto> selectStaticsByRq(VideoEventExample example);
 }
