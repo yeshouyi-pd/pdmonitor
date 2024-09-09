@@ -143,8 +143,8 @@ export default {
         for(let i=0;i<lists.length;i++){
           let obj = lists[i];
           sbmcList.push(_this.optionNSArray(_this.devices,obj.sbbh));
-          sxqrList.push(obj.yhc);
-          sgqrList.push(obj.whc);
+          sxqrList.push(obj.whc);
+          sgqrList.push(obj.yhc);
           gxqrList.push(obj.sssp)
         }
         _this.initStaticsBySbbh(sbmcList,sxqrList,sgqrList,gxqrList);

@@ -11,6 +11,16 @@
               <tbody>
               <tr>
                 <td style="width:10%">
+                  核查状态：
+                </td>
+                <td style="width: 15%">
+                  <select v-model="videoEventDto.sm" class="form-control">
+                    <option value="" selected>请选择</option>
+                    <option value="1">已核查</option>
+                    <option value="0">未核查</option>
+                  </select>
+                </td>
+                <td style="width:10%">
                   设备名称：
                 </td>
                 <td style="width: 15%">

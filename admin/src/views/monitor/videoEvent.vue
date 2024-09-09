@@ -11,6 +11,25 @@
               <tbody>
               <tr>
                 <td style="width:10%">
+                  类型：
+                </td>
+                <td style="width: 15%">
+                  <select v-model="videoEventDto.sfysp" class="form-control">
+                    <option value="1">全部</option>
+                    <option value="0">分析视频</option>
+                  </select>
+                </td>
+                <td style="width:10%">
+                  核查状态：
+                </td>
+                <td style="width: 15%">
+                  <select v-model="videoEventDto.sm" class="form-control">
+                    <option value="" selected>请选择</option>
+                    <option value="1">已核查</option>
+                    <option value="0">未核查</option>
+                  </select>
+                </td>
+                <td style="width:10%">
                   设备名称：
                 </td>
                 <td style="width: 15%">
@@ -19,20 +38,14 @@
                     <option v-for="item in waterEquipments" :value="item.sbsn">{{item.sbmc}}</option>
                   </select>
                 </td>
+              </tr>
+              <tr style="height: 10px"></tr>
+              <tr>
                 <td style="width: 10%;">
                   开始日期：
                 </td>
                 <td style="width: 15%;">
                   <times v-bind:startTime="startTime" v-bind:endTime="endTime" start-id="rStime" end-id="rEtime"></times>
-                </td>
-                <td style="width:10%">
-                  类型：
-                </td>
-                <td style="width: 15%">
-                  <select v-model="videoEventDto.sfysp" class="form-control">
-                    <option value="1">全部</option>
-                    <option value="0">分析视频</option>
-                  </select>
                 </td>
                 <td  style="width: 20%" class="text-center">
                   <button type="button" v-on:click="list(1)" class="btn btn-sm btn-info btn-round" style="margin-right: 10px;">
@@ -43,10 +56,10 @@
                     <i class="ace-icon fa fa-refresh"></i>
                     重置
                   </a>
-<!--                  <button type="button" v-on:click="exportExcle()" class="btn btn-sm btn-warning btn-round" style="margin-right: 10px;">-->
-<!--                    <i class="ace-icon fa fa-leaf"></i>-->
-<!--                    导出-->
-<!--                  </button>-->
+                  <!--                  <button type="button" v-on:click="exportExcle()" class="btn btn-sm btn-warning btn-round" style="margin-right: 10px;">-->
+                  <!--                    <i class="ace-icon fa fa-leaf"></i>-->
+                  <!--                    导出-->
+                  <!--                  </button>-->
                 </td>
               </tr>
               </tbody>
