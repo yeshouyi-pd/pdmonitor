@@ -60,6 +60,9 @@ public class VideoEventController {
         if(!StringUtils.isEmpty(pageDto.getSxtip())){
             ca.andSxtipEqualTo(pageDto.getSxtip());
         }
+        if(!StringUtils.isEmpty(pageDto.getSm())){
+            ca.andSmEqualTo(pageDto.getSm());
+        }
         List<VideoEvent> lists = videoEventService.selectByExample(example);
         responseDto.setContent(lists);
         return responseDto;
