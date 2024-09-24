@@ -97,6 +97,36 @@ public class MobileController  extends BaseWxController {
         return responseDto;
 
     }
+
+    @PostMapping("/getEquipmentEventByDeptday")
+    public ResponseDto getEquipmentEventByDeptday(@RequestBody  LoginUserDto user){
+        ResponseDto responseDto = new ResponseDto();
+        Map<String,Object> map  = new HashMap<String,Object>();
+        if(null != user){
+            if(!StringUtils.isEmpty(user.getDeptcode())){
+                List<String > listdept   =  getUpdeptcode(user.getDeptcode());
+                EquipmentFileEventExample equipmentFileEventExample = new EquipmentFileEventExample();
+                EquipmentFileEventExample.Criteria  ca = equipmentFileEventExample.createCriteria();
+                if(!CollectionUtils.isEmpty(listdept)){
+                    ca.andDeptcodeIn(listdept);
+                }
+                List<EquipmentFileEvent> equipmentEventByDeptdate = equipmentFileEventService.getEquipmentEventByDeptdate(equipmentFileEventExample);
+                if(!CollectionUtils.isEmpty(equipmentEventByDeptdate)){
+                    EquipmentFileEvent equipmentFileEvent =equipmentEventByDeptdate.get(0);
+                    //统计当天数据
+                    ca.andRqEqualTo(equipmentFileEvent.getRq());
+                    List<EventDto>  list   = equipmentFileEventService.getEquipmentEventByDept(equipmentFileEventExample);
+                    map.put("list", list);
+                    map.put("date",equipmentFileEvent.getRq());
+                }
+
+
+                responseDto.setContent(map);
+            }
+        }
+        return responseDto;
+
+    }
     /**
      * equipment_file_event 获取设备聚类事件 本周
      * @return
@@ -361,6 +391,27 @@ public class MobileController  extends BaseWxController {
         return responseDto;
 
     }
+
+    @PostMapping("/listday")
+    public ResponseDto listday(@RequestBody EquipmentFileEventDto equipmentFileEventDto){
+        ResponseDto responseDto = new ResponseDto();
+
+        if(null != equipmentFileEventDto){
+            if(!StringUtils.isEmpty(equipmentFileEventDto.getSbbh())){
+                EquipmentFileEventExample equipmentFileEventExample = new EquipmentFileEventExample();
+                EquipmentFileEventExample.Criteria  ca = equipmentFileEventExample.createCriteria();
+                ca.andSbbhEqualTo(equipmentFileEventDto.getSbbh());
+                Date  date = new Date();
+                ca.andRqEqualTo(equipmentFileEventDto.getRq());
+                equipmentFileEventExample.setOrderByClause("kssj desc");
+                List<EquipmentFileEvent>  list   = equipmentFileEventService.list(equipmentFileEventExample);
+                responseDto.setContent(list);
+            }
+        }
+        return responseDto;
+
+    }
+
 
 
 

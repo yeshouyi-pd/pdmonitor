@@ -414,6 +414,16 @@
   </update>
 
 
+  <select id="getEquipmentEventByDeptdate" parameterType="com.pd.server.main.domain.EquipmentFileEventExample"  resultMap="BaseResultMap">
+    SELECT   * FROM  equipment_file_event
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    order by rq desc limit 1
+  </select>
+
+
+
   <select id="getEquipmentEventByDept" parameterType="com.pd.server.main.domain.EquipmentFileEventExample"  resultMap="BaseResultMapKV">
     SELECT  deptcode , sbbh ,COUNT(*)  `value` FROM  equipment_file_event
     <if test="_parameter != null">
