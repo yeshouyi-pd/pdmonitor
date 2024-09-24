@@ -1,0 +1,14 @@
+Begin Time:2024-04-12T21:44:01.109
+[2024-04-12T21:44:01.109 info Netsdk:69989 5628:8816 netsdk.cpp:302]Enter CLIENT_SetAutoReconnect:[cbAutoConnect=00000000128E0050, dwUser=0000000000000000].
+[2024-04-12T21:44:01.109 info Netsdk:69989 5628:8816 netsdk.cpp:304]Leave CLIENT_SetAutoReconnect.
+[2024-04-12T21:44:01.109 info Netsdk:69989 5628:8816 netsdk.cpp:326]Enter CLIENT_SetConnectTime:[nWaitTime=5000, nTryTimes=1].
+[2024-04-12T21:44:01.109 info Netsdk:69989 5628:8816 netsdk.cpp:339]Leave CLIENT_SetConnectTime.
+[2024-04-12T21:44:01.109 info Netsdk:69989 5628:8816 netsdk.cpp:352]Enter CLIENT_SetNetworkParam:[nWaittime=0, nConnectTime=10000, nConnectTryNum=0, nSubConnectSpaceTime=0, nGetDevInfoTime=3000, nConnectBufSize=0, nGetConnInfoTime=3000, nSearchRecordTime=0, nsubDisconnetTime=0, byNetType=0, byPlaybackBufSize=0, bDetectDisconnTime=0, bKeepLifeInterval=0, nPicBufSize=0].
+[2024-04-12T21:44:01.110 info Netsdk:69989 5628:8816 netsdk.cpp:367]Leave CLIENT_SetNetworkParam.
+[2024-04-12T21:44:04.760 info Netsdk:69989 5628:8948 netsdk.cpp:2091]Enter CLIENT_StopRealPlayEx. lRealHandle:664397760.
+[2024-04-12T21:44:04.760 info Netsdk:69989 5628:8948 netsdk.cpp:2105]Leave CLIENT_StopRealPlayEx. ret:0
+[2024-04-12T21:44:06.157 info Netsdk:69989 5628:9332 netsdk.cpp:245]Enter CLIENT_InitEx:[cbDisConnect=00000000128E0010, dwUser=0000000000000000, lpInitParam=0000000000000000].
+[2024-04-12T21:44:06.157 info Netsdk:69989 5628:9332 AVNetSDKMgr.cpp:736]Test avnetsdk module handle: 000000002F910000
+
+[2024-04-12T21:44:06.157 info Netsdk:69989 5628:9332 netsdk.cpp:268]Leave CLIENT_InitEx.
+[2024-04-12T21:44:06.158 info Netsdk:69989 5628:9332 Manager.cpp:17401]-------------------Log file reset, log number:10-log size:10240------------------

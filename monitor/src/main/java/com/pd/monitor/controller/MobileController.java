@@ -1,6 +1,7 @@
 package com.pd.monitor.controller;
 
 
+import cn.hutool.core.date.DateUtil;
 import com.pd.monitor.wx.conf.BaseWxController;
 import com.pd.server.main.domain.*;
 import com.pd.server.main.dto.*;
@@ -155,6 +156,40 @@ public class MobileController  extends BaseWxController {
     }
 
 
+    /**
+     * 江豚预警
+     * @return
+     */
+    @PostMapping("/getAlljtByDeptDay")
+    public ResponseDto getAlljtByDeptDay(@RequestBody  LoginUserDto user){
+        ResponseDto responseDto = new ResponseDto();
+        Map<String,Object> map  = new HashMap<String,Object>();
+        if(null != user){
+            if(!StringUtils.isEmpty(user.getDeptcode())){
+
+                List<String > listdept   =  getUpdeptcode(user.getDeptcode());
+                EquipmentFileExample example = new EquipmentFileExample();
+                EquipmentFileExample.Criteria  ca = example.createCriteria();
+                if(!CollectionUtils.isEmpty(listdept)){
+                    ca.andDeptcodeIn(listdept);
+                }
+
+                List<EquipmentFile>  info =  equipmentFileService.getAlljcsjByDeptgetDay(example);
+                if(!CollectionUtils.isEmpty(info)){
+                    EquipmentFile vo = info.get(0);
+                    ca.andCjsjBetween(DateUtil.beginOfDay(vo.getCjsj()) ,DateUtil.endOfDay(vo.getCjsj()) );
+                    List<KvIntDto>  list   =equipmentFileService.getAlljcsjByDept(example);
+                    map.put("list", list);
+                    map.put("date",DateUtil.format(vo.getCjsj(),"yyyy-MM-dd"));
+                }
+
+                responseDto.setContent(map);
+            }
+        }
+        return responseDto;
+
+    }
+
 
 
     /**
@@ -235,6 +270,23 @@ public class MobileController  extends BaseWxController {
         return responseDto;
     }
 
+    @PostMapping("/getthisDeptEquipmentday")
+    public ResponseDto getthisDeptEquipmentday(@RequestBody EquipmentFileDto equipmentFileDto){
+        ResponseDto responseDto = new ResponseDto();
+
+        if(null != equipmentFileDto){
+            if(!StringUtils.isEmpty(equipmentFileDto.getDeptcode())){
+                EquipmentFileExample equipmentFileExample = new EquipmentFileExample();
+                EquipmentFileExample.Criteria  equipmentFileca = equipmentFileExample.createCriteria();
+                equipmentFileca.andDeptcodeEqualTo(equipmentFileDto.getDeptcode());
+                equipmentFileca.andCjsjBetween(DateUtil.beginOfDay(DateUtil.parse(equipmentFileDto.getRq(), "yyyy-MM-dd")) ,DateUtil.endOfDay(DateUtil.parse(equipmentFileDto.getRq(), "yyyy-MM-dd")) );
+                List<EquipmenInfo>  list   = equipmentFileService.getthisDeptEquipmentday(equipmentFileExample);
+                responseDto.setContent(list);
+            }
+        }
+        return responseDto;
+    }
+
 
     /**
      * 获取当前部门当天的设备信息---具体信息
@@ -256,6 +308,23 @@ public class MobileController  extends BaseWxController {
         return responseDto;
     }
 
+
+    @PostMapping("/getthisDeptEquipmentinfoday")
+    public ResponseDto getthisDeptEquipmentinfoday(@RequestBody EquipmentFileDto equipmentFileDto){
+        ResponseDto responseDto = new ResponseDto();
+
+        if(null != equipmentFileDto){
+            if(!StringUtils.isEmpty(equipmentFileDto.getSbbh())){
+                EquipmentFileExample equipmentFileExample = new EquipmentFileExample();
+                EquipmentFileExample.Criteria  equipmentFileca = equipmentFileExample.createCriteria();
+                equipmentFileca.andSbbhEqualTo(equipmentFileDto.getSbbh());
+                equipmentFileca.andCjsjBetween(DateUtil.beginOfDay(DateUtil.parse(equipmentFileDto.getRq(), "yyyy-MM-dd")) ,DateUtil.endOfDay(DateUtil.parse(equipmentFileDto.getRq(), "yyyy-MM-dd")) );
+                List<EquipmentMainListDto>  list   = equipmentFileService.getthisDeptEquipmentinfoday(equipmentFileExample);
+                responseDto.setContent(list);
+            }
+        }
+        return responseDto;
+    }
 
     /**
      * 根据设备编号获取聚类信息
