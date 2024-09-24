@@ -86,4 +86,9 @@ public class EquipmentFileEventService {
     public Integer selectTsBySms(EquipmentFileEventExample equipmentFileEventExample){
         return equipmentFileEventMapper.selectTsBySms(equipmentFileEventExample);
     }
+
+    public List<EquipmentFileEvent> getEquipmentEventByDeptdate(EquipmentFileEventExample example) {
+        return equipmentFileEventMapper.getEquipmentEventByDeptdate(example);
+    }
+
 }
