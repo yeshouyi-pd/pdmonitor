@@ -14,7 +14,14 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.time.LocalDate;
+import java.time.Year;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAdjusters;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/mobile")
@@ -43,6 +50,181 @@ public class MobileController  extends BaseWxController {
     @Resource
     private EquipmentFileEventService  equipmentFileEventService;
 
+
+    @Resource
+    private PredationNumService predationNumService;
+
+
+    private static  Set<String> getDateMonth(Date sdate ,Date edate){
+        Set<String> set = new TreeSet<>();
+        // 获取当月第一天的日期
+        LocalDate firstDayOfMonth =DateUtil.toLocalDateTime(sdate).toLocalDate();
+        // 获取当月最后一天的日期
+        LocalDate lastDayOfMonth = DateUtil.toLocalDateTime(edate).toLocalDate();
+        // 遍历输出每一天的日期
+        for (LocalDate date = firstDayOfMonth; date.isBefore(lastDayOfMonth.plusDays(1)); date = date.plusDays(1)) {
+            System.out.println(date);
+            set.add(date.toString());
+            if(date.toString().equals(DateUtil.format(new Date(),"yyyy-MM-dd"))){
+                break;
+            }
+        }
+        return set;
+    }
+
+    private static  Set<String> getDateMonth(int data){
+        Set<String> set = new TreeSet<>();
+        YearMonth yearMonth = YearMonth.of(data, 1); // 初始化为指定的年份和月份
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
+        int currentYear = Year.now().getValue();
+        if(currentYear >= data){
+            do {
+                String monthStr = yearMonth.format(formatter);
+                System.out.println(monthStr);
+                set.add(monthStr);
+                yearMonth = yearMonth.plusMonths(1); // 增加一个月
+            } while (yearMonth.getYear() == data); // 循环继续直到年份改变
+
+        }
+
+        return set;
+    }
+
+
+
+
+
+    /**
+     * 根据部门统计江豚侦测和聚类时间
+     * @param user
+     * @return
+     */
+    @PostMapping("/gettjByDept")
+    public ResponseDto gettjByDept(@RequestBody  LoginUserDto user){
+        ResponseDto responseDto = new ResponseDto();
+
+        if(null != user){
+            if(!StringUtils.isEmpty(user.getDeptcode()) && !StringUtils.isEmpty(user.getType()) && !StringUtils.isEmpty(user.getRq())){
+                List<String > listdept   =  getUpdeptcode(user.getDeptcode());
+                PredationNumExample example = new PredationNumExample();
+                PredationNumExample.Criteria  ca = example.createCriteria();
+                if(!CollectionUtils.isEmpty(listdept)){
+                    ca.andDeptcodeIn(listdept);
+                }
+                List<KvIntDtoTj>  list = new ArrayList<>();
+                Set<String>    set = new TreeSet<>();
+                //周统计
+                 if("day".equals(user.getType())){
+                     Date  endDate= DateUtil.parse(user.getRq(), "yyyy-MM-dd");
+                     Date startDate =  DateUtil.offsetDay(endDate,-7);
+                     ca.andCjsjBetween(DateUtil.beginOfDay(startDate),DateUtil.endOfDay(endDate));
+                     set=getDateMonth(startDate,endDate);
+                     list   = predationNumService.gettjByDept(example);
+
+
+                    //月统计
+                }else if("month".equals(user.getType())){
+                     Date  date= DateUtil.parse(user.getRq()+"-01", "yyyy-MM-dd");
+                     Date startDate =  DateUtil.beginOfMonth(date);
+                     Date  endDate= DateUtil.endOfMonth(date);
+                     ca.andCjsjBetween(DateUtil.beginOfDay(startDate),DateUtil.endOfDay(endDate));
+                     set=getDateMonth(startDate,endDate);
+                     list   = predationNumService.gettjByDept(example);
+
+                     //年统计
+                } else if("year".equals(user.getType())){
+                     Date  date= DateUtil.parse(user.getRq()+"-01-01", "yyyy-MM-dd");
+                     Date startDate =  DateUtil.beginOfYear(date);
+                     Date  endDate= DateUtil.endOfYear(date);
+                     ca.andCjsjBetween(DateUtil.beginOfDay(startDate),DateUtil.endOfDay(endDate));
+                     set=getDateMonth(Integer.parseInt(user.getRq()));
+                     list   = predationNumService.gettjByDeptyear(example);
+                }
+                 Set<String> setsb = new TreeSet<>();
+                 for (KvIntDtoTj kvIntDtoTj : list){
+                     setsb.add(kvIntDtoTj.getSbbh());
+                 }
+
+                /**返回个数服下
+                 *{
+                 *             categories: ["2018","2019","2020","2021","2022","2023","2024"],
+                 *             series: [
+                 *               {
+                 *                 name: "目标值",
+                 *                 data: [35,36,31,33,13,34,dara]
+                 *               },
+                 *               {
+                 *                 name: "完成量",
+                 *                 data: [18,27,21,24,6,28,dara]
+                 *               }
+                 *             ]
+                 *           }
+                 */
+                 NameAndDataRes  nameAndDataRes = new NameAndDataRes();
+                 NameAndDataRes  nameAndDataRes2 = new NameAndDataRes();
+                 nameAndDataRes.setCategories(set.toArray(new String[set.size()]));
+                 nameAndDataRes2.setCategories(set.toArray(new String[set.size()]));
+
+                 List<NameAndData>  listnameAndData = new ArrayList<>();
+                 List<NameAndData>  listnameAndData2 = new ArrayList<>();
+
+                 if(setsb.size() > 0){
+                     for (String b : setsb){
+                         NameAndData  nameAndData = new NameAndData();
+                         NameAndData  nameAndData2 = new NameAndData();
+                         nameAndData.setName(b);
+                         nameAndData2.setName(b);
+
+                         int data[] = new int[set.size()];
+                         int data2[] = new int[set.size()];
+                         int i = 0;
+                         for (String s : set){
+
+                             List<KvIntDtoTj> collect = list.stream().filter(x -> x.getSbbh().equals(b) && x.getSj().equals(s)).collect(Collectors.toList());
+                             if(!CollectionUtils.isEmpty(collect)){
+                                 data[i] = collect.get(0).getV1();
+                             }else{
+                                 data[i] = 0;
+                             }
+
+                             if(!CollectionUtils.isEmpty(collect)){
+                                 data2[i] = collect.get(0).getV2();
+                             }else{
+                                 data2[i] = 0;
+                             }
+                             nameAndData.setData(data);
+                             nameAndData2.setData(data2);
+                             i = i+1;
+                         }
+
+                         listnameAndData.add(nameAndData);
+                         listnameAndData2.add(nameAndData2);
+                     }
+
+                 }else {
+                     NameAndData  nameAndData = new NameAndData();
+                     NameAndData  nameAndData2 = new NameAndData();
+                     nameAndData.setName("");
+                     nameAndData2.setName("");
+                     int data[] = new int[set.size()];
+                     int data2[] = new int[set.size()];
+                     nameAndData.setData(data);
+                     nameAndData2.setData(data2);
+                     listnameAndData.add(nameAndData);
+                     listnameAndData2.add(nameAndData2);
+                 }
+                nameAndDataRes.setSeries(listnameAndData);
+                nameAndDataRes2.setSeries(listnameAndData2);
+                Map<String,NameAndDataRes> map  = new HashMap<String,NameAndDataRes>();
+                map.put("v1",nameAndDataRes);
+                map.put("v2",nameAndDataRes2);
+
+                responseDto.setContent(map);
+            }
+        }
+        return responseDto;
+
+    }
 
 
     /**
