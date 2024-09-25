@@ -3,6 +3,7 @@ package com.pd.server.main.service;
 import com.pd.server.main.domain.EquipmentTyEvent;
 import com.pd.server.main.domain.PredationNum;
 import com.pd.server.main.domain.PredationNumExample;
+import com.pd.server.main.dto.KvIntDtoTj;
 import com.pd.server.main.dto.PredationNumDto;
 import com.pd.server.main.dto.PageDto;
 import com.pd.server.main.dto.basewx.my.PredationNumDwDto;
@@ -88,4 +89,13 @@ public class PredationNumService {
     public void deleteByExample(PredationNumExample example){
         predationNumMapper.deleteByExample(example);
     }
+
+    public List<KvIntDtoTj> gettjByDept(PredationNumExample example) {
+        return  predationNumMapper.gettjByDept(example);
+    }
+    public List<KvIntDtoTj> gettjByDeptyear(PredationNumExample example) {
+        return  predationNumMapper.gettjByDeptyear(example);
+    }
+
+
 }
