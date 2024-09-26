@@ -93,7 +93,6 @@ public class MobileController  extends BaseWxController {
 
 
 
-
     /**
      * 根据部门统计江豚侦测和聚类时间
      * @param user
@@ -165,7 +164,12 @@ public class MobileController  extends BaseWxController {
 
                   Set<String>    resset = new TreeSet<>();
                   for (String s : set){
-                      resset.add(s.replaceAll( "-" , "/"));
+                      if(!"year".equals(user.getType())){
+                          resset.add(  s.substring(5,10).replaceAll( "-" , "/"));
+                      }else{
+                          resset.add(s.replaceAll( "-" , "/"));
+                      }
+
                   }
                  nameAndDataRes.setCategories(resset.toArray(new String[resset.size()]));
                  nameAndDataRes2.setCategories(resset.toArray(new String[resset.size()]));
