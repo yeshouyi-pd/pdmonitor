@@ -162,8 +162,13 @@ public class MobileController  extends BaseWxController {
                  */
                  NameAndDataRes  nameAndDataRes = new NameAndDataRes();
                  NameAndDataRes  nameAndDataRes2 = new NameAndDataRes();
-                 nameAndDataRes.setCategories(set.toArray(new String[set.size()]));
-                 nameAndDataRes2.setCategories(set.toArray(new String[set.size()]));
+
+                  Set<String>    resset = new TreeSet<>();
+                  for (String s : set){
+                      resset.add(s.replaceAll( "-" , "/"));
+                  }
+                 nameAndDataRes.setCategories(resset.toArray(new String[resset.size()]));
+                 nameAndDataRes2.setCategories(resset.toArray(new String[resset.size()]));
 
                  List<NameAndData>  listnameAndData = new ArrayList<>();
                  List<NameAndData>  listnameAndData2 = new ArrayList<>();
