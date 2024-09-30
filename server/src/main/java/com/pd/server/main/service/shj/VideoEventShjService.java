@@ -69,6 +69,8 @@ public class VideoEventShjService extends AbstractScanRequest {
             videoEvent.setKssj(wjmclj.substring(0,4)+"-"+wjmclj.substring(5,7)+"-"+wjmclj.substring(8,10)+" "+wjmclj.substring(11,13)+":"+wjmclj.substring(14,16)+":"+wjmclj.substring(17,19));
             videoEvent.setJssj(wjmclj.substring(20,24)+"-"+wjmclj.substring(25,27)+"-"+wjmclj.substring(28,30)+" "+wjmclj.substring(31,33)+":"+wjmclj.substring(34,36)+":"+wjmclj.substring(37,39));
             videoEvent.setRq(wjmclj.substring(0,4)+"-"+wjmclj.substring(5,7)+"-"+wjmclj.substring(8,10));
+            videoEvent.setNf(wjmclj.substring(0,4));
+            videoEvent.setYf(wjmclj.substring(0,4)+"-"+wjmclj.substring(5,7));
             videoEvent.setWjlj(tplj);
             videoEvent.setWjmc(wjmclj.substring(0,39));
             videoEvent.setSfysp(1);

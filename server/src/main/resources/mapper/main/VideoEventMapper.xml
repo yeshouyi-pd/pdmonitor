@@ -359,4 +359,10 @@
     </if>
     GROUP BY sbbh
   </select>
+  <select id="selectStatics" parameterType="com.pd.server.main.domain.VideoEventExample" resultMap="DpResultMap">
+    select sum(case when sfysp='0' then 1 else 0 end) yhc,sum(case when sfysp='1' then 1 else 0 end) whc,sum(case when sfysp='2' then 1 else 0 end) sssp from video_event
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
 </mapper>

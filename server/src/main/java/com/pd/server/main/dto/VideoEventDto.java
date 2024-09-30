@@ -57,6 +57,10 @@ public class VideoEventDto extends PageDto{
 
     private String xmbh;
 
+    private String yf;
+
+    private String nf;
+
     public String getId() {
         return id;
     }
@@ -153,6 +157,22 @@ public class VideoEventDto extends PageDto{
         this.xmbh = xmbh;
     }
 
+    public String getYf() {
+        return yf;
+    }
+
+    public void setYf(String yf) {
+        this.yf = yf;
+    }
+
+    public String getNf() {
+        return nf;
+    }
+
+    public void setNf(String nf) {
+        this.nf = nf;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -170,6 +190,8 @@ public class VideoEventDto extends PageDto{
             sb.append(", bz=").append(bz);
             sb.append(", sm=").append(sm);
             sb.append(", sxtip=").append(sxtip);
+            sb.append(", yf=").append(yf);
+            sb.append(", nf=").append(nf);
         sb.append("]");
         return sb.toString();
     }

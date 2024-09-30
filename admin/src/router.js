@@ -84,6 +84,7 @@ import VideoTl from "./views/mobile/videoTl.vue";
 import VideoEventSS from "./views/monitor/videoEventSS.vue";
 import testDhVideo from "./views/testDhVideo1.vue";
 import VideoEventTl from "./views/monitor/videoEventTl.vue";
+import VideoDpSecond from "./views/mobile/videoDpSecond.vue";
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -155,6 +156,9 @@ export default new Router({
     },{
         path: "/welcomeDw",
         component:WelcomeDw
+    },{
+        path: "/mobile/videoDpSecond",
+        component: VideoDpSecond
     },{
         path: "/",
         name:"admin",//为每一个路由都加上name属性，后续做通用的aidebar激活方法样式会用的

@@ -23,6 +23,10 @@ public class VideoEvent {
 
     private String sxtip;
 
+    private String yf;
+
+    private String nf;
+
     public String getId() {
         return id;
     }
@@ -111,6 +115,22 @@ public class VideoEvent {
         this.sxtip = sxtip;
     }
 
+    public String getYf() {
+        return yf;
+    }
+
+    public void setYf(String yf) {
+        this.yf = yf;
+    }
+
+    public String getNf() {
+        return nf;
+    }
+
+    public void setNf(String nf) {
+        this.nf = nf;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -128,6 +148,8 @@ public class VideoEvent {
         sb.append(", bz=").append(bz);
         sb.append(", sm=").append(sm);
         sb.append(", sxtip=").append(sxtip);
+        sb.append(", yf=").append(yf);
+        sb.append(", nf=").append(nf);
         sb.append("]");
         return sb.toString();
     }
