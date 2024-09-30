@@ -27,6 +27,13 @@ public class VideoEventService {
     }
 
     /**
+     * 根据月份查询已审核和未审核的联动视频数据量，实时视频数据量
+     */
+    public VideoEventDpDto selectStatics(VideoEventExample example){
+        return videoEventMapper.selectStatics(example);
+    }
+
+    /**
      * 根据日期分组查询已审核和未审核的联动视频数据量，实时视频数据量
      */
     public List<VideoEventDpDto> selectStaticsByRq(VideoEventExample example){

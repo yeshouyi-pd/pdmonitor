@@ -30,14 +30,10 @@
         </div>
         <div class="h37">
           <div class="imgs">
-            <video width="100%" height="100%" autoplay="autoplay" loop="loop" controls>
-              <source class="video" title="主监控位" src="/video/13.mp4"/>
-            </video>
-<!--            <div style="height: 50%;">-->
-<!--              <video width="100%" height="100%" poster="/largemonitors/assets/imgs/video.png">-->
-<!--                <source src="movie.mp4" type="video/mp4">-->
-<!--              </video>-->
-<!--            </div>-->
+<!--            <video width="100%" height="100%" autoplay="autoplay" loop="loop" controls>-->
+<!--              <source class="video" title="主监控位" src="/video/13.mp4"/>-->
+<!--            </video>-->
+            <swiper-video id="swiperVideo" :list="swiperVideo" style="text-align: center;width: 100% ;height: 100%;"></swiper-video>
           </div>
         </div>
         <div class="h37">
@@ -133,11 +129,15 @@
 <script>
 import EquipmentAMap from "../monitor/equipmentAMap";
 import Swiper from "../../components/swipe";
+import SwiperVideo from "../../components/swipeVideo";
 export default {
   name:'largemonitors',
-  components:{EquipmentAMap,Swiper},
+  components:{EquipmentAMap,Swiper,SwiperVideo},
   data: function (){
     return {
+      swiperVideo:[
+        "/video/13.mp4","/video/14.mp4","/video/15.mp4","/video/16.mp4","/video/17.mp4"
+      ],
       tdhList:[
         {key:"C11", value:"9"},
         {key:"C12", value:"5"},

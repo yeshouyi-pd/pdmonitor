@@ -81,6 +81,8 @@ public class VideoEventRevController {
             videoEventDto.setKssj(wjmclj.substring(0,4)+"-"+wjmclj.substring(5,7)+"-"+wjmclj.substring(8,10)+" "+wjmclj.substring(11,13)+":"+wjmclj.substring(14,16)+":"+wjmclj.substring(17,19));
             videoEventDto.setJssj(wjmclj.substring(20,24)+"-"+wjmclj.substring(25,27)+"-"+wjmclj.substring(28,30)+" "+wjmclj.substring(31,33)+":"+wjmclj.substring(34,36)+":"+wjmclj.substring(37,39));
             videoEventDto.setRq(videoEventDto.getKssj().substring(0,10));
+            videoEventDto.setNf(wjmclj.substring(0,4));
+            videoEventDto.setYf(wjmclj.substring(0,4)+"-"+wjmclj.substring(5,7));
             videoEventDto.setWjlj(wjlj);
             videoEventDto.setWjmc(wjmclj.substring(0,39));
             videoEventDto.setSfysp(!StringUtils.isEmpty(jsonObject.getString("sssp"))?2:0);//0分析视频2实时视频

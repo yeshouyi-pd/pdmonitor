@@ -9,6 +9,7 @@ import com.pd.server.main.domain.*;
 import com.pd.server.main.dto.*;
 import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
 import com.pd.server.main.dto.basewx.my.PredationNumDwDto;
+import com.pd.server.main.dto.basewx.my.VideoEventDpDto;
 import com.pd.server.main.service.*;
 import com.pd.server.util.CopyUtil;
 import com.pd.server.util.DateUtil;
@@ -63,6 +64,19 @@ public class WelcomeController extends BaseWxController{
     private EquipmentFileEventService equipmentFileEventService;
     @Resource
     private VideoEventService videoEventService;
+
+    @PostMapping("/staticMonth")
+    public ResponseDto staticMonth(@RequestBody VideoEventDto pageDto){
+        ResponseDto responseDto = new ResponseDto();
+        VideoEventExample example = new VideoEventExample();
+        VideoEventExample.Criteria ca = example.createCriteria();
+        if(!StringUtils.isEmpty(pageDto.getYf())){
+            ca.andYfEqualTo(pageDto.getYf());
+        }
+        VideoEventDpDto videoEventList = videoEventService.selectStatics(example);
+        responseDto.setContent(videoEventList);
+        return responseDto;
+    }
 
     @PostMapping("/getRealVideoEvent")
     public ResponseDto getRealVideoEvent(@RequestBody VideoEventDto pageDto){

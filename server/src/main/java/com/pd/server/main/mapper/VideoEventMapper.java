@@ -42,4 +42,6 @@ public interface VideoEventMapper {
     List<VideoEventDpDto> selectStaticsBySbbh(VideoEventExample example);
 
     List<VideoEventDpDto> selectStaticsByRq(VideoEventExample example);
+
+    VideoEventDpDto selectStatics(VideoEventExample example);
 }

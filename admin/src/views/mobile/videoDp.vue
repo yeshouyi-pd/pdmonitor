@@ -346,6 +346,12 @@ export default {
         }
       })
     },
+    download(item){
+      let _this = this;
+      let wjlj = item.wjlj.replace("49.239.193.146:59088","192.168.3.11:18088");
+      let paramsStr = "fileUrl="+wjlj.substring(0,wjlj.lastIndexOf("/")+1)+"&fileName="+wjlj.substring(wjlj.lastIndexOf("/")+1,wjlj.length);
+      window.location.href = process.env.VUE_APP_SERVER + '/monitor/download/audio/downAudioFile53?'+paramsStr;
+    },
     showVideo(item){
       let _this = this;
       if(item.sfysp==2){

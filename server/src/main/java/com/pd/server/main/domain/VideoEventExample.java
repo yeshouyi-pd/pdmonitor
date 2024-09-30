@@ -798,6 +798,21 @@ public class VideoEventExample {
             addCriterion("sxtip =", value, "sxtip");
             return (Criteria) this;
         }
+
+        public Criteria andYfGreaterThanOrEqualTo(String value) {
+            addCriterion("yf >=", value, "yf");
+            return (Criteria) this;
+        }
+
+        public Criteria andYfLessThanOrEqualTo(String value) {
+            addCriterion("yf <=", value, "yf");
+            return (Criteria) this;
+        }
+
+        public Criteria andYfEqualTo(String value) {
+            addCriterion("yf =", value, "yf");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {
