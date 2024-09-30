@@ -21,6 +21,14 @@
     <result column="bscs" jdbcType="INTEGER" property="bscs" />
     <result column="sjcs" jdbcType="INTEGER" property="sjcs" />
   </resultMap>
+
+  <resultMap id="TjResultMap" type="com.pd.server.main.dto.KvIntDtoTj">
+    <result column="dept" jdbcType="VARCHAR" property="dept" />
+    <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
+    <result column="sj" jdbcType="VARCHAR" property="sj" />
+    <result column="v1" jdbcType="INTEGER" property="v1" />
+    <result column="v2" jdbcType="INTEGER" property="v2" />
+  </resultMap>
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -365,4 +373,28 @@
       order by ${orderByClause}
     </if>
   </select>
+
+  <select id="gettjByDept" parameterType="com.pd.server.main.domain.PredationNumExample" resultMap="TjResultMap">
+    select deptcode as dept,  sbbh ,  DATE_FORMAT(cjsj, '%Y-%m-%d') AS sj ,sum(alarm_num)  as v1,sum(sm1) as v2
+    FROM predation_num
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    group by dept , sbbh ,sj
+    order by  dept  ,sbbh ,  sj
+
+  </select>
+
+  <select id="gettjByDeptyear" parameterType="com.pd.server.main.domain.PredationNumExample" resultMap="TjResultMap">
+    select deptcode as dept,  sbbh ,  DATE_FORMAT(cjsj, '%Y-%m') AS sj ,sum(alarm_num)  as v1,sum(sm1) as v2
+    FROM predation_num
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    group by dept , sbbh ,sj
+    order by  dept  ,sbbh ,  sj
+
+  </select>
+
+
 </mapper>
