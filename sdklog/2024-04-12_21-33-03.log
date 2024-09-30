@@ -1,0 +1,33 @@
+Begin Time:2024-04-12T21:33:03.435
+[2024-04-12T21:33:03.435 info Netsdk:69989 11008:2328 AVNetSDKMgr.cpp:504]Load avnetsdk library dynamically
+[2024-04-12T21:33:03.438 info Netsdk:69989 11008:2328 AVNetSDKMgr.cpp:549]avnetsdk module handle: 000000002EE30000
+
+[2024-04-12T21:33:03.438 info Netsdk:69989 11008:2328 AVNetSDKMgr.cpp:823]Load configsdk dynamically
+[2024-04-12T21:33:03.440 info Netsdk:69989 11008:2328 netsdk.cpp:302]Enter CLIENT_SetAutoReconnect:[cbAutoConnect=0000000000A40050, dwUser=0000000000000000].
+[2024-04-12T21:33:03.440 info Netsdk:69989 11008:2328 netsdk.cpp:304]Leave CLIENT_SetAutoReconnect.
+[2024-04-12T21:33:03.440 info Netsdk:69989 11008:2328 netsdk.cpp:326]Enter CLIENT_SetConnectTime:[nWaitTime=5000, nTryTimes=1].
+[2024-04-12T21:33:03.441 info Netsdk:69989 11008:2328 netsdk.cpp:339]Leave CLIENT_SetConnectTime.
+[2024-04-12T21:33:03.441 info Netsdk:69989 11008:2328 netsdk.cpp:352]Enter CLIENT_SetNetworkParam:[nWaittime=0, nConnectTime=10000, nConnectTryNum=0, nSubConnectSpaceTime=0, nGetDevInfoTime=3000, nConnectBufSize=0, nGetConnInfoTime=3000, nSearchRecordTime=0, nsubDisconnetTime=0, byNetType=0, byPlaybackBufSize=0, bDetectDisconnTime=0, bKeepLifeInterval=0, nPicBufSize=0].
+[2024-04-12T21:33:03.441 info Netsdk:69989 11008:2328 netsdk.cpp:367]Leave CLIENT_SetNetworkParam.
+[2024-04-12T21:33:03.442 info Netsdk:69989 11008:2328 netsdk.cpp:991]Enter CLIENT_LoginWithHighLevelSecurity. pstInParam:0000000021EC3450, pstOutParam:0000000000914250.
+[2024-04-12T21:33:03.442 info Netsdk:69989 11008:2328 netsdk.cpp:1007]IP:49.239.193.148, port:43489, SpeCap:0, CapParam:0000000000000000, TLSCap:0
+[2024-04-12T21:33:03.469 info Netsdk:69989 11008:2328 TPTCPClient.cpp:540]Connect Client Ip : 192.168.10.124 
+[2024-04-12T21:33:03.469 info Netsdk:69989 11008:2328 TPTCPClient.cpp:541]Connect Client Port : 7104
+[2024-04-12T21:33:03.970 info Netsdk:69989 11008:2328 netsdk.cpp:1054]Leave CLIENT_LoginWithHighLevelSecurity. error:0, login ID:0000000026157F50.
+[2024-04-12T21:33:03.977 info Netsdk:69989 11008:2328 netsdk.cpp:1656]Enter CLIENT_RealPlayByDataType. lLoginID:0000000026157F50. nChannelID:0. hWnd:0000000000000000
+[2024-04-12T21:33:04.434 error Netsdk:69989 11008:2328 Generation2ProtocolSecureTransmit.cpp:661]Not find
+[2024-04-12T21:33:04.434 info Netsdk:69989 11008:2328 DevConfigEx.cpp:12265]IN SetupSession PORT=0 and PORT: 43489
+[2024-04-12T21:33:04.461 info Netsdk:69989 11008:2328 TPTCPClient.cpp:540]Connect Client Ip : 192.168.10.124 
+[2024-04-12T21:33:04.461 info Netsdk:69989 11008:2328 TPTCPClient.cpp:541]Connect Client Port : 7109
+[2024-04-12T21:33:04.461 info Netsdk:69989 11008:2328 TcpSocket.cpp:2320]bSetSSL:0, nPolicy:0, nTlsMode:0
+[2024-04-12T21:33:04.461 info Netsdk:69989 11008:2328 TcpSocket.cpp:2335]IsStandardTls bSetSSL:0, nPolicy:0, nTlsMode:0
+[2024-04-12T21:33:04.488 info Netsdk:69989 11008:2328 netsdk.cpp:1703]Leave CLIENT_RealPlayByDataType. ret:639073872
+[2024-04-12T21:33:04.492 info Netsdk:69989 11008:2328 netsdk.cpp:3034]Enter CLIENT_SetRealDataCallBackEx. [lRealHandle=639073872. cbRealData=0000000000A40090, dwUser=00000000008F9100. dwFlag=31.]
+[2024-04-12T21:33:04.492 info Netsdk:69989 11008:2328 netsdk.cpp:3056]Leave CLIENT_SetRealDataCallBackEx.ret:1.
+[2024-04-12T21:33:04.572 error Netsdk:69989 11008:23960 RealPlayAndPlayBackUtil.cpp:468]Render is NULL
+[2024-04-12T21:33:04.572 error Netsdk:69989 11008:23960 RealPlayAndPlayBackUtil.cpp:468]Render is NULL
+[2024-04-12T21:33:23.168 info Netsdk:69989 11008:15068 netsdk.cpp:245]Enter CLIENT_InitEx:[cbDisConnect=0000000000A40010, dwUser=0000000000000000, lpInitParam=0000000000000000].
+[2024-04-12T21:33:23.168 info Netsdk:69989 11008:15068 AVNetSDKMgr.cpp:736]Test avnetsdk module handle: 000000002EE30000
+
+[2024-04-12T21:33:23.168 info Netsdk:69989 11008:15068 netsdk.cpp:268]Leave CLIENT_InitEx.
+[2024-04-12T21:33:23.168 info Netsdk:69989 11008:15068 Manager.cpp:17401]-------------------Log file reset, log number:10-log size:10240------------------

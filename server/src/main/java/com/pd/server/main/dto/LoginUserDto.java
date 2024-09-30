@@ -66,6 +66,12 @@ public class LoginUserDto {
      */
     private String token;
 
+
+    private String type;
+
+
+    private String rq;
+
     /**
      * 所有资源，用于前端界面控制
      */
@@ -304,6 +310,22 @@ public class LoginUserDto {
 
     public void setXmbhsbsns(Map<String, List<String>> xmbhsbsns) {
         this.xmbhsbsns = xmbhsbsns;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getRq() {
+        return rq;
+    }
+
+    public void setRq(String rq) {
+        this.rq = rq;
     }
 
     @Override

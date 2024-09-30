@@ -42,4 +42,7 @@ public interface EquipmentFileEventMapper {
     EquipmentFileEvent selectByDp();
 
     Integer selectTsBySms(EquipmentFileEventExample equipmentFileEventExample);
+
+    List<EquipmentFileEvent> getEquipmentEventByDeptdate(EquipmentFileEventExample example);
+
 }

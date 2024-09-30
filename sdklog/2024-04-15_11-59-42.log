@@ -1,0 +1,50 @@
+Begin Time:2024-04-15T11:59:42.867
+[2024-04-15T11:59:42.867 info Netsdk:69989 18876:8840 AVNetSDKMgr.cpp:504]Load avnetsdk library dynamically
+[2024-04-15T11:59:42.870 info Netsdk:69989 18876:8840 AVNetSDKMgr.cpp:549]avnetsdk module handle: 000000002F2E0000
+
+[2024-04-15T11:59:42.870 info Netsdk:69989 18876:8840 AVNetSDKMgr.cpp:823]Load configsdk dynamically
+[2024-04-15T11:59:42.872 info Netsdk:69989 18876:8840 netsdk.cpp:302]Enter CLIENT_SetAutoReconnect:[cbAutoConnect=0000000002D60050, dwUser=0000000000000000].
+[2024-04-15T11:59:42.872 info Netsdk:69989 18876:8840 netsdk.cpp:304]Leave CLIENT_SetAutoReconnect.
+[2024-04-15T11:59:42.872 info Netsdk:69989 18876:8840 netsdk.cpp:326]Enter CLIENT_SetConnectTime:[nWaitTime=5000, nTryTimes=1].
+[2024-04-15T11:59:42.872 info Netsdk:69989 18876:8840 netsdk.cpp:339]Leave CLIENT_SetConnectTime.
+[2024-04-15T11:59:42.872 info Netsdk:69989 18876:8840 netsdk.cpp:352]Enter CLIENT_SetNetworkParam:[nWaittime=0, nConnectTime=10000, nConnectTryNum=0, nSubConnectSpaceTime=0, nGetDevInfoTime=3000, nConnectBufSize=0, nGetConnInfoTime=3000, nSearchRecordTime=0, nsubDisconnetTime=0, byNetType=0, byPlaybackBufSize=0, bDetectDisconnTime=0, bKeepLifeInterval=0, nPicBufSize=0].
+[2024-04-15T11:59:42.872 info Netsdk:69989 18876:8840 netsdk.cpp:367]Leave CLIENT_SetNetworkParam.
+[2024-04-15T11:59:42.874 info Netsdk:69989 18876:8840 netsdk.cpp:991]Enter CLIENT_LoginWithHighLevelSecurity. pstInParam:0000000000C4C810, pstOutParam:0000000000C9E9B0.
+[2024-04-15T11:59:42.874 info Netsdk:69989 18876:8840 netsdk.cpp:1007]IP:49.239.193.148, port:43489, SpeCap:0, CapParam:0000000000000000, TLSCap:0
+[2024-04-15T11:59:42.900 info Netsdk:69989 18876:8840 TPTCPClient.cpp:540]Connect Client Ip : 192.168.10.124 
+[2024-04-15T11:59:42.900 info Netsdk:69989 18876:8840 TPTCPClient.cpp:541]Connect Client Port : 14864
+[2024-04-15T11:59:42.968 info Netsdk:69989 18876:16372 netsdk.cpp:245]Enter CLIENT_InitEx:[cbDisConnect=0000000002D60010, dwUser=0000000000000000, lpInitParam=0000000000000000].
+[2024-04-15T11:59:42.968 info Netsdk:69989 18876:16372 AVNetSDKMgr.cpp:736]Test avnetsdk module handle: 000000002F2E0000
+
+[2024-04-15T11:59:42.968 info Netsdk:69989 18876:16372 netsdk.cpp:268]Leave CLIENT_InitEx.
+[2024-04-15T11:59:42.968 info Netsdk:69989 18876:16372 Manager.cpp:17401]-------------------Log file reset, log number:10-log size:10240------------------
+Begin Time:2024-04-15T11:59:42.969
+[2024-04-15T11:59:42.969 info Netsdk:69989 18876:16372 netsdk.cpp:302]Enter CLIENT_SetAutoReconnect:[cbAutoConnect=0000000002D60050, dwUser=0000000000000000].
+[2024-04-15T11:59:42.969 info Netsdk:69989 18876:16372 netsdk.cpp:304]Leave CLIENT_SetAutoReconnect.
+[2024-04-15T11:59:42.969 info Netsdk:69989 18876:16372 netsdk.cpp:326]Enter CLIENT_SetConnectTime:[nWaitTime=5000, nTryTimes=1].
+[2024-04-15T11:59:42.969 info Netsdk:69989 18876:16372 netsdk.cpp:339]Leave CLIENT_SetConnectTime.
+[2024-04-15T11:59:42.969 info Netsdk:69989 18876:16372 netsdk.cpp:352]Enter CLIENT_SetNetworkParam:[nWaittime=0, nConnectTime=10000, nConnectTryNum=0, nSubConnectSpaceTime=0, nGetDevInfoTime=3000, nConnectBufSize=0, nGetConnInfoTime=3000, nSearchRecordTime=0, nsubDisconnetTime=0, byNetType=0, byPlaybackBufSize=0, bDetectDisconnTime=0, bKeepLifeInterval=0, nPicBufSize=0].
+[2024-04-15T11:59:42.969 info Netsdk:69989 18876:16372 netsdk.cpp:367]Leave CLIENT_SetNetworkParam.
+[2024-04-15T11:59:42.970 info Netsdk:69989 18876:16372 netsdk.cpp:991]Enter CLIENT_LoginWithHighLevelSecurity. pstInParam:0000000000C4C360, pstOutParam:0000000000C9E6B0.
+[2024-04-15T11:59:42.970 info Netsdk:69989 18876:16372 netsdk.cpp:1007]IP:49.239.193.148, port:43489, SpeCap:0, CapParam:0000000000000000, TLSCap:0
+[2024-04-15T11:59:42.996 info Netsdk:69989 18876:16372 TPTCPClient.cpp:540]Connect Client Ip : 192.168.10.124 
+[2024-04-15T11:59:42.996 info Netsdk:69989 18876:16372 TPTCPClient.cpp:541]Connect Client Port : 14865
+[2024-04-15T11:59:43.443 info Netsdk:69989 18876:8840 netsdk.cpp:1054]Leave CLIENT_LoginWithHighLevelSecurity. error:0, login ID:0000000027BF7F60.
+[2024-04-15T11:59:43.693 info Netsdk:69989 18876:16372 netsdk.cpp:1054]Leave CLIENT_LoginWithHighLevelSecurity. error:0, login ID:0000000027BFCE60.
+[2024-04-15T11:59:43.696 info Netsdk:69989 18876:16372 netsdk.cpp:1656]Enter CLIENT_RealPlayByDataType. lLoginID:0000000027BFCE60. nChannelID:0. hWnd:0000000000000000
+[2024-04-15T11:59:44.170 error Netsdk:69989 18876:16372 Generation2ProtocolSecureTransmit.cpp:661]Not find
+[2024-04-15T11:59:44.170 info Netsdk:69989 18876:16372 DevConfigEx.cpp:12265]IN SetupSession PORT=0 and PORT: 43489
+[2024-04-15T11:59:44.197 info Netsdk:69989 18876:16372 TPTCPClient.cpp:540]Connect Client Ip : 192.168.10.124 
+[2024-04-15T11:59:44.197 info Netsdk:69989 18876:16372 TPTCPClient.cpp:541]Connect Client Port : 14866
+[2024-04-15T11:59:44.197 info Netsdk:69989 18876:16372 TcpSocket.cpp:2320]bSetSSL:0, nPolicy:0, nTlsMode:0
+[2024-04-15T11:59:44.197 info Netsdk:69989 18876:16372 TcpSocket.cpp:2335]IsStandardTls bSetSSL:0, nPolicy:0, nTlsMode:0
+[2024-04-15T11:59:44.225 info Netsdk:69989 18876:16372 netsdk.cpp:1703]Leave CLIENT_RealPlayByDataType. ret:666909664
+[2024-04-15T11:59:44.230 info Netsdk:69989 18876:16372 netsdk.cpp:3034]Enter CLIENT_SetRealDataCallBackEx. [lRealHandle=666909664. cbRealData=0000000002D60090, dwUser=0000000000000000. dwFlag=31.]
+[2024-04-15T11:59:44.230 info Netsdk:69989 18876:16372 netsdk.cpp:3056]Leave CLIENT_SetRealDataCallBackEx.ret:1.
+[2024-04-15T11:59:44.307 error Netsdk:69989 18876:16972 RealPlayAndPlayBackUtil.cpp:468]Render is NULL
+[2024-04-15T11:59:44.307 error Netsdk:69989 18876:16972 RealPlayAndPlayBackUtil.cpp:468]Render is NULL
+[2024-04-15T11:59:50.646 info Netsdk:69989 18876:17488 netsdk.cpp:245]Enter CLIENT_InitEx:[cbDisConnect=0000000002D60010, dwUser=0000000000000000, lpInitParam=0000000000000000].
+[2024-04-15T11:59:50.646 info Netsdk:69989 18876:17488 AVNetSDKMgr.cpp:736]Test avnetsdk module handle: 000000002F2E0000
+
+[2024-04-15T11:59:50.646 info Netsdk:69989 18876:17488 netsdk.cpp:268]Leave CLIENT_InitEx.
+[2024-04-15T11:59:50.646 info Netsdk:69989 18876:17488 Manager.cpp:17401]-------------------Log file reset, log number:10-log size:10240------------------

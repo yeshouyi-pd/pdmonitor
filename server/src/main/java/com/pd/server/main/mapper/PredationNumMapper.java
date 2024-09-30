@@ -5,6 +5,7 @@ import com.pd.server.main.domain.PredationNum;
 import com.pd.server.main.domain.PredationNumExample;
 import java.util.List;
 
+import com.pd.server.main.dto.KvIntDtoTj;
 import com.pd.server.main.dto.PredationNumDto;
 import com.pd.server.main.dto.basewx.my.PredationNumDwDto;
 import org.apache.ibatis.annotations.Param;
@@ -39,4 +40,9 @@ public interface PredationNumMapper {
     List<EquipmentTyEvent> listEventCount(PredationNumExample example);
 
     List<PredationNumDwDto> statisticsExample(PredationNumExample example);
+
+    List<KvIntDtoTj> gettjByDept(PredationNumExample example);
+    List<KvIntDtoTj> gettjByDeptyear(PredationNumExample example);
+
+
 }

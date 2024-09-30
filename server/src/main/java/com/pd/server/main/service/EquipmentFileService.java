@@ -1,9 +1,6 @@
 package com.pd.server.main.service;
 
-import com.pd.server.main.domain.EquipmentFile;
-import com.pd.server.main.domain.EquipmentFileExample;
-import com.pd.server.main.domain.EquipmentFileTodayExample;
-import com.pd.server.main.domain.WaterQualityResultExample;
+import com.pd.server.main.domain.*;
 import com.pd.server.main.dto.*;
 import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
 import com.pd.server.main.dto.basewx.my.PredationStaticticsDto;
@@ -158,5 +155,22 @@ public class EquipmentFileService {
 
     public PredationStaticticsDto predationStatictics(EquipmentFileExample example){
         return equipmentFileMapper.predationStatictics(example);
+    }
+
+    public  List<EquipmentFile>  getAlljcsjByDeptgetDay(EquipmentFileExample example){
+        return equipmentFileMapper.getAlljcsjByDeptgetDay(example);
+    }
+
+    public List<KvIntDto> getAlljcsjByDept(EquipmentFileExample example){
+        return equipmentFileMapper.getAlljcsjByDept(example);
+    }
+
+    public List<EquipmenInfo> getthisDeptEquipmentday(EquipmentFileExample equipmentFileExample) {
+        return equipmentFileMapper.getthisDeptEquipmentday(equipmentFileExample);
+    }
+
+
+    public List<EquipmentMainListDto> getthisDeptEquipmentinfoday(EquipmentFileExample equipmentFileExample) {
+        return equipmentFileMapper.getthisDeptEquipmentinfoday(equipmentFileExample);
     }
 }

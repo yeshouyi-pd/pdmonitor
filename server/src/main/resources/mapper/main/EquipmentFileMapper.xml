@@ -42,6 +42,10 @@
   <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
   <result column="sbmc" jdbcType="VARCHAR" property="sbmc" />
   </resultMap>
+  <resultMap id="BaseResultMapKVint" type="com.pd.server.main.dto.KvIntDto">
+    <result column="key" jdbcType="VARCHAR" property="key" />
+    <result column="value" jdbcType="VARCHAR" property="value" />
+  </resultMap>
 
   <resultMap id="getthisDeptjxsjJT" type="com.pd.server.main.dto.EquipmentMainDto">
     <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
@@ -821,6 +825,17 @@
      AND  TO_DAYS(cjsj) = TO_DAYS(NOW()) AND txtlx = '1' ) b ,water_equipment c WHERE b.sbbh = c.sbsn
   </select>
 
+  <select id="getthisDeptEquipmentday" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultMap="getthisDeptEquipment">
+    SELECT DISTINCT  b.sbbh  ,c.sbmc FROM (
+    SELECT DISTINCT   sbbh FROM `equipment_file`
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+     AND txtlx = '1'
+   ) b ,water_equipment c WHERE b.sbbh = c.sbsn
+  </select>
+
+
 
   <select id="getthisDeptEquipmentinfo" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultMap="getthisDeptEquipmentinfo">
     SELECT *  FROM (
@@ -846,6 +861,24 @@
     AND TO_DAYS(cjsj) = TO_DAYS(NOW()) AND txtlx = '1'
     )  b  ORDER BY cjsj  DESC
   </select>
+
+
+
+
+  <select id="getthisDeptEquipmentinfoday" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultMap="getthisDeptEquipmentinfo">
+    SELECT *  FROM (
+    SELECT
+    id,
+    cjsj,
+    tplj,
+    deptcode  FROM `equipment_file`
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+     AND txtlx = '1'
+    )  b  ORDER BY cjsj  DESC
+  </select>
+
   <select id="selectVideoDp" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
@@ -880,4 +913,23 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
+
+
+  <select id="getAlljcsjByDeptgetDay" parameterType="com.pd.server.main.domain.EquipmentFileTodayExample"  resultMap="BaseResultMap">
+    SELECT * FROM  equipment_file
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    and  txtlx='1'  order by cjsj desc limit 1
+  </select>
+
+  <select id="getAlljcsjByDept" parameterType="com.pd.server.main.domain.EquipmentFileTodayExample"  resultMap="BaseResultMapKVint">
+    SELECT deptcode `key` ,COUNT(*)  `value` FROM  equipment_file
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+     and  txtlx='1'  GROUP  BY  deptcode
+
+  </select>
+
 </mapper>

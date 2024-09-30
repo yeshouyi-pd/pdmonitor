@@ -1,0 +1,23 @@
+Begin Time:2024-04-15T11:04:18.661
+[2024-04-15T11:04:18.661 info Netsdk:69989 17212:2424 netsdk.cpp:302]Enter CLIENT_SetAutoReconnect:[cbAutoConnect=000000001FC90050, dwUser=0000000000000000].
+[2024-04-15T11:04:18.661 info Netsdk:69989 17212:2424 netsdk.cpp:304]Leave CLIENT_SetAutoReconnect.
+[2024-04-15T11:04:18.661 info Netsdk:69989 17212:2424 netsdk.cpp:326]Enter CLIENT_SetConnectTime:[nWaitTime=5000, nTryTimes=1].
+[2024-04-15T11:04:18.661 info Netsdk:69989 17212:2424 netsdk.cpp:339]Leave CLIENT_SetConnectTime.
+[2024-04-15T11:04:18.662 info Netsdk:69989 17212:2424 netsdk.cpp:352]Enter CLIENT_SetNetworkParam:[nWaittime=0, nConnectTime=10000, nConnectTryNum=0, nSubConnectSpaceTime=0, nGetDevInfoTime=3000, nConnectBufSize=0, nGetConnInfoTime=3000, nSearchRecordTime=0, nsubDisconnetTime=0, byNetType=0, byPlaybackBufSize=0, bDetectDisconnTime=0, bKeepLifeInterval=0, nPicBufSize=0].
+[2024-04-15T11:04:18.667 info Netsdk:69989 17212:2424 netsdk.cpp:367]Leave CLIENT_SetNetworkParam.
+[2024-04-15T11:04:18.669 info Netsdk:69989 17212:2424 netsdk.cpp:2091]Enter CLIENT_StopRealPlayEx. lRealHandle:657448928.
+[2024-04-15T11:04:18.669 info Netsdk:69989 17212:2424 netsdk.cpp:2105]Leave CLIENT_StopRealPlayEx. ret:1
+[2024-04-15T11:04:18.669 info Netsdk:69989 17212:2424 netsdk.cpp:1656]Enter CLIENT_RealPlayByDataType. lLoginID:00000000272E7F50. nChannelID:0. hWnd:0000000000000000
+[2024-04-15T11:04:18.706 error Netsdk:69989 17212:2424 Generation2ProtocolSecureTransmit.cpp:661]Not find
+[2024-04-15T11:04:18.706 info Netsdk:69989 17212:2424 DevConfigEx.cpp:12265]IN SetupSession PORT=0 and PORT: 43489
+[2024-04-15T11:04:18.735 info Netsdk:69989 17212:2424 TPTCPClient.cpp:540]Connect Client Ip : 192.168.10.124 
+[2024-04-15T11:04:18.735 info Netsdk:69989 17212:2424 TPTCPClient.cpp:541]Connect Client Port : 6607
+[2024-04-15T11:04:18.735 info Netsdk:69989 17212:2424 TcpSocket.cpp:2320]bSetSSL:0, nPolicy:0, nTlsMode:0
+[2024-04-15T11:04:18.735 info Netsdk:69989 17212:2424 TcpSocket.cpp:2335]IsStandardTls bSetSSL:0, nPolicy:0, nTlsMode:0
+[2024-04-15T11:04:18.764 info Netsdk:69989 17212:2424 netsdk.cpp:1703]Leave CLIENT_RealPlayByDataType. ret:657463200
+[2024-04-15T11:04:18.765 info Netsdk:69989 17212:2424 netsdk.cpp:3034]Enter CLIENT_SetRealDataCallBackEx. [lRealHandle=657463200. cbRealData=000000001FC90090, dwUser=0000000000762770. dwFlag=31.]
+[2024-04-15T11:04:18.765 info Netsdk:69989 17212:2424 netsdk.cpp:3056]Leave CLIENT_SetRealDataCallBackEx.ret:1.
+[2024-04-15T11:04:18.834 error Netsdk:69989 17212:19188 RealPlayAndPlayBackUtil.cpp:468]Render is NULL
+[2024-04-15T11:04:18.834 error Netsdk:69989 17212:19188 RealPlayAndPlayBackUtil.cpp:468]Render is NULL
+[2024-04-15T11:04:59.926 info Netsdk:69989 17212:11180 netsdk.cpp:2091]Enter CLIENT_StopRealPlayEx. lRealHandle:657463200.
+[2024-04-15T11:04:59.927 info Netsdk:69989 17212:11180 netsdk.cpp:2105]Leave CLIENT_StopRealPlayEx. ret:1

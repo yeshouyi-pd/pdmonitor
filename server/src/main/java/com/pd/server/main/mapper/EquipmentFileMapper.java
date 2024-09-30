@@ -4,6 +4,7 @@ import com.pd.server.main.domain.EquipmentFile;
 import com.pd.server.main.domain.EquipmentFileExample;
 import java.util.List;
 
+import com.pd.server.main.domain.EquipmentFileToday;
 import com.pd.server.main.domain.EquipmentFileTodayExample;
 import com.pd.server.main.dto.*;
 import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
@@ -12,6 +13,9 @@ import com.pd.server.main.dto.basewx.my.SmsIntDto;
 import org.apache.ibatis.annotations.Param;
 
 public interface EquipmentFileMapper {
+
+    List<KvIntDto> getAlljcsjByDept(EquipmentFileExample example);
+    List<EquipmentFile>  getAlljcsjByDeptgetDay(EquipmentFileExample example);
 
     long countByExample(EquipmentFileExample example);
 
@@ -80,4 +84,8 @@ public interface EquipmentFileMapper {
     Integer countTsByExample(EquipmentFileExample example);
 
     PredationStaticticsDto predationStatictics(EquipmentFileExample example);
+
+    List<EquipmenInfo> getthisDeptEquipmentday(EquipmentFileExample equipmentFileExample);
+
+    List<EquipmentMainListDto> getthisDeptEquipmentinfoday(EquipmentFileExample equipmentFileExample);
 }
