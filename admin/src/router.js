@@ -85,6 +85,7 @@ import VideoEventSS from "./views/monitor/videoEventSS.vue";
 import testDhVideo from "./views/testDhVideo1.vue";
 import VideoEventTl from "./views/monitor/videoEventTl.vue";
 import VideoDpSecond from "./views/mobile/videoDpSecond.vue";
+import SolarPannel from "./views/electricity/solarPannel.vue";
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -427,6 +428,10 @@ export default new Router({
             path: "monitor/videoEventTl",
             name: "monitor/videoEventTl",
             component: VideoEventTl
+        },{
+            path: "monitor/solarPannel",
+            name: "monitor/solarPannel",
+            component: SolarPannel
         }]
     }]
 })

@@ -12,9 +12,9 @@
           <div v-on:click="videoNew()" style="color: rgb(255, 255, 255);font-size: 16px;border: 1px solid #043769;background-color:rgb(10,33,61);width: 15%;text-align: center;padding: 5px 0;cursor: pointer;margin-left: 10px;">
             视频
           </div>
-          <div v-on:click="test()" style="color: rgb(255, 255, 255);font-size: 16px;border: 1px solid #043769;background-color:rgb(10,33,61);width: 15%;text-align: center;padding: 5px 0;cursor: pointer;margin-left: 10px;">
-            测试
-          </div>
+<!--          <div v-on:click="test()" style="color: rgb(255, 255, 255);font-size: 16px;border: 1px solid #043769;background-color:rgb(10,33,61);width: 15%;text-align: center;padding: 5px 0;cursor: pointer;margin-left: 10px;">-->
+<!--            测试-->
+<!--          </div>-->
         </div>
         <div v-else style="height: 4.1%;display: flex;flex-direction: row;align-items: center;margin-left: 20px;">
           <div v-on:click="back()" style="color: rgb(255, 255, 255);font-size: 16px;border: 1px solid #043769;background-color:rgb(10,33,61);width: 15%;text-align: center;padding: 5px 0;cursor: pointer">
@@ -384,7 +384,7 @@ export default {
     sgdp(){
       let _this = this;
       _this.clear();
-      window.location.href = "/mobile/videoDp";
+      window.location.href = "/mobile/videoDpSecond";
     },
     videoNew(){
       let _this = this;
