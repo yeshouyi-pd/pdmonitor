@@ -1,0 +1,768 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pd.server.main.mapper.SolarPannelMapper">
+  <resultMap id="BaseResultMap" type="com.pd.server.main.domain.SolarPannel">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="del" jdbcType="VARCHAR" property="del" />
+    <result column="device_id" jdbcType="VARCHAR" property="deviceId" />
+    <result column="channel_id" jdbcType="VARCHAR" property="channelId" />
+    <result column="device_number" jdbcType="VARCHAR" property="deviceNumber" />
+    <result column="device_name" jdbcType="VARCHAR" property="deviceName" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="group_id" jdbcType="INTEGER" property="groupId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="heartbeat_time" jdbcType="TIMESTAMP" property="heartbeatTime" />
+    <result column="online" jdbcType="INTEGER" property="online" />
+    <result column="hand_switch" jdbcType="INTEGER" property="handSwitch" />
+    <result column="auto_mode" jdbcType="INTEGER" property="autoMode" />
+    <result column="longitude" jdbcType="DOUBLE" property="longitude" />
+    <result column="latitude" jdbcType="DOUBLE" property="latitude" />
+    <result column="temperature" jdbcType="VARCHAR" property="temperature" />
+    <result column="battery_voltage" jdbcType="VARCHAR" property="batteryVoltage" />
+    <result column="daily_electricity_consumption" jdbcType="VARCHAR" property="dailyElectricityConsumption" />
+    <result column="monthly_electricity_consumption" jdbcType="VARCHAR" property="monthlyElectricityConsumption" />
+    <result column="daily_charge" jdbcType="VARCHAR" property="dailyCharge" />
+    <result column="monthly_charge" jdbcType="VARCHAR" property="monthlyCharge" />
+    <result column="battery_current" jdbcType="VARCHAR" property="batteryCurrent" />
+    <result column="solar_panel_voltage" jdbcType="VARCHAR" property="solarPanelVoltage" />
+    <result column="solar_pannel_current" jdbcType="VARCHAR" property="solarPannelCurrent" />
+    <result column="power_generation" jdbcType="VARCHAR" property="powerGeneration" />
+    <result column="load_voltage" jdbcType="VARCHAR" property="loadVoltage" />
+    <result column="load_current" jdbcType="VARCHAR" property="loadCurrent" />
+    <result column="battery_percent" jdbcType="VARCHAR" property="batteryPercent" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="errMsg" jdbcType="VARCHAR" property="errmsg" />
+    <result column="ledMsg" jdbcType="VARCHAR" property="ledmsg" />
+    <result column="cardInfo" jdbcType="INTEGER" property="cardinfo" />
+    <result column="card_number" jdbcType="VARCHAR" property="cardNumber" />
+    <result column="min_voltage" jdbcType="DOUBLE" property="minVoltage" />
+    <result column="max_voltage" jdbcType="DOUBLE" property="maxVoltage" />
+    <result column="csq" jdbcType="VARCHAR" property="csq" />
+    <result column="tipCount" jdbcType="INTEGER" property="tipcount" />
+    <result column="batteryCorrect" jdbcType="VARCHAR" property="batterycorrect" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, create_time, del, device_id, channel_id, device_number, device_name, `password`, 
+    group_id, user_name, update_time, heartbeat_time, `online`, hand_switch, auto_mode, 
+    longitude, latitude, temperature, battery_voltage, daily_electricity_consumption, 
+    monthly_electricity_consumption, daily_charge, monthly_charge, battery_current, solar_panel_voltage, 
+    solar_pannel_current, power_generation, load_voltage, load_current, battery_percent, 
+    `type`, errMsg, ledMsg, cardInfo, card_number, min_voltage, max_voltage, csq, tipCount, 
+    batteryCorrect
+  </sql>
+  <select id="selectByExample" parameterType="com.pd.server.main.domain.SolarPannelExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from solar_pannel
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from solar_pannel
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from solar_pannel
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pd.server.main.domain.SolarPannelExample">
+    delete from solar_pannel
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pd.server.main.domain.SolarPannel">
+    insert into solar_pannel (id, create_time, del, 
+      device_id, channel_id, device_number, 
+      device_name, `password`, group_id, 
+      user_name, update_time, heartbeat_time, 
+      `online`, hand_switch, auto_mode, 
+      longitude, latitude, temperature, 
+      battery_voltage, daily_electricity_consumption, 
+      monthly_electricity_consumption, daily_charge, 
+      monthly_charge, battery_current, solar_panel_voltage, 
+      solar_pannel_current, power_generation, load_voltage, 
+      load_current, battery_percent, `type`, 
+      errMsg, ledMsg, cardInfo, 
+      card_number, min_voltage, max_voltage, 
+      csq, tipCount, batteryCorrect
+      )
+    values (#{id,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{del,jdbcType=VARCHAR}, 
+      #{deviceId,jdbcType=VARCHAR}, #{channelId,jdbcType=VARCHAR}, #{deviceNumber,jdbcType=VARCHAR}, 
+      #{deviceName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{groupId,jdbcType=INTEGER}, 
+      #{userName,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{heartbeatTime,jdbcType=TIMESTAMP}, 
+      #{online,jdbcType=INTEGER}, #{handSwitch,jdbcType=INTEGER}, #{autoMode,jdbcType=INTEGER}, 
+      #{longitude,jdbcType=DOUBLE}, #{latitude,jdbcType=DOUBLE}, #{temperature,jdbcType=VARCHAR}, 
+      #{batteryVoltage,jdbcType=VARCHAR}, #{dailyElectricityConsumption,jdbcType=VARCHAR}, 
+      #{monthlyElectricityConsumption,jdbcType=VARCHAR}, #{dailyCharge,jdbcType=VARCHAR}, 
+      #{monthlyCharge,jdbcType=VARCHAR}, #{batteryCurrent,jdbcType=VARCHAR}, #{solarPanelVoltage,jdbcType=VARCHAR}, 
+      #{solarPannelCurrent,jdbcType=VARCHAR}, #{powerGeneration,jdbcType=VARCHAR}, #{loadVoltage,jdbcType=VARCHAR}, 
+      #{loadCurrent,jdbcType=VARCHAR}, #{batteryPercent,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, 
+      #{errmsg,jdbcType=VARCHAR}, #{ledmsg,jdbcType=VARCHAR}, #{cardinfo,jdbcType=INTEGER}, 
+      #{cardNumber,jdbcType=VARCHAR}, #{minVoltage,jdbcType=DOUBLE}, #{maxVoltage,jdbcType=DOUBLE}, 
+      #{csq,jdbcType=VARCHAR}, #{tipcount,jdbcType=INTEGER}, #{batterycorrect,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.pd.server.main.domain.SolarPannel">
+    insert into solar_pannel
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="del != null">
+        del,
+      </if>
+      <if test="deviceId != null">
+        device_id,
+      </if>
+      <if test="channelId != null">
+        channel_id,
+      </if>
+      <if test="deviceNumber != null">
+        device_number,
+      </if>
+      <if test="deviceName != null">
+        device_name,
+      </if>
+      <if test="password != null">
+        `password`,
+      </if>
+      <if test="groupId != null">
+        group_id,
+      </if>
+      <if test="userName != null">
+        user_name,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="heartbeatTime != null">
+        heartbeat_time,
+      </if>
+      <if test="online != null">
+        `online`,
+      </if>
+      <if test="handSwitch != null">
+        hand_switch,
+      </if>
+      <if test="autoMode != null">
+        auto_mode,
+      </if>
+      <if test="longitude != null">
+        longitude,
+      </if>
+      <if test="latitude != null">
+        latitude,
+      </if>
+      <if test="temperature != null">
+        temperature,
+      </if>
+      <if test="batteryVoltage != null">
+        battery_voltage,
+      </if>
+      <if test="dailyElectricityConsumption != null">
+        daily_electricity_consumption,
+      </if>
+      <if test="monthlyElectricityConsumption != null">
+        monthly_electricity_consumption,
+      </if>
+      <if test="dailyCharge != null">
+        daily_charge,
+      </if>
+      <if test="monthlyCharge != null">
+        monthly_charge,
+      </if>
+      <if test="batteryCurrent != null">
+        battery_current,
+      </if>
+      <if test="solarPanelVoltage != null">
+        solar_panel_voltage,
+      </if>
+      <if test="solarPannelCurrent != null">
+        solar_pannel_current,
+      </if>
+      <if test="powerGeneration != null">
+        power_generation,
+      </if>
+      <if test="loadVoltage != null">
+        load_voltage,
+      </if>
+      <if test="loadCurrent != null">
+        load_current,
+      </if>
+      <if test="batteryPercent != null">
+        battery_percent,
+      </if>
+      <if test="type != null">
+        `type`,
+      </if>
+      <if test="errmsg != null">
+        errMsg,
+      </if>
+      <if test="ledmsg != null">
+        ledMsg,
+      </if>
+      <if test="cardinfo != null">
+        cardInfo,
+      </if>
+      <if test="cardNumber != null">
+        card_number,
+      </if>
+      <if test="minVoltage != null">
+        min_voltage,
+      </if>
+      <if test="maxVoltage != null">
+        max_voltage,
+      </if>
+      <if test="csq != null">
+        csq,
+      </if>
+      <if test="tipcount != null">
+        tipCount,
+      </if>
+      <if test="batterycorrect != null">
+        batteryCorrect,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="del != null">
+        #{del,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceId != null">
+        #{deviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="channelId != null">
+        #{channelId,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceNumber != null">
+        #{deviceNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceName != null">
+        #{deviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="groupId != null">
+        #{groupId,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="heartbeatTime != null">
+        #{heartbeatTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="online != null">
+        #{online,jdbcType=INTEGER},
+      </if>
+      <if test="handSwitch != null">
+        #{handSwitch,jdbcType=INTEGER},
+      </if>
+      <if test="autoMode != null">
+        #{autoMode,jdbcType=INTEGER},
+      </if>
+      <if test="longitude != null">
+        #{longitude,jdbcType=DOUBLE},
+      </if>
+      <if test="latitude != null">
+        #{latitude,jdbcType=DOUBLE},
+      </if>
+      <if test="temperature != null">
+        #{temperature,jdbcType=VARCHAR},
+      </if>
+      <if test="batteryVoltage != null">
+        #{batteryVoltage,jdbcType=VARCHAR},
+      </if>
+      <if test="dailyElectricityConsumption != null">
+        #{dailyElectricityConsumption,jdbcType=VARCHAR},
+      </if>
+      <if test="monthlyElectricityConsumption != null">
+        #{monthlyElectricityConsumption,jdbcType=VARCHAR},
+      </if>
+      <if test="dailyCharge != null">
+        #{dailyCharge,jdbcType=VARCHAR},
+      </if>
+      <if test="monthlyCharge != null">
+        #{monthlyCharge,jdbcType=VARCHAR},
+      </if>
+      <if test="batteryCurrent != null">
+        #{batteryCurrent,jdbcType=VARCHAR},
+      </if>
+      <if test="solarPanelVoltage != null">
+        #{solarPanelVoltage,jdbcType=VARCHAR},
+      </if>
+      <if test="solarPannelCurrent != null">
+        #{solarPannelCurrent,jdbcType=VARCHAR},
+      </if>
+      <if test="powerGeneration != null">
+        #{powerGeneration,jdbcType=VARCHAR},
+      </if>
+      <if test="loadVoltage != null">
+        #{loadVoltage,jdbcType=VARCHAR},
+      </if>
+      <if test="loadCurrent != null">
+        #{loadCurrent,jdbcType=VARCHAR},
+      </if>
+      <if test="batteryPercent != null">
+        #{batteryPercent,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="errmsg != null">
+        #{errmsg,jdbcType=VARCHAR},
+      </if>
+      <if test="ledmsg != null">
+        #{ledmsg,jdbcType=VARCHAR},
+      </if>
+      <if test="cardinfo != null">
+        #{cardinfo,jdbcType=INTEGER},
+      </if>
+      <if test="cardNumber != null">
+        #{cardNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="minVoltage != null">
+        #{minVoltage,jdbcType=DOUBLE},
+      </if>
+      <if test="maxVoltage != null">
+        #{maxVoltage,jdbcType=DOUBLE},
+      </if>
+      <if test="csq != null">
+        #{csq,jdbcType=VARCHAR},
+      </if>
+      <if test="tipcount != null">
+        #{tipcount,jdbcType=INTEGER},
+      </if>
+      <if test="batterycorrect != null">
+        #{batterycorrect,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pd.server.main.domain.SolarPannelExample" resultType="java.lang.Long">
+    select count(*) from solar_pannel
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update solar_pannel
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.del != null">
+        del = #{record.del,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deviceId != null">
+        device_id = #{record.deviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.channelId != null">
+        channel_id = #{record.channelId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deviceNumber != null">
+        device_number = #{record.deviceNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deviceName != null">
+        device_name = #{record.deviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.password != null">
+        `password` = #{record.password,jdbcType=VARCHAR},
+      </if>
+      <if test="record.groupId != null">
+        group_id = #{record.groupId,jdbcType=INTEGER},
+      </if>
+      <if test="record.userName != null">
+        user_name = #{record.userName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.heartbeatTime != null">
+        heartbeat_time = #{record.heartbeatTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.online != null">
+        `online` = #{record.online,jdbcType=INTEGER},
+      </if>
+      <if test="record.handSwitch != null">
+        hand_switch = #{record.handSwitch,jdbcType=INTEGER},
+      </if>
+      <if test="record.autoMode != null">
+        auto_mode = #{record.autoMode,jdbcType=INTEGER},
+      </if>
+      <if test="record.longitude != null">
+        longitude = #{record.longitude,jdbcType=DOUBLE},
+      </if>
+      <if test="record.latitude != null">
+        latitude = #{record.latitude,jdbcType=DOUBLE},
+      </if>
+      <if test="record.temperature != null">
+        temperature = #{record.temperature,jdbcType=VARCHAR},
+      </if>
+      <if test="record.batteryVoltage != null">
+        battery_voltage = #{record.batteryVoltage,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dailyElectricityConsumption != null">
+        daily_electricity_consumption = #{record.dailyElectricityConsumption,jdbcType=VARCHAR},
+      </if>
+      <if test="record.monthlyElectricityConsumption != null">
+        monthly_electricity_consumption = #{record.monthlyElectricityConsumption,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dailyCharge != null">
+        daily_charge = #{record.dailyCharge,jdbcType=VARCHAR},
+      </if>
+      <if test="record.monthlyCharge != null">
+        monthly_charge = #{record.monthlyCharge,jdbcType=VARCHAR},
+      </if>
+      <if test="record.batteryCurrent != null">
+        battery_current = #{record.batteryCurrent,jdbcType=VARCHAR},
+      </if>
+      <if test="record.solarPanelVoltage != null">
+        solar_panel_voltage = #{record.solarPanelVoltage,jdbcType=VARCHAR},
+      </if>
+      <if test="record.solarPannelCurrent != null">
+        solar_pannel_current = #{record.solarPannelCurrent,jdbcType=VARCHAR},
+      </if>
+      <if test="record.powerGeneration != null">
+        power_generation = #{record.powerGeneration,jdbcType=VARCHAR},
+      </if>
+      <if test="record.loadVoltage != null">
+        load_voltage = #{record.loadVoltage,jdbcType=VARCHAR},
+      </if>
+      <if test="record.loadCurrent != null">
+        load_current = #{record.loadCurrent,jdbcType=VARCHAR},
+      </if>
+      <if test="record.batteryPercent != null">
+        battery_percent = #{record.batteryPercent,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null">
+        `type` = #{record.type,jdbcType=INTEGER},
+      </if>
+      <if test="record.errmsg != null">
+        errMsg = #{record.errmsg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ledmsg != null">
+        ledMsg = #{record.ledmsg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cardinfo != null">
+        cardInfo = #{record.cardinfo,jdbcType=INTEGER},
+      </if>
+      <if test="record.cardNumber != null">
+        card_number = #{record.cardNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.minVoltage != null">
+        min_voltage = #{record.minVoltage,jdbcType=DOUBLE},
+      </if>
+      <if test="record.maxVoltage != null">
+        max_voltage = #{record.maxVoltage,jdbcType=DOUBLE},
+      </if>
+      <if test="record.csq != null">
+        csq = #{record.csq,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tipcount != null">
+        tipCount = #{record.tipcount,jdbcType=INTEGER},
+      </if>
+      <if test="record.batterycorrect != null">
+        batteryCorrect = #{record.batterycorrect,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update solar_pannel
+    set id = #{record.id,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      del = #{record.del,jdbcType=VARCHAR},
+      device_id = #{record.deviceId,jdbcType=VARCHAR},
+      channel_id = #{record.channelId,jdbcType=VARCHAR},
+      device_number = #{record.deviceNumber,jdbcType=VARCHAR},
+      device_name = #{record.deviceName,jdbcType=VARCHAR},
+      `password` = #{record.password,jdbcType=VARCHAR},
+      group_id = #{record.groupId,jdbcType=INTEGER},
+      user_name = #{record.userName,jdbcType=VARCHAR},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      heartbeat_time = #{record.heartbeatTime,jdbcType=TIMESTAMP},
+      `online` = #{record.online,jdbcType=INTEGER},
+      hand_switch = #{record.handSwitch,jdbcType=INTEGER},
+      auto_mode = #{record.autoMode,jdbcType=INTEGER},
+      longitude = #{record.longitude,jdbcType=DOUBLE},
+      latitude = #{record.latitude,jdbcType=DOUBLE},
+      temperature = #{record.temperature,jdbcType=VARCHAR},
+      battery_voltage = #{record.batteryVoltage,jdbcType=VARCHAR},
+      daily_electricity_consumption = #{record.dailyElectricityConsumption,jdbcType=VARCHAR},
+      monthly_electricity_consumption = #{record.monthlyElectricityConsumption,jdbcType=VARCHAR},
+      daily_charge = #{record.dailyCharge,jdbcType=VARCHAR},
+      monthly_charge = #{record.monthlyCharge,jdbcType=VARCHAR},
+      battery_current = #{record.batteryCurrent,jdbcType=VARCHAR},
+      solar_panel_voltage = #{record.solarPanelVoltage,jdbcType=VARCHAR},
+      solar_pannel_current = #{record.solarPannelCurrent,jdbcType=VARCHAR},
+      power_generation = #{record.powerGeneration,jdbcType=VARCHAR},
+      load_voltage = #{record.loadVoltage,jdbcType=VARCHAR},
+      load_current = #{record.loadCurrent,jdbcType=VARCHAR},
+      battery_percent = #{record.batteryPercent,jdbcType=VARCHAR},
+      `type` = #{record.type,jdbcType=INTEGER},
+      errMsg = #{record.errmsg,jdbcType=VARCHAR},
+      ledMsg = #{record.ledmsg,jdbcType=VARCHAR},
+      cardInfo = #{record.cardinfo,jdbcType=INTEGER},
+      card_number = #{record.cardNumber,jdbcType=VARCHAR},
+      min_voltage = #{record.minVoltage,jdbcType=DOUBLE},
+      max_voltage = #{record.maxVoltage,jdbcType=DOUBLE},
+      csq = #{record.csq,jdbcType=VARCHAR},
+      tipCount = #{record.tipcount,jdbcType=INTEGER},
+      batteryCorrect = #{record.batterycorrect,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pd.server.main.domain.SolarPannel">
+    update solar_pannel
+    <set>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="del != null">
+        del = #{del,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceId != null">
+        device_id = #{deviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="channelId != null">
+        channel_id = #{channelId,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceNumber != null">
+        device_number = #{deviceNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceName != null">
+        device_name = #{deviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        `password` = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="groupId != null">
+        group_id = #{groupId,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="heartbeatTime != null">
+        heartbeat_time = #{heartbeatTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="online != null">
+        `online` = #{online,jdbcType=INTEGER},
+      </if>
+      <if test="handSwitch != null">
+        hand_switch = #{handSwitch,jdbcType=INTEGER},
+      </if>
+      <if test="autoMode != null">
+        auto_mode = #{autoMode,jdbcType=INTEGER},
+      </if>
+      <if test="longitude != null">
+        longitude = #{longitude,jdbcType=DOUBLE},
+      </if>
+      <if test="latitude != null">
+        latitude = #{latitude,jdbcType=DOUBLE},
+      </if>
+      <if test="temperature != null">
+        temperature = #{temperature,jdbcType=VARCHAR},
+      </if>
+      <if test="batteryVoltage != null">
+        battery_voltage = #{batteryVoltage,jdbcType=VARCHAR},
+      </if>
+      <if test="dailyElectricityConsumption != null">
+        daily_electricity_consumption = #{dailyElectricityConsumption,jdbcType=VARCHAR},
+      </if>
+      <if test="monthlyElectricityConsumption != null">
+        monthly_electricity_consumption = #{monthlyElectricityConsumption,jdbcType=VARCHAR},
+      </if>
+      <if test="dailyCharge != null">
+        daily_charge = #{dailyCharge,jdbcType=VARCHAR},
+      </if>
+      <if test="monthlyCharge != null">
+        monthly_charge = #{monthlyCharge,jdbcType=VARCHAR},
+      </if>
+      <if test="batteryCurrent != null">
+        battery_current = #{batteryCurrent,jdbcType=VARCHAR},
+      </if>
+      <if test="solarPanelVoltage != null">
+        solar_panel_voltage = #{solarPanelVoltage,jdbcType=VARCHAR},
+      </if>
+      <if test="solarPannelCurrent != null">
+        solar_pannel_current = #{solarPannelCurrent,jdbcType=VARCHAR},
+      </if>
+      <if test="powerGeneration != null">
+        power_generation = #{powerGeneration,jdbcType=VARCHAR},
+      </if>
+      <if test="loadVoltage != null">
+        load_voltage = #{loadVoltage,jdbcType=VARCHAR},
+      </if>
+      <if test="loadCurrent != null">
+        load_current = #{loadCurrent,jdbcType=VARCHAR},
+      </if>
+      <if test="batteryPercent != null">
+        battery_percent = #{batteryPercent,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        `type` = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="errmsg != null">
+        errMsg = #{errmsg,jdbcType=VARCHAR},
+      </if>
+      <if test="ledmsg != null">
+        ledMsg = #{ledmsg,jdbcType=VARCHAR},
+      </if>
+      <if test="cardinfo != null">
+        cardInfo = #{cardinfo,jdbcType=INTEGER},
+      </if>
+      <if test="cardNumber != null">
+        card_number = #{cardNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="minVoltage != null">
+        min_voltage = #{minVoltage,jdbcType=DOUBLE},
+      </if>
+      <if test="maxVoltage != null">
+        max_voltage = #{maxVoltage,jdbcType=DOUBLE},
+      </if>
+      <if test="csq != null">
+        csq = #{csq,jdbcType=VARCHAR},
+      </if>
+      <if test="tipcount != null">
+        tipCount = #{tipcount,jdbcType=INTEGER},
+      </if>
+      <if test="batterycorrect != null">
+        batteryCorrect = #{batterycorrect,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pd.server.main.domain.SolarPannel">
+    update solar_pannel
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      del = #{del,jdbcType=VARCHAR},
+      device_id = #{deviceId,jdbcType=VARCHAR},
+      channel_id = #{channelId,jdbcType=VARCHAR},
+      device_number = #{deviceNumber,jdbcType=VARCHAR},
+      device_name = #{deviceName,jdbcType=VARCHAR},
+      `password` = #{password,jdbcType=VARCHAR},
+      group_id = #{groupId,jdbcType=INTEGER},
+      user_name = #{userName,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      heartbeat_time = #{heartbeatTime,jdbcType=TIMESTAMP},
+      `online` = #{online,jdbcType=INTEGER},
+      hand_switch = #{handSwitch,jdbcType=INTEGER},
+      auto_mode = #{autoMode,jdbcType=INTEGER},
+      longitude = #{longitude,jdbcType=DOUBLE},
+      latitude = #{latitude,jdbcType=DOUBLE},
+      temperature = #{temperature,jdbcType=VARCHAR},
+      battery_voltage = #{batteryVoltage,jdbcType=VARCHAR},
+      daily_electricity_consumption = #{dailyElectricityConsumption,jdbcType=VARCHAR},
+      monthly_electricity_consumption = #{monthlyElectricityConsumption,jdbcType=VARCHAR},
+      daily_charge = #{dailyCharge,jdbcType=VARCHAR},
+      monthly_charge = #{monthlyCharge,jdbcType=VARCHAR},
+      battery_current = #{batteryCurrent,jdbcType=VARCHAR},
+      solar_panel_voltage = #{solarPanelVoltage,jdbcType=VARCHAR},
+      solar_pannel_current = #{solarPannelCurrent,jdbcType=VARCHAR},
+      power_generation = #{powerGeneration,jdbcType=VARCHAR},
+      load_voltage = #{loadVoltage,jdbcType=VARCHAR},
+      load_current = #{loadCurrent,jdbcType=VARCHAR},
+      battery_percent = #{batteryPercent,jdbcType=VARCHAR},
+      `type` = #{type,jdbcType=INTEGER},
+      errMsg = #{errmsg,jdbcType=VARCHAR},
+      ledMsg = #{ledmsg,jdbcType=VARCHAR},
+      cardInfo = #{cardinfo,jdbcType=INTEGER},
+      card_number = #{cardNumber,jdbcType=VARCHAR},
+      min_voltage = #{minVoltage,jdbcType=DOUBLE},
+      max_voltage = #{maxVoltage,jdbcType=DOUBLE},
+      csq = #{csq,jdbcType=VARCHAR},
+      tipCount = #{tipcount,jdbcType=INTEGER},
+      batteryCorrect = #{batterycorrect,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
