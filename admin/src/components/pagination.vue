@@ -51,7 +51,18 @@
                         tabindex="0">
                         <a href="#"> 共【{{total}}】条</a>
                     </li>
-
+                    <li class="paginate_button "
+                        aria-controls="dynamic-table"
+                        tabindex="0">
+                      <a href="#">到第<input v-model="choosePage" style="padding: 0;margin: 0;border: none;width: 80px;text-align: center;"/></a>
+                    </li>
+                    <li class="paginate_button "
+                        aria-controls="dynamic-table"
+                        tabindex="0"
+                        v-bind:disabled="page === pageTotal"
+                        v-on:click="selectPageChoose">
+                      <a href="#">确认</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -77,6 +88,7 @@
         page: 0, // 当前页码
         pageTotal: 0, // 总页数
         pages: [], // 显示的页码数组
+        choosePage: 0
       }
     },
     methods: {
@@ -91,8 +103,12 @@
         _this.total = total;
         _this.pageTotal = Math.ceil(total / _this.size);
         _this.pages = _this.getPageItems(_this.pageTotal, page, _this.itemCount || 5);
+        _this.choosePage = page;
       },
-
+      selectPageChoose(){
+        let _this = this;
+        _this.selectPage(_this.choosePage);
+      },
       /**
        * 查询某一页
        * @param page
