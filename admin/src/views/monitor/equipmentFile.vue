@@ -23,7 +23,7 @@
                     </td>
                     <td style="width: 15%;">
                       <select v-model="equipmentFileDto.sbbh" class="form-control" id="form-field-select-1">
-                        <option value="" selected>请选择</option>
+                        <option value="" selected>全部</option>
                         <option v-for="item in waterEquipments" :value="item.sbsn">{{item.sbmc}}</option>
                       </select>
                     </td>
@@ -191,7 +191,7 @@ export default {
     let _this = this;
     _this.userDto = Tool.getLoginUser();
     _this.$refs.pagination.size = 24;
-    _this.list(1);
+    //_this.list(1);
     let h = document.documentElement.clientHeight || document.body.clientHeight;
     _this.maxHeight = h*0.8;
     _this.findDeviceInfo();

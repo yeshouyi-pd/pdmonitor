@@ -29,10 +29,12 @@
           </div>
         </div>
         <div class="h37">
-          <div class="imgs">
-<!--            <video width="100%" height="100%" autoplay="autoplay" loop="loop" controls>-->
-<!--              <source class="video" title="主监控位" src="/video/13.mp4"/>-->
-<!--            </video>-->
+          <div class="imgs"  v-if="LOCAL_TLBHQ || LOCAL_ZHBHT">
+            <video width="100%" height="100%" autoplay="autoplay" loop="loop" controls>
+              <source class="video" title="主监控位" src="/video/13.mp4"/>
+            </video>
+          </div>
+          <div class="imgs" v-else>
             <swiper-video id="swiperVideo" :list="swiperVideo" style="text-align: center;width: 100% ;height: 100%;"></swiper-video>
           </div>
         </div>
@@ -136,7 +138,7 @@ export default {
   data: function (){
     return {
       swiperVideo:[
-        "/video/13.mp4","/video/14.mp4","/video/15.mp4","/video/16.mp4","/video/17.mp4"
+        "/video/13.mp4","/video/14.mp4","/video/15.mp4","/video/16.mp4"
       ],
       tdhList:[
         {key:"C11", value:"9"},
@@ -176,7 +178,6 @@ export default {
       equipmentFiles:[],
       srcpic:'',
       heightMax:'',
-      LOCAL_SSBRL:LOCAL_SSBRL,
       devices:[],
       swiperData:[],
       videoData:[],
@@ -188,7 +189,9 @@ export default {
       dayTimer:null,
       secondBling:false,
       dayBling:false,
-      LOCAL_TLBHQ:LOCAL_TLBHQ
+      LOCAL_SSBRL:LOCAL_SSBRL,
+      LOCAL_TLBHQ:LOCAL_TLBHQ,
+      LOCAL_ZHBHT:LOCAL_ZHBHT
     }
   },
   created() {

@@ -2,7 +2,7 @@
   <div class="swiper-container" :id="id">
     <div class="swiper-wrapper" style="height: 300px" >
       <div class="swiper-slide" v-for="item in list" style="width: 100%;height: 100%;">
-        <video width="100%" height="100%" autoplay="autoplay" controls loop>
+        <video width="100%" height="100%" autoplay controls>
           <source class="video" title="主监控位" :src="item"/>
         </video>
       </div>
@@ -39,7 +39,6 @@ export default {
           var videos = document.querySelectorAll(".swiper-slide video");
           for (var i = 0; i < videos.length; i++) {
             videos[i].addEventListener("ended", function() {
-              console.log(_this.mySwiper);
               if (_this.mySwiper.activeIndex === videos.length - 1) {
                 // 最后一个视频结束，重新开始
                 _this.mySwiper.swipeTo(0);
