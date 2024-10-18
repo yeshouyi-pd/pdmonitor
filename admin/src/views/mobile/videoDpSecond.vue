@@ -1,7 +1,18 @@
 <template>
   <div class="page-content">
     <div class="title-content">
-
+      <header style="position: relative;background: none">
+        <img src="/largemonitors/assets/imgs/headertitle2.png" style="position: absolute;left: 30%;top:20px;width: 750px;">
+        <div class="lefttitle" style="top: 15px;left: 25px;color: #fff;display: flex;">
+          <!--        <img src="/largemonitors/assets/imgs/左上角title.png" alt="" style="width: 250px;">-->
+          <!--        <span>-->
+          <!--          <div @click="chooseProject" style="cursor: pointer;">主页</div>-->
+          <!--        </span>-->
+          <div class="title-item" @click="back">返回</div>
+          <div v-if="!LOCAL_VIDEO" class="title-item" @click="chooseEnvironment" style="margin-left: 10px;">环境</div>
+          <div v-if="!LOCAL_VIDEO" class="title-item" @click="chooseLargemonitors" style="margin-left: 10px;width: 90px;">定点监测</div>
+        </div>
+      </header>
     </div>
     <div class="content-box">
       <div class="top-content">
@@ -62,6 +73,7 @@ export default {
   components: {monthPicker},
   data: function (){
     return {
+      LOCAL_VIDEO:LOCAL_VIDEO,
       videoEvents:[],
       sbbhList:[
         {'sbbh':'RPCDA4013','sbmc':'一号航标'},
@@ -105,6 +117,21 @@ export default {
     })
   },
   methods: {
+    back(){
+      let _this = this;
+      if(_this.LOCAL_VIDEO){
+        window.location.href = "/mobile/environmentDp";
+      }else{
+        window.location.href = "/admin/largemonitorsZj";
+      }
+    },
+    chooseEnvironment(){
+      window.location.href = "/mobile/environmentDp";
+    },
+    chooseLargemonitors(){
+      let _this = this;
+      window.location.href = "/mobile/largemonitorsZj";
+    },
     selectStaticsByRq(){
       let _this = this;
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/selectStaticsByRq', {}).then((response)=>{
@@ -362,11 +389,21 @@ export default {
 }
 .title-content{
   width: 1920px;
-  height: 10vh;
+  height: 8vh;
+}
+.title-item{
+  width: 80px;
+  padding: 5px;
+  border: 1px solid #4AAFE3;
+  text-align: center;
+  font-size: 18px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #4AAFE3;
 }
 .content-box{
   width: 1920px;
-  height: 90vh;
+  height: 92vh;
 }
 .top-content{
   display: flex;
@@ -450,7 +487,7 @@ option{
 }
 .left-bottom{
   width: 380px;
-  height: 35vh;
+  height: 37vh;
 }
 .yf-select{
   margin: 4.3% 25px 0;
@@ -470,7 +507,7 @@ option{
 }
 .right-bottom{
   width: 1560px;
-  height: 35vh;
+  height: 37vh;
 }
 .right-bottom-content{
   width: 92%;
