@@ -21,6 +21,12 @@
     <result column="whc" jdbcType="INTEGER" property="whc" />
     <result column="sssp" jdbcType="INTEGER" property="sssp" />
   </resultMap>
+  <resultMap id="ExportResultMap" type="com.pd.server.main.dto.basewx.my.VideoEventExport">
+    <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
+    <result column="kssj" jdbcType="VARCHAR" property="kssj" />
+    <result column="jssj" jdbcType="VARCHAR" property="jssj" />
+    <result column="hcjg" jdbcType="VARCHAR" property="hcjg" />
+  </resultMap>
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -364,5 +370,21 @@
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
+  </select>
+  <select id="selectExportByExample" parameterType="com.pd.server.main.domain.VideoEventExample" resultMap="ExportResultMap">
+    SELECT a.sbbh, a.kssj, a.jssj, b_sm.sm as hcjg
+    FROM (
+           SELECT sbbh, kssj, jssj, wjmc
+           FROM video_event
+            <if test="_parameter != null">
+              <include refid="Example_Where_Clause" />
+            </if>
+         ) AS a
+           LEFT JOIN (
+      SELECT wjmc, sm
+      FROM video_event
+      WHERE sfysp = 0
+    ) AS b_sm ON a.wjmc = b_sm.wjmc
+    ORDER BY a.kssj DESC
   </select>
 </mapper>

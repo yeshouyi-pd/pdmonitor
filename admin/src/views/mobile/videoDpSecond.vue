@@ -18,7 +18,7 @@
       <div class="top-content">
         <div class="left-top bg-style">
           <div class="select-box">
-            <select v-model="sbbh" class="top-select">
+            <select v-model="sbbh" @change="changeData" class="top-select">
               <option v-for="item in sbbhList" :value="item.sbbh">{{item.sbmc}}</option>
             </select>
           </div>
@@ -33,7 +33,68 @@
           </div>
         </div>
         <div class="right_top">
-          <div id="playbox" style="width: 1440px;height: 48vh;margin: 3.4vh auto 0;"></div>
+          <div class="history-video">
+            <div class="play-box" id="playbox"></div>
+            <div class="history-txt">历史检测视频展示区</div>
+          </div>
+          <div class="realtime-video">
+            <div class="relplay-box">
+              <div class="h5-play-wrap">
+                <video ref="videoElement"
+                       class="centeredVideo"
+                       id="myPlayer"
+                       preload="auto"
+                       type="rtmp/flv"
+                       autoplay
+                       muted
+                       style="width: 100%;height: 100%"
+                ></video>
+              </div>
+              <fieldset class="h5-fieldset-wrap">
+<!--                <legend style="color: #FFFFFF;margin-bottom: 0;">云台控制</legend>-->
+                <div class="h5-step-wrap">
+                  <span style="color:#fff;">步长(1-8):</span>
+                  <select id="h5_ptz_step" style="width: 130px;"  v-model="selectedValue">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                  </select>
+                </div>
+                <div class="h5-ptz-wrap" title="云台按钮操作界面">
+                  <input type="button" class="h5-button" value="左上" @mousedown="onHandlePTZ('LeftUp', false)" @mouseup="onHandlePTZ('LeftUp', true)">
+                  <input type="button" class="h5-button" value="上" @mousedown="onHandlePTZ('Up', false)" @mouseup="onHandlePTZ('Up', true)">
+                  <input type="button" class="h5-button" value="右上" @mousedown="onHandlePTZ('RightUp', false)" @mouseup="onHandlePTZ('RightUp', true)">
+                  <input type="button" class="h5-button" value="左" @mousedown="onHandlePTZ('Left', false)" @mouseup="onHandlePTZ('Left', true)">
+                  <input class="h5-button" value="" style="opacity: 0;">
+                  <input type="button" class="h5-button" value="右" @mousedown="onHandlePTZ('Right', false)" @mouseup="onHandlePTZ('Right', true)">
+                  <input type="button" class="h5-button" value="左下" @mousedown="onHandlePTZ('LeftDown', false)" @mouseup="onHandlePTZ('LeftDown', true)">
+                  <input type="button" class="h5-button" value="下" @mousedown="onHandlePTZ('Down', false)" @mouseup="onHandlePTZ('Down', true)">
+                  <input type="button" class="h5-button" value="右下" @mousedown="onHandlePTZ('RightDown', false)" @mouseup="onHandlePTZ('RightDown', true)">
+                </div>
+                <div class="h5-zoomfocus-wrap" title="变倍聚焦操作界面">
+                  <input type="button" class="h5-button" value="变倍-" @mousedown="onHandlePTZ('ZoomWide', false)" @mouseup="onHandlePTZ('ZoomWide', true)">
+                  <input type="button" class="h5-button" value="变倍+" @mousedown="onHandlePTZ('ZoomTele', false)" @mouseup="onHandlePTZ('ZoomTele', true)">
+                  <input type="button" class="h5-button" value="聚焦-" @mousedown="onHandlePTZ('FocusFar', false)" @mouseup="onHandlePTZ('FocusFar', true)">
+                  <input type="button" class="h5-button" value="聚焦+" @mousedown="onHandlePTZ('FocusNear', false)" @mouseup="onHandlePTZ('FocusNear', true)">
+                  <input type="button" class="h5-button" value="光圈-" @mousedown="onHandlePTZ('IrisSmall', false)" @mouseup="onHandlePTZ('IrisSmall', true)">
+                  <input type="button" class="h5-button" value="光圈+" @mousedown="onHandlePTZ('IrisLarge', false)" @mouseup="onHandlePTZ('IrisLarge', true)">
+                </div>
+                <div class="h5-preset-wrap" title="预置点操作界面">
+                  <div class="h5-item-form" style="margin-bottom: 10px;">
+                    <label style="color: #fff">预置点：</label>
+                    <input type="text" id="h5_preset" v-model="yuzhidian">
+                    <input type="button" class="h5-button" value="查看" @mousedown="onHandlePTZ('GotoPreset', false)" style="margin-left: 10px;">
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+            <div class="rel-txt">云台实时监控区</div>
+          </div>
         </div>
       </div>
       <div class="bottom-content">
@@ -68,6 +129,7 @@
 </template>
 <script>
 import monthPicker from "@/components/monthPicker";
+import flvjs from "flv.js";
 export default {
   name:'video-dp-second',
   components: {monthPicker},
@@ -78,7 +140,7 @@ export default {
       sbbhList:[
         {'sbbh':'RPCDA4013','sbmc':'一号航标'},
         {'sbbh':'RPCDA4004','sbmc':'二号航标'},
-        {'sbbh':'RPCDA4005','sbmc':'三号航标'},
+        // {'sbbh':'RPCDA4005','sbmc':'三号航标'},
         {'sbbh':'RPCDA4012','sbmc':'四号航标'},
         {'sbbh':'RPCDA4003','sbmc':'五号航标'},
         {'sbbh':'RPCDA4006','sbmc':'六号航标'},
@@ -86,12 +148,26 @@ export default {
         {'sbbh':'RPCDA4001','sbmc':'八号航标'},
         {'sbbh':'RPCDA4007','sbmc':'九号航标'},
         {'sbbh':'RPCDA4010','sbmc':'十号航标'},
-        {'sbbh':'RPCDA4008','sbmc':'十一号航标'},
-        {'sbbh':'RPCDA4011','sbmc':'十二号航标'},
-        {'sbbh':'RPCDA4015','sbmc':'十三号航标'},
-        {'sbbh':'RPCDA4014','sbmc':'十四号航标'},
+        // {'sbbh':'RPCDA4008','sbmc':'十一号航标'},
+        // {'sbbh':'RPCDA4011','sbmc':'十二号航标'},
+        // {'sbbh':'RPCDA4015','sbmc':'十三号航标'},
+        // {'sbbh':'RPCDA4014','sbmc':'十四号航标'},
         {'sbbh':'RPCDA4002','sbmc':'十五号航标'},
         {'sbbh':'RPCDA4016','sbmc':'十六号航标'}
+      ],
+      sbbhTdhList:[
+        {key:"RPCDA4013", value:"0"},
+        {key:"RPCDA4004", value:"0"},
+        {key:"RPCDA4005", value:"2"},
+        {key:"RPCDA4012", value:"2"},
+        {key:"RPCDA4003", value:"4"},
+        {key:"RPCDA4006", value:"6"},
+        {key:"RPCDA4009", value:"8"},
+        {key:"RPCDA4001", value:"10"},
+        {key:"RPCDA4007", value:"12"},
+        {key:"RPCDA4010", value:"14"},
+        {key:"RPCDA4002", value:"16"},
+        {key:"RPCDA4016", value:"18"}
       ],
       sbbh:'RPCDA4013',
       tjyf:'',
@@ -100,12 +176,18 @@ export default {
         'yhc':0,
         'sssp':0
       },
-      devices:[]
+      devices:[],
+      selectedValue:5,
+      flvPlayer: "",
+      websocketUrl:'ws://49.239.193.146:50091/monitor/device/monitor/',
+      curChannel:'',
+      yuzhidian:''
     }
   },
   mounted() {
     let _this = this;
     _this.tjyf = Tool.dateFormat("yyyy年MM月",new Date());
+    _this.curChannel = _this.optionKVArray(_this.sbbhTdhList,_this.sbbh);
     //获取所有的设备，因为要用到设备的位置
     _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getDevice').then((res)=>{
       let response = res.data;
@@ -114,6 +196,7 @@ export default {
       _this.staticmonthMethod();
       _this.staticMethod();
       _this.selectStaticsByRq();
+      _this.openvideoElement();
     })
   },
   methods: {
@@ -131,6 +214,16 @@ export default {
     chooseLargemonitors(){
       let _this = this;
       window.location.href = "/mobile/largemonitorsZj";
+    },
+    changeData(){
+      let _this = this;
+      _this.getExplainVideoEvent();
+      let channel = _this.optionKVArray(_this.sbbhTdhList,_this.sbbh);
+      if(_this.curChannel == channel){
+        return ;
+      }
+      _this.curChannel = channel;
+      _this.openvideoElement();
     },
     selectStaticsByRq(){
       let _this = this;
@@ -290,7 +383,7 @@ export default {
     },
     getExplainVideoEvent(){
       let _this = this;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/welcome/getExplainVideoEvent', {sm:'1'}).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/welcome/getExplainVideoEvent', {sm:'1',sbbh:_this.sbbh}).then((response)=>{
         let resp = response.data;
         _this.videoEvents = resp.content;
         if(_this.videoEvents.length>0){
@@ -376,6 +469,108 @@ export default {
         }
         return result;
       }
+    },
+    onHandlePTZ(name, isStop){
+      let _this = this;
+      let param2 = '';
+      if(name=='GotoPreset'){
+        if(Tool.isEmpty(_this.yuzhidian) || !(/^[0-9]+$/.test(_this.yuzhidian))){
+          Toast.error("请填写数字！");
+          return;
+        }
+        param2 = _this.yuzhidian;
+      }else{
+        param2 = _this.selectedValue;
+      }
+      if(!isStop) {
+        _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/ptzController/ptzControlStart/'+name+"/"+_this.curChannel+"/0/"+param2, {}).then((response)=>{
+          let resp = response.data;
+          if(resp.code=='201'){
+            Toast.error(resp.message);
+          }
+        })
+      } else {
+        _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/ptzController/ptzControlEnd/'+name+"/"+_this.curChannel, {}).then((response)=>{
+          let resp = response.data;
+          if(resp.code=='201'){
+            Toast.error(resp.message);
+          }
+        })
+      }
+    },
+    openvideoElement(){
+      let _this = this;
+      if(_this.flvPlayer){
+        // destroy
+        _this.flvPlayer.pause();
+        _this.flvPlayer.unload();
+        _this.flvPlayer.detachMediaElement();
+        _this.flvPlayer.destroy();
+        _this.flvPlayer = null;
+      }
+      try {
+        if (flvjs.isSupported()) {
+          let videoElement = this.$refs.videoElement
+          _this.flvPlayer = flvjs.createPlayer({
+            type: 'flv',					//媒体类型
+            url: _this.websocketUrl+_this.curChannel,	//flv格式媒体URL
+            isLive: true,					//数据源是否为直播流
+            hasAudio: false,				//数据源是否包含有音频
+            hasVideo: true,					//数据源是否包含有视频
+            liveDelay: 3 // 设置3秒的实时播放延迟
+          },{
+            autoCleanupSourceBuffer: true,
+            // autoCleanupMinBackwardDuration: 60,
+            // autoCleanupMaxBackwardDuration:12,
+            enableWorker: false, //不启用分离线程
+            enableStashBuffer: false,//关闭IO隐藏缓冲区
+            stashInitialSize: 128,
+            lazyLoad: false
+          });
+          _this.flvPlayer.attachMediaElement(videoElement);	//将播放实例注册到节点
+          _this.flvPlayer.load(); 					//加载数据流
+          _this.flvPlayer.play();					//播放数据流
+          _this.flvPlayer.on(flvjs.Events.ERROR, (errType, errDetail) =>{
+            _this.openvideoElement();
+          })
+          setInterval(() => {
+            if (_this.flvPlayer.buffered && _this.flvPlayer.buffered.length) {
+              let end = _this.flvPlayer.buffered.end(0); // 获取当前buffered值
+              let diff = end - _this.flvPlayer.currentTime; // 获取buffered与currentTime的差值
+              if (diff >= 5) {// 如果差值大于等于3s 手动跳帧 这里可根据自身需求来定
+                //单个视频
+                _this.flvPlayer.currentTime = _this.flvPlayer.buffered.end(0);//手动跳帧
+              }
+            }
+          }, 5000); //5000毫秒执行一次
+        }else {
+          console.log("flvjs不支持");
+        }
+      }catch (error){
+        console.log(error);
+      }
+    },
+    destroyVideos(){
+      let _this = this;
+      if(!_this.flvPlayer) return
+      _this.flvPlayer.pause()
+      _this.flvPlayer.unload()
+      _this.flvPlayer.detachMediaElement()
+      _this.flvPlayer.destroy()
+      _this.flvPlayer = null
+    },
+    optionKVArray(list, key){
+      if (!list) {
+        return "";
+      } else {
+        let result = "";
+        for (let i = 0; i < list.length; i++) {
+          if (key == list[i]["key"]) {
+            result = list[i]["value"];
+          }
+        }
+        return result;
+      }
     }
   }
 }
@@ -386,6 +581,7 @@ export default {
   height: 100vh;
   background-color: #0c0e21;
   padding: 0;
+  margin: auto;
 }
 .title-content{
   width: 1920px;
@@ -407,6 +603,7 @@ export default {
 }
 .top-content{
   display: flex;
+  justify-content: center;
 }
 .left-top{
   width: 380px;
@@ -475,15 +672,61 @@ option{
   height: 50px;
 }
 .right_top{
-  width: 1560px;
+  width: 1750px;
+  height: 55vh;
+  display: flex;
+}
+.history-video {
+  width: 900px;
   height: 55vh;
   background-image: url("/static/image/environment/spk.png");
   background-repeat: no-repeat;
   background-size: 97% 93%;
   background-position: center;
 }
+.play-box{
+  width: 850px;
+  height: 45vh;
+  margin-top: 26px;
+  margin-left: 24px;
+}
+.history-txt{
+  width: 850px;
+  height: 4vh;
+  margin-left: 24px;
+  background: linear-gradient(to right, #00628B,#005687,#004A85,#004683,#003B80, #00387F);
+  color: #f4f4f4;
+  font-size: 20px;
+  text-align: center;
+  line-height: 4vh;
+}
+.realtime-video{
+  width: 660px;
+  height: 55vh;
+  background-image: url("/static/image/environment/spk.png");
+  background-repeat: no-repeat;
+  background-size: 97% 93%;
+  background-position: center;
+}
+.relplay-box{
+  width: 616px;
+  height: 45vh;
+  margin-top: 26px;
+  margin-left: 21px;
+}
+.rel-txt{
+  width: 620px;
+  height: 4vh;
+  margin-left: 18px;
+  background: linear-gradient(to right, #00628B,#005687,#004A85,#004683,#003B80, #00387F);
+  color: #f4f4f4;
+  font-size: 20px;
+  text-align: center;
+  line-height: 4vh;
+}
 .bottom-content{
   display: flex;
+  justify-content: center;
 }
 .left-bottom{
   width: 380px;
@@ -506,7 +749,7 @@ option{
   margin: 10px auto 0;
 }
 .right-bottom{
-  width: 1560px;
+  width: 1750px;
   height: 37vh;
 }
 .right-bottom-content{
@@ -554,5 +797,76 @@ option{
   background-repeat: no-repeat;
   background-size: 105% 100%;
   background-position: center;
+}
+.h5-ul {
+  list-style: none;
+  width: 150px;
+  text-align: center;
+  margin-right: 5px;
+  overflow-y: auto;
+}
+.h5-ul li {
+  cursor: pointer;
+  height: 60px;
+  line-height: 30px;
+  border: 1px solid #fff;
+  color: #FFFFFF;
+}
+.h5-ul li:hover {
+  background-color: #eee;
+  color: #000;
+}
+.h5-left{
+  float: left;
+  width: 980px;
+  height: 100%;
+}
+.h5-play-wrap {
+  /*width: 980px;*/
+  height: 32vh;
+  background-color: #000;
+  border: 1px solid #333;
+  position: relative;
+  overflow: hidden;
+}
+.fn-fontBlue{
+  color: #4AAFE3 !important;
+}
+.h5-fieldset-wrap {
+  /*width: 980px;*/
+  padding: 10px;
+}
+.h5-step-wrap {
+  margin-bottom: 5px;
+}
+.h5-zoomfocus-wrap {
+  width: 120px;
+  float: left;
+}
+.h5-preset-wrap {
+  float: left;
+  margin-top: 10px;
+}
+.h5-ptz-wrap {
+  width: 160px;
+  float: left;
+}
+.h5-ptz-wrap .h5-button {
+  width: 50px;
+  height: 20px;
+  margin-bottom: 3px;
+}
+.h5-zoomfocus-wrap .h5-button {
+  width: 50px;
+  height: 20px;
+  margin-bottom: 3px;
+}
+.h5-preset-wrap .h5-button {
+  width: 60px;
+  height: 30px;
+  margin-bottom: 3px;
+}
+.h5-preset-wrap input {
+  width: 130px;
 }
 </style>

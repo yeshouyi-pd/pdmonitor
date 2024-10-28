@@ -1,9 +1,6 @@
 <template>
   <div class="input-group">
     <input type="text" class=" form-control" v-bind:id="idValue" v-model="setValue"/>
-    <span class="input-group-addon">
-      <i class="fa fa-calendar bigger-110"></i>
-    </span>
   </div>
 </template>
 
@@ -49,3 +46,9 @@ methods: {
 }
 }
 </script>
+<style scoped>
+.form-control{
+  color: yellow !important; /* 修改日期选择框字体颜色 */
+  background-color: rgb(19, 34, 94) !important;
+}
+</style>

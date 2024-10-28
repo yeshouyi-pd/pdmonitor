@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.pd.server.main.dto.VideoEventDto;
 import com.pd.server.main.dto.basewx.my.VideoEventDpDto;
+import com.pd.server.main.dto.basewx.my.VideoEventExport;
 import org.apache.ibatis.annotations.Param;
 
 public interface VideoEventMapper {
@@ -44,4 +45,6 @@ public interface VideoEventMapper {
     List<VideoEventDpDto> selectStaticsByRq(VideoEventExample example);
 
     VideoEventDpDto selectStatics(VideoEventExample example);
+
+    List<VideoEventExport> selectExportByExample(VideoEventExample example);
 }

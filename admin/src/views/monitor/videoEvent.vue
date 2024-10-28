@@ -56,10 +56,10 @@
                     <i class="ace-icon fa fa-refresh"></i>
                     重置
                   </a>
-                  <!--                  <button type="button" v-on:click="exportExcle()" class="btn btn-sm btn-warning btn-round" style="margin-right: 10px;">-->
-                  <!--                    <i class="ace-icon fa fa-leaf"></i>-->
-                  <!--                    导出-->
-                  <!--                  </button>-->
+                  <button type="button" v-on:click="exportExcle()" class="btn btn-sm btn-warning btn-round" style="margin-right: 10px;">
+                    <i class="ace-icon fa fa-leaf"></i>
+                    导出
+                  </button>
                 </td>
               </tr>
               </tbody>
@@ -203,10 +203,16 @@ export default {
       if(!Tool.isEmpty(_this.videoEventDto.etime)){
         param+="&etime="+_this.videoEventDto.etime;
       }
+      if(!Tool.isEmpty(_this.videoEventDto.sfysp)){
+        param+="&sfysp="+_this.videoEventDto.sfysp;
+      }
+      if(!Tool.isEmpty(_this.videoEventDto.sm)){
+        param+="&sm="+_this.videoEventDto.sm;
+      }
       if(Tool.isEmpty(param)){
-        window.location.href = process.env.VUE_APP_SERVER + '/monitor/export/exportFileEvent';
+        window.location.href = process.env.VUE_APP_SERVER + '/monitor/export/exportVideoEvent';
       }else{
-        window.location.href = process.env.VUE_APP_SERVER + '/monitor/export/exportFileEvent?'+param.substring(1,param.length);
+        window.location.href = process.env.VUE_APP_SERVER + '/monitor/export/exportVideoEvent?'+param.substring(1,param.length);
       }
     },
     //是否有视频

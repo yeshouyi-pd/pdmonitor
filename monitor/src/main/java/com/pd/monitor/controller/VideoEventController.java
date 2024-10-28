@@ -16,6 +16,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -31,14 +32,15 @@ public class VideoEventController {
     @PostMapping("/checkSave")
     public ResponseDto checkSave(@RequestBody VideoEventDto videoEventDto){
         ResponseDto responseDto = new ResponseDto();
+        VideoEvent videoEvent = videoEventService.selectById(videoEventDto.getId());
         if(!StringUtils.isEmpty(videoEventDto.getSm())&&"1".equals(videoEventDto.getSm())){
             //核查通过
-            VideoEvent videoEvent = videoEventService.selectById(videoEventDto.getId());
             videoEvent.setSm("1");
             videoEventService.updateItem(videoEvent);
         }else if(!StringUtils.isEmpty(videoEventDto.getSm())&&"2".equals(videoEventDto.getSm())){
             //核查不通过
-            videoEventService.delete(videoEventDto.getId());
+            videoEvent.setSm("2");
+            videoEventService.updateItem(videoEvent);
         }
         return responseDto;
     }
@@ -124,7 +126,7 @@ public class VideoEventController {
             ca.andRqLessThanOrEqualTo(pageDto.getEtime());
         }
         if(!StringUtils.isEmpty(pageDto.getSm())){
-            ca.andSmEqualTo(pageDto.getSm());
+            ca.andSmIn(Arrays.asList(pageDto.getSm().split(",")));
         }
         example.setOrderByClause(" kssj desc ");
         List<VideoEvent> videoEventList = videoEventService.selectByExample(example);
