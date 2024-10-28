@@ -44,10 +44,10 @@
                     <i class="ace-icon fa fa-refresh"></i>
                     重置
                   </a>
-                  <!--                  <button type="button" v-on:click="exportExcle()" class="btn btn-sm btn-warning btn-round" style="margin-right: 10px;">-->
-                  <!--                    <i class="ace-icon fa fa-leaf"></i>-->
-                  <!--                    导出-->
-                  <!--                  </button>-->
+                  <button type="button" v-on:click="exportExcle()" class="btn btn-sm btn-warning btn-round" style="margin-right: 10px;">
+                    <i class="ace-icon fa fa-leaf"></i>
+                    导出
+                  </button>
                 </td>
               </tr>
               </tbody>
@@ -148,6 +148,9 @@ export default {
     exportExcle(){
       let _this = this;
       let param = "";
+      if(!Tool.isEmpty(_this.videoEventDto.sm)&&_this.videoEventDto.sm!='0,1'){
+        param+="&sm="+_this.videoEventDto.sm;
+      }
       if(!Tool.isEmpty(_this.videoEventDto.sbbh)){
         param+="&sbbh="+_this.videoEventDto.sbbh;
       }
@@ -158,9 +161,9 @@ export default {
         param+="&etime="+_this.videoEventDto.etime;
       }
       if(Tool.isEmpty(param)){
-        window.location.href = process.env.VUE_APP_SERVER + '/monitor/export/exportFileEvent';
+        window.location.href = process.env.VUE_APP_SERVER + '/monitor/export/exportVideoEventSS';
       }else{
-        window.location.href = process.env.VUE_APP_SERVER + '/monitor/export/exportFileEvent?'+param.substring(1,param.length);
+        window.location.href = process.env.VUE_APP_SERVER + '/monitor/export/exportVideoEventSS?'+param.substring(1,param.length);
       }
     },
     //历史回放
@@ -211,6 +214,7 @@ export default {
           }
           Toast.success("保存成功");
           $("#fx"+id).empty();
+          _this.list(1);
         }else{
           Loading.hide();
           Toast.error("保存失败");
@@ -252,6 +256,9 @@ export default {
       _this.videoEventDto.page = page;
       _this.videoEventDto.size = _this.$refs.pagination.size;
       _this.videoEventDto.sfysp = 2;
+      if(Tool.isEmpty(_this.videoEventDto.sm)){
+        _this.videoEventDto.sm = "0,1";
+      }
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/videoEvent/listSs', _this.videoEventDto).then((response)=>{
         Loading.hide();
         let resp = response.data;

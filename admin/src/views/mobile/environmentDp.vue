@@ -49,7 +49,7 @@
                 <img src="/static/image/environment/jcy.png" />
                 <div>
                   <span>当前日期</span><br/>
-                  <span>{{curDate}}</span>
+                  <span><date style="width: 75%;padding-left: 0;" @methodName="changeDate" id-value="curdateid" :set-value="curDate"></date></span>
                 </div>
               </div>
               <div class="content-box">
@@ -63,7 +63,7 @@
           </div>
           <div class="left-center">
             <div class="title-name-div" style="height: 10%">
-              <span style="padding-top:1%;">海流计监测数据 <b style="color: red">16号航标</b></span>
+              <span style="padding-top:1%;">海流计监测数据 <b style="color: red">{{zdysbList|optionKVArray(curSbbh)}}</b></span>
             </div>
             <div class="center-content-div">
               <div class="center-content-item-first">
@@ -110,7 +110,7 @@
           </div>
           <div class="left-bottom">
             <div class="title-name-div">
-              <span>温盐度浊度仪数据 <b style="color: red">16号航标</b></span>
+              <span>温盐度浊度仪数据 <b style="color: red">{{zdysbList|optionKVArray(curSbbh)}}</b></span>
             </div>
             <div class="bottom-content" id="leftBottomEchart"></div>
           </div>
@@ -135,7 +135,7 @@
         <div class="left-content-div" style="margin-top: 8%;">
           <div class="left-top">
             <div class="title-name-div" style="height: 20%;">
-              <span style="padding-top:0%;">气象数据 <b style="color: red">16号航标</b></span>
+              <span style="padding-top:0%;">气象数据 <b style="color: red">保护区楼顶气象站</b></span>
             </div>
             <div class="right-top-content" style="margin: 1% auto 0;">
               <div class="right-top-box">
@@ -244,20 +244,21 @@
 </template>
 <script>
 import EquipmentAMap from "../../components/dpMap";
+import Date from "../../components/date";
 export default {
   name: 'environment-dp',
-  components:{EquipmentAMap},
+  components:{EquipmentAMap,Date},
   data: function (){
     return {
       LOCAL_VIDEO:LOCAL_VIDEO,
       curDate:'',
       heightMax:510,
-      curSbbh:'RPCDA4016',
+      curSbbh:'RPCDA4010',
       curSbmc:'RPCDA4016',
       currentMeter:{},
       meteorological:{},
       intervalId:null,
-      zdysbbhList:['RPCDA4005','RPCDA4012','RPCDA4003','RPCDA4006-4','RPCDA4009-3','RPCDA4001','RPCDA4010','RPCDA4008','RPCDA4002','RPCDA4016','RPCDA4000'],
+      zdysbbhList:['RPCDA4005','RPCDA4012','RPCDA4003','RPCDA4006-4','RPCDA4009-3','RPCDA4001','RPCDA4010','RPCDA4008','RPCDA4002','RPCDA4016'],
       zdysbList:[
         {key:"RPCDA4005", value:"3号航标"},
         {key:"RPCDA4012", value:"4号航标"},
@@ -268,8 +269,7 @@ export default {
         {key:"RPCDA4010", value:"10号航标"},
         {key:"RPCDA4008", value:"11号航标"},
         {key:"RPCDA4002", value:"淇澳岛"},
-        {key:"RPCDA4016", value:"16号航标"},
-        {key:"RPCDA4000", value:"保护区楼顶气象站"}
+        {key:"RPCDA4016", value:"16号航标"}
       ],
       config: {
         headerBGC: "#054F7F",
@@ -299,7 +299,7 @@ export default {
   },
   mounted() {
     let _this = this;
-    _this.curDate = Tool.dateFormat("yyyy-MM-dd",new Date());
+    _this.curDate = Tool.dateFormat("yyyy-MM-dd");
     if(_this.$xhHisData.rq==_this.curDate){
       _this.dtime = _this.dtimeList[_this.$xhHisData.index];
     }else{
@@ -311,16 +311,28 @@ export default {
       _this.dtime = _this.dtimeList[_this.$xhHisData.index];
     }
     _this.getSeaSurfacePic();
-    _this.leftCenterData();
+    _this.leftCenterData();//海流计
     _this.leftBottomData();
     _this.rightBottomData();
-    _this.rightTopData();
+    _this.rightTopData();//气象数据
     _this.rightCenterData();
     //_this.centerBottomData();
     _this.dataRefreh();
     window.getPlayUrl = _this.getPlayUrl;
   },
   methods: {
+    //修改当前日期
+    changeDate(date){
+      let _this = this;
+      if(_this.curDate!=date){
+        _this.curDate = date;
+        _this.leftCenterData();//海流计
+        _this.leftBottomData();//温盐深浊度仪
+        _this.rightTopData();//气象数据
+        _this.rightCenterData();//海浪数据
+        _this.rightBottomData();//水质数据
+      }
+    },
     //获取海表盐度图片
     getSeaSurfacePic(){
       let _this = this;
@@ -328,12 +340,13 @@ export default {
         _this.tempUrl = response.data.content.imgUrl;
       })
     },
+    //修改设备编号
     changeData(){
       let _this = this;
-      //_this.leftBottomData();
-      _this.rightBottomData();
-      //_this.rightTopData();
-      _this.rightCenterData();
+      _this.leftCenterData();//海流计
+      _this.leftBottomData();//温盐深浊度仪
+      _this.rightCenterData();//海浪数据
+      _this.rightBottomData();//水质数据
     },
     // 定时刷新数据函数
     dataRefreh() {
@@ -344,12 +357,14 @@ export default {
       }
       // 计时器为空，操作
       _this.intervalId = setInterval(() => {
-        console.log("刷新" + new Date());
-        _this.leftCenterData();
-        _this.leftBottomData();
-        //_this.rightBottomData();
-        _this.rightTopData();
-        //_this.rightCenterData();
+        console.log("刷新" + Tool.dateFormat("yyyy-MM-dd"));
+        if(_this.curSbbh=='RPCDA4016'){
+          _this.leftCenterData();//海流计
+          _this.leftBottomData();//温盐深浊度仪
+        }
+        if(_this.curDate==Tool.dateFormat("yyyy-MM-dd")){
+          _this.rightTopData();//气象数据
+        }
       }, 900000);
     },
     // 停止定时器
@@ -403,16 +418,6 @@ export default {
       }else {
         Toast.error("该站点没有数据！");
       }
-      // if(_this.zdysbbhList.includes(sbbh)){
-      //   //_this.curSbmc = sbmc;
-      //   _this.curSbbh = sbbh;
-      //   _this.leftBottomData();
-      //   _this.rightBottomData();
-      //   _this.rightTopData();
-      //   _this.rightCenterData();
-      // }else{
-      //   Toast.error("该站点没有环境数据！");
-      // }
     },
     getAlarmNum(sbbh){
       let _this = this;
@@ -488,15 +493,17 @@ export default {
         this.$refs['scrollBoard'].updateRows(rolldata, 0);
       })
     },
+    //海流计
     leftCenterData(){
       let _this = this;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getCurrentMeterData', {"bz":"RPCDA4000"}).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getCurrentMeterData', {"bz":_this.curSbbh,"stime":_this.curDate}).then((response)=>{
         _this.currentMeter = response.data.content;
       })
     },
+    //水质数据
     rightBottomData(){
       let _this = this;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getWaterQualityNewData', {"sbbh":_this.curSbbh,'stime':_this.dtime}).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getWaterQualityNewData', {"sbbh":_this.curSbbh,"stime":_this.curDate}).then((response)=>{
         let waterQualityNews = response.data.content;
         let xAxisDatas = [];
         let seriesData1 = [];
@@ -592,9 +599,10 @@ export default {
       let echartsData = echarts.init(document.getElementById("rightBottomEchart"));
       echartsData.setOption(option);
     },
+    //温盐深浊度仪
     leftBottomData(){
       let _this = this;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getTurbidityData', {"bz":"RPCDA4000"}).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getTurbidityData', {"bz":_this.curSbbh,"stime":_this.curDate}).then((response)=>{
         let turbiditys = response.data.content;
         let xAxisData = [];
         let data1 = [];
@@ -688,9 +696,10 @@ export default {
       let echartsData = echarts.init(document.getElementById("leftBottomEchart"));
       echartsData.setOption(option);
     },
+    //气象数据
     rightTopData(){
       let _this = this;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getMeteorologicalData', {"bz":"RPCDA4000"}).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getMeteorologicalData', {"bz":"RPCDA4000","stime":_this.curDate}).then((response)=>{
         let meteorologicals = response.data.content;
         // let data = [];
         // let data1 = [];
@@ -835,9 +844,10 @@ export default {
       let echartsData = echarts.init(document.getElementById("centerBottomEchart"));
       echartsData.setOption(option);
     },
+    //海浪数据
     rightCenterData(){
       let _this = this;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getWaveDataData', {"sbbh":_this.curSbbh,'stime':_this.dtime}).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getWaveDataData', {"sbbh":_this.curSbbh,"stime":_this.curDate}).then((response)=>{
         let resp = response.data;
         let xAxisDatas = [];
         let seriesData1 = [];

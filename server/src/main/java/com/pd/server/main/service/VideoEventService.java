@@ -5,6 +5,7 @@ import com.pd.server.main.domain.VideoEventExample;
 import com.pd.server.main.dto.VideoEventDto;
 import com.pd.server.main.dto.PageDto;
 import com.pd.server.main.dto.basewx.my.VideoEventDpDto;
+import com.pd.server.main.dto.basewx.my.VideoEventExport;
 import com.pd.server.main.mapper.VideoEventMapper;
 import com.pd.server.util.CopyUtil;
 import com.pd.server.util.UuidUtil;
@@ -116,5 +117,9 @@ public class VideoEventService {
 
     public void saveItem(VideoEvent videoEvent){
         videoEventMapper.insert(videoEvent);
+    }
+
+    public List<VideoEventExport> selectExportByExample(VideoEventExample example){
+        return videoEventMapper.selectExportByExample(example);
     }
 }

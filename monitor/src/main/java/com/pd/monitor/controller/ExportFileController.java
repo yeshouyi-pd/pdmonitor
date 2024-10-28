@@ -6,6 +6,7 @@ import com.pd.server.config.RedisCode;
 import com.pd.server.main.domain.*;
 import com.pd.server.main.dto.*;
 import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
+import com.pd.server.main.dto.basewx.my.VideoEventExport;
 import com.pd.server.main.service.*;
 import com.pd.server.util.DateUtil;
 import com.pd.server.util.DateUtils;
@@ -62,6 +63,218 @@ public class ExportFileController extends BaseWxController{
     private PointerSecondService pointerSecondService;
     @Resource
     private AppearNumbersService appearNumbersService;
+    @Resource
+    private VideoEventService videoEventService;
+
+    /**
+     * 分析视频事件导出
+     */
+    @GetMapping("/exportVideoEvent")
+    public void exportVideoEvent(HttpServletRequest request, HttpServletResponse response){
+        try {
+            VideoEventExample example = new VideoEventExample();
+            VideoEventExample.Criteria ca = example.createCriteria();
+            if(!StringUtils.isEmpty(request.getParameter("sbbh"))){
+                ca.andSbbhEqualTo(request.getParameter("sbbh"));
+            }
+            if(!StringUtils.isEmpty(request.getParameter("stime"))){
+                ca.andRqGreaterThanOrEqualTo(request.getParameter("stime"));
+            }
+            if(!StringUtils.isEmpty(request.getParameter("etime"))){
+                ca.andRqLessThanOrEqualTo(request.getParameter("etime"));
+            }
+            if(!StringUtils.isEmpty(request.getParameter("sm"))){
+                ca.andSmEqualTo(request.getParameter("sm"));
+            }
+            if(!StringUtils.isEmpty(request.getParameter("sfysp"))){
+                ca.andSfyspEqualTo(Integer.parseInt(request.getParameter("sfysp")));
+            }
+            example.setOrderByClause(" kssj desc ");
+            List<VideoEventExport> videoEventList = videoEventService.selectExportByExample(example);
+            //导出
+            HSSFWorkbook workbook = new HSSFWorkbook();
+            //设置字体大小
+            HSSFFont fontCommon = workbook.createFont();
+            fontCommon.setFontHeightInPoints((short)12); // 设置字体大小为12磅
+            //设置公共单元格样式
+            HSSFCellStyle cellStyleCommon = workbook.createCellStyle();
+            cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+            cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+            //设置字体大小,加粗
+            HSSFFont font = workbook.createFont();
+            font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+            font.setFontHeightInPoints((short)12); // 设置字体大小为12磅
+            HSSFCellStyle cellStyleTitle = workbook.createCellStyle();
+            cellStyleTitle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+            cellStyleTitle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+            cellStyleTitle.setFont(font);
+            // 创建一个工作表
+            String fileName = "分析视频事件(" + new Date().getTime() + ").xls";
+            HSSFSheet sheet = workbook.createSheet("分析视频事件");
+            // 自适应列宽度
+            sheet.autoSizeColumn(1, true);
+            sheet.setDefaultColumnWidth(18);
+            sheet.setDefaultRowHeight((short)(40*10));
+            // 添加表头行
+            HSSFRow titleRow = sheet.createRow(0);//第1行
+            List<String> titleStrList = Arrays.asList("监测点","设备sn","开始时间","结束时间","核查情况");
+            for(int i=0;i<titleStrList.size();i++){
+                HSSFCell cell = titleRow.createCell(i);
+                cell.setCellValue(titleStrList.get(i));
+                cell.setCellStyle(cellStyleTitle);
+            }
+            WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
+            WaterEquipmentExample.Criteria caEquip = waterEquipmentExample.createCriteria();
+            caEquip.andSblbEqualTo("0001");
+            List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(waterEquipmentExample);
+            Map<String, String> mapSbxh = waterEquipmentList.stream().collect(Collectors.toMap(p -> p.getSbsn(), p -> p.getSbmc()));
+            for(int i=0;i<videoEventList.size();i++){
+                VideoEventExport videoEventExport = videoEventList.get(i);
+                HSSFRow comRow = sheet.createRow(i+1);
+                HSSFCell comCell0 = comRow.createCell(0);
+                comCell0.setCellValue(mapSbxh.get(videoEventExport.getSbbh()));
+                comCell0.setCellStyle(cellStyleCommon);
+                HSSFCell comCell1 = comRow.createCell(1);
+                comCell1.setCellValue(videoEventExport.getSbbh());
+                comCell1.setCellStyle(cellStyleCommon);
+                HSSFCell comCell2 = comRow.createCell(2);
+                comCell2.setCellValue(videoEventExport.getKssj());
+                comCell2.setCellStyle(cellStyleCommon);
+                HSSFCell comCell3 = comRow.createCell(3);
+                comCell3.setCellValue(videoEventExport.getJssj());
+                comCell3.setCellStyle(cellStyleCommon);
+                HSSFCell comCell4 = comRow.createCell(4);
+                if("0".equals(videoEventExport.getHcjg())){
+                    comCell4.setCellValue("未核查");
+                }else if("1".equals(videoEventExport.getHcjg())){
+                    comCell4.setCellValue("核查通过");
+                }else if("2".equals(videoEventExport.getHcjg())){
+                    comCell4.setCellValue("不通过");
+                }
+                comCell4.setCellStyle(cellStyleCommon);
+            }
+            response.setHeader("content-Type", "application/vnd.ms-excel");
+            // 下载文件的默认名称
+            String agent = request.getHeader("User-Agent");
+            if (agent.contains("MSIE") || agent.contains("Trident") || agent.contains("Edge")) {
+                response.setHeader("Content-Disposition",
+                        "attachment; filename=" + URLEncoder.encode(fileName, "UTF-8"));
+            } else {
+                response.setHeader("Content-Disposition",
+                        "attachment; filename=\"" + new String((fileName).getBytes("UTF-8"), "ISO-8859-1") + "\"");
+            }
+            response.setCharacterEncoding("utf-8");
+            ServletOutputStream out = response.getOutputStream();
+            workbook.write(out);
+            out.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 实时分析视频事件导出
+     */
+    @GetMapping("/exportVideoEventSS")
+    public void exportVideoEventSS(HttpServletRequest request, HttpServletResponse response){
+        try {
+            VideoEventExample example = new VideoEventExample();
+            VideoEventExample.Criteria ca = example.createCriteria();
+            if(!StringUtils.isEmpty(request.getParameter("sbbh"))){
+                ca.andSbbhEqualTo(request.getParameter("sbbh"));
+            }
+            if(!StringUtils.isEmpty(request.getParameter("stime"))){
+                ca.andRqGreaterThanOrEqualTo(request.getParameter("stime"));
+            }
+            if(!StringUtils.isEmpty(request.getParameter("etime"))){
+                ca.andRqLessThanOrEqualTo(request.getParameter("etime"));
+            }
+            if(!StringUtils.isEmpty(request.getParameter("sm"))){
+                ca.andSmEqualTo(request.getParameter("sm"));
+            }
+            ca.andSfyspEqualTo(2);
+            example.setOrderByClause(" kssj desc ");
+            List<VideoEvent> videoEventList = videoEventService.selectByExample(example);
+            //导出
+            HSSFWorkbook workbook = new HSSFWorkbook();
+            //设置字体大小
+            HSSFFont fontCommon = workbook.createFont();
+            fontCommon.setFontHeightInPoints((short)12); // 设置字体大小为12磅
+            //设置公共单元格样式
+            HSSFCellStyle cellStyleCommon = workbook.createCellStyle();
+            cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+            cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+            //设置字体大小,加粗
+            HSSFFont font = workbook.createFont();
+            font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+            font.setFontHeightInPoints((short)12); // 设置字体大小为12磅
+            HSSFCellStyle cellStyleTitle = workbook.createCellStyle();
+            cellStyleTitle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+            cellStyleTitle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+            cellStyleTitle.setFont(font);
+            // 创建一个工作表
+            String fileName = "实时分析视频事件(" + new Date().getTime() + ").xls";
+            HSSFSheet sheet = workbook.createSheet("实时分析视频事件");
+            // 自适应列宽度
+            sheet.autoSizeColumn(1, true);
+            sheet.setDefaultColumnWidth(18);
+            sheet.setDefaultRowHeight((short)(40*10));
+            // 添加表头行
+            HSSFRow titleRow = sheet.createRow(0);//第1行
+            List<String> titleStrList = Arrays.asList("监测点","设备sn","开始时间","结束时间","核查情况");
+            for(int i=0;i<titleStrList.size();i++){
+                HSSFCell cell = titleRow.createCell(i);
+                cell.setCellValue(titleStrList.get(i));
+                cell.setCellStyle(cellStyleTitle);
+            }
+            WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
+            WaterEquipmentExample.Criteria caEquip = waterEquipmentExample.createCriteria();
+            caEquip.andSblbEqualTo("0001");
+            List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(waterEquipmentExample);
+            Map<String, String> mapSbxh = waterEquipmentList.stream().collect(Collectors.toMap(p -> p.getSbsn(), p -> p.getSbmc()));
+            for(int i=0;i<videoEventList.size();i++){
+                VideoEvent videoEvent = videoEventList.get(i);
+                HSSFRow comRow = sheet.createRow(i+1);
+                HSSFCell comCell0 = comRow.createCell(0);
+                comCell0.setCellValue(mapSbxh.get(videoEvent.getSbbh()));
+                comCell0.setCellStyle(cellStyleCommon);
+                HSSFCell comCell1 = comRow.createCell(1);
+                comCell1.setCellValue(videoEvent.getSbbh());
+                comCell1.setCellStyle(cellStyleCommon);
+                HSSFCell comCell2 = comRow.createCell(2);
+                comCell2.setCellValue(videoEvent.getKssj());
+                comCell2.setCellStyle(cellStyleCommon);
+                HSSFCell comCell3 = comRow.createCell(3);
+                comCell3.setCellValue(videoEvent.getJssj());
+                comCell3.setCellStyle(cellStyleCommon);
+                HSSFCell comCell4 = comRow.createCell(4);
+                if("0".equals(videoEvent.getSm())){
+                    comCell4.setCellValue("未核查");
+                }else if("1".equals(videoEvent.getSm())){
+                    comCell4.setCellValue("核查通过");
+                }else if("2".equals(videoEvent.getSm())){
+                    comCell4.setCellValue("不通过");
+                }
+                comCell4.setCellStyle(cellStyleCommon);
+            }
+            response.setHeader("content-Type", "application/vnd.ms-excel");
+            // 下载文件的默认名称
+            String agent = request.getHeader("User-Agent");
+            if (agent.contains("MSIE") || agent.contains("Trident") || agent.contains("Edge")) {
+                response.setHeader("Content-Disposition",
+                        "attachment; filename=" + URLEncoder.encode(fileName, "UTF-8"));
+            } else {
+                response.setHeader("Content-Disposition",
+                        "attachment; filename=\"" + new String((fileName).getBytes("UTF-8"), "ISO-8859-1") + "\"");
+            }
+            response.setCharacterEncoding("utf-8");
+            ServletOutputStream out = response.getOutputStream();
+            workbook.write(out);
+            out.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
     /**
      * 出现次数导出
@@ -101,7 +314,6 @@ public class ExportFileController extends BaseWxController{
             HSSFCellStyle cellStyleCommon = workbook.createCellStyle();
             cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_CENTER);
             cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
-            //cellStyleCommon.setFont(fontCommon);
             //设置字体大小,加粗
             HSSFFont font = workbook.createFont();
             font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
