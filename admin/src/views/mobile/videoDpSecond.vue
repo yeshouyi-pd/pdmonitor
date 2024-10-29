@@ -677,7 +677,7 @@ option{
   display: flex;
 }
 .history-video {
-  width: 900px;
+  width: 790px;
   height: 55vh;
   background-image: url("/static/image/environment/spk.png");
   background-repeat: no-repeat;
@@ -685,13 +685,13 @@ option{
   background-position: center;
 }
 .play-box{
-  width: 850px;
+  width: 740px;
   height: 45vh;
   margin-top: 26px;
   margin-left: 24px;
 }
 .history-txt{
-  width: 850px;
+  width: 740px;
   height: 4vh;
   margin-left: 24px;
   background: linear-gradient(to right, #00628B,#005687,#004A85,#004683,#003B80, #00387F);
@@ -701,7 +701,7 @@ option{
   line-height: 4vh;
 }
 .realtime-video{
-  width: 660px;
+  width: 770px;
   height: 55vh;
   background-image: url("/static/image/environment/spk.png");
   background-repeat: no-repeat;
@@ -709,13 +709,13 @@ option{
   background-position: center;
 }
 .relplay-box{
-  width: 616px;
+  width: 716px;
   height: 45vh;
   margin-top: 26px;
-  margin-left: 21px;
+  margin-left: 26px;
 }
 .rel-txt{
-  width: 620px;
+  width: 730px;
   height: 4vh;
   margin-left: 18px;
   background: linear-gradient(to right, #00628B,#005687,#004A85,#004683,#003B80, #00387F);
@@ -823,7 +823,7 @@ option{
 }
 .h5-play-wrap {
   /*width: 980px;*/
-  height: 32vh;
+  height: 36.5vh;
   background-color: #000;
   border: 1px solid #333;
   position: relative;
@@ -837,6 +837,8 @@ option{
   padding: 10px;
 }
 .h5-step-wrap {
+  width: 130px;
+  float: left;
   margin-bottom: 5px;
 }
 .h5-zoomfocus-wrap {
