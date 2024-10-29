@@ -1,7 +1,0 @@
-Begin Time:2024-04-12T21:36:06.045
-[2024-04-12T21:36:06.045 info Netsdk:69989 16872:21868 netsdk.cpp:302]Enter CLIENT_SetAutoReconnect:[cbAutoConnect=00000000201C0050, dwUser=0000000000000000].
-[2024-04-12T21:36:06.045 info Netsdk:69989 16872:21868 netsdk.cpp:304]Leave CLIENT_SetAutoReconnect.
-[2024-04-12T21:36:06.045 info Netsdk:69989 16872:21868 netsdk.cpp:326]Enter CLIENT_SetConnectTime:[nWaitTime=5000, nTryTimes=1].
-[2024-04-12T21:36:06.045 info Netsdk:69989 16872:21868 netsdk.cpp:339]Leave CLIENT_SetConnectTime.
-[2024-04-12T21:36:06.045 info Netsdk:69989 16872:21868 netsdk.cpp:352]Enter CLIENT_SetNetworkParam:[nWaittime=0, nConnectTime=10000, nConnectTryNum=0, nSubConnectSpaceTime=0, nGetDevInfoTime=3000, nConnectBufSize=0, nGetConnInfoTime=3000, nSearchRecordTime=0, nsubDisconnetTime=0, byNetType=0, byPlaybackBufSize=0, bDetectDisconnTime=0, bKeepLifeInterval=0, nPicBufSize=0].
-[2024-04-12T21:36:06.046 info Netsdk:69989 16872:21868 netsdk.cpp:367]Leave CLIENT_SetNetworkParam.
