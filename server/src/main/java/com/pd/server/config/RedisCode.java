@@ -8,6 +8,8 @@ public enum RedisCode {
 
     DEPTCODENAME("dept_code_name"),//部门信息缓存
 
+    DEPTCODEGPS("dept_code_gps"),//部门位置缓存
+
     USERCODENAME("user_code_name"),//用户缓存
 
     USERVIDEOCODENAME("uservideo_code_name"),//用户缓存

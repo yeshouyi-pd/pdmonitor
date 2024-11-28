@@ -88,6 +88,8 @@ public class LoginUserDto {
 
     private Map<String,List<String>> xmbhsbsns;//项目编号对应的所有的设备编号
 
+    private Map<String,String> deptgpsmap;//所有部门位置
+
     public String getId() {
         return id;
     }
@@ -326,6 +328,14 @@ public class LoginUserDto {
 
     public void setRq(String rq) {
         this.rq = rq;
+    }
+
+    public Map<String, String> getDeptgpsmap() {
+        return deptgpsmap;
+    }
+
+    public void setDeptgpsmap(Map<String, String> deptgpsmap) {
+        this.deptgpsmap = deptgpsmap;
     }
 
     @Override

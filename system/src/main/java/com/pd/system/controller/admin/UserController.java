@@ -217,6 +217,8 @@ return responseDto;
         loginUserDto.setUsermap(mapuser);
         Map<String, List<String>> mapxmbhsbsns = (Map<String, List<String>>) redisTemplate.opsForValue().get(RedisCode.PROJECTSBSNS);
         loginUserDto.setXmbhsbsns(mapxmbhsbsns);
+        Map<String ,String> deptgpsmap = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.DEPTCODEGPS);
+        loginUserDto.setDeptgpsmap(deptgpsmap);
         redisTemplate.opsForValue().set(token, JSON.toJSONString(loginUserDto), 3600, TimeUnit.SECONDS);
 
          //request.getSession().setAttribute(Constants.LOGIN_USER,loginUserDto);
