@@ -11,11 +11,13 @@
         </span>
       </div>
       <div class="lefttitle" v-else>
-        <img src="/largemonitors/assets/imgs/左上角title.png" alt="">
+        <img style="width: 250px" src="/largemonitors/assets/imgs/左上角title.png" alt="">
         <span>
           <div @click="chooseProject" style="cursor: pointer;">主页</div>
           <div style="margin: 0 10px;"> / </div>
           <div @click="toTyDp" style="cursor: pointer;">巡护</div>
+          <div style="margin: 0 10px;"> / </div>
+          <div @click="toAzimuthDp" style="cursor: pointer;">方位</div>
         </span>
       </div>
     </header>
@@ -535,6 +537,9 @@ export default {
     },
     toTyDp(){
       window.location.href = "/mobile/largemonitorsTy";
+    },
+    toAzimuthDp(){
+      window.location.href = "/mobile/largemonitorsAzimuth";
     },
     getThreeDayTs(){
       let _this = this;

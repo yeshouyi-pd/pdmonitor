@@ -228,10 +228,13 @@ public class RedisConfig  implements CommandLineRunner {
             List<Dept> list = deptstaticMapper.selectByExample(example);
             if(!CollectionUtils.isEmpty(list)){
                 Map<String, String>  map = new LinkedHashMap<String,String>();
+                Map<String, String> gpsMap = new LinkedHashMap<>();
                 for(Dept vo  :list){
                     map.put(vo.getDeptcode(),vo.getDeptname());
+                    gpsMap.put(vo.getDeptcode(),vo.getJd()+","+vo.getWd());
                 }
                 redisTstaticemplate.opsForValue().set(RedisCode.DEPTCODENAME, map);//将参数信息写入redis缓存
+                redisTstaticemplate.opsForValue().set(RedisCode.DEPTCODEGPS, gpsMap);
             }
         }catch (Exception e) {
             e.printStackTrace();

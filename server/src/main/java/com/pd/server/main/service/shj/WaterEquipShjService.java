@@ -86,19 +86,21 @@ public class WaterEquipShjService extends AbstractScanRequest{
             data = "设备未备案";
             return data;
         }
-        if(!DateUtil.getYMD().equals(sbbhrqMap.get(sbbh))){
-            sbbhrqMap.remove(sbbh);
-        }
-        if("0".equals(code)){
-            if(!sbbhrqMap.containsKey(sbbh)){
-                restartEquip(listWater.get(0));
-            }else{
-                if(!DateUtil.getYMD().equals(sbbhrqMap.get(sbbh))){
-                    restartEquip(listWater.get(0));
-                }
+        if("true".equals(attrMapperStatic.selectByAttrKey("heartRestartEquip"))){
+            if(!DateUtil.getYMD().equals(sbbhrqMap.get(sbbh))){
+                sbbhrqMap.remove(sbbh);
             }
-            data = "设备离线";
-            return data;
+            if("0".equals(code)){
+                if(!sbbhrqMap.containsKey(sbbh)){
+                    restartEquip(listWater.get(0));
+                }else{
+                    if(!DateUtil.getYMD().equals(sbbhrqMap.get(sbbh))){
+                        restartEquip(listWater.get(0));
+                    }
+                }
+                data = "设备离线";
+                return data;
+            }
         }
         try {
             WaterEquiplog record = new WaterEquiplog();

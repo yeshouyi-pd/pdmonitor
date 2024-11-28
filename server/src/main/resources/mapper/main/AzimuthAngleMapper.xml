@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pd.server.main.mapper.AzimuthAngleMapper">
+  <resultMap id="BaseResultMap" type="com.pd.server.main.domain.AzimuthAngle">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
+    <result column="rq" jdbcType="VARCHAR" property="rq" />
+    <result column="xs" jdbcType="VARCHAR" property="xs" />
+    <result column="fz" jdbcType="VARCHAR" property="fz" />
+    <result column="ts" jdbcType="VARCHAR" property="ts" />
+    <result column="deptcode" jdbcType="VARCHAR" property="deptcode" />
+    <result column="north_northeast" jdbcType="INTEGER" property="northNortheast" />
+    <result column="northeast_east" jdbcType="INTEGER" property="northeastEast" />
+    <result column="east_eastsouth" jdbcType="INTEGER" property="eastEastsouth" />
+    <result column="eastsouth_south" jdbcType="INTEGER" property="eastsouthSouth" />
+    <result column="south_southwest" jdbcType="INTEGER" property="southSouthwest" />
+    <result column="southwest_west" jdbcType="INTEGER" property="southwestWest" />
+    <result column="west_westnorth" jdbcType="INTEGER" property="westWestnorth" />
+    <result column="westnorth_north" jdbcType="INTEGER" property="westnorthNorth" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, sbbh, rq, xs, fz, ts, deptcode, north_northeast, northeast_east, east_eastsouth, 
+    eastsouth_south, south_southwest, southwest_west, west_westnorth, westnorth_north
+  </sql>
+  <select id="selectByExample" parameterType="com.pd.server.main.domain.AzimuthAngleExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from azimuth_angle
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from azimuth_angle
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from azimuth_angle
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pd.server.main.domain.AzimuthAngleExample">
+    delete from azimuth_angle
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pd.server.main.domain.AzimuthAngle">
+    insert into azimuth_angle (id, sbbh, rq, 
+      xs, fz, ts, deptcode, 
+      north_northeast, northeast_east, east_eastsouth, 
+      eastsouth_south, south_southwest, southwest_west, 
+      west_westnorth, westnorth_north)
+    values (#{id,jdbcType=VARCHAR}, #{sbbh,jdbcType=VARCHAR}, #{rq,jdbcType=VARCHAR}, 
+      #{xs,jdbcType=VARCHAR}, #{fz,jdbcType=VARCHAR}, #{ts,jdbcType=VARCHAR}, #{deptcode,jdbcType=VARCHAR}, 
+      #{northNortheast,jdbcType=INTEGER}, #{northeastEast,jdbcType=INTEGER}, #{eastEastsouth,jdbcType=INTEGER}, 
+      #{eastsouthSouth,jdbcType=INTEGER}, #{southSouthwest,jdbcType=INTEGER}, #{southwestWest,jdbcType=INTEGER}, 
+      #{westWestnorth,jdbcType=INTEGER}, #{westnorthNorth,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pd.server.main.domain.AzimuthAngle">
+    insert into azimuth_angle
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="sbbh != null">
+        sbbh,
+      </if>
+      <if test="rq != null">
+        rq,
+      </if>
+      <if test="xs != null">
+        xs,
+      </if>
+      <if test="fz != null">
+        fz,
+      </if>
+      <if test="ts != null">
+        ts,
+      </if>
+      <if test="deptcode != null">
+        deptcode,
+      </if>
+      <if test="northNortheast != null">
+        north_northeast,
+      </if>
+      <if test="northeastEast != null">
+        northeast_east,
+      </if>
+      <if test="eastEastsouth != null">
+        east_eastsouth,
+      </if>
+      <if test="eastsouthSouth != null">
+        eastsouth_south,
+      </if>
+      <if test="southSouthwest != null">
+        south_southwest,
+      </if>
+      <if test="southwestWest != null">
+        southwest_west,
+      </if>
+      <if test="westWestnorth != null">
+        west_westnorth,
+      </if>
+      <if test="westnorthNorth != null">
+        westnorth_north,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="sbbh != null">
+        #{sbbh,jdbcType=VARCHAR},
+      </if>
+      <if test="rq != null">
+        #{rq,jdbcType=VARCHAR},
+      </if>
+      <if test="xs != null">
+        #{xs,jdbcType=VARCHAR},
+      </if>
+      <if test="fz != null">
+        #{fz,jdbcType=VARCHAR},
+      </if>
+      <if test="ts != null">
+        #{ts,jdbcType=VARCHAR},
+      </if>
+      <if test="deptcode != null">
+        #{deptcode,jdbcType=VARCHAR},
+      </if>
+      <if test="northNortheast != null">
+        #{northNortheast,jdbcType=INTEGER},
+      </if>
+      <if test="northeastEast != null">
+        #{northeastEast,jdbcType=INTEGER},
+      </if>
+      <if test="eastEastsouth != null">
+        #{eastEastsouth,jdbcType=INTEGER},
+      </if>
+      <if test="eastsouthSouth != null">
+        #{eastsouthSouth,jdbcType=INTEGER},
+      </if>
+      <if test="southSouthwest != null">
+        #{southSouthwest,jdbcType=INTEGER},
+      </if>
+      <if test="southwestWest != null">
+        #{southwestWest,jdbcType=INTEGER},
+      </if>
+      <if test="westWestnorth != null">
+        #{westWestnorth,jdbcType=INTEGER},
+      </if>
+      <if test="westnorthNorth != null">
+        #{westnorthNorth,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pd.server.main.domain.AzimuthAngleExample" resultType="java.lang.Long">
+    select count(*) from azimuth_angle
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update azimuth_angle
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sbbh != null">
+        sbbh = #{record.sbbh,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rq != null">
+        rq = #{record.rq,jdbcType=VARCHAR},
+      </if>
+      <if test="record.xs != null">
+        xs = #{record.xs,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fz != null">
+        fz = #{record.fz,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ts != null">
+        ts = #{record.ts,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deptcode != null">
+        deptcode = #{record.deptcode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.northNortheast != null">
+        north_northeast = #{record.northNortheast,jdbcType=INTEGER},
+      </if>
+      <if test="record.northeastEast != null">
+        northeast_east = #{record.northeastEast,jdbcType=INTEGER},
+      </if>
+      <if test="record.eastEastsouth != null">
+        east_eastsouth = #{record.eastEastsouth,jdbcType=INTEGER},
+      </if>
+      <if test="record.eastsouthSouth != null">
+        eastsouth_south = #{record.eastsouthSouth,jdbcType=INTEGER},
+      </if>
+      <if test="record.southSouthwest != null">
+        south_southwest = #{record.southSouthwest,jdbcType=INTEGER},
+      </if>
+      <if test="record.southwestWest != null">
+        southwest_west = #{record.southwestWest,jdbcType=INTEGER},
+      </if>
+      <if test="record.westWestnorth != null">
+        west_westnorth = #{record.westWestnorth,jdbcType=INTEGER},
+      </if>
+      <if test="record.westnorthNorth != null">
+        westnorth_north = #{record.westnorthNorth,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update azimuth_angle
+    set id = #{record.id,jdbcType=VARCHAR},
+      sbbh = #{record.sbbh,jdbcType=VARCHAR},
+      rq = #{record.rq,jdbcType=VARCHAR},
+      xs = #{record.xs,jdbcType=VARCHAR},
+      fz = #{record.fz,jdbcType=VARCHAR},
+      ts = #{record.ts,jdbcType=VARCHAR},
+      deptcode = #{record.deptcode,jdbcType=VARCHAR},
+      north_northeast = #{record.northNortheast,jdbcType=INTEGER},
+      northeast_east = #{record.northeastEast,jdbcType=INTEGER},
+      east_eastsouth = #{record.eastEastsouth,jdbcType=INTEGER},
+      eastsouth_south = #{record.eastsouthSouth,jdbcType=INTEGER},
+      south_southwest = #{record.southSouthwest,jdbcType=INTEGER},
+      southwest_west = #{record.southwestWest,jdbcType=INTEGER},
+      west_westnorth = #{record.westWestnorth,jdbcType=INTEGER},
+      westnorth_north = #{record.westnorthNorth,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pd.server.main.domain.AzimuthAngle">
+    update azimuth_angle
+    <set>
+      <if test="sbbh != null">
+        sbbh = #{sbbh,jdbcType=VARCHAR},
+      </if>
+      <if test="rq != null">
+        rq = #{rq,jdbcType=VARCHAR},
+      </if>
+      <if test="xs != null">
+        xs = #{xs,jdbcType=VARCHAR},
+      </if>
+      <if test="fz != null">
+        fz = #{fz,jdbcType=VARCHAR},
+      </if>
+      <if test="ts != null">
+        ts = #{ts,jdbcType=VARCHAR},
+      </if>
+      <if test="deptcode != null">
+        deptcode = #{deptcode,jdbcType=VARCHAR},
+      </if>
+      <if test="northNortheast != null">
+        north_northeast = #{northNortheast,jdbcType=INTEGER},
+      </if>
+      <if test="northeastEast != null">
+        northeast_east = #{northeastEast,jdbcType=INTEGER},
+      </if>
+      <if test="eastEastsouth != null">
+        east_eastsouth = #{eastEastsouth,jdbcType=INTEGER},
+      </if>
+      <if test="eastsouthSouth != null">
+        eastsouth_south = #{eastsouthSouth,jdbcType=INTEGER},
+      </if>
+      <if test="southSouthwest != null">
+        south_southwest = #{southSouthwest,jdbcType=INTEGER},
+      </if>
+      <if test="southwestWest != null">
+        southwest_west = #{southwestWest,jdbcType=INTEGER},
+      </if>
+      <if test="westWestnorth != null">
+        west_westnorth = #{westWestnorth,jdbcType=INTEGER},
+      </if>
+      <if test="westnorthNorth != null">
+        westnorth_north = #{westnorthNorth,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pd.server.main.domain.AzimuthAngle">
+    update azimuth_angle
+    set sbbh = #{sbbh,jdbcType=VARCHAR},
+      rq = #{rq,jdbcType=VARCHAR},
+      xs = #{xs,jdbcType=VARCHAR},
+      fz = #{fz,jdbcType=VARCHAR},
+      ts = #{ts,jdbcType=VARCHAR},
+      deptcode = #{deptcode,jdbcType=VARCHAR},
+      north_northeast = #{northNortheast,jdbcType=INTEGER},
+      northeast_east = #{northeastEast,jdbcType=INTEGER},
+      east_eastsouth = #{eastEastsouth,jdbcType=INTEGER},
+      eastsouth_south = #{eastsouthSouth,jdbcType=INTEGER},
+      south_southwest = #{southSouthwest,jdbcType=INTEGER},
+      southwest_west = #{southwestWest,jdbcType=INTEGER},
+      west_westnorth = #{westWestnorth,jdbcType=INTEGER},
+      westnorth_north = #{westnorthNorth,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

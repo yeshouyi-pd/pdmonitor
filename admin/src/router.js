@@ -35,6 +35,7 @@ import Jtlist  from "./views/mobile/jtlist.vue"
 import Jtlistinfo  from "./views/mobile/jtlistinfo.vue"
 import Largemonitors  from "./views/mobile/largemonitors.vue"
 import LargemonitorsZj  from "./views/mobile/largemonitorsZj.vue"
+import LargemonitorsAzimuth from "./views/mobile/largemonitorsAzimuth.vue"
 import Test  from "./views/mobile/test.vue"
 import WaterProject from "./views/monitor/waterProject.vue";
 import WaterState from "./views/monitor/waterState.vue"
@@ -117,6 +118,9 @@ export default new Router({
     },{
         path: "/mobile/largemonitorsZj",
         component: LargemonitorsZj
+    },{
+        path: "/mobile/largemonitorsAzimuth",
+        component: LargemonitorsAzimuth
     },{
         path: "/mobile/environmentDp",
         component: EnvironmentDp
