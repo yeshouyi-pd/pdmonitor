@@ -58,6 +58,10 @@
                       <i class="ace-icon fa fa-refresh"></i>
                       重置
                     </a>
+<!--                    <button type="button" v-on:click="exportExcle()" class="btn btn-sm btn-warning btn-round" style="margin-right: 10px;">-->
+<!--                      <i class="ace-icon fa fa-leaf"></i>-->
+<!--                      导出-->
+<!--                    </button>-->
                   </td>
                 </tr>
                 </tbody>
@@ -165,6 +169,24 @@ export default {
     _this.list(1);
   },
   methods: {
+    exportExcle(){
+      let _this = this;
+      let param = "";
+      if(!Tool.isEmpty(_this.waveDataDto.sbbh)){
+        param+="&sbbh="+_this.waveDataDto.sbbh;
+      }
+      if(!Tool.isEmpty(_this.waveDataDto.stime)){
+        param+="&stime="+_this.waveDataDto.stime;
+      }
+      if(!Tool.isEmpty(_this.waveDataDto.etime)){
+        param+="&etime="+_this.waveDataDto.etime;
+      }
+      if(Tool.isEmpty(param)){
+        window.location.href = process.env.VUE_APP_SERVER + '/monitor/export/exportWaveData';
+      }else{
+        window.location.href = process.env.VUE_APP_SERVER + '/monitor/export/exportWaveData?'+param.substring(1,param.length);
+      }
+    },
     changeTab(){
       let _this = this;
       _this.defaultShow = !_this.defaultShow;

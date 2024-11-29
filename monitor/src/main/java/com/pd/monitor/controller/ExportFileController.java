@@ -65,6 +65,76 @@ public class ExportFileController extends BaseWxController{
     private AppearNumbersService appearNumbersService;
     @Resource
     private VideoEventService videoEventService;
+    @Resource
+    private CurrentMeterService currentMeterService;
+    @Resource
+    private MeteorologicalDataService meteorologicalDataService;
+    @Resource
+    private TurbidityService turbidityService;
+    @Resource
+    private WaterQualityNewService waterQualityNewService;
+    @Resource
+    private WaveDataService waveDataService;
+
+    /**
+     * 海浪数据导出
+     */
+    @GetMapping("/exportWaveData")
+    public void exportWaveData(HttpServletRequest request, HttpServletResponse response){
+        try {
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 水质数据导出
+     */
+    @GetMapping("/exportWaterQualityNew")
+    public void exportWaterQualityNew(HttpServletRequest request, HttpServletResponse response){
+        try {
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 温盐深浊度仪数据导出
+     */
+    @GetMapping("/exportTurbidity")
+    public void exportTurbidity(HttpServletRequest request, HttpServletResponse response){
+        try {
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 气象数据导出
+     */
+    @GetMapping("/exportMeteorologicalData")
+    public void exportMeteorologicalData(HttpServletRequest request, HttpServletResponse response){
+        try {
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 海流计数据导出
+     */
+    @GetMapping("/exportCurrentMeter")
+    public void exportCurrentMeter(HttpServletRequest request, HttpServletResponse response){
+        try {
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
     /**
      * 分析视频事件导出
