@@ -73,38 +73,28 @@
               </div>
               <div class="center-content-item">
                 <div style="width: 15%;margin: auto;">1</div>
+                <div style="width: 35%;margin: auto;">海面高度</div>
+                <div style="width: 50%;margin: auto;color: yellow;">{{currentMeter.zetaData}}</div>
+              </div>
+              <div class="center-content-item">
+                <div style="width: 15%;margin: auto;">2</div>
                 <div style="width: 35%;margin: auto;">Abs速度</div>
                 <div style="width: 50%;margin: auto;color: yellow;">{{currentMeter.absSpeed}}m/s</div>
               </div>
               <div class="center-content-item">
-                <div style="width: 15%;margin: auto;">2</div>
+                <div style="width: 15%;margin: auto;">3</div>
                 <div style="width: 35%;margin: auto;">方向</div>
                 <div style="width: 50%;margin: auto;color: yellow;">{{currentMeter.direction}}</div>
               </div>
               <div class="center-content-item">
-                <div style="width: 15%;margin: auto;">3</div>
-                <div style="width: 35%;margin: auto;">倾斜度X</div>
-                <div style="width: 50%;margin: auto;color: yellow;">{{currentMeter.tiltX}}</div>
-              </div>
-              <div class="center-content-item">
                 <div style="width: 15%;margin: auto;">4</div>
-                <div style="width: 35%;margin: auto;">倾斜度Y</div>
-                <div style="width: 50%;margin: auto;color: yellow;">{{currentMeter.tiltY}}</div>
+                <div style="width: 35%;margin: auto;">东向流速</div>
+                <div style="width: 50%;margin: auto;color: yellow;">{{currentMeter.uspeed}}</div>
               </div>
               <div class="center-content-item">
                 <div style="width: 15%;margin: auto;">5</div>
-                <div style="width: 35%;margin: auto;">最大倾斜度</div>
-                <div style="width: 50%;margin: auto;color: yellow;">{{currentMeter.maxTilt}}</div>
-              </div>
-              <div class="center-content-item">
-                <div style="width: 15%;margin: auto;">6</div>
-                <div style="width: 35%;margin: auto;">标准倾斜度</div>
-                <div style="width: 50%;margin: auto;color: yellow;">{{currentMeter.stdTilt}}</div>
-              </div>
-              <div class="center-content-item">
-                <div style="width: 15%;margin: auto;">7</div>
-                <div style="width: 35%;margin: auto;">Sp标准</div>
-                <div style="width: 50%;margin: auto;color: yellow;">{{currentMeter.spStd}}</div>
+                <div style="width: 35%;margin: auto;">北向流速</div>
+                <div style="width: 50%;margin: auto;color: yellow;">{{currentMeter.vspeed}}</div>
               </div>
             </div>
           </div>
@@ -253,8 +243,8 @@ export default {
       LOCAL_VIDEO:LOCAL_VIDEO,
       curDate:'',
       heightMax:510,
-      curSbbh:'RPCDA4010',
-      curSbmc:'RPCDA4016',
+      curSbbh:'RPCDA4016',
+      curSbmc:'16号航标',
       currentMeter:{},
       meteorological:{},
       intervalId:null,
@@ -496,7 +486,11 @@ export default {
     //海流计
     leftCenterData(){
       let _this = this;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getCurrentMeterData', {"bz":_this.curSbbh,"stime":_this.curDate}).then((response)=>{
+      let sbbh = _this.curSbbh;
+      if(sbbh=='RPCDA4016'){
+        sbbh='RPCDA4000'
+      }
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getCurrentMeterData', {"bz":sbbh,"stime":_this.curDate}).then((response)=>{
         _this.currentMeter = response.data.content;
       })
     },
@@ -602,7 +596,11 @@ export default {
     //温盐深浊度仪
     leftBottomData(){
       let _this = this;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getTurbidityData', {"bz":_this.curSbbh,"stime":_this.curDate}).then((response)=>{
+      let sbbh = _this.curSbbh;
+      if(sbbh=='RPCDA4016'){
+        sbbh='RPCDA4000'
+      }
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getTurbidityData', {"bz":sbbh,"stime":_this.curDate}).then((response)=>{
         let turbiditys = response.data.content;
         let xAxisData = [];
         let data1 = [];
@@ -1109,7 +1107,7 @@ export default {
   margin: auto;
 }
 .center-content-item-first{
-  height: 10%;
+  height: 14%;
   background-color: #043769;
   display: flex;
   flex-direction: row;
@@ -1118,7 +1116,7 @@ export default {
   margin-top: 1%;
 }
 .center-content-item{
-  height: 12%;
+  height: 15%;
   background: url("/static/image/environment/bghg.png") no-repeat;
   background-size: cover;
   margin-top: 0.5%;

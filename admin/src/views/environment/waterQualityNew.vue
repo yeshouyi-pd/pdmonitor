@@ -58,6 +58,10 @@
                       <i class="ace-icon fa fa-refresh"></i>
                       重置
                     </a>
+<!--                    <button type="button" v-on:click="exportExcle()" class="btn btn-sm btn-warning btn-round" style="margin-right: 10px;">-->
+<!--                      <i class="ace-icon fa fa-leaf"></i>-->
+<!--                      导出-->
+<!--                    </button>-->
                   </td>
                 </tr>
                 </tbody>
@@ -167,6 +171,24 @@ export default {
     _this.list(1);
   },
   methods: {
+    exportExcle(){
+      let _this = this;
+      let param = "";
+      if(!Tool.isEmpty(_this.waterQualityNewDto.sbbh)){
+        param+="&sbbh="+_this.waterQualityNewDto.sbbh;
+      }
+      if(!Tool.isEmpty(_this.waterQualityNewDto.stime)){
+        param+="&stime="+_this.waterQualityNewDto.stime;
+      }
+      if(!Tool.isEmpty(_this.waterQualityNewDto.etime)){
+        param+="&etime="+_this.waterQualityNewDto.etime;
+      }
+      if(Tool.isEmpty(param)){
+        window.location.href = process.env.VUE_APP_SERVER + '/monitor/export/exportWaterQualityNew';
+      }else{
+        window.location.href = process.env.VUE_APP_SERVER + '/monitor/export/exportWaterQualityNew?'+param.substring(1,param.length);
+      }
+    },
     changeTab(){
       let _this = this;
       _this.defaultShow = !_this.defaultShow;

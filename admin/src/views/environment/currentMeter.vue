@@ -58,6 +58,10 @@
                       <i class="ace-icon fa fa-refresh"></i>
                       重置
                     </a>
+<!--                    <button type="button" v-on:click="exportExcle()" class="btn btn-sm btn-warning btn-round" style="margin-right: 10px;">-->
+<!--                      <i class="ace-icon fa fa-leaf"></i>-->
+<!--                      导出-->
+<!--                    </button>-->
                   </td>
                 </tr>
                 </tbody>
@@ -204,6 +208,24 @@ export default {
     _this.list(1);
   },
   methods: {
+    exportExcle(){
+      let _this = this;
+      let param = "";
+      if(!Tool.isEmpty(_this.currentMeterDto.bz)){
+        param+="&bz="+_this.currentMeterDto.bz;
+      }
+      if(!Tool.isEmpty(_this.currentMeterDto.stime)){
+        param+="&stime="+_this.currentMeterDto.stime;
+      }
+      if(!Tool.isEmpty(_this.currentMeterDto.etime)){
+        param+="&etime="+_this.currentMeterDto.etime;
+      }
+      if(Tool.isEmpty(param)){
+        window.location.href = process.env.VUE_APP_SERVER + '/monitor/export/exportCurrentMeter';
+      }else{
+        window.location.href = process.env.VUE_APP_SERVER + '/monitor/export/exportCurrentMeter?'+param.substring(1,param.length);
+      }
+    },
     changeTab(){
       let _this = this;
       _this.defaultShow = !_this.defaultShow;
