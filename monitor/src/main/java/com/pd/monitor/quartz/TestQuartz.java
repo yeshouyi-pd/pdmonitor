@@ -115,7 +115,7 @@ public class TestQuartz {
             dto.setRq(rq);
             dto.setXs(rqArr[0]+"-"+rqArr[1]+"-"+rqArr[2]+" "+rqArr[3]);
             dto.setFz(rqArr[0]+"-"+rqArr[1]+"-"+rqArr[2]+" "+rqArr[3]+":"+rqArr[4]);
-            dto.setTs(rqTsMap.get(xsStr)+"");
+            dto.setTs(rqTsMap.get(xsStr));
             dto.setDeptcode(deptcode);
             dto.setNorthNortheast(jdNum.get("north_northeast"));
             dto.setNortheastEast(jdNum.get("northeast_east"));

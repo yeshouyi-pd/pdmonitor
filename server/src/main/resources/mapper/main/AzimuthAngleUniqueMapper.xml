@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.pd.server.main.mapper.AzimuthAngleMapper">
-  <resultMap id="BaseResultMap" type="com.pd.server.main.domain.AzimuthAngle">
-    <id column="id" jdbcType="VARCHAR" property="id" />
-    <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
+<mapper namespace="com.pd.server.main.mapper.AzimuthAngleUniqueMapper">
+  <resultMap id="BaseResultMap" type="com.pd.server.main.domain.AzimuthAngleUnique">
+    <id column="sbbh" jdbcType="VARCHAR" property="sbbh" />
+    <id column="fz" jdbcType="VARCHAR" property="fz" />
+    <result column="id" jdbcType="VARCHAR" property="id" />
     <result column="rq" jdbcType="VARCHAR" property="rq" />
     <result column="xs" jdbcType="VARCHAR" property="xs" />
-    <result column="fz" jdbcType="VARCHAR" property="fz" />
     <result column="ts" jdbcType="INTEGER" property="ts" />
     <result column="deptcode" jdbcType="VARCHAR" property="deptcode" />
     <result column="north_northeast" jdbcType="INTEGER" property="northNortheast" />
@@ -77,16 +77,16 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, sbbh, rq, xs, fz, ts, deptcode, north_northeast, northeast_east, east_eastsouth, 
+    sbbh, fz, id, rq, xs, ts, deptcode, north_northeast, northeast_east, east_eastsouth, 
     eastsouth_south, south_southwest, southwest_west, west_westnorth, westnorth_north
   </sql>
-  <select id="selectByExample" parameterType="com.pd.server.main.domain.AzimuthAngleExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.pd.server.main.domain.AzimuthAngleUniqueExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from azimuth_angle
+    from azimuth_angle_unique
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -94,51 +94,53 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from azimuth_angle
-    where id = #{id,jdbcType=VARCHAR}
+    from azimuth_angle_unique
+    where sbbh = #{sbbh,jdbcType=VARCHAR}
+      and fz = #{fz,jdbcType=VARCHAR}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    delete from azimuth_angle
-    where id = #{id,jdbcType=VARCHAR}
+  <delete id="deleteByPrimaryKey" parameterType="map">
+    delete from azimuth_angle_unique
+    where sbbh = #{sbbh,jdbcType=VARCHAR}
+      and fz = #{fz,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.pd.server.main.domain.AzimuthAngleExample">
-    delete from azimuth_angle
+  <delete id="deleteByExample" parameterType="com.pd.server.main.domain.AzimuthAngleUniqueExample">
+    delete from azimuth_angle_unique
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.pd.server.main.domain.AzimuthAngle">
-    insert into azimuth_angle (id, sbbh, rq, 
-      xs, fz, ts, deptcode, 
+  <insert id="insert" parameterType="com.pd.server.main.domain.AzimuthAngleUnique">
+    insert into azimuth_angle_unique (sbbh, fz, id, 
+      rq, xs, ts, deptcode, 
       north_northeast, northeast_east, east_eastsouth, 
       eastsouth_south, south_southwest, southwest_west, 
       west_westnorth, westnorth_north)
-    values (#{id,jdbcType=VARCHAR}, #{sbbh,jdbcType=VARCHAR}, #{rq,jdbcType=VARCHAR}, 
-      #{xs,jdbcType=VARCHAR}, #{fz,jdbcType=VARCHAR}, #{ts,jdbcType=INTEGER}, #{deptcode,jdbcType=VARCHAR},
+    values (#{sbbh,jdbcType=VARCHAR}, #{fz,jdbcType=VARCHAR}, #{id,jdbcType=VARCHAR}, 
+      #{rq,jdbcType=VARCHAR}, #{xs,jdbcType=VARCHAR}, #{ts,jdbcType=INTEGER}, #{deptcode,jdbcType=VARCHAR},
       #{northNortheast,jdbcType=INTEGER}, #{northeastEast,jdbcType=INTEGER}, #{eastEastsouth,jdbcType=INTEGER}, 
       #{eastsouthSouth,jdbcType=INTEGER}, #{southSouthwest,jdbcType=INTEGER}, #{southwestWest,jdbcType=INTEGER}, 
       #{westWestnorth,jdbcType=INTEGER}, #{westnorthNorth,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.pd.server.main.domain.AzimuthAngle">
-    insert into azimuth_angle
+  <insert id="insertSelective" parameterType="com.pd.server.main.domain.AzimuthAngleUnique">
+    insert into azimuth_angle_unique
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
       <if test="sbbh != null">
         sbbh,
+      </if>
+      <if test="fz != null">
+        fz,
+      </if>
+      <if test="id != null">
+        id,
       </if>
       <if test="rq != null">
         rq,
       </if>
       <if test="xs != null">
         xs,
-      </if>
-      <if test="fz != null">
-        fz,
       </if>
       <if test="ts != null">
         ts,
@@ -172,20 +174,20 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=VARCHAR},
-      </if>
       <if test="sbbh != null">
         #{sbbh,jdbcType=VARCHAR},
+      </if>
+      <if test="fz != null">
+        #{fz,jdbcType=VARCHAR},
+      </if>
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
       </if>
       <if test="rq != null">
         #{rq,jdbcType=VARCHAR},
       </if>
       <if test="xs != null">
         #{xs,jdbcType=VARCHAR},
-      </if>
-      <if test="fz != null">
-        #{fz,jdbcType=VARCHAR},
       </if>
       <if test="ts != null">
         #{ts,jdbcType=INTEGER},
@@ -219,29 +221,29 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.pd.server.main.domain.AzimuthAngleExample" resultType="java.lang.Long">
-    select count(*) from azimuth_angle
+  <select id="countByExample" parameterType="com.pd.server.main.domain.AzimuthAngleUniqueExample" resultType="java.lang.Long">
+    select count(*) from azimuth_angle_unique
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update azimuth_angle
+    update azimuth_angle_unique
     <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=VARCHAR},
-      </if>
       <if test="record.sbbh != null">
         sbbh = #{record.sbbh,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fz != null">
+        fz = #{record.fz,jdbcType=VARCHAR},
+      </if>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
       </if>
       <if test="record.rq != null">
         rq = #{record.rq,jdbcType=VARCHAR},
       </if>
       <if test="record.xs != null">
         xs = #{record.xs,jdbcType=VARCHAR},
-      </if>
-      <if test="record.fz != null">
-        fz = #{record.fz,jdbcType=VARCHAR},
       </if>
       <if test="record.ts != null">
         ts = #{record.ts,jdbcType=INTEGER},
@@ -279,12 +281,12 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update azimuth_angle
-    set id = #{record.id,jdbcType=VARCHAR},
-      sbbh = #{record.sbbh,jdbcType=VARCHAR},
+    update azimuth_angle_unique
+    set sbbh = #{record.sbbh,jdbcType=VARCHAR},
+      fz = #{record.fz,jdbcType=VARCHAR},
+      id = #{record.id,jdbcType=VARCHAR},
       rq = #{record.rq,jdbcType=VARCHAR},
       xs = #{record.xs,jdbcType=VARCHAR},
-      fz = #{record.fz,jdbcType=VARCHAR},
       ts = #{record.ts,jdbcType=INTEGER},
       deptcode = #{record.deptcode,jdbcType=VARCHAR},
       north_northeast = #{record.northNortheast,jdbcType=INTEGER},
@@ -299,20 +301,17 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.pd.server.main.domain.AzimuthAngle">
-    update azimuth_angle
+  <update id="updateByPrimaryKeySelective" parameterType="com.pd.server.main.domain.AzimuthAngleUnique">
+    update azimuth_angle_unique
     <set>
-      <if test="sbbh != null">
-        sbbh = #{sbbh,jdbcType=VARCHAR},
+      <if test="id != null">
+        id = #{id,jdbcType=VARCHAR},
       </if>
       <if test="rq != null">
         rq = #{rq,jdbcType=VARCHAR},
       </if>
       <if test="xs != null">
         xs = #{xs,jdbcType=VARCHAR},
-      </if>
-      <if test="fz != null">
-        fz = #{fz,jdbcType=VARCHAR},
       </if>
       <if test="ts != null">
         ts = #{ts,jdbcType=INTEGER},
@@ -345,14 +344,14 @@
         westnorth_north = #{westnorthNorth,jdbcType=INTEGER},
       </if>
     </set>
-    where id = #{id,jdbcType=VARCHAR}
+    where sbbh = #{sbbh,jdbcType=VARCHAR}
+      and fz = #{fz,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.pd.server.main.domain.AzimuthAngle">
-    update azimuth_angle
-    set sbbh = #{sbbh,jdbcType=VARCHAR},
+  <update id="updateByPrimaryKey" parameterType="com.pd.server.main.domain.AzimuthAngleUnique">
+    update azimuth_angle_unique
+    set id = #{id,jdbcType=VARCHAR},
       rq = #{rq,jdbcType=VARCHAR},
       xs = #{xs,jdbcType=VARCHAR},
-      fz = #{fz,jdbcType=VARCHAR},
       ts = #{ts,jdbcType=INTEGER},
       deptcode = #{deptcode,jdbcType=VARCHAR},
       north_northeast = #{northNortheast,jdbcType=INTEGER},
@@ -363,21 +362,7 @@
       southwest_west = #{southwestWest,jdbcType=INTEGER},
       west_westnorth = #{westWestnorth,jdbcType=INTEGER},
       westnorth_north = #{westnorthNorth,jdbcType=INTEGER}
-    where id = #{id,jdbcType=VARCHAR}
+    where sbbh = #{sbbh,jdbcType=VARCHAR}
+      and fz = #{fz,jdbcType=VARCHAR}
   </update>
-  <select id="selectByQuartz" parameterType="com.pd.server.main.domain.AzimuthAngleExample" resultMap="BaseResultMap">
-    select sbbh,rq,xs,fz,deptcode,sum(ts) as ts,
-           sum(north_northeast) as north_northeast,sum(northeast_east) as northeast_east,
-           sum(east_eastsouth) as east_eastsouth,sum(eastsouth_south) as eastsouth_south,
-           sum(south_southwest) as south_southwest,sum(southwest_west) as southwest_west,
-           sum(west_westnorth) as west_westnorth,sum(westnorth_north) as westnorth_north
-    from azimuth_angle
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null">
-      order by ${orderByClause}
-    </if>
-    group by sbbh,rq,xs,fz,deptcode
-  </select>
 </mapper>

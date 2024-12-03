@@ -3,10 +3,7 @@ package com.pd.server.main.service.shj;
 import com.alibaba.fastjson.JSONObject;
 import com.pd.server.config.SpringUtil;
 import com.pd.server.main.domain.*;
-import com.pd.server.main.dto.AzimuthAngleDto;
-import com.pd.server.main.dto.CameraMiddleDto;
-import com.pd.server.main.dto.PointerDayDto;
-import com.pd.server.main.dto.PointerSecondDto;
+import com.pd.server.main.dto.*;
 import com.pd.server.main.mapper.*;
 import com.pd.server.main.service.*;
 import com.pd.server.util.*;
@@ -43,6 +40,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
     public static CameraMiddleService cameraMiddleServiceStatic;
     public static CodesetMapper codesetMapperStatic;
     public static AzimuthAngleService azimuthAngleServiceStatic;
+    public static AzimuthAngleRqService azimuthAngleRqServiceStatic;
     public static ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(10);
 
     @Resource
@@ -69,6 +67,8 @@ public class EquipmentFileShjService extends AbstractScanRequest{
     private CodesetMapper codesetMapper;
     @Resource
     private AzimuthAngleService azimuthAngleService;
+    @Resource
+    private AzimuthAngleRqService azimuthAngleRqService;
 
     @PostConstruct
     protected void init() {
@@ -84,6 +84,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
         cameraMiddleServiceStatic = cameraMiddleService;
         codesetMapperStatic = codesetMapper;
         azimuthAngleServiceStatic = azimuthAngleService;
+        azimuthAngleRqServiceStatic = azimuthAngleRqService;
     }
 
     /**
@@ -481,7 +482,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
             dto.setRq(rq);
             dto.setXs(rqArr[0]+"-"+rqArr[1]+"-"+rqArr[2]+" "+rqArr[3]);
             dto.setFz(rqArr[0]+"-"+rqArr[1]+"-"+rqArr[2]+" "+rqArr[3]+":"+rqArr[4]);
-            dto.setTs(rqTsMap.get(xsStr)+"");
+            dto.setTs(rqTsMap.get(xsStr));
             dto.setDeptcode(deptcode);
             dto.setNorthNortheast(jdNum.get("north_northeast"));
             dto.setNortheastEast(jdNum.get("northeast_east"));
@@ -492,6 +493,10 @@ public class EquipmentFileShjService extends AbstractScanRequest{
             dto.setWestWestnorth(jdNum.get("west_westnorth"));
             dto.setWestnorthNorth(jdNum.get("westnorth_north"));
             azimuthAngleServiceStatic.save(dto);
+            AzimuthAngleRqDto rqDto = new AzimuthAngleRqDto();
+            rqDto.setSbbh(sbbh);
+            rqDto.setRq(rq);
+            azimuthAngleRqServiceStatic.save(rqDto);
         }
     }
 }

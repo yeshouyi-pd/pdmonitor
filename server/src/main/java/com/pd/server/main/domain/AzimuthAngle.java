@@ -11,7 +11,7 @@ public class AzimuthAngle {
 
     private String fz;
 
-    private String ts;
+    private Integer ts;
 
     private String deptcode;
 
@@ -71,11 +71,11 @@ public class AzimuthAngle {
         this.fz = fz;
     }
 
-    public String getTs() {
+    public Integer getTs() {
         return ts;
     }
 
-    public void setTs(String ts) {
+    public void setTs(Integer ts) {
         this.ts = ts;
     }
 
