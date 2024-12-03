@@ -1,7 +1,7 @@
 package com.pd.server.main.dto;
 
 
-public class AzimuthAngleDto extends PageDto{
+public class AzimuthAngleUniqueDto {
 
     /**
     * 

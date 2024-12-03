@@ -2,6 +2,7 @@ package com.pd.server.main.service;
 
 import com.pd.server.main.domain.AzimuthAngle;
 import com.pd.server.main.domain.AzimuthAngleExample;
+import com.pd.server.main.domain.AzimuthAngleRq;
 import com.pd.server.main.dto.AzimuthAngleDto;
 import com.pd.server.main.dto.PageDto;
 import com.pd.server.main.mapper.AzimuthAngleMapper;
@@ -21,17 +22,15 @@ public class AzimuthAngleService {
     @Resource
     private AzimuthAngleMapper azimuthAngleMapper;
 
+    public List<AzimuthAngle> selectByQuartz(AzimuthAngleExample example){
+        return azimuthAngleMapper.selectByQuartz(example);
+    }
+
     /**
     * 列表查询
     */
-    public void list(PageDto pageDto) {
-    PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
-        AzimuthAngleExample azimuthAngleExample = new AzimuthAngleExample();
-        List<AzimuthAngle> azimuthAngleList = azimuthAngleMapper.selectByExample(azimuthAngleExample);
-        PageInfo<AzimuthAngle> pageInfo = new PageInfo<>(azimuthAngleList);
-        pageDto.setTotal(pageInfo.getTotal());
-        List<AzimuthAngleDto> azimuthAngleDtoList = CopyUtil.copyList(azimuthAngleList, AzimuthAngleDto.class);
-        pageDto.setList(azimuthAngleDtoList);
+    public List<AzimuthAngle> list(AzimuthAngleExample example) {
+        return azimuthAngleMapper.selectByExample(example);
     }
 
     /**

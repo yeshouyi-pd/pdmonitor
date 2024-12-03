@@ -203,7 +203,7 @@
                       </div>
                     </div>
                     <div class="form-group">
-                      <label class="col-sm-2 control-label">设备负责人</label>
+                      <label class="col-sm-2 control-label">太阳能电池板序号</label>
                       <div class="col-sm-4">
                         <input v-model="waterEquipment.fzr" class="form-control">
                       </div>

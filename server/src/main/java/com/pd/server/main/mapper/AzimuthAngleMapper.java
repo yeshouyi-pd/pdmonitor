@@ -27,4 +27,6 @@ public interface AzimuthAngleMapper {
     int updateByPrimaryKeySelective(AzimuthAngle record);
 
     int updateByPrimaryKey(AzimuthAngle record);
+
+    List<AzimuthAngle> selectByQuartz(AzimuthAngleExample example);
 }

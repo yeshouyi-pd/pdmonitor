@@ -89,12 +89,12 @@
               <div class="center-content-item">
                 <div style="width: 15%;margin: auto;">4</div>
                 <div style="width: 35%;margin: auto;">东向流速</div>
-                <div style="width: 50%;margin: auto;color: yellow;">{{currentMeter.uspeed}}</div>
+                <div style="width: 50%;margin: auto;color: yellow;">{{currentMeter.uspeed || currentMeter.east}}</div>
               </div>
               <div class="center-content-item">
                 <div style="width: 15%;margin: auto;">5</div>
                 <div style="width: 35%;margin: auto;">北向流速</div>
-                <div style="width: 50%;margin: auto;color: yellow;">{{currentMeter.vspeed}}</div>
+                <div style="width: 50%;margin: auto;color: yellow;">{{currentMeter.vspeed || currentMeter.north}}</div>
               </div>
             </div>
           </div>
