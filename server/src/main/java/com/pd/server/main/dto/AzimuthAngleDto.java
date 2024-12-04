@@ -78,6 +78,8 @@ public class AzimuthAngleDto extends PageDto{
     */
     private Integer westnorthNorth;
 
+    private String xmbh;
+
     public String getId() {
         return id;
     }
@@ -198,6 +200,13 @@ public class AzimuthAngleDto extends PageDto{
         this.westnorthNorth = westnorthNorth;
     }
 
+    public String getXmbh() {
+        return xmbh;
+    }
+
+    public void setXmbh(String xmbh) {
+        this.xmbh = xmbh;
+    }
 
     @Override
     public String toString() {

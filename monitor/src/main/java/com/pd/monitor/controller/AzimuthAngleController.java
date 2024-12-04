@@ -2,9 +2,11 @@ package com.pd.monitor.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.pd.monitor.wx.conf.BaseWxController;
 import com.pd.server.main.domain.AzimuthAngle;
 import com.pd.server.main.domain.AzimuthAngleExample;
 import com.pd.server.main.dto.AzimuthAngleDto;
+import com.pd.server.main.dto.LoginUserDto;
 import com.pd.server.main.dto.PageDto;
 import com.pd.server.main.dto.ResponseDto;
 import com.pd.server.main.service.AzimuthAngleService;
@@ -13,6 +15,7 @@ import com.pd.server.util.ValidatorUtil;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -20,10 +23,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/admin/azimuthAngle")
-public class AzimuthAngleController {
+public class AzimuthAngleController extends BaseWxController {
 
     private static final Logger LOG = LoggerFactory.getLogger(AzimuthAngleController.class);
-    public static final String BUSINESS_NAME = "方位角统计查询";
+    public static final String BUSINESS_NAME = "方位角统计查询(实时)";
 
     @Resource
     private AzimuthAngleService azimuthAngleService;
@@ -34,6 +37,7 @@ public class AzimuthAngleController {
     @PostMapping("/list")
     public ResponseDto list(@RequestBody AzimuthAngleDto pageDto) {
         ResponseDto responseDto = new ResponseDto();
+        LoginUserDto userDto = getRequestHeader();
         PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
         AzimuthAngleExample azimuthAngleExample = new AzimuthAngleExample();
         AzimuthAngleExample.Criteria ca = azimuthAngleExample.createCriteria();
@@ -45,6 +49,11 @@ public class AzimuthAngleController {
         }
         if(!StringUtils.isEmpty(pageDto.getEtime())){
             ca.andRqLessThanOrEqualTo(pageDto.getEtime());
+        }
+        if(!StringUtils.isEmpty(pageDto.getXmbh())){
+            if(!CollectionUtils.isEmpty(userDto.getXmbhsbsns().get(pageDto.getXmbh()))){
+                ca.andSbbhIn(userDto.getXmbhsbsns().get(pageDto.getXmbh()));
+            }
         }
         azimuthAngleExample.setOrderByClause(" fz desc ");
         List<AzimuthAngle> azimuthAngleList = azimuthAngleService.list(azimuthAngleExample);

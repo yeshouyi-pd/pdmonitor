@@ -24,14 +24,8 @@ public class AzimuthAngleUniqueService {
     /**
     * 列表查询
     */
-    public void list(PageDto pageDto) {
-    PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
-        AzimuthAngleUniqueExample azimuthAngleUniqueExample = new AzimuthAngleUniqueExample();
-        List<AzimuthAngleUnique> azimuthAngleUniqueList = azimuthAngleUniqueMapper.selectByExample(azimuthAngleUniqueExample);
-        PageInfo<AzimuthAngleUnique> pageInfo = new PageInfo<>(azimuthAngleUniqueList);
-        pageDto.setTotal(pageInfo.getTotal());
-        List<AzimuthAngleUniqueDto> azimuthAngleUniqueDtoList = CopyUtil.copyList(azimuthAngleUniqueList, AzimuthAngleUniqueDto.class);
-        pageDto.setList(azimuthAngleUniqueDtoList);
+    public List<AzimuthAngleUnique> list(AzimuthAngleUniqueExample example) {
+        return azimuthAngleUniqueMapper.selectByExample(example);
     }
 
     /**

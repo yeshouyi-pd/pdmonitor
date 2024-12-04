@@ -75,6 +75,186 @@ public class ExportFileController extends BaseWxController{
     private WaterQualityNewService waterQualityNewService;
     @Resource
     private WaveDataService waveDataService;
+    @Resource
+    private AzimuthAngleUniqueService azimuthAngleUniqueService;
+
+    /**
+     * 方位角统计(历史)导出
+     */
+    @GetMapping("/exportAzimuthAngleUnique")
+    public void exportAzimuthAngleUnique(HttpServletRequest request, HttpServletResponse response){
+        try {
+            List<String> sbbhs = new ArrayList<>();
+            if(!StringUtils.isEmpty(request.getParameter("xmbh"))){
+                sbbhs = waterProEquipService.findSbsnByXmbh(request.getParameter("xmbh"));
+            }
+            AzimuthAngleUniqueExample example = new AzimuthAngleUniqueExample();
+            AzimuthAngleUniqueExample.Criteria ca = example.createCriteria();
+            if(!StringUtils.isEmpty(request.getParameter("sbbh"))){
+                ca.andSbbhEqualTo(request.getParameter("sbbh"));
+            }
+            if(!StringUtils.isEmpty(request.getParameter("stime"))){
+                ca.andRqGreaterThanOrEqualTo(request.getParameter("stime"));
+            }
+            if(!StringUtils.isEmpty(request.getParameter("etime"))){
+                ca.andRqLessThanOrEqualTo(request.getParameter("etime"));
+            }
+            example.setOrderByClause(" fz desc ");
+            List<AzimuthAngleUnique> lists = azimuthAngleUniqueService.list(example);
+            //导出
+            HSSFWorkbook workbook = new HSSFWorkbook();
+            //设置字体大小
+            HSSFFont fontCommon = workbook.createFont();
+            fontCommon.setFontHeightInPoints((short)12); // 设置字体大小为12磅
+            //设置公共单元格样式
+            HSSFCellStyle cellStyleCommon = workbook.createCellStyle();
+            cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+            cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+            //cellStyleCommon.setFont(fontCommon);
+            //设置字体加粗
+            HSSFFont font = workbook.createFont();
+            font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+            font.setFontHeightInPoints((short)12); // 设置字体大小为12磅
+            HSSFCellStyle cellStyleTitle = workbook.createCellStyle();
+            cellStyleTitle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+            cellStyleTitle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+            cellStyleTitle.setFont(font);
+            // 创建一个工作表
+            String fileName = "方位角历史统计(" + new Date().getTime() + ").xls";
+            HSSFSheet sheet = workbook.createSheet("方位角统计");
+            // 自适应列宽度
+            sheet.autoSizeColumn(1, true);
+            sheet.setDefaultColumnWidth(18);
+            sheet.setDefaultRowHeight((short)(40*10));
+            // 添加表头行
+            HSSFRow titleRow = sheet.createRow(0);//第1行
+            List<String> titleStrList = Arrays.asList("所属机构","设备编号","设备名称","日期","分钟","发声次数","北-北东","北东-东","东-东南","东南-南","南-南西","南西-西","西-西北","西北-北");
+            for(int i=0;i<titleStrList.size();i++){
+                HSSFCell cell = titleRow.createCell(i);
+                cell.setCellValue(titleStrList.get(i));
+                cell.setCellStyle(cellStyleTitle);
+            }
+            WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
+            WaterEquipmentExample.Criteria caEquip = waterEquipmentExample.createCriteria();
+            caEquip.andSblbEqualTo("0001");
+            caEquip.andDqzlEqualTo("A4");
+            List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(waterEquipmentExample);
+            Map<String, String> mapSbxh = waterEquipmentList.stream().collect(Collectors.toMap(p -> p.getSbsn(), p -> p.getSbmc()));
+            Map<String,String> mapDept = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.DEPTCODENAME);
+            int i=0;
+            for(AzimuthAngleUnique entity : lists){
+                if(!StringUtils.isEmpty(request.getParameter("xmbh"))){
+                    if(sbbhs.contains(entity.getSbbh())){
+                        HSSFRow comRow = sheet.createRow(i+1);
+                        HSSFCell comCell0 = comRow.createCell(0);
+                        comCell0.setCellValue(mapDept.get(entity.getDeptcode()));
+                        comCell0.setCellStyle(cellStyleCommon);
+                        HSSFCell comCell1 = comRow.createCell(1);
+                        comCell1.setCellValue(entity.getSbbh());
+                        comCell1.setCellStyle(cellStyleCommon);
+                        HSSFCell comCell2 = comRow.createCell(2);
+                        comCell2.setCellValue(mapSbxh.get(entity.getSbbh()));
+                        comCell2.setCellStyle(cellStyleCommon);
+                        HSSFCell comCell3 = comRow.createCell(3);
+                        comCell3.setCellValue(entity.getRq());
+                        comCell3.setCellStyle(cellStyleCommon);
+                        HSSFCell comCell4 = comRow.createCell(4);
+                        comCell4.setCellValue(entity.getFz());
+                        comCell4.setCellStyle(cellStyleCommon);
+                        HSSFCell comCell5 = comRow.createCell(5);
+                        comCell5.setCellValue(entity.getTs());
+                        comCell5.setCellStyle(cellStyleCommon);
+                        HSSFCell comCell6 = comRow.createCell(6);
+                        comCell6.setCellValue(entity.getNorthNortheast());
+                        comCell6.setCellStyle(cellStyleCommon);
+                        HSSFCell comCell7 = comRow.createCell(7);
+                        comCell7.setCellValue(entity.getNortheastEast());
+                        comCell7.setCellStyle(cellStyleCommon);
+                        HSSFCell comCell8 = comRow.createCell(8);
+                        comCell8.setCellValue(entity.getEastEastsouth());
+                        comCell8.setCellStyle(cellStyleCommon);
+                        HSSFCell comCell9 = comRow.createCell(9);
+                        comCell9.setCellValue(entity.getEastsouthSouth());
+                        comCell9.setCellStyle(cellStyleCommon);
+                        HSSFCell comCell10 = comRow.createCell(10);
+                        comCell10.setCellValue(entity.getSouthSouthwest());
+                        comCell10.setCellStyle(cellStyleCommon);
+                        HSSFCell comCell11 = comRow.createCell(11);
+                        comCell11.setCellValue(entity.getSouthwestWest());
+                        comCell11.setCellStyle(cellStyleCommon);
+                        HSSFCell comCell12 = comRow.createCell(12);
+                        comCell12.setCellValue(entity.getWestWestnorth());
+                        comCell12.setCellStyle(cellStyleCommon);
+                        HSSFCell comCell13 = comRow.createCell(13);
+                        comCell13.setCellValue(entity.getWestnorthNorth());
+                        comCell13.setCellStyle(cellStyleCommon);
+                        i++;
+                    }
+                }else{
+                    HSSFRow comRow = sheet.createRow(i+1);
+                    HSSFCell comCell0 = comRow.createCell(0);
+                    comCell0.setCellValue(mapDept.get(entity.getDeptcode()));
+                    comCell0.setCellStyle(cellStyleCommon);
+                    HSSFCell comCell1 = comRow.createCell(1);
+                    comCell1.setCellValue(entity.getSbbh());
+                    comCell1.setCellStyle(cellStyleCommon);
+                    HSSFCell comCell2 = comRow.createCell(2);
+                    comCell2.setCellValue(mapSbxh.get(entity.getSbbh()));
+                    comCell2.setCellStyle(cellStyleCommon);
+                    HSSFCell comCell3 = comRow.createCell(3);
+                    comCell3.setCellValue(entity.getRq());
+                    comCell3.setCellStyle(cellStyleCommon);
+                    HSSFCell comCell4 = comRow.createCell(4);
+                    comCell4.setCellValue(entity.getFz());
+                    comCell4.setCellStyle(cellStyleCommon);
+                    HSSFCell comCell5 = comRow.createCell(5);
+                    comCell5.setCellValue(entity.getTs());
+                    comCell5.setCellStyle(cellStyleCommon);
+                    HSSFCell comCell6 = comRow.createCell(6);
+                    comCell6.setCellValue(entity.getNorthNortheast());
+                    comCell6.setCellStyle(cellStyleCommon);
+                    HSSFCell comCell7 = comRow.createCell(7);
+                    comCell7.setCellValue(entity.getNortheastEast());
+                    comCell7.setCellStyle(cellStyleCommon);
+                    HSSFCell comCell8 = comRow.createCell(8);
+                    comCell8.setCellValue(entity.getEastEastsouth());
+                    comCell8.setCellStyle(cellStyleCommon);
+                    HSSFCell comCell9 = comRow.createCell(9);
+                    comCell9.setCellValue(entity.getEastsouthSouth());
+                    comCell9.setCellStyle(cellStyleCommon);
+                    HSSFCell comCell10 = comRow.createCell(10);
+                    comCell10.setCellValue(entity.getSouthSouthwest());
+                    comCell10.setCellStyle(cellStyleCommon);
+                    HSSFCell comCell11 = comRow.createCell(11);
+                    comCell11.setCellValue(entity.getSouthwestWest());
+                    comCell11.setCellStyle(cellStyleCommon);
+                    HSSFCell comCell12 = comRow.createCell(12);
+                    comCell12.setCellValue(entity.getWestWestnorth());
+                    comCell12.setCellStyle(cellStyleCommon);
+                    HSSFCell comCell13 = comRow.createCell(13);
+                    comCell13.setCellValue(entity.getWestnorthNorth());
+                    comCell13.setCellStyle(cellStyleCommon);
+                    i++;
+                }
+            }
+            response.setHeader("content-Type", "application/vnd.ms-excel");
+            // 下载文件的默认名称
+            String agent = request.getHeader("User-Agent");
+            if (agent.contains("MSIE") || agent.contains("Trident") || agent.contains("Edge")) {
+                response.setHeader("Content-Disposition",
+                        "attachment; filename=" + URLEncoder.encode(fileName, "UTF-8"));
+            } else {
+                response.setHeader("Content-Disposition",
+                        "attachment; filename=\"" + new String((fileName).getBytes("UTF-8"), "ISO-8859-1") + "\"");
+            }
+            response.setCharacterEncoding("utf-8");
+            ServletOutputStream out = response.getOutputStream();
+            workbook.write(out);
+            out.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
     /**
      * 海浪数据导出

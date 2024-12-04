@@ -1,7 +1,7 @@
 package com.pd.server.main.dto;
 
 
-public class AzimuthAngleUniqueDto {
+public class AzimuthAngleUniqueDto extends PageDto{
 
     /**
     * 
@@ -77,6 +77,8 @@ public class AzimuthAngleUniqueDto {
     * 西北-北
     */
     private Integer westnorthNorth;
+
+    private String xmbh;
 
     public String getId() {
         return id;
@@ -198,6 +200,13 @@ public class AzimuthAngleUniqueDto {
         this.westnorthNorth = westnorthNorth;
     }
 
+    public String getXmbh() {
+        return xmbh;
+    }
+
+    public void setXmbh(String xmbh) {
+        this.xmbh = xmbh;
+    }
 
     @Override
     public String toString() {

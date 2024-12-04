@@ -2,7 +2,7 @@
   <div>
     <div class="widget-box">
       <div class="widget-header">
-        <h4 class="widget-title">方位角统计查询(实时)</h4>
+        <h4 class="widget-title">方位角统计查询(历史)</h4>
       </div>
       <div class="widget-body">
         <div class="widget-main">
@@ -20,7 +20,7 @@
                   设备名称：
                 </td>
                 <td style="width: 20%">
-                 <select v-model="azimuthAngleDto.sbbh" class="form-control" >
+                  <select v-model="azimuthAngleUniqueDto.sbbh" class="form-control" >
                     <option value="" selected>请选择</option>
                     <option v-for="item in waterEquipments" :value="item.sbsn">{{item.sbmc}}</option>
                   </select>
@@ -30,10 +30,14 @@
                     <i class="ace-icon fa fa-book"></i>
                     查询
                   </button>
-                  <a href="javascript:location.replace(location.href);"  class="btn btn-sm   btn-success btn-round">
+                  <a href="javascript:location.replace(location.href);"  class="btn btn-sm   btn-success btn-round" style="margin-right: 10px;">
                     <i class="ace-icon fa fa-refresh"></i>
                     重置
                   </a>
+                  <button type="button" v-on:click="exportExcel()" class="btn btn-sm btn-warning btn-round" style="margin-right: 10px;">
+                    <i class="ace-icon fa fa-leaf"></i>
+                    导出
+                  </button>
                 </td>
               </tr>
               </tbody>
@@ -42,7 +46,7 @@
         </div>
       </div>
     </div>
-    
+
     <div>
       <table id="simple-table" class="table  table-bordered table-hover">
         <thead>
@@ -64,27 +68,27 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="azimuthAngle in azimuthAngles">
-          <td>{{deptMap|optionMapKV(azimuthAngle.deptcode)}}</td>
-          <td>{{azimuthAngle.sbbh}}</td>
-          <td>{{waterEquipments|optionNSArray(azimuthAngle.sbbh)}}</td>
-          <td>{{azimuthAngle.rq}}</td>
-          <td>{{azimuthAngle.fz}}</td>
-          <td>{{azimuthAngle.ts}}</td>
-          <td>{{azimuthAngle.northNortheast}}</td>
-          <td>{{azimuthAngle.northeastEast}}</td>
-          <td>{{azimuthAngle.eastEastsouth}}</td>
-          <td>{{azimuthAngle.eastsouthSouth}}</td>
-          <td>{{azimuthAngle.southSouthwest}}</td>
-          <td>{{azimuthAngle.southwestWest}}</td>
-          <td>{{azimuthAngle.westWestnorth}}</td>
-          <td>{{azimuthAngle.westnorthNorth}}</td>
+        <tr v-for="azimuthAngleUnique in azimuthAngleUniques">
+          <td>{{deptMap|optionMapKV(azimuthAngleUnique.deptcode)}}</td>
+          <td>{{azimuthAngleUnique.sbbh}}</td>
+          <td>{{waterEquipments|optionNSArray(azimuthAngleUnique.sbbh)}}</td>
+          <td>{{azimuthAngleUnique.rq}}</td>
+          <td>{{azimuthAngleUnique.fz}}</td>
+          <td>{{azimuthAngleUnique.ts}}</td>
+          <td>{{azimuthAngleUnique.northNortheast}}</td>
+          <td>{{azimuthAngleUnique.northeastEast}}</td>
+          <td>{{azimuthAngleUnique.eastEastsouth}}</td>
+          <td>{{azimuthAngleUnique.eastsouthSouth}}</td>
+          <td>{{azimuthAngleUnique.southSouthwest}}</td>
+          <td>{{azimuthAngleUnique.southwestWest}}</td>
+          <td>{{azimuthAngleUnique.westWestnorth}}</td>
+          <td>{{azimuthAngleUnique.westnorthNorth}}</td>
         </tr>
         </tbody>
       </table>
       <pagination ref="pagination" v-bind:list="list" v-bind:itemCount="10"></pagination>
     </div>
-    
+
   </div>
 </template>
 <script>
@@ -95,9 +99,9 @@ export default {
   components: {Pagination,Times},
   data:function (){
     return {
-      azimuthAngle:{},
-      azimuthAngleDto:{},
-      azimuthAngles:[],
+      azimuthAngleUnique:{},
+      azimuthAngleUniqueDto:{},
+      azimuthAngleUniques:[],
       deptMap:null,
       waterEquipments:[]
     }
@@ -110,12 +114,33 @@ export default {
     _this.list(1);
   },
   methods:{
+    exportExcel(){
+      let _this = this;
+      let paramsStr = "";
+      if("460100"==Tool.getLoginUser().deptcode){
+        paramsStr = "deptcode="+Tool.getLoginUser().deptcode;
+      }else{
+        paramsStr = "deptcode="+Tool.getLoginUser().deptcode+"&xmbh="+Tool.getLoginUser().xmbh;
+      }
+      if(Tool.isNotEmpty(_this.azimuthAngleUniqueDto.stime)){
+        paramsStr = paramsStr + "&stime="+_this.azimuthAngleUniqueDto.stime;
+      }
+      if(Tool.isNotEmpty(_this.azimuthAngleUniqueDto.etime)){
+        paramsStr = paramsStr + "&etime="+_this.azimuthAngleUniqueDto.etime;
+      }
+      if(Tool.isNotEmpty(_this.azimuthAngleUniqueDto.sbbh)){
+        paramsStr = paramsStr + "&sbbh="+_this.azimuthAngleUniqueDto.sbbh;
+      }
+      let url = process.env.VUE_APP_SERVER + '/monitor/export/exportAzimuthAngleUnique?'+paramsStr;
+      console.log(url);
+      window.location.href = url;
+    },
     /**
      *开始时间
      */
     startTime(rep){
       let _this = this;
-      _this.azimuthAngleDto.stime = rep;
+      _this.azimuthAngleUniqueDto.stime = rep;
       _this.$forceUpdate();
     },
     /**
@@ -123,21 +148,21 @@ export default {
      */
     endTime(rep){
       let _this = this;
-      _this.azimuthAngleDto.etime = rep;
+      _this.azimuthAngleUniqueDto.etime = rep;
       _this.$forceUpdate();
     },
     list(page){
       let _this = this;
       Loading.show();
-      _this.azimuthAngleDto.page = page;
-      _this.azimuthAngleDto.size = _this.$refs.pagination.size;
+      _this.azimuthAngleUniqueDto.page = page;
+      _this.azimuthAngleUniqueDto.size = _this.$refs.pagination.size;
       if("460100"!=Tool.getLoginUser().deptcode){
-        _this.azimuthAngleDto.xmbh=Tool.getLoginUser().xmbh;
+        _this.azimuthAngleUniqueDto.xmbh=Tool.getLoginUser().xmbh;
       }
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/azimuthAngle/list', _this.azimuthAngleDto).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/azimuthAngleUnique/list', _this.azimuthAngleUniqueDto).then((response)=>{
         Loading.hide();
         let resp = response.data;
-        _this.azimuthAngles = resp.content.list;
+        _this.azimuthAngleUniques = resp.content.list;
         _this.$refs.pagination.render(page, resp.content.total);
       })
     },
