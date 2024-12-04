@@ -87,6 +87,8 @@ import testDhVideo from "./views/testDhVideo1.vue";
 import VideoEventTl from "./views/monitor/videoEventTl.vue";
 import VideoDpSecond from "./views/mobile/videoDpSecond.vue";
 import SolarPannel from "./views/electricity/solarPannel.vue";
+import AzimuthAngle from "./views/monitor/azimuthAngle.vue";
+import AzimuthAngleUnique from "./views/monitor/azimuthAngleUnique.vue";
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -102,13 +104,13 @@ export default new Router({
     base:process.env.BASE_URL,
     routes:[{
         path: "*",
-        redirect: "/loginVideo",
+        redirect: "/login",
     },{
         path: "",
-        redirect: "/loginVideo",
+        redirect: "/login",
     },{
-        path: "/loginVideo",
-        component:LoginVideo
+        path: "/login",
+        component:Login
     },{
         path: "/mobile/largemonitorsTy",
         component: LargemonitorsTy
@@ -436,6 +438,14 @@ export default new Router({
             path: "monitor/solarPannel",
             name: "monitor/solarPannel",
             component: SolarPannel
+        },{
+            path: "monitor/azimuthAngle",
+            name: "monitor/azimuthAngle",
+            component: AzimuthAngle
+        },{
+            path: "monitor/azimuthAngleUnique",
+            name: "monitor/azimuthAngleUnique",
+            component: AzimuthAngleUnique
         }]
     }]
 })

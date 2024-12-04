@@ -32,8 +32,8 @@ public class AzimuthAngleQuartz {
     @Resource
     private AzimuthAngleService azimuthAngleService;
 
-    //@Scheduled(cron = "0 30 01 * * ? ")
-    @Scheduled(cron = "0 50 13 * * ? ")
+    @Scheduled(cron = "0 30 01 * * ? ")
+    //@Scheduled(cron = "0 50 13 * * ? ")
     public void loop() throws ParseException {
         String beforeDayStr = DateTools.getFormatDate(DateUtil.getDaysLater(new Date(),-1),"yyyy-MM-dd");
         AzimuthAngleRqExample example = new AzimuthAngleRqExample();

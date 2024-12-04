@@ -1,22 +1,31 @@
 package com.pd.monitor.controller;
 
-import com.pd.server.main.dto.AzimuthAngleUniqueDto;
-import com.pd.server.main.dto.PageDto;
-import com.pd.server.main.dto.ResponseDto;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.pd.monitor.wx.conf.BaseWxController;
+import com.pd.server.main.domain.AzimuthAngle;
+import com.pd.server.main.domain.AzimuthAngleExample;
+import com.pd.server.main.domain.AzimuthAngleUnique;
+import com.pd.server.main.domain.AzimuthAngleUniqueExample;
+import com.pd.server.main.dto.*;
 import com.pd.server.main.service.AzimuthAngleUniqueService;
+import com.pd.server.util.CopyUtil;
 import com.pd.server.util.ValidatorUtil;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin/azimuthAngleUnique")
-public class AzimuthAngleUniqueController {
+public class AzimuthAngleUniqueController extends BaseWxController {
 
     private static final Logger LOG = LoggerFactory.getLogger(AzimuthAngleUniqueController.class);
-    public static final String BUSINESS_NAME = "";
+    public static final String BUSINESS_NAME = "方位角统计查询(历史)";
 
     @Resource
     private AzimuthAngleUniqueService azimuthAngleUniqueService;
@@ -25,9 +34,32 @@ public class AzimuthAngleUniqueController {
     * 列表查询
     */
     @PostMapping("/list")
-    public ResponseDto list(@RequestBody PageDto pageDto) {
+    public ResponseDto list(@RequestBody AzimuthAngleUniqueDto pageDto) {
         ResponseDto responseDto = new ResponseDto();
-        azimuthAngleUniqueService.list(pageDto);
+        LoginUserDto userDto = getRequestHeader();
+        PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
+        AzimuthAngleUniqueExample example = new AzimuthAngleUniqueExample();
+        AzimuthAngleUniqueExample.Criteria ca = example.createCriteria();
+        if(!StringUtils.isEmpty(pageDto.getSbbh())){
+            ca.andSbbhEqualTo(pageDto.getSbbh());
+        }
+        if(!StringUtils.isEmpty(pageDto.getStime())){
+            ca.andRqGreaterThanOrEqualTo(pageDto.getStime());
+        }
+        if(!StringUtils.isEmpty(pageDto.getEtime())){
+            ca.andRqLessThanOrEqualTo(pageDto.getEtime());
+        }
+        if(!StringUtils.isEmpty(pageDto.getXmbh())){
+            if(!CollectionUtils.isEmpty(userDto.getXmbhsbsns().get(pageDto.getXmbh()))){
+                ca.andSbbhIn(userDto.getXmbhsbsns().get(pageDto.getXmbh()));
+            }
+        }
+        example.setOrderByClause(" fz desc ");
+        List<AzimuthAngleUnique> azimuthAngleUniqueList = azimuthAngleUniqueService.list(example);
+        PageInfo<AzimuthAngleUnique> pageInfo = new PageInfo<>(azimuthAngleUniqueList);
+        pageDto.setTotal(pageInfo.getTotal());
+        List<AzimuthAngleUniqueDto> azimuthAngleDtoList = CopyUtil.copyList(azimuthAngleUniqueList, AzimuthAngleUniqueDto.class);
+        pageDto.setList(azimuthAngleDtoList);
         responseDto.setContent(pageDto);
         return responseDto;
     }
