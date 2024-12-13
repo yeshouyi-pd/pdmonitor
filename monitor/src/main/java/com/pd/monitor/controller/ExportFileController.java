@@ -11,6 +11,7 @@ import com.pd.server.main.service.*;
 import com.pd.server.util.DateUtil;
 import com.pd.server.util.DateUtils;
 import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.xssf.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -102,35 +103,35 @@ public class ExportFileController extends BaseWxController{
             example.setOrderByClause(" fz desc ");
             List<AzimuthAngleUnique> lists = azimuthAngleUniqueService.list(example);
             //导出
-            HSSFWorkbook workbook = new HSSFWorkbook();
+            XSSFWorkbook workbook = new XSSFWorkbook();
             //设置字体大小
-            HSSFFont fontCommon = workbook.createFont();
+            XSSFFont fontCommon = workbook.createFont();
             fontCommon.setFontHeightInPoints((short)12); // 设置字体大小为12磅
             //设置公共单元格样式
-            HSSFCellStyle cellStyleCommon = workbook.createCellStyle();
-            cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-            cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+            XSSFCellStyle cellStyleCommon = workbook.createCellStyle();
+            cellStyleCommon.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+            cellStyleCommon.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
             //cellStyleCommon.setFont(fontCommon);
             //设置字体加粗
-            HSSFFont font = workbook.createFont();
-            font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+            XSSFFont font = workbook.createFont();
+            font.setBoldweight(XSSFFont.BOLDWEIGHT_BOLD);
             font.setFontHeightInPoints((short)12); // 设置字体大小为12磅
-            HSSFCellStyle cellStyleTitle = workbook.createCellStyle();
-            cellStyleTitle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-            cellStyleTitle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+            XSSFCellStyle cellStyleTitle = workbook.createCellStyle();
+            cellStyleTitle.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+            cellStyleTitle.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
             cellStyleTitle.setFont(font);
             // 创建一个工作表
             String fileName = "方位角历史统计(" + new Date().getTime() + ").xls";
-            HSSFSheet sheet = workbook.createSheet("方位角统计");
+            XSSFSheet sheet = workbook.createSheet("方位角统计");
             // 自适应列宽度
             sheet.autoSizeColumn(1, true);
             sheet.setDefaultColumnWidth(18);
             sheet.setDefaultRowHeight((short)(40*10));
             // 添加表头行
-            HSSFRow titleRow = sheet.createRow(0);//第1行
+            XSSFRow titleRow = sheet.createRow(0);//第1行
             List<String> titleStrList = Arrays.asList("所属机构","设备编号","设备名称","日期","分钟","发声次数","北-北东","北东-东","东-东南","东南-南","南-南西","南西-西","西-西北","西北-北");
             for(int i=0;i<titleStrList.size();i++){
-                HSSFCell cell = titleRow.createCell(i);
+                XSSFCell cell = titleRow.createCell(i);
                 cell.setCellValue(titleStrList.get(i));
                 cell.setCellStyle(cellStyleTitle);
             }
@@ -145,93 +146,93 @@ public class ExportFileController extends BaseWxController{
             for(AzimuthAngleUnique entity : lists){
                 if(!StringUtils.isEmpty(request.getParameter("xmbh"))){
                     if(sbbhs.contains(entity.getSbbh())){
-                        HSSFRow comRow = sheet.createRow(i+1);
-                        HSSFCell comCell0 = comRow.createCell(0);
+                        XSSFRow comRow = sheet.createRow(i+1);
+                        XSSFCell comCell0 = comRow.createCell(0);
                         comCell0.setCellValue(mapDept.get(entity.getDeptcode()));
                         comCell0.setCellStyle(cellStyleCommon);
-                        HSSFCell comCell1 = comRow.createCell(1);
+                        XSSFCell comCell1 = comRow.createCell(1);
                         comCell1.setCellValue(entity.getSbbh());
                         comCell1.setCellStyle(cellStyleCommon);
-                        HSSFCell comCell2 = comRow.createCell(2);
+                        XSSFCell comCell2 = comRow.createCell(2);
                         comCell2.setCellValue(mapSbxh.get(entity.getSbbh()));
                         comCell2.setCellStyle(cellStyleCommon);
-                        HSSFCell comCell3 = comRow.createCell(3);
+                        XSSFCell comCell3 = comRow.createCell(3);
                         comCell3.setCellValue(entity.getRq());
                         comCell3.setCellStyle(cellStyleCommon);
-                        HSSFCell comCell4 = comRow.createCell(4);
+                        XSSFCell comCell4 = comRow.createCell(4);
                         comCell4.setCellValue(entity.getFz());
                         comCell4.setCellStyle(cellStyleCommon);
-                        HSSFCell comCell5 = comRow.createCell(5);
+                        XSSFCell comCell5 = comRow.createCell(5);
                         comCell5.setCellValue(entity.getTs());
                         comCell5.setCellStyle(cellStyleCommon);
-                        HSSFCell comCell6 = comRow.createCell(6);
+                        XSSFCell comCell6 = comRow.createCell(6);
                         comCell6.setCellValue(entity.getNorthNortheast());
                         comCell6.setCellStyle(cellStyleCommon);
-                        HSSFCell comCell7 = comRow.createCell(7);
+                        XSSFCell comCell7 = comRow.createCell(7);
                         comCell7.setCellValue(entity.getNortheastEast());
                         comCell7.setCellStyle(cellStyleCommon);
-                        HSSFCell comCell8 = comRow.createCell(8);
+                        XSSFCell comCell8 = comRow.createCell(8);
                         comCell8.setCellValue(entity.getEastEastsouth());
                         comCell8.setCellStyle(cellStyleCommon);
-                        HSSFCell comCell9 = comRow.createCell(9);
+                        XSSFCell comCell9 = comRow.createCell(9);
                         comCell9.setCellValue(entity.getEastsouthSouth());
                         comCell9.setCellStyle(cellStyleCommon);
-                        HSSFCell comCell10 = comRow.createCell(10);
+                        XSSFCell comCell10 = comRow.createCell(10);
                         comCell10.setCellValue(entity.getSouthSouthwest());
                         comCell10.setCellStyle(cellStyleCommon);
-                        HSSFCell comCell11 = comRow.createCell(11);
+                        XSSFCell comCell11 = comRow.createCell(11);
                         comCell11.setCellValue(entity.getSouthwestWest());
                         comCell11.setCellStyle(cellStyleCommon);
-                        HSSFCell comCell12 = comRow.createCell(12);
+                        XSSFCell comCell12 = comRow.createCell(12);
                         comCell12.setCellValue(entity.getWestWestnorth());
                         comCell12.setCellStyle(cellStyleCommon);
-                        HSSFCell comCell13 = comRow.createCell(13);
+                        XSSFCell comCell13 = comRow.createCell(13);
                         comCell13.setCellValue(entity.getWestnorthNorth());
                         comCell13.setCellStyle(cellStyleCommon);
                         i++;
                     }
                 }else{
-                    HSSFRow comRow = sheet.createRow(i+1);
-                    HSSFCell comCell0 = comRow.createCell(0);
+                    XSSFRow comRow = sheet.createRow(i+1);
+                    XSSFCell comCell0 = comRow.createCell(0);
                     comCell0.setCellValue(mapDept.get(entity.getDeptcode()));
                     comCell0.setCellStyle(cellStyleCommon);
-                    HSSFCell comCell1 = comRow.createCell(1);
+                    XSSFCell comCell1 = comRow.createCell(1);
                     comCell1.setCellValue(entity.getSbbh());
                     comCell1.setCellStyle(cellStyleCommon);
-                    HSSFCell comCell2 = comRow.createCell(2);
+                    XSSFCell comCell2 = comRow.createCell(2);
                     comCell2.setCellValue(mapSbxh.get(entity.getSbbh()));
                     comCell2.setCellStyle(cellStyleCommon);
-                    HSSFCell comCell3 = comRow.createCell(3);
+                    XSSFCell comCell3 = comRow.createCell(3);
                     comCell3.setCellValue(entity.getRq());
                     comCell3.setCellStyle(cellStyleCommon);
-                    HSSFCell comCell4 = comRow.createCell(4);
+                    XSSFCell comCell4 = comRow.createCell(4);
                     comCell4.setCellValue(entity.getFz());
                     comCell4.setCellStyle(cellStyleCommon);
-                    HSSFCell comCell5 = comRow.createCell(5);
+                    XSSFCell comCell5 = comRow.createCell(5);
                     comCell5.setCellValue(entity.getTs());
                     comCell5.setCellStyle(cellStyleCommon);
-                    HSSFCell comCell6 = comRow.createCell(6);
+                    XSSFCell comCell6 = comRow.createCell(6);
                     comCell6.setCellValue(entity.getNorthNortheast());
                     comCell6.setCellStyle(cellStyleCommon);
-                    HSSFCell comCell7 = comRow.createCell(7);
+                    XSSFCell comCell7 = comRow.createCell(7);
                     comCell7.setCellValue(entity.getNortheastEast());
                     comCell7.setCellStyle(cellStyleCommon);
-                    HSSFCell comCell8 = comRow.createCell(8);
+                    XSSFCell comCell8 = comRow.createCell(8);
                     comCell8.setCellValue(entity.getEastEastsouth());
                     comCell8.setCellStyle(cellStyleCommon);
-                    HSSFCell comCell9 = comRow.createCell(9);
+                    XSSFCell comCell9 = comRow.createCell(9);
                     comCell9.setCellValue(entity.getEastsouthSouth());
                     comCell9.setCellStyle(cellStyleCommon);
-                    HSSFCell comCell10 = comRow.createCell(10);
+                    XSSFCell comCell10 = comRow.createCell(10);
                     comCell10.setCellValue(entity.getSouthSouthwest());
                     comCell10.setCellStyle(cellStyleCommon);
-                    HSSFCell comCell11 = comRow.createCell(11);
+                    XSSFCell comCell11 = comRow.createCell(11);
                     comCell11.setCellValue(entity.getSouthwestWest());
                     comCell11.setCellStyle(cellStyleCommon);
-                    HSSFCell comCell12 = comRow.createCell(12);
+                    XSSFCell comCell12 = comRow.createCell(12);
                     comCell12.setCellValue(entity.getWestWestnorth());
                     comCell12.setCellStyle(cellStyleCommon);
-                    HSSFCell comCell13 = comRow.createCell(13);
+                    XSSFCell comCell13 = comRow.createCell(13);
                     comCell13.setCellValue(entity.getWestnorthNorth());
                     comCell13.setCellStyle(cellStyleCommon);
                     i++;
@@ -342,34 +343,34 @@ public class ExportFileController extends BaseWxController{
             example.setOrderByClause(" kssj desc ");
             List<VideoEventExport> videoEventList = videoEventService.selectExportByExample(example);
             //导出
-            HSSFWorkbook workbook = new HSSFWorkbook();
+            XSSFWorkbook workbook = new XSSFWorkbook();
             //设置字体大小
-            HSSFFont fontCommon = workbook.createFont();
+            XSSFFont fontCommon = workbook.createFont();
             fontCommon.setFontHeightInPoints((short)12); // 设置字体大小为12磅
             //设置公共单元格样式
-            HSSFCellStyle cellStyleCommon = workbook.createCellStyle();
-            cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-            cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+            XSSFCellStyle cellStyleCommon = workbook.createCellStyle();
+            cellStyleCommon.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+            cellStyleCommon.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
             //设置字体大小,加粗
-            HSSFFont font = workbook.createFont();
-            font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+            XSSFFont font = workbook.createFont();
+            font.setBoldweight(XSSFFont.BOLDWEIGHT_BOLD);
             font.setFontHeightInPoints((short)12); // 设置字体大小为12磅
-            HSSFCellStyle cellStyleTitle = workbook.createCellStyle();
-            cellStyleTitle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-            cellStyleTitle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+            XSSFCellStyle cellStyleTitle = workbook.createCellStyle();
+            cellStyleTitle.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+            cellStyleTitle.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
             cellStyleTitle.setFont(font);
             // 创建一个工作表
             String fileName = "分析视频事件(" + new Date().getTime() + ").xls";
-            HSSFSheet sheet = workbook.createSheet("分析视频事件");
+            XSSFSheet sheet = workbook.createSheet("分析视频事件");
             // 自适应列宽度
             sheet.autoSizeColumn(1, true);
             sheet.setDefaultColumnWidth(18);
             sheet.setDefaultRowHeight((short)(40*10));
             // 添加表头行
-            HSSFRow titleRow = sheet.createRow(0);//第1行
+            XSSFRow titleRow = sheet.createRow(0);//第1行
             List<String> titleStrList = Arrays.asList("监测点","设备sn","开始时间","结束时间","核查情况");
             for(int i=0;i<titleStrList.size();i++){
-                HSSFCell cell = titleRow.createCell(i);
+                XSSFCell cell = titleRow.createCell(i);
                 cell.setCellValue(titleStrList.get(i));
                 cell.setCellStyle(cellStyleTitle);
             }
@@ -380,20 +381,20 @@ public class ExportFileController extends BaseWxController{
             Map<String, String> mapSbxh = waterEquipmentList.stream().collect(Collectors.toMap(p -> p.getSbsn(), p -> p.getSbmc()));
             for(int i=0;i<videoEventList.size();i++){
                 VideoEventExport videoEventExport = videoEventList.get(i);
-                HSSFRow comRow = sheet.createRow(i+1);
-                HSSFCell comCell0 = comRow.createCell(0);
+                XSSFRow comRow = sheet.createRow(i+1);
+                XSSFCell comCell0 = comRow.createCell(0);
                 comCell0.setCellValue(mapSbxh.get(videoEventExport.getSbbh()));
                 comCell0.setCellStyle(cellStyleCommon);
-                HSSFCell comCell1 = comRow.createCell(1);
+                XSSFCell comCell1 = comRow.createCell(1);
                 comCell1.setCellValue(videoEventExport.getSbbh());
                 comCell1.setCellStyle(cellStyleCommon);
-                HSSFCell comCell2 = comRow.createCell(2);
+                XSSFCell comCell2 = comRow.createCell(2);
                 comCell2.setCellValue(videoEventExport.getKssj());
                 comCell2.setCellStyle(cellStyleCommon);
-                HSSFCell comCell3 = comRow.createCell(3);
+                XSSFCell comCell3 = comRow.createCell(3);
                 comCell3.setCellValue(videoEventExport.getJssj());
                 comCell3.setCellStyle(cellStyleCommon);
-                HSSFCell comCell4 = comRow.createCell(4);
+                XSSFCell comCell4 = comRow.createCell(4);
                 if("0".equals(videoEventExport.getHcjg())){
                     comCell4.setCellValue("未核查");
                 }else if("1".equals(videoEventExport.getHcjg())){
@@ -446,34 +447,34 @@ public class ExportFileController extends BaseWxController{
             example.setOrderByClause(" kssj desc ");
             List<VideoEvent> videoEventList = videoEventService.selectByExample(example);
             //导出
-            HSSFWorkbook workbook = new HSSFWorkbook();
+            XSSFWorkbook workbook = new XSSFWorkbook();
             //设置字体大小
-            HSSFFont fontCommon = workbook.createFont();
+            XSSFFont fontCommon = workbook.createFont();
             fontCommon.setFontHeightInPoints((short)12); // 设置字体大小为12磅
             //设置公共单元格样式
-            HSSFCellStyle cellStyleCommon = workbook.createCellStyle();
-            cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-            cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+            XSSFCellStyle cellStyleCommon = workbook.createCellStyle();
+            cellStyleCommon.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+            cellStyleCommon.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
             //设置字体大小,加粗
-            HSSFFont font = workbook.createFont();
-            font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+            XSSFFont font = workbook.createFont();
+            font.setBoldweight(XSSFFont.BOLDWEIGHT_BOLD);
             font.setFontHeightInPoints((short)12); // 设置字体大小为12磅
-            HSSFCellStyle cellStyleTitle = workbook.createCellStyle();
-            cellStyleTitle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-            cellStyleTitle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+            XSSFCellStyle cellStyleTitle = workbook.createCellStyle();
+            cellStyleTitle.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+            cellStyleTitle.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
             cellStyleTitle.setFont(font);
             // 创建一个工作表
             String fileName = "实时分析视频事件(" + new Date().getTime() + ").xls";
-            HSSFSheet sheet = workbook.createSheet("实时分析视频事件");
+            XSSFSheet sheet = workbook.createSheet("实时分析视频事件");
             // 自适应列宽度
             sheet.autoSizeColumn(1, true);
             sheet.setDefaultColumnWidth(18);
             sheet.setDefaultRowHeight((short)(40*10));
             // 添加表头行
-            HSSFRow titleRow = sheet.createRow(0);//第1行
+            XSSFRow titleRow = sheet.createRow(0);//第1行
             List<String> titleStrList = Arrays.asList("监测点","设备sn","开始时间","结束时间","核查情况");
             for(int i=0;i<titleStrList.size();i++){
-                HSSFCell cell = titleRow.createCell(i);
+                XSSFCell cell = titleRow.createCell(i);
                 cell.setCellValue(titleStrList.get(i));
                 cell.setCellStyle(cellStyleTitle);
             }
@@ -484,20 +485,20 @@ public class ExportFileController extends BaseWxController{
             Map<String, String> mapSbxh = waterEquipmentList.stream().collect(Collectors.toMap(p -> p.getSbsn(), p -> p.getSbmc()));
             for(int i=0;i<videoEventList.size();i++){
                 VideoEvent videoEvent = videoEventList.get(i);
-                HSSFRow comRow = sheet.createRow(i+1);
-                HSSFCell comCell0 = comRow.createCell(0);
+                XSSFRow comRow = sheet.createRow(i+1);
+                XSSFCell comCell0 = comRow.createCell(0);
                 comCell0.setCellValue(mapSbxh.get(videoEvent.getSbbh()));
                 comCell0.setCellStyle(cellStyleCommon);
-                HSSFCell comCell1 = comRow.createCell(1);
+                XSSFCell comCell1 = comRow.createCell(1);
                 comCell1.setCellValue(videoEvent.getSbbh());
                 comCell1.setCellStyle(cellStyleCommon);
-                HSSFCell comCell2 = comRow.createCell(2);
+                XSSFCell comCell2 = comRow.createCell(2);
                 comCell2.setCellValue(videoEvent.getKssj());
                 comCell2.setCellStyle(cellStyleCommon);
-                HSSFCell comCell3 = comRow.createCell(3);
+                XSSFCell comCell3 = comRow.createCell(3);
                 comCell3.setCellValue(videoEvent.getJssj());
                 comCell3.setCellStyle(cellStyleCommon);
-                HSSFCell comCell4 = comRow.createCell(4);
+                XSSFCell comCell4 = comRow.createCell(4);
                 if("0".equals(videoEvent.getSm())){
                     comCell4.setCellValue("未核查");
                 }else if("1".equals(videoEvent.getSm())){
@@ -556,34 +557,34 @@ public class ExportFileController extends BaseWxController{
                 appearNumbersList = appearNumbersService.list(example);
             }
             //导出
-            HSSFWorkbook workbook = new HSSFWorkbook();
+            XSSFWorkbook workbook = new XSSFWorkbook();
             //设置字体大小
-            HSSFFont fontCommon = workbook.createFont();
+            XSSFFont fontCommon = workbook.createFont();
             fontCommon.setFontHeightInPoints((short)12); // 设置字体大小为12磅
             //设置公共单元格样式
-            HSSFCellStyle cellStyleCommon = workbook.createCellStyle();
-            cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-            cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+            XSSFCellStyle cellStyleCommon = workbook.createCellStyle();
+            cellStyleCommon.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+            cellStyleCommon.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
             //设置字体大小,加粗
-            HSSFFont font = workbook.createFont();
-            font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+            XSSFFont font = workbook.createFont();
+            font.setBoldweight(XSSFFont.BOLDWEIGHT_BOLD);
             font.setFontHeightInPoints((short)12); // 设置字体大小为12磅
-            HSSFCellStyle cellStyleTitle = workbook.createCellStyle();
-            cellStyleTitle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-            cellStyleTitle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+            XSSFCellStyle cellStyleTitle = workbook.createCellStyle();
+            cellStyleTitle.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+            cellStyleTitle.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
             cellStyleTitle.setFont(font);
             // 创建一个工作表
             String fileName = "出现次数(" + new Date().getTime() + ").xls";
-            HSSFSheet sheet = workbook.createSheet("出现次数");
+            XSSFSheet sheet = workbook.createSheet("出现次数");
             // 自适应列宽度
             sheet.autoSizeColumn(1, true);
             sheet.setDefaultColumnWidth(18);
             sheet.setDefaultRowHeight((short)(40*10));
             // 添加表头行
-            HSSFRow titleRow = sheet.createRow(0);//第1行
+            XSSFRow titleRow = sheet.createRow(0);//第1行
             List<String> titleStrList = Arrays.asList("监测点","设备名称","设备sn","出现时间","出现次数");
             for(int i=0;i<titleStrList.size();i++){
-                HSSFCell cell = titleRow.createCell(i);
+                XSSFCell cell = titleRow.createCell(i);
                 cell.setCellValue(titleStrList.get(i));
                 cell.setCellStyle(cellStyleTitle);
             }
@@ -595,20 +596,20 @@ public class ExportFileController extends BaseWxController{
             Map<String, String> mapSbxh = waterEquipmentList.stream().collect(Collectors.toMap(p -> p.getSbsn(), p -> p.getSbmc()));
             for(int i=0;i<appearNumbersList.size();i++){
                 AppearNumbers appearNumbers = appearNumbersList.get(i);
-                HSSFRow comRow = sheet.createRow(i+1);
-                HSSFCell comCell0 = comRow.createCell(0);
+                XSSFRow comRow = sheet.createRow(i+1);
+                XSSFCell comCell0 = comRow.createCell(0);
                 comCell0.setCellValue(mapDept.get(appearNumbers.getDeptcode()));
                 comCell0.setCellStyle(cellStyleCommon);
-                HSSFCell comCell1 = comRow.createCell(1);
+                XSSFCell comCell1 = comRow.createCell(1);
                 comCell1.setCellValue(mapSbxh.get(appearNumbers.getSbbh()));
                 comCell1.setCellStyle(cellStyleCommon);
-                HSSFCell comCell2 = comRow.createCell(2);
+                XSSFCell comCell2 = comRow.createCell(2);
                 comCell2.setCellValue(appearNumbers.getSbbh());
                 comCell2.setCellStyle(cellStyleCommon);
-                HSSFCell comCell3 = comRow.createCell(3);
+                XSSFCell comCell3 = comRow.createCell(3);
                 comCell3.setCellValue(appearNumbers.getFz());
                 comCell3.setCellStyle(cellStyleCommon);
-                HSSFCell comCell4 = comRow.createCell(4);
+                XSSFCell comCell4 = comRow.createCell(4);
                 comCell4.setCellValue(appearNumbers.getAlarmNum());
                 comCell4.setCellStyle(cellStyleCommon);
             }
@@ -661,35 +662,35 @@ public class ExportFileController extends BaseWxController{
                 equipmentFileAlarmEventList = equipmentFileAlarmEventService.list(example);
             }
             //导出
-            HSSFWorkbook workbook = new HSSFWorkbook();
+            XSSFWorkbook workbook = new XSSFWorkbook();
             //设置字体大小
-            HSSFFont fontCommon = workbook.createFont();
+            XSSFFont fontCommon = workbook.createFont();
             fontCommon.setFontHeightInPoints((short)12); // 设置字体大小为12磅
             //设置公共单元格样式
-            HSSFCellStyle cellStyleCommon = workbook.createCellStyle();
-            cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-            cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+            XSSFCellStyle cellStyleCommon = workbook.createCellStyle();
+            cellStyleCommon.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+            cellStyleCommon.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
             //cellStyleCommon.setFont(fontCommon);
             //设置字体加粗
-            HSSFFont font = workbook.createFont();
-            font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+            XSSFFont font = workbook.createFont();
+            font.setBoldweight(XSSFFont.BOLDWEIGHT_BOLD);
             font.setFontHeightInPoints((short)12); // 设置字体大小为12磅
-            HSSFCellStyle cellStyleTitle = workbook.createCellStyle();
-            cellStyleTitle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-            cellStyleTitle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+            XSSFCellStyle cellStyleTitle = workbook.createCellStyle();
+            cellStyleTitle.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+            cellStyleTitle.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
             cellStyleTitle.setFont(font);
             // 创建一个工作表
             String fileName = "出现事件(" + new Date().getTime() + ").xls";
-            HSSFSheet sheet = workbook.createSheet("出现事件");
+            XSSFSheet sheet = workbook.createSheet("出现事件");
             // 自适应列宽度
             sheet.autoSizeColumn(1, true);
             sheet.setDefaultColumnWidth(18);
             sheet.setDefaultRowHeight((short)(40*10));
             // 添加表头行
-            HSSFRow titleRow = sheet.createRow(0);//第1行
+            XSSFRow titleRow = sheet.createRow(0);//第1行
             List<String> titleStrList = Arrays.asList("监测点","设备名称","设备sn","出现时间","出现次数","事件次数");
             for(int i=0;i<titleStrList.size();i++){
-                HSSFCell cell = titleRow.createCell(i);
+                XSSFCell cell = titleRow.createCell(i);
                 cell.setCellValue(titleStrList.get(i));
                 cell.setCellStyle(cellStyleTitle);
             }
@@ -701,23 +702,23 @@ public class ExportFileController extends BaseWxController{
             Map<String, String> mapSbxh = waterEquipmentList.stream().collect(Collectors.toMap(p -> p.getSbsn(), p -> p.getSbmc()));
             for(int i=0;i<equipmentFileAlarmEventList.size();i++){
                 EquipmentFileAlarmEvent alarmEvent = equipmentFileAlarmEventList.get(i);
-                HSSFRow comRow = sheet.createRow(i+1);
-                HSSFCell comCell0 = comRow.createCell(0);
+                XSSFRow comRow = sheet.createRow(i+1);
+                XSSFCell comCell0 = comRow.createCell(0);
                 comCell0.setCellValue(mapDept.get(alarmEvent.getDeptcode()));
                 comCell0.setCellStyle(cellStyleCommon);
-                HSSFCell comCell1 = comRow.createCell(1);
+                XSSFCell comCell1 = comRow.createCell(1);
                 comCell1.setCellValue(mapSbxh.get(alarmEvent.getSbbh()));
                 comCell1.setCellStyle(cellStyleCommon);
-                HSSFCell comCell2 = comRow.createCell(2);
+                XSSFCell comCell2 = comRow.createCell(2);
                 comCell2.setCellValue(alarmEvent.getSbbh());
                 comCell2.setCellStyle(cellStyleCommon);
-                HSSFCell comCell3 = comRow.createCell(3);
+                XSSFCell comCell3 = comRow.createCell(3);
                 comCell3.setCellValue(alarmEvent.getEventTime());
                 comCell3.setCellStyle(cellStyleCommon);
-                HSSFCell comCell4 = comRow.createCell(4);
+                XSSFCell comCell4 = comRow.createCell(4);
                 comCell4.setCellValue(alarmEvent.getAlarmNum());
                 comCell4.setCellStyle(cellStyleCommon);
-                HSSFCell comCell5 = comRow.createCell(5);
+                XSSFCell comCell5 = comRow.createCell(5);
                 comCell5.setCellValue(1);
                 comCell5.setCellStyle(cellStyleCommon);
             }
@@ -764,35 +765,35 @@ public class ExportFileController extends BaseWxController{
             example.setOrderByClause(" cjsj desc ");
             List<PointerSecond> lists = pointerSecondService.selectByExample(example);
             //导出
-            HSSFWorkbook workbook = new HSSFWorkbook();
+            XSSFWorkbook workbook = new XSSFWorkbook();
             //设置字体大小
-            HSSFFont fontCommon = workbook.createFont();
+            XSSFFont fontCommon = workbook.createFont();
             fontCommon.setFontHeightInPoints((short)12); // 设置字体大小为12磅
             //设置公共单元格样式
-            HSSFCellStyle cellStyleCommon = workbook.createCellStyle();
-            cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-            cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+            XSSFCellStyle cellStyleCommon = workbook.createCellStyle();
+            cellStyleCommon.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+            cellStyleCommon.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
             //cellStyleCommon.setFont(fontCommon);
             //设置字体加粗
-            HSSFFont font = workbook.createFont();
-            font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+            XSSFFont font = workbook.createFont();
+            font.setBoldweight(XSSFFont.BOLDWEIGHT_BOLD);
             font.setFontHeightInPoints((short)12); // 设置字体大小为12磅
-            HSSFCellStyle cellStyleTitle = workbook.createCellStyle();
-            cellStyleTitle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-            cellStyleTitle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+            XSSFCellStyle cellStyleTitle = workbook.createCellStyle();
+            cellStyleTitle.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+            cellStyleTitle.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
             cellStyleTitle.setFont(font);
             // 创建一个工作表
             String fileName = "实时水下环境指针预警数据(" + new Date().getTime() + ").xls";
-            HSSFSheet sheet = workbook.createSheet("预警数据");
+            XSSFSheet sheet = workbook.createSheet("预警数据");
             // 自适应列宽度
             sheet.autoSizeColumn(1, true);
             sheet.setDefaultColumnWidth(18);
             sheet.setDefaultRowHeight((short)(40*10));
             // 添加表头行
-            HSSFRow titleRow = sheet.createRow(0);//第1行
+            XSSFRow titleRow = sheet.createRow(0);//第1行
             List<String> titleStrList = Arrays.asList("设备名称","设备编号","预警数值","预警时间");
             for(int i=0;i<titleStrList.size();i++){
-                HSSFCell cell = titleRow.createCell(i);
+                XSSFCell cell = titleRow.createCell(i);
                 cell.setCellValue(titleStrList.get(i));
                 cell.setCellStyle(cellStyleTitle);
             }
@@ -805,33 +806,33 @@ public class ExportFileController extends BaseWxController{
             for(PointerSecond pointerSecond : lists){
                 if(!StringUtils.isEmpty(request.getParameter("xmbh"))){
                     if(sbbhs.contains(pointerSecond.getSm())){
-                        HSSFRow comRow = sheet.createRow(i+1);
-                        HSSFCell comCell0 = comRow.createCell(0);
+                        XSSFRow comRow = sheet.createRow(i+1);
+                        XSSFCell comCell0 = comRow.createCell(0);
                         comCell0.setCellValue(mapSbxh.get(pointerSecond.getSm()));
                         comCell0.setCellStyle(cellStyleCommon);
-                        HSSFCell comCell1 = comRow.createCell(1);
+                        XSSFCell comCell1 = comRow.createCell(1);
                         comCell1.setCellValue(pointerSecond.getSm());
                         comCell1.setCellStyle(cellStyleCommon);
-                        HSSFCell comCell2 = comRow.createCell(2);
+                        XSSFCell comCell2 = comRow.createCell(2);
                         comCell2.setCellValue(pointerSecond.getDecibelValue());
                         comCell2.setCellStyle(cellStyleCommon);
-                        HSSFCell comCell3 = comRow.createCell(3);
+                        XSSFCell comCell3 = comRow.createCell(3);
                         comCell3.setCellValue(DateUtil.getFormatDate(pointerSecond.getCjsj(),"yyyy-MM-dd HH:mm:ss"));
                         comCell3.setCellStyle(cellStyleCommon);
                         i++;
                     }
                 }else{
-                    HSSFRow comRow = sheet.createRow(i+1);
-                    HSSFCell comCell0 = comRow.createCell(0);
+                    XSSFRow comRow = sheet.createRow(i+1);
+                    XSSFCell comCell0 = comRow.createCell(0);
                     comCell0.setCellValue(mapSbxh.get(pointerSecond.getSm()));
                     comCell0.setCellStyle(cellStyleCommon);
-                    HSSFCell comCell1 = comRow.createCell(1);
+                    XSSFCell comCell1 = comRow.createCell(1);
                     comCell1.setCellValue(pointerSecond.getSm());
                     comCell1.setCellStyle(cellStyleCommon);
-                    HSSFCell comCell2 = comRow.createCell(2);
+                    XSSFCell comCell2 = comRow.createCell(2);
                     comCell2.setCellValue(pointerSecond.getDecibelValue());
                     comCell2.setCellStyle(cellStyleCommon);
-                    HSSFCell comCell3 = comRow.createCell(3);
+                    XSSFCell comCell3 = comRow.createCell(3);
                     comCell3.setCellValue(DateUtil.getFormatDate(pointerSecond.getCjsj(),"yyyy-MM-dd HH:mm:ss"));
                     comCell3.setCellStyle(cellStyleCommon);
                     i++;
@@ -880,35 +881,35 @@ public class ExportFileController extends BaseWxController{
             example.setOrderByClause(" cjsj desc ");
             List<PointerDay> lists = pointerDayService.selectByExample(example);
             //导出
-            HSSFWorkbook workbook = new HSSFWorkbook();
+            XSSFWorkbook workbook = new XSSFWorkbook();
             //设置字体大小
-            HSSFFont fontCommon = workbook.createFont();
+            XSSFFont fontCommon = workbook.createFont();
             fontCommon.setFontHeightInPoints((short)12); // 设置字体大小为12磅
             //设置公共单元格样式
-            HSSFCellStyle cellStyleCommon = workbook.createCellStyle();
-            cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-            cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+            XSSFCellStyle cellStyleCommon = workbook.createCellStyle();
+            cellStyleCommon.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+            cellStyleCommon.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
             //cellStyleCommon.setFont(fontCommon);
             //设置字体加粗
-            HSSFFont font = workbook.createFont();
-            font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+            XSSFFont font = workbook.createFont();
+            font.setBoldweight(XSSFFont.BOLDWEIGHT_BOLD);
             font.setFontHeightInPoints((short)12); // 设置字体大小为12磅
-            HSSFCellStyle cellStyleTitle = workbook.createCellStyle();
-            cellStyleTitle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-            cellStyleTitle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+            XSSFCellStyle cellStyleTitle = workbook.createCellStyle();
+            cellStyleTitle.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+            cellStyleTitle.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
             cellStyleTitle.setFont(font);
             // 创建一个工作表
             String fileName = "当日水下环境指针预警数据(" + new Date().getTime() + ").xls";
-            HSSFSheet sheet = workbook.createSheet("预警数据");
+            XSSFSheet sheet = workbook.createSheet("预警数据");
             // 自适应列宽度
             sheet.autoSizeColumn(1, true);
             sheet.setDefaultColumnWidth(18);
             sheet.setDefaultRowHeight((short)(40*10));
             // 添加表头行
-            HSSFRow titleRow = sheet.createRow(0);//第1行
+            XSSFRow titleRow = sheet.createRow(0);//第1行
             List<String> titleStrList = Arrays.asList("设备名称","设备编号","预警数值","预警时间");
             for(int i=0;i<titleStrList.size();i++){
-                HSSFCell cell = titleRow.createCell(i);
+                XSSFCell cell = titleRow.createCell(i);
                 cell.setCellValue(titleStrList.get(i));
                 cell.setCellStyle(cellStyleTitle);
             }
@@ -921,33 +922,33 @@ public class ExportFileController extends BaseWxController{
             for(PointerDay pointerDay : lists){
                 if(!StringUtils.isEmpty(request.getParameter("xmbh"))){
                     if(sbbhs.contains(pointerDay.getSm())){
-                        HSSFRow comRow = sheet.createRow(i+1);
-                        HSSFCell comCell0 = comRow.createCell(0);
+                        XSSFRow comRow = sheet.createRow(i+1);
+                        XSSFCell comCell0 = comRow.createCell(0);
                         comCell0.setCellValue(mapSbxh.get(pointerDay.getSm()));
                         comCell0.setCellStyle(cellStyleCommon);
-                        HSSFCell comCell1 = comRow.createCell(1);
+                        XSSFCell comCell1 = comRow.createCell(1);
                         comCell1.setCellValue(pointerDay.getSm());
                         comCell1.setCellStyle(cellStyleCommon);
-                        HSSFCell comCell2 = comRow.createCell(2);
+                        XSSFCell comCell2 = comRow.createCell(2);
                         comCell2.setCellValue(pointerDay.getDecibelValue());
                         comCell2.setCellStyle(cellStyleCommon);
-                        HSSFCell comCell3 = comRow.createCell(3);
+                        XSSFCell comCell3 = comRow.createCell(3);
                         comCell3.setCellValue(DateUtil.getFormatDate(pointerDay.getCjsj(),"yyyy-MM-dd HH:mm:ss"));
                         comCell3.setCellStyle(cellStyleCommon);
                         i++;
                     }
                 }else{
-                    HSSFRow comRow = sheet.createRow(i+1);
-                    HSSFCell comCell0 = comRow.createCell(0);
+                    XSSFRow comRow = sheet.createRow(i+1);
+                    XSSFCell comCell0 = comRow.createCell(0);
                     comCell0.setCellValue(mapSbxh.get(pointerDay.getSm()));
                     comCell0.setCellStyle(cellStyleCommon);
-                    HSSFCell comCell1 = comRow.createCell(1);
+                    XSSFCell comCell1 = comRow.createCell(1);
                     comCell1.setCellValue(pointerDay.getSm());
                     comCell1.setCellStyle(cellStyleCommon);
-                    HSSFCell comCell2 = comRow.createCell(2);
+                    XSSFCell comCell2 = comRow.createCell(2);
                     comCell2.setCellValue(pointerDay.getDecibelValue());
                     comCell2.setCellStyle(cellStyleCommon);
-                    HSSFCell comCell3 = comRow.createCell(3);
+                    XSSFCell comCell3 = comRow.createCell(3);
                     comCell3.setCellValue(DateUtil.getFormatDate(pointerDay.getCjsj(),"yyyy-MM-dd HH:mm:ss"));
                     comCell3.setCellStyle(cellStyleCommon);
                     i++;
@@ -994,36 +995,36 @@ public class ExportFileController extends BaseWxController{
             }
             List<EquipmentFileEvent> equipmentFileEventList = equipmentFileEventService.selectByExampleExport(record);
             //导出
-            HSSFWorkbook workbook = new HSSFWorkbook();
+            XSSFWorkbook workbook = new XSSFWorkbook();
             //设置字体大小
-            HSSFFont fontCommon = workbook.createFont();
+            XSSFFont fontCommon = workbook.createFont();
             fontCommon.setFontHeightInPoints((short)12); // 设置字体大小为12磅
             //设置公共单元格样式
-            HSSFCellStyle cellStyleCommon = workbook.createCellStyle();
-            cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-            cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+            XSSFCellStyle cellStyleCommon = workbook.createCellStyle();
+            cellStyleCommon.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+            cellStyleCommon.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
             //cellStyleCommon.setFont(fontCommon);
             //设置字体加粗
-            HSSFFont font = workbook.createFont();
-            font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+            XSSFFont font = workbook.createFont();
+            font.setBoldweight(XSSFFont.BOLDWEIGHT_BOLD);
             font.setFontHeightInPoints((short)12); // 设置字体大小为12磅
-            HSSFCellStyle cellStyleTitle = workbook.createCellStyle();
-            cellStyleTitle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-            cellStyleTitle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+            XSSFCellStyle cellStyleTitle = workbook.createCellStyle();
+            cellStyleTitle.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+            cellStyleTitle.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
             cellStyleTitle.setFont(font);
             // 创建一个工作表
             String fileName = "聚类统计(" + new Date().getTime() + ").xls";
-            HSSFSheet sheet = workbook.createSheet("聚类统计");
+            XSSFSheet sheet = workbook.createSheet("聚类统计");
             // 自适应列宽度
             sheet.autoSizeColumn(1, true);
             sheet.setDefaultColumnWidth(18);
             sheet.setDefaultRowHeight((short)(40*10));
             // 添加表头行
-            HSSFRow titleRow = sheet.createRow(0);//第1行
+            XSSFRow titleRow = sheet.createRow(0);//第1行
             sheet.setColumnWidth(4,256*12+184);
             List<String> titleStrList = Arrays.asList("声检测点位","设备编号","开始时间","结束时间","预估头数");
             for(int i=0;i<titleStrList.size();i++){
-                HSSFCell cell = titleRow.createCell(i);
+                XSSFCell cell = titleRow.createCell(i);
                 cell.setCellValue(titleStrList.get(i));
                 cell.setCellStyle(cellStyleTitle);
             }
@@ -1036,39 +1037,39 @@ public class ExportFileController extends BaseWxController{
             for(EquipmentFileEvent fileEvent : equipmentFileEventList){
                 if(!StringUtils.isEmpty(request.getParameter("xmbh"))){
                     if(sbbhs.contains(fileEvent.getSbbh())){
-                        HSSFRow comRow = sheet.createRow(i+1);
-                        HSSFCell comCell0 = comRow.createCell(0);
+                        XSSFRow comRow = sheet.createRow(i+1);
+                        XSSFCell comCell0 = comRow.createCell(0);
                         comCell0.setCellValue(mapSbxh.get(fileEvent.getSbbh()));
                         comCell0.setCellStyle(cellStyleCommon);
-                        HSSFCell comCell1 = comRow.createCell(1);
+                        XSSFCell comCell1 = comRow.createCell(1);
                         comCell1.setCellValue(fileEvent.getSbbh());
                         comCell1.setCellStyle(cellStyleCommon);
-                        HSSFCell comCell2 = comRow.createCell(2);
+                        XSSFCell comCell2 = comRow.createCell(2);
                         comCell2.setCellValue(fileEvent.getKssj());
                         comCell2.setCellStyle(cellStyleCommon);
-                        HSSFCell comCell3 = comRow.createCell(3);
+                        XSSFCell comCell3 = comRow.createCell(3);
                         comCell3.setCellValue(fileEvent.getJssj());
                         comCell3.setCellStyle(cellStyleCommon);
-                        HSSFCell comCell4 = comRow.createCell(4);
+                        XSSFCell comCell4 = comRow.createCell(4);
                         comCell4.setCellValue(fileEvent.getTs());
                         comCell4.setCellStyle(cellStyleCommon);
                         i++;
                     }
                 }else{
-                    HSSFRow comRow = sheet.createRow(i+1);
-                    HSSFCell comCell0 = comRow.createCell(0);
+                    XSSFRow comRow = sheet.createRow(i+1);
+                    XSSFCell comCell0 = comRow.createCell(0);
                     comCell0.setCellValue(mapSbxh.get(fileEvent.getSbbh()));
                     comCell0.setCellStyle(cellStyleCommon);
-                    HSSFCell comCell1 = comRow.createCell(1);
+                    XSSFCell comCell1 = comRow.createCell(1);
                     comCell1.setCellValue(fileEvent.getSbbh());
                     comCell1.setCellStyle(cellStyleCommon);
-                    HSSFCell comCell2 = comRow.createCell(2);
+                    XSSFCell comCell2 = comRow.createCell(2);
                     comCell2.setCellValue(fileEvent.getKssj());
                     comCell2.setCellStyle(cellStyleCommon);
-                    HSSFCell comCell3 = comRow.createCell(3);
+                    XSSFCell comCell3 = comRow.createCell(3);
                     comCell3.setCellValue(fileEvent.getJssj());
                     comCell3.setCellStyle(cellStyleCommon);
-                    HSSFCell comCell4 = comRow.createCell(4);
+                    XSSFCell comCell4 = comRow.createCell(4);
                     comCell4.setCellValue(fileEvent.getTs());
                     comCell4.setCellStyle(cellStyleCommon);
                     i++;
@@ -1115,35 +1116,35 @@ public class ExportFileController extends BaseWxController{
             }
             List<EquipmentTyEvent> equipmentTyEventList = equipmentTyEventService.selectByExampleExport(record);
             //导出
-            HSSFWorkbook workbook = new HSSFWorkbook();
+            XSSFWorkbook workbook = new XSSFWorkbook();
             //设置字体大小
-            HSSFFont fontCommon = workbook.createFont();
+            XSSFFont fontCommon = workbook.createFont();
             fontCommon.setFontHeightInPoints((short)12); // 设置字体大小为12磅
             //设置公共单元格样式
-            HSSFCellStyle cellStyleCommon = workbook.createCellStyle();
-            cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-            cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+            XSSFCellStyle cellStyleCommon = workbook.createCellStyle();
+            cellStyleCommon.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+            cellStyleCommon.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
             //cellStyleCommon.setFont(fontCommon);
             //设置字体加粗
-            HSSFFont font = workbook.createFont();
-            font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+            XSSFFont font = workbook.createFont();
+            font.setBoldweight(XSSFFont.BOLDWEIGHT_BOLD);
             font.setFontHeightInPoints((short)12); // 设置字体大小为12磅
-            HSSFCellStyle cellStyleTitle = workbook.createCellStyle();
-            cellStyleTitle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-            cellStyleTitle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+            XSSFCellStyle cellStyleTitle = workbook.createCellStyle();
+            cellStyleTitle.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+            cellStyleTitle.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
             cellStyleTitle.setFont(font);
             // 创建一个工作表
             String fileName = "聚类统计(" + new Date().getTime() + ").xls";
-            HSSFSheet sheet = workbook.createSheet("聚类统计");
+            XSSFSheet sheet = workbook.createSheet("聚类统计");
             // 自适应列宽度
             sheet.autoSizeColumn(1, true);
             sheet.setDefaultColumnWidth(18);
             sheet.setDefaultRowHeight((short)(40*10));
             // 添加表头行
-            HSSFRow titleRow = sheet.createRow(0);//第1行
+            XSSFRow titleRow = sheet.createRow(0);//第1行
             List<String> titleStrList = Arrays.asList("声检测点位","设备编号","开始时间","结束时间","预估头数","坐标","经度","纬度","速度");
             for(int i=0;i<titleStrList.size();i++){
-                HSSFCell cell = titleRow.createCell(i);
+                XSSFCell cell = titleRow.createCell(i);
                 cell.setCellValue(titleStrList.get(i));
                 cell.setCellStyle(cellStyleTitle);
             }
@@ -1156,69 +1157,69 @@ public class ExportFileController extends BaseWxController{
             for(EquipmentTyEvent tyEvent : equipmentTyEventList){
                 if(!StringUtils.isEmpty(request.getParameter("xmbh"))){
                     if(sbbhs.contains(tyEvent.getSbbh())){
-                        HSSFRow comRow = sheet.createRow(i+1);
-                        HSSFCell comCell0 = comRow.createCell(0);
+                        XSSFRow comRow = sheet.createRow(i+1);
+                        XSSFCell comCell0 = comRow.createCell(0);
                         comCell0.setCellValue(mapSbxh.get(tyEvent.getSbbh()));
                         comCell0.setCellStyle(cellStyleCommon);
-                        HSSFCell comCell1 = comRow.createCell(1);
+                        XSSFCell comCell1 = comRow.createCell(1);
                         comCell1.setCellValue(tyEvent.getSbbh());
                         comCell1.setCellStyle(cellStyleCommon);
-                        HSSFCell comCell2 = comRow.createCell(2);
+                        XSSFCell comCell2 = comRow.createCell(2);
                         comCell2.setCellValue(tyEvent.getKssj());
                         comCell2.setCellStyle(cellStyleCommon);
-                        HSSFCell comCell3 = comRow.createCell(3);
+                        XSSFCell comCell3 = comRow.createCell(3);
                         comCell3.setCellValue(tyEvent.getJssj());
                         comCell3.setCellStyle(cellStyleCommon);
-                        HSSFCell comCell4 = comRow.createCell(4);
+                        XSSFCell comCell4 = comRow.createCell(4);
                         comCell4.setCellValue(Integer.parseInt(tyEvent.getTs()));
                         comCell4.setCellStyle(cellStyleCommon);
-                        comCell4.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
-                        HSSFCell comCell5 = comRow.createCell(5);
+                        comCell4.setCellType(XSSFCell.CELL_TYPE_NUMERIC);
+                        XSSFCell comCell5 = comRow.createCell(5);
                         comCell5.setCellValue(tyEvent.getGps());
                         comCell5.setCellStyle(cellStyleCommon);
                         if(!StringUtils.isEmpty(tyEvent.getGps())&&tyEvent.getGps().split(",").length==2){
-                            HSSFCell comCell6 = comRow.createCell(6);
+                            XSSFCell comCell6 = comRow.createCell(6);
                             comCell6.setCellValue(tyEvent.getGps().split(",")[0]);
                             comCell6.setCellStyle(cellStyleCommon);
-                            HSSFCell comCell7 = comRow.createCell(7);
+                            XSSFCell comCell7 = comRow.createCell(7);
                             comCell7.setCellValue(tyEvent.getGps().split(",")[1]);
                             comCell7.setCellStyle(cellStyleCommon);
                         }
-                        HSSFCell comCell8 = comRow.createCell(8);
+                        XSSFCell comCell8 = comRow.createCell(8);
                         comCell8.setCellValue(tyEvent.getSm1());
                         comCell8.setCellStyle(cellStyleCommon);
                         i++;
                     }
                 }else{
-                    HSSFRow comRow = sheet.createRow(i+1);
-                    HSSFCell comCell0 = comRow.createCell(0);
+                    XSSFRow comRow = sheet.createRow(i+1);
+                    XSSFCell comCell0 = comRow.createCell(0);
                     comCell0.setCellValue(mapSbxh.get(tyEvent.getSbbh()));
                     comCell0.setCellStyle(cellStyleCommon);
-                    HSSFCell comCell1 = comRow.createCell(1);
+                    XSSFCell comCell1 = comRow.createCell(1);
                     comCell1.setCellValue(tyEvent.getSbbh());
                     comCell1.setCellStyle(cellStyleCommon);
-                    HSSFCell comCell2 = comRow.createCell(2);
+                    XSSFCell comCell2 = comRow.createCell(2);
                     comCell2.setCellValue(tyEvent.getKssj());
                     comCell2.setCellStyle(cellStyleCommon);
-                    HSSFCell comCell3 = comRow.createCell(3);
+                    XSSFCell comCell3 = comRow.createCell(3);
                     comCell3.setCellValue(tyEvent.getJssj());
                     comCell3.setCellStyle(cellStyleCommon);
-                    HSSFCell comCell4 = comRow.createCell(4);
+                    XSSFCell comCell4 = comRow.createCell(4);
                     comCell4.setCellValue(Integer.parseInt(tyEvent.getTs()));
                     comCell4.setCellStyle(cellStyleCommon);
-                    comCell4.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
-                    HSSFCell comCell5 = comRow.createCell(5);
+                    comCell4.setCellType(XSSFCell.CELL_TYPE_NUMERIC);
+                    XSSFCell comCell5 = comRow.createCell(5);
                     comCell5.setCellValue(tyEvent.getGps());
                     comCell5.setCellStyle(cellStyleCommon);
                     if(!StringUtils.isEmpty(tyEvent.getGps())&&tyEvent.getGps().split(",").length==2){
-                        HSSFCell comCell6 = comRow.createCell(6);
+                        XSSFCell comCell6 = comRow.createCell(6);
                         comCell6.setCellValue(tyEvent.getGps().split(",")[0]);
                         comCell6.setCellStyle(cellStyleCommon);
-                        HSSFCell comCell7 = comRow.createCell(7);
+                        XSSFCell comCell7 = comRow.createCell(7);
                         comCell7.setCellValue(tyEvent.getGps().split(",")[1]);
                         comCell7.setCellStyle(cellStyleCommon);
                     }
-                    HSSFCell comCell8 = comRow.createCell(8);
+                    XSSFCell comCell8 = comRow.createCell(8);
                     comCell8.setCellValue(tyEvent.getSm1());
                     comCell8.setCellStyle(cellStyleCommon);
                     i++;
@@ -1276,49 +1277,49 @@ public class ExportFileController extends BaseWxController{
         waterEquipmentExample.setOrderByClause(" sblc ");
         List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(waterEquipmentExample);
         //导出
-        HSSFWorkbook workbook = new HSSFWorkbook();
+        XSSFWorkbook workbook = new XSSFWorkbook();
         //设置字体大小
-        HSSFFont fontCommon = workbook.createFont();
+        XSSFFont fontCommon = workbook.createFont();
         fontCommon.setFontHeightInPoints((short)12); // 设置字体大小为12磅
         //设置公共单元格样式
-        HSSFCellStyle cellStyleCommon = workbook.createCellStyle();
-        cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-        cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+        XSSFCellStyle cellStyleCommon = workbook.createCellStyle();
+        cellStyleCommon.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+        cellStyleCommon.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
         //cellStyleCommon.setFont(fontCommon);
         //设置字体加粗
-        HSSFFont font = workbook.createFont();
-        font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+        XSSFFont font = workbook.createFont();
+        font.setBoldweight(XSSFFont.BOLDWEIGHT_BOLD);
         font.setFontHeightInPoints((short)12); // 设置字体大小为12磅
-        HSSFCellStyle cellStyleTitle = workbook.createCellStyle();
-        cellStyleTitle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-        cellStyleTitle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+        XSSFCellStyle cellStyleTitle = workbook.createCellStyle();
+        cellStyleTitle.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+        cellStyleTitle.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
         cellStyleTitle.setFont(font);
         // 创建一个工作表
         String fileName = "设备运行日志(" + new Date().getTime() + ").xls";
-        HSSFSheet sheet = workbook.createSheet("设备运行日志");
+        XSSFSheet sheet = workbook.createSheet("设备运行日志");
         // 自适应列宽度
         sheet.autoSizeColumn(1, true);
         sheet.setDefaultColumnWidth(18);
         sheet.setDefaultRowHeight((short)(40*10));
         // 添加表头行
-        HSSFRow titleRow = sheet.createRow(0);//第1行
+        XSSFRow titleRow = sheet.createRow(0);//第1行
         List<String> titleSbbhList = new ArrayList<>();
         for(int i=0;i<waterEquipmentList.size();i++){
-            HSSFCell cell = titleRow.createCell(i+1);
+            XSSFCell cell = titleRow.createCell(i+1);
             cell.setCellValue(waterEquipmentList.get(i).getSbmc());
             cell.setCellStyle(cellStyleTitle);
             titleSbbhList.add(waterEquipmentList.get(i).getSbsn());
         }
         int rowIndex = 1;
         for(String rq : resultMap.keySet()){
-            HSSFRow rowComment = sheet.createRow(rowIndex);//第1行
-            HSSFCell cell = rowComment.createCell(0);
+            XSSFRow rowComment = sheet.createRow(rowIndex);//第1行
+            XSSFCell cell = rowComment.createCell(0);
             cell.setCellValue(rq);
             cell.setCellStyle(cellStyleCommon);
             Map<String,String> sbbhMap = resultMap.get(rq);
             int cellIndex = 1;
             for(String sbbh : titleSbbhList){
-                HSSFCell cellComment = rowComment.createCell(cellIndex);
+                XSSFCell cellComment = rowComment.createCell(cellIndex);
                 if(!StringUtils.isEmpty(sbbhMap.get(sbbh))){
                     if("0".equals(sbbhMap.get(sbbh))){
                         cellComment.setCellValue("√");
@@ -1378,35 +1379,35 @@ public class ExportFileController extends BaseWxController{
             dataList = predationNumService.list(example);
         }
         //导出
-        HSSFWorkbook workbook = new HSSFWorkbook();
+        XSSFWorkbook workbook = new XSSFWorkbook();
         //设置字体大小
-        HSSFFont fontCommon = workbook.createFont();
+        XSSFFont fontCommon = workbook.createFont();
         fontCommon.setFontHeightInPoints((short)12); // 设置字体大小为12磅
         //设置公共单元格样式
-        HSSFCellStyle cellStyleCommon = workbook.createCellStyle();
-        cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-        cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+        XSSFCellStyle cellStyleCommon = workbook.createCellStyle();
+        cellStyleCommon.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+        cellStyleCommon.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
         //cellStyleCommon.setFont(fontCommon);
         //设置字体加粗
-        HSSFFont font = workbook.createFont();
-        font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+        XSSFFont font = workbook.createFont();
+        font.setBoldweight(XSSFFont.BOLDWEIGHT_BOLD);
         font.setFontHeightInPoints((short)12); // 设置字体大小为12磅
-        HSSFCellStyle cellStyleTitle = workbook.createCellStyle();
-        cellStyleTitle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-        cellStyleTitle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+        XSSFCellStyle cellStyleTitle = workbook.createCellStyle();
+        cellStyleTitle.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+        cellStyleTitle.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
         cellStyleTitle.setFont(font);
         // 创建一个工作表
         String fileName = "捕食统计(" + new Date().getTime() + ").xls";
-        HSSFSheet sheet = workbook.createSheet("按捕食次数统计");
+        XSSFSheet sheet = workbook.createSheet("按捕食次数统计");
         // 自适应列宽度
         sheet.autoSizeColumn(1, true);
         sheet.setDefaultColumnWidth(18);
         sheet.setDefaultRowHeight((short)(40*10));
         // 添加表头行
-        HSSFRow titleRow = sheet.createRow(0);//第1行
+        XSSFRow titleRow = sheet.createRow(0);//第1行
         List<String> titleStrList = Arrays.asList("所属机构","检测点","设备sn","捕食日期","鲸豚出现次数","鲸豚捕食次数","鲸豚事件次数");
         for(int i=0;i<titleStrList.size();i++){
-            HSSFCell cell = titleRow.createCell(i);
+            XSSFCell cell = titleRow.createCell(i);
             cell.setCellValue(titleStrList.get(i));
             cell.setCellStyle(cellStyleTitle);
         }
@@ -1418,26 +1419,26 @@ public class ExportFileController extends BaseWxController{
         Map<String, String> mapSbxh = waterEquipmentList.stream().collect(Collectors.toMap(p -> p.getSbsn(), p -> p.getSbmc()));
         for(int i=0;i<dataList.size();i++){
             PredationNum entity = dataList.get(i);
-            HSSFRow comRow = sheet.createRow(i+1);
-            HSSFCell comCell0 = comRow.createCell(0);
+            XSSFRow comRow = sheet.createRow(i+1);
+            XSSFCell comCell0 = comRow.createCell(0);
             comCell0.setCellValue(mapDept.get(entity.getDeptcode()));
             comCell0.setCellStyle(cellStyleCommon);
-            HSSFCell comCell1 = comRow.createCell(1);
+            XSSFCell comCell1 = comRow.createCell(1);
             comCell1.setCellValue(mapSbxh.get(entity.getSbbh()));
             comCell1.setCellStyle(cellStyleCommon);
-            HSSFCell comCell2 = comRow.createCell(2);
+            XSSFCell comCell2 = comRow.createCell(2);
             comCell2.setCellValue(entity.getSbbh());
             comCell2.setCellStyle(cellStyleCommon);
-            HSSFCell comCell3 = comRow.createCell(3);
+            XSSFCell comCell3 = comRow.createCell(3);
             comCell3.setCellValue(DateUtil.getFormatDate(entity.getCjsj(),"yyyy-MM-dd"));
             comCell3.setCellStyle(cellStyleCommon);
-            HSSFCell comCell4 = comRow.createCell(4);
+            XSSFCell comCell4 = comRow.createCell(4);
             comCell4.setCellValue(entity.getAlarmNum());
             comCell4.setCellStyle(cellStyleCommon);
-            HSSFCell comCell5 = comRow.createCell(5);
+            XSSFCell comCell5 = comRow.createCell(5);
             comCell5.setCellValue(entity.getPredationNum());
             comCell5.setCellStyle(cellStyleCommon);
-            HSSFCell comCell6 = comRow.createCell(6);
+            XSSFCell comCell6 = comRow.createCell(6);
             comCell6.setCellValue(entity.getSm1());
             comCell6.setCellStyle(cellStyleCommon);
         }
@@ -1486,35 +1487,35 @@ public class ExportFileController extends BaseWxController{
             dataList = predationNumService.list(example);
         }
         //导出
-        HSSFWorkbook workbook = new HSSFWorkbook();
+        XSSFWorkbook workbook = new XSSFWorkbook();
         //设置字体大小
-        HSSFFont fontCommon = workbook.createFont();
+        XSSFFont fontCommon = workbook.createFont();
         fontCommon.setFontHeightInPoints((short)12); // 设置字体大小为12磅
         //设置公共单元格样式
-        HSSFCellStyle cellStyleCommon = workbook.createCellStyle();
-        cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-        cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+        XSSFCellStyle cellStyleCommon = workbook.createCellStyle();
+        cellStyleCommon.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+        cellStyleCommon.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
         //cellStyleCommon.setFont(fontCommon);
         //设置字体加粗
-        HSSFFont font = workbook.createFont();
-        font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+        XSSFFont font = workbook.createFont();
+        font.setBoldweight(XSSFFont.BOLDWEIGHT_BOLD);
         font.setFontHeightInPoints((short)12); // 设置字体大小为12磅
-        HSSFCellStyle cellStyleTitle = workbook.createCellStyle();
-        cellStyleTitle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-        cellStyleTitle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+        XSSFCellStyle cellStyleTitle = workbook.createCellStyle();
+        cellStyleTitle.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+        cellStyleTitle.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
         cellStyleTitle.setFont(font);
         // 创建一个工作表
         String fileName = "事件统计(" + new Date().getTime() + ").xls";
-        HSSFSheet sheet = workbook.createSheet("按事件统计");
+        XSSFSheet sheet = workbook.createSheet("按事件统计");
         // 自适应列宽度
         sheet.autoSizeColumn(1, true);
         sheet.setDefaultColumnWidth(18);
         sheet.setDefaultRowHeight((short)(40*10));
         // 添加表头行
-        HSSFRow titleRow = sheet.createRow(0);//第1行
+        XSSFRow titleRow = sheet.createRow(0);//第1行
         List<String> titleStrList = Arrays.asList("所属监测点","设备名称","设备sn","事件日期","事件次数","事件发生时间集合");
         for(int i=0;i<titleStrList.size();i++){
-            HSSFCell cell = titleRow.createCell(i);
+            XSSFCell cell = titleRow.createCell(i);
             cell.setCellValue(titleStrList.get(i));
             cell.setCellStyle(cellStyleTitle);
         }
@@ -1528,28 +1529,28 @@ public class ExportFileController extends BaseWxController{
         for(int i=0;i<dataList.size();i++){
             EquipmentFileAlarmEvent efae = new EquipmentFileAlarmEvent();
             PredationNum entity = dataList.get(i);
-            HSSFRow comRow = sheet.createRow(i+1);
-            HSSFCell comCell0 = comRow.createCell(0);
+            XSSFRow comRow = sheet.createRow(i+1);
+            XSSFCell comCell0 = comRow.createCell(0);
             comCell0.setCellValue(mapDept.get(entity.getDeptcode()));
             comCell0.setCellStyle(cellStyleCommon);
             efae.setDeptcode(entity.getDeptcode());
-            HSSFCell comCell1 = comRow.createCell(1);
+            XSSFCell comCell1 = comRow.createCell(1);
             comCell1.setCellValue(mapSbxh.get(entity.getSbbh()));
             comCell1.setCellStyle(cellStyleCommon);
             efae.setSbbh(entity.getSbbh());
-            HSSFCell comCell2 = comRow.createCell(2);
+            XSSFCell comCell2 = comRow.createCell(2);
             comCell2.setCellValue(entity.getSbbh());
             comCell2.setCellStyle(cellStyleCommon);
-            HSSFCell comCell3 = comRow.createCell(3);
+            XSSFCell comCell3 = comRow.createCell(3);
             comCell3.setCellValue(entity.getCjsj());
             comCell3.setCellStyle(cellStyleCommon);
             efae.setBjsj(DateUtil.getFormatDate(entity.getCjsj(),"yyyy-MM-dd"));
-            HSSFCell comCell4 = comRow.createCell(4);
+            XSSFCell comCell4 = comRow.createCell(4);
             comCell4.setCellValue(entity.getSm1());
             comCell4.setCellStyle(cellStyleCommon);
             List<EquipmentFileAlarmEvent> detailAlarmTimes = equipmentFileAlarmEventService.detailByParam(efae);
             List<String> eventTimes=  detailAlarmTimes.stream().filter(Objects::nonNull).map(EquipmentFileAlarmEvent::getEventTime).collect(Collectors.toList());
-            HSSFCell comCell5 = comRow.createCell(5);
+            XSSFCell comCell5 = comRow.createCell(5);
             comCell5.setCellValue(JSONArray.toJSONString(eventTimes));
             comCell5.setCellStyle(cellStyleCommon);
         }
@@ -1618,36 +1619,36 @@ public class ExportFileController extends BaseWxController{
             op = lists.stream().map(AlarmNumbersDto::getAlarmNum).reduce(Integer::sum);
         }
         //导出
-        HSSFWorkbook workbook = new HSSFWorkbook();
+        XSSFWorkbook workbook = new XSSFWorkbook();
         //设置字体大小
-        HSSFFont fontCommon = workbook.createFont();
+        XSSFFont fontCommon = workbook.createFont();
         fontCommon.setFontHeightInPoints((short)12); // 设置字体大小为12磅
         //设置公共单元格样式
-        HSSFCellStyle cellStyleCommon = workbook.createCellStyle();
-        cellStyleCommon.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-        cellStyleCommon.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+        XSSFCellStyle cellStyleCommon = workbook.createCellStyle();
+        cellStyleCommon.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+        cellStyleCommon.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
         //cellStyleCommon.setFont(fontCommon);
         //设置字体加粗
-        HSSFFont font = workbook.createFont();
-        font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+        XSSFFont font = workbook.createFont();
+        font.setBoldweight(XSSFFont.BOLDWEIGHT_BOLD);
         font.setFontHeightInPoints((short)12); // 设置字体大小为12磅
-        HSSFCellStyle cellStyleTitle = workbook.createCellStyle();
-        cellStyleTitle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-        cellStyleTitle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+        XSSFCellStyle cellStyleTitle = workbook.createCellStyle();
+        cellStyleTitle.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+        cellStyleTitle.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
         cellStyleTitle.setFont(font);
         // 创建一个工作表
         String fileName = "出现统计(" + new Date().getTime() + ").xls";
-        HSSFSheet sheet = workbook.createSheet("出现时间");
+        XSSFSheet sheet = workbook.createSheet("出现时间");
         // 自适应列宽度
         sheet.autoSizeColumn(1, true);
         sheet.setDefaultColumnWidth(18);
         sheet.setDefaultRowHeight((short)(40*10));
         // 添加表头行
-        HSSFRow titileRow = sheet.createRow(0);//第1行
-        HSSFCell headCell = titileRow.createCell(0);//第1行第1列
+        XSSFRow titileRow = sheet.createRow(0);//第1行
+        XSSFCell headCell = titileRow.createCell(0);//第1行第1列
         headCell.setCellValue("出现时间");
         headCell.setCellStyle(cellStyleTitle);
-        HSSFCell headCell1 = titileRow.createCell(1);//第1行第2列
+        XSSFCell headCell1 = titileRow.createCell(1);//第1行第2列
         if(type.equals("minute")){
             headCell1.setCellValue("出现次数");
         }else if(type.equals("hour")){
@@ -1657,19 +1658,19 @@ public class ExportFileController extends BaseWxController{
         for(int i=0;i<lists.size();i++){
             AlarmNumbersDto entity = lists.get(i);
             if(type.equals("minute")){
-                HSSFRow row = sheet.createRow(i+1);//第1行
-                HSSFCell cell = row.createCell(0);//第1行第1列
+                XSSFRow row = sheet.createRow(i+1);//第1行
+                XSSFCell cell = row.createCell(0);//第1行第1列
                 cell.setCellValue(entity.getBjsj()+" "+entity.getXs()+":"+entity.getFz());
                 cell.setCellStyle(cellStyleCommon);
-                HSSFCell cell1 = row.createCell(1);//第1行第2列
+                XSSFCell cell1 = row.createCell(1);//第1行第2列
                 cell1.setCellValue(entity.getAlarmNum());
                 cell1.setCellStyle(cellStyleCommon);
             }else if(type.equals("hour")) {
-                HSSFRow row = sheet.createRow(i+1);//第1行
-                HSSFCell cell = row.createCell(0);//第1行第1列
+                XSSFRow row = sheet.createRow(i+1);//第1行
+                XSSFCell cell = row.createCell(0);//第1行第1列
                 cell.setCellValue(entity.getBjsj()+" "+entity.getXs());
                 cell.setCellStyle(cellStyleCommon);
-                HSSFCell cell1 = row.createCell(1);//第1行第2列
+                XSSFCell cell1 = row.createCell(1);//第1行第2列
                 if(op.get()!=null && op.get()!=0){
                     cell1.setCellValue(div(entity.getAlarmNum(),op.get(),4)*100);
                 }
