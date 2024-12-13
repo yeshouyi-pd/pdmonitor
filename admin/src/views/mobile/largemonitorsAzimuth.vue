@@ -13,7 +13,8 @@ export default {
       user:null,//当前用户
       infoWindow:null,
       polygonTextArr:[],
-      allSbsn:[]
+      allSbsn:[],
+      blingSbbh:[]
     }
   },
   created() {
@@ -51,6 +52,19 @@ export default {
           }else{
             let data = JSON.parse(msg.data);
             if(_this.allSbsn.includes(data.sbbh) && data.txtlx=='5'  && !Tool.isEmpty(data.sm1)){
+              if(_this.blingSbbh.includes(data.sbbh)){
+                _this.blingSbbh.splice(_this.blingSbbh.indexOf(data.sbbh), 1);
+                for(let m=0;m<_this.polygonTextArr.length;m++){
+                  let polygonText = _this.polygonTextArr[m];
+                  if(polygonText.getExtData().id.includes(data.sbbh)){
+                    // 将文字还原为白色
+                    polygonText.setStyle({
+                      'font-size': '16px',
+                      'color': 'white'
+                    });
+                  }
+                }
+              }
               let arr = data.sm1.split("/");//2022_10_15_02_15_14-0:105,1:235
               let jdNum = new Map();
               jdNum.set("northNortheast",0);
@@ -102,26 +116,20 @@ export default {
                     'color': 'red'
                   });
                 }else if(polygonText.getExtData().id==data.sbbh+"_"+sortJdNum[1]){
-                  // 将文字设置为红色
+                  // 将文字设置为绿色
                   polygonText.setStyle({
                     'font-size': '18px',
                     'color': 'green'
                   });
                 }else if(polygonText.getExtData().id==data.sbbh+"_"+sortJdNum[2]){
-                  // 将文字设置为红色
+                  // 将文字设置为蓝色
                   polygonText.setStyle({
                     'font-size': '18px',
                     'color': 'blue'
                   });
                 }
-                setTimeout(function (){
-                  // 将文字设置为红色
-                  polygonText.setStyle({
-                    'font-size': '16px',
-                    'color': 'white'
-                  });
-                }, 3000);
               }
+              _this.blingSbbh.push(data.sbbh);
             }
           }
         };
@@ -165,14 +173,14 @@ export default {
             x: circleCenter[0],
             y: circleCenter[1],
             data: [
-              {msg:'北-北东',r:0,angle:25,offset:new AMap.Pixel(-15,-15),id:_this.equipments[i].sbsn+"_"+"northNortheast"},
-              {msg:'北东-东',r:45,angle:65,offset:new AMap.Pixel(15,10),id:_this.equipments[i].sbsn+"_"+"northeastEast"},
-              {msg:'东-东南',r:90,angle:115,offset:new AMap.Pixel(12,-15),id:_this.equipments[i].sbsn+"_"+"eastEastsouth"},
-              {msg:'东南-南',r:135,angle:160,offset:new AMap.Pixel(-12,10),id:_this.equipments[i].sbsn+"_"+"eastsouthSouth"},
-              {msg:'南-南西',r:180,angle:205,offset:new AMap.Pixel(15,10),id:_this.equipments[i].sbsn+"_"+"southSouthwest"},
-              {msg:'南西-西',r:225,angle:245,offset:new AMap.Pixel(-10,-12),id:_this.equipments[i].sbsn+"_"+"southwestWest"},
-              {msg:'西-西北',r:270,angle:-65,offset:new AMap.Pixel(-10,12),id:_this.equipments[i].sbsn+"_"+"westWestnorth"},
-              {msg:'西北-北',r:315,angle:-25,offset:new AMap.Pixel(10,-12),id:_this.equipments[i].sbsn+"_"+"westnorthNorth"}
+              {msg:'北偏东45度',r:0,angle:25,offset:new AMap.Pixel(-15,-15),id:_this.equipments[i].sbsn+"_"+"northNortheast"},
+              {msg:'东偏北45度',r:45,angle:65,offset:new AMap.Pixel(15,10),id:_this.equipments[i].sbsn+"_"+"northeastEast"},
+              {msg:'东偏南45度',r:90,angle:115,offset:new AMap.Pixel(12,-15),id:_this.equipments[i].sbsn+"_"+"eastEastsouth"},
+              {msg:'南偏东45度',r:135,angle:160,offset:new AMap.Pixel(-12,10),id:_this.equipments[i].sbsn+"_"+"eastsouthSouth"},
+              {msg:'南偏西45度',r:180,angle:205,offset:new AMap.Pixel(15,10),id:_this.equipments[i].sbsn+"_"+"southSouthwest"},
+              {msg:'西偏南45度',r:225,angle:245,offset:new AMap.Pixel(-10,-12),id:_this.equipments[i].sbsn+"_"+"southwestWest"},
+              {msg:'西偏北45度',r:270,angle:-65,offset:new AMap.Pixel(-10,12),id:_this.equipments[i].sbsn+"_"+"westWestnorth"},
+              {msg:'北偏西45度',r:315,angle:-25,offset:new AMap.Pixel(10,-12),id:_this.equipments[i].sbsn+"_"+"westnorthNorth"}
             ]
           }
           _this.drawSite(point);
