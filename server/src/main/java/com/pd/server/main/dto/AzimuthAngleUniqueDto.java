@@ -39,42 +39,42 @@ public class AzimuthAngleUniqueDto extends PageDto{
     private String deptcode;
 
     /**
-    * 北-北东
+    * 北偏东45度
     */
     private Integer northNortheast;
 
     /**
-    * 北东-东
+    * 东偏北45度
     */
     private Integer northeastEast;
 
     /**
-    * 东-东南
+    * 东偏南45度
     */
     private Integer eastEastsouth;
 
     /**
-    * 东南-南
+    * 南偏东45度
     */
     private Integer eastsouthSouth;
 
     /**
-    * 南-南西
+    * 南偏西45度
     */
     private Integer southSouthwest;
 
     /**
-    * 南西-西
+    * 西偏南45度
     */
     private Integer southwestWest;
 
     /**
-    * 西-西北
+    * 西偏北45度
     */
     private Integer westWestnorth;
 
     /**
-    * 西北-北
+    * 北偏西45度
     */
     private Integer westnorthNorth;
 

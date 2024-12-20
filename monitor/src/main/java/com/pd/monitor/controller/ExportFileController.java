@@ -129,7 +129,7 @@ public class ExportFileController extends BaseWxController{
             sheet.setDefaultRowHeight((short)(40*10));
             // 添加表头行
             XSSFRow titleRow = sheet.createRow(0);//第1行
-            List<String> titleStrList = Arrays.asList("所属机构","设备编号","设备名称","日期","分钟","发声次数","北-北东","北东-东","东-东南","东南-南","南-南西","南西-西","西-西北","西北-北");
+            List<String> titleStrList = Arrays.asList("所属机构","设备编号","设备名称","日期","分钟","发声次数","北偏东45度","东偏北45度","东偏南45度","南偏东45度","南偏西45度","西偏南45度","西偏北45度","北偏西45度");
             for(int i=0;i<titleStrList.size();i++){
                 XSSFCell cell = titleRow.createCell(i);
                 cell.setCellValue(titleStrList.get(i));

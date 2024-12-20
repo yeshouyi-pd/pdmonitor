@@ -45,34 +45,44 @@
         <thead>
         <tr>
           <th>设备名称</th>
-          <th>电池电流</th>
+          <th>设备编号</th>
+          <th>设备温度</th>
           <th>电池电压</th>
           <th>负载电压</th>
           <th>负载电流</th>
+          <th>当日用电</th>
+          <th>当月累计用电</th>
+          <th>太阳能电压</th>
+          <th>太阳能电流</th>
           <th>发电功率</th>
-          <th>太阳能板电流</th>
-          <th>太阳能板电压</th>
-          <th>当日用电量</th>
-          <th>当日累计充电量</th>
-          <th>电池剩余电量</th>
-          <th>创建时间</th>
+          <th>当日累计充电</th>
+          <th>当月累计充电</th>
+          <th>电池电量</th>
+          <th>更新时间</th>
+          <th>是否在线</th>
+          <th>开关</th>
           <th>操作</th>
         </tr>
         </thead>
         <tbody>
         <tr v-for="item in solarPannels">
           <td>{{item.deviceName}}</td>
-          <td>{{item.batteryCurrent}}</td>
+          <td>{{item.deviceNumber}}</td>
+          <td>{{item.temperature}}</td>
           <td>{{item.batteryVoltage}}</td>
           <td>{{item.loadVoltage}}</td>
           <td>{{item.loadCurrent}}</td>
-          <td>{{item.powerGeneration}}</td>
-          <td>{{item.solarPannelCurrent}}</td>
-          <td>{{item.solarPanelVoltage}}</td>
           <td>{{item.dailyElectricityConsumption}}</td>
+          <td>{{item.monthlyElectricityConsumption}}</td>
+          <td>{{item.solarPanelVoltage}}</td>
+          <td>{{item.solarPannelCurrent}}</td>
+          <td>{{item.powerGeneration}}</td>
           <td>{{item.dailyCharge}}</td>
+          <td>{{item.monthlyCharge}}</td>
           <td>{{item.batteryPercent}}</td>
-          <td>{{item.createTime}}</td>
+          <td>{{item.updateTime}}</td>
+          <td><span v-if="item.online=='1'">在线</span><span v-else>不在线</span></td>
+          <td><span v-if="item.handSwitch=='1'">开</span><span v-else>关</span></td>
           <td>
             <div class="hidden-sm hidden-xs btn-group" title="详情">
               <button v-on:click="detail(item)" class="btn btn-xs btn-info">
