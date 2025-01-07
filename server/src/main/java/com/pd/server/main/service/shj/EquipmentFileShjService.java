@@ -345,9 +345,11 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                 if("1001,1007,1009,1010".contains(record.getType())){
                     // 提交一个延迟执行的任务
                     scheduledExecutorService.schedule(() -> {
+                        LOG.error("cameraMiddle数据："+cameraMiddle.toString());
                         cameraMiddleServiceStatic.save(cameraMiddle);
                     }, Integer.parseInt(attrServiceStatic.findByAttrKey("spjqjgsj")), TimeUnit.SECONDS);
                 }else{
+                    LOG.error("cameraMiddle数据："+cameraMiddle.toString());
                     cameraMiddleServiceStatic.save(cameraMiddle);
                 }
 
@@ -371,6 +373,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                     cameraMiddle.setJgsj("0");
                     cameraMiddle.setSfjq("0");
                     cameraMiddle.setBz(cameraInfo.getSm4());//默认预置位
+                    LOG.error("cameraMiddle数据："+cameraMiddle.toString());
                     cameraMiddleServiceStatic.save(cameraMiddle);
                 }
                 redisTstaticemplate.opsForValue().set("JQ"+record.getSbbh(), jssj);
