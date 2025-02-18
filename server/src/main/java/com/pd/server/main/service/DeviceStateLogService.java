@@ -62,4 +62,8 @@ public class DeviceStateLogService {
         deviceStateLogMapper.deleteByPrimaryKey(id);
     }
 
+    public void updateZt(String rq,String sbbh) {
+        deviceStateLogMapper.updateZt(rq,sbbh);
+    }
+
 }

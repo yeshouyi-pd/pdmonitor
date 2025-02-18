@@ -240,4 +240,9 @@
       sm = #{sm,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
+  <update id="updateZt" parameterType="java.lang.String">
+    update device_state_log
+    set zt = "0"
+    where rq = #{rq,jdbcType=VARCHAR} and sbbh = #{sbbh,jdbcType=VARCHAR}
+  </update>
 </mapper>

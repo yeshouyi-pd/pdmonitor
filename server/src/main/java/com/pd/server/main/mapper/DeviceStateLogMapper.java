@@ -27,4 +27,6 @@ public interface DeviceStateLogMapper {
     int updateByPrimaryKeySelective(DeviceStateLog record);
 
     int updateByPrimaryKey(DeviceStateLog record);
+
+    int updateZt(@Param("rq") String rq,@Param("sbbh") String sbbh);
 }

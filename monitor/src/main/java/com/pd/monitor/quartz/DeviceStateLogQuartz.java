@@ -36,7 +36,7 @@ public class DeviceStateLogQuartz {
     @Resource
     private WaterEquipmentService waterEquipmentService;
 
-    //每天晚上11点30执行
+    //每天晚上11点30执行(StatisticsDataQuartz这个类在每天统计的时候，如果有原来的历史数据，会把历史数据那天的设备状态改为正常，不管设备原本的状态是否正常)
     @Scheduled(cron = "0 30 23 * * ? ")
     public void loop(){
         String curDay = DateUtil.getFormatDate(new Date(),"yyyy-MM-dd");
