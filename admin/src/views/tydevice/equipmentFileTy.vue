@@ -134,7 +134,9 @@ export default {
           _this.amap.setCenter([gpslist[0].split(",")[0],gpslist[0].split(",")[1]]);
           gpslist.forEach(function (item){
             let itemarr = item.split(",");
-            polylineArr.push(new AMap.LngLat(itemarr[0],itemarr[1].trim()));
+            if(itemarr[0]!='0'&&itemarr[0]!='NaN'){
+              polylineArr.push(new AMap.LngLat(itemarr[0],itemarr[1].trim()));
+            }
           })
           console.log(polylineArr);
           let  polyline = new AMap.Polyline ({
@@ -164,18 +166,20 @@ export default {
         if(gpslist && gpslist.length>0){
           _this.amap.setCenter(gpslist[0].gps.split(","));
           gpslist.forEach(function (item){
-            let marker = new AMap.Marker({
-              position: item.gps.split(","),
-              icon: '//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-default.png',
-              anchor:'bottom-center',
-              offset: new AMap.Pixel(0, 0),
-              map: _this.amap
-            });
-            marker.setLabel({
-              direction:'center',
-              offset:new AMap.Pixel(0, -5),
-              content: item.ts, //设置文本标注内容
-            });
+            if(item.gps.split(",")[0]!='0'&&item.gps.split(",")[0]!='NaN'){
+              let marker = new AMap.Marker({
+                position: item.gps.split(","),
+                icon: '//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-default.png',
+                anchor:'bottom-center',
+                offset: new AMap.Pixel(0, 0),
+                map: _this.amap
+              });
+              marker.setLabel({
+                direction:'center',
+                offset:new AMap.Pixel(0, -5),
+                content: item.ts, //设置文本标注内容
+              });
+            }
           })
         }
       })

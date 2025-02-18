@@ -158,7 +158,9 @@ export default {
                 let polylineArr = new Array();//多边形覆盖物节点坐标数组
                 gpslist.forEach(function (item){
                   let itemarr = item.gps.split(",");
-                  polylineArr.push(new AMap.LngLat(itemarr[0],itemarr[1].trim()));
+                  if(itemarr[0]!='0'&&itemarr[0]!='NaN'){
+                    polylineArr.push(new AMap.LngLat(itemarr[0],itemarr[1].trim()));
+                  }
                 })
                 let  polyline = new AMap.Polyline ({
                     path: polylineArr,//设置多边形边界路径
@@ -193,18 +195,20 @@ export default {
         let gpslist = resp.content;
         if(gpslist && gpslist.length>0){
           gpslist.forEach(function (item){
-            let marker = new AMap.Marker({
-              position: item.gps.split(","),
-              icon: '//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-default.png',
-              anchor:'bottom-center',
-              offset: new AMap.Pixel(0, 0),
-              map: _this.amap
-            });
-            marker.setLabel({
-              direction:'center',
-              offset:new AMap.Pixel(0, -5),
-              content: item.ts, //设置文本标注内容
-            });
+            if(item.gps.split(",")[0]!='0'&&item.gps.split(",")[0]!='NaN'){
+              let marker = new AMap.Marker({
+                position: item.gps.split(","),
+                icon: '//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-default.png',
+                anchor:'bottom-center',
+                offset: new AMap.Pixel(0, 0),
+                map: _this.amap
+              });
+              marker.setLabel({
+                direction:'center',
+                offset:new AMap.Pixel(0, -5),
+                content: item.ts, //设置文本标注内容
+              });
+            }
           })
         }
       })
