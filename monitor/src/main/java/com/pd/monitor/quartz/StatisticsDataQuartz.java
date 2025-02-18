@@ -46,6 +46,8 @@ public class StatisticsDataQuartz {
     private WaterEquipmentService waterEquipmentService;
     @Resource
     private EquipmentFileService equipmentFileService;
+    @Resource
+    private DeviceStateLogService deviceStateLogService;
 
 //    @Scheduled(cron = "0 43 10 * * ? ")
 //    public void test() throws ParseException {
@@ -67,6 +69,14 @@ public class StatisticsDataQuartz {
         noTodayCa.andTxtlxEqualTo("1");
         List<NoTodaySbbhDto> noTodaySbbhDtoList = equipmentFileTodayService.noTodaySbbhDtoList(noTodayExample);
         noTodaySbbhDtoList(noTodaySbbhDtoList);
+        //将之前的设备状态改为正常
+        changeDeviceStateLog(noTodaySbbhDtoList);
+    }
+
+    public void changeDeviceStateLog(List<NoTodaySbbhDto> noTodaySbbhDtoList){
+        for(NoTodaySbbhDto entity : noTodaySbbhDtoList){
+            deviceStateLogService.updateZt(entity.getRq(), entity.getSbbh());
+        }
     }
 
     public void clearTodayData(){
