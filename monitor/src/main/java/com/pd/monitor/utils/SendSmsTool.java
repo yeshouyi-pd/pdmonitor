@@ -94,17 +94,17 @@ public class SendSmsTool {
             req.setSign(signName);
             req.setTemplateID(templateId);
 //            String[] templateParamSet = {"A4001","145dB"};
-           if(!StringUtils.isEmpty(params)){
+            if(!StringUtils.isEmpty(params)){
                String[] templateParamSet = params.split("-");
                req.setTemplateParamSet(templateParamSet);
-           }
+            }
 //            String[] phoneNumberSet = {"+8618827512017","+8618827512017"};
-            String[] phoneNumberSet = phoneNum.split(",");
-            req.setPhoneNumberSet(phoneNumberSet);
-            req.setSessionContext("");
-            req.setExtendCode("");
-            req.setSenderId("");
             if(!StringUtils.isEmpty(phoneNum)){
+                String[] phoneNumberSet = phoneNum.split(",");
+                req.setPhoneNumberSet(phoneNumberSet);
+                req.setSessionContext("");
+                req.setExtendCode("");
+                req.setSenderId("");
                 SendSmsResponse res = client.SendSms(req);
                 JSONObject resultJson = JSON.parseObject(SendSmsResponse.toJsonString(res));
                 LOG.error("短信返回数据："+resultJson);
