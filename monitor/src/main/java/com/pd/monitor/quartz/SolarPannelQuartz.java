@@ -9,6 +9,7 @@ import com.pd.server.main.domain.WaterEquipment;
 import com.pd.server.main.domain.WaterEquipmentExample;
 import com.pd.server.main.service.SolarPannelService;
 import com.pd.server.main.service.WaterEquipmentService;
+import com.pd.server.util.UuidUtil;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,10 +35,10 @@ public class SolarPannelQuartz {
     private WaterEquipmentService waterEquipmentService;
 
     /**
-     * 每10分钟执行一次
+     * 每1个小时执行一次
      * @throws Exception
      */
-    @Scheduled(cron="0 */10 * * * ?")
+    @Scheduled(cron="0 0 */1 * * ?")
     public void getSolarPannelInfo(){
         Map<String, String> attrMap = WxRedisConfig.getAttrMap();
         String openConnect = attrMap.get("openConnect");
@@ -55,6 +56,7 @@ public class SolarPannelQuartz {
                         String result = HttpUtil.get("http://39.108.52.229:8190/openData/getData", paramMap);
                         JSONObject jsonObject = JSON.parseObject(result);
                         SolarPannel solarPannel = jsonObject.getJSONObject("data").toJavaObject(SolarPannel.class);
+                        solarPannel.setId(UuidUtil.getShortUuid());
                         solarPannelService.saveEntity(solarPannel);
                     } catch (DuplicateKeyException e){
                         LOG.error("主键冲突，不能插入。");
