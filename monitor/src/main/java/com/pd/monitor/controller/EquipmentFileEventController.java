@@ -87,7 +87,8 @@ public class EquipmentFileEventController {
             equipmentFileEventList = equipmentFileEventService.selectByExampleSpecial(pageDto);
         }else{
             equipmentFileEventList = equipmentFileEventService.list(equipmentFileEventExample);
-        }PageInfo<EquipmentFileEvent> pageInfo = new PageInfo<>(equipmentFileEventList);
+        }
+        PageInfo<EquipmentFileEvent> pageInfo = new PageInfo<>(equipmentFileEventList);
         pageDto.setTotal(pageInfo.getTotal());
         List<EquipmentFileEventDto> equipmentFileEventDtoList = CopyUtil.copyList(equipmentFileEventList, EquipmentFileEventDto.class);
         pageDto.setList(equipmentFileEventDtoList);

@@ -46,7 +46,7 @@ public class SolarPannelController {
         if(!StringUtils.isEmpty(pageDto.getDeviceNumber())){
             ca.andDeviceNumberEqualTo(pageDto.getDeviceNumber());
         }
-        solarPannelExample.setOrderByClause(" create_time desc ");
+        solarPannelExample.setOrderByClause(" update_time desc ");
         List<SolarPannel> solarPannelList = solarPannelService.list(solarPannelExample);
         PageInfo<SolarPannel> pageInfo = new PageInfo<>(solarPannelList);
         pageDto.setTotal(pageInfo.getTotal());

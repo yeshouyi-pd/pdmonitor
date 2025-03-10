@@ -5,6 +5,7 @@ import cn.hutool.core.util.ZipUtil;
 import cn.hutool.http.HttpUtil;
 import com.pd.server.config.RedisCode;
 import com.pd.server.main.domain.*;
+import com.pd.server.main.dto.EquipmentFileEventDto;
 import com.pd.server.main.service.*;
 import com.pd.server.util.DateUtil;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
@@ -51,6 +52,69 @@ public class DownloadAudioController {
     public AttrService attrService;
     @Resource
     public VideoEventService videoEventService;
+
+    /**
+     * A4聚类文件下载
+     * @param request
+     * @param response
+     * @throws Exception
+     */
+    @GetMapping("/downloadEquipmentFileEvent")
+    public void downloadEquipmentFileEvent(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setCharacterEncoding("UTF-8");
+        EquipmentFileEventExample equipmentFileEventExample = new EquipmentFileEventExample();
+        EquipmentFileEventExample.Criteria ca = equipmentFileEventExample.createCriteria();
+        EquipmentFileEventDto record = new EquipmentFileEventDto();
+        record.setXmbh(request.getParameter("xmbh"));
+        if(!StringUtils.isEmpty(request.getParameter("sbbh"))){
+            ca.andSbbhEqualTo(request.getParameter("sbbh"));
+            record.setSbbh(request.getParameter("sbbh"));
+        }
+        if(!StringUtils.isEmpty(request.getParameter("stime"))){
+            ca.andRqGreaterThanOrEqualTo(request.getParameter("stime"));
+            record.setStime(request.getParameter("stime"));
+        }
+        if(!StringUtils.isEmpty(request.getParameter("etime"))){
+            ca.andRqLessThanOrEqualTo(request.getParameter("etime"));
+            record.setEtime(request.getParameter("etime"));
+        }
+        equipmentFileEventExample.setOrderByClause(" kssj desc ");
+        List<EquipmentFileEvent> equipmentFileEventList = new ArrayList<>();
+        if(!StringUtils.isEmpty(request.getParameter("xmbh"))){
+            equipmentFileEventList = equipmentFileEventService.selectByExampleSpecial(record);
+        }else{
+            equipmentFileEventList = equipmentFileEventService.list(equipmentFileEventExample);
+        }
+        // 目标文件夹a
+        File destDir = new File("C:/A4File");
+        // 确保目标文件夹存在
+        if (!destDir.exists()) {
+            destDir.mkdirs();
+        }else{
+            destDir.delete();
+            destDir.mkdir();
+        }
+        for(EquipmentFileEvent event : equipmentFileEventList){
+            EquipmentFile equipmentFile = equipmentFileService.selectByPrimaryKey(event.getEquipmentFileId());
+            if(equipmentFile!=null&&!StringUtils.isEmpty(equipmentFile.getTplj())){
+                HttpUtil.downloadFile(equipmentFile.getTplj(), FileUtil.file("C:/A4File"));
+            }
+        }
+        ZipUtil.zip("C:/A4File");
+        //拼接下载默认名称并转为ISO-8859-1格式
+        response.setHeader("Content-Disposition", "attchment;filename=A4File.zip");
+        //该流不可以手动关闭,手动关闭下载会出问题,下载完成后会自动关闭
+        ServletOutputStream outputStream = response.getOutputStream();
+        FileInputStream inputStream = new FileInputStream("C:/A4File.zip");
+        // 如果是SpringBoot框架,在这个路径
+        // org.apache.tomcat.util.http.fileupload.IOUtils产品
+        // 否则需要自主引入apache的 commons-io依赖
+        // copy方法为文件复制,在这里直接实现了下载效果
+        IOUtils.copy(inputStream, outputStream);
+        // 关闭输入流
+        inputStream.close();
+    }
+
 
     @GetMapping("/downZipByWjmc")
     public void downZipByWjmc(HttpServletRequest request, HttpServletResponse response) throws Exception{
