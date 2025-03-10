@@ -38,6 +38,10 @@
                     <i class="ace-icon fa fa-leaf"></i>
                     导出
                   </button>
+                  <button type="button" v-on:click="downloadEvent()" class="btn btn-xs btn-info" style="margin-right: 10px;">
+                    <i class="ace-icon fa fa-download"></i>
+                    下载文件
+                  </button>
                 </td>
               </tr>
               </tbody>
@@ -194,6 +198,38 @@ export default {
     });
   },
   methods: {
+    //下载文件
+    downloadEvent(){
+      let _this = this;
+      let param = "";
+      if("460100"!=Tool.getLoginUser().deptcode){
+        param+="&xmbh="+Tool.getLoginUser().xmbh;
+      }
+      if(!Tool.isEmpty(_this.equipmentFileEventDto.sbbh)){
+        param+="&sbbh="+_this.equipmentFileEventDto.sbbh;
+      }else{
+        Toast.error("请选择设备编号！");
+        return;
+      }
+      if(!Tool.isEmpty(_this.equipmentFileEventDto.stime)){
+        param+="&stime="+_this.equipmentFileEventDto.stime;
+      }else{
+        Toast.error("请选择开始日期！");
+        return;
+      }
+      if(!Tool.isEmpty(_this.equipmentFileEventDto.etime)){
+        param+="&etime="+_this.equipmentFileEventDto.etime;
+      }else{
+        Toast.error("请选择结束日期！");
+        return;
+      }
+      let diff = _this.getDateDiff(_this.equipmentFileEventDto.stime,_this.equipmentFileEventDto.etime);
+      if(diff>=3){
+        Toast.error("日期相差不能超过3天！");
+        return;
+      }
+      window.location.href = process.env.VUE_APP_SERVER + '/monitor/download/audio/downloadEquipmentFileEvent?'+param.substring(1,param.length);
+    },
     exportExcle(){
       let _this = this;
       let param = "";
@@ -518,7 +554,34 @@ export default {
           window.location.href = url;
         }
       })
+    },
+    getDateDiff(dateStr1, dateStr2) {
+      // 处理常见的日期分隔符（兼容 "-" 和 "/"）
+      const formatDateStr = (str) => str.replace(/\//g, '-');
+      // 将字符串转换为 Date 对象
+      const date1 = new Date(formatDateStr(dateStr1));
+      const date2 = new Date(formatDateStr(dateStr2));
+      // 验证日期有效性
+      if (isNaN(date1) || isNaN(date2)) {
+        throw new Error('Invalid date format. Use "YYYY-MM-DD" or "YYYY/MM/DD"');
+      }
+      // 转换为 UTC 时间消除时区影响
+      const utc1 = Date.UTC(
+          date1.getFullYear(),
+          date1.getMonth(),
+          date1.getDate()
+      );
+      const utc2 = Date.UTC(
+          date2.getFullYear(),
+          date2.getMonth(),
+          date2.getDate()
+      );
+      // 计算天数差（绝对值）
+      const timeDiff = Math.abs(utc2 - utc1);
+      const dayDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+      return dayDiff;
     }
+
   }
 }
 </script>
