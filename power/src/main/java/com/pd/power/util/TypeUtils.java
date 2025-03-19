@@ -139,23 +139,23 @@ public class TypeUtils {
                     }else if(KEY_2.equals(entry.getKey())){
                         type = "1002";
                         wjlx ="1";
-
+                        txtlx="0";
                     }else if(KEY_3.equals(entry.getKey())){
                         type = "1003";
                         wjlx ="1";
-
+                        txtlx="0";
                     }else if(KEY_4.equals(entry.getKey())){
                         type = "1004";
                         wjlx ="2";
-
+                        txtlx="0";
                     }else if(KEY_5.equals(entry.getKey())){
                         type = "1005";
                         wjlx ="1";
-
+                        txtlx="0";
                     }else if(KEY_6.equals(entry.getKey())){
                         type = "1006";
                         wjlx ="1";
-
+                        txtlx="0";
                     }else if(KEY_7.equals(entry.getKey())){
                         type = "1007";
                         wjlx ="3";
@@ -163,7 +163,7 @@ public class TypeUtils {
                     }else if(KEY_8.equals(entry.getKey())){
                         type = "1008";
                         wjlx ="2";
-
+                        txtlx="0";
                     }else if(KEY_9.equals(entry.getKey())){
                         type = "1009";
                         wjlx ="3";
@@ -190,7 +190,7 @@ public class TypeUtils {
                         type = "1013";
                         wjlx ="4";
                         ts = tss[12];
-
+                        txtlx="0";
                     }else if(KEY_14.equals(entry.getKey())){
                         type = "1014";
                         wjlx ="3";
@@ -205,22 +205,22 @@ public class TypeUtils {
                         type = "1016";
                         wjlx ="4";
                         ts = tss[6];
-
+                        txtlx="0";
                     }else if(KEY_17.equals(entry.getKey())){
                         type = "1017";
                         wjlx ="4";
                         ts = tss[7];
-
+                        txtlx="0";
                     }else if(KEY_18.equals(entry.getKey())){
                         type = "1018";
                         wjlx ="5";
                         ts=tss[7].split("\\.")[0];
-
+                        txtlx="0";
                     }else if(KEY_19.equals(entry.getKey())){
                         type = "1019";
                         wjlx ="6";
                         ts=tss[7].split("\\.")[0];
-
+                        txtlx="0";
                     }else if(KEY_20.equals(entry.getKey())){
                         type = "1020";
                         wjlx ="3";
@@ -230,7 +230,7 @@ public class TypeUtils {
                         type = "1021";
                         wjlx ="4";
                         ts=tss[13];
-
+                        txtlx="0";
                     }else if(KEY_22.equals(entry.getKey())){
                         type = "1022";
                         wjlx ="3";
@@ -240,7 +240,7 @@ public class TypeUtils {
                         type = "1023";
                         wjlx ="4";
                         ts=tss[13];
-
+                        txtlx="0";
                     }else if(KEY_24.equals(entry.getKey())){
                         type = "1024";
                         wjlx ="3";
@@ -250,7 +250,7 @@ public class TypeUtils {
                         type = "1025";
                         wjlx ="4";
                         ts=tss[12];
-
+                        txtlx="0";
                     }else if(KEY_26.equals(entry.getKey())){
                         type = "1026";
                         wjlx ="3";
@@ -260,7 +260,7 @@ public class TypeUtils {
                         type = "1027";
                         wjlx ="4";
                         ts=tss[14];
-
+                        txtlx="0";
                     }
                     break;
                 }

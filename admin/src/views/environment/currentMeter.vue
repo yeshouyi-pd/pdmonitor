@@ -75,21 +75,21 @@
           <thead>
           <tr>
             <th>所在位置</th>
-            <th>产品编号</th>
-            <th>序列号</th>
-            <th>abs速度</th>
-            <th>方向</th>
-            <th>北</th>
-            <th>东</th>
-            <th>朝向</th>
-            <th>倾斜度X</th>
-            <th>倾斜度Y</th>
-            <th>Sp标准</th>
-            <th>力度</th>
-            <th>平计数</th>
-            <th>Abs倾斜度</th>
-            <th>最大倾斜度</th>
-            <th>标准倾斜度</th>
+<!--            <th>产品编号</th>-->
+<!--            <th>序列号</th>-->
+<!--            <th>abs速度</th>-->
+<!--            <th>方向</th>-->
+<!--            <th>北</th>-->
+<!--            <th>东</th>-->
+<!--            <th>朝向</th>-->
+<!--            <th>倾斜度X</th>-->
+<!--            <th>倾斜度Y</th>-->
+<!--            <th>Sp标准</th>-->
+<!--            <th>力度</th>-->
+<!--            <th>平计数</th>-->
+<!--            <th>Abs倾斜度</th>-->
+<!--            <th>最大倾斜度</th>-->
+<!--            <th>标准倾斜度</th>-->
             <th>东向流速</th>
             <th>北向流速</th>
             <th>海面高度</th>
@@ -99,21 +99,21 @@
           <tbody>
           <tr v-for="currentMeter in currentMeters">
             <td>{{zdysbList|optionKVArray(currentMeter.bz)}}</td>
-            <td>{{currentMeter.productNumber}}</td>
-            <td>{{currentMeter.serialNumber}}</td>
-            <td>{{currentMeter.absSpeed}}</td>
-            <td>{{currentMeter.direction}}</td>
-            <td>{{currentMeter.north}}</td>
-            <td>{{currentMeter.east}}</td>
-            <td>{{currentMeter.heading}}</td>
-            <td>{{currentMeter.tiltX}}</td>
-            <td>{{currentMeter.tiltY}}</td>
-            <td>{{currentMeter.spStd}}</td>
-            <td>{{currentMeter.strength}}</td>
-            <td>{{currentMeter.pingCount}}</td>
-            <td>{{currentMeter.absTilt}}</td>
-            <td>{{currentMeter.maxTilt}}</td>
-            <td>{{currentMeter.stdTilt}}</td>
+<!--            <td>{{currentMeter.productNumber}}</td>-->
+<!--            <td>{{currentMeter.serialNumber}}</td>-->
+<!--            <td>{{currentMeter.absSpeed}}</td>-->
+<!--            <td>{{currentMeter.direction}}</td>-->
+<!--            <td>{{currentMeter.north}}</td>-->
+<!--            <td>{{currentMeter.east}}</td>-->
+<!--            <td>{{currentMeter.heading}}</td>-->
+<!--            <td>{{currentMeter.tiltX}}</td>-->
+<!--            <td>{{currentMeter.tiltY}}</td>-->
+<!--            <td>{{currentMeter.spStd}}</td>-->
+<!--            <td>{{currentMeter.strength}}</td>-->
+<!--            <td>{{currentMeter.pingCount}}</td>-->
+<!--            <td>{{currentMeter.absTilt}}</td>-->
+<!--            <td>{{currentMeter.maxTilt}}</td>-->
+<!--            <td>{{currentMeter.stdTilt}}</td>-->
             <td>{{currentMeter.uspeed}}</td>
             <td>{{currentMeter.vspeed}}</td>
             <td>{{currentMeter.zetaData}}</td>
@@ -181,7 +181,7 @@ export default {
       cursbbh:'RPCDA4000',
       zdysbList:[
         {key:"RPCDA4001", value:"8号航标"},
-        {key:"RPCDA4002", value:"珠海A4002"},
+        {key:"RPCDA4002", value:"15号航标"},
         {key:"RPCDA4003", value:"5号航标"},
         {key:"RPCDA4004", value:"2号航标"},
         {key:"RPCDA4005", value:"3号航标"},
@@ -195,10 +195,10 @@ export default {
         {key:"RPCDA4013", value:"1号航标"},
         {key:"RPCDA4014", value:"14号航标"},
         {key:"RPCDA4015", value:"13号航标"},
-        // {key:"RPCDA4016", value:"16号航标"},
+        {key:"RPCDA4016", value:"16号航标"},
         {key:"RPCDA4006-4", value:"平台4"},
         {key:"RPCDA4009-3", value:"平台3"},
-        {key:"RPCDA4000", value:"16号航标"}
+        // {key:"RPCDA4000", value:"16号航标"}
       ]
     }
   },

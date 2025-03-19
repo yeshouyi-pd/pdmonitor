@@ -54,28 +54,67 @@ public class EnvironmentController {
             for(int i=0;i<jsonArray.size();i++){
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 MeteorologicalDataDto meteorologicalDataDto = new MeteorologicalDataDto();
-                meteorologicalDataDto.setTemperature(jsonObject.getDouble("air_temperature"));
-                meteorologicalDataDto.setHumidity(jsonObject.getDouble("relative_humidity"));
-                meteorologicalDataDto.setPressure(jsonObject.getDouble("air_pressure"));
-                meteorologicalDataDto.setShortwave(jsonObject.getDouble("short_wave"));
-                meteorologicalDataDto.setLongwave(jsonObject.getDouble("long_wave"));
-                meteorologicalDataDto.setUwindSpeed(jsonObject.getDouble("uwind_speed"));
-                meteorologicalDataDto.setVwindSpeed(jsonObject.getDouble("vwind_speed"));
-                meteorologicalDataDto.setCjsj(jsonObject.getDate("jcsj"));
-                meteorologicalDataDto.setBz(jsonObject.getString("sbbh"));
+                if(!StringUtils.isEmpty(jsonObject.get("air_temperature"))){
+                    meteorologicalDataDto.setTemperature(jsonObject.getDouble("air_temperature"));
+                }
+                if(!StringUtils.isEmpty(jsonObject.get("relative_humidity"))){
+                    meteorologicalDataDto.setHumidity(jsonObject.getDouble("relative_humidity"));
+                }
+                if(!StringUtils.isEmpty(jsonObject.get("air_pressure"))){
+                    meteorologicalDataDto.setPressure(jsonObject.getDouble("air_pressure"));
+                }
+                if(!StringUtils.isEmpty(jsonObject.get("short_wave"))){
+                    meteorologicalDataDto.setShortwave(jsonObject.getDouble("short_wave"));
+                }
+                if(!StringUtils.isEmpty(jsonObject.get("long_wave"))){
+                    meteorologicalDataDto.setLongwave(jsonObject.getDouble("long_wave"));
+                }
+                if(!StringUtils.isEmpty(jsonObject.get("uwind_speed"))){
+                    meteorologicalDataDto.setUwindSpeed(jsonObject.getDouble("uwind_speed"));
+                }
+                if(!StringUtils.isEmpty(jsonObject.get("vwind_speed"))){
+                    meteorologicalDataDto.setVwindSpeed(jsonObject.getDouble("vwind_speed"));
+                }
+                if(!StringUtils.isEmpty(jsonObject.get("jcsj"))){
+                    meteorologicalDataDto.setCjsj(jsonObject.getDate("jcsj"));
+                }
+                if(!StringUtils.isEmpty(jsonObject.get("sbbh"))){
+                    meteorologicalDataDto.setBz(jsonObject.getString("sbbh"));
+                }
                 meteorologicalDataService.save(meteorologicalDataDto);
                 TurbidityDto turbidityDto = new TurbidityDto();
-                turbidityDto.setTemperature(jsonObject.getDouble("temperature").toString());
-                turbidityDto.setSalinity(jsonObject.getDouble("salinity").toString());
-                turbidityDto.setDateTime(jsonObject.getDate("jcsj"));
-                turbidityDto.setBz(jsonObject.getString("sbbh"));
+                if(!StringUtils.isEmpty(jsonObject.get("temperature"))){
+                    turbidityDto.setTemperature(jsonObject.getDouble("temperature").toString());
+                }
+                if(!StringUtils.isEmpty(jsonObject.get("salinity"))){
+                    turbidityDto.setSalinity(jsonObject.getDouble("salinity").toString());
+                }
+                if(!StringUtils.isEmpty(jsonObject.get("turbidity"))){
+                    turbidityDto.setTuribidityL(jsonObject.getString("turbidity"));
+                }
+                if(!StringUtils.isEmpty(jsonObject.get("jcsj"))){
+                    turbidityDto.setDateTime(jsonObject.getDate("jcsj"));
+                }
+                if(!StringUtils.isEmpty(jsonObject.get("sbbh"))){
+                    turbidityDto.setBz(jsonObject.getString("sbbh"));
+                }
                 turbidityService.save(turbidityDto);
                 CurrentMeterDto currentMeterDto = new CurrentMeterDto();
-                currentMeterDto.setUspeed(jsonObject.getDouble("u"));
-                currentMeterDto.setVspeed(jsonObject.getDouble("v"));
-                currentMeterDto.setZetaData(jsonObject.getDouble("zeta"));
-                currentMeterDto.setCjsj(jsonObject.getDate("jcsj"));
-                currentMeterDto.setBz(jsonObject.getString("sbbh"));
+                if(!StringUtils.isEmpty(jsonObject.get("u"))){
+                    currentMeterDto.setUspeed(jsonObject.getDouble("u"));
+                }
+                if(!StringUtils.isEmpty(jsonObject.get("v"))){
+                    currentMeterDto.setVspeed(jsonObject.getDouble("v"));
+                }
+                if(!StringUtils.isEmpty(jsonObject.get("zeta"))){
+                    currentMeterDto.setZetaData(jsonObject.getDouble("zeta"));
+                }
+                if(!StringUtils.isEmpty(jsonObject.get("jcsj"))){
+                    currentMeterDto.setCjsj(jsonObject.getDate("jcsj"));
+                }
+                if(!StringUtils.isEmpty(jsonObject.get("sbbh"))){
+                    currentMeterDto.setBz(jsonObject.getString("sbbh"));
+                }
                 currentMeterService.save(currentMeterDto);
             }
         }catch (Exception e){

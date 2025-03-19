@@ -26,9 +26,7 @@ import java.io.File;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -91,7 +89,7 @@ public class DownloadAudioController {
         if (!destDir.exists()) {
             destDir.mkdirs();
         }else{
-            destDir.delete();
+            deleteFiles(destDir);
             destDir.mkdir();
         }
         for(EquipmentFileEvent event : equipmentFileEventList){
@@ -113,6 +111,25 @@ public class DownloadAudioController {
         IOUtils.copy(inputStream, outputStream);
         // 关闭输入流
         inputStream.close();
+    }
+
+    public static void deleteFiles(File folder) {
+        Queue<File> queue = new ArrayDeque<>();
+        queue.add(folder);
+
+        while (!queue.isEmpty()) {
+            File current = queue.poll();
+            File[] files = current.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    if (file.isDirectory()) {
+                        queue.add(file); // 将子文件夹添加到队列中
+                    } else {
+                        file.delete(); // 删除文件
+                    }
+                }
+            }
+        }
     }
 
 
