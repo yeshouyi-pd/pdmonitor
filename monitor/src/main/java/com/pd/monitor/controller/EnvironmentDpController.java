@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @RestController
@@ -226,6 +227,27 @@ public class EnvironmentDpController {
         return responseDto;
     }
 
+    @PostMapping("/getWaterQualityNewDataRq")
+    public ResponseDto getWaterQualityNewDataRq(@RequestBody WaterQualityNewDto waterQualityNewDto){
+        ResponseDto responseDto = new ResponseDto();
+        WaterQualityNewExample example = new WaterQualityNewExample();
+        WaterQualityNewExample.Criteria ca = example.createCriteria();
+        if(!StringUtils.isEmpty(waterQualityNewDto.getSbbh())){
+            ca.andSbbhEqualTo(waterQualityNewDto.getSbbh());
+        }
+        if(!StringUtils.isEmpty(waterQualityNewDto.getStime())){
+            ca.andCjsjGreaterThanOrEqualTo(DateUtil.getDaysLater(DateUtil.toDate(waterQualityNewDto.getStime(),"yyyy-MM-dd"),-9));
+            ca.andCjsjLessThanOrEqualTo(waterQualityNewDto.getStime(),"%Y-%m-%d");
+        }else{
+            ca.andCjsjGreaterThanOrEqualTo(DateUtils.getDateToStrFormat(DateUtil.getDaysLater(new Date(),-9),"yyyy-MM-dd"),"%Y-%m-%d");
+            ca.andCjsjLessThanOrEqualTo(DateUtils.getDateToStrFormat(new Date(),"yyyy-MM-dd"),"%Y-%m-%d");
+        }
+        example.setOrderByClause(" cjsj ");
+        List<WaterQualityNew> lists = waterQualityNewService.selectByExample(example);
+        responseDto.setContent(lists);
+        return responseDto;
+    }
+
     @PostMapping("/getMeteorologicalData")
     public ResponseDto getMeteorologicalData(@RequestBody MeteorologicalDataDto meteorologicalDataDto){
         ResponseDto responseDto = new ResponseDto();
@@ -264,6 +286,27 @@ public class EnvironmentDpController {
         return responseDto;
     }
 
+    @PostMapping("/getTurbidityDataRq")
+    public ResponseDto getTurbidityDataRq(@RequestBody TurbidityDto turbidityDto){
+        ResponseDto responseDto = new ResponseDto();
+        TurbidityExample turbidityExample = new TurbidityExample();
+        TurbidityExample.Criteria ca = turbidityExample.createCriteria();
+        if(!StringUtils.isEmpty(turbidityDto.getBz())){
+            ca.andBzEqualTo(turbidityDto.getBz());
+        }
+        if(!StringUtils.isEmpty(turbidityDto.getStime())){
+            ca.andDateTimeGreaterThanOrEqualTo(DateUtil.getDaysLater(DateUtil.toDate(turbidityDto.getStime(),"yyyy-MM-dd"),-9));
+            ca.andDateTimeLessThanOrEqualTo(turbidityDto.getStime(),"%Y-%m-%d");
+        }else{
+            ca.andDateTimeGreaterThanOrEqualTo(DateUtils.getDateToStrFormat(DateUtil.getDaysLater(new Date(),-9),"yyyy-MM-dd"),"%Y-%m-%d");
+            ca.andDateTimeLessThanOrEqualTo(DateUtils.getDateToStrFormat(new Date(),"yyyy-MM-dd"),"%Y-%m-%d");
+        }
+        turbidityExample.setOrderByClause(" date_time ");
+        List<Turbidity> lists = turbidityService.selectByExample(turbidityExample);
+        responseDto.setContent(lists);
+        return responseDto;
+    }
+
     @PostMapping("/getCurrentMeterData")
     public ResponseDto getCurrentMeterData(@RequestBody CurrentMeterDto currentMeterDto){
         ResponseDto responseDto = new ResponseDto();
@@ -277,6 +320,30 @@ public class EnvironmentDpController {
             ca.andCjsjEqualTo(currentMeterDto.getStime(),"%Y-%m-%d");
         }else{
             ca.andCjsjEqualTo(DateUtils.getDateToStrFormat(new Date(),"yyyy-MM-dd"),"%Y-%m-%d");
+        }
+        currentMeterExample.setOrderByClause(" cjsj desc ");
+        List<CurrentMeter> currentMeterList = currentMeterService.selectByExample(currentMeterExample);
+        if(currentMeterList.size()>0){
+            currentMeter = currentMeterList.get(0);
+        }
+        responseDto.setContent(currentMeter);
+        return responseDto;
+    }
+
+    @PostMapping("/getCurrentMeterDataXs")
+    public ResponseDto getCurrentMeterDataXs(@RequestBody CurrentMeterDto currentMeterDto){
+        ResponseDto responseDto = new ResponseDto();
+        CurrentMeter currentMeter = new CurrentMeter();
+        CurrentMeterExample currentMeterExample = new CurrentMeterExample();
+        CurrentMeterExample.Criteria ca = currentMeterExample.createCriteria();
+        if(!StringUtils.isEmpty(currentMeterDto.getBz())){
+            ca.andBzEqualTo(currentMeterDto.getBz());
+        }
+        if(!StringUtils.isEmpty(currentMeterDto.getStime())){
+            SimpleDateFormat sdf = new SimpleDateFormat("HH");
+            ca.andCjsjEqualTo(currentMeterDto.getStime()+" "+sdf.format(new Date()),"%Y-%m-%d %H");
+        }else{
+            ca.andCjsjEqualTo(DateUtils.getDateToStrFormat(new Date(),"yyyy-MM-dd HH"),"%Y-%m-%d %H");
         }
         currentMeterExample.setOrderByClause(" cjsj desc ");
         List<CurrentMeter> currentMeterList = currentMeterService.selectByExample(currentMeterExample);

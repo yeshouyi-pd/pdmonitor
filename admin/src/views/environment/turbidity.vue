@@ -75,26 +75,26 @@
           <thead>
           <tr>
             <th>所在位置</th>
-            <th>浊度高量程</th>
-            <th>浊度低量程</th>
-            <th>深度(bar)</th>
+<!--            <th>浊度高量程</th>-->
+            <th>浊度</th>
+<!--            <th>深度(bar)</th>-->
             <th>温度(℃)</th>
-            <th>电导率(mS/cm)</th>
+<!--            <th>电导率(mS/cm)</th>-->
             <th>盐度(PSU)</th>
-            <th>电池电压(V)</th>
+<!--            <th>电池电压(V)</th>-->
             <th>采集时间</th>
           </tr>
           </thead>
           <tbody>
           <tr v-for="turbidity in turbiditys">
             <td>{{zdysbList|optionKVArray(turbidity.bz)}}</td>
-            <td>{{turbidity.turbidityH}}</td>
+<!--            <td>{{turbidity.turbidityH}}</td>-->
             <td>{{turbidity.turibidityL}}</td>
-            <td>{{turbidity.depth}}</td>
+<!--            <td>{{turbidity.depth}}</td>-->
             <td>{{turbidity.temperature}}</td>
-            <td>{{turbidity.conductivity}}</td>
+<!--            <td>{{turbidity.conductivity}}</td>-->
             <td>{{turbidity.salinity}}</td>
-            <td>{{turbidity.batVolt}}</td>
+<!--            <td>{{turbidity.batVolt}}</td>-->
             <td>{{turbidity.dateTime}}</td>
           </tr>
           </tbody>
@@ -159,7 +159,7 @@ export default {
       cursbbh:'RPCDA4000',
       zdysbList:[
         {key:"RPCDA4001", value:"8号航标"},
-        {key:"RPCDA4002", value:"珠海A4002"},
+        {key:"RPCDA4002", value:"15号航标"},
         {key:"RPCDA4003", value:"5号航标"},
         {key:"RPCDA4004", value:"2号航标"},
         {key:"RPCDA4005", value:"3号航标"},
@@ -173,10 +173,10 @@ export default {
         {key:"RPCDA4013", value:"1号航标"},
         {key:"RPCDA4014", value:"14号航标"},
         {key:"RPCDA4015", value:"13号航标"},
-        // {key:"RPCDA4016", value:"珠海A4016"},
+        {key:"RPCDA4016", value:"16号航标"},
         {key:"RPCDA4006-4", value:"平台4"},
         {key:"RPCDA4009-3", value:"平台3"},
-        {key:"RPCDA4000", value:"16号航标"}
+        // {key:"RPCDA4000", value:"16号航标"}
       ]
     }
   },
@@ -254,7 +254,7 @@ export default {
           trigger: 'axis'
         },
         legend: {
-          data: ["浊度高量程","浊度低量程","深度","温度","电导率","盐度","电池电压"]
+          data: ["浊度","温度","盐度"]
         },
         grid: {
           left: '3%',
@@ -270,41 +270,41 @@ export default {
           type: 'value'
         },
         series: [
+          // {
+          //   name: '浊度高量程',
+          //   type: 'line',
+          //   data: seriesData1
+          // },
           {
-            name: '浊度高量程',
-            type: 'line',
-            data: seriesData1
-          },
-          {
-            name: '浊度低量程',
+            name: '浊度',
             type: 'line',
             data: seriesData2
           },
-          {
-            name: '深度',
-            type: 'line',
-            data: seriesData3
-          },
+          // {
+          //   name: '深度',
+          //   type: 'line',
+          //   data: seriesData3
+          // },
           {
             name: '温度',
             type: 'line',
             data: seriesData4
           },
-          {
-            name: '电导率',
-            type: 'line',
-            data: seriesData5
-          },
+          // {
+          //   name: '电导率',
+          //   type: 'line',
+          //   data: seriesData5
+          // },
           {
             name: '盐度',
             type: 'line',
             data: seriesData6
           },
-          {
-            name: '电池电压',
-            type: 'line',
-            data: seriesData7
-          }
+          // {
+          //   name: '电池电压',
+          //   type: 'line',
+          //   data: seriesData7
+          // }
         ]
       };
       let echartsData = echarts.init(document.getElementById("echartTurbidity"));

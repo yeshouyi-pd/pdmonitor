@@ -65,38 +65,13 @@
             <div class="title-name-div" style="height: 10%">
               <span style="padding-top:1%;">海流计监测数据 <b style="color: red">{{zdysbList|optionKVArray(curSbbh)}}</b></span>
             </div>
-            <div class="center-content-div">
-              <div class="center-content-item-first">
-                <div style="width: 15%;margin: auto;">序号</div>
-                <div style="width: 35%;margin: auto;">数据项</div>
-                <div style="width: 50%;margin: auto;">数值</div>
-              </div>
-              <div class="center-content-item">
-                <div style="width: 15%;margin: auto;">1</div>
-                <div style="width: 35%;margin: auto;">海面高度</div>
-                <div style="width: 50%;margin: auto;color: yellow;">{{currentMeter.zetaData}}</div>
-              </div>
-              <div class="center-content-item">
-                <div style="width: 15%;margin: auto;">2</div>
-                <div style="width: 35%;margin: auto;">Abs速度</div>
-                <div style="width: 50%;margin: auto;color: yellow;">{{currentMeter.absSpeed}}m/s</div>
-              </div>
-              <div class="center-content-item">
-                <div style="width: 15%;margin: auto;">3</div>
-                <div style="width: 35%;margin: auto;">方向</div>
-                <div style="width: 50%;margin: auto;color: yellow;">{{currentMeter.direction}}</div>
-              </div>
-              <div class="center-content-item">
-                <div style="width: 15%;margin: auto;">4</div>
-                <div style="width: 35%;margin: auto;">东向流速</div>
-                <div style="width: 50%;margin: auto;color: yellow;">{{currentMeter.uspeed || currentMeter.east}}</div>
-              </div>
-              <div class="center-content-item">
-                <div style="width: 15%;margin: auto;">5</div>
-                <div style="width: 35%;margin: auto;">北向流速</div>
-                <div style="width: 50%;margin: auto;color: yellow;">{{currentMeter.vspeed || currentMeter.north}}</div>
-              </div>
+            <div class="meter-box">
+              <div class="meter-item" id="meterEchartsOne"></div>
+              <div class="meter-item" id="meterEchartsTwo"></div>
+              <div class="meter-item" id="meterEchartsThree"></div>
+              <div class="meter-item" id="meterEchartsFour"></div>
             </div>
+
           </div>
           <div class="left-bottom">
             <div class="title-name-div">
@@ -248,18 +223,24 @@ export default {
       currentMeter:{},
       meteorological:{},
       intervalId:null,
-      zdysbbhList:['RPCDA4005','RPCDA4012','RPCDA4003','RPCDA4006-4','RPCDA4009-3','RPCDA4001','RPCDA4010','RPCDA4008','RPCDA4002','RPCDA4016'],
       zdysbList:[
+        {key:"RPCDA4013", value:"1号航标"},
+        {key:"RPCDA4004", value:"2号航标"},
         {key:"RPCDA4005", value:"3号航标"},
         {key:"RPCDA4012", value:"4号航标"},
         {key:"RPCDA4003", value:"5号航标"},
-        {key:"RPCDA4006-4", value:"平台4"},
-        {key:"RPCDA4009-3", value:"平台3"},
+        {key:"RPCDA4006", value:"6号航标"},
+        {key:"RPCDA4009", value:"7号航标"},
         {key:"RPCDA4001", value:"8号航标"},
+        {key:"RPCDA4007", value:"9号航标"},
         {key:"RPCDA4010", value:"10号航标"},
         {key:"RPCDA4008", value:"11号航标"},
-        {key:"RPCDA4002", value:"淇澳岛"},
-        {key:"RPCDA4016", value:"16号航标"}
+        {key:"RPCDA4011", value:"12号航标"},
+        {key:"RPCDA4015", value:"13号航标"},
+        {key:"RPCDA4014", value:"14号航标"},
+        {key:"RPCDA4002", value:"15号航标"},
+        {key:"RPCDA4016", value:"16号航标"},
+        // {key:"RPCDA4000", value:"16号航标"}
       ],
       config: {
         headerBGC: "#054F7F",
@@ -290,16 +271,16 @@ export default {
   mounted() {
     let _this = this;
     _this.curDate = Tool.dateFormat("yyyy-MM-dd");
-    if(_this.$xhHisData.rq==_this.curDate){
-      _this.dtime = _this.dtimeList[_this.$xhHisData.index];
-    }else{
-      _this.$xhHisData.rq = _this.curDate;
-      _this.$xhHisData.index++;
-      if(_this.$xhHisData.index>10){
-        _this.$xhHisData.index = 0;
-      }
-      _this.dtime = _this.dtimeList[_this.$xhHisData.index];
-    }
+    // if(_this.$xhHisData.rq==_this.curDate){
+    //   _this.dtime = _this.dtimeList[_this.$xhHisData.index];
+    // }else{
+    //   _this.$xhHisData.rq = _this.curDate;
+    //   _this.$xhHisData.index++;
+    //   if(_this.$xhHisData.index>10){
+    //     _this.$xhHisData.index = 0;
+    //   }
+    //   _this.dtime = _this.dtimeList[_this.$xhHisData.index];
+    // }
     _this.getSeaSurfacePic();
     _this.leftCenterData();//海流计
     _this.leftBottomData();
@@ -348,14 +329,15 @@ export default {
       // 计时器为空，操作
       _this.intervalId = setInterval(() => {
         console.log("刷新" + Tool.dateFormat("yyyy-MM-dd"));
-        if(_this.curSbbh=='RPCDA4016'){
-          _this.leftCenterData();//海流计
-          _this.leftBottomData();//温盐深浊度仪
-        }
+        // if(_this.curSbbh=='RPCDA4016'){
+        //   _this.leftCenterData();//海流计
+        //   _this.leftBottomData();//温盐深浊度仪
+        // }
+        _this.leftCenterData();//海流计
         if(_this.curDate==Tool.dateFormat("yyyy-MM-dd")){
           _this.rightTopData();//气象数据
         }
-      }, 900000);
+      }, 1800000);
     },
     // 停止定时器
     clear() {
@@ -486,18 +468,174 @@ export default {
     //海流计
     leftCenterData(){
       let _this = this;
-      let sbbh = _this.curSbbh;
-      if(sbbh=='RPCDA4016'){
-        sbbh='RPCDA4000'
-      }
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getCurrentMeterData', {"bz":sbbh,"stime":_this.curDate}).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getCurrentMeterDataXs', {"bz":_this.curSbbh,"stime":_this.curDate}).then((response)=>{
         _this.currentMeter = response.data.content;
+        _this.initLeftCenterEchartData();
       })
+    },
+    initLeftCenterEchartData(){
+        let _this = this;
+        let option1 = _this.initOption("东西向流速",_this.currentMeter.uspeed,-1,1,'#FFAB91','#FD7347');
+        let echartsData1 = echarts.init(document.getElementById("meterEchartsOne"));
+        echartsData1.setOption(option1);
+        let option2 = _this.initOption("南北向流速",_this.currentMeter.vspeed,-3,3,'#FFAB91','#FD7347');
+        let echartsData2 = echarts.init(document.getElementById("meterEchartsTwo"));
+        echartsData2.setOption(option2);
+        let option3 = _this.initOption("流速",_this.currentMeter.absSpeed,-3,3,'#FFAB91','#FD7347');
+        let echartsData3 = echarts.init(document.getElementById("meterEchartsThree"));
+        echartsData3.setOption(option3);
+        let option4 = _this.luopanOption(_this.currentMeter.direction);
+        let echartsData4 = echarts.init(document.getElementById("meterEchartsFour"));
+        echartsData4.setOption(option4);
+    },
+    initOption(name,data,min,max,color1,color2){
+      return {
+        series: [
+          {
+            type: 'gauge',
+            center: ['50%', '70%'],
+            radius: "94%",
+            startAngle: 200,
+            endAngle: -20,
+            min: min,
+            max: max,
+            itemStyle: {
+              color: color1
+            },
+            progress: {
+              show: true,
+              width: 8
+            },
+            pointer: {
+              show: false
+            },
+            axisLine: {
+              lineStyle: {
+                width: 16
+              }
+            },
+            axisTick: {
+              show: false
+            },
+            splitLine: {
+              distance: -22,
+              length: 5,
+              lineStyle: {
+                width: 1,
+                color: '#fff'
+              }
+            },
+            axisLabel: {
+              distance: -5,
+              color: '#fff',
+              fontSize: 10
+            },
+            detail:{
+              fontSize:16,
+              offsetCenter:[0,0],
+              color:'#fff'
+            },
+            title: {
+              color: '#fff'
+            },
+            data: [
+              {
+                name: name,
+                value: data
+              }
+            ]
+          },
+          {
+            type: 'gauge',
+            center: ['50%', '70%'],
+            radius: "94%",
+            startAngle: 200,
+            endAngle: -20,
+            min: min,
+            max: max,
+            itemStyle: {
+              color: color2
+            },
+            progress: {
+              show: true,
+              width: 4
+            },
+            pointer: {
+              show: false
+            },
+            axisLine: {
+              show: false
+            },
+            axisTick: {
+              show: false
+            },
+            splitLine: {
+              show: false
+            },
+            axisLabel: {
+              show: false
+            },
+            detail: {
+              show: false
+            },
+            data: [
+              {
+                value: data
+              }
+            ]
+          }
+        ]
+      };
+    },
+    luopanOption(data){
+      return {
+        series: [{
+          type: 'gauge',
+          detail: {
+            textStyle: {
+              fontSize: 10,
+              fontWeight: 'bolder',
+              color: '#fff'
+            }
+          },
+          startAngle: 90,
+          splitNumber: 8,
+          endAngle: 450,
+          min: 0,
+          max: 360,
+          axisLabel: {
+            color: '#fff',
+            fontSize: 10,
+            distance: -35,
+            formatter: function (value) {
+              const directions = ['北', '东北', '东', '东南', '南', '西南', '西', '西北'];
+              const index = Math.floor((value + 22.5) / 45) % 8; // 计算当前值对应的方向索引，考虑ECharts的0度在右侧，需要调整
+              return directions[index];
+            }
+          },
+          axisTick: {
+            show: false
+          },
+          splitLine: {
+            show: false
+          },
+          pointer: {
+            width: 2
+          },
+          title: {
+            color: '#fff'
+          },
+          data: [{
+            value: data,
+            name: '流向'
+          }]
+        }]
+      };
     },
     //水质数据
     rightBottomData(){
       let _this = this;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getWaterQualityNewData', {"sbbh":_this.curSbbh,"stime":_this.curDate}).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getWaterQualityNewDataRq', {"sbbh":_this.curSbbh,"stime":_this.curDate}).then((response)=>{
         let waterQualityNews = response.data.content;
         let xAxisDatas = [];
         let seriesData1 = [];
@@ -506,7 +644,7 @@ export default {
         let seriesData4 = [];
         for(let i=0;i<waterQualityNews.length;i++){
           let waterQualityNew = waterQualityNews[i];
-          xAxisDatas.push(waterQualityNew.cjsj.substring(11,waterQualityNew.cjsj.length));
+          xAxisDatas.push(waterQualityNew.cjsj.substring(0,10));
           seriesData1.push(waterQualityNew.oxidative);
           seriesData2.push(waterQualityNew.chlorophyll);
           seriesData3.push(waterQualityNew.ph);
@@ -521,7 +659,7 @@ export default {
           trigger: 'axis'
         },
         legend: {
-          data: ["溶解氧","叶绿素","ph","氨氮"],
+          data: ["溶解氧","ph"],
           textStyle: {
             color: "#fff"
           }
@@ -561,15 +699,15 @@ export default {
               width: 6
             }
           },
-          {
-            name: '叶绿素',
-            type: 'line',
-            data: seriesData2,
-            symbolSize: 7,
-            lineStyle: {
-              width: 6
-            }
-          },
+          // {
+          //   name: '叶绿素',
+          //   type: 'line',
+          //   data: seriesData2,
+          //   symbolSize: 7,
+          //   lineStyle: {
+          //     width: 6
+          //   }
+          // },
           {
             name: 'ph',
             type: 'line',
@@ -579,15 +717,15 @@ export default {
               width: 6
             }
           },
-          {
-            name: '氨氮',
-            type: 'line',
-            data: seriesData4,
-            symbolSize: 7,
-            lineStyle: {
-              width: 6
-            },
-          }
+          // {
+          //   name: '氨氮',
+          //   type: 'line',
+          //   data: seriesData4,
+          //   symbolSize: 7,
+          //   lineStyle: {
+          //     width: 6
+          //   },
+          // }
         ]
       };
       let echartsData = echarts.init(document.getElementById("rightBottomEchart"));
@@ -596,11 +734,7 @@ export default {
     //温盐深浊度仪
     leftBottomData(){
       let _this = this;
-      let sbbh = _this.curSbbh;
-      if(sbbh=='RPCDA4016'){
-        sbbh='RPCDA4000'
-      }
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getTurbidityData', {"bz":sbbh,"stime":_this.curDate}).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getTurbidityDataRq', {"bz":_this.curSbbh,"stime":_this.curDate}).then((response)=>{
         let turbiditys = response.data.content;
         let xAxisData = [];
         let data1 = [];
@@ -608,10 +742,10 @@ export default {
         let data3 = [];
         for(let i=0;i<turbiditys.length;i++){
           let turbidity = turbiditys[i];
-          xAxisData.push(turbidity.dateTime.substring(11,turbidity.dateTime.length));
+          xAxisData.push(turbidity.dateTime.substring(0,10));
           data1.push(turbidity.salinity);
           data2.push(turbidity.temperature);
-          data3.push(turbidity.depth);
+          data3.push(turbidity.turibidityL);
         }
         _this.initLeftBottomEchart(xAxisData,data1,data2,data3);
       })
@@ -625,7 +759,7 @@ export default {
           right: '18px'
         },
         legend: {
-          data: ['盐度','温度','深度'],
+          data: ['温度','盐度','浊度'],
           textStyle: {
             color: "#fff"
           }
@@ -654,18 +788,6 @@ export default {
         },
         series: [
           {
-            name: '盐度',
-            type: 'line',
-            data: data1,
-            symbolSize: 7,
-            lineStyle: {
-              width: 6
-            },
-            itemStyle: {
-              color: "blue"
-            }
-          },
-          {
             name: '温度',
             type: 'line',
             data: data2,
@@ -678,7 +800,19 @@ export default {
             }
           },
           {
-            name: '深度',
+            name: '盐度',
+            type: 'line',
+            data: data1,
+            symbolSize: 7,
+            lineStyle: {
+              width: 6
+            },
+            itemStyle: {
+              color: "blue"
+            }
+          },
+          {
+            name: '浊度',
             type: 'line',
             data: data3,
             symbolSize: 7,
@@ -1077,6 +1211,16 @@ export default {
   padding-top: 2%;
   display: block;
 }
+.meter-box{
+  height: 88%;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+.meter-item{
+  width: 50%;
+  height: 50%;
+}
 .left-top-content{
   height: 38%;
   display: flex;
@@ -1161,6 +1305,7 @@ export default {
   width: 32%;
   display: flex;
   background-image: url("/static/image/environment/rightTopBg.png");
+  border-radius: 10px;
 }
 .right-top-box img{
   height: 30px;
