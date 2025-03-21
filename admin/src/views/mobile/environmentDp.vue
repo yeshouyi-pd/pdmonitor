@@ -345,11 +345,8 @@ export default {
       // 计时器为空，操作
       _this.intervalId = setInterval(() => {
         console.log("刷新" + Tool.dateFormat("yyyy-MM-dd"));
-        // if(_this.curSbbh=='RPCDA4016'){
-        //   _this.leftCenterData();//海流计
-        //   _this.leftBottomData();//温盐深浊度仪
-        // }
         _this.leftCenterData();//海流计
+        _this.rightCenterData();//海浪数据
         if(_this.curDate==Tool.dateFormat("yyyy-MM-dd")){
           _this.rightTopData();//气象数据
         }
