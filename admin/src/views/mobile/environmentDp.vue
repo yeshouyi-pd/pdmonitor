@@ -153,7 +153,20 @@
             <div class="title-name-div" style="height: 10%">
               <span style="padding-top: 1%;">海浪数据 <b style="color: red">{{zdysbList|optionKVArray(curSbbh)}}</b></span>
             </div>
-            <div class="center-content-div" id="rightCenterEchart"></div>
+            <div class="center-content-div">
+              <div class="wave-box">
+                <div class="wave-item">
+                  <div class="wave-echarts" id="wave-level-echarts"></div>
+                  <div class="wave-text">海况-{{level}}级</div>
+                </div>
+                <div class="wave-item">
+                  <div class="wave-echarts" id="wave-direction-echarts"></div>
+                  <div class="wave-text">海浪-{{waveName}}</div>
+                </div>
+              </div>
+              <div class="wave-text">波浪周期-{{wavePeriod}}</div>
+            </div>
+<!--            <div class="center-content-div" id="rightCenterEchart"></div>-->
           </div>
           <div class="left-bottom">
             <div class="title-name-div">
@@ -265,7 +278,10 @@ export default {
       dtimeList:['2023-10-25','2023-10-24','2023-10-23','2023-10-22','2023-10-21','2023-10-20','2023-10-19','2023-10-18','2023-10-17','2023-10-16','2023-10-15'],
       dtimeIndex:0,
       dtime:'',
-      tempUrl:''
+      tempUrl:'',
+      level:null,
+      waveName:null,
+      wavePeriod:null
     }
   },
   mounted() {
@@ -484,7 +500,7 @@ export default {
         let option3 = _this.initOption("流速",_this.currentMeter.absSpeed,-3,3,'#FFAB91','#FD7347');
         let echartsData3 = echarts.init(document.getElementById("meterEchartsThree"));
         echartsData3.setOption(option3);
-        let option4 = _this.luopanOption(_this.currentMeter.direction);
+        let option4 = _this.luopanOption(_this.currentMeter.direction,"流向");
         let echartsData4 = echarts.init(document.getElementById("meterEchartsFour"));
         echartsData4.setOption(option4);
     },
@@ -587,7 +603,7 @@ export default {
         ]
       };
     },
-    luopanOption(data){
+    luopanOption(data,name){
       return {
         series: [{
           type: 'gauge',
@@ -627,7 +643,7 @@ export default {
           },
           data: [{
             value: data,
-            name: '流向'
+            name: name
           }]
         }]
       };
@@ -833,166 +849,69 @@ export default {
       let _this = this;
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getMeteorologicalData', {"bz":"RPCDA4000","stime":_this.curDate}).then((response)=>{
         let meteorologicals = response.data.content;
-        // let data = [];
-        // let data1 = [];
-        // let data2 = [];
         if(meteorologicals.length>0){
           _this.meteorological = meteorologicals[0];
         }
-        // for(let i=0;i<meteorologicals.length;i++){
-        //   let meteorological = meteorologicals[i];
-        //   let dataItem = [];//风速和风向
-        //   dataItem.push(meteorological.cjsj);
-        //   dataItem.push(meteorological.speed);
-        //   dataItem.push(meteorological.winddirection);
-        //   data.push(dataItem);
-        //   let dataItem1 = [];//温度
-        //   dataItem1.push(meteorological.cjsj.substring(11,meteorological.cjsj.length));
-        //   dataItem1.push(meteorological.temperature);
-        //   data1.push(dataItem1)
-        //   let dataItem2 = [];//湿度
-        //   dataItem2.push(meteorological.cjsj.substring(11,meteorological.cjsj.length));
-        //   dataItem2.push(meteorological.humidity);
-        //   data2.push(dataItem2)
-        // }
-        // _this.initCenterBottomEchart(data);
-        // _this.rightCenterEchart(data1,data2);
-        //_this.rightBottomEchart(data2);
       })
-    },
-    initCenterBottomEchart(data){
-      const directionMap = {};
-      ['W', 'WSW', 'SW', 'SSW', 'S', 'SSE', 'SE', 'ESE', 'E', 'ENE', 'NE', 'NNE', 'N', 'NNW', 'NW', 'WNW'].forEach(function (name, index) {
-        directionMap[name] = Math.PI / 8 * index;
-      });
-      const dims = {
-        time: 0,
-        windSpeed: 1,
-        R: 2,
-        minTemp: 3,
-        maxTemp: 4
-      };
-      const arrowSize = 18;
-      const renderArrow = function (param, api) {
-        const point = api.coord([
-          api.value(dims.time),
-          api.value(dims.windSpeed)
-        ]);
-        return {
-          type: 'path',
-          shape: {
-            pathData: 'M31 16l-15-15v9h-26v12h26v9z',
-            x: -arrowSize / 2,
-            y: -arrowSize / 2,
-            width: arrowSize,
-            height: arrowSize
-          },
-          rotation: directionMap[api.value(dims.R)],
-          position: point,
-          style: api.style({
-            stroke: '#555',
-            lineWidth: 1
-          })
-        };
-      };
-      let option = {
-        tooltip: {
-          trigger: 'axis',
-          formatter: function (params) {
-            return [
-              echarts.format.formatTime(
-                  'yyyy-MM-dd',
-                  params[0].value[dims.time]
-              ) +
-              ' ' +
-              echarts.format.formatTime('hh:mm:ss', params[0].value[dims.time]),
-              '风速：' + params[0].value[dims.windSpeed],
-              '风向：' + params[0].value[dims.R]
-            ].join('<br>');
-          }
-        },
-        grid: {
-          left: '30px',
-          right: '10px',
-          bottom: '25px',
-          top: '40px'
-        },
-        xAxis: {
-          type: 'time',
-          splitLine: {
-            lineStyle: {
-              color: '#ddd'
-            }
-          },
-          axisLine: {
-            lineStyle: {
-              type: "solid",
-              color: "#fff"
-            }
-          }
-        },
-        yAxis: [
-          {
-            name: '风速',
-            axisLine: {
-              lineStyle: {
-                color: '#fff'
-              }
-            },
-            splitLine: {
-              lineStyle: {
-                color: '#ddd'
-              }
-            }
-          }
-        ],
-        series: [
-          // {
-          //   type: 'custom',
-          //   renderItem: renderArrow,
-          //   encode: {
-          //     x: dims.time,
-          //     y: dims.windSpeed
-          //   },
-          //   data: data,
-          //   z: 10
-          // },
-          {
-            type: 'line',
-            symbol: 'none',
-            encode: {
-              x: dims.time,
-              y: dims.windSpeed
-            },
-            lineStyle: {
-              color: '#aaa',
-              type: 'dotted'
-            },
-            data: data,
-            z: 1
-          }
-        ]
-      };
-      let echartsData = echarts.init(document.getElementById("centerBottomEchart"));
-      echartsData.setOption(option);
     },
     //海浪数据
     rightCenterData(){
       let _this = this;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getWaveDataData', {"sbbh":_this.curSbbh,"stime":_this.curDate}).then((response)=>{
-        let resp = response.data;
-        let xAxisDatas = [];
-        let seriesData1 = [];
-        let seriesData2 = [];
-        let seriesData3 = [];
-        for(let i=0;i<resp.content.length;i++){
-          let waveData = resp.content[i];
-          xAxisDatas.push(waveData.cjsj.substring(11,waveData.cjsj.length));
-          seriesData1.push(waveData.waveH);
-          seriesData2.push(waveData.waveDirection);
-          seriesData3.push(waveData.wavePeriod);
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getWaveDataXs', {"sbbh":_this.curSbbh,"stime":_this.curDate}).then((response)=>{
+        let resp = response.data.content;
+        if(resp!=null){
+          _this.wavePeriod = resp.wavePeriod
+          if(resp.waveH==0){
+            this.level = 0;
+            this.waveName = "无浪";
+          }else if(resp.waveH<0.1){
+            this.level = 1;
+            this.waveName = "微浪";
+          }else if(resp.waveH>=0.1 && resp.waveH<0.5){
+            this.level = 2;
+            this.waveName = "小浪";
+          }else if(resp.waveH>=0.5 && resp.waveH<1.25){
+            this.level = 3;
+            this.waveName = "轻浪";
+          }else if(resp.waveH>=1.25 && resp.waveH<2.5){
+            this.level = 4;
+            this.waveName = "中浪";
+          }else if(resp.waveH>=2.5 && resp.waveH<4.0){
+            this.level = 5;
+            this.waveName = "大浪";
+          }else if(resp.waveH>=4.0 && resp.waveH<6.0){
+            this.level = 6;
+            this.waveName = "巨浪";
+          }else if(resp.waveH>=6.0 && resp.waveH<9.0){
+            this.level = 7;
+            this.waveName = "狂浪";
+          }else if(resp.waveH>=9.0 && resp.waveH<14.0){
+            this.level = 8;
+            this.waveName = "狂涛";
+          }else if(resp.waveH>=14.0){
+            this.level = 9;
+            this.waveName = "怒涛";
+          }
+          let option1 = _this.initOption("",_this.level,-1,10,'#FFAB91','#FD7347');
+          let echartsData1 = echarts.init(document.getElementById("wave-level-echarts"));
+          echartsData1.setOption(option1);
+          let option4 = _this.luopanOption(resp.waveDirection,"");
+          let echartsData4 = echarts.init(document.getElementById("wave-direction-echarts"));
+          echartsData4.setOption(option4);
         }
-        _this.rightCenterEchart(xAxisDatas,seriesData1,seriesData2,seriesData3);
+        // let resp = response.data;
+        // let xAxisDatas = [];
+        // let seriesData1 = [];
+        // let seriesData2 = [];
+        // let seriesData3 = [];
+        // for(let i=0;i<resp.content.length;i++){
+        //   let waveData = resp.content[i];
+        //   xAxisDatas.push(waveData.cjsj.substring(11,waveData.cjsj.length));
+        //   seriesData1.push(waveData.waveH);
+        //   seriesData2.push(waveData.waveDirection);
+        //   seriesData3.push(waveData.wavePeriod);
+        // }
+        // _this.rightCenterEchart(xAxisDatas,seriesData1,seriesData2,seriesData3);
       })
     },
     rightCenterEchart(xAxisDatas,seriesData1,seriesData2,seriesData3){
@@ -1249,6 +1168,25 @@ export default {
   width: 90%;
   height: 88%;
   margin: auto;
+}
+.wave-box{
+  width: 100%;
+  height: 80%;
+  display: flex;
+}
+.wave-item{
+  width: 50%;
+  height: 100%;
+}
+.wave-echarts{
+  width: 100%;
+  height: 80%;
+}
+.wave-text{
+  height: 20%;
+  font-size: 22px;
+  color: #fff;
+  text-align: center;
 }
 .center-content-item-first{
   height: 14%;

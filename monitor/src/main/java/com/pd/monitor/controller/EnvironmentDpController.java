@@ -208,6 +208,26 @@ public class EnvironmentDpController {
         return responseDto;
     }
 
+    @PostMapping("/getWaveDataXs")
+    public ResponseDto getWaveDataXs(@RequestBody WaveDataDto waveDataDto){
+        ResponseDto responseDto = new ResponseDto();
+        WaveDataExample example = new WaveDataExample();
+        WaveDataExample.Criteria ca = example.createCriteria();
+        if(!StringUtils.isEmpty(waveDataDto.getSbbh())){
+            ca.andSbbhEqualTo(waveDataDto.getSbbh());
+        }
+        if(!StringUtils.isEmpty(waveDataDto.getStime())){
+            SimpleDateFormat sdf = new SimpleDateFormat("HH");
+            ca.andCjsjEqualTo(waveDataDto.getStime()+" "+sdf.format(new Date()),"%Y-%m-%d %H");
+        }else{
+            ca.andCjsjEqualTo(DateUtils.getDateToStrFormat(new Date(),"yyyy-MM-dd HH"),"%Y-%m-%d %H");
+        }
+        example.setOrderByClause(" cjsj ");
+        List<WaveData> lists = waveDataService.selectByExample(example);
+        responseDto.setContent(lists.size()>0?lists.get(0):null);
+        return responseDto;
+    }
+
     @PostMapping("/getWaterQualityNewData")
     public ResponseDto getWaterQualityNewData(@RequestBody WaterQualityNewDto waterQualityNewDto){
         ResponseDto responseDto = new ResponseDto();
