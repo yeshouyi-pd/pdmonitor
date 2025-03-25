@@ -89,7 +89,7 @@
               <th>设备型号</th>
               <th>设备gps坐标</th>
 <!--              <th>设备负责人</th>-->
-<!--              <th>负责人电话</th>-->
+<!--              <th>飞行航线名称</th>-->
 <!--              <th>设备量程</th>-->
 <!--              <th>设备进度范围</th>-->
               <th>设备放置位置</th>
@@ -207,7 +207,7 @@
                       <div class="col-sm-4">
                         <input v-model="waterEquipment.fzr" class="form-control">
                       </div>
-                      <label class="col-sm-2 control-label">负责人电话</label>
+                      <label class="col-sm-2 control-label">飞行航线名称</label>
                       <div class="col-sm-4">
                         <input v-model="waterEquipment.fzrdh" class="form-control">
                       </div>
@@ -490,9 +490,9 @@
                 || !Validator.length(_this.waterEquipment.gps, "设备gps坐标", 1, 45)
                 // || !Validator.require(_this.waterEquipment.fzr, "设备负责人")
                 || !Validator.length(_this.waterEquipment.fzr, "设备负责人", 1, 128)
-                // || !Validator.require(_this.waterEquipment.fzrdh, "负责人电话")
-                ||!Validator.checkIsGH(_this.waterEquipment.fzrdh, "负责人电话")
-                || !Validator.length(_this.waterEquipment.fzrdh, "负责人电话", 1, 45)
+                // || !Validator.require(_this.waterEquipment.fzrdh, "飞行航线名称")
+                // ||!Validator.checkIsGH(_this.waterEquipment.fzrdh, "飞行航线名称")
+                || !Validator.length(_this.waterEquipment.fzrdh, "飞行航线名称", 1, 45)
                 // || !Validator.require(_this.waterEquipment.sblc, "设备顺序号")
                 || !Validator.length(_this.waterEquipment.sblc, "设备顺序号", 1, 45)
                 // || !Validator.require(_this.waterEquipment.jdfw, "设备进度范围")

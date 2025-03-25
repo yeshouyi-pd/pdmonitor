@@ -89,6 +89,7 @@ import VideoDpSecond from "./views/mobile/videoDpSecond.vue";
 import SolarPannel from "./views/electricity/solarPannel.vue";
 import AzimuthAngle from "./views/monitor/azimuthAngle.vue";
 import AzimuthAngleUnique from "./views/monitor/azimuthAngleUnique.vue";
+import UavFlyVideo from "./views/uav/uavFlyVideo.vue";
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -446,6 +447,10 @@ export default new Router({
             path: "monitor/azimuthAngleUnique",
             name: "monitor/azimuthAngleUnique",
             component: AzimuthAngleUnique
+        },{
+            path: "monitor/uavFlyVideo",
+            name: "monitor/uavFlyVideo",
+            component: UavFlyVideo
         }]
     }]
 })
