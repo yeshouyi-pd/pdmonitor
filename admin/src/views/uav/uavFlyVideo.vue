@@ -2,7 +2,7 @@
   <div>
     <div class="widget-box">
       <div class="widget-header">
-        <h4 class="widget-title">图片管理查询</h4>
+        <h4 class="widget-title">视频管理查询</h4>
       </div>
       <div class="widget-body">
         <div class="widget-main">
