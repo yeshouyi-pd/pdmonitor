@@ -63,7 +63,7 @@
           </div>
           <div class="left-center">
             <div class="title-name-div" style="height: 10%">
-              <span style="padding-top:1%;">海流计监测数据 <b style="color: red">{{zdysbList|optionKVArray(curSbbh)}}</b></span>
+              <span style="padding-top:1%;">海流监测数据 <b style="color: red">{{zdysbList|optionKVArray(curSbbh)}}</b></span>
             </div>
             <div class="meter-box">
               <div class="meter-item" id="meterEchartsOne"></div>
@@ -281,7 +281,13 @@ export default {
       tempUrl:'',
       level:null,
       waveName:null,
-      wavePeriod:null
+      wavePeriod:null,
+      echartsData1:null,
+      echartsData2:null,
+      echartsData3:null,
+      echartsData4:null,
+      echartsData5:null,
+      echartsData6:null
     }
   },
   mounted() {
@@ -461,7 +467,7 @@ export default {
       };
       setTimeout(function (){
         let echartsData = echarts.init(document.getElementById("alarmNumEcharts"));
-        echartsData.setOption(option);
+        echartsData.setOption(option,true);
       },1000)
     },
     centerBottomData(){
@@ -488,18 +494,70 @@ export default {
     },
     initLeftCenterEchartData(){
         let _this = this;
-        let option1 = _this.initOption("东西向流速",_this.currentMeter.uspeed,-1,1,'#FFAB91','#FD7347');
-        let echartsData1 = echarts.init(document.getElementById("meterEchartsOne"));
-        echartsData1.setOption(option1);
-        let option2 = _this.initOption("南北向流速",_this.currentMeter.vspeed,-3,3,'#FFAB91','#FD7347');
-        let echartsData2 = echarts.init(document.getElementById("meterEchartsTwo"));
-        echartsData2.setOption(option2);
-        let option3 = _this.initOption("流速",_this.currentMeter.absSpeed,-3,3,'#FFAB91','#FD7347');
-        let echartsData3 = echarts.init(document.getElementById("meterEchartsThree"));
-        echartsData3.setOption(option3);
-        let option4 = _this.luopanOption(_this.currentMeter.direction,"流向");
-        let echartsData4 = echarts.init(document.getElementById("meterEchartsFour"));
-        echartsData4.setOption(option4);
+        if(!Tool.isEmpty(_this.currentMeter.uspeed)){
+          _this.currentMeter.uspeed = Number(_this.currentMeter.uspeed).toFixed(3);
+          let option1 = _this.initOption("东西向流速",_this.currentMeter.uspeed,-1,1,'#FFAB91','#FD7347');
+          if(_this.echartsData1){
+            _this.echartsData1.dispose();
+          }
+          _this.echartsData1 = echarts.init(document.getElementById("meterEchartsOne"));
+          _this.echartsData1.setOption(option1,true);
+        }else{
+          let option1 = _this.initOption("东西向流速",null,-1,1,'#FFAB91','#FD7347');
+          if(_this.echartsData1){
+            _this.echartsData1.dispose();
+          }
+          _this.echartsData1 = echarts.init(document.getElementById("meterEchartsOne"));
+          _this.echartsData1.setOption(option1,true);
+        }
+        if(!Tool.isEmpty(_this.currentMeter.vspeed)){
+          _this.currentMeter.vspeed = Number(_this.currentMeter.vspeed).toFixed(3);
+          let option2 = _this.initOption("南北向流速",_this.currentMeter.vspeed,-3,3,'#FFAB91','#FD7347');
+          if(_this.echartsData2){
+            _this.echartsData2.dispose();
+          }
+          _this.echartsData2 = echarts.init(document.getElementById("meterEchartsTwo"));
+          _this.echartsData2.setOption(option2,true);
+        }else{
+          let option2 = _this.initOption("南北向流速",null,-3,3,'#FFAB91','#FD7347');
+          if(_this.echartsData2){
+            _this.echartsData2.dispose();
+          }
+          _this.echartsData2 = echarts.init(document.getElementById("meterEchartsTwo"));
+          _this.echartsData2.setOption(option2,true);
+        }
+        if(!Tool.isEmpty(_this.currentMeter.absSpeed)){
+          _this.currentMeter.absSpeed = Number(_this.currentMeter.absSpeed).toFixed(3);
+          let option3 = _this.initOption("流速",_this.currentMeter.absSpeed,-3,3,'#FFAB91','#FD7347');
+          if(_this.echartsData3){
+            _this.echartsData3.dispose();
+          }
+          _this.echartsData3 = echarts.init(document.getElementById("meterEchartsThree"));
+          _this.echartsData3.setOption(option3,true);
+        }else{
+          let option3 = _this.initOption("流速",null,-3,3,'#FFAB91','#FD7347');
+          if(_this.echartsData3){
+            _this.echartsData3.dispose();
+          }
+          _this.echartsData3 = echarts.init(document.getElementById("meterEchartsThree"));
+          _this.echartsData3.setOption(option3,true);
+        }
+        if(!Tool.isEmpty(_this.currentMeter.direction)){
+          _this.currentMeter.direction = Number(_this.currentMeter.direction).toFixed(3);
+          let option4 = _this.luopanOption(_this.currentMeter.direction,"流向");
+          if(_this.echartsData4){
+            _this.echartsData4.dispose();
+          }
+          _this.echartsData4 = echarts.init(document.getElementById("meterEchartsFour"));
+          _this.echartsData4.setOption(option4,true);
+        }else {
+          let option4 = _this.luopanOption(null,"流向");
+          if(_this.echartsData4){
+            _this.echartsData4.dispose();
+          }
+          _this.echartsData4 = echarts.init(document.getElementById("meterEchartsFour"));
+          _this.echartsData4.setOption(option4,true);
+        }
     },
     initOption(name,data,min,max,color1,color2){
       return {
@@ -672,7 +730,7 @@ export default {
           trigger: 'axis'
         },
         legend: {
-          data: ["溶解氧","ph"],
+          data: ["溶解氧","ph",'叶绿素'],
           textStyle: {
             color: "#fff"
           }
@@ -712,19 +770,19 @@ export default {
               width: 6
             }
           },
-          // {
-          //   name: '叶绿素',
-          //   type: 'line',
-          //   data: seriesData2,
-          //   symbolSize: 7,
-          //   lineStyle: {
-          //     width: 6
-          //   }
-          // },
           {
             name: 'ph',
             type: 'line',
             data: seriesData3,
+            symbolSize: 7,
+            lineStyle: {
+              width: 6
+            }
+          },
+          {
+            name: '叶绿素',
+            type: 'line',
+            data: seriesData2,
             symbolSize: 7,
             lineStyle: {
               width: 6
@@ -742,7 +800,7 @@ export default {
         ]
       };
       let echartsData = echarts.init(document.getElementById("rightBottomEchart"));
-      echartsData.setOption(option);
+      echartsData.setOption(option,true);
     },
     //温盐深浊度仪
     leftBottomData(){
@@ -839,7 +897,7 @@ export default {
         ]
       };
       let echartsData = echarts.init(document.getElementById("leftBottomEchart"));
-      echartsData.setOption(option);
+      echartsData.setOption(option,true);
     },
     //气象数据
     rightTopData(){
@@ -848,6 +906,12 @@ export default {
         let meteorologicals = response.data.content;
         if(meteorologicals.length>0){
           _this.meteorological = meteorologicals[0];
+          _this.meteorological.solarintensity = _this.meteorological.solarintensity?Number(_this.meteorological.solarintensity).toFixed(3):_this.meteorological.solarintensity;
+          _this.meteorological.humidity = _this.meteorological.humidity?Number(_this.meteorological.humidity).toFixed(3):_this.meteorological.humidity;
+          _this.meteorological.winddirection = _this.meteorological.winddirection?Number(_this.meteorological.winddirection).toFixed(3):_this.meteorological.winddirection;
+          _this.meteorological.pressure = _this.meteorological.pressure?Number(_this.meteorological.pressure).toFixed(3):_this.meteorological.pressure;
+          _this.meteorological.temperature = _this.meteorological.temperature?Number(_this.meteorological.temperature).toFixed(3):_this.meteorological.temperature;
+          _this.meteorological.speed = _this.meteorological.speed?Number(_this.meteorological.speed).toFixed(3):_this.meteorological.speed;
         }
       })
     },
@@ -890,11 +954,20 @@ export default {
             this.waveName = "怒涛";
           }
           let option1 = _this.initOption("",_this.level,-1,10,'#FFAB91','#FD7347');
-          let echartsData1 = echarts.init(document.getElementById("wave-level-echarts"));
-          echartsData1.setOption(option1);
-          let option4 = _this.luopanOption(resp.waveDirection,"");
-          let echartsData4 = echarts.init(document.getElementById("wave-direction-echarts"));
-          echartsData4.setOption(option4);
+          if(_this.echartsData5){
+            _this.echartsData5.dispose();
+          }
+          _this.echartsData5 = echarts.init(document.getElementById("wave-level-echarts"));
+          _this.echartsData5.setOption(option1,true);
+          if(resp.waveDirection){
+            resp.waveDirection = Number(resp.waveDirection).toFixed(3);
+          }
+          let option4 = _this.luopanOption(resp.waveDirection,"流向");
+          if(_this.echartsData6){
+            _this.echartsData6.dispose();
+          }
+          _this.echartsData6 = echarts.init(document.getElementById("wave-direction-echarts"));
+          _this.echartsData6.setOption(option4,true);
         }
         // let resp = response.data;
         // let xAxisDatas = [];
@@ -979,7 +1052,7 @@ export default {
         ]
       };
       let echartsData = echarts.init(document.getElementById("rightCenterEchart"));
-      echartsData.setOption(option);
+      echartsData.setOption(option,true);
     },
     rightBottomEchart(data){
       let _this = this;
@@ -1020,7 +1093,7 @@ export default {
         ]
       };
       let echartsData = echarts.init(document.getElementById("rightBottomEchart"));
-      echartsData.setOption(option);
+      echartsData.setOption(option,true);
     },
     getPlayUrl(sbbh,wjlj){
       let _this = this;
