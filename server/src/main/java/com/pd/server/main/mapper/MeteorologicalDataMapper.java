@@ -3,6 +3,8 @@ package com.pd.server.main.mapper;
 import com.pd.server.main.domain.MeteorologicalData;
 import com.pd.server.main.domain.MeteorologicalDataExample;
 import java.util.List;
+
+import com.pd.server.main.dto.basewx.my.MeteorologicalDataSum;
 import org.apache.ibatis.annotations.Param;
 
 public interface MeteorologicalDataMapper {
@@ -27,4 +29,6 @@ public interface MeteorologicalDataMapper {
     int updateByPrimaryKeySelective(MeteorologicalData record);
 
     int updateByPrimaryKey(MeteorologicalData record);
+
+    List<MeteorologicalDataSum> sumByExample(MeteorologicalDataExample example);
 }

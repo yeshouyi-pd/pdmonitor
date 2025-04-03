@@ -62,7 +62,7 @@
             </div>
           </div>
           <div class="left-center">
-            <div class="title-name-div" style="height: 10%">
+            <div class="title-name-div" style="height: 14%">
               <span style="padding-top:1%;">海流监测数据 <b style="color: red">{{zdysbList|optionKVArray(curSbbh)}}</b></span>
             </div>
             <div class="meter-box">
@@ -71,89 +71,12 @@
               <div class="meter-item" id="meterEchartsThree"></div>
               <div class="meter-item" id="meterEchartsFour"></div>
             </div>
-
           </div>
-          <div class="left-bottom">
-            <div class="title-name-div">
-              <span>温盐度浊度仪数据 <b style="color: red">{{zdysbList|optionKVArray(curSbbh)}}</b></span>
+          <div class="left-center-bottom">
+            <div class="title-name-div" style="height: 17%;">
+              <span>海浪数据 <b style="color: red">{{zdysbList|optionKVArray(curSbbh)}}</b></span>
             </div>
-            <div class="bottom-content" id="leftBottomEchart"></div>
-          </div>
-        </div>
-      </div>
-      <div class="center-div">
-        <div class="dp-title">中华白海豚环境耦合实时监测系统</div>
-        <div class="map-div">
-          <EquipmentAMap v-bind:height-max="heightMax" :click-map-point="clickMapPoint"></EquipmentAMap>
-        </div>
-        <div class="center-content-bottom">
-<!--          <div class="title-name-div">-->
-<!--            <span style="padding-top: 1%;">分析视频</span>-->
-<!--          </div>-->
-<!--          <div class="center-bottom-div">-->
-<!--            <dv-scroll-board class="sc-div" :config="config" style="width:100% ;height:96%" ref="scrollBoard"/>-->
-<!--          </div>-->
-          <img :src="tempUrl" style="width: 100%;height: 100%;"/>
-        </div>
-      </div>
-      <div class="right-div">
-        <div class="left-content-div" style="margin-top: 8%;">
-          <div class="left-top">
-            <div class="title-name-div" style="height: 20%;">
-              <span style="padding-top:0%;">气象数据 <b style="color: red">保护区楼顶气象站</b></span>
-            </div>
-            <div class="right-top-content" style="margin: 1% auto 0;">
-              <div class="right-top-box">
-                <img src="/static/image/environment/fs.png" />
-                <div>
-                  <span>风速</span><br/>
-                  <span>{{meteorological.speed}}m/s</span>
-                </div>
-              </div>
-              <div class="right-top-box" style="margin:0 1%;">
-                <img src="/static/image/environment/wd.png" />
-                <div>
-                  <span>气温</span><br/>
-                  <span>{{meteorological.temperature}}℃</span>
-                </div>
-              </div>
-              <div class="right-top-box">
-                <img src="/static/image/environment/qy.png" />
-                <div>
-                  <span>气压</span><br/>
-                  <span>{{meteorological.pressure}}hPa</span>
-                </div>
-              </div>
-            </div>
-            <div class="right-top-content" style="margin: 1% auto 0;">
-              <div class="right-top-box">
-                <img src="/static/image/environment/fx.png" />
-                <div>
-                  <span>风向</span><br/>
-                  <span>{{meteorological.winddirection}}</span>
-                </div>
-              </div>
-              <div class="right-top-box" style="margin:0 1%;">
-                <img src="/static/image/environment/sd.png" />
-                <div>
-                  <span>湿度</span><br/>
-                  <span>{{meteorological.humidity}}%</span>
-                </div>
-              </div>
-              <div class="right-top-box">
-                <img src="/static/image/environment/tyg.png" />
-                <div>
-                  <span>太阳光强度</span><br/>
-                  <span>{{meteorological.solarintensity}}W/m2</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="left-center">
-            <div class="title-name-div" style="height: 10%">
-              <span style="padding-top: 1%;">海浪数据 <b style="color: red">{{zdysbList|optionKVArray(curSbbh)}}</b></span>
-            </div>
-            <div class="center-content-div">
+            <div class="bottom-content">
               <div class="wave-box">
                 <div class="wave-item">
                   <div class="wave-echarts" id="wave-level-echarts"></div>
@@ -166,10 +89,36 @@
               </div>
               <div class="wave-text">波浪周期-{{wavePeriod}}</div>
             </div>
-<!--            <div class="center-content-div" id="rightCenterEchart"></div>-->
           </div>
           <div class="left-bottom">
-            <div class="title-name-div">
+            <div class="title-name-div" style="height: 17%;">
+              <span>温盐度浊度仪数据 <b style="color: red">{{zdysbList|optionKVArray(curSbbh)}}</b></span>
+            </div>
+            <div class="bottom-content" id="leftBottomEchart"></div>
+          </div>
+        </div>
+      </div>
+      <div class="center-div">
+        <div class="dp-title">中华白海豚环境耦合实时监测系统</div>
+        <div class="map-div">
+          <EquipmentAMap v-bind:height-max="heightMax" :click-map-point="clickMapPoint"></EquipmentAMap>
+        </div>
+        <div class="center-content-bottom">
+          <img :src="tempUrl" style="width: 100%;height: 100%;"/>
+        </div>
+      </div>
+      <div class="right-div">
+        <div class="left-content-div" style="margin-top: 8%;">
+          <div class="right-top">
+            <div class="title-name-div" style="height: 5%;">
+              <span style="padding-top:0%;">气象数据 <b style="color: red">保护区楼顶气象站</b></span>
+            </div>
+            <div class="right-top-content" id="temperature-echart"></div>
+            <div class="right-top-content" id="speed-echart"></div>
+            <div class="right-top-content" id="wind-direction-echarts"></div>
+          </div>
+          <div class="left-bottom">
+            <div class="title-name-div" style="height:17%;">
               <span style="padding-top: 1%;">水质数据 <b style="color: red">{{zdysbList|optionKVArray(curSbbh)}}</b></span>
             </div>
             <div class="center-bottom-div" id="rightBottomEchart"></div>
@@ -282,12 +231,15 @@ export default {
       level:null,
       waveName:null,
       wavePeriod:null,
-      echartsData1:null,
-      echartsData2:null,
-      echartsData3:null,
-      echartsData4:null,
-      echartsData5:null,
-      echartsData6:null
+      meterUSpeedData:null,
+      meterVSpeedData:null,
+      meterSpeedData:null,
+      meterDirectionData:null,
+      waveLevelData:null,
+      waveDirectionData:null,
+      winddirectionData:null,
+      speedData:null,
+      temperatureData:null
     }
   },
   mounted() {
@@ -307,7 +259,8 @@ export default {
     _this.leftCenterData();//海流计
     _this.leftBottomData();
     _this.rightBottomData();
-    _this.rightTopData();//气象数据
+    _this.rightTopData();//气象数据-历史平均数据
+    _this.rightTopDirectionData();//气象数据-实时方向数据
     _this.rightCenterData();
     //_this.centerBottomData();
     _this.dataRefreh();
@@ -321,7 +274,7 @@ export default {
         _this.curDate = date;
         _this.leftCenterData();//海流计
         _this.leftBottomData();//温盐深浊度仪
-        _this.rightTopData();//气象数据
+        _this.rightTopData();//气象数据-历史平均数据
         _this.rightCenterData();//海浪数据
         _this.rightBottomData();//水质数据
       }
@@ -340,6 +293,7 @@ export default {
       _this.leftBottomData();//温盐深浊度仪
       _this.rightCenterData();//海浪数据
       _this.rightBottomData();//水质数据
+      _this.rightTopData();//气象数据-历史平均数据
     },
     // 定时刷新数据函数
     dataRefreh() {
@@ -353,10 +307,8 @@ export default {
         console.log("刷新" + Tool.dateFormat("yyyy-MM-dd"));
         _this.leftCenterData();//海流计
         _this.rightCenterData();//海浪数据
-        if(_this.curDate==Tool.dateFormat("yyyy-MM-dd")){
-          _this.rightTopData();//气象数据
-        }
-      }, 1800000);
+        _this.rightTopDirectionData();//气象数据-实时方向数据
+      }, 1200000);//20分钟
     },
     // 停止定时器
     clear() {
@@ -497,66 +449,66 @@ export default {
         if(!Tool.isEmpty(_this.currentMeter.uspeed)){
           _this.currentMeter.uspeed = Number(_this.currentMeter.uspeed).toFixed(3);
           let option1 = _this.initOption("东西向流速",_this.currentMeter.uspeed,-1,1,'#FFAB91','#FD7347');
-          if(_this.echartsData1){
-            _this.echartsData1.dispose();
+          if(_this.meterUSpeedData){
+            _this.meterUSpeedData.dispose();
           }
-          _this.echartsData1 = echarts.init(document.getElementById("meterEchartsOne"));
-          _this.echartsData1.setOption(option1,true);
+          _this.meterUSpeedData = echarts.init(document.getElementById("meterEchartsOne"));
+          _this.meterUSpeedData.setOption(option1,true);
         }else{
           let option1 = _this.initOption("东西向流速",null,-1,1,'#FFAB91','#FD7347');
-          if(_this.echartsData1){
-            _this.echartsData1.dispose();
+          if(_this.meterUSpeedData){
+            _this.meterUSpeedData.dispose();
           }
-          _this.echartsData1 = echarts.init(document.getElementById("meterEchartsOne"));
-          _this.echartsData1.setOption(option1,true);
+          _this.meterUSpeedData = echarts.init(document.getElementById("meterEchartsOne"));
+          _this.meterUSpeedData.setOption(option1,true);
         }
         if(!Tool.isEmpty(_this.currentMeter.vspeed)){
           _this.currentMeter.vspeed = Number(_this.currentMeter.vspeed).toFixed(3);
           let option2 = _this.initOption("南北向流速",_this.currentMeter.vspeed,-3,3,'#FFAB91','#FD7347');
-          if(_this.echartsData2){
-            _this.echartsData2.dispose();
+          if(_this.meterVSpeedData){
+            _this.meterVSpeedData.dispose();
           }
-          _this.echartsData2 = echarts.init(document.getElementById("meterEchartsTwo"));
-          _this.echartsData2.setOption(option2,true);
+          _this.meterVSpeedData = echarts.init(document.getElementById("meterEchartsTwo"));
+          _this.meterVSpeedData.setOption(option2,true);
         }else{
           let option2 = _this.initOption("南北向流速",null,-3,3,'#FFAB91','#FD7347');
-          if(_this.echartsData2){
-            _this.echartsData2.dispose();
+          if(_this.meterVSpeedData){
+            _this.meterVSpeedData.dispose();
           }
-          _this.echartsData2 = echarts.init(document.getElementById("meterEchartsTwo"));
-          _this.echartsData2.setOption(option2,true);
+          _this.meterVSpeedData = echarts.init(document.getElementById("meterEchartsTwo"));
+          _this.meterVSpeedData.setOption(option2,true);
         }
         if(!Tool.isEmpty(_this.currentMeter.absSpeed)){
           _this.currentMeter.absSpeed = Number(_this.currentMeter.absSpeed).toFixed(3);
           let option3 = _this.initOption("流速",_this.currentMeter.absSpeed,-3,3,'#FFAB91','#FD7347');
-          if(_this.echartsData3){
-            _this.echartsData3.dispose();
+          if(_this.meterSpeedData){
+            _this.meterSpeedData.dispose();
           }
-          _this.echartsData3 = echarts.init(document.getElementById("meterEchartsThree"));
-          _this.echartsData3.setOption(option3,true);
+          _this.meterSpeedData = echarts.init(document.getElementById("meterEchartsThree"));
+          _this.meterSpeedData.setOption(option3,true);
         }else{
           let option3 = _this.initOption("流速",null,-3,3,'#FFAB91','#FD7347');
-          if(_this.echartsData3){
-            _this.echartsData3.dispose();
+          if(_this.meterSpeedData){
+            _this.meterSpeedData.dispose();
           }
-          _this.echartsData3 = echarts.init(document.getElementById("meterEchartsThree"));
-          _this.echartsData3.setOption(option3,true);
+          _this.meterSpeedData = echarts.init(document.getElementById("meterEchartsThree"));
+          _this.meterSpeedData.setOption(option3,true);
         }
         if(!Tool.isEmpty(_this.currentMeter.direction)){
           _this.currentMeter.direction = Number(_this.currentMeter.direction).toFixed(3);
           let option4 = _this.luopanOption(_this.currentMeter.direction,"流向");
-          if(_this.echartsData4){
-            _this.echartsData4.dispose();
+          if(_this.meterDirectionData){
+            _this.meterDirectionData.dispose();
           }
-          _this.echartsData4 = echarts.init(document.getElementById("meterEchartsFour"));
-          _this.echartsData4.setOption(option4,true);
+          _this.meterDirectionData = echarts.init(document.getElementById("meterEchartsFour"));
+          _this.meterDirectionData.setOption(option4,true);
         }else {
           let option4 = _this.luopanOption(null,"流向");
-          if(_this.echartsData4){
-            _this.echartsData4.dispose();
+          if(_this.meterDirectionData){
+            _this.meterDirectionData.dispose();
           }
-          _this.echartsData4 = echarts.init(document.getElementById("meterEchartsFour"));
-          _this.echartsData4.setOption(option4,true);
+          _this.meterDirectionData = echarts.init(document.getElementById("meterEchartsFour"));
+          _this.meterDirectionData.setOption(option4,true);
         }
     },
     initOption(name,data,min,max,color1,color2){
@@ -599,15 +551,16 @@ export default {
             axisLabel: {
               distance: -5,
               color: '#fff',
-              fontSize: 10
+              fontSize: 8
             },
             detail:{
-              fontSize:16,
+              fontSize:12,
               offsetCenter:[0,0],
               color:'#fff'
             },
             title: {
-              color: '#fff'
+              color: '#fff',
+              fontSize: 10
             },
             data: [
               {
@@ -694,12 +647,14 @@ export default {
             width: 2
           },
           title: {
-            color: '#fff'
+            color: '#fff',
+            fontSize: 10
           },
           data: [{
             value: data,
             name: name
-          }]
+          }],
+          radius: "70%"
         }]
       };
     },
@@ -753,6 +708,7 @@ export default {
         },
         yAxis: {
           type: 'value',
+          splitLine: { show: false },
           axisLine: {
             lineStyle: {
               type: "solid",
@@ -900,7 +856,7 @@ export default {
       echartsData.setOption(option,true);
     },
     //气象数据
-    rightTopData(){
+    rightTopDirectionData(){
       let _this = this;
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getMeteorologicalData', {"bz":"RPCDA4000","stime":_this.curDate}).then((response)=>{
         let meteorologicals = response.data.content;
@@ -913,7 +869,107 @@ export default {
           _this.meteorological.temperature = _this.meteorological.temperature?Number(_this.meteorological.temperature).toFixed(3):_this.meteorological.temperature;
           _this.meteorological.speed = _this.meteorological.speed?Number(_this.meteorological.speed).toFixed(3):_this.meteorological.speed;
         }
+        let option4 = _this.luopanOption(_this.meteorological.winddirection,"风向");
+        if(_this.winddirectionData){
+          _this.winddirectionData.dispose();
+        }
+        _this.winddirectionData = echarts.init(document.getElementById("wind-direction-echarts"));
+        _this.winddirectionData.setOption(option4,true);
       })
+    },
+    rightTopData(){
+      let _this = this;
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getMeteorologicalDataAvg', {"bz":"RPCDA4000","stime":_this.curDate,"dayCount":-29}).then((response)=>{
+        let meteorologicals = response.data.content;
+        let rqData=[];
+        let temperature=[];
+        let speed=[];
+        for(let i=0;i<meteorologicals.length;i++){
+          let obj = meteorologicals[i];
+          rqData.push(obj.rq);
+          temperature.push(obj.temperature);
+          speed.push(obj.speed);
+        }
+        let option1 = _this.meteorologicalOption("每日平均温度",rqData,temperature,'rgb(255, 173, 134)','rgb(255, 0, 0)');
+        if(_this.temperatureData){
+          _this.temperatureData.dispose();
+        }
+        _this.temperatureData = echarts.init(document.getElementById("temperature-echart"));
+        _this.temperatureData.setOption(option1,true);
+        let option2 = _this.meteorologicalOption("每日平均风速",rqData,speed,'rgb(128, 255, 165)','rgb(1, 191, 236)');
+        if(_this.speedData){
+          _this.speedData.dispose();
+        }
+        _this.speedData = echarts.init(document.getElementById("speed-echart"));
+        _this.speedData.setOption(option2,true);
+      })
+    },
+    meteorologicalOption(titleText,xAxisData,yAxisData,color,color1){
+      return {
+        title: {
+          left: 'center',
+          text: titleText,
+          textStyle: {
+            color:'#fff'
+          }
+        },
+        tooltip: {
+          trigger: 'axis'
+        },
+        grid: {
+          bottom: '20px',
+          top: '40px',
+          left: '25px',
+          right: '18px'
+        },
+        xAxis: {
+          type: 'category',
+          axisLine: {
+            lineStyle: {
+              type: "solid",
+              color: "#fff"
+            }
+          },
+          data: xAxisData
+        },
+        yAxis: {
+          type: 'value',
+          boundaryGap: [0, '100%'],
+          splitLine: { show: false },
+          axisLine: {
+            lineStyle: {
+              type: "solid",
+              color: "#fff"
+            }
+          }
+        },
+        series: [
+          {
+            type: 'line',
+            smooth: true,
+            symbol: 'none',
+            areaStyle: {
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                {
+                  offset: 0,
+                  color: color1
+                },
+                {
+                  offset: 1,
+                  color: color
+                }
+              ])
+            },
+            data:yAxisData,
+            itemStyle: {
+              color: color1
+            },
+            lineStyle: {
+              width: 3
+            }
+          }
+        ]
+      };
     },
     //海浪数据
     rightCenterData(){
@@ -921,7 +977,9 @@ export default {
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/environmentDp/getWaveDataXs', {"sbbh":_this.curSbbh,"stime":_this.curDate}).then((response)=>{
         let resp = response.data.content;
         if(resp!=null){
-          _this.wavePeriod = resp.wavePeriod
+          if(resp.wavePeriod){
+            _this.wavePeriod = Number(resp.wavePeriod).toFixed(3);
+          }
           if(resp.waveH==0){
             this.level = 0;
             this.waveName = "无浪";
@@ -954,20 +1012,20 @@ export default {
             this.waveName = "怒涛";
           }
           let option1 = _this.initOption("",_this.level,-1,10,'#FFAB91','#FD7347');
-          if(_this.echartsData5){
-            _this.echartsData5.dispose();
+          if(_this.waveLevelData){
+            _this.waveLevelData.dispose();
           }
-          _this.echartsData5 = echarts.init(document.getElementById("wave-level-echarts"));
-          _this.echartsData5.setOption(option1,true);
+          _this.waveLevelData = echarts.init(document.getElementById("wave-level-echarts"));
+          _this.waveLevelData.setOption(option1,true);
           if(resp.waveDirection){
             resp.waveDirection = Number(resp.waveDirection).toFixed(3);
           }
           let option4 = _this.luopanOption(resp.waveDirection,"流向");
-          if(_this.echartsData6){
-            _this.echartsData6.dispose();
+          if(_this.waveDirectionData){
+            _this.waveDirectionData.dispose();
           }
-          _this.echartsData6 = echarts.init(document.getElementById("wave-direction-echarts"));
-          _this.echartsData6.setOption(option4,true);
+          _this.waveDirectionData = echarts.init(document.getElementById("wave-direction-echarts"));
+          _this.waveDirectionData.setOption(option4,true);
         }
         // let resp = response.data;
         // let xAxisDatas = [];
@@ -1175,13 +1233,19 @@ export default {
 }
 .left-center{
   width: 100%;
-  height: 40%;
+  height: 30%;
+  background-color: #0F3A56;
+  margin-bottom: 10px;
+}
+.left-center-bottom{
+  width: 100%;
+  height: 22%;
   background-color: #0F3A56;
   margin-bottom: 10px;
 }
 .left-bottom{
   width: 100%;
-  height: 37.2%;
+  height: 25%;
   background-color: #0F3A56;
 }
 .title-name-div{
@@ -1197,11 +1261,11 @@ export default {
 }
 .title-name-div span{
   margin-left: 5%;
-  padding-top: 2%;
+  padding-top: 1%;
   display: block;
 }
 .meter-box{
-  height: 88%;
+  height: 86%;
   width: 100%;
   display: flex;
   flex-wrap: wrap;
@@ -1241,7 +1305,7 @@ export default {
 }
 .wave-box{
   width: 100%;
-  height: 80%;
+  height: 90%;
   display: flex;
 }
 .wave-item{
@@ -1250,11 +1314,11 @@ export default {
 }
 .wave-echarts{
   width: 100%;
-  height: 80%;
+  height: 90%;
 }
 .wave-text{
-  height: 20%;
-  font-size: 22px;
+  height: 10%;
+  font-size: 12px;
   color: #fff;
   text-align: center;
 }
@@ -1278,7 +1342,7 @@ export default {
   text-align: center;
 }
 .bottom-content{
-  height: 85%;
+  height: 82%;
   width: 90%;
   margin: auto;
 }
@@ -1298,15 +1362,21 @@ export default {
   background-color: #0F3A56;
 }
 .center-bottom-div{
-  height: 85%;
+  height: 82%;
   width: 90%;
   margin-left: 5%;
 }
+.right-top{
+  width: 100%;
+  height: 74.5%;
+  margin: 10px 0;
+  background-color: #0F3A56;
+  padding: 10px 0;
+}
 .right-top-content{
-  height: 38%;
+  height: 32%;
   width: 96%;
-  display: flex;
-  flex-direction: row;
+  margin: auto;
 }
 .right-top-box{
   height: 100%;

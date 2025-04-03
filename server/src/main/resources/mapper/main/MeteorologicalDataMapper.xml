@@ -21,6 +21,13 @@
     <result column="uwind_speed" jdbcType="DOUBLE" property="uwindSpeed" />
     <result column="vwind_speed" jdbcType="DOUBLE" property="vwindSpeed" />
   </resultMap>
+  <resultMap id="SumResultMap" type="com.pd.server.main.dto.basewx.my.MeteorologicalDataSum">
+    <result column="rq" jdbcType="VARCHAR" property="rq" />
+    <result column="speed" jdbcType="DOUBLE" property="speed" />
+    <result column="temperature" jdbcType="DOUBLE" property="temperature" />
+    <result column="humidity" jdbcType="DOUBLE" property="humidity" />
+    <result column="total" jdbcType="INTEGER" property="total" />
+  </resultMap>
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -413,4 +420,18 @@
       vwind_speed = #{vwindSpeed,jdbcType=DOUBLE}
     where id = #{id,jdbcType=VARCHAR}
   </update>
+  <select id="sumByExample" parameterType="com.pd.server.main.domain.MeteorologicalDataExample" resultMap="SumResultMap">
+    SELECT
+    DATE(cjsj) AS rq,
+    SUM(CAST(IFNULL(speed, 0) AS DECIMAL(30, 5))) AS speed,
+    SUM(CAST(IFNULL(temperature, 0) AS DECIMAL(30, 5))) AS temperature,
+    SUM(CAST(IFNULL(humidity, 0) AS DECIMAL(30, 5))) AS humidity,
+    COUNT(*) AS total
+    FROM meteorological_data
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    GROUP BY rq
+    ORDER BY rq;
+  </select>
 </mapper>

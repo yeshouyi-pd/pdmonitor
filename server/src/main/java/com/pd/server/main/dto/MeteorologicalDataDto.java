@@ -96,6 +96,16 @@ public class MeteorologicalDataDto extends PageDto{
      */
     private Double vwindSpeed;
 
+    private int dayCount;
+
+    public int getDayCount() {
+        return dayCount;
+    }
+
+    public void setDayCount(int dayCount) {
+        this.dayCount = dayCount;
+    }
+
     public String getId() {
         return id;
     }
