@@ -36,7 +36,7 @@
 
     <div class="video-box">
       <div class="video-item" v-for="(item,index) in uavFlyVideoList">
-        <video style="width: 100%;height: 90%" :src="item.videoUrl" controls autoplay></video>
+        <video style="width: 100%;height: 90%" :src="item.videoUrl" controls></video>
         <div>{{item.cjsj}}</div>
       </div>
     </div>
