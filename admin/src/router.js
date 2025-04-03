@@ -105,13 +105,13 @@ export default new Router({
     base:process.env.BASE_URL,
     routes:[{
         path: "*",
-        redirect: "/login",
+        redirect: "/loginVideo",
     },{
         path: "",
-        redirect: "/login",
+        redirect: "/loginVideo",
     },{
-        path: "/login",
-        component:Login
+        path: "/loginVideo",
+        component:LoginVideo
     },{
         path: "/mobile/largemonitorsTy",
         component: LargemonitorsTy

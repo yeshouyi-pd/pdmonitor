@@ -171,6 +171,9 @@
                     Loading.hide();
                     let devices = response.data.content;
                     for(let i=0;i<devices.length;i++){
+                        if(Tool.isEmpty(devices[i].gps)){
+                          continue;
+                        }
                         if(devices[i].sbzt=='1'){
                             _this.onLineCount++;
                         }else if(devices[i].sbzt=='2'){

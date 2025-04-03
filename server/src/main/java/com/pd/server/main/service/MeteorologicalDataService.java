@@ -4,6 +4,7 @@ import com.pd.server.main.domain.MeteorologicalData;
 import com.pd.server.main.domain.MeteorologicalDataExample;
 import com.pd.server.main.dto.MeteorologicalDataDto;
 import com.pd.server.main.dto.PageDto;
+import com.pd.server.main.dto.basewx.my.MeteorologicalDataSum;
 import com.pd.server.main.mapper.MeteorologicalDataMapper;
 import com.pd.server.util.CopyUtil;
 import com.pd.server.util.UuidUtil;
@@ -21,6 +22,10 @@ public class MeteorologicalDataService {
 
     @Resource
     private MeteorologicalDataMapper meteorologicalDataMapper;
+
+    public List<MeteorologicalDataSum> sumByExample(MeteorologicalDataExample example){
+        return meteorologicalDataMapper.sumByExample(example);
+    }
 
     public List<MeteorologicalData> selectByExample(MeteorologicalDataExample example){
         return meteorologicalDataMapper.selectByExample(example);

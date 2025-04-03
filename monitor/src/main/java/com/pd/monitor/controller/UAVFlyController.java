@@ -18,9 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/UAVFly")
@@ -109,9 +107,51 @@ public class UAVFlyController {
             return responseDto;
         }catch (Exception e){
             LOG.error("入参："+deptcode);
-            LOG.error("无人机循环查询接口异常："+e.getMessage());
+            LOG.error("无人机自动循环查询接口异常："+e.getMessage());
             responseDto.setSuccess(false);
             responseDto.setMessage("系统异常，不能飞行！");
+            return responseDto;
+        }
+
+    }
+
+    @GetMapping("/UAVFlyList/{deptcode}")
+    public ResponseDto UAVFlyList(@PathVariable String deptcode){
+        ResponseDto responseDto = new ResponseDto();
+        try{
+            WaterEquipmentExample example = new WaterEquipmentExample();
+            example.createCriteria().andDeptcodeEqualTo(deptcode);
+            example.setOrderByClause(" sblc ");
+            List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(example);
+            if(waterEquipmentList.size()<=0){
+                responseDto.setSuccess(false);
+                responseDto.setMessage("参数错误");
+                return responseDto;
+            }
+            Map<String, String> attrMap = WxRedisConfig.getAttrMap();
+            Integer UAVFlyTime = Integer.parseInt(attrMap.get("UAVFlyTime"));
+            List<Map<String,Object>> resultList = new ArrayList<>();
+            for(WaterEquipment waterEquipment : waterEquipmentList){
+                Map<String,Object> resultMap = new HashMap<>();
+                EquipmentFileTodayExample todayExample = new EquipmentFileTodayExample();
+                EquipmentFileTodayExample.Criteria todayCa = todayExample.createCriteria();
+                todayCa.andTxtlxEqualTo("1");
+                todayCa.andSbbhEqualTo(waterEquipment.getSbsn());
+                todayCa.andCjsjGreaterThanOrEqualTo(DateTools.getFormatDate(DateUtil.getMinutesLater(new Date(),UAVFlyTime),DateTools.yyyy_MM_dd_HH_mm_ss));
+                todayCa.andCjsjLessThanOrEqualTo(DateTools.getFormatDate(new Date(),DateTools.yyyy_MM_dd_HH_mm_ss));
+                long count = equipmentFileTodayService.countByExample(todayExample);
+                resultMap.put("sbbh",waterEquipment.getSbsn());//设备编号
+                resultMap.put("fxhx",waterEquipment.getFzrdh());//飞行航线
+                resultMap.put("mcs",count);//侦测次数(脉冲数)
+                resultList.add(resultMap);
+            }
+            responseDto.setContent(resultList);
+            return responseDto;
+        }catch (Exception e){
+            LOG.error("入参："+deptcode);
+            LOG.error("无人机手动循环查询接口异常："+e.getMessage());
+            responseDto.setSuccess(false);
+            responseDto.setMessage("系统异常！");
             return responseDto;
         }
 

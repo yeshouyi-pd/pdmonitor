@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.pd.server.main.domain.*;
 import com.pd.server.main.dto.*;
 import com.pd.server.main.dto.basewx.my.AppearNumDpDto;
+import com.pd.server.main.dto.basewx.my.MeteorologicalDataSum;
 import com.pd.server.main.dto.basewx.my.VideoEventDpDto;
 import com.pd.server.main.service.*;
 import com.pd.server.util.DateUtil;
@@ -14,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -281,10 +283,50 @@ public class EnvironmentDpController {
         }else{
             ca.andCjsjEqualTo(DateUtils.getDateToStrFormat(new Date(),"yyyy-MM-dd"),"%Y-%m-%d");
         }
-        example.setOrderByClause(" cjsj ");
+        example.setOrderByClause(" cjsj desc ");
         List<MeteorologicalData> lists = meteorologicalDataService.selectByExample(example);
         responseDto.setContent(lists);
         return responseDto;
+    }
+
+    @PostMapping("/getMeteorologicalDataAvg")
+    public ResponseDto getMeteorologicalDataAvg(@RequestBody MeteorologicalDataDto meteorologicalDataDto){
+        ResponseDto responseDto = new ResponseDto();
+        MeteorologicalDataExample example = new MeteorologicalDataExample();
+        MeteorologicalDataExample.Criteria ca = example.createCriteria();
+        if(!StringUtils.isEmpty(meteorologicalDataDto.getBz())){
+            ca.andBzEqualTo(meteorologicalDataDto.getBz());
+        }
+        if(!StringUtils.isEmpty(meteorologicalDataDto.getStime())){
+            ca.andCjsjGreaterThanOrEqualTo(DateUtil.getDaysLater(DateUtil.toDate(meteorologicalDataDto.getStime(),"yyyy-MM-dd"),meteorologicalDataDto.getDayCount()));
+            ca.andCjsjLessThanOrEqualTo(meteorologicalDataDto.getStime(),"%Y-%m-%d");
+        }else{
+            ca.andCjsjGreaterThanOrEqualTo(DateUtils.getDateToStrFormat(DateUtil.getDaysLater(new Date(),meteorologicalDataDto.getDayCount()),"yyyy-MM-dd"),"%Y-%m-%d");
+            ca.andCjsjLessThanOrEqualTo(DateUtils.getDateToStrFormat(new Date(),"yyyy-MM-dd"),"%Y-%m-%d");
+        }
+        List<MeteorologicalDataSum> lists = meteorologicalDataService.sumByExample(example);
+        for(MeteorologicalDataSum entity: lists){
+            entity.setHumidity(Double.parseDouble(calculateResultOfPercent(entity.getHumidity(),entity.getTotal())));
+            entity.setSpeed(Double.parseDouble(calculateResultOfPercent(entity.getSpeed(),entity.getTotal())));
+            entity.setTemperature(Double.parseDouble(calculateResultOfPercent(entity.getTemperature(),entity.getTotal())));
+        }
+        responseDto.setContent(lists);
+        return responseDto;
+    }
+
+    /**
+     * 计算结果百分比，保留1位小数
+     *
+     * @param v1 除数
+     * @param v2 被除数
+     * @return
+     */
+    private static String calculateResultOfPercent(double v1, double v2) {
+        if (v2 == 0) {
+            return "0";
+        }
+        DecimalFormat df = new DecimalFormat("#.##");
+        return df.format(v1 / v2);
     }
 
     @PostMapping("/getTurbidityData")
