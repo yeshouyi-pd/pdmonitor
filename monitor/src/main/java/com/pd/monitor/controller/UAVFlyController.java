@@ -2,9 +2,7 @@ package com.pd.monitor.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.pd.monitor.wx.conf.WxRedisConfig;
-import com.pd.server.main.domain.EquipmentFileTodayExample;
-import com.pd.server.main.domain.WaterEquipment;
-import com.pd.server.main.domain.WaterEquipmentExample;
+import com.pd.server.main.domain.*;
 import com.pd.server.main.dto.ResponseDto;
 import com.pd.server.main.dto.UavFlyVideoDto;
 import com.pd.server.main.service.EquipmentFileTodayService;
@@ -45,6 +43,15 @@ public class UAVFlyController {
             if(!jsonObject.getString("cjsj").matches(isFlag)){
                 responseDto.setSuccess(false);
                 responseDto.setMessage("时间格式错误！");
+                return responseDto;
+            }
+            UavFlyVideoExample example = new UavFlyVideoExample();
+            UavFlyVideoExample.Criteria ca = example.createCriteria();
+            ca.andVideoUrlEqualTo(jsonObject.getString("wjlj"));
+            List<UavFlyVideo> tempList = uavFlyVideoService.selectByExample(example);
+            if(tempList.size()>0){
+                responseDto.setSuccess(false);
+                responseDto.setMessage("重复数据！");
                 return responseDto;
             }
 //            WaterEquipmentExample example = new WaterEquipmentExample();
