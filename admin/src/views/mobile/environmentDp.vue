@@ -76,18 +76,21 @@
             <div class="title-name-div" style="height: 17%;">
               <span>海浪数据 <b style="color: red">{{zdysbList|optionKVArray(curSbbh)}}</b></span>
             </div>
-            <div class="bottom-content">
-              <div class="wave-box">
-                <div class="wave-item">
-                  <div class="wave-echarts" id="wave-level-echarts"></div>
-                  <div class="wave-text">海况-{{level}}级</div>
+            <div class="bottom-content" style="display: flex;">
+              <div class="wave-content">
+                <div class="wave-box">
+                  <div class="wave-item">
+                    <div class="wave-echarts" id="wave-level-echarts"></div>
+                    <div class="wave-text">海况-{{level}}级</div>
+                  </div>
+                  <div class="wave-item">
+                    <div class="wave-echarts" id="wave-direction-echarts"></div>
+                    <div class="wave-text">海浪-{{waveName}}</div>
+                  </div>
                 </div>
-                <div class="wave-item">
-                  <div class="wave-echarts" id="wave-direction-echarts"></div>
-                  <div class="wave-text">海浪-{{waveName}}</div>
-                </div>
+                <div class="wave-text">波浪周期-{{wavePeriod}}</div>
               </div>
-              <div class="wave-text">波浪周期-{{wavePeriod}}</div>
+              <div class="wind-direction-content" id="wind-direction-echarts"></div>
             </div>
           </div>
           <div class="left-bottom">
@@ -115,7 +118,7 @@
             </div>
             <div class="right-top-content" id="temperature-echart"></div>
             <div class="right-top-content" id="speed-echart"></div>
-            <div class="right-top-content" id="wind-direction-echarts"></div>
+            <div class="right-top-content" id="humidity-echart"></div>
           </div>
           <div class="left-bottom">
             <div class="title-name-div" style="height:17%;">
@@ -884,11 +887,13 @@ export default {
         let rqData=[];
         let temperature=[];
         let speed=[];
+        let humidity=[];
         for(let i=0;i<meteorologicals.length;i++){
           let obj = meteorologicals[i];
           rqData.push(obj.rq);
           temperature.push(obj.temperature);
           speed.push(obj.speed);
+          humidity.push(obj.humidity);
         }
         let option1 = _this.meteorologicalOption("每日平均温度",rqData,temperature,'rgb(255, 173, 134)','rgb(255, 0, 0)');
         if(_this.temperatureData){
@@ -902,6 +907,12 @@ export default {
         }
         _this.speedData = echarts.init(document.getElementById("speed-echart"));
         _this.speedData.setOption(option2,true);
+        let option3 = _this.meteorologicalOption("每日平均湿度",rqData,humidity,'rgb(116, 183, 231)','rgb(27, 125, 221)');
+        if(_this.humidityData){
+          _this.humidityData.dispose();
+        }
+        _this.humidityData = echarts.init(document.getElementById("humidity-echart"));
+        _this.humidityData.setOption(option3,true);
       })
     },
     meteorologicalOption(titleText,xAxisData,yAxisData,color,color1){
@@ -919,7 +930,7 @@ export default {
         grid: {
           bottom: '20px',
           top: '40px',
-          left: '25px',
+          left: '30px',
           right: '18px'
         },
         xAxis: {
@@ -1303,9 +1314,17 @@ export default {
   height: 88%;
   margin: auto;
 }
+.wave-content{
+  width: 66%;
+  height: 90%;
+}
+.wind-direction-content{
+  width: 33%;
+  height: 90%;
+}
 .wave-box{
   width: 100%;
-  height: 90%;
+  height: 99%;
   display: flex;
 }
 .wave-item{

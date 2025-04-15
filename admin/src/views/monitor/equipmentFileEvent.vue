@@ -178,7 +178,7 @@ export default {
     _this.deptMap = Tool.getDeptUser();
     _this.$refs.pagination.size = 10;
     _this.$forceUpdate();
-    _this.list(1);
+    //_this.list(1);
     _this.findDeviceInfo();
     //监听模态框关闭
     $('#echart-modal').on('hidden.bs.modal', function () {
