@@ -5,13 +5,16 @@ import com.github.pagehelper.PageInfo;
 import com.pd.monitor.mobileCode.FileInfo;
 import com.pd.monitor.mobileCode.FileInfoSoap;
 import com.pd.monitor.mobileCode.RetClass;
+import com.pd.monitor.wx.conf.WxRedisConfig;
 import com.pd.server.main.domain.*;
+import com.pd.server.main.dto.EquipmentFileDto;
 import com.pd.server.main.dto.EquipmentFileEventDto;
 import com.pd.server.main.dto.PageDto;
 import com.pd.server.main.dto.ResponseDto;
 import com.pd.server.main.service.EquipmentFileEventService;
 import com.pd.server.main.service.EquipmentFileService;
 import com.pd.server.util.CopyUtil;
+import com.pd.server.util.DateUtil;
 import com.pd.server.util.ValidatorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +23,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/admin/equipmentFileEvent")
@@ -33,6 +38,31 @@ public class EquipmentFileEventController {
     private EquipmentFileEventService equipmentFileEventService;
     @Resource
     private EquipmentFileService equipmentFileService;
+
+    //岳阳无人机视频选择关联聚类
+    @PostMapping("/yueYangChoose")
+    public ResponseDto yueYangChoose(@RequestBody EquipmentFileEventDto pageDto){
+        ResponseDto responseDto = new ResponseDto();
+        EquipmentFileEventExample example = new EquipmentFileEventExample();
+        EquipmentFileEventExample.Criteria ca = example.createCriteria();
+        Map<String, String> attrMap = WxRedisConfig.getAttrMap();
+        if(!StringUtils.isEmpty(pageDto.getSbbh())){
+            ca.andSbbhEqualTo(pageDto.getSbbh());
+        }else{
+            ca.andSbbhIn(Arrays.asList(attrMap.get("yueYangSbbh").split(",")));
+        }
+        ca.andKssjGreaterThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getMinutesLater(DateUtil.toDate(pageDto.getEtime(),"yyyy-MM-dd HH:mm:ss"),-10),"yyyy-MM-dd HH:mm:ss"));
+        ca.andKssjLessThanOrEqualTo(pageDto.getEtime());
+        example.setOrderByClause(" Kssj desc ");
+        PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
+        List<EquipmentFileEvent> lists = equipmentFileEventService.list(example);
+        PageInfo<EquipmentFileEvent> pageInfo = new PageInfo<>(lists);
+        pageDto.setTotal(pageInfo.getTotal());
+        List<EquipmentFileEventDto> listDto = CopyUtil.copyList(lists, EquipmentFileEventDto.class);
+        pageDto.setList(listDto);
+        responseDto.setContent(pageDto);
+        return responseDto;
+    }
 
     @PostMapping("/playVedio")
     public ResponseDto playVedio(@RequestBody EquipmentFileEventDto pageDto){

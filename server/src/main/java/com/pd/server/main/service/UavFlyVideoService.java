@@ -52,7 +52,7 @@ public class UavFlyVideoService {
     * 更新
     */
     private void update(UavFlyVideo uavFlyVideo) {
-        uavFlyVideoMapper.updateByPrimaryKey(uavFlyVideo);
+        uavFlyVideoMapper.updateByPrimaryKeySelective(uavFlyVideo);
     }
 
     /**

@@ -90,6 +90,8 @@ import SolarPannel from "./views/electricity/solarPannel.vue";
 import AzimuthAngle from "./views/monitor/azimuthAngle.vue";
 import AzimuthAngleUnique from "./views/monitor/azimuthAngleUnique.vue";
 import UavFlyVideo from "./views/uav/uavFlyVideo.vue";
+import NutritionalStatusAssessment from "./views/nutritionalStatus/nutritionalStatusAssessment.vue";
+import VideoImageExtraction from "./views/nutritionalStatus/videoImageExtraction.vue";
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -105,13 +107,13 @@ export default new Router({
     base:process.env.BASE_URL,
     routes:[{
         path: "*",
-        redirect: "/loginVideo",
+        redirect: "/login",
     },{
         path: "",
-        redirect: "/loginVideo",
+        redirect: "/login",
     },{
-        path: "/loginVideo",
-        component:LoginVideo
+        path: "/login",
+        component:Login
     },{
         path: "/mobile/largemonitorsTy",
         component: LargemonitorsTy
@@ -451,6 +453,14 @@ export default new Router({
             path: "monitor/uavFlyVideo",
             name: "monitor/uavFlyVideo",
             component: UavFlyVideo
+        },{
+            path: "monitor/nutritionalStatusAssessment",
+            name: "monitor/nutritionalStatusAssessment",
+            component: NutritionalStatusAssessment
+        },{
+            path: "monitor/videoImageExtraction",
+            name: "monitor/videoImageExtraction",
+            component: VideoImageExtraction
         }]
     }]
 })

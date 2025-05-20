@@ -3,6 +3,7 @@ package com.pd.monitor.controller;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.pd.monitor.wx.conf.BaseWxController;
+import com.pd.monitor.wx.conf.WxRedisConfig;
 import com.pd.server.config.RedisCode;
 import com.pd.server.main.domain.EquipmentFile;
 import com.pd.server.main.domain.EquipmentFileExample;
@@ -44,6 +45,32 @@ public class EquipmentFileController extends BaseWxController {
     private WaterEquipmentService waterEquipmentService;
     @Resource
     private RedisTemplate redisTemplate;
+
+    //岳阳无人机视频选择关联声谱图
+    @PostMapping("/yueYangChoose")
+    public ResponseDto yueYangChoose(@RequestBody EquipmentFileDto pageDto){
+        ResponseDto responseDto = new ResponseDto();
+        EquipmentFileExample example = new EquipmentFileExample();
+        EquipmentFileExample.Criteria ca = example.createCriteria();
+        Map<String, String> attrMap = WxRedisConfig.getAttrMap();
+        if(!StringUtils.isEmpty(pageDto.getSbbh())){
+            ca.andSbbhEqualTo(pageDto.getSbbh());
+        }else{
+            ca.andSbbhIn(Arrays.asList(attrMap.get("yueYangSbbh").split(",")));
+        }
+        ca.andCjsjGreaterThanOrEqualTo(DateUtil.getMinutesLater(DateUtil.toDate(pageDto.getEtime(),"yyyy-MM-dd HH:mm:ss"),-10));
+        ca.andCjsjLessThanOrEqualToNoType(pageDto.getEtime());
+        ca.andTxtlxEqualTo("1");
+        example.setOrderByClause(" cjsj desc ");
+        PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
+        List<EquipmentFile> lists = equipmentFileService.lists(example);
+        PageInfo<EquipmentFile> pageInfo = new PageInfo<>(lists);
+        pageDto.setTotal(pageInfo.getTotal());
+        List<EquipmentFileDto> listDto = CopyUtil.copyList(lists, EquipmentFileDto.class);
+        pageDto.setList(listDto);
+        responseDto.setContent(pageDto);
+        return responseDto;
+    }
 
     @PostMapping("/statisticsAlarmNumsByMinute")
     public ResponseDto statisticsAlarmNumsByMinute(@RequestBody AlarmNumbersDto entityDto){

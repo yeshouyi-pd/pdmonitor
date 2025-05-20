@@ -96,7 +96,7 @@
     </div>
 
     <div id="img-modal" class="modal fade" tabindex="-1" role="dialog">
-      <div class="modal-dialog" role="document" style="width: 55%">
+      <div class="modal-dialog" role="document" style="width: 90%">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -104,10 +104,10 @@
           </div>
           <div class="modal-body">
 <!--            <img :src="equipmentFile.tplj"/>-->
-            <div>
-              <button type="button" class="btn btn-white btn-default btn-round" v-on:click="showRealPic()">
-                查看原图
-              </button>
+            <div style="margin-bottom: 20px;">
+<!--              <button type="button" class="btn btn-white btn-default btn-round" v-on:click="showRealPic()">-->
+<!--                查看原图-->
+<!--              </button>-->
               <span style="font-size: 18px;margin: 10px 20px;">设备名称：{{waterEquipments|optionNSArray(curSbsn)}}</span>
               <span style="font-size: 18px;">采集时间：{{curCjsj}}</span>
               <span style="font-size: 18px;">文件名称：{{curWjmc.substring(curWjmc.lastIndexOf("/")+1,curWjmc.length)}}</span>
@@ -116,8 +116,8 @@
               <div style="text-align: left;margin: auto;">
                 <img v-on:click="beforePic()" v-show="curIndex!=0" src="../../../public/static/image/turnLeft.png"/>
               </div>
-              <div style="text-align: center;width: 500px;overflow-x: auto;">
-                <img :src="curTplj" :style="{height:+maxHeight-100+'px'}"  alt="无数据"/>
+              <div :style="{overflow:'auto',textAlign:'center'}">
+                <img :src="curTplj" alt="无数据"/>
               </div>
               <div style="text-align: right;margin: auto;">
                 <img v-on:click="nextPic()" v-show="curIndex!=equipmentFiles.length-1" src="../../../public/static/image/turnRight.png"/>

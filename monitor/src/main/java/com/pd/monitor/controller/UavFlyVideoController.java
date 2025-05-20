@@ -28,11 +28,18 @@ public class UavFlyVideoController {
     @Resource
     private UavFlyVideoService uavFlyVideoService;
 
+    @PostMapping("/update")
+    public ResponseDto update(@RequestBody UavFlyVideoDto uavFlyVideoDto){
+        ResponseDto responseDto = new ResponseDto();
+        uavFlyVideoService.save(uavFlyVideoDto);
+        return responseDto;
+    }
+
     /**
     * 列表查询
     */
     @PostMapping("/list")
-    public ResponseDto list(@RequestBody PageDto pageDto) {
+    public ResponseDto list(@RequestBody UavFlyVideoDto pageDto) {
         ResponseDto responseDto = new ResponseDto();
         PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
         UavFlyVideoExample uavFlyVideoExample = new UavFlyVideoExample();

@@ -1,7 +1,7 @@
 package com.pd.server.main.dto;
 
 
-public class UavFlyVideoDto {
+public class UavFlyVideoDto extends PageDto{
 
     /**
     * 
@@ -37,6 +37,16 @@ public class UavFlyVideoDto {
     * 说明
     */
     private String sm;
+
+    /**
+     * 声谱图ids
+     */
+    private String tpids;
+
+    /**
+     * 聚类id
+     */
+    private String jlid;
 
     public String getId() {
         return id;
@@ -94,6 +104,21 @@ public class UavFlyVideoDto {
         this.sm = sm;
     }
 
+    public String getTpids() {
+        return tpids;
+    }
+
+    public void setTpids(String tpids) {
+        this.tpids = tpids;
+    }
+
+    public String getJlid() {
+        return jlid;
+    }
+
+    public void setJlid(String jlid) {
+        this.jlid = jlid;
+    }
 
     @Override
     public String toString() {

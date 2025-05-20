@@ -42,12 +42,13 @@ public class MQUtil {
     }
 
     public static void main(String[] args) throws IOException, TimeoutException {
-        Connection connection = MQUtil.getConnectionpYH();
+        Connection connection = MQUtil.getConnection();
         Channel channel = connection.createChannel();
-        channel.queueDeclare(MQUtil.QUEUE_NAME_PYH,true,false,false,null);
+        channel.queueDeclare(MQUtil.QUEUE_NAME,true,false,false,null);
         String message = "NJA4001&118.73123,32.08157@2023_12_26_09_51_12-0:348.748/2023_12_26_09_51_13-0:188.738,1:351.486/2023_12_26_09_51_17-0:351.052";
-        channel.basicPublish("",MQUtil.QUEUE_NAME_PYH,null,message.getBytes("UTF-8"));
+        channel.basicPublish("",MQUtil.QUEUE_NAME,null,message.getBytes("UTF-8"));
         channel.close();
         connection.close();
+        System.out.println("上传完成");
     }
 }
