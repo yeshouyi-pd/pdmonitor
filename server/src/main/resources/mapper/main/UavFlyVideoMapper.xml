@@ -9,6 +9,8 @@
     <result column="cjsj" jdbcType="VARCHAR" property="cjsj" />
     <result column="bz" jdbcType="VARCHAR" property="bz" />
     <result column="sm" jdbcType="VARCHAR" property="sm" />
+    <result column="tpids" jdbcType="VARCHAR" property="tpids" />
+    <result column="jlid" jdbcType="VARCHAR" property="jlid" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -69,7 +71,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, sbbh, video_url, deptcode, cjsj, bz, sm
+    id, sbbh, video_url, deptcode, cjsj, bz, sm, tpids, jlid
   </sql>
   <select id="selectByExample" parameterType="com.pd.server.main.domain.UavFlyVideoExample" resultMap="BaseResultMap">
     select
@@ -104,10 +106,10 @@
   <insert id="insert" parameterType="com.pd.server.main.domain.UavFlyVideo">
     insert into uav_fly_video (id, sbbh, video_url, 
       deptcode, cjsj, bz, 
-      sm)
+      sm, tpids, jlid)
     values (#{id,jdbcType=VARCHAR}, #{sbbh,jdbcType=VARCHAR}, #{videoUrl,jdbcType=VARCHAR}, 
       #{deptcode,jdbcType=VARCHAR}, #{cjsj,jdbcType=VARCHAR}, #{bz,jdbcType=VARCHAR}, 
-      #{sm,jdbcType=VARCHAR})
+      #{sm,jdbcType=VARCHAR}, #{tpids,jdbcType=VARCHAR}, #{jlid,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.pd.server.main.domain.UavFlyVideo">
     insert into uav_fly_video
@@ -133,6 +135,12 @@
       <if test="sm != null">
         sm,
       </if>
+      <if test="tpids != null">
+        tpids,
+      </if>
+      <if test="jlid != null">
+        jlid,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -155,6 +163,12 @@
       </if>
       <if test="sm != null">
         #{sm,jdbcType=VARCHAR},
+      </if>
+      <if test="tpids != null">
+        #{tpids,jdbcType=VARCHAR},
+      </if>
+      <if test="jlid != null">
+        #{jlid,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -188,6 +202,12 @@
       <if test="record.sm != null">
         sm = #{record.sm,jdbcType=VARCHAR},
       </if>
+      <if test="record.tpids != null">
+        tpids = #{record.tpids,jdbcType=VARCHAR},
+      </if>
+      <if test="record.jlid != null">
+        jlid = #{record.jlid,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -201,7 +221,9 @@
       deptcode = #{record.deptcode,jdbcType=VARCHAR},
       cjsj = #{record.cjsj,jdbcType=VARCHAR},
       bz = #{record.bz,jdbcType=VARCHAR},
-      sm = #{record.sm,jdbcType=VARCHAR}
+      sm = #{record.sm,jdbcType=VARCHAR},
+      tpids = #{record.tpids,jdbcType=VARCHAR},
+      jlid = #{record.jlid,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -227,6 +249,12 @@
       <if test="sm != null">
         sm = #{sm,jdbcType=VARCHAR},
       </if>
+      <if test="tpids != null">
+        tpids = #{tpids,jdbcType=VARCHAR},
+      </if>
+      <if test="jlid != null">
+        jlid = #{jlid,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -237,7 +265,9 @@
       deptcode = #{deptcode,jdbcType=VARCHAR},
       cjsj = #{cjsj,jdbcType=VARCHAR},
       bz = #{bz,jdbcType=VARCHAR},
-      sm = #{sm,jdbcType=VARCHAR}
+      sm = #{sm,jdbcType=VARCHAR},
+      tpids = #{tpids,jdbcType=VARCHAR},
+      jlid = #{jlid,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

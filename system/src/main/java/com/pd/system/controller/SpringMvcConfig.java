@@ -47,5 +47,6 @@ public class SpringMvcConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
         registry.addResourceHandler("/f/**").addResourceLocations("file:"+this.getPicStorePath());
+        registry.addResourceHandler("/uploads/**").addResourceLocations("file:"+this.getPicStorePath());
     }
 }

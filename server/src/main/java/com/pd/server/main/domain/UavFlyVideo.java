@@ -15,6 +15,10 @@ public class UavFlyVideo {
 
     private String sm;
 
+    private String tpids;
+
+    private String jlid;
+
     public String getId() {
         return id;
     }
@@ -71,6 +75,22 @@ public class UavFlyVideo {
         this.sm = sm;
     }
 
+    public String getTpids() {
+        return tpids;
+    }
+
+    public void setTpids(String tpids) {
+        this.tpids = tpids;
+    }
+
+    public String getJlid() {
+        return jlid;
+    }
+
+    public void setJlid(String jlid) {
+        this.jlid = jlid;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -84,6 +104,8 @@ public class UavFlyVideo {
         sb.append(", cjsj=").append(cjsj);
         sb.append(", bz=").append(bz);
         sb.append(", sm=").append(sm);
+        sb.append(", tpids=").append(tpids);
+        sb.append(", jlid=").append(jlid);
         sb.append("]");
         return sb.toString();
     }

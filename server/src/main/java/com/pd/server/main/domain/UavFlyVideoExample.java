@@ -593,6 +593,146 @@ public class UavFlyVideoExample {
             addCriterion("sm not between", value1, value2, "sm");
             return (Criteria) this;
         }
+
+        public Criteria andTpidsIsNull() {
+            addCriterion("tpids is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTpidsIsNotNull() {
+            addCriterion("tpids is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTpidsEqualTo(String value) {
+            addCriterion("tpids =", value, "tpids");
+            return (Criteria) this;
+        }
+
+        public Criteria andTpidsNotEqualTo(String value) {
+            addCriterion("tpids <>", value, "tpids");
+            return (Criteria) this;
+        }
+
+        public Criteria andTpidsGreaterThan(String value) {
+            addCriterion("tpids >", value, "tpids");
+            return (Criteria) this;
+        }
+
+        public Criteria andTpidsGreaterThanOrEqualTo(String value) {
+            addCriterion("tpids >=", value, "tpids");
+            return (Criteria) this;
+        }
+
+        public Criteria andTpidsLessThan(String value) {
+            addCriterion("tpids <", value, "tpids");
+            return (Criteria) this;
+        }
+
+        public Criteria andTpidsLessThanOrEqualTo(String value) {
+            addCriterion("tpids <=", value, "tpids");
+            return (Criteria) this;
+        }
+
+        public Criteria andTpidsLike(String value) {
+            addCriterion("tpids like", value, "tpids");
+            return (Criteria) this;
+        }
+
+        public Criteria andTpidsNotLike(String value) {
+            addCriterion("tpids not like", value, "tpids");
+            return (Criteria) this;
+        }
+
+        public Criteria andTpidsIn(List<String> values) {
+            addCriterion("tpids in", values, "tpids");
+            return (Criteria) this;
+        }
+
+        public Criteria andTpidsNotIn(List<String> values) {
+            addCriterion("tpids not in", values, "tpids");
+            return (Criteria) this;
+        }
+
+        public Criteria andTpidsBetween(String value1, String value2) {
+            addCriterion("tpids between", value1, value2, "tpids");
+            return (Criteria) this;
+        }
+
+        public Criteria andTpidsNotBetween(String value1, String value2) {
+            addCriterion("tpids not between", value1, value2, "tpids");
+            return (Criteria) this;
+        }
+
+        public Criteria andJlidIsNull() {
+            addCriterion("jlid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andJlidIsNotNull() {
+            addCriterion("jlid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andJlidEqualTo(String value) {
+            addCriterion("jlid =", value, "jlid");
+            return (Criteria) this;
+        }
+
+        public Criteria andJlidNotEqualTo(String value) {
+            addCriterion("jlid <>", value, "jlid");
+            return (Criteria) this;
+        }
+
+        public Criteria andJlidGreaterThan(String value) {
+            addCriterion("jlid >", value, "jlid");
+            return (Criteria) this;
+        }
+
+        public Criteria andJlidGreaterThanOrEqualTo(String value) {
+            addCriterion("jlid >=", value, "jlid");
+            return (Criteria) this;
+        }
+
+        public Criteria andJlidLessThan(String value) {
+            addCriterion("jlid <", value, "jlid");
+            return (Criteria) this;
+        }
+
+        public Criteria andJlidLessThanOrEqualTo(String value) {
+            addCriterion("jlid <=", value, "jlid");
+            return (Criteria) this;
+        }
+
+        public Criteria andJlidLike(String value) {
+            addCriterion("jlid like", value, "jlid");
+            return (Criteria) this;
+        }
+
+        public Criteria andJlidNotLike(String value) {
+            addCriterion("jlid not like", value, "jlid");
+            return (Criteria) this;
+        }
+
+        public Criteria andJlidIn(List<String> values) {
+            addCriterion("jlid in", values, "jlid");
+            return (Criteria) this;
+        }
+
+        public Criteria andJlidNotIn(List<String> values) {
+            addCriterion("jlid not in", values, "jlid");
+            return (Criteria) this;
+        }
+
+        public Criteria andJlidBetween(String value1, String value2) {
+            addCriterion("jlid between", value1, value2, "jlid");
+            return (Criteria) this;
+        }
+
+        public Criteria andJlidNotBetween(String value1, String value2) {
+            addCriterion("jlid not between", value1, value2, "jlid");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

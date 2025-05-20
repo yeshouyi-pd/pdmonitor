@@ -8,7 +8,9 @@ import Moment from 'moment';
 import DataV from '@jiaminghi/data-view'
 import ElementUI from 'element-ui'
 import locale from 'element-ui/lib/locale/lang/en'
+import uploader from 'vue-simple-uploader';
 
+Vue.use(uploader); // 全局注册组件
 Vue.use(ElementUI, { locale })
 Vue.use(DataV)
 Vue.use(VueAMap);
