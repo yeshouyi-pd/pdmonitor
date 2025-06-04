@@ -9,7 +9,7 @@ import java.util.concurrent.TimeoutException;
 
 public class MQUtil {
 
-    public final static String HOST="218.94.155.86";//主机
+    public final static String HOST="121.229.202.41";//主机
     public final static int PORT=5672;//端口
     public final static String USER_NAME="finless";//用户名
     public final static String PASS_WORD="finless@bxkj";//密码
