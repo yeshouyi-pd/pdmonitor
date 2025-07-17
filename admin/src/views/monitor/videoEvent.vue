@@ -263,7 +263,7 @@ export default {
       if(_this.LOCAL_ZHBHT || _this.LOCAL_VIDEO){
         url="http://49.239.193.146:59088/FileInfo.asmx/GetPlayUrl";
       }else if(_this.LOCAL_TLBHQ){
-        url="http://111.38.21.161:7003/FileInfo.asmx/GetPlayUrl";
+        url="http://111.38.20.175:7003/FileInfo.asmx/GetPlayUrl";
       }
       $.post(url,{"sbid": sbid,"filename":filename,"fbl":"1080","fhfs":"1"}, function (data, status) {
         if(status&&!(data.getElementsByTagName('Mesg')[0].childNodes[0].nodeValue.includes('不存在')||data.getElementsByTagName('Mesg')[0].childNodes[0].nodeValue.includes('文件大小为0'))){

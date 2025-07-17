@@ -90,6 +90,7 @@ import SolarPannel from "./views/electricity/solarPannel.vue";
 import AzimuthAngle from "./views/monitor/azimuthAngle.vue";
 import AzimuthAngleUnique from "./views/monitor/azimuthAngleUnique.vue";
 import UavFlyVideo from "./views/uav/uavFlyVideo.vue";
+import UavFlyVideoNoGl from "./views/uav/uavFlyVideoNoGl.vue";
 import NutritionalStatusAssessment from "./views/nutritionalStatus/nutritionalStatusAssessment.vue";
 import VideoImageExtraction from "./views/nutritionalStatus/videoImageExtraction.vue";
 
@@ -461,6 +462,10 @@ export default new Router({
             path: "monitor/videoImageExtraction",
             name: "monitor/videoImageExtraction",
             component: VideoImageExtraction
+        },{
+            path: "monitor/uavFlyVideoNoGl",
+            name: "monitor/uavFlyVideoNoGl",
+            component: UavFlyVideoNoGl
         }]
     }]
 })

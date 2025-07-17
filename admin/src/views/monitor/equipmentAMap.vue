@@ -152,7 +152,7 @@
                       center: [114.299945,30.593221],
                       resizeEnable: true,
                       zoom: 5,
-                      mapStyle: _this.mapStyle
+                      //mapStyle: _this.mapStyle
                     });
                   }else if(_this.LOCAL_TLBHQ){
                     _this.amap = new AMap.Map('equipmentamap', {

@@ -114,11 +114,11 @@ export default {
       let _this = this;
       // let item = {
       //   'sbbh':'tl002',
-      //   'wjlj':'http://111.38.21.161:7003/tempData/tl002/2023_12_19_19_16_47_2023_12_19_19_17_47_0_A1_TD2.mp4'
+      //   'wjlj':'http://111.38.20.175:7003/tempData/tl002/2023_12_19_19_16_47_2023_12_19_19_17_47_0_A1_TD2.mp4'
       // }
       $("#playbox").empty();
       Loading.show();
-      let url = 'http://111.38.21.161:7003/FileInfo.asmx/GetPlayUrl';
+      let url = 'http://111.38.20.175:7003/FileInfo.asmx/GetPlayUrl';
       $.post(url,{"sbid": item.sbbh,"filename":item.wjlj.substring(item.wjlj.lastIndexOf("/")+1),"fbl":"1080","fhfs":"1"}, function (data, status) {
         if(status&&!(data.getElementsByTagName('Mesg')[0].childNodes[0].nodeValue.includes('不存在')||data.getElementsByTagName('Mesg')[0].childNodes[0].nodeValue.includes('文件大小为0'))){
           let video = document.createElement("video");

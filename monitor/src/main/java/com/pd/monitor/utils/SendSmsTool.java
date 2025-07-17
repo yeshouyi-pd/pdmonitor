@@ -74,6 +74,10 @@ public class SendSmsTool {
     }
 
     public static Boolean sendSms(String templateId, String params, String phoneNum){
+//        String secretId = "AKIDNhy3uWyvBHCxYxmmUP9k6INK8mmc5aqr";
+//        String secretKey = "zp3uZ3Qh1EHDbt0ykU9fwPjttf2D8ynQ";
+//        String sdkAppId = "1400296653";
+//        String signName = "武汉品度";
         Map<String, String> attrMap = WxRedisConfig.getAttrMap();
         String secretId = attrMap.get("secretId");
         String secretKey = attrMap.get("secretKey");
@@ -127,7 +131,6 @@ public class SendSmsTool {
     }
 
     public static void main(String[] args) {
-        Boolean falge = SendSmsTool.sendSms("2037275","","+8618827512017");
-
+        Boolean falge = SendSmsTool.sendSms("1860261","RPCDA4001","+8618537576976");
     }
 }

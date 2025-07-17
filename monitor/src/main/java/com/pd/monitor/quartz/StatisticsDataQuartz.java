@@ -214,16 +214,18 @@ public class StatisticsDataQuartz {
                         entity.setSm1(String.valueOf(tsCount));
                     }
                     tsCount = null;
-                    System.gc();
                 }
                 equipmentFileAlarmEventService.insert(entity);
                 kssj = null;
                 jssj = null;
-                System.gc();
             }
             lists.clear();
             listsTemp.clear();
             resultList.clear();
+            // 用完后置为null，帮助GC
+            lists = null;
+            listsTemp = null;
+            resultList = null;
             WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
             waterEquipmentExample.createCriteria().andSbsnEqualTo(noTodaySbbhDto.getSbbh());
             List<WaterEquipment> waterEquipments = waterEquipmentService.list(waterEquipmentExample);
@@ -252,12 +254,17 @@ public class StatisticsDataQuartz {
             }
             predationNumService.save(dto);
             waterEquipments.clear();
+            // 用完后置为null，帮助GC
+            waterEquipments = null;
             predationStaticticsDto = null;
             dto = null;
         }
         clearTodayData();
         list.clear();
         sbbha4.clear();
+        // 用完后置为null，帮助GC
+        list = null;
+        sbbha4 = null;
     }
 
     public static Boolean isOverThreeMinute(String curDateStr, String nextDateStr){

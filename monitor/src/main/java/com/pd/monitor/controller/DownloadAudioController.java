@@ -818,8 +818,8 @@ public class DownloadAudioController {
         try{
             String id = request.getParameter("id");
             VideoEvent videoEvent = videoEventService.selectById(id);
-            String fileName = videoEvent.getWjlj().substring(videoEvent.getWjlj().lastIndexOf('/'),videoEvent.getWjlj().length());//http://111.38.21.161:7003/tempData/tl003/2024_04_22_10_49_51_2024_04_22_10_59_04_0_A4_TD20.mp4
-            in = new BufferedInputStream(new FileInputStream(videoEvent.getWjlj().replace("http://49.239.193.146:59088/",filePath).replace("http://49.239.193.146:49082/",filePath).replace("http://111.38.21.161:7003/",filePath)));
+            String fileName = videoEvent.getWjlj().substring(videoEvent.getWjlj().lastIndexOf('/'),videoEvent.getWjlj().length());//http://111.38.20.175:7003/tempData/tl003/2024_04_22_10_49_51_2024_04_22_10_59_04_0_A4_TD20.mp4
+            in = new BufferedInputStream(new FileInputStream(videoEvent.getWjlj().replace("http://49.239.193.146:59088/",filePath).replace("http://49.239.193.146:49082/",filePath).replace("http://111.38.20.175:7003/",filePath)));
             response.reset();
             response.setContentType("application/octet-stream");
             fileName = new String(fileName.getBytes(), "ISO-8859-1");

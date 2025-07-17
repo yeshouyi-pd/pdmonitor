@@ -38,17 +38,17 @@
       <div class="video-item" v-for="(item,index) in uavFlyVideoList">
         <video style="width: 100%;height: 90%" :src="item.videoUrl" controls></video>
         <div style="display: flex;flex-wrap: nowrap;flex-direction: row;justify-content: space-around;">
-          <div>
-            <button type="button" v-on:click="correlation(item)" v-if="!(item.tpids && item.jlid && item.sm)" class="btn btn-sm btn-grey btn-round" style="margin-right: 10px;">
-              关联
-            </button>
-          </div>
+<!--          <div>-->
+<!--            <button type="button" v-on:click="correlation(item)" v-if="!(item.tpids && item.jlid && item.sm)" class="btn btn-sm btn-grey btn-round" style="margin-right: 10px;">-->
+<!--              关联-->
+<!--            </button>-->
+<!--          </div>-->
           <div style="margin: auto;">{{item.cjsj}}</div>
-          <div>
-            <button type="button" v-on:click="showDetail(item)" v-if="item.tpids || item.jlid || item.sm" class="btn btn-sm btn-warning btn-round" style="margin-right: 10px;">
-              详情
-            </button>
-          </div>
+<!--          <div>-->
+<!--            <button type="button" v-on:click="showDetail(item)" v-if="item.tpids || item.jlid || item.sm" class="btn btn-sm btn-warning btn-round" style="margin-right: 10px;">-->
+<!--              详情-->
+<!--            </button>-->
+<!--          </div>-->
         </div>
       </div>
     </div>
