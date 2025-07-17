@@ -73,7 +73,7 @@
             <img height="40px;" src="/static/image/loginButtom.png"/>
             <div style="margin-top: 5px;">广东珠江口中华白海豚国家级自然保护区管理局</div>
           </div>
-          <img v-if="LOCAL_SSBRL" height="80px;" src="/static/image/loginButtom1.png"/>
+<!--          <img v-if="LOCAL_SSBRL" height="80px;" src="/static/image/loginButtom1.png"/>-->
         </div>
       </div>
       <div v-if="isMobileflag" class="main-content" style="width: 100%;height: 100%;background-image: url('/static/image/loginbg.jpg');background-size: 100% 100%;">
@@ -139,9 +139,9 @@
             <img  v-if="!isMobileflag" height="40px;" src="/static/image/loginButtom.png"/>
             <div>广东珠江口中华白海豚国家级自然保护区管理局</div>
           </div>
-          <div v-if="LOCAL_SSBRL" class="position-relative-gs">
-            <img height="40px;" src="/static/image/loginButtom1.png" style="margin-top: 15%;"/>
-          </div>
+<!--          <div v-if="LOCAL_SSBRL" class="position-relative-gs">-->
+<!--            <img height="40px;" src="/static/image/loginButtom1.png" style="margin-top: 15%;"/>-->
+<!--          </div>-->
         </div>
       </div>
     </div>
