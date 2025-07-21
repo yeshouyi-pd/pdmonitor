@@ -1,6 +1,8 @@
 package com.pd.server.main.service.shj;
 
 import com.alibaba.fastjson.JSONObject;
+import com.pd.server.config.MqttClientSpace;
+import com.pd.server.config.RedisCode;
 import com.pd.server.config.SpringUtil;
 import com.pd.server.main.domain.*;
 import com.pd.server.main.dto.*;
@@ -41,6 +43,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
     public static CodesetMapper codesetMapperStatic;
     public static AzimuthAngleService azimuthAngleServiceStatic;
     public static AzimuthAngleRqService azimuthAngleRqServiceStatic;
+    public static SpaceFileService spaceFileServiceStatic;
     public static ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(10);
 
     @Resource
@@ -69,6 +72,8 @@ public class EquipmentFileShjService extends AbstractScanRequest{
     private AzimuthAngleService azimuthAngleService;
     @Resource
     private AzimuthAngleRqService azimuthAngleRqService;
+    @Resource
+    private SpaceFileService spaceFileService;
 
     @PostConstruct
     protected void init() {
@@ -85,6 +90,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
         codesetMapperStatic = codesetMapper;
         azimuthAngleServiceStatic = azimuthAngleService;
         azimuthAngleRqServiceStatic = azimuthAngleRqService;
+        spaceFileServiceStatic = spaceFileService;
     }
 
     /**
@@ -102,6 +108,14 @@ public class EquipmentFileShjService extends AbstractScanRequest{
         if(StringUtils.isEmpty(sbbh)||StringUtils.isEmpty(tplj)||StringUtils.isEmpty(cjsj)){
             data = "参数错误";
             return data;
+        }
+        //判断是不是驱离文件，如果是则调用驱离方法
+        if(tplj.contains("Space")){
+            return spaceMethod(jsonParam);
+        }
+        //判断是不是信标文件，如果是则调用信标方法
+        if(tplj.contains("Becon")){
+            return BeconMethod(jsonParam);
         }
         EquipmentFileTodayExample exampleTodayFile = new EquipmentFileTodayExample();
         EquipmentFileTodayExample.Criteria caFile = exampleTodayFile.createCriteria();
@@ -290,6 +304,99 @@ public class EquipmentFileShjService extends AbstractScanRequest{
             data="该图片已保存过";
             return data;
         }
+    }
+
+    //驱离文件，文件类型2022_09_05_20_18_16_Space_144.txt
+    public static String spaceMethod(JSONObject jsonParam){
+        try {
+            String sbbh = jsonParam.getString("sbbh");
+            String tplj = jsonParam.getString("tplj");
+            String cjsj = jsonParam.getString("cjsj");
+            Map<String, JSONObject> sbbhEquipMap = (Map<String, JSONObject>) redisTstaticemplate.opsForValue().get(RedisCode.SBBHEQUIPMAP);
+            if(!sbbhEquipMap.keySet().contains("equip-"+sbbh)){
+                return "设备编号不存在";
+            }
+            WaterEquipment waterEquipment = JSONObject.toJavaObject(sbbhEquipMap.get("equip-"+sbbh), WaterEquipment.class);
+            SpaceFileDto spaceFileDto = new SpaceFileDto();
+            spaceFileDto.setSbbh(sbbh);
+            spaceFileDto.setWjlj(tplj);
+            spaceFileDto.setYjz(tplj.substring(tplj.indexOf("Space_")+1,tplj.lastIndexOf(".txt")));
+            spaceFileDto.setCjsj(DateUtil.toDate(cjsj,"yyyy-MM-dd HH:mm:ss"));
+            spaceFileDto.setJssj(new Date());
+            spaceFileDto.setDeptcode(waterEquipment.getDeptcode());
+            spaceFileDto.setRq(DateUtil.getFormatDate(spaceFileDto.getCjsj(),"yyyy-MM-dd"));
+            spaceFileServiceStatic.save(spaceFileDto);
+            //发送指令，播放音频
+            String jdfw = waterEquipment.getJdfw();//用来放发布主题和订阅主题，播放驱离音频
+            publishMessage(jdfw,cjsj);
+            JSONObject result = new JSONObject();
+            result.put("data","保存成功");
+            result.put("otherFile",true);
+            return result.toJSONString();
+        }catch (Exception e){
+            LOG.error("保存驱离文件出错："+e.getMessage());
+            return "保存驱离文件出错";
+        }
+    }
+
+    //发送指令，播放驱离文件，停指播放驱离文件
+    public static void publishMessage(String jdfw, String cjsj){
+        try {
+            if(!StringUtils.isEmpty(jdfw)){
+                String[] topicArr = jdfw.split(";");//WHPD[meg],WHPD[updata];RPCD[meg],RPCD[updata]
+                //如果接收文件时间和生成文件时间没有超过5分钟
+                if(new Date().getTime()-DateUtil.toDate(cjsj,"yyyy-MM-dd HH:mm:ss").getTime()<=300000){
+                    //调用李响程序，进行指令下发
+                    // 1. 获取客户端实例
+                    MqttClientSpace client = MqttClientSpace.getInstance(
+                            "tcp://119.3.2.53:1883",
+                            "subClient",
+                            "whpd",
+                            "whpd1234"
+                    );
+                    String hex = "4352 4410 0002 1002 0C73 696E 3130 6B48 7A2E 7761 768D 7B";
+                    byte[] messageStart = hexStringToByteArray(hex);
+                    for(int i=0;i<topicArr.length;i++){
+                        String oneitem = topicArr[i];
+                        String[] oneArr = oneitem.split(",");
+                        // 2. 订阅返回主题
+                        client.subTopic(oneArr[1]);
+                        // 3. 发布消息
+                        client.publishMessage(oneArr[0], messageStart, 2);
+                        // 提交一个延迟执行的任务，关闭指令
+                        scheduledExecutorService.schedule(() -> {
+                            //43 52 44 02 00 07 10 02 4C
+                            byte[] messageStop = new byte[] { 0x43, 0x52, 0x44, 0x02, 0x00, 0x07, 0x10, 0x02, 0x4C };
+                            client.publishMessage(oneArr[0], messageStop, 2);
+
+                        },300, TimeUnit.SECONDS);
+                    }
+                }
+            }
+        }catch (Exception e){
+            LOG.error("发送指令失败："+e.getMessage());
+        }
+    }
+
+    public static byte[] hexStringToByteArray(String hex) {
+        hex = hex.replaceAll("\\s+", ""); // 去掉空格
+        int len = hex.length();
+        byte[] data = new byte[len / 2];
+        for (int i = 0; i < len; i += 2) {
+            data[i / 2] = (byte) ((Character.digit(hex.charAt(i), 16) << 4)
+                    + Character.digit(hex.charAt(i+1), 16));
+        }
+        return data;
+    }
+
+
+    //信标文件
+    public static String BeconMethod(JSONObject jsonParam){
+        String sbbh = jsonParam.getString("sbbh");
+        String tplj = jsonParam.getString("tplj");
+        String cjsj = jsonParam.getString("cjsj");
+        String sm2 = jsonParam.getString("sm2");
+        return "";
     }
 
     public static Boolean isOverThreeMinute(String curDateStr, String nextDateStr){
@@ -501,5 +608,10 @@ public class EquipmentFileShjService extends AbstractScanRequest{
             rqDto.setRq(rq);
             azimuthAngleRqServiceStatic.save(rqDto);
         }
+    }
+
+    public static void main(String[] args){
+        String hex = "4352 4410 0002 1002 0C73 696E 3130 6B48 7A2E 7761 768D 7B";
+        System.out.println(hexStringToByteArray(hex));
     }
 }

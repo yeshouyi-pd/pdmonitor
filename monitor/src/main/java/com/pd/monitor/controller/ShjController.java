@@ -60,37 +60,43 @@ public class ShjController{
             }
             data = shjRequest.request(jsonObject.getJSONObject("data"));
             if("EquipmentFile".equals(methodname)||"EquipmentFileByTy".equals(methodname)){
-                JSONObject result = JSONObject.parseObject(data);
-                data = result.getString("data");
-                if("保存成功".equals(data)){
-                    JSONObject entity = result.getJSONObject("entity");
-                    //向页面推送数据
-                    WebSocketServer.sendInfo(entity.toJSONString(),null);
-                    if(("A4001".equals(entity.getString("sbbh"))||"A4002".equals(entity.getString("sbbh"))||"A4003".equals(entity.getString("sbbh")))&&("1019".equals(entity.getString("type")))){
-                        //发送短信
-                        String templateId = "1018".equals(entity.getString("type"))?"1823144":"1847667";
-                        String sbmc = "";
-                        if("A4001".equals(entity.getString("sbbh"))){
-                            sbmc = "下游1";
-                        }else if("A4002".equals(entity.getString("sbbh"))){
-                            sbmc = "大桥2";
-                        }else if("A4003".equals(entity.getString("sbbh"))){
-                            sbmc = "上游3";
+                if(data.contains("data")){
+                    JSONObject result = JSONObject.parseObject(data);
+                    String resultdata = result.getString("data");
+                    if("保存成功".equals(resultdata)){
+                        //判断是不是基站和驱离文件。如果不是需要传到前端页面做地图实时展示
+                        if(StringUtils.isEmpty(result.getString("otherFile"))){
+                            JSONObject entity = result.getJSONObject("entity");
+                            //向页面推送数据
+                            WebSocketServer.sendInfo(entity.toJSONString(),null);
+                            //如果是铜陵长江大桥的数据，则需要发送短信
+                            if(("A4001".equals(entity.getString("sbbh"))||"A4002".equals(entity.getString("sbbh"))||"A4003".equals(entity.getString("sbbh")))&&("1019".equals(entity.getString("type")))){
+                                //发送短信
+                                String templateId = "1018".equals(entity.getString("type"))?"1823144":"1847667";
+                                String sbmc = "";
+                                if("A4001".equals(entity.getString("sbbh"))){
+                                    sbmc = "下游1";
+                                }else if("A4002".equals(entity.getString("sbbh"))){
+                                    sbmc = "大桥2";
+                                }else if("A4003".equals(entity.getString("sbbh"))){
+                                    sbmc = "上游3";
+                                }
+                                SendSmsTool.sendSmsNotPhone(templateId,sbmc+"-"+entity.getString("ts")+"dB");
+                            }
+                            entity.remove("sm1");
                         }
-                        SendSmsTool.sendSmsNotPhone(templateId,sbmc+"-"+entity.getString("ts")+"dB");
                     }
-                    entity.remove("sm1");
                 }
             }
             if("参数错误".equals(data) || data.contains("错误")){
                 returnObject.put("returnCode", ShjJsonConstant.CODE_4000);
                 returnObject.put("returnMsg", ShjJsonConstant.MSG_4000);
-            }else if("系统异常".equals(data)){
-                returnObject.put("returnCode", ShjJsonConstant.CODE_2001);
-                returnObject.put("returnMsg", ShjJsonConstant.MSG_2001);
-            }else{
+            }else if(data.contains("成功")){
                 returnObject.put("returnCode", ShjJsonConstant.CODE_0000);
                 returnObject.put("returnMsg", ShjJsonConstant.MSG_0000);
+            }else {
+                returnObject.put("returnCode", ShjJsonConstant.CODE_2001);
+                returnObject.put("returnMsg", ShjJsonConstant.MSG_2001);
             }
         } catch (Exception e){
             returnObject.put("returnCode", ShjJsonConstant.CODE_2001);

@@ -79,6 +79,8 @@ public class TypeUtils {
     public static final String ZZ_29 ="^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{1,}.wav$";
     public static final String ZZ_30 ="^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{1,}.jpg$";
     public static final String ZZ_31 ="^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{1,}.png$";
+    public static final String ZZ_32 ="^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_Becon.txt$";//信标文件
+    public static final String ZZ_33 ="^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_Space_\\d{1,}.txt$";//驱离文件
 
     public static Map<String,String> patternmap = new HashMap<>();
     static {
