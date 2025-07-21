@@ -103,9 +103,13 @@ public class WxRedisConfig implements CommandLineRunner {
         try {
             List<WaterEquipment> list = waterEquipmentstaticMapper.selectByExample(null);
             Map<String, String> map = list.stream().collect(Collectors.toMap(p -> p.getSbsn(), p -> p.getDeptcode()));
+            Map<String, WaterEquipment> sbbhEquipMap = list.stream().collect(Collectors.toMap(p -> "equip-"+p.getSbsn(), p -> p ));
             String s = JSONObject.toJSONString(map);
             JSONObject jsonObj = JSONObject.parseObject(s);
+            String s1 = JSONObject.toJSONString(sbbhEquipMap);
+            JSONObject jsonObj1 = JSONObject.parseObject(s1);
             redisTstaticemplate.opsForValue().set(RedisCode.SBSNCENTERCODE, jsonObj);
+            redisTstaticemplate.opsForValue().set(RedisCode.SBBHEQUIPMAP, jsonObj1);
         } catch (Exception e) {
             e.printStackTrace();
             return false;

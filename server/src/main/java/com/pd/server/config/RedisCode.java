@@ -31,6 +31,8 @@ public enum RedisCode {
     PROJECTCODENAME("project_code_name"),//项目信息缓存
 
     PROJECTSBSNS("project_sbsbs"),//项目编号对应的设备sn信息
+
+    SBBHEQUIPMAP("sbbh_equip_map"),//设备sn对应的设备信息
     ;
 
     private String desc;
