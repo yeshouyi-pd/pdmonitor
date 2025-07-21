@@ -38,14 +38,17 @@
       <div class="video-item" v-for="(item,index) in uavFlyVideoList">
         <video style="width: 100%;height: 90%" :src="item.videoUrl" controls></video>
         <div style="display: flex;flex-wrap: nowrap;flex-direction: row;justify-content: space-around;">
-          <div>
-            <button type="button" v-on:click="correlation(item)" v-if="!(item.tpids && item.jlid && item.sm)" class="btn btn-sm btn-grey btn-round" style="margin-right: 10px;">
+          <div style="display: flex;">
+            <button type="button" v-on:click="correlation(item)" v-if="!(item.tpids && item.jlid && item.sm)" class="btn btn-xs btn-grey btn-round" style="margin-right: 10px;">
               关联
+            </button>
+            <button type="button" v-on:click="deleteInfo(item)" v-if="loginUser.rode=='00000000'" class="btn btn-xs btn-danger btn-round" style="margin-right: 10px;">
+              删除
             </button>
           </div>
           <div style="margin: auto;">{{item.cjsj}}</div>
           <div>
-            <button type="button" v-on:click="showDetail(item)" v-if="item.tpids || item.jlid || item.sm" class="btn btn-sm btn-warning btn-round" style="margin-right: 10px;">
+            <button type="button" v-on:click="showDetail(item)" v-if="item.tpids || item.jlid || item.sm" class="btn btn-xs btn-warning btn-round" style="margin-right: 10px;">
               详情
             </button>
           </div>
@@ -177,6 +180,7 @@ export default {
   components:{Pagination,Times,EquipFileCommen,EventCommen,BodyAssess},
   data: function (){
     return {
+      loginUser:null,
       uavFlyVideo:{},
       uavFlyVideoDto:{},
       uavFlyVideoList:[],
@@ -192,6 +196,8 @@ export default {
   },
   mounted() {
     let _this = this;
+    _this.loginUser = Tool.getLoginUser();
+    console.log(Tool.getLoginUser());
     _this.list(1);
     _this.$refs.pagination.size = 10;
     //监听模态框关闭
@@ -205,6 +211,22 @@ export default {
     });
   },
   methods: {
+    deleteInfo(item){
+      let _this = this;
+      Confirm.show("删除后不可恢复，确认删除？", function () {
+        Loading.show();
+        _this.$ajax.delete(process.env.VUE_APP_SERVER + '/monitor/admin/uavFlyVideo/delete/' + item.id).then((response)=>{
+          Loading.hide();
+          let resp = response.data;
+          if (resp.success) {
+            _this.list(1);
+            Toast.success("删除成功！");
+          }else{
+            Toast.warning(resp.message);
+          }
+        })
+      });
+    },
     //详情
     showDetail(item){
       let _this = this;

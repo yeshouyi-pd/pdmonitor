@@ -142,6 +142,8 @@
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title">表单</h4>
+            <h6 style="color: red;">播放主题填写示例：WHPD[meg],WHPD[updata];RPCD[meg],RPCD[updata]</h6>
+            <h6 style="color: red;">播放文件填写示例：4352 4410 0002 1002 0C73 696E 3130 6B48 7A2E 7761 768D 7B</h6>
           </div>
           <div class="modal-body">
             <form class="form-horizontal">
@@ -213,13 +215,13 @@
                       </div>
                     </div>
                     <div class="form-group">
-                      <label class="col-sm-2 control-label">设备顺序号</label>
-                      <div class="col-sm-4">
-                        <input v-model="waterEquipment.sblc" class="form-control">
-                      </div>
-                      <label class="col-sm-2 control-label">设备进度范围</label>
+                      <label class="col-sm-2 control-label">播放主题</label>
                       <div class="col-sm-4">
                         <input v-model="waterEquipment.jdfw" class="form-control">
+                      </div>
+                      <label class="col-sm-2 control-label">播放文件</label>
+                      <div class="col-sm-4">
+                        <input v-model="waterEquipment.sm1" class="form-control">
                       </div>
                     </div>
                     <div class="form-group">
@@ -250,6 +252,12 @@
                       <div class="col-sm-4">
                         <input v-model="waterEquipment.sbcj" class="form-control">
                       </div>
+                      <label class="col-sm-2 control-label">设备顺序号</label>
+                      <div class="col-sm-4">
+                        <input v-model="waterEquipment.sblc" class="form-control">
+                      </div>
+                    </div>
+                    <div class="form-group">
                       <label class="col-sm-2 control-label">备注</label>
                       <div class="col-sm-4">
                         <input v-model="waterEquipment.bz" class="form-control">

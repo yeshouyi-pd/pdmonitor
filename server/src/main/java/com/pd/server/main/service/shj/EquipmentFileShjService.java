@@ -320,15 +320,14 @@ public class EquipmentFileShjService extends AbstractScanRequest{
             SpaceFileDto spaceFileDto = new SpaceFileDto();
             spaceFileDto.setSbbh(sbbh);
             spaceFileDto.setWjlj(tplj);
-            spaceFileDto.setYjz(tplj.substring(tplj.indexOf("Space_")+1,tplj.lastIndexOf(".txt")));
+            spaceFileDto.setYjz(tplj.substring(tplj.indexOf("Space_")+6,tplj.lastIndexOf(".txt")));
             spaceFileDto.setCjsj(DateUtil.toDate(cjsj,"yyyy-MM-dd HH:mm:ss"));
             spaceFileDto.setJssj(new Date());
             spaceFileDto.setDeptcode(waterEquipment.getDeptcode());
             spaceFileDto.setRq(DateUtil.getFormatDate(spaceFileDto.getCjsj(),"yyyy-MM-dd"));
             spaceFileServiceStatic.save(spaceFileDto);
             //发送指令，播放音频
-            String jdfw = waterEquipment.getJdfw();//用来放发布主题和订阅主题，播放驱离音频
-            publishMessage(jdfw,cjsj);
+            publishMessage(waterEquipment.getJdfw(),waterEquipment.getSm1(),cjsj);
             JSONObject result = new JSONObject();
             result.put("data","保存成功");
             result.put("otherFile",true);
@@ -340,21 +339,21 @@ public class EquipmentFileShjService extends AbstractScanRequest{
     }
 
     //发送指令，播放驱离文件，停指播放驱离文件
-    public static void publishMessage(String jdfw, String cjsj){
+    public static void publishMessage(String jdfw,String hex, String cjsj){
         try {
-            if(!StringUtils.isEmpty(jdfw)){
+            if(!StringUtils.isEmpty(jdfw) && !StringUtils.isEmpty(hex)){
                 String[] topicArr = jdfw.split(";");//WHPD[meg],WHPD[updata];RPCD[meg],RPCD[updata]
                 //如果接收文件时间和生成文件时间没有超过5分钟
                 if(new Date().getTime()-DateUtil.toDate(cjsj,"yyyy-MM-dd HH:mm:ss").getTime()<=300000){
+                    Map<String,String> mapAttr = (Map<String, String>) redisTstaticemplate.opsForValue().get(RedisCode.ATTRECODEKEY);
                     //调用李响程序，进行指令下发
                     // 1. 获取客户端实例
                     MqttClientSpace client = MqttClientSpace.getInstance(
-                            "tcp://119.3.2.53:1883",
-                            "subClient",
-                            "whpd",
-                            "whpd1234"
+                            mapAttr.get("mqttBrokerUrl"),
+                            mapAttr.get("mqttClientId"),
+                            mapAttr.get("mqttUserName"),
+                            mapAttr.get("mqttPassWord")
                     );
-                    String hex = "4352 4410 0002 1002 0C73 696E 3130 6B48 7A2E 7761 768D 7B";
                     byte[] messageStart = hexStringToByteArray(hex);
                     for(int i=0;i<topicArr.length;i++){
                         String oneitem = topicArr[i];
