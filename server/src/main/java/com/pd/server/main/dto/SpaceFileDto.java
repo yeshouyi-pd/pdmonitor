@@ -3,7 +3,7 @@ package com.pd.server.main.dto;
         import java.util.Date;
         import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class SpaceFileDto {
+public class SpaceFileDto extends PageDto{
 
     /**
     * 主键
@@ -28,13 +28,13 @@ public class SpaceFileDto {
     /**
     * 采集时间
     */
-        @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date cjsj;
 
     /**
     * 接收时间
     */
-        @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date jssj;
 
     /**
@@ -56,6 +56,8 @@ public class SpaceFileDto {
     * 说明
     */
     private String sm;
+
+    private String xmbh;
 
     public String getId() {
         return id;
@@ -137,6 +139,13 @@ public class SpaceFileDto {
         this.sm = sm;
     }
 
+    public String getXmbh() {
+        return xmbh;
+    }
+
+    public void setXmbh(String xmbh) {
+        this.xmbh = xmbh;
+    }
 
     @Override
     public String toString() {

@@ -118,7 +118,7 @@
     MAX( max.cjsj ) create_time_max
     FROM
     ( SELECT DISTINCT ( a.id ), a.decibel_value, a.cjsj, a.create_time, a.sm
-    FROM pointer_second a left join water_pro_equip b
+    FROM pointer_second a inner join water_pro_equip b
     ON a.sm = b.sbsn where b.xmbh = #{record.xmbh,jdbcType=VARCHAR}
     <if test="record.bz3 != null and record.bz3 !=''">
       AND DATE_FORMAT(a.cjsj,'%Y-%m-%d') = #{record.bz3,jdbcType=VARCHAR}

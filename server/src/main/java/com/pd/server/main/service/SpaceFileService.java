@@ -1,9 +1,12 @@
 package com.pd.server.main.service;
 
+import com.pd.server.main.domain.EquipmentFileEvent;
 import com.pd.server.main.domain.SpaceFile;
 import com.pd.server.main.domain.SpaceFileExample;
+import com.pd.server.main.dto.EquipmentFileEventDto;
 import com.pd.server.main.dto.SpaceFileDto;
 import com.pd.server.main.dto.PageDto;
+import com.pd.server.main.dto.basewx.my.SpaceFileExcel;
 import com.pd.server.main.mapper.SpaceFileMapper;
 import com.pd.server.util.CopyUtil;
 import com.pd.server.util.UuidUtil;
@@ -25,14 +28,16 @@ public class SpaceFileService {
     /**
     * 列表查询
     */
-    public void list(PageDto pageDto) {
-    PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
-        SpaceFileExample spaceFileExample = new SpaceFileExample();
-        List<SpaceFile> spaceFileList = spaceFileMapper.selectByExample(spaceFileExample);
-        PageInfo<SpaceFile> pageInfo = new PageInfo<>(spaceFileList);
-        pageDto.setTotal(pageInfo.getTotal());
-        List<SpaceFileDto> spaceFileDtoList = CopyUtil.copyList(spaceFileList, SpaceFileDto.class);
-        pageDto.setList(spaceFileDtoList);
+    public List<SpaceFile> selectByExample(SpaceFileExample spaceFileExample) {
+        return spaceFileMapper.selectByExample(spaceFileExample);
+    }
+
+    public List<SpaceFile> selectByExampleSpecial(SpaceFileDto record){
+        return spaceFileMapper.selectByExampleSpecial(record);
+    }
+
+    public List<SpaceFileExcel> selectByExampleExcel(SpaceFileExample spaceFileExample){
+        return spaceFileMapper.selectByExampleExcel(spaceFileExample);
     }
 
     /**

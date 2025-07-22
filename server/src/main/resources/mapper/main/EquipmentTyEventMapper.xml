@@ -80,7 +80,7 @@
   </sql>
   <select id="selectByExampleExport" parameterType="com.pd.server.main.domain.EquipmentTyEventExample" resultMap="BaseResultMap">
     select a.*,b.sm2 as gps
-    from equipment_ty_event a left join equipment_file_ty b on a.bz=b.id where 1=1
+    from equipment_ty_event a inner join equipment_file_ty b on a.bz=b.id where 1=1
     <if test="record.sbbh != null and record.sbbh !=''">
       AND a.sbbh = #{record.sbbh,jdbcType=VARCHAR}
     </if>
@@ -107,7 +107,7 @@
     </if>
   </select>
   <select id="selectByExampleSpecial" parameterType="map" resultMap="BaseResultMap">
-    select a.* from equipment_ty_event a LEFT JOIN water_pro_equip b
+    select a.* from equipment_ty_event a inner join water_pro_equip b
     ON a.sbbh = b.sbsn where b.xmbh = #{record.xmbh,jdbcType=VARCHAR}
     <if test="record.sbbh != null and record.sbbh !=''">
       AND a.sbbh = #{record.sbbh,jdbcType=VARCHAR}
