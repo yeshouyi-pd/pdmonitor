@@ -93,6 +93,7 @@ import UavFlyVideo from "./views/uav/uavFlyVideo.vue";
 import UavFlyVideoNoGl from "./views/uav/uavFlyVideoNoGl.vue";
 import NutritionalStatusAssessment from "./views/nutritionalStatus/nutritionalStatusAssessment.vue";
 import VideoImageExtraction from "./views/nutritionalStatus/videoImageExtraction.vue";
+import SpaceFile from "./views/monitor/spaceFile.vue";
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -466,6 +467,10 @@ export default new Router({
             path: "monitor/uavFlyVideoNoGl",
             name: "monitor/uavFlyVideoNoGl",
             component: UavFlyVideoNoGl
+        },{
+            path: "monitor/spaceFile",
+            name: "monitor/spaceFile",
+            component: SpaceFile
         }]
     }]
 })
