@@ -101,7 +101,7 @@
     </if>
   </select>
   <select id="selectByExampleSpecial"  parameterType="map" resultMap="BaseResultMap">
-    select a.* from equipment_file_alarm_event a LEFT JOIN water_pro_equip b
+    select a.* from equipment_file_alarm_event a inner join water_pro_equip b
     ON a.sbbh = b.sbsn where b.xmbh = #{record.xmbh,jdbcType=VARCHAR}
     <if test="record.sbbh != null and record.sbbh !=''">
       AND a.sbbh = #{record.sbbh,jdbcType=VARCHAR}

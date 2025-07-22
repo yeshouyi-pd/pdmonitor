@@ -380,7 +380,7 @@
               <include refid="Example_Where_Clause" />
             </if>
          ) AS a
-           LEFT JOIN (
+            inner join (
       SELECT wjmc, sm
       FROM video_event
       WHERE sfysp = 0

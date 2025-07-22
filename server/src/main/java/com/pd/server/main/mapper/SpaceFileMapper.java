@@ -1,8 +1,13 @@
 package com.pd.server.main.mapper;
 
+import com.pd.server.main.domain.EquipmentFileEvent;
 import com.pd.server.main.domain.SpaceFile;
 import com.pd.server.main.domain.SpaceFileExample;
 import java.util.List;
+
+import com.pd.server.main.dto.EquipmentFileEventDto;
+import com.pd.server.main.dto.SpaceFileDto;
+import com.pd.server.main.dto.basewx.my.SpaceFileExcel;
 import org.apache.ibatis.annotations.Param;
 
 public interface SpaceFileMapper {
@@ -17,6 +22,10 @@ public interface SpaceFileMapper {
     int insertSelective(SpaceFile record);
 
     List<SpaceFile> selectByExample(SpaceFileExample example);
+
+    List<SpaceFile> selectByExampleSpecial(@Param("record") SpaceFileDto record);
+
+    List<SpaceFileExcel> selectByExampleExcel(SpaceFileExample example);
 
     SpaceFile selectByPrimaryKey(String id);
 

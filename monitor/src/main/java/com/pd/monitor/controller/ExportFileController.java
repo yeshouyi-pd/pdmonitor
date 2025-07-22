@@ -6,6 +6,7 @@ import com.pd.server.config.RedisCode;
 import com.pd.server.main.domain.*;
 import com.pd.server.main.dto.*;
 import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
+import com.pd.server.main.dto.basewx.my.SpaceFileExcel;
 import com.pd.server.main.dto.basewx.my.VideoEventExport;
 import com.pd.server.main.service.*;
 import com.pd.server.util.DateUtil;
@@ -78,6 +79,129 @@ public class ExportFileController extends BaseWxController{
     private WaveDataService waveDataService;
     @Resource
     private AzimuthAngleUniqueService azimuthAngleUniqueService;
+    @Resource
+    private SpaceFileService spaceFileService;
+
+    /**
+     * 驱离文件管理导出
+     */
+    @GetMapping("/exportSpaceFile")
+    public void exportSpaceFile(HttpServletRequest request, HttpServletResponse response){
+        try {
+            List<String> sbbhs = new ArrayList<>();
+            if(!StringUtils.isEmpty(request.getParameter("xmbh"))){
+                sbbhs = waterProEquipService.findSbsnByXmbh(request.getParameter("xmbh"));
+            }
+            SpaceFileExample example = new SpaceFileExample();
+            SpaceFileExample.Criteria ca = example.createCriteria();
+            if(!StringUtils.isEmpty(request.getParameter("sbbh"))){
+                ca.andSbbhEqualTo(request.getParameter("sbbh"));
+            }
+            if(!StringUtils.isEmpty(request.getParameter("stime"))){
+                ca.andRqGreaterThanOrEqualTo(request.getParameter("stime"));
+            }
+            if(!StringUtils.isEmpty(request.getParameter("etime"))){
+                ca.andRqLessThanOrEqualTo(request.getParameter("etime"));
+            }
+            example.setOrderByClause(" cjsj desc ");
+            List<SpaceFileExcel> lists = spaceFileService.selectByExampleExcel(example);
+            //导出
+            XSSFWorkbook workbook = new XSSFWorkbook();
+            //设置字体大小
+            XSSFFont fontCommon = workbook.createFont();
+            fontCommon.setFontHeightInPoints((short)12); // 设置字体大小为12磅
+            //设置公共单元格样式
+            XSSFCellStyle cellStyleCommon = workbook.createCellStyle();
+            cellStyleCommon.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+            cellStyleCommon.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
+            XSSFCellStyle cellStyleCommonLeft = workbook.createCellStyle();
+            cellStyleCommonLeft.setAlignment(XSSFCellStyle.ALIGN_LEFT);
+            cellStyleCommonLeft.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
+            //cellStyleCommon.setFont(fontCommon);
+            //设置字体加粗
+            XSSFFont font = workbook.createFont();
+            font.setBoldweight(XSSFFont.BOLDWEIGHT_BOLD);
+            font.setFontHeightInPoints((short)12); // 设置字体大小为12磅
+            XSSFCellStyle cellStyleTitle = workbook.createCellStyle();
+            cellStyleTitle.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+            cellStyleTitle.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
+            cellStyleTitle.setFont(font);
+            // 创建一个工作表
+            String fileName = "驱离文件统计(" + new Date().getTime() + ").xls";
+            XSSFSheet sheet = workbook.createSheet("驱离文件统计");
+            // 自适应列宽度
+            sheet.autoSizeColumn(1, true);
+            sheet.setDefaultColumnWidth(18);
+            sheet.setDefaultRowHeight((short)(40*10));
+            // 添加表头行
+            XSSFRow titleRow = sheet.createRow(0);//第1行
+            List<String> titleStrList = Arrays.asList("设备编号","设备名称","日期","时间");
+            for(int i=0;i<titleStrList.size();i++){
+                XSSFCell cell = titleRow.createCell(i);
+                cell.setCellValue(titleStrList.get(i));
+                cell.setCellStyle(cellStyleTitle);
+            }
+            WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
+            WaterEquipmentExample.Criteria caEquip = waterEquipmentExample.createCriteria();
+            caEquip.andSblbEqualTo("0001");
+            caEquip.andDqzlEqualTo("A4");
+            List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(waterEquipmentExample);
+            Map<String, String> mapSbxh = waterEquipmentList.stream().collect(Collectors.toMap(p -> p.getSbsn(), p -> p.getSbmc()));
+            Map<String,String> mapDept = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.DEPTCODENAME);
+            int i=0;
+            for(SpaceFileExcel entity : lists){
+                if(!StringUtils.isEmpty(request.getParameter("xmbh"))){
+                    if(sbbhs.contains(entity.getSbbh())){
+                        XSSFRow comRow = sheet.createRow(i+1);
+                        XSSFCell comCell0 = comRow.createCell(0);
+                        comCell0.setCellValue(entity.getSbbh());
+                        comCell0.setCellStyle(cellStyleCommon);
+                        XSSFCell comCell1 = comRow.createCell(1);
+                        comCell1.setCellValue(mapSbxh.get(entity.getSbbh()));
+                        comCell1.setCellStyle(cellStyleCommon);
+                        XSSFCell comCell2 = comRow.createCell(2);
+                        comCell2.setCellValue(entity.getRq());
+                        comCell2.setCellStyle(cellStyleCommon);
+                        XSSFCell comCell3 = comRow.createCell(3);
+                        comCell3.setCellValue(entity.getGroupcjsj());
+                        comCell3.setCellStyle(cellStyleCommonLeft);
+                        i++;
+                    }
+                }else{
+                    XSSFRow comRow = sheet.createRow(i+1);
+                    XSSFCell comCell0 = comRow.createCell(0);
+                    comCell0.setCellValue(entity.getSbbh());
+                    comCell0.setCellStyle(cellStyleCommon);
+                    XSSFCell comCell1 = comRow.createCell(1);
+                    comCell1.setCellValue(mapSbxh.get(entity.getSbbh()));
+                    comCell1.setCellStyle(cellStyleCommon);
+                    XSSFCell comCell2 = comRow.createCell(2);
+                    comCell2.setCellValue(entity.getRq());
+                    comCell2.setCellStyle(cellStyleCommon);
+                    XSSFCell comCell3 = comRow.createCell(3);
+                    comCell3.setCellValue(entity.getGroupcjsj());
+                    comCell3.setCellStyle(cellStyleCommonLeft);
+                    i++;
+                }
+            }
+            response.setHeader("content-Type", "application/vnd.ms-excel");
+            // 下载文件的默认名称
+            String agent = request.getHeader("User-Agent");
+            if (agent.contains("MSIE") || agent.contains("Trident") || agent.contains("Edge")) {
+                response.setHeader("Content-Disposition",
+                        "attachment; filename=" + URLEncoder.encode(fileName, "UTF-8"));
+            } else {
+                response.setHeader("Content-Disposition",
+                        "attachment; filename=\"" + new String((fileName).getBytes("UTF-8"), "ISO-8859-1") + "\"");
+            }
+            response.setCharacterEncoding("utf-8");
+            ServletOutputStream out = response.getOutputStream();
+            workbook.write(out);
+            out.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
     /**
      * 方位角统计(历史)导出
