@@ -3,6 +3,7 @@ package com.pd.monitor.controller;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.pd.monitor.wx.conf.BaseWxController;
+import com.pd.monitor.wx.conf.WxRedisConfig;
 import com.pd.server.main.domain.*;
 import com.pd.server.main.dto.LoginUserDto;
 import com.pd.server.main.dto.MonitorEquipmentDto;
@@ -337,6 +338,7 @@ public class WaterEquipmentController  extends BaseWxController {
         LoginUserDto loginUserDto = getRequestHeader();
         try{
             waterEquipmentService.save(waterEquipmentDto, loginUserDto);
+            WxRedisConfig.init_sbsnCenterCodeMap();
             responseDto.setContent(waterEquipmentDto);
         }catch (Exception e) {
             responseDto.setSuccess(false);

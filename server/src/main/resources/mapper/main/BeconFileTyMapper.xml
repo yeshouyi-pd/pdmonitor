@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pd.server.main.mapper.BeconFileTyMapper">
+  <resultMap id="BaseResultMap" type="com.pd.server.main.domain.BeconFileTy">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
+    <result column="wjlj" jdbcType="VARCHAR" property="wjlj" />
+    <result column="xbid" jdbcType="VARCHAR" property="xbid" />
+    <result column="cjsj" jdbcType="TIMESTAMP" property="cjsj" />
+    <result column="jssj" jdbcType="TIMESTAMP" property="jssj" />
+    <result column="deptcode" jdbcType="VARCHAR" property="deptcode" />
+    <result column="rq" jdbcType="VARCHAR" property="rq" />
+    <result column="gps" jdbcType="VARCHAR" property="gps" />
+    <result column="jd" jdbcType="VARCHAR" property="jd" />
+    <result column="wd" jdbcType="VARCHAR" property="wd" />
+    <result column="sm1" jdbcType="VARCHAR" property="sm1" />
+    <result column="sm" jdbcType="VARCHAR" property="sm" />
+    <result column="bz" jdbcType="VARCHAR" property="bz" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, sbbh, wjlj, xbid, cjsj, jssj, deptcode, rq, gps, jd, wd, sm1, sm, bz
+  </sql>
+  <select id="selectByExample" parameterType="com.pd.server.main.domain.BeconFileTyExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from becon_file_ty
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from becon_file_ty
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from becon_file_ty
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pd.server.main.domain.BeconFileTyExample">
+    delete from becon_file_ty
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pd.server.main.domain.BeconFileTy">
+    insert into becon_file_ty (id, sbbh, wjlj, 
+      xbid, cjsj, jssj, 
+      deptcode, rq, gps, 
+      jd, wd, sm1, sm, 
+      bz)
+    values (#{id,jdbcType=VARCHAR}, #{sbbh,jdbcType=VARCHAR}, #{wjlj,jdbcType=VARCHAR}, 
+      #{xbid,jdbcType=VARCHAR}, #{cjsj,jdbcType=TIMESTAMP}, #{jssj,jdbcType=TIMESTAMP}, 
+      #{deptcode,jdbcType=VARCHAR}, #{rq,jdbcType=VARCHAR}, #{gps,jdbcType=VARCHAR}, 
+      #{jd,jdbcType=VARCHAR}, #{wd,jdbcType=VARCHAR}, #{sm1,jdbcType=VARCHAR}, #{sm,jdbcType=VARCHAR}, 
+      #{bz,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pd.server.main.domain.BeconFileTy">
+    insert into becon_file_ty
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="sbbh != null">
+        sbbh,
+      </if>
+      <if test="wjlj != null">
+        wjlj,
+      </if>
+      <if test="xbid != null">
+        xbid,
+      </if>
+      <if test="cjsj != null">
+        cjsj,
+      </if>
+      <if test="jssj != null">
+        jssj,
+      </if>
+      <if test="deptcode != null">
+        deptcode,
+      </if>
+      <if test="rq != null">
+        rq,
+      </if>
+      <if test="gps != null">
+        gps,
+      </if>
+      <if test="jd != null">
+        jd,
+      </if>
+      <if test="wd != null">
+        wd,
+      </if>
+      <if test="sm1 != null">
+        sm1,
+      </if>
+      <if test="sm != null">
+        sm,
+      </if>
+      <if test="bz != null">
+        bz,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="sbbh != null">
+        #{sbbh,jdbcType=VARCHAR},
+      </if>
+      <if test="wjlj != null">
+        #{wjlj,jdbcType=VARCHAR},
+      </if>
+      <if test="xbid != null">
+        #{xbid,jdbcType=VARCHAR},
+      </if>
+      <if test="cjsj != null">
+        #{cjsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="jssj != null">
+        #{jssj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deptcode != null">
+        #{deptcode,jdbcType=VARCHAR},
+      </if>
+      <if test="rq != null">
+        #{rq,jdbcType=VARCHAR},
+      </if>
+      <if test="gps != null">
+        #{gps,jdbcType=VARCHAR},
+      </if>
+      <if test="jd != null">
+        #{jd,jdbcType=VARCHAR},
+      </if>
+      <if test="wd != null">
+        #{wd,jdbcType=VARCHAR},
+      </if>
+      <if test="sm1 != null">
+        #{sm1,jdbcType=VARCHAR},
+      </if>
+      <if test="sm != null">
+        #{sm,jdbcType=VARCHAR},
+      </if>
+      <if test="bz != null">
+        #{bz,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pd.server.main.domain.BeconFileTyExample" resultType="java.lang.Long">
+    select count(*) from becon_file_ty
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update becon_file_ty
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sbbh != null">
+        sbbh = #{record.sbbh,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wjlj != null">
+        wjlj = #{record.wjlj,jdbcType=VARCHAR},
+      </if>
+      <if test="record.xbid != null">
+        xbid = #{record.xbid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cjsj != null">
+        cjsj = #{record.cjsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.jssj != null">
+        jssj = #{record.jssj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.deptcode != null">
+        deptcode = #{record.deptcode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rq != null">
+        rq = #{record.rq,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gps != null">
+        gps = #{record.gps,jdbcType=VARCHAR},
+      </if>
+      <if test="record.jd != null">
+        jd = #{record.jd,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wd != null">
+        wd = #{record.wd,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sm1 != null">
+        sm1 = #{record.sm1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sm != null">
+        sm = #{record.sm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bz != null">
+        bz = #{record.bz,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update becon_file_ty
+    set id = #{record.id,jdbcType=VARCHAR},
+      sbbh = #{record.sbbh,jdbcType=VARCHAR},
+      wjlj = #{record.wjlj,jdbcType=VARCHAR},
+      xbid = #{record.xbid,jdbcType=VARCHAR},
+      cjsj = #{record.cjsj,jdbcType=TIMESTAMP},
+      jssj = #{record.jssj,jdbcType=TIMESTAMP},
+      deptcode = #{record.deptcode,jdbcType=VARCHAR},
+      rq = #{record.rq,jdbcType=VARCHAR},
+      gps = #{record.gps,jdbcType=VARCHAR},
+      jd = #{record.jd,jdbcType=VARCHAR},
+      wd = #{record.wd,jdbcType=VARCHAR},
+      sm1 = #{record.sm1,jdbcType=VARCHAR},
+      sm = #{record.sm,jdbcType=VARCHAR},
+      bz = #{record.bz,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pd.server.main.domain.BeconFileTy">
+    update becon_file_ty
+    <set>
+      <if test="sbbh != null">
+        sbbh = #{sbbh,jdbcType=VARCHAR},
+      </if>
+      <if test="wjlj != null">
+        wjlj = #{wjlj,jdbcType=VARCHAR},
+      </if>
+      <if test="xbid != null">
+        xbid = #{xbid,jdbcType=VARCHAR},
+      </if>
+      <if test="cjsj != null">
+        cjsj = #{cjsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="jssj != null">
+        jssj = #{jssj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deptcode != null">
+        deptcode = #{deptcode,jdbcType=VARCHAR},
+      </if>
+      <if test="rq != null">
+        rq = #{rq,jdbcType=VARCHAR},
+      </if>
+      <if test="gps != null">
+        gps = #{gps,jdbcType=VARCHAR},
+      </if>
+      <if test="jd != null">
+        jd = #{jd,jdbcType=VARCHAR},
+      </if>
+      <if test="wd != null">
+        wd = #{wd,jdbcType=VARCHAR},
+      </if>
+      <if test="sm1 != null">
+        sm1 = #{sm1,jdbcType=VARCHAR},
+      </if>
+      <if test="sm != null">
+        sm = #{sm,jdbcType=VARCHAR},
+      </if>
+      <if test="bz != null">
+        bz = #{bz,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pd.server.main.domain.BeconFileTy">
+    update becon_file_ty
+    set sbbh = #{sbbh,jdbcType=VARCHAR},
+      wjlj = #{wjlj,jdbcType=VARCHAR},
+      xbid = #{xbid,jdbcType=VARCHAR},
+      cjsj = #{cjsj,jdbcType=TIMESTAMP},
+      jssj = #{jssj,jdbcType=TIMESTAMP},
+      deptcode = #{deptcode,jdbcType=VARCHAR},
+      rq = #{rq,jdbcType=VARCHAR},
+      gps = #{gps,jdbcType=VARCHAR},
+      jd = #{jd,jdbcType=VARCHAR},
+      wd = #{wd,jdbcType=VARCHAR},
+      sm1 = #{sm1,jdbcType=VARCHAR},
+      sm = #{sm,jdbcType=VARCHAR},
+      bz = #{bz,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

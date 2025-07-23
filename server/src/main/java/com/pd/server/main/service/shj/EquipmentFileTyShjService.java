@@ -1,18 +1,25 @@
 package com.pd.server.main.service.shj;
 
 import com.alibaba.fastjson.JSONObject;
+import com.pd.server.config.RedisCode;
 import com.pd.server.main.domain.*;
+import com.pd.server.main.dto.BeconFileDto;
+import com.pd.server.main.dto.BeconFileTyDto;
 import com.pd.server.main.dto.PointerDayDto;
 import com.pd.server.main.dto.PointerSecondDto;
 import com.pd.server.main.mapper.EquipmentFileTyMapper;
 import com.pd.server.main.mapper.EquipmentFileTyTodayMapper;
 import com.pd.server.main.mapper.EquipmentTyEventMapper;
 import com.pd.server.main.mapper.WaterEquipmentMapper;
+import com.pd.server.main.service.BeconFileTyService;
+import com.pd.server.main.service.BeconFileTyTodayService;
 import com.pd.server.main.service.PointerDayService;
 import com.pd.server.main.service.PointerSecondService;
+import com.pd.server.util.CopyUtil;
 import com.pd.server.util.DateUtil;
 import com.pd.server.util.TypeUtils;
 import com.pd.server.util.UuidUtil;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -21,17 +28,23 @@ import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 @Service
 public class EquipmentFileTyShjService extends AbstractScanRequest{
 
+    public static RedisTemplate redisTstaticemplate;
     public static EquipmentTyEventMapper equipmentTyEventMapperStatic;
     public static EquipmentFileTyMapper equipmentFileTyMapperStatic;
     public static EquipmentFileTyTodayMapper todayMapperStatic;
     public static WaterEquipmentMapper waterEquipmentMapperStatic;
     public static PointerSecondService pointerSecondServiceStatic;
     public static PointerDayService pointerDayServiceStatic;
+    public static BeconFileTyService beconFileTyServiceStatic;
+    public static BeconFileTyTodayService beconFileTyTodayServiceStatic;
 
+    @Resource
+    private RedisTemplate redisTemplate;
     @Resource
     private EquipmentTyEventMapper equipmentTyEventMapper;
     @Resource
@@ -44,15 +57,22 @@ public class EquipmentFileTyShjService extends AbstractScanRequest{
     private PointerSecondService pointerSecondService;
     @Resource
     private PointerDayService pointerDayService;
+    @Resource
+    private BeconFileTyService beconFileTyService;
+    @Resource
+    private BeconFileTyTodayService beconFileTyTodayService;
 
     @PostConstruct
     protected void init() {
+        redisTstaticemplate = redisTemplate;
         equipmentTyEventMapperStatic = equipmentTyEventMapper;
         equipmentFileTyMapperStatic = equipmentFileTyMapper;
         todayMapperStatic = todayMapper;
         waterEquipmentMapperStatic = waterEquipmentMapper;
         pointerSecondServiceStatic = pointerSecondService;
         pointerDayServiceStatic = pointerDayService;
+        beconFileTyServiceStatic = beconFileTyService;
+        beconFileTyTodayServiceStatic = beconFileTyTodayService;
     }
 
     /**
@@ -71,6 +91,10 @@ public class EquipmentFileTyShjService extends AbstractScanRequest{
             data = "参数错误";
             return data;
         }
+        //判断是不是信标文件，如果是则调用信标方法
+        if(tplj.contains("Becon")){
+            return BeconMethod(jsonParam);
+        }
         try {
             JSONObject obj = JSONObject.parseObject(sm1);
             EquipmentFileTyTodayExample exampleFile = new EquipmentFileTyTodayExample();
@@ -79,15 +103,12 @@ public class EquipmentFileTyShjService extends AbstractScanRequest{
             caFile.andSbbhEqualTo(sbbh);
             List<EquipmentFileTyToday> comment = todayMapperStatic.selectByExample(exampleFile);
             if(comment==null || comment.isEmpty()){
-                WaterEquipmentExample example = new WaterEquipmentExample();
-                WaterEquipmentExample.Criteria ca = example.createCriteria();
-                ca.andSbsnEqualTo(sbbh);
-                List<WaterEquipment> lists = waterEquipmentMapperStatic.selectByExample(example);
-                if(lists==null || lists.isEmpty()){
-                    data="设备编号不存在";
-                    return data;
+                Map<String, JSONObject> sbbhEquipMap = (Map<String, JSONObject>) redisTstaticemplate.opsForValue().get(RedisCode.SBBHEQUIPMAP);
+                if(!sbbhEquipMap.keySet().contains("equip-"+sbbh)){
+                    return "设备编号不存在";
                 }
-                String deptcode = lists.get(0).getDeptcode();
+                WaterEquipment waterEquipment = JSONObject.toJavaObject(sbbhEquipMap.get("equip-"+sbbh), WaterEquipment.class);
+                String deptcode = waterEquipment.getDeptcode();
                 EquipmentFileTy entity = new EquipmentFileTy();
                 entity.setId(UuidUtil.getShortUuid());
                 entity.setSbbh(sbbh);
@@ -167,4 +188,54 @@ public class EquipmentFileTyShjService extends AbstractScanRequest{
         }
     }
 
+    //信标文件
+    public static String BeconMethod(JSONObject jsonParam){
+        try {
+            String sbbh = jsonParam.getString("sbbh");
+            String tplj = jsonParam.getString("tplj");
+            String cjsj = jsonParam.getString("cjsj");
+            String sm1 = jsonParam.getString("sm1");
+            String sm2 = jsonParam.getString("sm2");
+            JSONObject obj = JSONObject.parseObject(sm1);
+            Map<String, JSONObject> sbbhEquipMap = (Map<String, JSONObject>) redisTstaticemplate.opsForValue().get(RedisCode.SBBHEQUIPMAP);
+            if(StringUtils.isEmpty(sm2)){
+                return "错误，缺少必要参数";
+            }
+            if(!sbbhEquipMap.keySet().contains("equip-"+sbbh)){
+                return "设备编号不存在";
+            }
+            if(!Pattern.matches(TypeUtils.ZZ_32, tplj.substring(tplj.lastIndexOf("/")+1))){
+                return "文件名称命名错误";
+            }
+            BeconFileTyTodayExample example = new BeconFileTyTodayExample();
+            BeconFileTyTodayExample.Criteria caFile = example.createCriteria();
+            caFile.andWjljEqualTo(tplj);
+            List<BeconFileTyToday> comment = beconFileTyTodayServiceStatic.selectByExample(example);
+            if(!(comment==null || comment.isEmpty())){
+                return "该数据已保存过";
+            }
+            WaterEquipment waterEquipment = JSONObject.toJavaObject(sbbhEquipMap.get("equip-"+sbbh), WaterEquipment.class);
+            BeconFileTyDto beconFileTyDto = new BeconFileTyDto();
+            beconFileTyDto.setSbbh(sbbh);
+            beconFileTyDto.setWjlj(tplj);
+            beconFileTyDto.setXbid(sm2);
+            beconFileTyDto.setCjsj(DateUtil.toDate(cjsj,"yyyy-MM-dd HH:mm:ss"));
+            beconFileTyDto.setJssj(new Date());
+            beconFileTyDto.setDeptcode(waterEquipment.getDeptcode());
+            beconFileTyDto.setRq(DateUtil.getFormatDate(beconFileTyDto.getCjsj(),"yyyy-MM-dd"));
+            beconFileTyDto.setSm1(sm1);
+            beconFileTyDto.setGps(obj.getString("jd")+","+obj.getString("wd"));
+            beconFileTyDto.setJd(obj.getString("jd"));
+            beconFileTyDto.setWd(obj.getString("wd"));
+            beconFileTyServiceStatic.save(beconFileTyDto);
+            BeconFileTyToday beconFileToday = CopyUtil.copy(beconFileTyDto, BeconFileTyToday.class);
+            beconFileTyTodayServiceStatic.insert(beconFileToday);
+            JSONObject result = new JSONObject();
+            result.put("data","保存成功");
+            result.put("otherFile",true);
+            return result.toJSONString();
+        }catch (Exception e){
+            return "保存基站文件数据错误";
+        }
+    }
 }
