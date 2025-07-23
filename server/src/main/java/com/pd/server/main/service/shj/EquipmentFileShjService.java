@@ -23,6 +23,7 @@ import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,6 +45,8 @@ public class EquipmentFileShjService extends AbstractScanRequest{
     public static AzimuthAngleService azimuthAngleServiceStatic;
     public static AzimuthAngleRqService azimuthAngleRqServiceStatic;
     public static SpaceFileService spaceFileServiceStatic;
+    public static BeconFileService beconFileServiceStatic;
+    public static BeconFileTodayService beconFileTodayServiceStatic;
     public static ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(10);
 
     @Resource
@@ -74,6 +77,10 @@ public class EquipmentFileShjService extends AbstractScanRequest{
     private AzimuthAngleRqService azimuthAngleRqService;
     @Resource
     private SpaceFileService spaceFileService;
+    @Resource
+    private BeconFileService beconFileService;
+    @Resource
+    private BeconFileTodayService beconFileTodayService;
 
     @PostConstruct
     protected void init() {
@@ -91,6 +98,8 @@ public class EquipmentFileShjService extends AbstractScanRequest{
         azimuthAngleServiceStatic = azimuthAngleService;
         azimuthAngleRqServiceStatic = azimuthAngleRqService;
         spaceFileServiceStatic = spaceFileService;
+        beconFileServiceStatic = beconFileService;
+        beconFileTodayServiceStatic = beconFileTodayService;
     }
 
     /**
@@ -123,15 +132,12 @@ public class EquipmentFileShjService extends AbstractScanRequest{
         caFile.andSbbhEqualTo(sbbh);
         List<EquipmentFileToday> comment = todayMapperStatic.selectByExample(exampleTodayFile);
         if(comment==null || comment.isEmpty()){
-            WaterEquipmentExample example = new WaterEquipmentExample();
-            WaterEquipmentExample.Criteria ca = example.createCriteria();
-            ca.andSbsnEqualTo(sbbh);
-            List<WaterEquipment> lists = waterEquipmentMapperStatic.selectByExample(example);
-            if(lists==null || lists.isEmpty()){
-                data="设备编号不存在";
-                return data;
+            Map<String, JSONObject> sbbhEquipMap = (Map<String, JSONObject>) redisTstaticemplate.opsForValue().get(RedisCode.SBBHEQUIPMAP);
+            if(!sbbhEquipMap.keySet().contains("equip-"+sbbh)){
+                return "设备编号不存在";
             }
-            String deptcode = lists.get(0).getDeptcode();
+            WaterEquipment waterEquipment = JSONObject.toJavaObject(sbbhEquipMap.get("equip-"+sbbh), WaterEquipment.class);
+            String deptcode = waterEquipment.getDeptcode();
             EquipmentFile entity = new EquipmentFile();
             entity.setId(UuidUtil.getShortUuid());
             entity.setSbbh(sbbh);
@@ -316,6 +322,9 @@ public class EquipmentFileShjService extends AbstractScanRequest{
             if(!sbbhEquipMap.keySet().contains("equip-"+sbbh)){
                 return "设备编号不存在";
             }
+            if(!Pattern.matches(TypeUtils.ZZ_33, tplj.substring(tplj.lastIndexOf("/")+1))){
+                return "文件名称命名错误";
+            }
             WaterEquipment waterEquipment = JSONObject.toJavaObject(sbbhEquipMap.get("equip-"+sbbh), WaterEquipment.class);
             SpaceFileDto spaceFileDto = new SpaceFileDto();
             spaceFileDto.setSbbh(sbbh);
@@ -391,11 +400,50 @@ public class EquipmentFileShjService extends AbstractScanRequest{
 
     //信标文件
     public static String BeconMethod(JSONObject jsonParam){
-        String sbbh = jsonParam.getString("sbbh");
-        String tplj = jsonParam.getString("tplj");
-        String cjsj = jsonParam.getString("cjsj");
-        String sm2 = jsonParam.getString("sm2");
-        return "";
+        try {
+            String sbbh = jsonParam.getString("sbbh");
+            String tplj = jsonParam.getString("tplj");
+            String cjsj = jsonParam.getString("cjsj");
+            String sm2 = jsonParam.getString("sm2");
+            Map<String, JSONObject> sbbhEquipMap = (Map<String, JSONObject>) redisTstaticemplate.opsForValue().get(RedisCode.SBBHEQUIPMAP);
+            if(StringUtils.isEmpty(sm2)){
+                return "错误，缺少必要参数";
+            }
+            if(!sbbhEquipMap.keySet().contains("equip-"+sbbh)){
+                return "设备编号不存在";
+            }
+            if(!Pattern.matches(TypeUtils.ZZ_32, tplj.substring(tplj.lastIndexOf("/")+1))){
+                return "文件名称命名错误";
+            }
+            BeconFileTodayExample example = new BeconFileTodayExample();
+            BeconFileTodayExample.Criteria caFile = example.createCriteria();
+            caFile.andWjljEqualTo(tplj);
+            List<BeconFileToday> comment = beconFileTodayServiceStatic.selectByExample(example);
+            if(!(comment==null || comment.isEmpty())){
+                return "该数据已保存过";
+            }
+            WaterEquipment waterEquipment = JSONObject.toJavaObject(sbbhEquipMap.get("equip-"+sbbh), WaterEquipment.class);
+            String[] xbids = sm2.split(",");
+            for(String xbid : xbids){
+                BeconFileDto beconFileDto = new BeconFileDto();
+                beconFileDto.setSbbh(sbbh);
+                beconFileDto.setWjlj(tplj);
+                beconFileDto.setXbid(xbid);
+                beconFileDto.setCjsj(DateUtil.toDate(cjsj,"yyyy-MM-dd HH:mm:ss"));
+                beconFileDto.setJssj(new Date());
+                beconFileDto.setDeptcode(waterEquipment.getDeptcode());
+                beconFileDto.setRq(DateUtil.getFormatDate(beconFileDto.getCjsj(),"yyyy-MM-dd"));
+                beconFileServiceStatic.save(beconFileDto);
+                BeconFileToday beconFileToday = CopyUtil.copy(beconFileDto, BeconFileToday.class);
+                beconFileTodayServiceStatic.insert(beconFileToday);
+            }
+            JSONObject result = new JSONObject();
+            result.put("data","保存成功");
+            result.put("otherFile",true);
+            return result.toJSONString();
+        }catch (Exception e){
+            return "保存基站文件数据错误";
+        }
     }
 
     public static Boolean isOverThreeMinute(String curDateStr, String nextDateStr){

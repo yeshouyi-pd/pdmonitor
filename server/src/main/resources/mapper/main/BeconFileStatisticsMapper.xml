@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pd.server.main.mapper.BeconFileStatisticsMapper">
+  <resultMap id="BaseResultMap" type="com.pd.server.main.domain.BeconFileStatistics">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="xbid" jdbcType="VARCHAR" property="xbid" />
+    <result column="sbbhs" jdbcType="VARCHAR" property="sbbhs" />
+    <result column="sbmcs" jdbcType="VARCHAR" property="sbmcs" />
+    <result column="rq" jdbcType="VARCHAR" property="rq" />
+    <result column="cjsjs" jdbcType="VARCHAR" property="cjsjs" />
+    <result column="gps" jdbcType="VARCHAR" property="gps" />
+    <result column="bz" jdbcType="VARCHAR" property="bz" />
+    <result column="sm" jdbcType="VARCHAR" property="sm" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, xbid, sbbhs, sbmcs, rq, cjsjs, gps, bz, sm
+  </sql>
+  <select id="selectByExample" parameterType="com.pd.server.main.domain.BeconFileStatisticsExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from becon_file_statistics
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from becon_file_statistics
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from becon_file_statistics
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pd.server.main.domain.BeconFileStatisticsExample">
+    delete from becon_file_statistics
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pd.server.main.domain.BeconFileStatistics">
+    insert into becon_file_statistics (id, xbid, sbbhs, 
+      sbmcs, rq, cjsjs, gps, 
+      bz, sm)
+    values (#{id,jdbcType=VARCHAR}, #{xbid,jdbcType=VARCHAR}, #{sbbhs,jdbcType=VARCHAR}, 
+      #{sbmcs,jdbcType=VARCHAR}, #{rq,jdbcType=VARCHAR}, #{cjsjs,jdbcType=VARCHAR}, #{gps,jdbcType=VARCHAR}, 
+      #{bz,jdbcType=VARCHAR}, #{sm,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pd.server.main.domain.BeconFileStatistics">
+    insert into becon_file_statistics
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="xbid != null">
+        xbid,
+      </if>
+      <if test="sbbhs != null">
+        sbbhs,
+      </if>
+      <if test="sbmcs != null">
+        sbmcs,
+      </if>
+      <if test="rq != null">
+        rq,
+      </if>
+      <if test="cjsjs != null">
+        cjsjs,
+      </if>
+      <if test="gps != null">
+        gps,
+      </if>
+      <if test="bz != null">
+        bz,
+      </if>
+      <if test="sm != null">
+        sm,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="xbid != null">
+        #{xbid,jdbcType=VARCHAR},
+      </if>
+      <if test="sbbhs != null">
+        #{sbbhs,jdbcType=VARCHAR},
+      </if>
+      <if test="sbmcs != null">
+        #{sbmcs,jdbcType=VARCHAR},
+      </if>
+      <if test="rq != null">
+        #{rq,jdbcType=VARCHAR},
+      </if>
+      <if test="cjsjs != null">
+        #{cjsjs,jdbcType=VARCHAR},
+      </if>
+      <if test="gps != null">
+        #{gps,jdbcType=VARCHAR},
+      </if>
+      <if test="bz != null">
+        #{bz,jdbcType=VARCHAR},
+      </if>
+      <if test="sm != null">
+        #{sm,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pd.server.main.domain.BeconFileStatisticsExample" resultType="java.lang.Long">
+    select count(*) from becon_file_statistics
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update becon_file_statistics
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.xbid != null">
+        xbid = #{record.xbid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sbbhs != null">
+        sbbhs = #{record.sbbhs,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sbmcs != null">
+        sbmcs = #{record.sbmcs,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rq != null">
+        rq = #{record.rq,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cjsjs != null">
+        cjsjs = #{record.cjsjs,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gps != null">
+        gps = #{record.gps,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bz != null">
+        bz = #{record.bz,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sm != null">
+        sm = #{record.sm,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update becon_file_statistics
+    set id = #{record.id,jdbcType=VARCHAR},
+      xbid = #{record.xbid,jdbcType=VARCHAR},
+      sbbhs = #{record.sbbhs,jdbcType=VARCHAR},
+      sbmcs = #{record.sbmcs,jdbcType=VARCHAR},
+      rq = #{record.rq,jdbcType=VARCHAR},
+      cjsjs = #{record.cjsjs,jdbcType=VARCHAR},
+      gps = #{record.gps,jdbcType=VARCHAR},
+      bz = #{record.bz,jdbcType=VARCHAR},
+      sm = #{record.sm,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pd.server.main.domain.BeconFileStatistics">
+    update becon_file_statistics
+    <set>
+      <if test="xbid != null">
+        xbid = #{xbid,jdbcType=VARCHAR},
+      </if>
+      <if test="sbbhs != null">
+        sbbhs = #{sbbhs,jdbcType=VARCHAR},
+      </if>
+      <if test="sbmcs != null">
+        sbmcs = #{sbmcs,jdbcType=VARCHAR},
+      </if>
+      <if test="rq != null">
+        rq = #{rq,jdbcType=VARCHAR},
+      </if>
+      <if test="cjsjs != null">
+        cjsjs = #{cjsjs,jdbcType=VARCHAR},
+      </if>
+      <if test="gps != null">
+        gps = #{gps,jdbcType=VARCHAR},
+      </if>
+      <if test="bz != null">
+        bz = #{bz,jdbcType=VARCHAR},
+      </if>
+      <if test="sm != null">
+        sm = #{sm,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pd.server.main.domain.BeconFileStatistics">
+    update becon_file_statistics
+    set xbid = #{xbid,jdbcType=VARCHAR},
+      sbbhs = #{sbbhs,jdbcType=VARCHAR},
+      sbmcs = #{sbmcs,jdbcType=VARCHAR},
+      rq = #{rq,jdbcType=VARCHAR},
+      cjsjs = #{cjsjs,jdbcType=VARCHAR},
+      gps = #{gps,jdbcType=VARCHAR},
+      bz = #{bz,jdbcType=VARCHAR},
+      sm = #{sm,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
