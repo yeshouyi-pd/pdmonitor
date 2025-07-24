@@ -1,22 +1,29 @@
 package com.pd.monitor.controller;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.pd.server.main.domain.BeconFileStatistics;
+import com.pd.server.main.domain.BeconFileStatisticsExample;
 import com.pd.server.main.dto.BeconFileStatisticsDto;
 import com.pd.server.main.dto.PageDto;
 import com.pd.server.main.dto.ResponseDto;
 import com.pd.server.main.service.BeconFileStatisticsService;
+import com.pd.server.util.CopyUtil;
 import com.pd.server.util.ValidatorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin/beconFileStatistics")
 public class BeconFileStatisticsController {
 
     private static final Logger LOG = LoggerFactory.getLogger(BeconFileStatisticsController.class);
-    public static final String BUSINESS_NAME = "";
+    public static final String BUSINESS_NAME = "定点基站统计";
 
     @Resource
     private BeconFileStatisticsService beconFileStatisticsService;
@@ -25,9 +32,26 @@ public class BeconFileStatisticsController {
     * 列表查询
     */
     @PostMapping("/list")
-    public ResponseDto list(@RequestBody PageDto pageDto) {
+    public ResponseDto list(@RequestBody BeconFileStatisticsDto pageDto) {
         ResponseDto responseDto = new ResponseDto();
-        beconFileStatisticsService.list(pageDto);
+        PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
+        BeconFileStatisticsExample example = new BeconFileStatisticsExample();
+        BeconFileStatisticsExample.Criteria ca = example.createCriteria();
+        if(!StringUtils.isEmpty(pageDto.getXbid())){
+            ca.andXbidEqualTo(pageDto.getXbid());
+        }
+        if(!StringUtils.isEmpty(pageDto.getStime())){
+            ca.andRqGreaterThanOrEqualTo(pageDto.getStime());
+        }
+        if(!StringUtils.isEmpty(pageDto.getEtime())){
+            ca.andRqLessThanOrEqualTo(pageDto.getEtime());
+        }
+        example.setOrderByClause(" rq desc ");
+        List<BeconFileStatistics> beconFileStatisticsList = beconFileStatisticsService.selectByExample(example);
+        PageInfo<BeconFileStatistics> pageInfo = new PageInfo<>(beconFileStatisticsList);
+        pageDto.setTotal(pageInfo.getTotal());
+        List<BeconFileStatisticsDto> beconFileStatisticsDtoList = CopyUtil.copyList(beconFileStatisticsList, BeconFileStatisticsDto.class);
+        pageDto.setList(beconFileStatisticsDtoList);
         responseDto.setContent(pageDto);
         return responseDto;
     }

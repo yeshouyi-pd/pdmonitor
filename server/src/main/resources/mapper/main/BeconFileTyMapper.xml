@@ -92,6 +92,20 @@
       order by ${orderByClause}
     </if>
   </select>
+  <select id="selectByExampleSpecial"  parameterType="map" resultMap="BaseResultMap">
+    select a.* from becon_file_ty a inner join water_pro_equip b
+    ON a.sbbh = b.sbsn where b.xmbh = #{record.xmbh,jdbcType=VARCHAR}
+    <if test="record.sbbh != null and record.sbbh !=''">
+      AND a.sbbh = #{record.sbbh,jdbcType=VARCHAR}
+    </if>
+    <if test="record.stime != null and record.stime !=''">
+      AND a.rq &gt;= #{record.stime,jdbcType=VARCHAR}
+    </if>
+    <if test="record.etime != null and record.etime !=''">
+      AND a.rq &lt;= #{record.etime,jdbcType=VARCHAR}
+    </if>
+    order by cjsj desc
+  </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />

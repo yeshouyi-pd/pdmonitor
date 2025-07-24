@@ -24,14 +24,8 @@ public class BeconFileStatisticsService {
     /**
     * 列表查询
     */
-    public void list(PageDto pageDto) {
-    PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
-        BeconFileStatisticsExample beconFileStatisticsExample = new BeconFileStatisticsExample();
-        List<BeconFileStatistics> beconFileStatisticsList = beconFileStatisticsMapper.selectByExample(beconFileStatisticsExample);
-        PageInfo<BeconFileStatistics> pageInfo = new PageInfo<>(beconFileStatisticsList);
-        pageDto.setTotal(pageInfo.getTotal());
-        List<BeconFileStatisticsDto> beconFileStatisticsDtoList = CopyUtil.copyList(beconFileStatisticsList, BeconFileStatisticsDto.class);
-        pageDto.setList(beconFileStatisticsDtoList);
+    public List<BeconFileStatistics> selectByExample(BeconFileStatisticsExample example) {
+        return beconFileStatisticsMapper.selectByExample(example);
     }
 
     /**

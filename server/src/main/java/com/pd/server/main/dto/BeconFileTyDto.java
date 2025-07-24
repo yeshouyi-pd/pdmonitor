@@ -58,7 +58,7 @@ public class BeconFileTyDto extends PageDto{
     private String jd;
 
     /**
-    * 维度
+    * 纬度
     */
     private String wd;
 
@@ -76,6 +76,8 @@ public class BeconFileTyDto extends PageDto{
     * 备注
     */
     private String bz;
+
+    private String xmbh;
 
     public String getId() {
         return id;
@@ -189,6 +191,13 @@ public class BeconFileTyDto extends PageDto{
         this.bz = bz;
     }
 
+    public String getXmbh() {
+        return xmbh;
+    }
+
+    public void setXmbh(String xmbh) {
+        this.xmbh = xmbh;
+    }
 
     @Override
     public String toString() {
