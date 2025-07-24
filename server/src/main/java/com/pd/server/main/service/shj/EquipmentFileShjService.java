@@ -47,6 +47,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
     public static SpaceFileService spaceFileServiceStatic;
     public static BeconFileService beconFileServiceStatic;
     public static BeconFileTodayService beconFileTodayServiceStatic;
+    public static AngleFileService angleFileServiceStatic;
     public static ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(10);
 
     @Resource
@@ -81,6 +82,8 @@ public class EquipmentFileShjService extends AbstractScanRequest{
     private BeconFileService beconFileService;
     @Resource
     private BeconFileTodayService beconFileTodayService;
+    @Resource
+    private AngleFileService angleFileService;
 
     @PostConstruct
     protected void init() {
@@ -100,6 +103,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
         spaceFileServiceStatic = spaceFileService;
         beconFileServiceStatic = beconFileService;
         beconFileTodayServiceStatic = beconFileTodayService;
+        angleFileServiceStatic = angleFileService;
     }
 
     /**
@@ -118,13 +122,25 @@ public class EquipmentFileShjService extends AbstractScanRequest{
             data = "参数错误";
             return data;
         }
+        //判断是不是仪器姿态文件，如果是则调用仪器姿态方法
+        if(tplj.contains("angle")){
+            return angleMethod(jsonParam);
+        }
         //判断是不是驱离文件，如果是则调用驱离方法
         if(tplj.contains("Space")){
             return spaceMethod(jsonParam);
         }
         //判断是不是信标文件，如果是则调用信标方法
         if(tplj.contains("Becon")){
-            return BeconMethod(jsonParam);
+            return beconMethod(jsonParam);
+        }
+        //指针数据每秒
+        if(tplj.contains("FISH")){
+            return fishMethod(jsonParam);
+        }
+        //指针数据每天
+        if(tplj.contains("YFP")){
+            return yfpMethod(jsonParam);
         }
         EquipmentFileTodayExample exampleTodayFile = new EquipmentFileTodayExample();
         EquipmentFileTodayExample.Criteria caFile = exampleTodayFile.createCriteria();
@@ -219,22 +235,6 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                         }
                     }
                 }
-            }else if("1018".equals(entity.getType())){//指针数据每秒
-                PointerSecondDto dto = new PointerSecondDto();
-                dto.setDecibelValue(entity.getTs());
-                dto.setCjsj(DateUtil.toDate(cjsj,"yyyy-MM-dd HH:mm:ss"));
-                dto.setSm(sbbh);
-                dto.setCreateTime(new Date());
-                dto.setBz(deptcode);
-                pointerSecondServiceStatic.save(dto);
-            }else if("1019".equals(entity.getType())){//指针数据每天
-                PointerDayDto dto = new PointerDayDto();
-                dto.setDecibelValue(entity.getTs());
-                dto.setCjsj(DateUtil.toDate(cjsj,"yyyy-MM-dd HH:mm:ss"));
-                dto.setSm(sbbh);
-                dto.setCreateTime(new Date());
-                dto.setBz(deptcode);
-                pointerDayServiceStatic.save(dto);
             }
             String predationsbsn = attrServiceStatic.findByAttrKey("predationsbsn");
             if(predationsbsn.contains(sbbh)&&tplj.contains("txt")&&("1001".equals(typeUtil.get(TypeUtils.TYPE))||"1007".equals(typeUtil.get(TypeUtils.TYPE)))){
@@ -285,11 +285,6 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                 result.put("entity",entity);
                 //白海豚写剪切视频的事件，李响读了去剪切视频
                 if(("1001,1007,1009,1010,1020,1022,1024,1026".contains(entity.getType()))&&(sbbh.contains("RPCD")||sbbh.contains("tl"))){
-//                    if("A4".equals(lists.get(0).getDqzl())&&"1020,1022,1024,1026".contains(entity.getType())){
-//                        saveNewEvent(entity);
-//                    }else if("A1".equals(lists.get(0).getDqzl())){
-//                        saveNewEvent(entity);
-//                    }
                     try {
                         saveNewEvent(entity);
                     }catch (Exception e){
@@ -309,6 +304,51 @@ public class EquipmentFileShjService extends AbstractScanRequest{
         }else {
             data="该图片已保存过";
             return data;
+        }
+    }
+
+    //仪器姿态文件
+    public static String angleMethod(JSONObject jsonParam){
+        try {
+            String sbbh = jsonParam.getString("sbbh");
+            String tplj = jsonParam.getString("tplj");
+            String cjsj = jsonParam.getString("cjsj");
+            Map<String, JSONObject> sbbhEquipMap = (Map<String, JSONObject>) redisTstaticemplate.opsForValue().get(RedisCode.SBBHEQUIPMAP);
+            if(!sbbhEquipMap.keySet().contains("equip-"+sbbh)){
+                return "设备编号不存在";
+            }
+            if(!Pattern.matches(TypeUtils.ZZ_34, tplj.substring(tplj.lastIndexOf("/")+1))){
+                return "文件名称命名错误";
+            }
+            WaterEquipment waterEquipment = JSONObject.toJavaObject(sbbhEquipMap.get("equip-"+sbbh), WaterEquipment.class);
+            AngleFileDto angleFileDto = new AngleFileDto();
+            angleFileDto.setSbbh(sbbh);
+            angleFileDto.setWjlj(tplj);
+            angleFileDto.setCjsj(DateUtil.toDate(cjsj,"yyyy-MM-dd HH:mm:ss"));
+            angleFileDto.setJssj(new Date());
+            angleFileDto.setDeptcode(waterEquipment.getDeptcode());
+            angleFileDto.setRq(DateUtil.getFormatDate(angleFileDto.getCjsj(),"yyyy-MM-dd"));
+            angleFileServiceStatic.save(angleFileDto);
+            if(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd").equals(angleFileDto.getRq())){
+                sendMsg(sbbh);
+            }
+            JSONObject result = new JSONObject();
+            result.put("data","保存成功");
+            result.put("otherFile",true);
+            return result.toJSONString();
+        }catch (Exception e){
+            LOG.error("保存仪器姿态文件出错："+e.getMessage());
+            return "保存仪器姿态文件出错";
+        }
+    }
+
+    public static void sendMsg(String sbbh){
+        try {
+            String angleTemplateId = attrServiceStatic.findByAttrKey("angleTemplateId");
+            String phoneNum = attrServiceStatic.findByAttrKey("anglePhone");
+            SendSmsTool.sendSms(angleTemplateId,sbbh, phoneNum);
+        }catch (Exception e){
+            LOG.error("仪器姿态发送短信失败："+e.getMessage());
         }
     }
 
@@ -399,7 +439,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
 
 
     //信标文件
-    public static String BeconMethod(JSONObject jsonParam){
+    public static String beconMethod(JSONObject jsonParam){
         try {
             String sbbh = jsonParam.getString("sbbh");
             String tplj = jsonParam.getString("tplj");
@@ -657,8 +697,66 @@ public class EquipmentFileShjService extends AbstractScanRequest{
         }
     }
 
-    public static void main(String[] args){
-        String hex = "4352 4410 0002 1002 0C73 696E 3130 6B48 7A2E 7761 768D 7B";
-        System.out.println(hexStringToByteArray(hex));
+    public static String fishMethod(JSONObject jsonParam){
+        try {
+            String sbbh = jsonParam.getString("sbbh");
+            String tplj = jsonParam.getString("tplj");
+            String cjsj = jsonParam.getString("cjsj");
+            Map<String, JSONObject> sbbhEquipMap = (Map<String, JSONObject>) redisTstaticemplate.opsForValue().get(RedisCode.SBBHEQUIPMAP);
+            if(!sbbhEquipMap.keySet().contains("equip-"+sbbh)){
+                return "设备编号不存在";
+            }
+            if(!Pattern.matches(TypeUtils.ZZ_18, tplj.substring(tplj.lastIndexOf("/")+1))){
+                return "文件名称命名错误";
+            }
+            WaterEquipment waterEquipment = JSONObject.toJavaObject(sbbhEquipMap.get("equip-"+sbbh), WaterEquipment.class);
+            String deptcode = waterEquipment.getDeptcode();
+            PointerSecondDto dto = new PointerSecondDto();
+            dto.setDecibelValue(tplj.substring(tplj.indexOf("FISH_")+5,tplj.lastIndexOf(".txt")));
+            dto.setCjsj(DateUtil.toDate(cjsj,"yyyy-MM-dd HH:mm:ss"));
+            dto.setSm(sbbh);
+            dto.setCreateTime(new Date());
+            dto.setBz(deptcode);
+            pointerSecondServiceStatic.save(dto);
+            JSONObject result = new JSONObject();
+            result.put("data","保存成功");
+            result.put("otherFile",true);
+            return result.toJSONString();
+        }catch (Exception e){
+            LOG.error("保存指针文件出错："+e.getMessage());
+            return "保存指针文件出错";
+        }
     }
+
+    public static String yfpMethod(JSONObject jsonParam){
+        try {
+            String sbbh = jsonParam.getString("sbbh");
+            String tplj = jsonParam.getString("tplj");
+            String cjsj = jsonParam.getString("cjsj");
+            Map<String, JSONObject> sbbhEquipMap = (Map<String, JSONObject>) redisTstaticemplate.opsForValue().get(RedisCode.SBBHEQUIPMAP);
+            if(!sbbhEquipMap.keySet().contains("equip-"+sbbh)){
+                return "设备编号不存在";
+            }
+            if(!Pattern.matches(TypeUtils.ZZ_19, tplj.substring(tplj.lastIndexOf("/")+1))){
+                return "文件名称命名错误";
+            }
+            WaterEquipment waterEquipment = JSONObject.toJavaObject(sbbhEquipMap.get("equip-"+sbbh), WaterEquipment.class);
+            String deptcode = waterEquipment.getDeptcode();
+            PointerDayDto dto = new PointerDayDto();
+            dto.setDecibelValue(tplj.substring(tplj.indexOf("YFP_")+4,tplj.lastIndexOf(".txt")));
+            dto.setCjsj(DateUtil.toDate(cjsj,"yyyy-MM-dd HH:mm:ss"));
+            dto.setSm(sbbh);
+            dto.setCreateTime(new Date());
+            dto.setBz(deptcode);
+            pointerDayServiceStatic.save(dto);
+            JSONObject result = new JSONObject();
+            result.put("data","保存成功");
+            result.put("otherFile",true);
+            return result.toJSONString();
+        }catch (Exception e){
+            LOG.error("保存指针文件出错："+e.getMessage());
+            return "保存指针文件出错";
+        }
+    }
+
 }
