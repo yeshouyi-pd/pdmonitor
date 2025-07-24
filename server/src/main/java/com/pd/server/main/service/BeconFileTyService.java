@@ -3,18 +3,15 @@ package com.pd.server.main.service;
 import com.pd.server.main.domain.BeconFileTy;
 import com.pd.server.main.domain.BeconFileTyExample;
 import com.pd.server.main.dto.BeconFileTyDto;
-import com.pd.server.main.dto.PageDto;
 import com.pd.server.main.mapper.BeconFileTyMapper;
 import com.pd.server.util.CopyUtil;
 import com.pd.server.util.UuidUtil;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
-        import java.util.Date;
+import java.util.Date;
 
 @Service
 public class BeconFileTyService {
@@ -27,6 +24,11 @@ public class BeconFileTyService {
     */
     public List<BeconFileTy> selectByExample(BeconFileTyExample beconFileTyExample) {
         return beconFileTyMapper.selectByExample(beconFileTyExample);
+    }
+
+
+    public List<BeconFileTy> selectByExampleSpecial(BeconFileTyDto record){
+        return beconFileTyMapper.selectByExampleSpecial(record);
     }
 
     /**

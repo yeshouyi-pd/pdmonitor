@@ -57,6 +57,8 @@ public class BeconFileDto extends PageDto{
     */
     private String sm;
 
+    private String xmbh;
+
     public String getId() {
         return id;
     }
@@ -137,6 +139,13 @@ public class BeconFileDto extends PageDto{
         this.sm = sm;
     }
 
+    public String getXmbh() {
+        return xmbh;
+    }
+
+    public void setXmbh(String xmbh) {
+        this.xmbh = xmbh;
+    }
 
     @Override
     public String toString() {

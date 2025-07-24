@@ -4,18 +4,15 @@ import com.pd.server.main.domain.BeconFile;
 import com.pd.server.main.domain.BeconFileExample;
 import com.pd.server.main.domain.BeconFileStatistics;
 import com.pd.server.main.dto.BeconFileDto;
-import com.pd.server.main.dto.PageDto;
 import com.pd.server.main.mapper.BeconFileMapper;
 import com.pd.server.util.CopyUtil;
 import com.pd.server.util.UuidUtil;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
-        import java.util.Date;
+import java.util.Date;
 
 @Service
 public class BeconFileService {
@@ -28,6 +25,10 @@ public class BeconFileService {
     */
     public List<BeconFile> selectByExample(BeconFileExample beconFileExample) {
         return beconFileMapper.selectByExample(beconFileExample);
+    }
+
+    public List<BeconFile> selectByExampleSpecial(BeconFileDto record){
+        return beconFileMapper.selectByExampleSpecial(record);
     }
 
     /**

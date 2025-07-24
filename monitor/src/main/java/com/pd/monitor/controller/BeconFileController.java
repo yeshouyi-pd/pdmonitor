@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.pd.server.main.domain.BeconFile;
 import com.pd.server.main.domain.BeconFileExample;
+import com.pd.server.main.domain.SpaceFile;
 import com.pd.server.main.dto.BeconFileDto;
 import com.pd.server.main.dto.ResponseDto;
 import com.pd.server.main.service.BeconFileService;
@@ -15,6 +16,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -39,6 +41,9 @@ public class BeconFileController {
         if(!StringUtils.isEmpty(pageDto.getSbbh())){
             ca.andSbbhEqualTo(pageDto.getSbbh());
         }
+        if(!StringUtils.isEmpty(pageDto.getXbid())){
+            ca.andXbidEqualTo(pageDto.getXbid());
+        }
         if(!StringUtils.isEmpty(pageDto.getStime())){
             ca.andRqGreaterThanOrEqualTo(pageDto.getStime());
         }
@@ -46,7 +51,12 @@ public class BeconFileController {
             ca.andRqLessThanOrEqualTo(pageDto.getEtime());
         }
         beconFileExample.setOrderByClause(" cjsj desc ");
-        List<BeconFile> beconFileList = beconFileService.selectByExample(beconFileExample);
+        List<BeconFile> beconFileList = new ArrayList<>();
+        if(!StringUtils.isEmpty(pageDto.getXmbh())){
+            beconFileList = beconFileService.selectByExampleSpecial(pageDto);
+        }else{
+            beconFileList = beconFileService.selectByExample(beconFileExample);
+        }
         PageInfo<BeconFile> pageInfo = new PageInfo<>(beconFileList);
         pageDto.setTotal(pageInfo.getTotal());
         List<BeconFileDto> beconFileDtoList = CopyUtil.copyList(beconFileList, BeconFileDto.class);

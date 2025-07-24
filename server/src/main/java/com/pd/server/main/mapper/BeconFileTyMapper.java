@@ -3,6 +3,8 @@ package com.pd.server.main.mapper;
 import com.pd.server.main.domain.BeconFileTy;
 import com.pd.server.main.domain.BeconFileTyExample;
 import java.util.List;
+
+import com.pd.server.main.dto.BeconFileTyDto;
 import org.apache.ibatis.annotations.Param;
 
 public interface BeconFileTyMapper {
@@ -17,6 +19,8 @@ public interface BeconFileTyMapper {
     int insertSelective(BeconFileTy record);
 
     List<BeconFileTy> selectByExample(BeconFileTyExample example);
+
+    List<BeconFileTy> selectByExampleSpecial(BeconFileTyDto record);
 
     BeconFileTy selectByPrimaryKey(String id);
 

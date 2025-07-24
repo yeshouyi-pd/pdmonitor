@@ -94,6 +94,9 @@ import UavFlyVideoNoGl from "./views/uav/uavFlyVideoNoGl.vue";
 import NutritionalStatusAssessment from "./views/nutritionalStatus/nutritionalStatusAssessment.vue";
 import VideoImageExtraction from "./views/nutritionalStatus/videoImageExtraction.vue";
 import SpaceFile from "./views/monitor/spaceFile.vue";
+import BeconFile from "./views/monitor/beconFile.vue";
+import BeconFileStatistics from "./views/monitor/beconFileStatistics.vue";
+import BeconFileTy from "./views/monitor/beconFileTy.vue";
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -471,6 +474,18 @@ export default new Router({
             path: "monitor/spaceFile",
             name: "monitor/spaceFile",
             component: SpaceFile
+        },{
+            path: "monitor/beconFile",
+            name: "monitor/beconFile",
+            component: BeconFile
+        },{
+            path: "monitor/beconFileStatistics",
+            name: "monitor/beconFileStatistics",
+            component: BeconFileStatistics
+        },{
+            path: "monitor/beconFileTy",
+            name: "monitor/beconFileTy",
+            component: BeconFileTy
         }]
     }]
 })

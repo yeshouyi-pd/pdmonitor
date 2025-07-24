@@ -2,6 +2,7 @@ package com.pd.monitor.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.pd.server.main.domain.BeconFile;
 import com.pd.server.main.domain.BeconFileTy;
 import com.pd.server.main.domain.BeconFileTyExample;
 import com.pd.server.main.dto.BeconFileTyDto;
@@ -15,6 +16,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -46,7 +48,12 @@ public class BeconFileTyController {
             ca.andRqLessThanOrEqualTo(pageDto.getEtime());
         }
         beconFileTyExample.setOrderByClause(" cjsj desc ");
-        List<BeconFileTy> beconFileTyList = beconFileTyService.selectByExample(beconFileTyExample);
+        List<BeconFileTy> beconFileTyList = new ArrayList<>();
+        if(!StringUtils.isEmpty(pageDto.getXmbh())){
+            beconFileTyList = beconFileTyService.selectByExampleSpecial(pageDto);
+        }else{
+            beconFileTyList = beconFileTyService.selectByExample(beconFileTyExample);
+        }
         PageInfo<BeconFileTy> pageInfo = new PageInfo<>(beconFileTyList);
         pageDto.setTotal(pageInfo.getTotal());
         List<BeconFileTyDto> beconFileTyDtoList = CopyUtil.copyList(beconFileTyList, BeconFileTyDto.class);
@@ -68,7 +75,7 @@ public class BeconFileTyController {
                 ValidatorUtil.length(beconFileTyDto.getRq(), "日期", 1, 10);
                 ValidatorUtil.length(beconFileTyDto.getGps(), "gps", 1, 100);
                 ValidatorUtil.length(beconFileTyDto.getJd(), "经度", 1, 50);
-                ValidatorUtil.length(beconFileTyDto.getWd(), "维度", 1, 50);
+                ValidatorUtil.length(beconFileTyDto.getWd(), "纬度", 1, 50);
                 ValidatorUtil.length(beconFileTyDto.getSm(), "说明", 1, 100);
                 ValidatorUtil.length(beconFileTyDto.getBz(), "备注", 1, 100);
 

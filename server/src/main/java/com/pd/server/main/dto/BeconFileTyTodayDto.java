@@ -58,7 +58,7 @@ public class BeconFileTyTodayDto extends PageDto{
     private String jd;
 
     /**
-    * 维度
+    * 纬度
     */
     private String wd;
 

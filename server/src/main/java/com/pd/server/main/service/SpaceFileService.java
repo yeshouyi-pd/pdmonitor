@@ -1,23 +1,18 @@
 package com.pd.server.main.service;
 
-import com.pd.server.main.domain.EquipmentFileEvent;
 import com.pd.server.main.domain.SpaceFile;
 import com.pd.server.main.domain.SpaceFileExample;
-import com.pd.server.main.dto.EquipmentFileEventDto;
 import com.pd.server.main.dto.SpaceFileDto;
-import com.pd.server.main.dto.PageDto;
 import com.pd.server.main.dto.basewx.my.SpaceFileExcel;
 import com.pd.server.main.mapper.SpaceFileMapper;
 import com.pd.server.util.CopyUtil;
 import com.pd.server.util.UuidUtil;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
-        import java.util.Date;
+import java.util.Date;
 
 @Service
 public class SpaceFileService {

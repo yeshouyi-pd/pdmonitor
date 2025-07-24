@@ -10,13 +10,10 @@ import com.pd.server.main.dto.basewx.my.SpaceFileExcel;
 import com.pd.server.main.dto.basewx.my.VideoEventExport;
 import com.pd.server.main.service.*;
 import com.pd.server.util.DateUtil;
-import com.pd.server.util.DateUtils;
-import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.xssf.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +23,6 @@ import javax.annotation.Resource;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.awt.*;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
@@ -81,6 +77,238 @@ public class ExportFileController extends BaseWxController{
     private AzimuthAngleUniqueService azimuthAngleUniqueService;
     @Resource
     private SpaceFileService spaceFileService;
+    @Resource
+    private BeconFileTyService beconFileTyService;
+    @Resource
+    private BeconFileStatisticsService beconFileStatisticsService;
+
+    /**
+     * 定点基站导出
+     */
+    @GetMapping("/exportBeconFile")
+    public void exportBeconFile(HttpServletRequest request, HttpServletResponse response){
+        try {
+            BeconFileStatisticsExample example = new BeconFileStatisticsExample();
+            BeconFileStatisticsExample.Criteria ca = example.createCriteria();
+            if(!StringUtils.isEmpty(request.getParameter("xbid"))){
+                ca.andXbidEqualTo(request.getParameter("xbid"));
+            }
+            if(!StringUtils.isEmpty(request.getParameter("stime"))){
+                ca.andRqGreaterThanOrEqualTo(request.getParameter("stime"));
+            }
+            if(!StringUtils.isEmpty(request.getParameter("etime"))){
+                ca.andRqLessThanOrEqualTo(request.getParameter("etime"));
+            }
+            example.setOrderByClause(" rq desc ");
+            List<BeconFileStatistics> lists = beconFileStatisticsService.selectByExample(example);
+            //导出
+            XSSFWorkbook workbook = new XSSFWorkbook();
+            //设置字体大小
+            XSSFFont fontCommon = workbook.createFont();
+            fontCommon.setFontHeightInPoints((short)12); // 设置字体大小为12磅
+            //设置公共单元格样式
+            XSSFCellStyle cellStyleCommon = workbook.createCellStyle();
+            cellStyleCommon.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+            cellStyleCommon.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
+            XSSFCellStyle cellStyleCommonLeft = workbook.createCellStyle();
+            cellStyleCommonLeft.setAlignment(XSSFCellStyle.ALIGN_LEFT);
+            cellStyleCommonLeft.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
+            //cellStyleCommon.setFont(fontCommon);
+            //设置字体加粗
+            XSSFFont font = workbook.createFont();
+            font.setBoldweight(XSSFFont.BOLDWEIGHT_BOLD);
+            font.setFontHeightInPoints((short)12); // 设置字体大小为12磅
+            XSSFCellStyle cellStyleTitle = workbook.createCellStyle();
+            cellStyleTitle.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+            cellStyleTitle.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
+            cellStyleTitle.setFont(font);
+            // 创建一个工作表
+            String fileName = "定点基站数据(" + new Date().getTime() + ").xls";
+            XSSFSheet sheet = workbook.createSheet("定点基站数据");
+            // 自适应列宽度
+            sheet.autoSizeColumn(1, true);
+            sheet.setDefaultColumnWidth(18);
+            sheet.setDefaultRowHeight((short)(40*10));
+            // 添加表头行
+            XSSFRow titleRow = sheet.createRow(0);//第1行
+            List<String> titleStrList = Arrays.asList("信标id","日期","设备编号合集","设备名称合集","gps合集");
+            for(int i=0;i<titleStrList.size();i++){
+                XSSFCell cell = titleRow.createCell(i);
+                cell.setCellValue(titleStrList.get(i));
+                cell.setCellStyle(cellStyleTitle);
+            }
+            Map<String,String> mapSbxh = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.SBBHSBMC);
+            int i=0;
+            for(BeconFileStatistics entity : lists){
+                XSSFRow comRow = sheet.createRow(i+1);
+                XSSFCell comCell0 = comRow.createCell(0);
+                comCell0.setCellValue(entity.getXbid());
+                comCell0.setCellStyle(cellStyleCommon);
+                XSSFCell comCell1 = comRow.createCell(1);
+                comCell1.setCellValue(entity.getRq());
+                comCell1.setCellStyle(cellStyleCommon);
+                XSSFCell comCell2 = comRow.createCell(2);
+                comCell2.setCellValue(entity.getSbbhs());
+                comCell2.setCellStyle(cellStyleCommonLeft);
+                XSSFCell comCell3 = comRow.createCell(3);
+                comCell3.setCellValue(entity.getSbmcs());
+                comCell3.setCellStyle(cellStyleCommonLeft);
+                XSSFCell comCell4 = comRow.createCell(4);
+                comCell4.setCellValue(entity.getGps());
+                comCell4.setCellStyle(cellStyleCommonLeft);
+                i++;
+            }
+            response.setHeader("content-Type", "application/vnd.ms-excel");
+            // 下载文件的默认名称
+            String agent = request.getHeader("User-Agent");
+            if (agent.contains("MSIE") || agent.contains("Trident") || agent.contains("Edge")) {
+                response.setHeader("Content-Disposition",
+                        "attachment; filename=" + URLEncoder.encode(fileName, "UTF-8"));
+            } else {
+                response.setHeader("Content-Disposition",
+                        "attachment; filename=\"" + new String((fileName).getBytes("UTF-8"), "ISO-8859-1") + "\"");
+            }
+            response.setCharacterEncoding("utf-8");
+            ServletOutputStream out = response.getOutputStream();
+            workbook.write(out);
+            out.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 移动基站导出
+     */
+    @GetMapping("/exportBeconFileTy")
+    public void exportBeconFileTy(HttpServletRequest request, HttpServletResponse response){
+        try {
+            List<String> sbbhs = new ArrayList<>();
+            if(!StringUtils.isEmpty(request.getParameter("xmbh"))){
+                sbbhs = waterProEquipService.findSbsnByXmbh(request.getParameter("xmbh"));
+            }
+            BeconFileTyExample example = new BeconFileTyExample();
+            BeconFileTyExample.Criteria ca = example.createCriteria();
+            if(!StringUtils.isEmpty(request.getParameter("sbbh"))){
+                ca.andSbbhEqualTo(request.getParameter("sbbh"));
+            }
+            if(!StringUtils.isEmpty(request.getParameter("stime"))){
+                ca.andRqGreaterThanOrEqualTo(request.getParameter("stime"));
+            }
+            if(!StringUtils.isEmpty(request.getParameter("etime"))){
+                ca.andRqLessThanOrEqualTo(request.getParameter("etime"));
+            }
+            example.setOrderByClause(" cjsj desc ");
+            List<BeconFileTy> lists = beconFileTyService.selectByExample(example);
+            //导出
+            XSSFWorkbook workbook = new XSSFWorkbook();
+            //设置字体大小
+            XSSFFont fontCommon = workbook.createFont();
+            fontCommon.setFontHeightInPoints((short)12); // 设置字体大小为12磅
+            //设置公共单元格样式
+            XSSFCellStyle cellStyleCommon = workbook.createCellStyle();
+            cellStyleCommon.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+            cellStyleCommon.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
+            XSSFCellStyle cellStyleCommonLeft = workbook.createCellStyle();
+            cellStyleCommonLeft.setAlignment(XSSFCellStyle.ALIGN_LEFT);
+            cellStyleCommonLeft.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
+            //cellStyleCommon.setFont(fontCommon);
+            //设置字体加粗
+            XSSFFont font = workbook.createFont();
+            font.setBoldweight(XSSFFont.BOLDWEIGHT_BOLD);
+            font.setFontHeightInPoints((short)12); // 设置字体大小为12磅
+            XSSFCellStyle cellStyleTitle = workbook.createCellStyle();
+            cellStyleTitle.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+            cellStyleTitle.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
+            cellStyleTitle.setFont(font);
+            // 创建一个工作表
+            String fileName = "移动基站数据(" + new Date().getTime() + ").xls";
+            XSSFSheet sheet = workbook.createSheet("移动基站数据");
+            // 自适应列宽度
+            sheet.autoSizeColumn(1, true);
+            sheet.setDefaultColumnWidth(18);
+            sheet.setDefaultRowHeight((short)(40*10));
+            // 添加表头行
+            XSSFRow titleRow = sheet.createRow(0);//第1行
+            List<String> titleStrList = Arrays.asList("设备编号","设备名称","采集时间","信标合集","坐标","经度","纬度");
+            for(int i=0;i<titleStrList.size();i++){
+                XSSFCell cell = titleRow.createCell(i);
+                cell.setCellValue(titleStrList.get(i));
+                cell.setCellStyle(cellStyleTitle);
+            }
+            Map<String,String> mapSbxh = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.SBBHSBMC);
+            int i=0;
+            for(BeconFileTy entity : lists){
+                if(!StringUtils.isEmpty(request.getParameter("xmbh"))){
+                    if(sbbhs.contains(entity.getSbbh())){
+                        XSSFRow comRow = sheet.createRow(i+1);
+                        XSSFCell comCell0 = comRow.createCell(0);
+                        comCell0.setCellValue(entity.getSbbh());
+                        comCell0.setCellStyle(cellStyleCommon);
+                        XSSFCell comCell1 = comRow.createCell(1);
+                        comCell1.setCellValue(mapSbxh.get("sbmc-"+entity.getSbbh()));
+                        comCell1.setCellStyle(cellStyleCommon);
+                        XSSFCell comCell2 = comRow.createCell(2);
+                        comCell2.setCellValue(DateUtil.getFormatDate(entity.getCjsj(),"yyyy-MM-dd HH:mm:ss"));
+                        comCell2.setCellStyle(cellStyleCommon);
+                        XSSFCell comCell3 = comRow.createCell(3);
+                        comCell3.setCellValue(entity.getXbid());
+                        comCell3.setCellStyle(cellStyleCommonLeft);
+                        XSSFCell comCell4 = comRow.createCell(4);
+                        comCell4.setCellValue(entity.getGps());
+                        comCell4.setCellStyle(cellStyleCommon);
+                        XSSFCell comCell5 = comRow.createCell(5);
+                        comCell5.setCellValue(entity.getJd());
+                        comCell5.setCellStyle(cellStyleCommon);
+                        XSSFCell comCell6 = comRow.createCell(6);
+                        comCell6.setCellValue(entity.getWd());
+                        comCell6.setCellStyle(cellStyleCommon);
+                        i++;
+                    }
+                }else{
+                    XSSFRow comRow = sheet.createRow(i+1);
+                    XSSFCell comCell0 = comRow.createCell(0);
+                    comCell0.setCellValue(entity.getSbbh());
+                    comCell0.setCellStyle(cellStyleCommon);
+                    XSSFCell comCell1 = comRow.createCell(1);
+                    comCell1.setCellValue(mapSbxh.get("sbmc-"+entity.getSbbh()));
+                    comCell1.setCellStyle(cellStyleCommon);
+                    XSSFCell comCell2 = comRow.createCell(2);
+                    comCell2.setCellValue(entity.getCjsj());
+                    comCell2.setCellStyle(cellStyleCommon);
+                    XSSFCell comCell3 = comRow.createCell(3);
+                    comCell3.setCellValue(entity.getXbid());
+                    comCell3.setCellStyle(cellStyleCommonLeft);
+                    XSSFCell comCell4 = comRow.createCell(4);
+                    comCell4.setCellValue(entity.getGps());
+                    comCell4.setCellStyle(cellStyleCommon);
+                    XSSFCell comCell5 = comRow.createCell(5);
+                    comCell5.setCellValue(entity.getJd());
+                    comCell5.setCellStyle(cellStyleCommon);
+                    XSSFCell comCell6 = comRow.createCell(6);
+                    comCell6.setCellValue(entity.getWd());
+                    comCell6.setCellStyle(cellStyleCommon);
+                    i++;
+                }
+            }
+            response.setHeader("content-Type", "application/vnd.ms-excel");
+            // 下载文件的默认名称
+            String agent = request.getHeader("User-Agent");
+            if (agent.contains("MSIE") || agent.contains("Trident") || agent.contains("Edge")) {
+                response.setHeader("Content-Disposition",
+                        "attachment; filename=" + URLEncoder.encode(fileName, "UTF-8"));
+            } else {
+                response.setHeader("Content-Disposition",
+                        "attachment; filename=\"" + new String((fileName).getBytes("UTF-8"), "ISO-8859-1") + "\"");
+            }
+            response.setCharacterEncoding("utf-8");
+            ServletOutputStream out = response.getOutputStream();
+            workbook.write(out);
+            out.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
     /**
      * 驱离文件管理导出
@@ -141,12 +369,7 @@ public class ExportFileController extends BaseWxController{
                 cell.setCellValue(titleStrList.get(i));
                 cell.setCellStyle(cellStyleTitle);
             }
-            WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
-            WaterEquipmentExample.Criteria caEquip = waterEquipmentExample.createCriteria();
-            caEquip.andSblbEqualTo("0001");
-            caEquip.andDqzlEqualTo("A4");
-            List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(waterEquipmentExample);
-            Map<String, String> mapSbxh = waterEquipmentList.stream().collect(Collectors.toMap(p -> p.getSbsn(), p -> p.getSbmc()));
+            Map<String,String> mapSbxh = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.SBBHSBMC);
             Map<String,String> mapDept = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.DEPTCODENAME);
             int i=0;
             for(SpaceFileExcel entity : lists){
@@ -157,7 +380,7 @@ public class ExportFileController extends BaseWxController{
                         comCell0.setCellValue(entity.getSbbh());
                         comCell0.setCellStyle(cellStyleCommon);
                         XSSFCell comCell1 = comRow.createCell(1);
-                        comCell1.setCellValue(mapSbxh.get(entity.getSbbh()));
+                        comCell1.setCellValue(mapSbxh.get("sbmc-"+entity.getSbbh()));
                         comCell1.setCellStyle(cellStyleCommon);
                         XSSFCell comCell2 = comRow.createCell(2);
                         comCell2.setCellValue(entity.getRq());
@@ -173,7 +396,7 @@ public class ExportFileController extends BaseWxController{
                     comCell0.setCellValue(entity.getSbbh());
                     comCell0.setCellStyle(cellStyleCommon);
                     XSSFCell comCell1 = comRow.createCell(1);
-                    comCell1.setCellValue(mapSbxh.get(entity.getSbbh()));
+                    comCell1.setCellValue(mapSbxh.get("sbmc-"+entity.getSbbh()));
                     comCell1.setCellStyle(cellStyleCommon);
                     XSSFCell comCell2 = comRow.createCell(2);
                     comCell2.setCellValue(entity.getRq());
@@ -259,12 +482,7 @@ public class ExportFileController extends BaseWxController{
                 cell.setCellValue(titleStrList.get(i));
                 cell.setCellStyle(cellStyleTitle);
             }
-            WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
-            WaterEquipmentExample.Criteria caEquip = waterEquipmentExample.createCriteria();
-            caEquip.andSblbEqualTo("0001");
-            caEquip.andDqzlEqualTo("A4");
-            List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(waterEquipmentExample);
-            Map<String, String> mapSbxh = waterEquipmentList.stream().collect(Collectors.toMap(p -> p.getSbsn(), p -> p.getSbmc()));
+            Map<String,String> mapSbxh = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.SBBHSBMC);
             Map<String,String> mapDept = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.DEPTCODENAME);
             int i=0;
             for(AzimuthAngleUnique entity : lists){
@@ -278,7 +496,7 @@ public class ExportFileController extends BaseWxController{
                         comCell1.setCellValue(entity.getSbbh());
                         comCell1.setCellStyle(cellStyleCommon);
                         XSSFCell comCell2 = comRow.createCell(2);
-                        comCell2.setCellValue(mapSbxh.get(entity.getSbbh()));
+                        comCell2.setCellValue(mapSbxh.get("sbmc-"+entity.getSbbh()));
                         comCell2.setCellStyle(cellStyleCommon);
                         XSSFCell comCell3 = comRow.createCell(3);
                         comCell3.setCellValue(entity.getRq());
@@ -324,7 +542,7 @@ public class ExportFileController extends BaseWxController{
                     comCell1.setCellValue(entity.getSbbh());
                     comCell1.setCellStyle(cellStyleCommon);
                     XSSFCell comCell2 = comRow.createCell(2);
-                    comCell2.setCellValue(mapSbxh.get(entity.getSbbh()));
+                    comCell2.setCellValue(mapSbxh.get("sbmc-"+entity.getSbbh()));
                     comCell2.setCellStyle(cellStyleCommon);
                     XSSFCell comCell3 = comRow.createCell(3);
                     comCell3.setCellValue(entity.getRq());
@@ -498,16 +716,12 @@ public class ExportFileController extends BaseWxController{
                 cell.setCellValue(titleStrList.get(i));
                 cell.setCellStyle(cellStyleTitle);
             }
-            WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
-            WaterEquipmentExample.Criteria caEquip = waterEquipmentExample.createCriteria();
-            caEquip.andSblbEqualTo("0001");
-            List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(waterEquipmentExample);
-            Map<String, String> mapSbxh = waterEquipmentList.stream().collect(Collectors.toMap(p -> p.getSbsn(), p -> p.getSbmc()));
+            Map<String,String> mapSbxh = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.SBBHSBMC);
             for(int i=0;i<videoEventList.size();i++){
                 VideoEventExport videoEventExport = videoEventList.get(i);
                 XSSFRow comRow = sheet.createRow(i+1);
                 XSSFCell comCell0 = comRow.createCell(0);
-                comCell0.setCellValue(mapSbxh.get(videoEventExport.getSbbh()));
+                comCell0.setCellValue(mapSbxh.get("sbmc-"+videoEventExport.getSbbh()));
                 comCell0.setCellStyle(cellStyleCommon);
                 XSSFCell comCell1 = comRow.createCell(1);
                 comCell1.setCellValue(videoEventExport.getSbbh());
@@ -602,16 +816,12 @@ public class ExportFileController extends BaseWxController{
                 cell.setCellValue(titleStrList.get(i));
                 cell.setCellStyle(cellStyleTitle);
             }
-            WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
-            WaterEquipmentExample.Criteria caEquip = waterEquipmentExample.createCriteria();
-            caEquip.andSblbEqualTo("0001");
-            List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(waterEquipmentExample);
-            Map<String, String> mapSbxh = waterEquipmentList.stream().collect(Collectors.toMap(p -> p.getSbsn(), p -> p.getSbmc()));
+            Map<String,String> mapSbxh = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.SBBHSBMC);
             for(int i=0;i<videoEventList.size();i++){
                 VideoEvent videoEvent = videoEventList.get(i);
                 XSSFRow comRow = sheet.createRow(i+1);
                 XSSFCell comCell0 = comRow.createCell(0);
-                comCell0.setCellValue(mapSbxh.get(videoEvent.getSbbh()));
+                comCell0.setCellValue(mapSbxh.get("sbmc-"+videoEvent.getSbbh()));
                 comCell0.setCellStyle(cellStyleCommon);
                 XSSFCell comCell1 = comRow.createCell(1);
                 comCell1.setCellValue(videoEvent.getSbbh());
@@ -713,11 +923,7 @@ public class ExportFileController extends BaseWxController{
                 cell.setCellStyle(cellStyleTitle);
             }
             Map<String,String> mapDept = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.DEPTCODENAME);
-            WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
-            WaterEquipmentExample.Criteria caEquip = waterEquipmentExample.createCriteria();
-            caEquip.andSblbEqualTo("0001");
-            List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(waterEquipmentExample);
-            Map<String, String> mapSbxh = waterEquipmentList.stream().collect(Collectors.toMap(p -> p.getSbsn(), p -> p.getSbmc()));
+            Map<String,String> mapSbxh = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.SBBHSBMC);
             for(int i=0;i<appearNumbersList.size();i++){
                 AppearNumbers appearNumbers = appearNumbersList.get(i);
                 XSSFRow comRow = sheet.createRow(i+1);
@@ -725,7 +931,7 @@ public class ExportFileController extends BaseWxController{
                 comCell0.setCellValue(mapDept.get(appearNumbers.getDeptcode()));
                 comCell0.setCellStyle(cellStyleCommon);
                 XSSFCell comCell1 = comRow.createCell(1);
-                comCell1.setCellValue(mapSbxh.get(appearNumbers.getSbbh()));
+                comCell1.setCellValue(mapSbxh.get("sbmc-"+appearNumbers.getSbbh()));
                 comCell1.setCellStyle(cellStyleCommon);
                 XSSFCell comCell2 = comRow.createCell(2);
                 comCell2.setCellValue(appearNumbers.getSbbh());
@@ -819,11 +1025,7 @@ public class ExportFileController extends BaseWxController{
                 cell.setCellStyle(cellStyleTitle);
             }
             Map<String,String> mapDept = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.DEPTCODENAME);
-            WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
-            WaterEquipmentExample.Criteria caEquip = waterEquipmentExample.createCriteria();
-            caEquip.andSblbEqualTo("0001");
-            List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(waterEquipmentExample);
-            Map<String, String> mapSbxh = waterEquipmentList.stream().collect(Collectors.toMap(p -> p.getSbsn(), p -> p.getSbmc()));
+            Map<String,String> mapSbxh = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.SBBHSBMC);
             for(int i=0;i<equipmentFileAlarmEventList.size();i++){
                 EquipmentFileAlarmEvent alarmEvent = equipmentFileAlarmEventList.get(i);
                 XSSFRow comRow = sheet.createRow(i+1);
@@ -831,7 +1033,7 @@ public class ExportFileController extends BaseWxController{
                 comCell0.setCellValue(mapDept.get(alarmEvent.getDeptcode()));
                 comCell0.setCellStyle(cellStyleCommon);
                 XSSFCell comCell1 = comRow.createCell(1);
-                comCell1.setCellValue(mapSbxh.get(alarmEvent.getSbbh()));
+                comCell1.setCellValue(mapSbxh.get("sbmc-"+alarmEvent.getSbbh()));
                 comCell1.setCellStyle(cellStyleCommon);
                 XSSFCell comCell2 = comRow.createCell(2);
                 comCell2.setCellValue(alarmEvent.getSbbh());
@@ -921,18 +1123,14 @@ public class ExportFileController extends BaseWxController{
                 cell.setCellValue(titleStrList.get(i));
                 cell.setCellStyle(cellStyleTitle);
             }
-            WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
-            WaterEquipmentExample.Criteria caEquip = waterEquipmentExample.createCriteria();
-            caEquip.andSblbEqualTo("0001");
-            List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(waterEquipmentExample);
-            Map<String, String> mapSbxh = waterEquipmentList.stream().collect(Collectors.toMap(p -> p.getSbsn(), p -> p.getSbmc()));
+            Map<String,String> mapSbxh = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.SBBHSBMC);
             int i=0;
             for(PointerSecond pointerSecond : lists){
                 if(!StringUtils.isEmpty(request.getParameter("xmbh"))){
                     if(sbbhs.contains(pointerSecond.getSm())){
                         XSSFRow comRow = sheet.createRow(i+1);
                         XSSFCell comCell0 = comRow.createCell(0);
-                        comCell0.setCellValue(mapSbxh.get(pointerSecond.getSm()));
+                        comCell0.setCellValue(mapSbxh.get("sbmc-"+pointerSecond.getSm()));
                         comCell0.setCellStyle(cellStyleCommon);
                         XSSFCell comCell1 = comRow.createCell(1);
                         comCell1.setCellValue(pointerSecond.getSm());
@@ -948,7 +1146,7 @@ public class ExportFileController extends BaseWxController{
                 }else{
                     XSSFRow comRow = sheet.createRow(i+1);
                     XSSFCell comCell0 = comRow.createCell(0);
-                    comCell0.setCellValue(mapSbxh.get(pointerSecond.getSm()));
+                    comCell0.setCellValue(mapSbxh.get("sbmc-"+pointerSecond.getSm()));
                     comCell0.setCellStyle(cellStyleCommon);
                     XSSFCell comCell1 = comRow.createCell(1);
                     comCell1.setCellValue(pointerSecond.getSm());
@@ -1037,18 +1235,14 @@ public class ExportFileController extends BaseWxController{
                 cell.setCellValue(titleStrList.get(i));
                 cell.setCellStyle(cellStyleTitle);
             }
-            WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
-            WaterEquipmentExample.Criteria caEquip = waterEquipmentExample.createCriteria();
-            caEquip.andSblbEqualTo("0001");
-            List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(waterEquipmentExample);
-            Map<String, String> mapSbxh = waterEquipmentList.stream().collect(Collectors.toMap(p -> p.getSbsn(), p -> p.getSbmc()));
+            Map<String,String> mapSbxh = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.SBBHSBMC);
             int i=0;
             for(PointerDay pointerDay : lists){
                 if(!StringUtils.isEmpty(request.getParameter("xmbh"))){
                     if(sbbhs.contains(pointerDay.getSm())){
                         XSSFRow comRow = sheet.createRow(i+1);
                         XSSFCell comCell0 = comRow.createCell(0);
-                        comCell0.setCellValue(mapSbxh.get(pointerDay.getSm()));
+                        comCell0.setCellValue(mapSbxh.get("sbmc-"+pointerDay.getSm()));
                         comCell0.setCellStyle(cellStyleCommon);
                         XSSFCell comCell1 = comRow.createCell(1);
                         comCell1.setCellValue(pointerDay.getSm());
@@ -1064,7 +1258,7 @@ public class ExportFileController extends BaseWxController{
                 }else{
                     XSSFRow comRow = sheet.createRow(i+1);
                     XSSFCell comCell0 = comRow.createCell(0);
-                    comCell0.setCellValue(mapSbxh.get(pointerDay.getSm()));
+                    comCell0.setCellValue(mapSbxh.get("sbmc-"+pointerDay.getSm()));
                     comCell0.setCellStyle(cellStyleCommon);
                     XSSFCell comCell1 = comRow.createCell(1);
                     comCell1.setCellValue(pointerDay.getSm());
@@ -1152,18 +1346,14 @@ public class ExportFileController extends BaseWxController{
                 cell.setCellValue(titleStrList.get(i));
                 cell.setCellStyle(cellStyleTitle);
             }
-            WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
-            WaterEquipmentExample.Criteria caEquip = waterEquipmentExample.createCriteria();
-            caEquip.andSblbEqualTo("0001");
-            List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(waterEquipmentExample);
-            Map<String, String> mapSbxh = waterEquipmentList.stream().collect(Collectors.toMap(p -> p.getSbsn(), p -> p.getSbmc()));
+            Map<String,String> mapSbxh = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.SBBHSBMC);
             int i=0;
             for(EquipmentFileEvent fileEvent : equipmentFileEventList){
                 if(!StringUtils.isEmpty(request.getParameter("xmbh"))){
                     if(sbbhs.contains(fileEvent.getSbbh())){
                         XSSFRow comRow = sheet.createRow(i+1);
                         XSSFCell comCell0 = comRow.createCell(0);
-                        comCell0.setCellValue(mapSbxh.get(fileEvent.getSbbh()));
+                        comCell0.setCellValue(mapSbxh.get("sbmc-"+fileEvent.getSbbh()));
                         comCell0.setCellStyle(cellStyleCommon);
                         XSSFCell comCell1 = comRow.createCell(1);
                         comCell1.setCellValue(fileEvent.getSbbh());
@@ -1182,7 +1372,7 @@ public class ExportFileController extends BaseWxController{
                 }else{
                     XSSFRow comRow = sheet.createRow(i+1);
                     XSSFCell comCell0 = comRow.createCell(0);
-                    comCell0.setCellValue(mapSbxh.get(fileEvent.getSbbh()));
+                    comCell0.setCellValue(mapSbxh.get("sbmc-"+fileEvent.getSbbh()));
                     comCell0.setCellStyle(cellStyleCommon);
                     XSSFCell comCell1 = comRow.createCell(1);
                     comCell1.setCellValue(fileEvent.getSbbh());
@@ -1272,18 +1462,14 @@ public class ExportFileController extends BaseWxController{
                 cell.setCellValue(titleStrList.get(i));
                 cell.setCellStyle(cellStyleTitle);
             }
-            WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
-            WaterEquipmentExample.Criteria caEquip = waterEquipmentExample.createCriteria();
-            caEquip.andSblbEqualTo("0001");
-            List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(waterEquipmentExample);
-            Map<String, String> mapSbxh = waterEquipmentList.stream().collect(Collectors.toMap(p -> p.getSbsn(), p -> p.getSbmc()));
+            Map<String,String> mapSbxh = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.SBBHSBMC);
             int i=0;
             for(EquipmentTyEvent tyEvent : equipmentTyEventList){
                 if(!StringUtils.isEmpty(request.getParameter("xmbh"))){
                     if(sbbhs.contains(tyEvent.getSbbh())){
                         XSSFRow comRow = sheet.createRow(i+1);
                         XSSFCell comCell0 = comRow.createCell(0);
-                        comCell0.setCellValue(mapSbxh.get(tyEvent.getSbbh()));
+                        comCell0.setCellValue(mapSbxh.get("sbmc-"+tyEvent.getSbbh()));
                         comCell0.setCellStyle(cellStyleCommon);
                         XSSFCell comCell1 = comRow.createCell(1);
                         comCell1.setCellValue(tyEvent.getSbbh());
@@ -1317,7 +1503,7 @@ public class ExportFileController extends BaseWxController{
                 }else{
                     XSSFRow comRow = sheet.createRow(i+1);
                     XSSFCell comCell0 = comRow.createCell(0);
-                    comCell0.setCellValue(mapSbxh.get(tyEvent.getSbbh()));
+                    comCell0.setCellValue(mapSbxh.get("sbmc-"+tyEvent.getSbbh()));
                     comCell0.setCellStyle(cellStyleCommon);
                     XSSFCell comCell1 = comRow.createCell(1);
                     comCell1.setCellValue(tyEvent.getSbbh());
@@ -1536,11 +1722,7 @@ public class ExportFileController extends BaseWxController{
             cell.setCellStyle(cellStyleTitle);
         }
         Map<String,String> mapDept = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.DEPTCODENAME);
-        WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
-        WaterEquipmentExample.Criteria caEquip = waterEquipmentExample.createCriteria();
-        caEquip.andSblbEqualTo("0001");
-        List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(waterEquipmentExample);
-        Map<String, String> mapSbxh = waterEquipmentList.stream().collect(Collectors.toMap(p -> p.getSbsn(), p -> p.getSbmc()));
+        Map<String,String> mapSbxh = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.SBBHSBMC);
         for(int i=0;i<dataList.size();i++){
             PredationNum entity = dataList.get(i);
             XSSFRow comRow = sheet.createRow(i+1);
@@ -1548,7 +1730,7 @@ public class ExportFileController extends BaseWxController{
             comCell0.setCellValue(mapDept.get(entity.getDeptcode()));
             comCell0.setCellStyle(cellStyleCommon);
             XSSFCell comCell1 = comRow.createCell(1);
-            comCell1.setCellValue(mapSbxh.get(entity.getSbbh()));
+            comCell1.setCellValue(mapSbxh.get("sbmc-"+entity.getSbbh()));
             comCell1.setCellStyle(cellStyleCommon);
             XSSFCell comCell2 = comRow.createCell(2);
             comCell2.setCellValue(entity.getSbbh());
@@ -1644,12 +1826,7 @@ public class ExportFileController extends BaseWxController{
             cell.setCellStyle(cellStyleTitle);
         }
         Map<String,String> mapDept = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.DEPTCODENAME);
-        WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
-        WaterEquipmentExample.Criteria waterCa = waterEquipmentExample.createCriteria();
-        waterCa.andSblbEqualTo("0001");
-        waterCa.andDqzlIn(Arrays.asList("A1","A4"));
-        List<WaterEquipment> waterEquipmentList = waterEquipmentService.list(waterEquipmentExample);
-        Map<String, String> mapSbxh = waterEquipmentList.stream().collect(Collectors.toMap(p -> p.getSbsn(), p -> p.getSbmc()));
+        Map<String,String> mapSbxh = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.SBBHSBMC);
         for(int i=0;i<dataList.size();i++){
             EquipmentFileAlarmEvent efae = new EquipmentFileAlarmEvent();
             PredationNum entity = dataList.get(i);
@@ -1659,7 +1836,7 @@ public class ExportFileController extends BaseWxController{
             comCell0.setCellStyle(cellStyleCommon);
             efae.setDeptcode(entity.getDeptcode());
             XSSFCell comCell1 = comRow.createCell(1);
-            comCell1.setCellValue(mapSbxh.get(entity.getSbbh()));
+            comCell1.setCellValue(mapSbxh.get("sbmc-"+entity.getSbbh()));
             comCell1.setCellStyle(cellStyleCommon);
             efae.setSbbh(entity.getSbbh());
             XSSFCell comCell2 = comRow.createCell(2);

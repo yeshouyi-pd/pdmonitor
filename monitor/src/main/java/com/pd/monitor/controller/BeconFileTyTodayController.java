@@ -68,7 +68,7 @@ public class BeconFileTyTodayController {
                 ValidatorUtil.length(beconFileTyTodayDto.getRq(), "日期", 1, 10);
                 ValidatorUtil.length(beconFileTyTodayDto.getGps(), "gps", 1, 100);
                 ValidatorUtil.length(beconFileTyTodayDto.getJd(), "经度", 1, 50);
-                ValidatorUtil.length(beconFileTyTodayDto.getWd(), "维度", 1, 50);
+                ValidatorUtil.length(beconFileTyTodayDto.getWd(), "纬度", 1, 50);
                 ValidatorUtil.length(beconFileTyTodayDto.getSm(), "说明", 1, 100);
                 ValidatorUtil.length(beconFileTyTodayDto.getBz(), "备注", 1, 100);
 

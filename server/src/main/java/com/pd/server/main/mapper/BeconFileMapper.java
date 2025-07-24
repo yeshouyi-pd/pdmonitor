@@ -5,6 +5,7 @@ import com.pd.server.main.domain.BeconFileExample;
 import java.util.List;
 
 import com.pd.server.main.domain.BeconFileStatistics;
+import com.pd.server.main.dto.BeconFileDto;
 import org.apache.ibatis.annotations.Param;
 
 public interface BeconFileMapper {
@@ -19,6 +20,8 @@ public interface BeconFileMapper {
     int insertSelective(BeconFile record);
 
     List<BeconFile> selectByExample(BeconFileExample example);
+
+    List<BeconFile> selectByExampleSpecial(@Param("record") BeconFileDto record);
 
     BeconFile selectByPrimaryKey(String id);
 

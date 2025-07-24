@@ -1,7 +1,7 @@
 package com.pd.server.main.dto;
 
 
-public class BeconFileStatisticsDto {
+public class BeconFileStatisticsDto extends PageDto{
 
     /**
     * 
