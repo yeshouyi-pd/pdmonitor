@@ -3,22 +3,15 @@ package com.pd.server.main.service.shj;
 import com.alibaba.fastjson.JSONObject;
 import com.pd.server.config.RedisCode;
 import com.pd.server.main.domain.*;
-import com.pd.server.main.dto.BeconFileDto;
-import com.pd.server.main.dto.BeconFileTyDto;
-import com.pd.server.main.dto.PointerDayDto;
-import com.pd.server.main.dto.PointerSecondDto;
+import com.pd.server.main.dto.*;
 import com.pd.server.main.mapper.EquipmentFileTyMapper;
 import com.pd.server.main.mapper.EquipmentFileTyTodayMapper;
 import com.pd.server.main.mapper.EquipmentTyEventMapper;
 import com.pd.server.main.mapper.WaterEquipmentMapper;
-import com.pd.server.main.service.BeconFileTyService;
-import com.pd.server.main.service.BeconFileTyTodayService;
-import com.pd.server.main.service.PointerDayService;
-import com.pd.server.main.service.PointerSecondService;
-import com.pd.server.util.CopyUtil;
-import com.pd.server.util.DateUtil;
-import com.pd.server.util.TypeUtils;
-import com.pd.server.util.UuidUtil;
+import com.pd.server.main.service.*;
+import com.pd.server.util.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -33,6 +26,8 @@ import java.util.regex.Pattern;
 @Service
 public class EquipmentFileTyShjService extends AbstractScanRequest{
 
+    private static final Logger LOG = LoggerFactory.getLogger(EquipmentFileTyShjService.class);
+
     public static RedisTemplate redisTstaticemplate;
     public static EquipmentTyEventMapper equipmentTyEventMapperStatic;
     public static EquipmentFileTyMapper equipmentFileTyMapperStatic;
@@ -42,6 +37,8 @@ public class EquipmentFileTyShjService extends AbstractScanRequest{
     public static PointerDayService pointerDayServiceStatic;
     public static BeconFileTyService beconFileTyServiceStatic;
     public static BeconFileTyTodayService beconFileTyTodayServiceStatic;
+    public static AngleFileService angleFileServiceStatic;
+    public static AttrService attrServiceStatic;
 
     @Resource
     private RedisTemplate redisTemplate;
@@ -61,6 +58,10 @@ public class EquipmentFileTyShjService extends AbstractScanRequest{
     private BeconFileTyService beconFileTyService;
     @Resource
     private BeconFileTyTodayService beconFileTyTodayService;
+    @Resource
+    private AngleFileService angleFileService;
+    @Resource
+    private AttrService attrService;
 
     @PostConstruct
     protected void init() {
@@ -73,6 +74,8 @@ public class EquipmentFileTyShjService extends AbstractScanRequest{
         pointerDayServiceStatic = pointerDayService;
         beconFileTyServiceStatic = beconFileTyService;
         beconFileTyTodayServiceStatic = beconFileTyTodayService;
+        angleFileServiceStatic = angleFileService;
+        attrServiceStatic = attrService;
     }
 
     /**
@@ -93,7 +96,19 @@ public class EquipmentFileTyShjService extends AbstractScanRequest{
         }
         //判断是不是信标文件，如果是则调用信标方法
         if(tplj.contains("Becon")){
-            return BeconMethod(jsonParam);
+            return beconMethod(jsonParam);
+        }
+        //判断是不是仪器姿态文件，如果是则调用仪器姿态方法
+        if(tplj.contains("angle")){
+            return angleMethod(jsonParam);
+        }
+        //指针数据每秒
+        if(tplj.contains("FISH")){
+            return fishMethod(jsonParam);
+        }
+        //指针数据每天
+        if(tplj.contains("YFP")){
+            return yfpMethod(jsonParam);
         }
         try {
             JSONObject obj = JSONObject.parseObject(sm1);
@@ -151,22 +166,6 @@ public class EquipmentFileTyShjService extends AbstractScanRequest{
                     tyEvent.setSm(entity.getSm2());
                     tyEvent.setSm1(obj.getString("sd"));
                     equipmentTyEventMapperStatic.insert(tyEvent);
-                }else if("1018".equals(entity.getType())){//指针数据每秒
-                    PointerSecondDto dto = new PointerSecondDto();
-                    dto.setDecibelValue(entity.getTs());
-                    dto.setCjsj(DateUtil.toDate(cjsj,"yyyy-MM-dd HH:mm:ss"));
-                    dto.setSm(sbbh);
-                    dto.setCreateTime(new Date());
-                    dto.setBz(deptcode);
-                    pointerSecondServiceStatic.save(dto);
-                }else if("1019".equals(entity.getType())){//指针数据每天
-                    PointerDayDto dto = new PointerDayDto();
-                    dto.setDecibelValue(entity.getTs());
-                    dto.setCjsj(DateUtil.toDate(cjsj,"yyyy-MM-dd HH:mm:ss"));
-                    dto.setSm(sbbh);
-                    dto.setCreateTime(new Date());
-                    dto.setBz(deptcode);
-                    pointerDayServiceStatic.save(dto);
                 }
                 equipmentFileTyMapperStatic.insert(entity);
                 todayMapperStatic.insertEquipTy(entity);
@@ -188,8 +187,115 @@ public class EquipmentFileTyShjService extends AbstractScanRequest{
         }
     }
 
+    public static String fishMethod(JSONObject jsonParam){
+        try {
+            String sbbh = jsonParam.getString("sbbh");
+            String tplj = jsonParam.getString("tplj");
+            String cjsj = jsonParam.getString("cjsj");
+            Map<String, JSONObject> sbbhEquipMap = (Map<String, JSONObject>) redisTstaticemplate.opsForValue().get(RedisCode.SBBHEQUIPMAP);
+            if(!sbbhEquipMap.keySet().contains("equip-"+sbbh)){
+                return "设备编号不存在";
+            }
+            if(!Pattern.matches(TypeUtils.ZZ_18, tplj.substring(tplj.lastIndexOf("/")+1))){
+                return "文件名称命名错误";
+            }
+            WaterEquipment waterEquipment = JSONObject.toJavaObject(sbbhEquipMap.get("equip-"+sbbh), WaterEquipment.class);
+            String deptcode = waterEquipment.getDeptcode();
+            PointerSecondDto dto = new PointerSecondDto();
+            dto.setDecibelValue(tplj.substring(tplj.indexOf("FISH_")+5,tplj.lastIndexOf(".txt")));
+            dto.setCjsj(DateUtil.toDate(cjsj,"yyyy-MM-dd HH:mm:ss"));
+            dto.setSm(sbbh);
+            dto.setCreateTime(new Date());
+            dto.setBz(deptcode);
+            pointerSecondServiceStatic.save(dto);
+            JSONObject result = new JSONObject();
+            result.put("data","保存成功");
+            result.put("otherFile",true);
+            return result.toJSONString();
+        }catch (Exception e){
+            LOG.error("保存指针文件出错："+e.getMessage());
+            return "保存指针文件出错";
+        }
+    }
+
+    public static String yfpMethod(JSONObject jsonParam){
+        try {
+            String sbbh = jsonParam.getString("sbbh");
+            String tplj = jsonParam.getString("tplj");
+            String cjsj = jsonParam.getString("cjsj");
+            Map<String, JSONObject> sbbhEquipMap = (Map<String, JSONObject>) redisTstaticemplate.opsForValue().get(RedisCode.SBBHEQUIPMAP);
+            if(!sbbhEquipMap.keySet().contains("equip-"+sbbh)){
+                return "设备编号不存在";
+            }
+            if(!Pattern.matches(TypeUtils.ZZ_19, tplj.substring(tplj.lastIndexOf("/")+1))){
+                return "文件名称命名错误";
+            }
+            WaterEquipment waterEquipment = JSONObject.toJavaObject(sbbhEquipMap.get("equip-"+sbbh), WaterEquipment.class);
+            String deptcode = waterEquipment.getDeptcode();
+            PointerDayDto dto = new PointerDayDto();
+            dto.setDecibelValue(tplj.substring(tplj.indexOf("YFP_")+4,tplj.lastIndexOf(".txt")));
+            dto.setCjsj(DateUtil.toDate(cjsj,"yyyy-MM-dd HH:mm:ss"));
+            dto.setSm(sbbh);
+            dto.setCreateTime(new Date());
+            dto.setBz(deptcode);
+            pointerDayServiceStatic.save(dto);
+            JSONObject result = new JSONObject();
+            result.put("data","保存成功");
+            result.put("otherFile",true);
+            return result.toJSONString();
+        }catch (Exception e){
+            LOG.error("保存指针文件出错："+e.getMessage());
+            return "保存指针文件出错";
+        }
+    }
+
+    //仪器姿态文件
+    public static String angleMethod(JSONObject jsonParam){
+        try {
+            String sbbh = jsonParam.getString("sbbh");
+            String tplj = jsonParam.getString("tplj");
+            String cjsj = jsonParam.getString("cjsj");
+            Map<String, JSONObject> sbbhEquipMap = (Map<String, JSONObject>) redisTstaticemplate.opsForValue().get(RedisCode.SBBHEQUIPMAP);
+            if(!sbbhEquipMap.keySet().contains("equip-"+sbbh)){
+                return "设备编号不存在";
+            }
+            if(!Pattern.matches(TypeUtils.ZZ_34, tplj.substring(tplj.lastIndexOf("/")+1))){
+                return "文件名称命名错误";
+            }
+            WaterEquipment waterEquipment = JSONObject.toJavaObject(sbbhEquipMap.get("equip-"+sbbh), WaterEquipment.class);
+            AngleFileDto angleFileDto = new AngleFileDto();
+            angleFileDto.setSbbh(sbbh);
+            angleFileDto.setWjlj(tplj);
+            angleFileDto.setCjsj(DateUtil.toDate(cjsj,"yyyy-MM-dd HH:mm:ss"));
+            angleFileDto.setJssj(new Date());
+            angleFileDto.setDeptcode(waterEquipment.getDeptcode());
+            angleFileDto.setRq(DateUtil.getFormatDate(angleFileDto.getCjsj(),"yyyy-MM-dd"));
+            angleFileServiceStatic.save(angleFileDto);
+            if(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd").equals(angleFileDto.getRq())){
+                sendMsg(sbbh);
+            }
+            JSONObject result = new JSONObject();
+            result.put("data","保存成功");
+            result.put("otherFile",true);
+            return result.toJSONString();
+        }catch (Exception e){
+            LOG.error("保存仪器姿态文件出错："+e.getMessage());
+            return "保存仪器姿态文件出错";
+        }
+    }
+
+    public static void sendMsg(String sbbh){
+        try {
+            String angleTemplateId = attrServiceStatic.findByAttrKey("angleTemplateId");
+            String phoneNum = attrServiceStatic.findByAttrKey("anglePhone");
+            SendSmsTool.sendSms(angleTemplateId,sbbh, phoneNum);
+        }catch (Exception e){
+            LOG.error("仪器姿态发送短信失败："+e.getMessage());
+        }
+    }
+
     //信标文件
-    public static String BeconMethod(JSONObject jsonParam){
+    public static String beconMethod(JSONObject jsonParam){
         try {
             String sbbh = jsonParam.getString("sbbh");
             String tplj = jsonParam.getString("tplj");
