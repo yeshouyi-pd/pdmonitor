@@ -98,10 +98,6 @@ public class EquipmentFileTyShjService extends AbstractScanRequest{
         if(tplj.contains("Becon")){
             return beconMethod(jsonParam);
         }
-        //判断是不是仪器姿态文件，如果是则调用仪器姿态方法
-        if(tplj.contains("angle")){
-            return angleMethod(jsonParam);
-        }
         //指针数据每秒
         if(tplj.contains("FISH")){
             return fishMethod(jsonParam);
@@ -246,51 +242,6 @@ public class EquipmentFileTyShjService extends AbstractScanRequest{
         }catch (Exception e){
             LOG.error("保存指针文件出错："+e.getMessage());
             return "保存指针文件出错";
-        }
-    }
-
-    //仪器姿态文件
-    public static String angleMethod(JSONObject jsonParam){
-        try {
-            String sbbh = jsonParam.getString("sbbh");
-            String tplj = jsonParam.getString("tplj");
-            String cjsj = jsonParam.getString("cjsj");
-            Map<String, JSONObject> sbbhEquipMap = (Map<String, JSONObject>) redisTstaticemplate.opsForValue().get(RedisCode.SBBHEQUIPMAP);
-            if(!sbbhEquipMap.keySet().contains("equip-"+sbbh)){
-                return "设备编号不存在";
-            }
-            if(!Pattern.matches(TypeUtils.ZZ_34, tplj.substring(tplj.lastIndexOf("/")+1))){
-                return "文件名称命名错误";
-            }
-            WaterEquipment waterEquipment = JSONObject.toJavaObject(sbbhEquipMap.get("equip-"+sbbh), WaterEquipment.class);
-            AngleFileDto angleFileDto = new AngleFileDto();
-            angleFileDto.setSbbh(sbbh);
-            angleFileDto.setWjlj(tplj);
-            angleFileDto.setCjsj(DateUtil.toDate(cjsj,"yyyy-MM-dd HH:mm:ss"));
-            angleFileDto.setJssj(new Date());
-            angleFileDto.setDeptcode(waterEquipment.getDeptcode());
-            angleFileDto.setRq(DateUtil.getFormatDate(angleFileDto.getCjsj(),"yyyy-MM-dd"));
-            angleFileServiceStatic.save(angleFileDto);
-            if(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd").equals(angleFileDto.getRq())){
-                sendMsg(sbbh);
-            }
-            JSONObject result = new JSONObject();
-            result.put("data","保存成功");
-            result.put("otherFile",true);
-            return result.toJSONString();
-        }catch (Exception e){
-            LOG.error("保存仪器姿态文件出错："+e.getMessage());
-            return "保存仪器姿态文件出错";
-        }
-    }
-
-    public static void sendMsg(String sbbh){
-        try {
-            String angleTemplateId = attrServiceStatic.findByAttrKey("angleTemplateId");
-            String phoneNum = attrServiceStatic.findByAttrKey("anglePhone");
-            SendSmsTool.sendSms(angleTemplateId,sbbh, phoneNum);
-        }catch (Exception e){
-            LOG.error("仪器姿态发送短信失败："+e.getMessage());
         }
     }
 
