@@ -2,7 +2,7 @@
   <div>
     <div class="widget-box">
       <div class="widget-header">
-        <h4 class="widget-title">移动基站数据查询</h4>
+        <h4 class="widget-title">设备姿态报警数据查询</h4>
       </div>
       <div class="widget-body">
         <div class="widget-main">
