@@ -37,8 +37,8 @@ public class BeconFileQuartz {
     @Resource
     private RedisTemplate redisTemplate;
 
-    @Scheduled(cron = "0 38 16 * * ? ")
-    //@Scheduled(cron = "0 30 02 * * ? ")
+    //@Scheduled(cron = "0 38 16 * * ? ")
+    @Scheduled(cron = "0 30 02 * * ? ")
     public void loop() throws ParseException {
         String beforeDayStr = DateTools.getFormatDate(DateUtil.getDaysLater(new Date(),-1),"yyyy-MM-dd");
         //不是今天的数据
