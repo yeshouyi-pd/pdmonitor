@@ -1,0 +1,62 @@
+{
+  "name": "admin",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve-dev": "vue-cli-service serve --mode dev",
+    "serve-prod": "vue-cli-service serve --mode prod",
+    "build-dev": "vue-cli-service build --mode dev",
+    "build-prod": "vue-cli-service build --mode prod",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "@jiaminghi/data-view": "^2.10.0",
+    "axios": "^0.19.2",
+    "bootstrap-table": "^1.18.3",
+    "coordtransform": "^2.1.2",
+    "core-js": "^3.6.5",
+    "crypto-js": "^4.0.0",
+    "echarts": "^5.2.2",
+    "element-ui": "^2.15.14",
+    "flv.js": "^1.6.2",
+    "jquery": "^3.6.0",
+    "moment": "^2.29.1",
+    "spark-md5": "^3.0.2",
+    "viewerjs": "^1.9.0",
+    "vue": "^2.6.11",
+    "vue-amap": "^0.5.10",
+    "vue-aplayer": "^1.6.1",
+    "vue-router": "^3.3.1",
+    "vue-simple-uploader": "^0.7.6",
+    "vue-ueditor-wrap": "^2.4.4",
+    "vue-video-player": "^5.0.2"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.4.0",
+    "@vue/cli-plugin-eslint": "~4.4.0",
+    "@vue/cli-service": "~4.4.0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.7.2",
+    "eslint-plugin-vue": "^6.2.2",
+    "vue-template-compiler": "^2.6.11"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "babel-eslint"
+    },
+    "rules": {}
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}
