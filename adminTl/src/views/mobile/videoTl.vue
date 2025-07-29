@@ -152,7 +152,9 @@ export default {
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/welcome/getExplainVideoEvent', {sfysp:1}).then((response)=>{
         let resp = response.data;
         _this.videoEvents = resp.content;
-        _this.getPlayUrl(_this.videoEvents[0]);
+        if( _this.videoEvents.length > 0 ){
+          _this.getPlayUrl(_this.videoEvents[0]);
+        }
       })
     },
     back(){
