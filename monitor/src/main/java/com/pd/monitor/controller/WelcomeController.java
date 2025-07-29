@@ -133,7 +133,11 @@ public class WelcomeController extends BaseWxController{
         if(!StringUtils.isEmpty(videoEventDto.getSm())){
             ca.andSmEqualTo(videoEventDto.getSm());
         }
-        ca.andSfyspIn(Arrays.asList(0,2));//实时视频和联动分析视频
+        if(!StringUtils.isEmpty(videoEventDto.getSfysp())){
+            ca.andSfyspEqualTo(videoEventDto.getSfysp());
+        }else{
+            ca.andSfyspIn(Arrays.asList(0,2));//实时视频和联动分析视频
+        }
         List<VideoEvent> lists = videoEventService.selectByDp(example, limitNum);
         responseDto.setContent(lists);
         return responseDto;
