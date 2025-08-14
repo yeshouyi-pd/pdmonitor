@@ -1,0 +1,77 @@
+<template>
+  <div>
+    <input type="file" @change="handleFileSelect">
+    <button @click="startUpload">开始上传</button>
+    <div>进度：{{ progress }}%</div>
+  </div>
+</template>
+
+<script>
+import SparkMD5 from 'spark-md5'
+
+export default {
+  data() {
+    return {
+      file: null,
+      CHUNK_SIZE: 5 * 1024 * 1024, // 5MB
+      progress: 0
+    }
+  },
+  methods: {
+    async handleFileSelect(e) {
+      this.file = e.target.files[0]
+    },
+
+    async calculateMD5(file) {
+      return new Promise(resolve => {
+        const spark = new SparkMD5.ArrayBuffer()
+        const reader = new FileReader()
+
+        reader.onload = e => {
+          spark.append(e.target.result)
+          resolve(spark.end())
+        }
+
+        reader.readAsArrayBuffer(file)
+      })
+    },
+
+    async startUpload() {
+      const fileMd5 = await this.calculateMD5(this.file)
+      const totalChunks = Math.ceil(this.file.size / this.CHUNK_SIZE)
+
+      // 检查已上传分片
+      const { data } = await this.$axios.get('/upload/check', {
+        params: { fileMd5, totalChunks }
+      })
+
+      // 上传缺失分片
+      for (let i = 0; i < totalChunks; i++) {
+        if (data.uploaded.includes(i)) continue
+
+        const chunk = this.file.slice(
+            i * this.CHUNK_SIZE,
+            Math.min((i + 1) * this.CHUNK_SIZE, this.file.size)
+        )
+
+        const formData = new FormData()
+        formData.append('file', chunk)
+        formData.append('chunkIndex', i)
+        formData.append('fileMd5', fileMd5)
+
+        await this.$axios.post('/upload/chunk', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        })
+
+        this.progress = Math.round(((i + 1) / totalChunks) * 100)
+      }
+
+      // 合并文件
+      await this.$axios.post('/upload/merge', {
+        fileMd5,
+        fileName: this.file.name
+      })
+    }
+  }
+}
+</script>
