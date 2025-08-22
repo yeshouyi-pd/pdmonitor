@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pd.server.main.mapper.SonarSingleValueMapper">
+  <resultMap id="BaseResultMap" type="com.pd.server.main.domain.SonarSingleValue">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="single_target_id" jdbcType="VARCHAR" property="singleTargetId" />
+    <result column="d_ts" jdbcType="DOUBLE" property="dTs" />
+    <result column="d_range" jdbcType="DOUBLE" property="dRange" />
+    <result column="n_bio_type_code" jdbcType="INTEGER" property="nBioTypeCode" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.pd.server.main.domain.SonarSingleValue">
+    <result column="l_time" jdbcType="LONGVARCHAR" property="lTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, single_target_id, d_ts, d_range, n_bio_type_code
+  </sql>
+  <sql id="Blob_Column_List">
+    l_time
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.pd.server.main.domain.SonarSingleValueExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from sonar_single_value
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.pd.server.main.domain.SonarSingleValueExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from sonar_single_value
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from sonar_single_value
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from sonar_single_value
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pd.server.main.domain.SonarSingleValueExample">
+    delete from sonar_single_value
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pd.server.main.domain.SonarSingleValue">
+    insert into sonar_single_value (id, single_target_id, d_ts, 
+      d_range, n_bio_type_code, l_time
+      )
+    values (#{id,jdbcType=VARCHAR}, #{singleTargetId,jdbcType=VARCHAR}, #{dTs,jdbcType=DOUBLE}, 
+      #{dRange,jdbcType=DOUBLE}, #{nBioTypeCode,jdbcType=INTEGER}, #{lTime,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.pd.server.main.domain.SonarSingleValue">
+    insert into sonar_single_value
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="singleTargetId != null">
+        single_target_id,
+      </if>
+      <if test="dTs != null">
+        d_ts,
+      </if>
+      <if test="dRange != null">
+        d_range,
+      </if>
+      <if test="nBioTypeCode != null">
+        n_bio_type_code,
+      </if>
+      <if test="lTime != null">
+        l_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="singleTargetId != null">
+        #{singleTargetId,jdbcType=VARCHAR},
+      </if>
+      <if test="dTs != null">
+        #{dTs,jdbcType=DOUBLE},
+      </if>
+      <if test="dRange != null">
+        #{dRange,jdbcType=DOUBLE},
+      </if>
+      <if test="nBioTypeCode != null">
+        #{nBioTypeCode,jdbcType=INTEGER},
+      </if>
+      <if test="lTime != null">
+        #{lTime,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pd.server.main.domain.SonarSingleValueExample" resultType="java.lang.Long">
+    select count(*) from sonar_single_value
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update sonar_single_value
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.singleTargetId != null">
+        single_target_id = #{record.singleTargetId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dTs != null">
+        d_ts = #{record.dTs,jdbcType=DOUBLE},
+      </if>
+      <if test="record.dRange != null">
+        d_range = #{record.dRange,jdbcType=DOUBLE},
+      </if>
+      <if test="record.nBioTypeCode != null">
+        n_bio_type_code = #{record.nBioTypeCode,jdbcType=INTEGER},
+      </if>
+      <if test="record.lTime != null">
+        l_time = #{record.lTime,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update sonar_single_value
+    set id = #{record.id,jdbcType=VARCHAR},
+      single_target_id = #{record.singleTargetId,jdbcType=VARCHAR},
+      d_ts = #{record.dTs,jdbcType=DOUBLE},
+      d_range = #{record.dRange,jdbcType=DOUBLE},
+      n_bio_type_code = #{record.nBioTypeCode,jdbcType=INTEGER},
+      l_time = #{record.lTime,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update sonar_single_value
+    set id = #{record.id,jdbcType=VARCHAR},
+      single_target_id = #{record.singleTargetId,jdbcType=VARCHAR},
+      d_ts = #{record.dTs,jdbcType=DOUBLE},
+      d_range = #{record.dRange,jdbcType=DOUBLE},
+      n_bio_type_code = #{record.nBioTypeCode,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pd.server.main.domain.SonarSingleValue">
+    update sonar_single_value
+    <set>
+      <if test="singleTargetId != null">
+        single_target_id = #{singleTargetId,jdbcType=VARCHAR},
+      </if>
+      <if test="dTs != null">
+        d_ts = #{dTs,jdbcType=DOUBLE},
+      </if>
+      <if test="dRange != null">
+        d_range = #{dRange,jdbcType=DOUBLE},
+      </if>
+      <if test="nBioTypeCode != null">
+        n_bio_type_code = #{nBioTypeCode,jdbcType=INTEGER},
+      </if>
+      <if test="lTime != null">
+        l_time = #{lTime,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.pd.server.main.domain.SonarSingleValue">
+    update sonar_single_value
+    set single_target_id = #{singleTargetId,jdbcType=VARCHAR},
+      d_ts = #{dTs,jdbcType=DOUBLE},
+      d_range = #{dRange,jdbcType=DOUBLE},
+      n_bio_type_code = #{nBioTypeCode,jdbcType=INTEGER},
+      l_time = #{lTime,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pd.server.main.domain.SonarSingleValue">
+    update sonar_single_value
+    set single_target_id = #{singleTargetId,jdbcType=VARCHAR},
+      d_ts = #{dTs,jdbcType=DOUBLE},
+      d_range = #{dRange,jdbcType=DOUBLE},
+      n_bio_type_code = #{nBioTypeCode,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
