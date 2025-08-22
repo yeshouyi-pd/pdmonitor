@@ -43,6 +43,8 @@
         methods:{
             createAmap(){
                 let _this = this;
+                let loginuser = Tool.getLoginUser();
+                let usergps = loginuser.deptgpsmap[loginuser.deptcode];
                 if(_this.LOCAL_ZHBHT || _this.LOCAL_VIDEO){
                   _this.amap = new AMap.Map('equipmentamap', {
                     center: [113.73,22.30],
@@ -149,18 +151,28 @@
                 }else{
                   if(_this.LOCAL_SSBRL){
                     _this.amap = new AMap.Map('equipmentamap', {
-                      center: [114.299945,30.593221],
+                      //center: [114.299945,30.593221],
                       resizeEnable: true,
                       zoom: 5,
                       //mapStyle: _this.mapStyle
                     });
+                    if(!Tool.isEmpty(usergps)){
+                      _this.amap.setCenter(usergps.split(","));
+                    }else{
+                      _this.amap.setCenter([114.299945,30.593221]);
+                    }
                   }else if(_this.LOCAL_TLBHQ){
                     _this.amap = new AMap.Map('equipmentamap', {
-                      center: [117.773,31.0355],
+                      //center: [117.773,31.0355],
                       resizeEnable: true,
                       zoom: 10,
                       mapStyle: _this.mapStyle
                     });
+                    if(!Tool.isEmpty(usergps)){
+                      _this.amap.setCenter(usergps.split(","));
+                    }else{
+                      _this.amap.setCenter([117.773,31.0355]);
+                    }
                   }
                 }
             },

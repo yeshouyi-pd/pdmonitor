@@ -43,6 +43,8 @@
         methods:{
             createAmap(){
                 let _this = this;
+                let loginuser = Tool.getLoginUser();
+                let usergps = loginuser.deptgpsmap[loginuser.deptcode];
                 if(_this.LOCAL_ZHBHT || _this.LOCAL_VIDEO){
                   _this.amap = new AMap.Map('equipmentamap', {
                     center: [113.73,22.30],
@@ -149,18 +151,28 @@
                 }else{
                   if(_this.LOCAL_SSBRL){
                     _this.amap = new AMap.Map('equipmentamap', {
-                      center: [116.197297,29.73374],
+                      //center: [114.299945,30.593221],
                       resizeEnable: true,
-                      zoom: 13,
+                      zoom: 5,
                       //mapStyle: _this.mapStyle
                     });
+                    if(!Tool.isEmpty(usergps)){
+                      _this.amap.setCenter(usergps.split(","));
+                    }else{
+                      _this.amap.setCenter([114.299945,30.593221]);
+                    }
                   }else if(_this.LOCAL_TLBHQ){
                     _this.amap = new AMap.Map('equipmentamap', {
-                      center: [117.773,31.0355],
+                      //center: [117.773,31.0355],
                       resizeEnable: true,
                       zoom: 10,
                       mapStyle: _this.mapStyle
                     });
+                    if(!Tool.isEmpty(usergps)){
+                      _this.amap.setCenter(usergps.split(","));
+                    }else{
+                      _this.amap.setCenter([117.773,31.0355]);
+                    }
                   }
                 }
             },
@@ -171,6 +183,9 @@
                     Loading.hide();
                     let devices = response.data.content;
                     for(let i=0;i<devices.length;i++){
+                        if(Tool.isEmpty(devices[i].gps)){
+                          continue;
+                        }
                         if(devices[i].sbzt=='1'){
                             _this.onLineCount++;
                         }else if(devices[i].sbzt=='2'){
@@ -178,10 +193,6 @@
                         }else if(devices[i].sbzt=='3') {
                             _this.errorCount++;
                         }
-                        let circleIcon = new AMap.Icon({
-                          image: '/largemonitors/assets/imgs/circle.png',
-                          size: new AMap.Size(29, 29)
-                        });
                         let icon = new AMap.Icon({
                             image: '/largemonitors/assets/imgs/zcsb.png',
                             size: new AMap.Size(29, 29)
@@ -195,26 +206,15 @@
                           size: new AMap.Size(35, 35)
                         })
                         if("0001"==devices[i].sblb){
-                            let marker;
-                            if("A0"==devices[i].dqzl || "A1"==devices[i].dqzl){
-                              marker = new AMap.Marker({
-                                icon: circleIcon,
-                                position: devices[i].gps.split(','),
-                                offset: new AMap.Pixel(-12,-12),
-                                zIndex: 101,
-                                map: _this.amap
-                              });
-                            }else{
-                              marker = new AMap.Marker({
+                            let marker = new AMap.Marker({
                                 icon: devices[i].sbzt=='1'?icon:ycicon,
                                 position: devices[i].gps.split(','),
                                 offset: new AMap.Pixel(-12,-12),
                                 zIndex: 101,
                                 map: _this.amap
-                              });
-                            }
+                            });
                             marker.setLabel({
-                              direction:'bottom',
+                              direction:'center',
                               offset: new AMap.Pixel(10, 0),  //设置文本标注偏移量
                               content: "<div style='color: #fff'>"+devices[i].fzwz+"</div>", //设置文本标注内容
                             });
