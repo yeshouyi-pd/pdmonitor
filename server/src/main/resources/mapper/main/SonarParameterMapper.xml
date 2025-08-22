@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pd.server.main.mapper.SonarParameterMapper">
+  <resultMap id="BaseResultMap" type="com.pd.server.main.domain.SonarParameter">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="device_code" jdbcType="VARCHAR" property="deviceCode" />
+    <result column="avr_max" jdbcType="DOUBLE" property="avrMax" />
+    <result column="avr_min" jdbcType="DOUBLE" property="avrMin" />
+    <result column="cross_section_area" jdbcType="DOUBLE" property="crossSectionArea" />
+    <result column="map_para_value" jdbcType="VARCHAR" property="mapParaValue" />
+    <result column="weight_or_flux_acc_time" jdbcType="INTEGER" property="weightOrFluxAccTime" />
+    <result column="change_time" jdbcType="VARCHAR" property="changeTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, device_code, avr_max, avr_min, cross_section_area, map_para_value, weight_or_flux_acc_time, 
+    change_time
+  </sql>
+  <select id="selectByExample" parameterType="com.pd.server.main.domain.SonarParameterExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from sonar_parameter
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sonar_parameter
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from sonar_parameter
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pd.server.main.domain.SonarParameterExample">
+    delete from sonar_parameter
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pd.server.main.domain.SonarParameter">
+    insert into sonar_parameter (id, device_code, avr_max, 
+      avr_min, cross_section_area, map_para_value, 
+      weight_or_flux_acc_time, change_time)
+    values (#{id,jdbcType=VARCHAR}, #{deviceCode,jdbcType=VARCHAR}, #{avrMax,jdbcType=DOUBLE}, 
+      #{avrMin,jdbcType=DOUBLE}, #{crossSectionArea,jdbcType=DOUBLE}, #{mapParaValue,jdbcType=VARCHAR}, 
+      #{weightOrFluxAccTime,jdbcType=INTEGER}, #{changeTime,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pd.server.main.domain.SonarParameter">
+    insert into sonar_parameter
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="deviceCode != null">
+        device_code,
+      </if>
+      <if test="avrMax != null">
+        avr_max,
+      </if>
+      <if test="avrMin != null">
+        avr_min,
+      </if>
+      <if test="crossSectionArea != null">
+        cross_section_area,
+      </if>
+      <if test="mapParaValue != null">
+        map_para_value,
+      </if>
+      <if test="weightOrFluxAccTime != null">
+        weight_or_flux_acc_time,
+      </if>
+      <if test="changeTime != null">
+        change_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceCode != null">
+        #{deviceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="avrMax != null">
+        #{avrMax,jdbcType=DOUBLE},
+      </if>
+      <if test="avrMin != null">
+        #{avrMin,jdbcType=DOUBLE},
+      </if>
+      <if test="crossSectionArea != null">
+        #{crossSectionArea,jdbcType=DOUBLE},
+      </if>
+      <if test="mapParaValue != null">
+        #{mapParaValue,jdbcType=VARCHAR},
+      </if>
+      <if test="weightOrFluxAccTime != null">
+        #{weightOrFluxAccTime,jdbcType=INTEGER},
+      </if>
+      <if test="changeTime != null">
+        #{changeTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pd.server.main.domain.SonarParameterExample" resultType="java.lang.Long">
+    select count(*) from sonar_parameter
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update sonar_parameter
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deviceCode != null">
+        device_code = #{record.deviceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.avrMax != null">
+        avr_max = #{record.avrMax,jdbcType=DOUBLE},
+      </if>
+      <if test="record.avrMin != null">
+        avr_min = #{record.avrMin,jdbcType=DOUBLE},
+      </if>
+      <if test="record.crossSectionArea != null">
+        cross_section_area = #{record.crossSectionArea,jdbcType=DOUBLE},
+      </if>
+      <if test="record.mapParaValue != null">
+        map_para_value = #{record.mapParaValue,jdbcType=VARCHAR},
+      </if>
+      <if test="record.weightOrFluxAccTime != null">
+        weight_or_flux_acc_time = #{record.weightOrFluxAccTime,jdbcType=INTEGER},
+      </if>
+      <if test="record.changeTime != null">
+        change_time = #{record.changeTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update sonar_parameter
+    set id = #{record.id,jdbcType=VARCHAR},
+      device_code = #{record.deviceCode,jdbcType=VARCHAR},
+      avr_max = #{record.avrMax,jdbcType=DOUBLE},
+      avr_min = #{record.avrMin,jdbcType=DOUBLE},
+      cross_section_area = #{record.crossSectionArea,jdbcType=DOUBLE},
+      map_para_value = #{record.mapParaValue,jdbcType=VARCHAR},
+      weight_or_flux_acc_time = #{record.weightOrFluxAccTime,jdbcType=INTEGER},
+      change_time = #{record.changeTime,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pd.server.main.domain.SonarParameter">
+    update sonar_parameter
+    <set>
+      <if test="deviceCode != null">
+        device_code = #{deviceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="avrMax != null">
+        avr_max = #{avrMax,jdbcType=DOUBLE},
+      </if>
+      <if test="avrMin != null">
+        avr_min = #{avrMin,jdbcType=DOUBLE},
+      </if>
+      <if test="crossSectionArea != null">
+        cross_section_area = #{crossSectionArea,jdbcType=DOUBLE},
+      </if>
+      <if test="mapParaValue != null">
+        map_para_value = #{mapParaValue,jdbcType=VARCHAR},
+      </if>
+      <if test="weightOrFluxAccTime != null">
+        weight_or_flux_acc_time = #{weightOrFluxAccTime,jdbcType=INTEGER},
+      </if>
+      <if test="changeTime != null">
+        change_time = #{changeTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pd.server.main.domain.SonarParameter">
+    update sonar_parameter
+    set device_code = #{deviceCode,jdbcType=VARCHAR},
+      avr_max = #{avrMax,jdbcType=DOUBLE},
+      avr_min = #{avrMin,jdbcType=DOUBLE},
+      cross_section_area = #{crossSectionArea,jdbcType=DOUBLE},
+      map_para_value = #{mapParaValue,jdbcType=VARCHAR},
+      weight_or_flux_acc_time = #{weightOrFluxAccTime,jdbcType=INTEGER},
+      change_time = #{changeTime,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

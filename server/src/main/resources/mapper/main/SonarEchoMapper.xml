@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pd.server.main.mapper.SonarEchoMapper">
+  <resultMap id="BaseResultMap" type="com.pd.server.main.domain.SonarEcho">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="device_code" jdbcType="VARCHAR" property="deviceCode" />
+    <result column="ac_time" jdbcType="VARCHAR" property="acTime" />
+    <result column="num_ping" jdbcType="INTEGER" property="numPing" />
+    <result column="num_dot" jdbcType="INTEGER" property="numDot" />
+    <result column="dR" jdbcType="DOUBLE" property="dr" />
+    <result column="db_max" jdbcType="DOUBLE" property="dbMax" />
+    <result column="db_min" jdbcType="DOUBLE" property="dbMin" />
+    <result column="aver_sv" jdbcType="DOUBLE" property="averSv" />
+    <result column="avr_max" jdbcType="DOUBLE" property="avrMax" />
+    <result column="avr_min" jdbcType="DOUBLE" property="avrMin" />
+    <result column="buffer_size_sonar" jdbcType="INTEGER" property="bufferSizeSonar" />
+    <result column="buffer_size_time_stamp" jdbcType="INTEGER" property="bufferSizeTimeStamp" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.pd.server.main.domain.SonarEcho">
+    <result column="buffer_sonar" jdbcType="LONGVARCHAR" property="bufferSonar" />
+    <result column="buffer_time_stamp" jdbcType="LONGVARCHAR" property="bufferTimeStamp" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, device_code, ac_time, num_ping, num_dot, dR, db_max, db_min, aver_sv, avr_max, 
+    avr_min, buffer_size_sonar, buffer_size_time_stamp, `type`
+  </sql>
+  <sql id="Blob_Column_List">
+    buffer_sonar, buffer_time_stamp
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.pd.server.main.domain.SonarEchoExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from sonar_echo
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.pd.server.main.domain.SonarEchoExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from sonar_echo
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from sonar_echo
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from sonar_echo
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pd.server.main.domain.SonarEchoExample">
+    delete from sonar_echo
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pd.server.main.domain.SonarEcho">
+    insert into sonar_echo (id, device_code, ac_time, 
+      num_ping, num_dot, dR, 
+      db_max, db_min, aver_sv, 
+      avr_max, avr_min, buffer_size_sonar, 
+      buffer_size_time_stamp, `type`, buffer_sonar, 
+      buffer_time_stamp)
+    values (#{id,jdbcType=VARCHAR}, #{deviceCode,jdbcType=VARCHAR}, #{acTime,jdbcType=VARCHAR}, 
+      #{numPing,jdbcType=INTEGER}, #{numDot,jdbcType=INTEGER}, #{dr,jdbcType=DOUBLE}, 
+      #{dbMax,jdbcType=DOUBLE}, #{dbMin,jdbcType=DOUBLE}, #{averSv,jdbcType=DOUBLE}, 
+      #{avrMax,jdbcType=DOUBLE}, #{avrMin,jdbcType=DOUBLE}, #{bufferSizeSonar,jdbcType=INTEGER}, 
+      #{bufferSizeTimeStamp,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, #{bufferSonar,jdbcType=LONGVARCHAR}, 
+      #{bufferTimeStamp,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pd.server.main.domain.SonarEcho">
+    insert into sonar_echo
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="deviceCode != null">
+        device_code,
+      </if>
+      <if test="acTime != null">
+        ac_time,
+      </if>
+      <if test="numPing != null">
+        num_ping,
+      </if>
+      <if test="numDot != null">
+        num_dot,
+      </if>
+      <if test="dr != null">
+        dR,
+      </if>
+      <if test="dbMax != null">
+        db_max,
+      </if>
+      <if test="dbMin != null">
+        db_min,
+      </if>
+      <if test="averSv != null">
+        aver_sv,
+      </if>
+      <if test="avrMax != null">
+        avr_max,
+      </if>
+      <if test="avrMin != null">
+        avr_min,
+      </if>
+      <if test="bufferSizeSonar != null">
+        buffer_size_sonar,
+      </if>
+      <if test="bufferSizeTimeStamp != null">
+        buffer_size_time_stamp,
+      </if>
+      <if test="type != null">
+        `type`,
+      </if>
+      <if test="bufferSonar != null">
+        buffer_sonar,
+      </if>
+      <if test="bufferTimeStamp != null">
+        buffer_time_stamp,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceCode != null">
+        #{deviceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="acTime != null">
+        #{acTime,jdbcType=VARCHAR},
+      </if>
+      <if test="numPing != null">
+        #{numPing,jdbcType=INTEGER},
+      </if>
+      <if test="numDot != null">
+        #{numDot,jdbcType=INTEGER},
+      </if>
+      <if test="dr != null">
+        #{dr,jdbcType=DOUBLE},
+      </if>
+      <if test="dbMax != null">
+        #{dbMax,jdbcType=DOUBLE},
+      </if>
+      <if test="dbMin != null">
+        #{dbMin,jdbcType=DOUBLE},
+      </if>
+      <if test="averSv != null">
+        #{averSv,jdbcType=DOUBLE},
+      </if>
+      <if test="avrMax != null">
+        #{avrMax,jdbcType=DOUBLE},
+      </if>
+      <if test="avrMin != null">
+        #{avrMin,jdbcType=DOUBLE},
+      </if>
+      <if test="bufferSizeSonar != null">
+        #{bufferSizeSonar,jdbcType=INTEGER},
+      </if>
+      <if test="bufferSizeTimeStamp != null">
+        #{bufferSizeTimeStamp,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="bufferSonar != null">
+        #{bufferSonar,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="bufferTimeStamp != null">
+        #{bufferTimeStamp,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pd.server.main.domain.SonarEchoExample" resultType="java.lang.Long">
+    select count(*) from sonar_echo
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update sonar_echo
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deviceCode != null">
+        device_code = #{record.deviceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.acTime != null">
+        ac_time = #{record.acTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.numPing != null">
+        num_ping = #{record.numPing,jdbcType=INTEGER},
+      </if>
+      <if test="record.numDot != null">
+        num_dot = #{record.numDot,jdbcType=INTEGER},
+      </if>
+      <if test="record.dr != null">
+        dR = #{record.dr,jdbcType=DOUBLE},
+      </if>
+      <if test="record.dbMax != null">
+        db_max = #{record.dbMax,jdbcType=DOUBLE},
+      </if>
+      <if test="record.dbMin != null">
+        db_min = #{record.dbMin,jdbcType=DOUBLE},
+      </if>
+      <if test="record.averSv != null">
+        aver_sv = #{record.averSv,jdbcType=DOUBLE},
+      </if>
+      <if test="record.avrMax != null">
+        avr_max = #{record.avrMax,jdbcType=DOUBLE},
+      </if>
+      <if test="record.avrMin != null">
+        avr_min = #{record.avrMin,jdbcType=DOUBLE},
+      </if>
+      <if test="record.bufferSizeSonar != null">
+        buffer_size_sonar = #{record.bufferSizeSonar,jdbcType=INTEGER},
+      </if>
+      <if test="record.bufferSizeTimeStamp != null">
+        buffer_size_time_stamp = #{record.bufferSizeTimeStamp,jdbcType=INTEGER},
+      </if>
+      <if test="record.type != null">
+        `type` = #{record.type,jdbcType=INTEGER},
+      </if>
+      <if test="record.bufferSonar != null">
+        buffer_sonar = #{record.bufferSonar,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.bufferTimeStamp != null">
+        buffer_time_stamp = #{record.bufferTimeStamp,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update sonar_echo
+    set id = #{record.id,jdbcType=VARCHAR},
+      device_code = #{record.deviceCode,jdbcType=VARCHAR},
+      ac_time = #{record.acTime,jdbcType=VARCHAR},
+      num_ping = #{record.numPing,jdbcType=INTEGER},
+      num_dot = #{record.numDot,jdbcType=INTEGER},
+      dR = #{record.dr,jdbcType=DOUBLE},
+      db_max = #{record.dbMax,jdbcType=DOUBLE},
+      db_min = #{record.dbMin,jdbcType=DOUBLE},
+      aver_sv = #{record.averSv,jdbcType=DOUBLE},
+      avr_max = #{record.avrMax,jdbcType=DOUBLE},
+      avr_min = #{record.avrMin,jdbcType=DOUBLE},
+      buffer_size_sonar = #{record.bufferSizeSonar,jdbcType=INTEGER},
+      buffer_size_time_stamp = #{record.bufferSizeTimeStamp,jdbcType=INTEGER},
+      `type` = #{record.type,jdbcType=INTEGER},
+      buffer_sonar = #{record.bufferSonar,jdbcType=LONGVARCHAR},
+      buffer_time_stamp = #{record.bufferTimeStamp,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update sonar_echo
+    set id = #{record.id,jdbcType=VARCHAR},
+      device_code = #{record.deviceCode,jdbcType=VARCHAR},
+      ac_time = #{record.acTime,jdbcType=VARCHAR},
+      num_ping = #{record.numPing,jdbcType=INTEGER},
+      num_dot = #{record.numDot,jdbcType=INTEGER},
+      dR = #{record.dr,jdbcType=DOUBLE},
+      db_max = #{record.dbMax,jdbcType=DOUBLE},
+      db_min = #{record.dbMin,jdbcType=DOUBLE},
+      aver_sv = #{record.averSv,jdbcType=DOUBLE},
+      avr_max = #{record.avrMax,jdbcType=DOUBLE},
+      avr_min = #{record.avrMin,jdbcType=DOUBLE},
+      buffer_size_sonar = #{record.bufferSizeSonar,jdbcType=INTEGER},
+      buffer_size_time_stamp = #{record.bufferSizeTimeStamp,jdbcType=INTEGER},
+      `type` = #{record.type,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pd.server.main.domain.SonarEcho">
+    update sonar_echo
+    <set>
+      <if test="deviceCode != null">
+        device_code = #{deviceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="acTime != null">
+        ac_time = #{acTime,jdbcType=VARCHAR},
+      </if>
+      <if test="numPing != null">
+        num_ping = #{numPing,jdbcType=INTEGER},
+      </if>
+      <if test="numDot != null">
+        num_dot = #{numDot,jdbcType=INTEGER},
+      </if>
+      <if test="dr != null">
+        dR = #{dr,jdbcType=DOUBLE},
+      </if>
+      <if test="dbMax != null">
+        db_max = #{dbMax,jdbcType=DOUBLE},
+      </if>
+      <if test="dbMin != null">
+        db_min = #{dbMin,jdbcType=DOUBLE},
+      </if>
+      <if test="averSv != null">
+        aver_sv = #{averSv,jdbcType=DOUBLE},
+      </if>
+      <if test="avrMax != null">
+        avr_max = #{avrMax,jdbcType=DOUBLE},
+      </if>
+      <if test="avrMin != null">
+        avr_min = #{avrMin,jdbcType=DOUBLE},
+      </if>
+      <if test="bufferSizeSonar != null">
+        buffer_size_sonar = #{bufferSizeSonar,jdbcType=INTEGER},
+      </if>
+      <if test="bufferSizeTimeStamp != null">
+        buffer_size_time_stamp = #{bufferSizeTimeStamp,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        `type` = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="bufferSonar != null">
+        buffer_sonar = #{bufferSonar,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="bufferTimeStamp != null">
+        buffer_time_stamp = #{bufferTimeStamp,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.pd.server.main.domain.SonarEcho">
+    update sonar_echo
+    set device_code = #{deviceCode,jdbcType=VARCHAR},
+      ac_time = #{acTime,jdbcType=VARCHAR},
+      num_ping = #{numPing,jdbcType=INTEGER},
+      num_dot = #{numDot,jdbcType=INTEGER},
+      dR = #{dr,jdbcType=DOUBLE},
+      db_max = #{dbMax,jdbcType=DOUBLE},
+      db_min = #{dbMin,jdbcType=DOUBLE},
+      aver_sv = #{averSv,jdbcType=DOUBLE},
+      avr_max = #{avrMax,jdbcType=DOUBLE},
+      avr_min = #{avrMin,jdbcType=DOUBLE},
+      buffer_size_sonar = #{bufferSizeSonar,jdbcType=INTEGER},
+      buffer_size_time_stamp = #{bufferSizeTimeStamp,jdbcType=INTEGER},
+      `type` = #{type,jdbcType=INTEGER},
+      buffer_sonar = #{bufferSonar,jdbcType=LONGVARCHAR},
+      buffer_time_stamp = #{bufferTimeStamp,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pd.server.main.domain.SonarEcho">
+    update sonar_echo
+    set device_code = #{deviceCode,jdbcType=VARCHAR},
+      ac_time = #{acTime,jdbcType=VARCHAR},
+      num_ping = #{numPing,jdbcType=INTEGER},
+      num_dot = #{numDot,jdbcType=INTEGER},
+      dR = #{dr,jdbcType=DOUBLE},
+      db_max = #{dbMax,jdbcType=DOUBLE},
+      db_min = #{dbMin,jdbcType=DOUBLE},
+      aver_sv = #{averSv,jdbcType=DOUBLE},
+      avr_max = #{avrMax,jdbcType=DOUBLE},
+      avr_min = #{avrMin,jdbcType=DOUBLE},
+      buffer_size_sonar = #{bufferSizeSonar,jdbcType=INTEGER},
+      buffer_size_time_stamp = #{bufferSizeTimeStamp,jdbcType=INTEGER},
+      `type` = #{type,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
