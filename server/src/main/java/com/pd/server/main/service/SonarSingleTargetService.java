@@ -24,14 +24,8 @@ public class SonarSingleTargetService {
     /**
     * 列表查询
     */
-    public void list(PageDto pageDto) {
-    PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
-        SonarSingleTargetExample sonarSingleTargetExample = new SonarSingleTargetExample();
-        List<SonarSingleTarget> sonarSingleTargetList = sonarSingleTargetMapper.selectByExample(sonarSingleTargetExample);
-        PageInfo<SonarSingleTarget> pageInfo = new PageInfo<>(sonarSingleTargetList);
-        pageDto.setTotal(pageInfo.getTotal());
-        List<SonarSingleTargetDto> sonarSingleTargetDtoList = CopyUtil.copyList(sonarSingleTargetList, SonarSingleTargetDto.class);
-        pageDto.setList(sonarSingleTargetDtoList);
+    public List<SonarSingleTarget> selectByExample(SonarSingleTargetExample example) {
+        return sonarSingleTargetMapper.selectByExample(example);
     }
 
     /**
