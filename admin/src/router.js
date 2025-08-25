@@ -99,6 +99,10 @@ import BeconFileStatistics from "./views/monitor/beconFileStatistics.vue";
 import BeconFileTy from "./views/monitor/beconFileTy.vue";
 import AngleFile from "./views/monitor/angleFile.vue";
 import FinlessPorpoiseTraverse from "./views/monitor/finlessPorpoiseTraverse.vue";
+import SonarBiomass from "./views/sonar/sonarBiomass.vue";
+import SonarEcho from "./views/sonar/sonarEcho.vue";
+import SonarEchoSv from "./views/sonar/sonarEchoSv.vue";
+import SonarSingleTarget from "./views/sonar/sonarSingleTarget.vue";
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -496,6 +500,22 @@ export default new Router({
             path: "monitor/finlessPorpoiseTraverse",
             name: "monitor/finlessPorpoiseTraverse",
             component: FinlessPorpoiseTraverse
+        },{
+            path: "sonar/sonarBiomass",
+            name: "sonar/sonarBiomass",
+            component: SonarBiomass
+        },{
+            path: "sonar/sonarEcho",
+            name: "sonar/sonarEcho",
+            component: SonarEcho
+        },{
+            path: "sonar/sonarEchoSv",
+            name: "sonar/sonarEchoSv",
+            component: SonarEchoSv
+        },{
+            path: "sonar/sonarSingleTarget",
+            name: "sonar/sonarSingleTarget",
+            component: SonarSingleTarget
         }]
     }]
 })

@@ -2,7 +2,7 @@
   <div>
     <div class="widget-box">
       <div class="widget-header">
-        <h4 class="widget-title">回波图信息查询</h4>
+        <h4 class="widget-title">平均SV回波图信息查询</h4>
       </div>
       <div class="widget-body">
         <div class="widget-main">
@@ -43,51 +43,51 @@
     <div>
       <table id="simple-table" class="table  table-bordered table-hover">
         <thead>
-          <tr>
-            <th>声呐换能器的编号</th>
-            <th>采集时间</th>
-            <th>ping个数</th>
-            <th>ping中点的个数</th>
-            <th>相邻点间距</th>
-            <th>色卡最大值</th>
-            <th>色卡最小值</th>
-            <th>当前这段数据的平均SV</th>
-            <th>计算平均SV的最大深度</th>
-            <th>计算平均SV的最小深度</th>
-<!--            <th>SV值数组</th>-->
-<!--            <th>SV值数量</th>-->
-<!--            <th>时间戳数组</th>-->
-<!--            <th>时间戳数量</th>-->
-<!--            <th>操作</th>-->
-          </tr>
+        <tr>
+          <th>声呐换能器的编号</th>
+          <th>采集时间</th>
+          <th>ping个数</th>
+          <th>ping中点的个数</th>
+          <th>相邻点间距</th>
+          <th>色卡最大值</th>
+          <th>色卡最小值</th>
+          <th>当前这段数据的平均SV</th>
+          <th>计算平均SV的最大深度</th>
+          <th>计算平均SV的最小深度</th>
+          <!--            <th>SV值数组</th>-->
+          <!--            <th>SV值数量</th>-->
+          <!--            <th>时间戳数组</th>-->
+          <!--            <th>时间戳数量</th>-->
+<!--          <th>操作</th>-->
+        </tr>
         </thead>
         <tbody>
-          <tr v-for="sonarEcho in sonarEchos">
-            <td>{{sonarEcho.deviceCode}}</td>
-            <td>{{sonarEcho.acTime}}</td>
-            <td>{{sonarEcho.numPing}}</td>
-            <td>{{sonarEcho.numDot}}</td>
-            <td>{{sonarEcho.dr}}</td>
-            <td>{{sonarEcho.dbMax}}</td>
-            <td>{{sonarEcho.dbMin}}</td>
-            <td>{{sonarEcho.averSv}}</td>
-            <td>{{sonarEcho.avrMax}}</td>
-            <td>{{sonarEcho.avrMin}}</td>
-<!--            <td>{{sonarEcho.bufferSonar}}</td>-->
-<!--            <td>{{sonarEcho.bufferSizeSonar}}</td>-->
-<!--            <td>{{sonarEcho.bufferTimeStamp}}</td>-->
-<!--            <td>{{sonarEcho.bufferSizeTimeStamp}}</td>-->
-<!--            <td>-->
-<!--              <div class="hidden-sm hidden-xs btn-group">-->
-<!--                <button v-on:click="edit(sonarEcho)" class="btn btn-xs btn-info">-->
-<!--                  <i class="ace-icon fa fa-pencil bigger-120"></i>-->
-<!--                </button>-->
-<!--                <button v-on:click="del(sonarEcho.id)" class="btn btn-xs btn-danger">-->
-<!--                  <i class="ace-icon fa fa-trash-o bigger-120"></i>-->
-<!--                </button>-->
-<!--              </div>-->
-<!--            </td>-->
-          </tr>
+        <tr v-for="sonarEcho in sonarEchos">
+          <td>{{sonarEcho.deviceCode}}</td>
+          <td>{{sonarEcho.acTime}}</td>
+          <td>{{sonarEcho.numPing}}</td>
+          <td>{{sonarEcho.numDot}}</td>
+          <td>{{sonarEcho.dr}}</td>
+          <td>{{sonarEcho.dbMax}}</td>
+          <td>{{sonarEcho.dbMin}}</td>
+          <td>{{sonarEcho.averSv}}</td>
+          <td>{{sonarEcho.avrMax}}</td>
+          <td>{{sonarEcho.avrMin}}</td>
+          <!--            <td>{{sonarEcho.bufferSonar}}</td>-->
+          <!--            <td>{{sonarEcho.bufferSizeSonar}}</td>-->
+          <!--            <td>{{sonarEcho.bufferTimeStamp}}</td>-->
+          <!--            <td>{{sonarEcho.bufferSizeTimeStamp}}</td>-->
+<!--          <td>-->
+<!--            <div class="hidden-sm hidden-xs btn-group">-->
+<!--              <button v-on:click="edit(sonarEcho)" class="btn btn-xs btn-info">-->
+<!--                <i class="ace-icon fa fa-pencil bigger-120"></i>-->
+<!--              </button>-->
+<!--              <button v-on:click="del(sonarEcho.id)" class="btn btn-xs btn-danger">-->
+<!--                <i class="ace-icon fa fa-trash-o bigger-120"></i>-->
+<!--              </button>-->
+<!--            </div>-->
+<!--          </td>-->
+        </tr>
         </tbody>
       </table>
       <pagination ref="pagination" v-bind:list="list" v-bind:itemCount="10"></pagination>
@@ -198,56 +198,56 @@
 </template>
 
 <script>
-  import Pagination from "../../components/pagination";
-  import Times from "../../components/times";
-  export default {
-    components: {Pagination,Times},
-    name: "sonar-sonarEcho",
-    data: function() {
-      return {
-        sonarEchoDto: {},
-        sonarEcho: {},
-        sonarEchos: [],
-      }
-    },
-    mounted: function() {
+import Pagination from "../../components/pagination";
+import Times from "../../components/times";
+export default {
+  components: {Pagination,Times},
+  name: "sonar-sonarEcho",
+  data: function() {
+    return {
+      sonarEchoDto: {},
+      sonarEcho: {},
+      sonarEchos: [],
+    }
+  },
+  mounted: function() {
+    let _this = this;
+    _this.$refs.pagination.size = 10;
+    _this.list(1);
+  },
+  methods: {
+    /**
+     *开始时间
+     */
+    startTime(rep){
       let _this = this;
-      _this.$refs.pagination.size = 10;
-      _this.list(1);
+      _this.sonarEchoDto.stime = rep;
+      _this.$forceUpdate();
     },
-    methods: {
-      /**
-       *开始时间
-       */
-      startTime(rep){
-        let _this = this;
-        _this.sonarEchoDto.stime = rep;
-        _this.$forceUpdate();
-      },
-      /**
-       *结束时间
-       */
-      endTime(rep){
-        let _this = this;
-        _this.sonarEchoDto.etime = rep;
-        _this.$forceUpdate();
-      },
-      /**
-       * 列表查询
-       */
-      list(page) {
-        let _this = this;
-        Loading.show();
-        _this.sonarEchoDto.page = page;
-        _this.sonarEchoDto.size = _this.$refs.pagination.size;
-        _this.sonarEchoDto.type = 1;
-        _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/sonarEcho/list', _this.sonarEchoDto).then((response)=>{
-          Loading.hide();
-          let resp = response.data;
-          _this.sonarEchos = resp.content.list;
-          _this.$refs.pagination.render(page, resp.content.total);
-        })
-      }
+    /**
+     *结束时间
+     */
+    endTime(rep){
+      let _this = this;
+      _this.sonarEchoDto.etime = rep;
+      _this.$forceUpdate();
+    },
+    /**
+     * 列表查询
+     */
+    list(page) {
+      let _this = this;
+      Loading.show();
+      _this.sonarEchoDto.page = page;
+      _this.sonarEchoDto.size = _this.$refs.pagination.size;
+      _this.sonarEchoDto.type = 2;
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/sonarEcho/list', _this.sonarEchoDto).then((response)=>{
+        Loading.hide();
+        let resp = response.data;
+        _this.sonarEchos = resp.content.list;
+        _this.$refs.pagination.render(page, resp.content.total);
+      })
     }
   }
+}
 </script>
