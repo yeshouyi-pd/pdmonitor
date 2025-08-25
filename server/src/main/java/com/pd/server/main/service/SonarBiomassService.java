@@ -24,14 +24,8 @@ public class SonarBiomassService {
     /**
     * 列表查询
     */
-    public void list(PageDto pageDto) {
-    PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
-        SonarBiomassExample sonarBiomassExample = new SonarBiomassExample();
-        List<SonarBiomass> sonarBiomassList = sonarBiomassMapper.selectByExample(sonarBiomassExample);
-        PageInfo<SonarBiomass> pageInfo = new PageInfo<>(sonarBiomassList);
-        pageDto.setTotal(pageInfo.getTotal());
-        List<SonarBiomassDto> sonarBiomassDtoList = CopyUtil.copyList(sonarBiomassList, SonarBiomassDto.class);
-        pageDto.setList(sonarBiomassDtoList);
+    public List<SonarBiomass> selectByExample(SonarBiomassExample example) {
+        return sonarBiomassMapper.selectByExample(example);
     }
 
     /**

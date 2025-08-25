@@ -24,14 +24,8 @@ public class SonarEchoService {
     /**
     * 列表查询
     */
-    public void list(PageDto pageDto) {
-    PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
-        SonarEchoExample sonarEchoExample = new SonarEchoExample();
-        List<SonarEcho> sonarEchoList = sonarEchoMapper.selectByExample(sonarEchoExample);
-        PageInfo<SonarEcho> pageInfo = new PageInfo<>(sonarEchoList);
-        pageDto.setTotal(pageInfo.getTotal());
-        List<SonarEchoDto> sonarEchoDtoList = CopyUtil.copyList(sonarEchoList, SonarEchoDto.class);
-        pageDto.setList(sonarEchoDtoList);
+    public List<SonarEcho> selectByExample(SonarEchoExample example) {
+        return sonarEchoMapper.selectByExample(example);
     }
 
     /**

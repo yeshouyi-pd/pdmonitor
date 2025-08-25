@@ -1,7 +1,11 @@
 package com.pd.server.main.dto;
 
 
-public class SonarSingleTargetDto {
+import com.pd.server.main.domain.SonarSingleValue;
+
+import java.util.List;
+
+public class SonarSingleTargetDto extends PageDto {
 
     /**
     * 序号
@@ -22,6 +26,8 @@ public class SonarSingleTargetDto {
     * 单体数量
     */
     private Integer num;
+
+    private List<SonarSingleValue> sonarSingleValueList;
 
     public String getId() {
         return id;
@@ -55,6 +61,13 @@ public class SonarSingleTargetDto {
         this.num = num;
     }
 
+    public List<SonarSingleValue> getSonarSingleValueList() {
+        return sonarSingleValueList;
+    }
+
+    public void setSonarSingleValueList(List<SonarSingleValue> sonarSingleValueList) {
+        this.sonarSingleValueList = sonarSingleValueList;
+    }
 
     @Override
     public String toString() {

@@ -1,7 +1,7 @@
 package com.pd.server.main.dto;
 
 
-public class SonarEchoDto {
+public class SonarEchoDto extends PageDto{
 
     /**
     * 

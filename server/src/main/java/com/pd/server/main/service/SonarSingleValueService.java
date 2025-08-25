@@ -21,6 +21,13 @@ public class SonarSingleValueService {
     @Resource
     private SonarSingleValueMapper sonarSingleValueMapper;
 
+    public List<SonarSingleValue> selectBySingleTarget(String targetId){
+        SonarSingleValueExample example = new SonarSingleValueExample();
+        example.createCriteria().andSingleTargetIdEqualTo(targetId);
+        example.setOrderByClause(" l_time ");
+        return sonarSingleValueMapper.selectByExampleWithBLOBs(example);
+    }
+
     /**
     * 列表查询
     */
