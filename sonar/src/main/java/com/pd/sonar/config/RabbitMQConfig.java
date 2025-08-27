@@ -13,7 +13,8 @@ public class RabbitMQConfig {
     private static final String CONFIG_FILE = "rabbitmq.properties";
     
     // 默认配置值
-    private static final String DEFAULT_HOST = "8.154.29.39";
+    private static final String DEFAULT_HOST = "127.0.0.1";
+    //private static final String DEFAULT_HOST = "8.154.29.39";
     private static final int DEFAULT_PORT = 35672;
     private static final String DEFAULT_USERNAME = "dszx";
     private static final String DEFAULT_PASSWORD = "b!*Vz&^Gs62(@ro";

@@ -1,14 +1,20 @@
 package com.pd.sonar.service;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.pd.server.main.domain.SonarSingleTarget;
 import com.pd.server.main.dto.*;
 import com.pd.server.main.service.*;
 import com.pd.server.util.UuidUtil;
 import com.pd.sonar.model.*;
+import com.pd.sonar.receiver.SonarMessageReceiver;
+import com.pd.sonar.util.SonarDataDiagnosticUtil;
+import com.pd.sonar.util.SonarDataEncoder;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
@@ -20,6 +26,7 @@ import java.util.logging.Level;
 public class SonarMessageService {
     
     private static final Logger logger = Logger.getLogger(SonarMessageService.class.getName());
+    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(SonarMessageService.class);
 
     @Resource
     private SonarBiomassService sonarBiomassService;
@@ -107,40 +114,45 @@ public class SonarMessageService {
     /**
      * 处理回波图信息
      */
-    public void processEchoData(SonarEchoData echoData) {
+    public void processEchoData(JSONObject jsonObject) {
         try {
-            logger.info("开始处理回波图信息: ID=" + echoData.getId() + ", 设备=" + echoData.getDeviceCode() + ", 时间=" + echoData.getAcTime());
+            String bufferSonar = jsonObject.getString("buffer_sonar");
+            Integer bufferSizeSonar = jsonObject.getInteger("buffer_size_sonar");
+            // 将 buffer_sonar 转换为 Base64 编码以安全存储
+            String encodedBufferSonar = SonarDataEncoder.smartEncode(bufferSonar);
+            if (encodedBufferSonar != null && !encodedBufferSonar.equals(bufferSonar)) {
+                LOG.info("buffer_sonar 已编码: {}", SonarDataEncoder.getEncodingSummary(bufferSonar, encodedBufferSonar));
+            }
+
+            String bufferTimeStamp = jsonObject.getString("buffer_timeStamp");
+            Integer bufferSizeTimeStamp = jsonObject.getInteger("buffer_size_timeStamp");
+            // 将 buffer_sonar 转换为 Base64 编码以安全存储
+            String encodedBufferTimeStamp = SonarDataEncoder.smartEncode(bufferTimeStamp);
+            if (encodedBufferTimeStamp != null && !encodedBufferTimeStamp.equals(bufferTimeStamp)) {
+                LOG.info("buffer_sonar 已编码: {}", SonarDataEncoder.getEncodingSummary(bufferTimeStamp, encodedBufferTimeStamp));
+            }
+            
             SonarEchoDto sonarEchoDto = new SonarEchoDto();
-            sonarEchoDto.setDeviceCode(echoData.getDeviceCode());
-            sonarEchoDto.setAcTime(echoData.getAcTime());
-            sonarEchoDto.setNumPing(echoData.getNumPing());
-            sonarEchoDto.setNumDot(echoData.getNumDot());
-            sonarEchoDto.setDr(echoData.getDR());
-            sonarEchoDto.setDbMax(echoData.getDbMax());
-            sonarEchoDto.setDbMin(echoData.getDbMin());
-            sonarEchoDto.setAverSv(echoData.getAverSV());
-            sonarEchoDto.setAvrMax(echoData.getAvrMax());
-            sonarEchoDto.setAvrMin(echoData.getAvrMin());
-            sonarEchoDto.setBufferSonar(echoData.getBufferSonar());
-            sonarEchoDto.setBufferSizeSonar(echoData.getBufferSizeSonar());
-            sonarEchoDto.setBufferTimeStamp(echoData.getBufferTimeStamp());
-            sonarEchoDto.setBufferSizeTimeStamp(echoData.getBufferSizeTimeStamp());
+            sonarEchoDto.setDeviceCode(jsonObject.getString("device_code"));
+            sonarEchoDto.setAcTime(jsonObject.getString("ac_time"));
+            sonarEchoDto.setNumPing(jsonObject.getInteger("num_ping"));
+            sonarEchoDto.setNumDot(jsonObject.getInteger("num_dot"));
+            sonarEchoDto.setDr(jsonObject.getDouble("dR"));
+            sonarEchoDto.setDbMax(jsonObject.getDouble("dbMax"));
+            sonarEchoDto.setDbMin(jsonObject.getDouble("dbMin"));
+            sonarEchoDto.setAverSv(jsonObject.getDouble("AverSV"));
+            sonarEchoDto.setAvrMax(jsonObject.getDouble("avrMax"));
+            sonarEchoDto.setAvrMin(jsonObject.getDouble("avrMin"));
+            sonarEchoDto.setBufferSonar(encodedBufferSonar); // 使用编码后的数据
+            sonarEchoDto.setBufferSizeSonar(bufferSizeSonar);
+            sonarEchoDto.setBufferTimeStamp(encodedBufferTimeStamp); // 使用编码后的数据
+            sonarEchoDto.setBufferSizeTimeStamp(bufferSizeTimeStamp);
             sonarEchoDto.setType(1);
             sonarEchoService.save(sonarEchoDto);
-//            logger.info("回波图信息: " + echoData.getEchoImageInfo());
-//            logger.info("SV值范围: " + echoData.getSVRangeInfo());
-//            // 处理SV值数组
-//            if (echoData.getBufferSonar() != null && echoData.getBufferSizeSonar() != null) {
-//                processSonarBuffer(echoData);
-//            }
-//            // 处理时间戳数组
-//            if (echoData.getBufferTimeStamp() != null && echoData.getBufferSizeTimeStamp() != null) {
-//                processTimeStampBuffer(echoData);
-//            }
-//            logger.info("回波图信息:"+echoData.toString());
             logger.info("回波图信息处理完成");
         } catch (Exception e) {
             logger.log(Level.SEVERE, "处理回波图信息失败", e);
+            LOG.error("处理回波图信息失败: {}", e.getMessage(), e);
         }
     }
     
@@ -178,32 +190,45 @@ public class SonarMessageService {
     /**
      * 处理平均SV回波图信息
      */
-    public void processSVEchoData(SonarEchoData svEchoData) {
+    public void processSVEchoData(JSONObject jsonObject) {
         try {
-            logger.info("开始处理平均SV回波图信息: ID=" + svEchoData.getId() + ", 设备=" + svEchoData.getDeviceCode() + ", 时间=" + svEchoData.getAcTime());
+            String bufferSonar = jsonObject.getString("buffer_sonar");
+            Integer bufferSizeSonar = jsonObject.getInteger("buffer_size_sonar");
+            // 将 buffer_sonar 转换为 Base64 编码以安全存储
+            String encodedBufferSonar = SonarDataEncoder.smartEncode(bufferSonar);
+            if (encodedBufferSonar != null && !encodedBufferSonar.equals(bufferSonar)) {
+                LOG.info("SV回波图 buffer_sonar 已编码: {}",  SonarDataEncoder.getEncodingSummary(bufferSonar, encodedBufferSonar));
+            }
+
+            String bufferTimeStamp = jsonObject.getString("buffer_timeStamp");
+            Integer bufferSizeTimeStamp = jsonObject.getInteger("buffer_size_timeStamp");
+            // 将 buffer_sonar 转换为 Base64 编码以安全存储
+            String encodedBufferTimeStamp = SonarDataEncoder.smartEncode(bufferTimeStamp);
+            if (encodedBufferTimeStamp != null && !encodedBufferTimeStamp.equals(bufferTimeStamp)) {
+                LOG.info("buffer_sonar 已编码: {}", SonarDataEncoder.getEncodingSummary(bufferTimeStamp, encodedBufferTimeStamp));
+            }
+            
             SonarEchoDto sonarEchoDto = new SonarEchoDto();
-            sonarEchoDto.setDeviceCode(svEchoData.getDeviceCode());
-            sonarEchoDto.setAcTime(svEchoData.getAcTime());
-            sonarEchoDto.setNumPing(svEchoData.getNumPing());
-            sonarEchoDto.setNumDot(svEchoData.getNumDot());
-            sonarEchoDto.setDr(svEchoData.getDR());
-            sonarEchoDto.setDbMax(svEchoData.getDbMax());
-            sonarEchoDto.setDbMin(svEchoData.getDbMin());
-            sonarEchoDto.setAverSv(svEchoData.getAverSV());
-            sonarEchoDto.setAvrMax(svEchoData.getAvrMax());
-            sonarEchoDto.setAvrMin(svEchoData.getAvrMin());
-            sonarEchoDto.setBufferSonar(svEchoData.getBufferSonar());
-            sonarEchoDto.setBufferSizeSonar(svEchoData.getBufferSizeSonar());
-            sonarEchoDto.setBufferTimeStamp(svEchoData.getBufferTimeStamp());
-            sonarEchoDto.setBufferSizeTimeStamp(svEchoData.getBufferSizeTimeStamp());
+            sonarEchoDto.setDeviceCode(jsonObject.getString("device_code"));
+            sonarEchoDto.setAcTime(jsonObject.getString("ac_time"));
+            sonarEchoDto.setNumPing(jsonObject.getInteger("num_ping"));
+            sonarEchoDto.setNumDot(jsonObject.getInteger("num_dot"));
+            sonarEchoDto.setDr(jsonObject.getDouble("dR"));
+            sonarEchoDto.setDbMax(jsonObject.getDouble("dbMax"));
+            sonarEchoDto.setDbMin(jsonObject.getDouble("dbMin"));
+            sonarEchoDto.setAverSv(jsonObject.getDouble("AverSV"));
+            sonarEchoDto.setAvrMax(jsonObject.getDouble("avrMax"));
+            sonarEchoDto.setAvrMin(jsonObject.getDouble("avrMin"));
+            sonarEchoDto.setBufferSonar(encodedBufferSonar); // 使用编码后的数据
+            sonarEchoDto.setBufferSizeSonar(bufferSizeSonar);
+            sonarEchoDto.setBufferTimeStamp(encodedBufferTimeStamp); // 使用编码后的数据
+            sonarEchoDto.setBufferSizeTimeStamp(bufferSizeTimeStamp);
             sonarEchoDto.setType(2);
             sonarEchoService.save(sonarEchoDto);
-            // 平均SV回波图处理逻辑与普通回波图类似
-            //processEchoData(svEchoData);
-            //logger.info("平均SV回波图信息："+svEchoData.toString());
             logger.info("平均SV回波图信息处理完成");
         } catch (Exception e) {
             logger.log(Level.SEVERE, "处理平均SV回波图信息失败", e);
+            LOG.error("处理平均SV回波图信息失败: {}", e.getMessage(), e);
         }
     }
     
