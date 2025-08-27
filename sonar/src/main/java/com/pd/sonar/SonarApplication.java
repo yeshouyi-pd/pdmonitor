@@ -42,7 +42,7 @@ public class SonarApplication {
 
             // 显示配置信息
             RabbitMQConfig config = new RabbitMQConfig();
-            LOG.info(config.getConnectionInfo());
+            LOG.error(config.getConnectionInfo());
 
             // 从Spring容器获取消息接收器
             messageReceiver = context.getBean(SonarMessageReceiver.class);
@@ -50,14 +50,14 @@ public class SonarApplication {
 
             // 添加关闭钩子
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-                LOG.info("正在关闭声呐消息接收器...");
+                LOG.error("正在关闭声呐消息接收器...");
                 if (messageReceiver != null) {
                     messageReceiver.close();
                 }
-                LOG.info("声呐消息接收器已关闭");
+                LOG.error("声呐消息接收器已关闭");
             }));
 
-            LOG.info("声呐消息接收器启动成功，正在监听消息...");
+            LOG.error("声呐消息接收器启动成功，正在监听消息...");
 
             // 保持程序运行
             while (true) {
@@ -65,19 +65,19 @@ public class SonarApplication {
                     Thread.sleep(5000); // 每5秒检查一次连接状态
 
                     if (!messageReceiver.isConnected()) {
-                        LOG.info("RabbitMQ连接已断开，尝试重新连接...");
+                        LOG.error("RabbitMQ连接已断开，尝试重新连接...");
                         messageReceiver.start();
                     }
                 } catch (InterruptedException e) {
-                    LOG.info("程序被中断");
+                    LOG.error("程序被中断");
                     break;
                 } catch (Exception e) {
-                    LOG.info( "重新连接失败", e);
+                    LOG.error( "重新连接失败", e);
                 }
             }
 
         } catch (Exception e) {
-            LOG.info( "启动声呐消息接收器失败", e);
+            LOG.error( "启动声呐消息接收器失败", e);
             System.exit(1);
         }
 
