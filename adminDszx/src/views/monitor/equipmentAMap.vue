@@ -23,15 +23,7 @@
         data: function() {
             return {
                 deptMap:[],
-                onLineCount:0,
-                offLineCount:0,
-                errorCount:0,
-                centerLoction:[113.63,22.24],
-                amap:'',
-                LOCAL_ZHBHT:LOCAL_ZHBHT,
-                LOCAL_SSBRL:LOCAL_SSBRL,
-                LOCAL_VIDEO:LOCAL_VIDEO,
-                LOCAL_TLBHQ:LOCAL_TLBHQ
+                amap:''
             }
         },
         mounted() {
@@ -42,139 +34,14 @@
         },
         methods:{
             createAmap(){
-                let _this = this;
-                let loginuser = Tool.getLoginUser();
-                let usergps = loginuser.deptgpsmap[loginuser.deptcode];
-                if(_this.LOCAL_ZHBHT || _this.LOCAL_VIDEO){
-                  _this.amap = new AMap.Map('equipmentamap', {
-                    center: [113.73,22.30],
-                    resizeEnable: true,
-                    zoom: 11,
-                    // mapStyle: _this.mapStyle
-                  });
-                  let polygonArr = new Array();//多边形覆盖物节点坐标数组
-                  polygonArr.push([113.666667, 22.4]);
-                  polygonArr.push([113.716667, 22.4]);
-                  polygonArr.push([113.716667, 22.183333]);
-                  polygonArr.push([113.666667, 22.183333]);
-                  let  polygon = new AMap.Polygon({
-                    path: polygonArr,//设置多边形边界路径
-                    strokeColor: "#6A8F71", //线颜色
-                    strokeOpacity: 0.2, //线透明度
-                    strokeWeight: 3,    //线宽
-                    fillColor: "#85C5A0", //填充色
-                    fillOpacity: 0.35//填充透明度
-                  });
-                  let polygonArr2 = new Array();//多边形覆盖物节点坐标数组
-                  polygonArr2.push([113.716667, 22.4]);
-                  polygonArr2.push([113.869444, 22.4]);
-                  polygonArr2.push([113.869444, 22.366667]);
-                  polygonArr2.push([113.766667, 22.366667]);
-                  polygonArr2.push([113.766667, 22.216667]);
-                  polygonArr2.push([113.816667, 22.216667]);
-                  polygonArr2.push([113.833333, 22.183333]);
-                  polygonArr2.push([113.716667, 22.183333]);
-                  let  polygon2 = new AMap.Polygon({
-                    path: polygonArr2,//设置多边形边界路径
-                    strokeColor: "#76987C", //线颜色
-                    strokeOpacity: 0.2, //线透明度
-                    strokeWeight: 3,    //线宽
-                    fillColor: "#BFE39B", //填充色
-                    fillOpacity: 0.35//填充透明度
-                  });
-                  let polygonArr3 = new Array();//多边形覆盖物节点坐标数组
-                  polygonArr3.push([113.869444, 22.366667]);
-                  polygonArr3.push([113.869444, 22.333333]);
-                  polygonArr3.push([113.847778, 22.273056]);
-                  polygonArr3.push([113.838889, 22.266667]);
-                  polygonArr3.push([113.816667, 22.216667]);
-                  polygonArr3.push([113.766667, 22.216667]);
-                  polygonArr3.push([113.766667, 22.366667]);
-                  let  polygon3 = new AMap.Polygon({
-                    path: polygonArr3,//设置多边形边界路径
-                    strokeColor: "#908983", //线颜色
-                    strokeOpacity: 0.2, //线透明度
-                    strokeWeight: 3,    //线宽
-                    fillColor: "#B59A8F", //填充色
-                    fillOpacity: 0.35//填充透明度
-                  });
-                  let overlayGroup = new AMap.OverlayGroup([polygon,polygon2,polygon3])
-                  _this.amap.add(overlayGroup);
-                  // 创建纯文本标记
-                  let text = new AMap.Text({
-                    text:'实验区',
-                    anchor:'center', // 设置文本标记锚点
-                    style:{
-                      'height': '15rem',
-                      'background-color': 'rgba(133, 197, 160, 0)',
-                      'text-align': 'center',
-                      'font-size': '20px',
-                      'border-width': 0,
-                      'color': 'white',
-                      'writing-mode':'vertical-lr'
-                    },
-                    position: [113.691667, 22.291667]
-                  });
-                  text.setMap(_this.amap);
-                  // 创建纯文本标记
-                  let text1 = new AMap.Text({
-                    text:'缓冲区',
-                    anchor:'center', // 设置文本标记锚点
-                    style:{
-                      'height': '15rem',
-                      'background-color': 'rgba(133, 197, 160, 0)',
-                      'text-align': 'center',
-                      'font-size': '20px',
-                      'border-width': 0,
-                      'color': 'white',
-                      'writing-mode':'vertical-lr'
-                    },
-                    position: [113.741667, 22.291667]
-                  });
-                  text1.setMap(_this.amap);
-                  // 创建纯文本标记
-                  let text2 = new AMap.Text({
-                    text:'核心区',
-                    anchor:'center', // 设置文本标记锚点
-                    style:{
-                      'height': '15rem',
-                      'background-color': 'rgba(133, 197, 160, 0)',
-                      'text-align': 'center',
-                      'font-size': '20px',
-                      'border-width': 0,
-                      'color': 'white',
-                      'writing-mode':'vertical-lr'
-                    },
-                    position: [113.791667, 22.291667]
-                  });
-                  text2.setMap(_this.amap);
-                }else{
-                  if(_this.LOCAL_SSBRL){
-                    _this.amap = new AMap.Map('equipmentamap', {
-                      //center: [114.299945,30.593221],
-                      resizeEnable: true,
-                      zoom: 5,
-                      //mapStyle: _this.mapStyle
-                    });
-                    if(!Tool.isEmpty(usergps)){
-                      _this.amap.setCenter(usergps.split(","));
-                    }else{
-                      _this.amap.setCenter([114.299945,30.593221]);
-                    }
-                  }else if(_this.LOCAL_TLBHQ){
-                    _this.amap = new AMap.Map('equipmentamap', {
-                      //center: [117.773,31.0355],
-                      resizeEnable: true,
-                      zoom: 10,
-                      mapStyle: _this.mapStyle
-                    });
-                    if(!Tool.isEmpty(usergps)){
-                      _this.amap.setCenter(usergps.split(","));
-                    }else{
-                      _this.amap.setCenter([117.773,31.0355]);
-                    }
-                  }
-                }
+              let _this = this;
+              let loginuser = Tool.getLoginUser();
+              let usergps = loginuser.deptgpsmap[loginuser.deptcode];
+              _this.amap = new AMap.Map('equipmentamap', {
+                resizeEnable: true,
+                zoom: 12,
+              });
+              _this.amap.setCenter([119.58,32.24]);
             },
             findDeviceInfo(){
                 let _this = this;
@@ -182,32 +49,29 @@
                 _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/findAll', {}).then((response)=>{
                     Loading.hide();
                     let devices = response.data.content;
+                    let zirongshishebei = new AMap.Icon({
+                      image: '/largemonitors/assets/imgs/zirongshishebei.png',
+                      size: new AMap.Size(29, 29)
+                    });
+                    let shengxueshebei = new AMap.Icon({
+                      image: '/largemonitors/assets/imgs/shengxueshebei.png',
+                      size: new AMap.Size(29, 29)
+                    })
+                    let wurenji = new AMap.Icon({
+                      image: '/largemonitors/assets/imgs/wurenji.png',
+                      size: new AMap.Size(35, 35)
+                    })
+                    let anjijiankong = new AMap.Icon({
+                      image: '/largemonitors/assets/imgs/anjijiankong.png',
+                      size: new AMap.Size(35, 35)
+                    })
                     for(let i=0;i<devices.length;i++){
                         if(Tool.isEmpty(devices[i].gps)){
                           continue;
                         }
-                        if(devices[i].sbzt=='1'){
-                            _this.onLineCount++;
-                        }else if(devices[i].sbzt=='2'){
-                            _this.offLineCount++;
-                        }else if(devices[i].sbzt=='3') {
-                            _this.errorCount++;
-                        }
-                        let icon = new AMap.Icon({
-                            image: '/largemonitors/assets/imgs/zcsb.png',
-                            size: new AMap.Size(29, 29)
-                        });
-                        let ycicon = new AMap.Icon({
-                            image: '/largemonitors/assets/imgs/ycsb.png',
-                            size: new AMap.Size(29, 29)
-                        })
-                        let cameraicon = new AMap.Icon({
-                          image: '/largemonitors/assets/imgs/Camera.png',
-                          size: new AMap.Size(35, 35)
-                        })
-                        if("0001"==devices[i].sblb){
+                        if("A1"==devices[i].dqzl){
                             let marker = new AMap.Marker({
-                                icon: devices[i].sbzt=='1'?icon:ycicon,
+                                icon: zirongshishebei,
                                 position: devices[i].gps.split(','),
                                 offset: new AMap.Pixel(-12,-12),
                                 zIndex: 101,
@@ -231,35 +95,22 @@
                                 });
                                 infoWindow.open(_this.amap, e.target.getPosition());
                             });
-                            let circle = new AMap.Circle({
-                                center: devices[i].gps.split(','),
-                                radius: 500, //半径
-                                borderWeight: 3,
-                                strokeColor: "#6D9DE9",
-                                strokeWeight: 6,
-                                strokeOpacity: 1,
-                                fillOpacity: 0.4,
-                                strokeStyle: 'dashed',
-                                strokeDasharray: [10, 10],
-                                // 线样式还支持 'dashed'
-                                fillColor: '#1791fc',
-                                zIndex: 50,
-                            })
-                            circle.setMap(_this.amap);
-                            // 缩放地图到合适的视野级别
-                            //_this.amap.setFitView([ circle ])
-                        }else if("0002"==devices[i].sblb){
+                        }else if("A4"==devices[i].dqzl){
                             let marker = new AMap.Marker({
+                                icon: shengxueshebei,
                                 position: devices[i].gps.split(','),
                                 map: _this.amap
+                            });
+                            marker.setLabel({
+                              direction:'center',
+                              offset: new AMap.Pixel(10, 0),  //设置文本标注偏移量
+                              content: "<div style='color: #fff'>"+devices[i].fzwz+"</div>", //设置文本标注内容
                             });
                             marker.content = [];
                             marker.content.push(devices[i].deptcode);
                             marker.content.push(devices[i].centerCode);
                             marker.content.push(devices[i].fzwz);
                             marker.content.push(devices[i].sbsn);
-                            //marker.on('click', _this.markerClick);
-                            //鼠标点击marker弹出自定义的信息窗体
                             AMap.event.addListener(marker, 'click', function (e) {
                                 let infoWindow = new AMap.InfoWindow({
                                     isCustom: true,  //使用自定义窗体
@@ -268,39 +119,20 @@
                                 });
                                 infoWindow.open(_this.amap, e.target.getPosition());
                             });
-                        }else if("004"==devices[i].sblb){
-                          let marker = new AMap.Marker({
-                            icon: cameraicon,
-                            position: devices[i].gps.split(','),
-                            offset: new AMap.Pixel(-12,-12),
-                            zIndex: 101,
-                            map: _this.amap
-                          });
-                          marker.setLabel({
-                            direction:'center',
-                            offset: new AMap.Pixel(10, 0),  //设置文本标注偏移量
-                            content: "<div style='color: #fff'>"+devices[i].fzwz+"</div>", //设置文本标注内容
-                          });
-                          marker.content = [];
-                          marker.content.push(devices[i].deptcode);
-                          marker.content.push(devices[i].centerCode);
-                          marker.content.push(devices[i].fzwz);
-                          marker.content.push(devices[i].sbsn);
-                          AMap.event.addListener(marker, 'click', function (e) {
-                            let infoWindow = new AMap.InfoWindow({
-                              isCustom: true,  //使用自定义窗体
-                              content: _this.createInfoWindow(e.target.content),
-                              offset: new AMap.Pixel(16, -40)
-                            });
-                            infoWindow.open(_this.amap, e.target.getPosition());
-                          });
                         }
                     }
+                    new AMap.Marker({icon: wurenji,position: [119.70,32.30],map: _this.amap});
+                    new AMap.Marker({icon: wurenji,position: [119.60,32.22],map: _this.amap});
+                    new AMap.Marker({icon: wurenji,position: [119.565,32.22],map: _this.amap});
+                    new AMap.Marker({icon: anjijiankong,position: [119.71,32.31],map: _this.amap});
+                    new AMap.Marker({icon: anjijiankong,position: [119.61,32.22],map: _this.amap});
+                    new AMap.Marker({icon: anjijiankong,position: [119.56,32.24],map: _this.amap});
+                    new AMap.Marker({icon: anjijiankong,position: [119.58,32.24],map: _this.amap});
                 })
             },
             createInfoWindow(content) {
                 let _this = this;
-                _this.clickMapPoint(content[2],content[3]);
+                //_this.clickMapPoint(content[2],content[3]);
                 let info = document.createElement("div");
                 info.className = "custom-info input-card content-window-card";
 
