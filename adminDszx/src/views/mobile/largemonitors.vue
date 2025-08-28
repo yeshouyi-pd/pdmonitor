@@ -49,7 +49,7 @@
       </div>
       <div class="bcenter">
         <div class="h63">
-          <EquipmentAMap v-bind:height-max="heightMax" :click-map-point="clickMapPoint"></EquipmentAMap>
+          <EquipmentAMap v-bind:height-max="heightMax"></EquipmentAMap>
         </div>
         <div class="h37">
           <span>分析数据</span>
