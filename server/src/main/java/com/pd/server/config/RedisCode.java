@@ -38,6 +38,8 @@ public enum RedisCode {
 
 
     APPCODETYPE("APP_CODE_TYPE"),//app类型缓存
+
+    APPCODESET("APP_CODE_SET"),//app类型缓存
     ;
 
     private String desc;
