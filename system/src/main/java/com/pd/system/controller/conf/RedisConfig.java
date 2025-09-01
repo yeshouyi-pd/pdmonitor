@@ -46,6 +46,11 @@ public class RedisConfig  implements CommandLineRunner {
 
     public static WaterProEquipMapper waterProEquipStaticMapper;
 
+
+    public static AppCodeTypeMapper appCodeTypeStaticMapper;
+
+
+
     @Resource
     private RedisTemplate redisTemplate;
 
@@ -70,6 +75,9 @@ public class RedisConfig  implements CommandLineRunner {
     @Resource
     private WaterProEquipMapper waterProEquipMapper;
 
+    @Resource
+    private AppCodeTypeMapper appCodeTypeMapper;
+
     @PostConstruct
     protected void init() {
         CodesetstaticMapper = codesetMapper;
@@ -80,6 +88,7 @@ public class RedisConfig  implements CommandLineRunner {
         myDeptstaticMapper =myDeptMapper;
         attrstaticMapper =attrMapper;
         waterProEquipStaticMapper = waterProEquipMapper;
+        appCodeTypeStaticMapper = appCodeTypeMapper;
     }
 
 
@@ -102,6 +111,7 @@ public class RedisConfig  implements CommandLineRunner {
         init_uservideo();//加载用户缓存
         init_xmbhsbsn();//加载项目编号对应的设备编号
         init_attr();//加载系统参数
+        init_app_code_type();//加载app 缓存
     }
 
     /**
@@ -295,5 +305,25 @@ public class RedisConfig  implements CommandLineRunner {
             return false;
         }
         return true;
+    }
+
+    public synchronized static boolean init_app_code_type() {
+        try {
+            AppCodeTypeExample example  = new  AppCodeTypeExample();
+            AppCodeTypeExample.Criteria ca = example.createCriteria();
+            List<AppCodeType> list = appCodeTypeStaticMapper.selectByExample(example);
+            if(!CollectionUtils.isEmpty(list)){
+                Map<String, String>  map = new LinkedHashMap<String,String>();
+                for(AppCodeType vo  :list){
+                    map.put(vo.getTypeValue(),vo.getTypeName());
+                }
+                redisTstaticemplate.opsForValue().set(RedisCode.APPCODETYPE, map);//将参数信息写入redis缓存
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+
     }
 }

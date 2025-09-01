@@ -26,8 +26,13 @@ public class AppCodeTypeService {
     * 列表查询
     */
     public void list(PageDto pageDto) {
-    PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
+        PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
         AppCodeTypeExample appCodeTypeExample = new AppCodeTypeExample();
+        
+        // 如果有查询参数，可以在这里添加查询条件
+        // 目前先实现基础的分页查询
+        
+        appCodeTypeExample.setOrderByClause("create_time desc");
         List<AppCodeType> appCodeTypeList = appCodeTypeMapper.selectByExample(appCodeTypeExample);
         PageInfo<AppCodeType> pageInfo = new PageInfo<>(appCodeTypeList);
         pageDto.setTotal(pageInfo.getTotal());
@@ -41,6 +46,8 @@ public class AppCodeTypeService {
     public void save(AppCodeTypeDto appCodeTypeDto) {
         AppCodeType appCodeType = CopyUtil.copy(appCodeTypeDto, AppCodeType.class);
         if (StringUtils.isEmpty(appCodeTypeDto.getId())) {
+            // 新增时检查类型代码是否已存在
+            this.checkTypeValueExists(appCodeTypeDto.getTypeValue());
             this.insert(appCodeType);
         } else {
             this.update(appCodeType);
@@ -48,11 +55,26 @@ public class AppCodeTypeService {
     }
 
     /**
+     * 检查类型代码是否已存在
+     */
+    private void checkTypeValueExists(String typeValue) {
+        AppCodeTypeExample example = new AppCodeTypeExample();
+        AppCodeTypeExample.Criteria criteria = example.createCriteria();
+        criteria.andTypeValueEqualTo(typeValue);
+        
+        List<AppCodeType> existingList = appCodeTypeMapper.selectByExample(example);
+        if (!existingList.isEmpty()) {
+            throw new RuntimeException("类型代码已存在，请使用其他代码");
+        }
+    }
+
+    /**
     * 新增
     */
     private void insert(AppCodeType appCodeType) {
-                Date now = new Date();
+        Date now = new Date();
         appCodeType.setId(UuidUtil.getShortUuid());
+        appCodeType.setCreateTime(now);
         appCodeTypeMapper.insert(appCodeType);
     }
 
