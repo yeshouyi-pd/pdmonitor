@@ -50,6 +50,9 @@ public class RedisConfig  implements CommandLineRunner {
     public static AppCodeTypeMapper appCodeTypeStaticMapper;
 
 
+    public static AppCodeSetMapper appCodeSetStaticMapper;
+
+
 
     @Resource
     private RedisTemplate redisTemplate;
@@ -78,6 +81,9 @@ public class RedisConfig  implements CommandLineRunner {
     @Resource
     private AppCodeTypeMapper appCodeTypeMapper;
 
+    @Resource
+    private AppCodeSetMapper appCodeSetMapper;
+
     @PostConstruct
     protected void init() {
         CodesetstaticMapper = codesetMapper;
@@ -89,6 +95,7 @@ public class RedisConfig  implements CommandLineRunner {
         attrstaticMapper =attrMapper;
         waterProEquipStaticMapper = waterProEquipMapper;
         appCodeTypeStaticMapper = appCodeTypeMapper;
+        appCodeSetStaticMapper = appCodeSetMapper;
     }
 
 
@@ -112,6 +119,7 @@ public class RedisConfig  implements CommandLineRunner {
         init_xmbhsbsn();//加载项目编号对应的设备编号
         init_attr();//加载系统参数
         init_app_code_type();//加载app 缓存
+        init_app_code_set();//加载app 缓存
     }
 
     /**
@@ -318,6 +326,41 @@ public class RedisConfig  implements CommandLineRunner {
                     map.put(vo.getTypeValue(),vo.getTypeName());
                 }
                 redisTstaticemplate.opsForValue().set(RedisCode.APPCODETYPE, map);//将参数信息写入redis缓存
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+
+    }
+
+    public synchronized static boolean init_app_code_set() {
+        try {
+            AppCodeTypeExample exampler  = new  AppCodeTypeExample();
+            AppCodeTypeExample.Criteria car = exampler.createCriteria();
+            List<AppCodeType> listType = appCodeTypeStaticMapper.selectByExample(exampler);
+            Set<String> types = new HashSet<>();
+            for (AppCodeType vo : listType){
+                types.add(vo.getTypeValue());
+            }
+
+            AppCodeSetExample example  = new  AppCodeSetExample();
+            AppCodeSetExample.Criteria ca = example.createCriteria();
+            List<AppCodeSet> list = appCodeSetStaticMapper.selectByExample(example);
+            if(!CollectionUtils.isEmpty(list)){
+                Map<String,  Map<String, String>>  amap= new LinkedHashMap<String, Map<String, String>>();
+                for(String  type :types){
+                    Map<String, String>  map = new LinkedHashMap<String,String>();
+                    for(AppCodeSet vo  :list){
+                        if(type.equals(vo.getTypeValue())){
+                            map.put(vo.getCodeValue(),vo.getCodeName());
+                        }
+                    }
+                    amap.put(type, map);
+                }
+
+                redisTstaticemplate.opsForValue().set(RedisCode.APPCODESET, amap);//将参数信息写入redis缓存
             }
         }catch (Exception e) {
             e.printStackTrace();
