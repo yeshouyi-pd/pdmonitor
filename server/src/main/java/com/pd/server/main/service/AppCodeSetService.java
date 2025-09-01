@@ -26,8 +26,13 @@ public class AppCodeSetService {
     * 列表查询
     */
     public void list(PageDto pageDto) {
-    PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
+        PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
         AppCodeSetExample appCodeSetExample = new AppCodeSetExample();
+        
+        // 如果有查询参数，可以在这里添加查询条件
+        // 目前先实现基础的分页查询
+        
+        appCodeSetExample.setOrderByClause("create_time desc");
         List<AppCodeSet> appCodeSetList = appCodeSetMapper.selectByExample(appCodeSetExample);
         PageInfo<AppCodeSet> pageInfo = new PageInfo<>(appCodeSetList);
         pageDto.setTotal(pageInfo.getTotal());
@@ -41,6 +46,8 @@ public class AppCodeSetService {
     public void save(AppCodeSetDto appCodeSetDto) {
         AppCodeSet appCodeSet = CopyUtil.copy(appCodeSetDto, AppCodeSet.class);
         if (StringUtils.isEmpty(appCodeSetDto.getId())) {
+            // 新增时检查typeValue和codeValue组合是否已存在
+            this.checkTypeValueAndCodeValueExists(appCodeSetDto.getTypeValue(), appCodeSetDto.getCodeValue());
             this.insert(appCodeSet);
         } else {
             this.update(appCodeSet);
@@ -48,11 +55,27 @@ public class AppCodeSetService {
     }
 
     /**
+     * 检查typeValue和codeValue组合是否已存在
+     */
+    private void checkTypeValueAndCodeValueExists(String typeValue, String codeValue) {
+        AppCodeSetExample example = new AppCodeSetExample();
+        AppCodeSetExample.Criteria criteria = example.createCriteria();
+        criteria.andTypeValueEqualTo(typeValue);
+        criteria.andCodeValueEqualTo(codeValue);
+        
+        List<AppCodeSet> existingList = appCodeSetMapper.selectByExample(example);
+        if (!existingList.isEmpty()) {
+            throw new RuntimeException("该代码类型下已存在相同的代码值，请使用其他代码值");
+        }
+    }
+
+    /**
     * 新增
     */
     private void insert(AppCodeSet appCodeSet) {
-                Date now = new Date();
+        Date now = new Date();
         appCodeSet.setId(UuidUtil.getShortUuid());
+        appCodeSet.setCreateTime(now);
         appCodeSetMapper.insert(appCodeSet);
     }
 
