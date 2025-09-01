@@ -104,6 +104,7 @@ import SonarEcho from "./views/sonar/sonarEcho.vue";
 import SonarEchoSv from "./views/sonar/sonarEchoSv.vue";
 import SonarSingleTarget from "./views/sonar/sonarSingleTarget.vue";
 import AppCodeType from "./views/app/appCodeType.vue";
+import AppCodeSet from "./views/app/appCodeSet.vue";
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -521,6 +522,10 @@ export default new Router({
             path: "admin/appCodeType",
             name: "admin/appCodeType",
             component: AppCodeType
+        },{
+            path: "admin/appCodeSet",
+            name: "admin/appCodeSet",
+            component: AppCodeSet
         }]
     }]
 })
