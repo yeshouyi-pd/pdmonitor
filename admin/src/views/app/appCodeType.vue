@@ -133,7 +133,7 @@
   import Pagination from "../../components/pagination";
   export default {
     components: {Pagination},
-    name: "app-appCodeType",
+    name: "admin-appCodeType",
     data: function() {
       return {
       appCodeType: {},

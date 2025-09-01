@@ -1,6 +1,7 @@
 package com.pd.system.controller.app;
 
 import com.pd.server.config.RedisCode;
+import com.pd.server.main.domain.AppCodeSet;
 import com.pd.server.main.dto.AppCodeSetDto;
 import com.pd.server.main.dto.PageDto;
 import com.pd.server.main.dto.ResponseDto;
@@ -28,7 +29,7 @@ public class AppCodeSetController {
     * 列表查询
     */
     @PostMapping("/list")
-    public ResponseDto list(@RequestBody PageDto pageDto) {
+    public ResponseDto list(@RequestBody AppCodeSet pageDto) {
         ResponseDto responseDto = new ResponseDto();
         try {
             appCodeSetService.list(pageDto);

@@ -28,11 +28,21 @@ public class AppCodeSetService {
     public void list(PageDto pageDto) {
         PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
         AppCodeSetExample appCodeSetExample = new AppCodeSetExample();
-        
+        AppCodeSet appCodeSet = CopyUtil.copy(pageDto, AppCodeSet.class);
+        if(org.apache.commons.lang.StringUtils.isNotBlank(appCodeSet.getCodeName())){
+            appCodeSetExample.createCriteria().andCodeNameLike("%" + appCodeSet.getCodeName().trim() + "%");
+        }
+        if (org.apache.commons.lang.StringUtils.isNotBlank(appCodeSet.getCodeValue())){
+            appCodeSetExample.createCriteria().andCodeValueEqualTo(appCodeSet.getCodeValue().trim());
+        }
+        if (org.apache.commons.lang.StringUtils.isNotBlank(appCodeSet.getTypeValue())){
+            appCodeSetExample.createCriteria().andTypeValueEqualTo(appCodeSet.getTypeValue().trim());
+        }
+
         // 如果有查询参数，可以在这里添加查询条件
         // 目前先实现基础的分页查询
         
-        appCodeSetExample.setOrderByClause("create_time desc");
+        appCodeSetExample.setOrderByClause("create_time asc");
         List<AppCodeSet> appCodeSetList = appCodeSetMapper.selectByExample(appCodeSetExample);
         PageInfo<AppCodeSet> pageInfo = new PageInfo<>(appCodeSetList);
         pageDto.setTotal(pageInfo.getTotal());

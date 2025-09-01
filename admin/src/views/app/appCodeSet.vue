@@ -157,7 +157,7 @@
   import Pagination from "../../components/pagination";
   export default {
     components: {Pagination},
-    name: "app-appCodeSet",
+    name: "admin-appCodeSet",
     data: function() {
       return {
       appCodeSet: {},
