@@ -40,6 +40,7 @@
               _this.amap = new AMap.Map('equipmentamap', {
                 resizeEnable: true,
                 zoom: 12,
+                features: ['bg']
               });
               _this.amap.setCenter([119.58,32.24]);
             },
@@ -122,7 +123,7 @@
                         }
                     }
                     new AMap.Marker({icon: wurenji,position: [119.70,32.30],map: _this.amap});
-                    new AMap.Marker({icon: wurenji,position: [119.60,32.22],map: _this.amap});
+                    new AMap.Marker({icon: wurenji,position: [119.585,32.22],map: _this.amap});
                     new AMap.Marker({icon: wurenji,position: [119.565,32.22],map: _this.amap});
                     new AMap.Marker({icon: anjijiankong,position: [119.71,32.31],map: _this.amap});
                     new AMap.Marker({icon: anjijiankong,position: [119.61,32.22],map: _this.amap});
