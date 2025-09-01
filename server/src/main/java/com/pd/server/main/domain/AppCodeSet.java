@@ -1,8 +1,10 @@
 package com.pd.server.main.domain;
 
+import com.pd.server.main.dto.PageDto;
+
 import java.util.Date;
 
-public class AppCodeSet {
+public class AppCodeSet  extends PageDto {
     private String id;
 
     private String codeName;

@@ -28,11 +28,19 @@ public class AppCodeTypeService {
     public void list(PageDto pageDto) {
         PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
         AppCodeTypeExample appCodeTypeExample = new AppCodeTypeExample();
+        AppCodeTypeExample.Criteria criteria = appCodeTypeExample.createCriteria();
+        AppCodeType appCodeType = CopyUtil.copy(pageDto, AppCodeType.class);
+        if(org.apache.commons.lang.StringUtils.isNotBlank(appCodeType.getTypeName())){
+            criteria.andTypeNameLike("%" + appCodeType.getTypeName().trim() + "%");
+        }
+        if (org.apache.commons.lang.StringUtils.isNotBlank(appCodeType.getTypeValue())){
+            criteria.andTypeValueEqualTo(appCodeType.getTypeValue().trim());
+        }
         
         // 如果有查询参数，可以在这里添加查询条件
         // 目前先实现基础的分页查询
         
-        appCodeTypeExample.setOrderByClause("create_time desc");
+        appCodeTypeExample.setOrderByClause("create_time asc");
         List<AppCodeType> appCodeTypeList = appCodeTypeMapper.selectByExample(appCodeTypeExample);
         PageInfo<AppCodeType> pageInfo = new PageInfo<>(appCodeTypeList);
         pageDto.setTotal(pageInfo.getTotal());

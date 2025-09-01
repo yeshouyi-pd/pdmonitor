@@ -1,5 +1,6 @@
 package com.pd.system.controller.app;
 
+import com.pd.server.main.domain.AppCodeType;
 import com.pd.server.main.dto.AppCodeTypeDto;
 import com.pd.server.main.dto.PageDto;
 import com.pd.server.main.dto.ResponseDto;
@@ -26,7 +27,7 @@ public class AppCodeTypeController {
     * 列表查询
     */
     @PostMapping("/list")
-    public ResponseDto list(@RequestBody PageDto pageDto) {
+    public ResponseDto list(@RequestBody AppCodeType pageDto) {
         ResponseDto responseDto = new ResponseDto();
         try {
             appCodeTypeService.list(pageDto);
