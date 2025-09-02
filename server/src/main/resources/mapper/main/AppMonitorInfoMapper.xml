@@ -137,7 +137,7 @@
       #{wztgczk,jdbcType=VARCHAR}, #{wxgszfw,jdbcType=VARCHAR}, #{wxgzk,jdbcType=VARCHAR}, 
       #{njajl,jdbcType=VARCHAR}, #{nss,jdbcType=VARCHAR}, #{ncs,jdbcType=VARCHAR}, #{njafx,jdbcType=VARCHAR}, 
       #{nfx,jdbcType=VARCHAR}, #{jsgcsj,jdbcType=TIMESTAMP}, #{scsj,jdbcType=TIMESTAMP}, 
-      #{gxsj,jdbcType=TIMESTAMP}, #{deptcode,jdbcType=VARCHAR},, #{gczzwm,jdbcType=VARCHAR})
+      #{gxsj,jdbcType=TIMESTAMP}, #{deptcode,jdbcType=VARCHAR},#{gczzwm,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.pd.server.main.domain.AppMonitorInfo">
     insert into app_monitor_info
