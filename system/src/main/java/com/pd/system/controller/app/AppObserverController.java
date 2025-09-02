@@ -313,9 +313,9 @@ public class AppObserverController {
             return HttpResult.error("参数异常");
         }
         userDto.setPassword(userDto.getPassword()+"!@#QWERT");
-        userDto.setPassword(DigestUtils.md5DigestAsHex(userDto.getPassword().getBytes()));
+        userDto.setPassword( DigestUtils.md5DigestAsHex(DigestUtils.md5DigestAsHex(userDto.getPassword().getBytes()).getBytes())  );
         User user =  userService.appLgoin(userDto);
-        if(null != user){
+        if(null == user){
             return HttpResult.error("账号或密码错误");
         }
         user.setPassword( null);
