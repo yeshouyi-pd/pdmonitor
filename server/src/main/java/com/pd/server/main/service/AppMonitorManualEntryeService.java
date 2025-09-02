@@ -56,7 +56,6 @@ public class AppMonitorManualEntryeService {
     */
     private void insert(AppMonitorManualEntrye appMonitorManualEntrye) {
                 Date now = new Date();
-        appMonitorManualEntrye.setId(UuidUtil.getShortUuid());
         appMonitorManualEntryeMapper.insert(appMonitorManualEntrye);
     }
 
