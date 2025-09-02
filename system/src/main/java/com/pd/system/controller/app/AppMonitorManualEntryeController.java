@@ -56,6 +56,8 @@ public class AppMonitorManualEntryeController {
                 ValidatorUtil.length(appMonitorManualEntryeDto.getNFx(), "方向", 1, 10);
                 ValidatorUtil.length(appMonitorManualEntryeDto.getVYcsl(), "渔船数量", 1, 10);
                 ValidatorUtil.length(appMonitorManualEntryeDto.getVDcsl(), "大船数量", 1, 10);
+                ValidatorUtil.length(appMonitorManualEntryeDto.getVTbcsl(), "停泊船数量", 1, 10);
+                ValidatorUtil.length(appMonitorManualEntryeDto.getVYdcsl(), "移动船数量", 1, 10);
 
         ResponseDto responseDto = new ResponseDto();
         appMonitorManualEntryeService.save(appMonitorManualEntryeDto);
