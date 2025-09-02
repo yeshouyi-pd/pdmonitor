@@ -5,128 +5,58 @@ package com.pd.server.main.dto;
 
 public class AppMonitorManualEntryeDto {
 
-    /**
-    * 
-    */
     private String id;
 
-    /**
-    * 
-    */
     private String mid;
 
-    /**
-    * 人工观察录入时间
-    */
-        @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date ksgcsj;
 
-    /**
-    * 左方观察者
-    */
-    private String pZfgcz;
+    private String pzfgcz;
 
-    /**
-    * 记录者
-    */
-    private String pJlz;
+    private String pjlz;
 
-    /**
-    * 右方观察者
-    */
-    private String pYfgcz;
+    private String pyfgcz;
 
-    /**
-    * 独立观察者
-    */
-    private String pDlgcz;
+    private String pdlgcz;
 
-    /**
-    * 独立观察者所用方法
-    */
-    private String pDlgczsyff;
+    private String pdlgczsyff;
 
-    /**
-    * 附加观察者
-    */
-    private String pFjgcz;
+    private String pfjgcz;
 
-    /**
-    * 总体观察状况
-    */
-    private String wZtgczk;
+    private String wztgczk;
 
-    /**
-    * 眩光所在范围
-    */
-    private String wXgszfw;
+    private String wxgszfw;
 
-    /**
-    * 眩光状况
-    */
-    private String wXgzk;
+    private String wxgzk;
 
-    /**
-    * 近岸距离(米)
-    */
-    private String nJajl;
+    private String njajl;
 
-    /**
-    * 水深(米)
-    */
-    private String nSs;
+    private String nss;
 
-    /**
-    * 船速
-    */
-    private String nCs;
+    private String ncs;
 
-    /**
-    * 近岸方向
-    */
-    private String nJafx;
+    private String njafx;
 
-    /**
-    * 方向
-    */
-    private String nFx;
+    private String nfx;
 
-    /**
-    * 渔船数量
-    */
-    private String vYcsl;
+    private String vycsl;
 
-    /**
-    * 大船数量
-    */
-    private String vDcsl;
+    private String vdcsl;
 
-    /**
-    * 上传时间
-    */
-        @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date scsj;
 
-    /**
-    * 更新时间
-    */
-        @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date gxsj;
 
-    /**
-    * 停泊船数量
-    */
-    private String vTbcsl;
+    private String vtbcsl;
 
-    /**
-    * 移动船数量
-    */
-    private String vYdcsl;
-
-
-    private String gczxm;
+    private String vydcsl;
 
     private String deptcode;
+
+    private String gczxm;
 
     public String getId() {
         return id;
@@ -152,132 +82,132 @@ public class AppMonitorManualEntryeDto {
         this.ksgcsj = ksgcsj;
     }
 
-    public String getPZfgcz() {
-        return pZfgcz;
+    public String getPzfgcz() {
+        return pzfgcz;
     }
 
-    public void setPZfgcz(String pZfgcz) {
-        this.pZfgcz = pZfgcz;
+    public void setPzfgcz(String pzfgcz) {
+        this.pzfgcz = pzfgcz;
     }
 
-    public String getPJlz() {
-        return pJlz;
+    public String getPjlz() {
+        return pjlz;
     }
 
-    public void setPJlz(String pJlz) {
-        this.pJlz = pJlz;
+    public void setPjlz(String pjlz) {
+        this.pjlz = pjlz;
     }
 
-    public String getPYfgcz() {
-        return pYfgcz;
+    public String getPyfgcz() {
+        return pyfgcz;
     }
 
-    public void setPYfgcz(String pYfgcz) {
-        this.pYfgcz = pYfgcz;
+    public void setPyfgcz(String pyfgcz) {
+        this.pyfgcz = pyfgcz;
     }
 
-    public String getPDlgcz() {
-        return pDlgcz;
+    public String getPdlgcz() {
+        return pdlgcz;
     }
 
-    public void setPDlgcz(String pDlgcz) {
-        this.pDlgcz = pDlgcz;
+    public void setPdlgcz(String pdlgcz) {
+        this.pdlgcz = pdlgcz;
     }
 
-    public String getPDlgczsyff() {
-        return pDlgczsyff;
+    public String getPdlgczsyff() {
+        return pdlgczsyff;
     }
 
-    public void setPDlgczsyff(String pDlgczsyff) {
-        this.pDlgczsyff = pDlgczsyff;
+    public void setPdlgczsyff(String pdlgczsyff) {
+        this.pdlgczsyff = pdlgczsyff;
     }
 
-    public String getPFjgcz() {
-        return pFjgcz;
+    public String getPfjgcz() {
+        return pfjgcz;
     }
 
-    public void setPFjgcz(String pFjgcz) {
-        this.pFjgcz = pFjgcz;
+    public void setPfjgcz(String pfjgcz) {
+        this.pfjgcz = pfjgcz;
     }
 
-    public String getWZtgczk() {
-        return wZtgczk;
+    public String getWztgczk() {
+        return wztgczk;
     }
 
-    public void setWZtgczk(String wZtgczk) {
-        this.wZtgczk = wZtgczk;
+    public void setWztgczk(String wztgczk) {
+        this.wztgczk = wztgczk;
     }
 
-    public String getWXgszfw() {
-        return wXgszfw;
+    public String getWxgszfw() {
+        return wxgszfw;
     }
 
-    public void setWXgszfw(String wXgszfw) {
-        this.wXgszfw = wXgszfw;
+    public void setWxgszfw(String wxgszfw) {
+        this.wxgszfw = wxgszfw;
     }
 
-    public String getWXgzk() {
-        return wXgzk;
+    public String getWxgzk() {
+        return wxgzk;
     }
 
-    public void setWXgzk(String wXgzk) {
-        this.wXgzk = wXgzk;
+    public void setWxgzk(String wxgzk) {
+        this.wxgzk = wxgzk;
     }
 
-    public String getNJajl() {
-        return nJajl;
+    public String getNjajl() {
+        return njajl;
     }
 
-    public void setNJajl(String nJajl) {
-        this.nJajl = nJajl;
+    public void setNjajl(String njajl) {
+        this.njajl = njajl;
     }
 
-    public String getNSs() {
-        return nSs;
+    public String getNss() {
+        return nss;
     }
 
-    public void setNSs(String nSs) {
-        this.nSs = nSs;
+    public void setNss(String nss) {
+        this.nss = nss;
     }
 
-    public String getNCs() {
-        return nCs;
+    public String getNcs() {
+        return ncs;
     }
 
-    public void setNCs(String nCs) {
-        this.nCs = nCs;
+    public void setNcs(String ncs) {
+        this.ncs = ncs;
     }
 
-    public String getNJafx() {
-        return nJafx;
+    public String getNjafx() {
+        return njafx;
     }
 
-    public void setNJafx(String nJafx) {
-        this.nJafx = nJafx;
+    public void setNjafx(String njafx) {
+        this.njafx = njafx;
     }
 
-    public String getNFx() {
-        return nFx;
+    public String getNfx() {
+        return nfx;
     }
 
-    public void setNFx(String nFx) {
-        this.nFx = nFx;
+    public void setNfx(String nfx) {
+        this.nfx = nfx;
     }
 
-    public String getVYcsl() {
-        return vYcsl;
+    public String getVycsl() {
+        return vycsl;
     }
 
-    public void setVYcsl(String vYcsl) {
-        this.vYcsl = vYcsl;
+    public void setVycsl(String vycsl) {
+        this.vycsl = vycsl;
     }
 
-    public String getVDcsl() {
-        return vDcsl;
+    public String getVdcsl() {
+        return vdcsl;
     }
 
-    public void setVDcsl(String vDcsl) {
-        this.vDcsl = vDcsl;
+    public void setVdcsl(String vdcsl) {
+        this.vdcsl = vdcsl;
     }
 
     public Date getScsj() {
@@ -296,28 +226,20 @@ public class AppMonitorManualEntryeDto {
         this.gxsj = gxsj;
     }
 
-    public String getVTbcsl() {
-        return vTbcsl;
+    public String getVtbcsl() {
+        return vtbcsl;
     }
 
-    public void setVTbcsl(String vTbcsl) {
-        this.vTbcsl = vTbcsl;
+    public void setVtbcsl(String vtbcsl) {
+        this.vtbcsl = vtbcsl;
     }
 
-    public String getVYdcsl() {
-        return vYdcsl;
+    public String getVydcsl() {
+        return vydcsl;
     }
 
-    public void setVYdcsl(String vYdcsl) {
-        this.vYdcsl = vYdcsl;
-    }
-
-    public String getGczxm() {
-        return gczxm;
-    }
-
-    public void setGczxm(String gczxm) {
-        this.gczxm = gczxm;
+    public void setVydcsl(String vydcsl) {
+        this.vydcsl = vydcsl;
     }
 
     public String getDeptcode() {
@@ -326,5 +248,13 @@ public class AppMonitorManualEntryeDto {
 
     public void setDeptcode(String deptcode) {
         this.deptcode = deptcode;
+    }
+
+    public String getGczxm() {
+        return gczxm;
+    }
+
+    public void setGczxm(String gczxm) {
+        this.gczxm = gczxm;
     }
 }

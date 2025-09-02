@@ -9,31 +9,31 @@ public class AppMonitorDiscovery {
 
     private Date fxsj;
 
-    private String sJl;
+    private String sjl;
 
-    private String sGcz;
+    private String sgcz;
 
-    private String sFw;
+    private String sfw;
 
-    private String sFf;
+    private String sff;
 
-    private String sWzm;
+    private String swzm;
 
-    private String sQtZx;
+    private String sqtzx;
 
-    private String sQtZy;
+    private String sqtzy;
 
-    private String sQtZd;
+    private String sqtzd;
 
-    private String cZsbh;
+    private String czsbh;
 
-    private String hZjajl;
+    private String hzjajl;
 
-    private String hMztds;
+    private String hmztds;
 
-    private String hXwms;
+    private String hxwms;
 
-    private String hHjlxdm;
+    private String hhjlxdm;
 
     private Date scjs;
 
@@ -65,108 +65,108 @@ public class AppMonitorDiscovery {
         this.fxsj = fxsj;
     }
 
-    public String getsJl() {
-        return sJl;
+    public String getSjl() {
+        return sjl;
     }
 
-    public void setsJl(String sJl) {
-        this.sJl = sJl;
+    public void setSjl(String sjl) {
+        this.sjl = sjl;
     }
 
-    public String getsGcz() {
-        return sGcz;
+    public String getSgcz() {
+        return sgcz;
     }
 
-    public void setsGcz(String sGcz) {
-        this.sGcz = sGcz;
+    public void setSgcz(String sgcz) {
+        this.sgcz = sgcz;
     }
 
-    public String getsFw() {
-        return sFw;
+    public String getSfw() {
+        return sfw;
     }
 
-    public void setsFw(String sFw) {
-        this.sFw = sFw;
+    public void setSfw(String sfw) {
+        this.sfw = sfw;
     }
 
-    public String getsFf() {
-        return sFf;
+    public String getSff() {
+        return sff;
     }
 
-    public void setsFf(String sFf) {
-        this.sFf = sFf;
+    public void setSff(String sff) {
+        this.sff = sff;
     }
 
-    public String getsWzm() {
-        return sWzm;
+    public String getSwzm() {
+        return swzm;
     }
 
-    public void setsWzm(String sWzm) {
-        this.sWzm = sWzm;
+    public void setSwzm(String swzm) {
+        this.swzm = swzm;
     }
 
-    public String getsQtZx() {
-        return sQtZx;
+    public String getSqtzx() {
+        return sqtzx;
     }
 
-    public void setsQtZx(String sQtZx) {
-        this.sQtZx = sQtZx;
+    public void setSqtzx(String sqtzx) {
+        this.sqtzx = sqtzx;
     }
 
-    public String getsQtZy() {
-        return sQtZy;
+    public String getSqtzy() {
+        return sqtzy;
     }
 
-    public void setsQtZy(String sQtZy) {
-        this.sQtZy = sQtZy;
+    public void setSqtzy(String sqtzy) {
+        this.sqtzy = sqtzy;
     }
 
-    public String getsQtZd() {
-        return sQtZd;
+    public String getSqtzd() {
+        return sqtzd;
     }
 
-    public void setsQtZd(String sQtZd) {
-        this.sQtZd = sQtZd;
+    public void setSqtzd(String sqtzd) {
+        this.sqtzd = sqtzd;
     }
 
-    public String getcZsbh() {
-        return cZsbh;
+    public String getCzsbh() {
+        return czsbh;
     }
 
-    public void setcZsbh(String cZsbh) {
-        this.cZsbh = cZsbh;
+    public void setCzsbh(String czsbh) {
+        this.czsbh = czsbh;
     }
 
-    public String gethZjajl() {
-        return hZjajl;
+    public String getHzjajl() {
+        return hzjajl;
     }
 
-    public void sethZjajl(String hZjajl) {
-        this.hZjajl = hZjajl;
+    public void setHzjajl(String hzjajl) {
+        this.hzjajl = hzjajl;
     }
 
-    public String gethMztds() {
-        return hMztds;
+    public String getHmztds() {
+        return hmztds;
     }
 
-    public void sethMztds(String hMztds) {
-        this.hMztds = hMztds;
+    public void setHmztds(String hmztds) {
+        this.hmztds = hmztds;
     }
 
-    public String gethXwms() {
-        return hXwms;
+    public String getHxwms() {
+        return hxwms;
     }
 
-    public void sethXwms(String hXwms) {
-        this.hXwms = hXwms;
+    public void setHxwms(String hxwms) {
+        this.hxwms = hxwms;
     }
 
-    public String gethHjlxdm() {
-        return hHjlxdm;
+    public String getHhjlxdm() {
+        return hhjlxdm;
     }
 
-    public void sethHjlxdm(String hHjlxdm) {
-        this.hHjlxdm = hHjlxdm;
+    public void setHhjlxdm(String hhjlxdm) {
+        this.hhjlxdm = hhjlxdm;
     }
 
     public Date getScjs() {
@@ -191,34 +191,5 @@ public class AppMonitorDiscovery {
 
     public void setDeptcode(String deptcode) {
         this.deptcode = deptcode;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", mid=").append(mid);
-        sb.append(", fxsj=").append(fxsj);
-        sb.append(", sJl=").append(sJl);
-        sb.append(", sGcz=").append(sGcz);
-        sb.append(", sFw=").append(sFw);
-        sb.append(", sFf=").append(sFf);
-        sb.append(", sWzm=").append(sWzm);
-        sb.append(", sQtZx=").append(sQtZx);
-        sb.append(", sQtZy=").append(sQtZy);
-        sb.append(", sQtZd=").append(sQtZd);
-        sb.append(", cZsbh=").append(cZsbh);
-        sb.append(", hZjajl=").append(hZjajl);
-        sb.append(", hMztds=").append(hMztds);
-        sb.append(", hXwms=").append(hXwms);
-        sb.append(", hHjlxdm=").append(hHjlxdm);
-        sb.append(", scjs=").append(scjs);
-        sb.append(", gczxm=").append(gczxm);
-        sb.append(", deptcode=").append(deptcode);
-        sb.append("]");
-        return sb.toString();
     }
 }

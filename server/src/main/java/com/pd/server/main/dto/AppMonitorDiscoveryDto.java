@@ -4,99 +4,45 @@ package com.pd.server.main.dto;
         import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class AppMonitorDiscoveryDto extends  PageDto{
-
-    /**
-    * id
-    */
     private String id;
 
-    /**
-    * 观察周期主表ID
-    */
     private String mid;
 
-    /**
-    * 发现江豚时间
-    */
-        @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date fxsj;
 
-    /**
-    * 观察者与动物间距离(米)
-    */
-    private String sJl;
+    private String sjl;
 
-    /**
-    * 观察者姓名
-    */
-    private String sGcz;
+    private String sgcz;
 
-    /**
-    * 方位:船首为0度，左方为负值
-    */
-    private String sFw;
+    private String sfw;
 
-    /**
-    * 方法
-    */
-    private String sFf;
+    private String sff;
 
-    /**
-    * 物种名
-    */
-    private String sWzm;
+    private String swzm;
 
-    /**
-    * 群体大小-最少
-    */
-    private String sQtZx;
+    private String sqtzx;
 
-    /**
-    * 群体大小-最优
-    */
-    private String sQtZy;
+    private String sqtzy;
 
-    /**
-    * 群体大小-最多
-    */
-    private String sQtZd;
+    private String sqtzd;
 
-    /**
-    * 注释编码
-    */
-    private String cZsbh;
+    private String czsbh;
 
-    /**
-    * 动物距最近岸的距离
-    */
-    private String hZjajl;
+    private String hzjajl;
 
-    /**
-    * 母子豚对数
-    */
-    private String hMztds;
+    private String hmztds;
 
-    /**
-    * 行为描述
-    */
-    private String hXwms;
+    private String hxwms;
 
-    /**
-    * 环境类型代码
-    */
-    private String hHjlxdm;
+    private String hhjlxdm;
 
-    /**
-    * 上传时间
-    */
-        @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date scjs;
-
 
     private String gczxm;
 
     private String deptcode;
-
 
     public String getId() {
         return id;
@@ -122,108 +68,108 @@ public class AppMonitorDiscoveryDto extends  PageDto{
         this.fxsj = fxsj;
     }
 
-    public String getSJl() {
-        return sJl;
+    public String getSjl() {
+        return sjl;
     }
 
-    public void setSJl(String sJl) {
-        this.sJl = sJl;
+    public void setSjl(String sjl) {
+        this.sjl = sjl;
     }
 
-    public String getSGcz() {
-        return sGcz;
+    public String getSgcz() {
+        return sgcz;
     }
 
-    public void setSGcz(String sGcz) {
-        this.sGcz = sGcz;
+    public void setSgcz(String sgcz) {
+        this.sgcz = sgcz;
     }
 
-    public String getSFw() {
-        return sFw;
+    public String getSfw() {
+        return sfw;
     }
 
-    public void setSFw(String sFw) {
-        this.sFw = sFw;
+    public void setSfw(String sfw) {
+        this.sfw = sfw;
     }
 
-    public String getSFf() {
-        return sFf;
+    public String getSff() {
+        return sff;
     }
 
-    public void setSFf(String sFf) {
-        this.sFf = sFf;
+    public void setSff(String sff) {
+        this.sff = sff;
     }
 
-    public String getSWzm() {
-        return sWzm;
+    public String getSwzm() {
+        return swzm;
     }
 
-    public void setSWzm(String sWzm) {
-        this.sWzm = sWzm;
+    public void setSwzm(String swzm) {
+        this.swzm = swzm;
     }
 
-    public String getSQtZx() {
-        return sQtZx;
+    public String getSqtzx() {
+        return sqtzx;
     }
 
-    public void setSQtZx(String sQtZx) {
-        this.sQtZx = sQtZx;
+    public void setSqtzx(String sqtzx) {
+        this.sqtzx = sqtzx;
     }
 
-    public String getSQtZy() {
-        return sQtZy;
+    public String getSqtzy() {
+        return sqtzy;
     }
 
-    public void setSQtZy(String sQtZy) {
-        this.sQtZy = sQtZy;
+    public void setSqtzy(String sqtzy) {
+        this.sqtzy = sqtzy;
     }
 
-    public String getSQtZd() {
-        return sQtZd;
+    public String getSqtzd() {
+        return sqtzd;
     }
 
-    public void setSQtZd(String sQtZd) {
-        this.sQtZd = sQtZd;
+    public void setSqtzd(String sqtzd) {
+        this.sqtzd = sqtzd;
     }
 
-    public String getCZsbh() {
-        return cZsbh;
+    public String getCzsbh() {
+        return czsbh;
     }
 
-    public void setCZsbh(String cZsbh) {
-        this.cZsbh = cZsbh;
+    public void setCzsbh(String czsbh) {
+        this.czsbh = czsbh;
     }
 
-    public String getHZjajl() {
-        return hZjajl;
+    public String getHzjajl() {
+        return hzjajl;
     }
 
-    public void setHZjajl(String hZjajl) {
-        this.hZjajl = hZjajl;
+    public void setHzjajl(String hzjajl) {
+        this.hzjajl = hzjajl;
     }
 
-    public String getHMztds() {
-        return hMztds;
+    public String getHmztds() {
+        return hmztds;
     }
 
-    public void setHMztds(String hMztds) {
-        this.hMztds = hMztds;
+    public void setHmztds(String hmztds) {
+        this.hmztds = hmztds;
     }
 
-    public String getHXwms() {
-        return hXwms;
+    public String getHxwms() {
+        return hxwms;
     }
 
-    public void setHXwms(String hXwms) {
-        this.hXwms = hXwms;
+    public void setHxwms(String hxwms) {
+        this.hxwms = hxwms;
     }
 
-    public String getHHjlxdm() {
-        return hHjlxdm;
+    public String getHhjlxdm() {
+        return hhjlxdm;
     }
 
-    public void setHHjlxdm(String hHjlxdm) {
-        this.hHjlxdm = hHjlxdm;
+    public void setHhjlxdm(String hhjlxdm) {
+        this.hhjlxdm = hhjlxdm;
     }
 
     public Date getScjs() {
@@ -246,31 +192,7 @@ public class AppMonitorDiscoveryDto extends  PageDto{
         return deptcode;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-            sb.append(", id=").append(id);
-            sb.append(", mid=").append(mid);
-            sb.append(", fxsj=").append(fxsj);
-            sb.append(", sJl=").append(sJl);
-            sb.append(", sGcz=").append(sGcz);
-            sb.append(", sFw=").append(sFw);
-            sb.append(", sFf=").append(sFf);
-            sb.append(", sWzm=").append(sWzm);
-            sb.append(", sQtZx=").append(sQtZx);
-            sb.append(", sQtZy=").append(sQtZy);
-            sb.append(", sQtZd=").append(sQtZd);
-            sb.append(", cZsbh=").append(cZsbh);
-            sb.append(", hZjajl=").append(hZjajl);
-            sb.append(", hMztds=").append(hMztds);
-            sb.append(", hXwms=").append(hXwms);
-            sb.append(", hHjlxdm=").append(hHjlxdm);
-            sb.append(", scjs=").append(scjs);
-        sb.append("]");
-        return sb.toString();
+    public void setDeptcode(String deptcode) {
+        this.deptcode = deptcode;
     }
-
 }
