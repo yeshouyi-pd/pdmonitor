@@ -25,6 +25,8 @@
     <result column="gxsj" jdbcType="TIMESTAMP" property="gxsj" />
     <result column="v_tbcsl" jdbcType="VARCHAR" property="vTbcsl" />
     <result column="v_ydcsl" jdbcType="VARCHAR" property="vYdcsl" />
+    <result column="deptcode" jdbcType="VARCHAR" property="deptcode" />
+    <result column="gczxm" jdbcType="VARCHAR" property="gczxm" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -87,7 +89,7 @@
   <sql id="Base_Column_List">
     id, mid, ksgcsj, p_zfgcz, p_jlz, p_yfgcz, p_dlgcz, p_dlgczsyff, p_fjgcz, w_ztgczk, 
     w_xgszfw, w_xgzk, n_jajl, n_ss, n_cs, n_jafx, n_fx, v_ycsl, v_dcsl, scsj, gxsj, v_tbcsl, 
-    v_ydcsl
+    v_ydcsl, deptcode, gczxm
   </sql>
   <select id="selectByExample" parameterType="com.pd.server.main.domain.AppMonitorManualEntryeExample" resultMap="BaseResultMap">
     select
@@ -127,7 +129,8 @@
       n_jajl, n_ss, n_cs, n_jafx, 
       n_fx, v_ycsl, v_dcsl, 
       scsj, gxsj, v_tbcsl, 
-      v_ydcsl)
+      v_ydcsl, deptcode, gczxm
+      )
     values (#{id,jdbcType=VARCHAR}, #{mid,jdbcType=VARCHAR}, #{ksgcsj,jdbcType=TIMESTAMP}, 
       #{pZfgcz,jdbcType=VARCHAR}, #{pJlz,jdbcType=VARCHAR}, #{pYfgcz,jdbcType=VARCHAR}, 
       #{pDlgcz,jdbcType=VARCHAR}, #{pDlgczsyff,jdbcType=VARCHAR}, #{pFjgcz,jdbcType=VARCHAR}, 
@@ -135,7 +138,8 @@
       #{nJajl,jdbcType=VARCHAR}, #{nSs,jdbcType=VARCHAR}, #{nCs,jdbcType=VARCHAR}, #{nJafx,jdbcType=VARCHAR}, 
       #{nFx,jdbcType=VARCHAR}, #{vYcsl,jdbcType=VARCHAR}, #{vDcsl,jdbcType=VARCHAR}, 
       #{scsj,jdbcType=TIMESTAMP}, #{gxsj,jdbcType=TIMESTAMP}, #{vTbcsl,jdbcType=VARCHAR}, 
-      #{vYdcsl,jdbcType=VARCHAR})
+      #{vYdcsl,jdbcType=VARCHAR}, #{deptcode,jdbcType=VARCHAR}, #{gczxm,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.pd.server.main.domain.AppMonitorManualEntrye">
     insert into app_monitor_manual_entrye
@@ -209,6 +213,12 @@
       <if test="vYdcsl != null">
         v_ydcsl,
       </if>
+      <if test="deptcode != null">
+        deptcode,
+      </if>
+      <if test="gczxm != null">
+        gczxm,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -279,6 +289,12 @@
       </if>
       <if test="vYdcsl != null">
         #{vYdcsl,jdbcType=VARCHAR},
+      </if>
+      <if test="deptcode != null">
+        #{deptcode,jdbcType=VARCHAR},
+      </if>
+      <if test="gczxm != null">
+        #{gczxm,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -360,6 +376,12 @@
       <if test="record.vYdcsl != null">
         v_ydcsl = #{record.vYdcsl,jdbcType=VARCHAR},
       </if>
+      <if test="record.deptcode != null">
+        deptcode = #{record.deptcode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gczxm != null">
+        gczxm = #{record.gczxm,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -389,7 +411,9 @@
       scsj = #{record.scsj,jdbcType=TIMESTAMP},
       gxsj = #{record.gxsj,jdbcType=TIMESTAMP},
       v_tbcsl = #{record.vTbcsl,jdbcType=VARCHAR},
-      v_ydcsl = #{record.vYdcsl,jdbcType=VARCHAR}
+      v_ydcsl = #{record.vYdcsl,jdbcType=VARCHAR},
+      deptcode = #{record.deptcode,jdbcType=VARCHAR},
+      gczxm = #{record.gczxm,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -463,6 +487,12 @@
       <if test="vYdcsl != null">
         v_ydcsl = #{vYdcsl,jdbcType=VARCHAR},
       </if>
+      <if test="deptcode != null">
+        deptcode = #{deptcode,jdbcType=VARCHAR},
+      </if>
+      <if test="gczxm != null">
+        gczxm = #{gczxm,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -489,7 +519,9 @@
       scsj = #{scsj,jdbcType=TIMESTAMP},
       gxsj = #{gxsj,jdbcType=TIMESTAMP},
       v_tbcsl = #{vTbcsl,jdbcType=VARCHAR},
-      v_ydcsl = #{vYdcsl,jdbcType=VARCHAR}
+      v_ydcsl = #{vYdcsl,jdbcType=VARCHAR},
+      deptcode = #{deptcode,jdbcType=VARCHAR},
+      gczxm = #{gczxm,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

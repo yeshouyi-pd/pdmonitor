@@ -37,6 +37,10 @@ public class AppMonitorDiscovery {
 
     private Date scjs;
 
+    private String gczxm;
+
+    private String deptcode;
+
     public String getId() {
         return id;
     }
@@ -173,6 +177,22 @@ public class AppMonitorDiscovery {
         this.scjs = scjs;
     }
 
+    public String getGczxm() {
+        return gczxm;
+    }
+
+    public void setGczxm(String gczxm) {
+        this.gczxm = gczxm;
+    }
+
+    public String getDeptcode() {
+        return deptcode;
+    }
+
+    public void setDeptcode(String deptcode) {
+        this.deptcode = deptcode;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -196,6 +216,8 @@ public class AppMonitorDiscovery {
         sb.append(", hXwms=").append(hXwms);
         sb.append(", hHjlxdm=").append(hHjlxdm);
         sb.append(", scjs=").append(scjs);
+        sb.append(", gczxm=").append(gczxm);
+        sb.append(", deptcode=").append(deptcode);
         sb.append("]");
         return sb.toString();
     }

@@ -35,6 +35,16 @@ public class AppMonitorInfoService {
         pageDto.setList(appMonitorInfoDtoList);
     }
 
+    public List<AppMonitorInfo> selectByExample( AppMonitorInfoDto appMonitorInfoDto) {
+        AppMonitorInfoExample appMonitorInfoExample = new AppMonitorInfoExample();
+        AppMonitorInfoExample.Criteria ca = appMonitorInfoExample.createCriteria();
+        ca.andDeptcodeEqualTo(appMonitorInfoDto.getDeptcode());
+        ca.andGczxmEqualTo(appMonitorInfoDto.getGczxm());
+        appMonitorInfoExample.setOrderByClause(" ksgcsj desc");
+        return appMonitorInfoMapper.selectByExample(appMonitorInfoExample);
+
+    }
+
     /**
     * 保存，id有值时更新，无值时新增
     */
