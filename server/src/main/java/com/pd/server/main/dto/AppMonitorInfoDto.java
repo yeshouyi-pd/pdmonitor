@@ -23,7 +23,7 @@ public class AppMonitorInfoDto extends PageDto {
 
 
     /**
-    * 观察者姓名
+    * 用户登录账号
     */
     private String gczxm;
 
