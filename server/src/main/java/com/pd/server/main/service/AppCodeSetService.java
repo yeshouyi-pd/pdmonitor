@@ -124,4 +124,7 @@ public class AppCodeSetService {
         }
     }
 
+    public List<AppCodeSet> selectByExample() {
+        return appCodeSetMapper.selectByExample(null);
+    }
 }

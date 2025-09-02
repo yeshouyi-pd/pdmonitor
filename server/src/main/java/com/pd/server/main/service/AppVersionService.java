@@ -71,6 +71,10 @@ public class AppVersionService {
         appVersionMapper.deleteByPrimaryKey(Long.valueOf(id));
     }
 
+    public  List<AppVersion> selectByExample(){
+       return appVersionMapper.selectByExample(null);
+    }
+
     /**
      * 原子性增加版本号
      */

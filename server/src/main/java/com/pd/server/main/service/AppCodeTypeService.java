@@ -100,4 +100,7 @@ public class AppCodeTypeService {
         appCodeTypeMapper.deleteByPrimaryKey(id);
     }
 
+    public List<AppCodeType> selectByExample() {
+        return appCodeTypeMapper.selectByExample(null);
+    }
 }
