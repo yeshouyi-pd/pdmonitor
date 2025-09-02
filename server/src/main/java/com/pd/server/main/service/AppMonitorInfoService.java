@@ -74,7 +74,6 @@ public class AppMonitorInfoService {
     */
     private void insert(AppMonitorInfo appMonitorInfo) {
                 Date now = new Date();
-        appMonitorInfo.setId(UuidUtil.getShortUuid());
         appMonitorInfoMapper.insert(appMonitorInfo);
     }
 

@@ -66,7 +66,6 @@ public class AppMonitorDiscoveryService {
     */
     private void insert(AppMonitorDiscovery appMonitorDiscovery) {
                 Date now = new Date();
-        appMonitorDiscovery.setId(UuidUtil.getShortUuid());
         appMonitorDiscoveryMapper.insert(appMonitorDiscovery);
     }
 
