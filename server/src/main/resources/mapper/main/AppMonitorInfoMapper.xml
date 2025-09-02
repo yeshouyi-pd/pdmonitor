@@ -26,6 +26,7 @@
     <result column="scsj" jdbcType="TIMESTAMP" property="scsj" />
     <result column="gxsj" jdbcType="TIMESTAMP" property="gxsj" />
     <result column="deptcode" jdbcType="VARCHAR" property="deptcode" />
+    <result column="gczzwm" jdbcType="VARCHAR" property="gczzwm" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -88,7 +89,7 @@
   <sql id="Base_Column_List">
     id, kcclx, gczxm, gcqy, gcdw, ksgcsj, p_zfgcz, p_jlz, p_yfgcz, p_dlgcz, p_dlgczsyff, 
     p_fjgcz, w_ztgczk, w_xgszfw, w_xgzk, n_jajl, n_ss, n_cs, n_jafx, n_fx, jsgcsj, scsj, 
-    gxsj, deptcode
+    gxsj, deptcode ,gczzwm
   </sql>
   <select id="selectByExample" parameterType="com.pd.server.main.domain.AppMonitorInfoExample" resultMap="BaseResultMap">
     select
@@ -128,7 +129,7 @@
       w_ztgczk, w_xgszfw, w_xgzk, 
       n_jajl, n_ss, n_cs, n_jafx, 
       n_fx, jsgcsj, scsj, 
-      gxsj, deptcode)
+      gxsj, deptcode ,gczzwm)
     values (#{id,jdbcType=VARCHAR}, #{kcclx,jdbcType=VARCHAR}, #{gczxm,jdbcType=VARCHAR}, 
       #{gcqy,jdbcType=VARCHAR}, #{gcdw,jdbcType=VARCHAR}, #{ksgcsj,jdbcType=TIMESTAMP}, 
       #{pzfgcz,jdbcType=VARCHAR}, #{pjlz,jdbcType=VARCHAR}, #{pyfgcz,jdbcType=VARCHAR}, 
@@ -136,7 +137,7 @@
       #{wztgczk,jdbcType=VARCHAR}, #{wxgszfw,jdbcType=VARCHAR}, #{wxgzk,jdbcType=VARCHAR}, 
       #{njajl,jdbcType=VARCHAR}, #{nss,jdbcType=VARCHAR}, #{ncs,jdbcType=VARCHAR}, #{njafx,jdbcType=VARCHAR}, 
       #{nfx,jdbcType=VARCHAR}, #{jsgcsj,jdbcType=TIMESTAMP}, #{scsj,jdbcType=TIMESTAMP}, 
-      #{gxsj,jdbcType=TIMESTAMP}, #{deptcode,jdbcType=VARCHAR})
+      #{gxsj,jdbcType=TIMESTAMP}, #{deptcode,jdbcType=VARCHAR},, #{gczzwm,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.pd.server.main.domain.AppMonitorInfo">
     insert into app_monitor_info
@@ -213,6 +214,10 @@
       <if test="deptcode != null">
         deptcode,
       </if>
+      <if test="gczzwm != null">
+        gczzwm,
+      </if>
+
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -286,6 +291,9 @@
       </if>
       <if test="deptcode != null">
         #{deptcode,jdbcType=VARCHAR},
+      </if>
+      <if test="gczzwm != null">
+        #{gczzwm,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -370,6 +378,9 @@
       <if test="record.deptcode != null">
         deptcode = #{record.deptcode,jdbcType=VARCHAR},
       </if>
+      <if test="record.gczzwm != null">
+        gczzwm = #{record.gczzwm,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -400,7 +411,9 @@
       jsgcsj = #{record.jsgcsj,jdbcType=TIMESTAMP},
       scsj = #{record.scsj,jdbcType=TIMESTAMP},
       gxsj = #{record.gxsj,jdbcType=TIMESTAMP},
-      deptcode = #{record.deptcode,jdbcType=VARCHAR}
+      deptcode = #{record.deptcode,jdbcType=VARCHAR},
+      gczzwm = #{record.gczzwm,jdbcType=VARCHAR}
+
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -477,6 +490,12 @@
       <if test="deptcode != null">
         deptcode = #{deptcode,jdbcType=VARCHAR},
       </if>
+
+      <if test="gczzwm != null">
+        gczzwm = #{gczzwm,jdbcType=VARCHAR},
+      </if>
+
+
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -504,7 +523,8 @@
       jsgcsj = #{jsgcsj,jdbcType=TIMESTAMP},
       scsj = #{scsj,jdbcType=TIMESTAMP},
       gxsj = #{gxsj,jdbcType=TIMESTAMP},
-      deptcode = #{deptcode,jdbcType=VARCHAR}
+      deptcode = #{deptcode,jdbcType=VARCHAR},
+      gczzwm = #{gczzwm,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

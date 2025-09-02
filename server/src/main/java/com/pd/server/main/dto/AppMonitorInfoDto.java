@@ -15,6 +15,13 @@ public class AppMonitorInfoDto extends PageDto {
     */
     private String kcclx;
 
+
+    /**
+     * 观察者中文名
+     */
+    private String gczzwm;
+
+
     /**
     * 观察者姓名
     */
@@ -128,6 +135,7 @@ public class AppMonitorInfoDto extends PageDto {
     * 登录用户所在部门
     */
     private String deptcode;
+
 
     public String getId() {
         return id;
@@ -319,5 +327,13 @@ public class AppMonitorInfoDto extends PageDto {
 
     public void setDeptcode(String deptcode) {
         this.deptcode = deptcode;
+    }
+
+    public String getGczzwm() {
+        return gczzwm;
+    }
+
+    public void setGczzwm(String gczzwm) {
+        this.gczzwm = gczzwm;
     }
 }
