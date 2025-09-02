@@ -4,39 +4,91 @@ package com.pd.server.main.dto;
         import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class AppMonitorDiscoveryDto extends  PageDto{
+    /**
+     * id
+     */
     private String id;
 
+
+    /**
+     * 观察周期主表ID
+     */
     private String mid;
 
+    /**
+     * 发现江豚时间
+     */
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date fxsj;
 
+    /**
+     * 观察者与动物间距离(米)
+     */
     private String sjl;
 
+    /**
+     * 观察者姓名
+     */
     private String sgcz;
 
+    /**
+     * 方位:船首为0度，左方为负值
+     */
     private String sfw;
 
+    /**
+     * 方法
+     */
     private String sff;
 
+    /**
+     * 物种名
+     */
     private String swzm;
 
+    /**
+     * 群体大小-最少
+     */
     private String sqtzx;
 
+    /**
+     * 群体大小-最优
+     */
     private String sqtzy;
 
+    /**
+     * 群体大小-最多
+     */
     private String sqtzd;
 
+    /**
+     * 注释编码
+     */
     private String czsbh;
 
+    /**
+     * 动物距最近岸的距离
+     */
     private String hzjajl;
 
+    /**
+     * 母子豚对数
+     */
     private String hmztds;
 
+    /**
+     * 行为描述
+     */
     private String hxwms;
 
+    /**
+     * 环境类型代码
+     */
     private String hhjlxdm;
 
+    /**
+     * 上传时间
+     */
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date scjs;
 
