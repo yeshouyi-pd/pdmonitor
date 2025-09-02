@@ -138,7 +138,7 @@ public class AppObserverController {
      * @return
      */
     @PostMapping("/uploadManualEntrye")
-    public HttpResult uploadMonituploadManualEntryeorInfo(@RequestBody AppMonitorManualEntryeDto appMonitorManualEntryeDto) {
+    public HttpResult uploadManualEntrye(@RequestBody AppMonitorManualEntryeDto appMonitorManualEntryeDto) {
         if(StringUtils.isBlank(appMonitorManualEntryeDto.getMid()) || StringUtils.isBlank(appMonitorManualEntryeDto.getId())
         || StringUtils.isBlank(appMonitorManualEntryeDto.getDeptcode()) || StringUtils.isBlank(appMonitorManualEntryeDto.getGczxm())
         ){
