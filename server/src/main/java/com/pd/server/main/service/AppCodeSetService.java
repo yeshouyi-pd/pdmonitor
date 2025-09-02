@@ -5,6 +5,7 @@ import com.pd.server.main.domain.AppCodeSetExample;
 import com.pd.server.main.dto.AppCodeSetDto;
 import com.pd.server.main.dto.PageDto;
 import com.pd.server.main.mapper.AppCodeSetMapper;
+import com.pd.server.main.service.AppVersionService;
 import com.pd.server.util.CopyUtil;
 import com.pd.server.util.UuidUtil;
 import com.github.pagehelper.PageHelper;
@@ -21,6 +22,9 @@ public class AppCodeSetService {
 
     @Resource
     private AppCodeSetMapper appCodeSetMapper;
+
+    @Resource
+    private AppVersionService appVersionService;
 
     /**
     * 列表查询
@@ -62,6 +66,8 @@ public class AppCodeSetService {
         } else {
             this.update(appCodeSet);
         }
+        // 保存后增加版本号
+        this.incrementVersion();
     }
 
     /**
@@ -101,6 +107,21 @@ public class AppCodeSetService {
     */
     public void delete(String id) {
         appCodeSetMapper.deleteByPrimaryKey(id);
+        // 删除后增加版本号
+        this.incrementVersion();
+    }
+
+    /**
+     * 增加版本号
+     */
+    private void incrementVersion() {
+        try {
+            // 使用AppVersionService进行版本管理
+            appVersionService.incrementVersion();
+        } catch (Exception e) {
+            // 版本更新失败不影响主业务，只记录日志
+            System.err.println("版本更新失败: " + e.getMessage());
+        }
     }
 
 }
