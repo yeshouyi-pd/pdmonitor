@@ -3,7 +3,7 @@ package com.pd.server.main.dto;
         import java.util.Date;
         import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class AppMonitorManualEntryeDto {
+public class AppMonitorManualEntryeDto extends PageDto {
 
     /**
     * 
@@ -123,6 +123,10 @@ public class AppMonitorManualEntryeDto {
     */
     private String vYdcsl;
 
+    private String gczxm;
+
+    private String deptcode;
+
     public String getId() {
         return id;
     }
@@ -147,131 +151,131 @@ public class AppMonitorManualEntryeDto {
         this.ksgcsj = ksgcsj;
     }
 
-    public String getPZfgcz() {
+    public String getpZfgcz() {
         return pZfgcz;
     }
 
-    public void setPZfgcz(String pZfgcz) {
+    public void setpZfgcz(String pZfgcz) {
         this.pZfgcz = pZfgcz;
     }
 
-    public String getPJlz() {
+    public String getpJlz() {
         return pJlz;
     }
 
-    public void setPJlz(String pJlz) {
+    public void setpJlz(String pJlz) {
         this.pJlz = pJlz;
     }
 
-    public String getPYfgcz() {
+    public String getpYfgcz() {
         return pYfgcz;
     }
 
-    public void setPYfgcz(String pYfgcz) {
+    public void setpYfgcz(String pYfgcz) {
         this.pYfgcz = pYfgcz;
     }
 
-    public String getPDlgcz() {
+    public String getpDlgcz() {
         return pDlgcz;
     }
 
-    public void setPDlgcz(String pDlgcz) {
+    public void setpDlgcz(String pDlgcz) {
         this.pDlgcz = pDlgcz;
     }
 
-    public String getPDlgczsyff() {
+    public String getpDlgczsyff() {
         return pDlgczsyff;
     }
 
-    public void setPDlgczsyff(String pDlgczsyff) {
+    public void setpDlgczsyff(String pDlgczsyff) {
         this.pDlgczsyff = pDlgczsyff;
     }
 
-    public String getPFjgcz() {
+    public String getpFjgcz() {
         return pFjgcz;
     }
 
-    public void setPFjgcz(String pFjgcz) {
+    public void setpFjgcz(String pFjgcz) {
         this.pFjgcz = pFjgcz;
     }
 
-    public String getWZtgczk() {
+    public String getwZtgczk() {
         return wZtgczk;
     }
 
-    public void setWZtgczk(String wZtgczk) {
+    public void setwZtgczk(String wZtgczk) {
         this.wZtgczk = wZtgczk;
     }
 
-    public String getWXgszfw() {
+    public String getwXgszfw() {
         return wXgszfw;
     }
 
-    public void setWXgszfw(String wXgszfw) {
+    public void setwXgszfw(String wXgszfw) {
         this.wXgszfw = wXgszfw;
     }
 
-    public String getWXgzk() {
+    public String getwXgzk() {
         return wXgzk;
     }
 
-    public void setWXgzk(String wXgzk) {
+    public void setwXgzk(String wXgzk) {
         this.wXgzk = wXgzk;
     }
 
-    public String getNJajl() {
+    public String getnJajl() {
         return nJajl;
     }
 
-    public void setNJajl(String nJajl) {
+    public void setnJajl(String nJajl) {
         this.nJajl = nJajl;
     }
 
-    public String getNSs() {
+    public String getnSs() {
         return nSs;
     }
 
-    public void setNSs(String nSs) {
+    public void setnSs(String nSs) {
         this.nSs = nSs;
     }
 
-    public String getNCs() {
+    public String getnCs() {
         return nCs;
     }
 
-    public void setNCs(String nCs) {
+    public void setnCs(String nCs) {
         this.nCs = nCs;
     }
 
-    public String getNJafx() {
+    public String getnJafx() {
         return nJafx;
     }
 
-    public void setNJafx(String nJafx) {
+    public void setnJafx(String nJafx) {
         this.nJafx = nJafx;
     }
 
-    public String getNFx() {
+    public String getnFx() {
         return nFx;
     }
 
-    public void setNFx(String nFx) {
+    public void setnFx(String nFx) {
         this.nFx = nFx;
     }
 
-    public String getVYcsl() {
+    public String getvYcsl() {
         return vYcsl;
     }
 
-    public void setVYcsl(String vYcsl) {
+    public void setvYcsl(String vYcsl) {
         this.vYcsl = vYcsl;
     }
 
-    public String getVDcsl() {
+    public String getvDcsl() {
         return vDcsl;
     }
 
-    public void setVDcsl(String vDcsl) {
+    public void setvDcsl(String vDcsl) {
         this.vDcsl = vDcsl;
     }
 
@@ -291,54 +295,35 @@ public class AppMonitorManualEntryeDto {
         this.gxsj = gxsj;
     }
 
-    public String getVTbcsl() {
+    public String getvTbcsl() {
         return vTbcsl;
     }
 
-    public void setVTbcsl(String vTbcsl) {
+    public void setvTbcsl(String vTbcsl) {
         this.vTbcsl = vTbcsl;
     }
 
-    public String getVYdcsl() {
+    public String getvYdcsl() {
         return vYdcsl;
     }
 
-    public void setVYdcsl(String vYdcsl) {
+    public void setvYdcsl(String vYdcsl) {
         this.vYdcsl = vYdcsl;
     }
 
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-            sb.append(", id=").append(id);
-            sb.append(", mid=").append(mid);
-            sb.append(", ksgcsj=").append(ksgcsj);
-            sb.append(", pZfgcz=").append(pZfgcz);
-            sb.append(", pJlz=").append(pJlz);
-            sb.append(", pYfgcz=").append(pYfgcz);
-            sb.append(", pDlgcz=").append(pDlgcz);
-            sb.append(", pDlgczsyff=").append(pDlgczsyff);
-            sb.append(", pFjgcz=").append(pFjgcz);
-            sb.append(", wZtgczk=").append(wZtgczk);
-            sb.append(", wXgszfw=").append(wXgszfw);
-            sb.append(", wXgzk=").append(wXgzk);
-            sb.append(", nJajl=").append(nJajl);
-            sb.append(", nSs=").append(nSs);
-            sb.append(", nCs=").append(nCs);
-            sb.append(", nJafx=").append(nJafx);
-            sb.append(", nFx=").append(nFx);
-            sb.append(", vYcsl=").append(vYcsl);
-            sb.append(", vDcsl=").append(vDcsl);
-            sb.append(", scsj=").append(scsj);
-            sb.append(", gxsj=").append(gxsj);
-            sb.append(", vTbcsl=").append(vTbcsl);
-            sb.append(", vYdcsl=").append(vYdcsl);
-        sb.append("]");
-        return sb.toString();
+    public String getGczxm() {
+        return gczxm;
     }
 
+    public void setGczxm(String gczxm) {
+        this.gczxm = gczxm;
+    }
+
+    public String getDeptcode() {
+        return deptcode;
+    }
+
+    public void setDeptcode(String deptcode) {
+        this.deptcode = deptcode;
+    }
 }

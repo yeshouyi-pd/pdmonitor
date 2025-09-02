@@ -3,7 +3,7 @@ package com.pd.server.main.dto;
         import java.util.Date;
         import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class AppMonitorInfoDto {
+public class AppMonitorInfoDto extends PageDto {
 
     /**
     * 
