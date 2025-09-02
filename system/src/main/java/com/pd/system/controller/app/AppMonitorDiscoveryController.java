@@ -25,9 +25,9 @@ public class AppMonitorDiscoveryController {
     * 列表查询
     */
     @PostMapping("/list")
-    public ResponseDto list(@RequestBody PageDto pageDto) {
+    public ResponseDto list(@RequestBody AppMonitorDiscoveryDto appMonitorDiscoveryDto) {
         ResponseDto responseDto = new ResponseDto();
-        appMonitorDiscoveryService.list(pageDto);
+        PageDto pageDto = appMonitorDiscoveryService.list(appMonitorDiscoveryDto);
         responseDto.setContent(pageDto);
         return responseDto;
     }

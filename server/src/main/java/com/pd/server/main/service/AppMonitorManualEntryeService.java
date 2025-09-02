@@ -82,4 +82,11 @@ public class AppMonitorManualEntryeService {
         return appMonitorManualEntryeMapper.selectByExample(appMonitorManualEntryeExample);
 
     }
+
+    public List<AppMonitorManualEntrye> selectByMid(String mid) {
+        AppMonitorManualEntryeExample appMonitorManualEntryeExample = new AppMonitorManualEntryeExample();
+        AppMonitorManualEntryeExample.Criteria criteria = appMonitorManualEntryeExample.createCriteria();
+        criteria.andMidEqualTo(mid);
+        return appMonitorManualEntryeMapper.selectByExample(appMonitorManualEntryeExample);
+    }
 }

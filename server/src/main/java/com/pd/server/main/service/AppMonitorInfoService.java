@@ -9,8 +9,8 @@ import com.pd.server.util.CopyUtil;
 import com.pd.server.util.UuidUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -25,14 +25,24 @@ public class AppMonitorInfoService {
     /**
     * 列表查询
     */
-    public void list(PageDto pageDto) {
+    public PageDto list(PageDto pageDto) {
     PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
         AppMonitorInfoExample appMonitorInfoExample = new AppMonitorInfoExample();
+        AppMonitorInfoExample.Criteria ca = appMonitorInfoExample.createCriteria();
+        AppMonitorInfoDto appMonitorInfoDto = CopyUtil.copy(pageDto, AppMonitorInfoDto.class);
+        if(StringUtils.isNotBlank(appMonitorInfoDto.getDeptcode())){
+            ca.andDeptcodeEqualTo(appMonitorInfoDto.getDeptcode());
+        }
+        if(StringUtils.isNotBlank(appMonitorInfoDto.getGczxm())){
+            ca.andDeptcodeEqualTo(appMonitorInfoDto.getGczxm());
+        }
+        appMonitorInfoExample.setOrderByClause(" ksgcsj desc");
         List<AppMonitorInfo> appMonitorInfoList = appMonitorInfoMapper.selectByExample(appMonitorInfoExample);
         PageInfo<AppMonitorInfo> pageInfo = new PageInfo<>(appMonitorInfoList);
         pageDto.setTotal(pageInfo.getTotal());
         List<AppMonitorInfoDto> appMonitorInfoDtoList = CopyUtil.copyList(appMonitorInfoList, AppMonitorInfoDto.class);
         pageDto.setList(appMonitorInfoDtoList);
+        return pageDto;
     }
 
     public List<AppMonitorInfo> selectByExample( AppMonitorInfoDto appMonitorInfoDto) {
@@ -82,4 +92,7 @@ public class AppMonitorInfoService {
         appMonitorInfoMapper.deleteByPrimaryKey(id);
     }
 
+    public AppMonitorInfo findById(String id) {
+        return appMonitorInfoMapper.selectByPrimaryKey(id);
+    }
 }

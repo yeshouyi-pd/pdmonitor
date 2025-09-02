@@ -25,9 +25,9 @@ public class AppMonitorInfoController {
     * 列表查询
     */
     @PostMapping("/list")
-    public ResponseDto list(@RequestBody PageDto pageDto) {
+    public ResponseDto list(@RequestBody  AppMonitorInfoDto appMonitorInfoDto) {
         ResponseDto responseDto = new ResponseDto();
-        appMonitorInfoService.list(pageDto);
+        PageDto pageDto = appMonitorInfoService.list(appMonitorInfoDto);
         responseDto.setContent(pageDto);
         return responseDto;
     }

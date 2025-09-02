@@ -3,10 +3,7 @@ package com.pd.system.controller.app;
 
 import com.pd.server.config.RedisCode;
 import com.pd.server.main.domain.*;
-import com.pd.server.main.dto.AppMonitorDiscoveryDto;
-import com.pd.server.main.dto.AppMonitorInfoDto;
-import com.pd.server.main.dto.AppMonitorManualEntryeDto;
-import com.pd.server.main.dto.ResponseDto;
+import com.pd.server.main.dto.*;
 import com.pd.server.main.service.*;
 import com.pd.system.controller.conf.HttpResult;
 import com.pd.system.controller.conf.RedisConfig;
@@ -211,13 +208,98 @@ public class AppObserverController {
     }
 
 
-    //迅游信息分页查询
+    /**
+     * 巡查信息分页查询
+     * @param appMonitorInfoDto
+     * @return
+     */
+    @PostMapping("/findPageMonitorInfo")
+    public HttpResult findPageMonitorInfo(@RequestBody AppMonitorInfoDto appMonitorInfoDto) {
+        if( StringUtils.isBlank(appMonitorInfoDto.getDeptcode())){
+            return HttpResult.error("参数异常");
+        }
+        try {
+            PageDto pageDto = appMonitorInfoService.list(appMonitorInfoDto);
+            return HttpResult.ok(pageDto);
+        }catch (Exception e){
+            return HttpResult.error("下载失败");
+        }
+    }
 
 
-    //关联
+    /**
+     * 当前巡查下所有的发现江豚信息
+     * @param mid
+     * @return
+     */
+    @GetMapping("/findDiscoveryByMid/{mid}")
+    public HttpResult findDiscoveryByMid(@PathVariable(value = "mid") String mid) {
+        if( StringUtils.isBlank(mid)){
+            return HttpResult.error("参数异常");
+        }
+        try {
+            List<AppMonitorDiscovery> list = appMonitorDiscoveryService.selectByMid(mid);
+            return HttpResult.ok(list);
+        }catch(Exception e){
+            return HttpResult.error("下载失败");
+        }
+    }
+
+    /**
+     * 当前巡查下所有的人工观察信息
+     * @param mid
+     * @return
+     */
+    @GetMapping("/findManualEntryeByMid/{mid}")
+    public HttpResult findManualEntryeByMid(@PathVariable(value = "mid") String mid) {
+        if( StringUtils.isBlank(mid)){
+            return HttpResult.error("参数异常");
+        }
+        try {
+            List<AppMonitorManualEntrye> list = appMonitorManualEntryeService.selectByMid(mid);
+            return HttpResult.ok(list);
+        }catch(Exception e){
+            return HttpResult.error("下载失败");
+        }
+    }
 
 
-    //发现江豚信息分页查询 关联迅游信息
+    /**
+     * 发现江豚信息分页查询 关联迅游信息
+     * @param appMonitorDiscoveryDto
+     * @return
+     */
+    @PostMapping("/findPageDiscovery")
+    public HttpResult findPageDiscovery(@RequestBody AppMonitorDiscoveryDto appMonitorDiscoveryDto) {
+        if( StringUtils.isBlank(appMonitorDiscoveryDto.getDeptcode())){
+            return HttpResult.error("参数异常");
+        }
+        try {
+            PageDto pageDto = appMonitorDiscoveryService.list(appMonitorDiscoveryDto);
+            return HttpResult.ok(pageDto);
+        }catch (Exception e){
+            return HttpResult.error("下载失败");
+        }
+    }
+
+
+    /**
+     * 获取当前巡查信息
+     * @param id
+     * @return
+     */
+    @GetMapping("/findInfoById/{id}")
+    public HttpResult findInfoById(@PathVariable(value = "mid") String id) {
+        if( StringUtils.isBlank(id)){
+            return HttpResult.error("参数异常");
+        }
+        try {
+            AppMonitorInfo appMonitorInfo =  appMonitorInfoService.findById(id);
+            return HttpResult.ok(appMonitorInfo);
+        }catch(Exception e){
+            return HttpResult.error("下载失败");
+        }
+    }
 
 
 
