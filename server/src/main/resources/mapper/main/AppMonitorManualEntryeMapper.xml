@@ -23,6 +23,8 @@
     <result column="v_dcsl" jdbcType="VARCHAR" property="vDcsl" />
     <result column="scsj" jdbcType="TIMESTAMP" property="scsj" />
     <result column="gxsj" jdbcType="TIMESTAMP" property="gxsj" />
+    <result column="v_tbcsl" jdbcType="VARCHAR" property="vTbcsl" />
+    <result column="v_ydcsl" jdbcType="VARCHAR" property="vYdcsl" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -84,7 +86,8 @@
   </sql>
   <sql id="Base_Column_List">
     id, mid, ksgcsj, p_zfgcz, p_jlz, p_yfgcz, p_dlgcz, p_dlgczsyff, p_fjgcz, w_ztgczk, 
-    w_xgszfw, w_xgzk, n_jajl, n_ss, n_cs, n_jafx, n_fx, v_ycsl, v_dcsl, scsj, gxsj
+    w_xgszfw, w_xgzk, n_jajl, n_ss, n_cs, n_jafx, n_fx, v_ycsl, v_dcsl, scsj, gxsj, v_tbcsl, 
+    v_ydcsl
   </sql>
   <select id="selectByExample" parameterType="com.pd.server.main.domain.AppMonitorManualEntryeExample" resultMap="BaseResultMap">
     select
@@ -123,14 +126,16 @@
       w_ztgczk, w_xgszfw, w_xgzk, 
       n_jajl, n_ss, n_cs, n_jafx, 
       n_fx, v_ycsl, v_dcsl, 
-      scsj, gxsj)
+      scsj, gxsj, v_tbcsl, 
+      v_ydcsl)
     values (#{id,jdbcType=VARCHAR}, #{mid,jdbcType=VARCHAR}, #{ksgcsj,jdbcType=TIMESTAMP}, 
       #{pZfgcz,jdbcType=VARCHAR}, #{pJlz,jdbcType=VARCHAR}, #{pYfgcz,jdbcType=VARCHAR}, 
       #{pDlgcz,jdbcType=VARCHAR}, #{pDlgczsyff,jdbcType=VARCHAR}, #{pFjgcz,jdbcType=VARCHAR}, 
       #{wZtgczk,jdbcType=VARCHAR}, #{wXgszfw,jdbcType=VARCHAR}, #{wXgzk,jdbcType=VARCHAR}, 
       #{nJajl,jdbcType=VARCHAR}, #{nSs,jdbcType=VARCHAR}, #{nCs,jdbcType=VARCHAR}, #{nJafx,jdbcType=VARCHAR}, 
       #{nFx,jdbcType=VARCHAR}, #{vYcsl,jdbcType=VARCHAR}, #{vDcsl,jdbcType=VARCHAR}, 
-      #{scsj,jdbcType=TIMESTAMP}, #{gxsj,jdbcType=TIMESTAMP})
+      #{scsj,jdbcType=TIMESTAMP}, #{gxsj,jdbcType=TIMESTAMP}, #{vTbcsl,jdbcType=VARCHAR}, 
+      #{vYdcsl,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.pd.server.main.domain.AppMonitorManualEntrye">
     insert into app_monitor_manual_entrye
@@ -198,6 +203,12 @@
       <if test="gxsj != null">
         gxsj,
       </if>
+      <if test="vTbcsl != null">
+        v_tbcsl,
+      </if>
+      <if test="vYdcsl != null">
+        v_ydcsl,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -262,6 +273,12 @@
       </if>
       <if test="gxsj != null">
         #{gxsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="vTbcsl != null">
+        #{vTbcsl,jdbcType=VARCHAR},
+      </if>
+      <if test="vYdcsl != null">
+        #{vYdcsl,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -337,6 +354,12 @@
       <if test="record.gxsj != null">
         gxsj = #{record.gxsj,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.vTbcsl != null">
+        v_tbcsl = #{record.vTbcsl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.vYdcsl != null">
+        v_ydcsl = #{record.vYdcsl,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -364,7 +387,9 @@
       v_ycsl = #{record.vYcsl,jdbcType=VARCHAR},
       v_dcsl = #{record.vDcsl,jdbcType=VARCHAR},
       scsj = #{record.scsj,jdbcType=TIMESTAMP},
-      gxsj = #{record.gxsj,jdbcType=TIMESTAMP}
+      gxsj = #{record.gxsj,jdbcType=TIMESTAMP},
+      v_tbcsl = #{record.vTbcsl,jdbcType=VARCHAR},
+      v_ydcsl = #{record.vYdcsl,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -432,6 +457,12 @@
       <if test="gxsj != null">
         gxsj = #{gxsj,jdbcType=TIMESTAMP},
       </if>
+      <if test="vTbcsl != null">
+        v_tbcsl = #{vTbcsl,jdbcType=VARCHAR},
+      </if>
+      <if test="vYdcsl != null">
+        v_ydcsl = #{vYdcsl,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -456,7 +487,9 @@
       v_ycsl = #{vYcsl,jdbcType=VARCHAR},
       v_dcsl = #{vDcsl,jdbcType=VARCHAR},
       scsj = #{scsj,jdbcType=TIMESTAMP},
-      gxsj = #{gxsj,jdbcType=TIMESTAMP}
+      gxsj = #{gxsj,jdbcType=TIMESTAMP},
+      v_tbcsl = #{vTbcsl,jdbcType=VARCHAR},
+      v_ydcsl = #{vYdcsl,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

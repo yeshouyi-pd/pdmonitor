@@ -113,6 +113,16 @@ public class AppMonitorManualEntryeDto {
         @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date gxsj;
 
+    /**
+    * 停泊船数量
+    */
+    private String vTbcsl;
+
+    /**
+    * 移动船数量
+    */
+    private String vYdcsl;
+
     public String getId() {
         return id;
     }
@@ -281,6 +291,22 @@ public class AppMonitorManualEntryeDto {
         this.gxsj = gxsj;
     }
 
+    public String getVTbcsl() {
+        return vTbcsl;
+    }
+
+    public void setVTbcsl(String vTbcsl) {
+        this.vTbcsl = vTbcsl;
+    }
+
+    public String getVYdcsl() {
+        return vYdcsl;
+    }
+
+    public void setVYdcsl(String vYdcsl) {
+        this.vYdcsl = vYdcsl;
+    }
+
 
     @Override
     public String toString() {
@@ -309,6 +335,8 @@ public class AppMonitorManualEntryeDto {
             sb.append(", vDcsl=").append(vDcsl);
             sb.append(", scsj=").append(scsj);
             sb.append(", gxsj=").append(gxsj);
+            sb.append(", vTbcsl=").append(vTbcsl);
+            sb.append(", vYdcsl=").append(vYdcsl);
         sb.append("]");
         return sb.toString();
     }

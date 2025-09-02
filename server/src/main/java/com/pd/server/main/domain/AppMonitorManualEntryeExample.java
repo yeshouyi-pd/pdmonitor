@@ -1544,6 +1544,146 @@ public class AppMonitorManualEntryeExample {
             addCriterion("gxsj not between", value1, value2, "gxsj");
             return (Criteria) this;
         }
+
+        public Criteria andVTbcslIsNull() {
+            addCriterion("v_tbcsl is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andVTbcslIsNotNull() {
+            addCriterion("v_tbcsl is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andVTbcslEqualTo(String value) {
+            addCriterion("v_tbcsl =", value, "vTbcsl");
+            return (Criteria) this;
+        }
+
+        public Criteria andVTbcslNotEqualTo(String value) {
+            addCriterion("v_tbcsl <>", value, "vTbcsl");
+            return (Criteria) this;
+        }
+
+        public Criteria andVTbcslGreaterThan(String value) {
+            addCriterion("v_tbcsl >", value, "vTbcsl");
+            return (Criteria) this;
+        }
+
+        public Criteria andVTbcslGreaterThanOrEqualTo(String value) {
+            addCriterion("v_tbcsl >=", value, "vTbcsl");
+            return (Criteria) this;
+        }
+
+        public Criteria andVTbcslLessThan(String value) {
+            addCriterion("v_tbcsl <", value, "vTbcsl");
+            return (Criteria) this;
+        }
+
+        public Criteria andVTbcslLessThanOrEqualTo(String value) {
+            addCriterion("v_tbcsl <=", value, "vTbcsl");
+            return (Criteria) this;
+        }
+
+        public Criteria andVTbcslLike(String value) {
+            addCriterion("v_tbcsl like", value, "vTbcsl");
+            return (Criteria) this;
+        }
+
+        public Criteria andVTbcslNotLike(String value) {
+            addCriterion("v_tbcsl not like", value, "vTbcsl");
+            return (Criteria) this;
+        }
+
+        public Criteria andVTbcslIn(List<String> values) {
+            addCriterion("v_tbcsl in", values, "vTbcsl");
+            return (Criteria) this;
+        }
+
+        public Criteria andVTbcslNotIn(List<String> values) {
+            addCriterion("v_tbcsl not in", values, "vTbcsl");
+            return (Criteria) this;
+        }
+
+        public Criteria andVTbcslBetween(String value1, String value2) {
+            addCriterion("v_tbcsl between", value1, value2, "vTbcsl");
+            return (Criteria) this;
+        }
+
+        public Criteria andVTbcslNotBetween(String value1, String value2) {
+            addCriterion("v_tbcsl not between", value1, value2, "vTbcsl");
+            return (Criteria) this;
+        }
+
+        public Criteria andVYdcslIsNull() {
+            addCriterion("v_ydcsl is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andVYdcslIsNotNull() {
+            addCriterion("v_ydcsl is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andVYdcslEqualTo(String value) {
+            addCriterion("v_ydcsl =", value, "vYdcsl");
+            return (Criteria) this;
+        }
+
+        public Criteria andVYdcslNotEqualTo(String value) {
+            addCriterion("v_ydcsl <>", value, "vYdcsl");
+            return (Criteria) this;
+        }
+
+        public Criteria andVYdcslGreaterThan(String value) {
+            addCriterion("v_ydcsl >", value, "vYdcsl");
+            return (Criteria) this;
+        }
+
+        public Criteria andVYdcslGreaterThanOrEqualTo(String value) {
+            addCriterion("v_ydcsl >=", value, "vYdcsl");
+            return (Criteria) this;
+        }
+
+        public Criteria andVYdcslLessThan(String value) {
+            addCriterion("v_ydcsl <", value, "vYdcsl");
+            return (Criteria) this;
+        }
+
+        public Criteria andVYdcslLessThanOrEqualTo(String value) {
+            addCriterion("v_ydcsl <=", value, "vYdcsl");
+            return (Criteria) this;
+        }
+
+        public Criteria andVYdcslLike(String value) {
+            addCriterion("v_ydcsl like", value, "vYdcsl");
+            return (Criteria) this;
+        }
+
+        public Criteria andVYdcslNotLike(String value) {
+            addCriterion("v_ydcsl not like", value, "vYdcsl");
+            return (Criteria) this;
+        }
+
+        public Criteria andVYdcslIn(List<String> values) {
+            addCriterion("v_ydcsl in", values, "vYdcsl");
+            return (Criteria) this;
+        }
+
+        public Criteria andVYdcslNotIn(List<String> values) {
+            addCriterion("v_ydcsl not in", values, "vYdcsl");
+            return (Criteria) this;
+        }
+
+        public Criteria andVYdcslBetween(String value1, String value2) {
+            addCriterion("v_ydcsl between", value1, value2, "vYdcsl");
+            return (Criteria) this;
+        }
+
+        public Criteria andVYdcslNotBetween(String value1, String value2) {
+            addCriterion("v_ydcsl not between", value1, value2, "vYdcsl");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

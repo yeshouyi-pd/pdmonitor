@@ -45,6 +45,10 @@ public class AppMonitorManualEntrye {
 
     private Date gxsj;
 
+    private String vTbcsl;
+
+    private String vYdcsl;
+
     public String getId() {
         return id;
     }
@@ -213,6 +217,22 @@ public class AppMonitorManualEntrye {
         this.gxsj = gxsj;
     }
 
+    public String getvTbcsl() {
+        return vTbcsl;
+    }
+
+    public void setvTbcsl(String vTbcsl) {
+        this.vTbcsl = vTbcsl;
+    }
+
+    public String getvYdcsl() {
+        return vYdcsl;
+    }
+
+    public void setvYdcsl(String vYdcsl) {
+        this.vYdcsl = vYdcsl;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -240,6 +260,8 @@ public class AppMonitorManualEntrye {
         sb.append(", vDcsl=").append(vDcsl);
         sb.append(", scsj=").append(scsj);
         sb.append(", gxsj=").append(gxsj);
+        sb.append(", vTbcsl=").append(vTbcsl);
+        sb.append(", vYdcsl=").append(vYdcsl);
         sb.append("]");
         return sb.toString();
     }
