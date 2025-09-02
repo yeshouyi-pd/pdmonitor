@@ -316,62 +316,62 @@ public class AppMonitorManualEntryeExample {
         }
 
         public Criteria andPZfgczEqualTo(String value) {
-            addCriterion("p_zfgcz =", value, "pZfgcz");
+            addCriterion("p_zfgcz =", value, "pzfgcz");
             return (Criteria) this;
         }
 
         public Criteria andPZfgczNotEqualTo(String value) {
-            addCriterion("p_zfgcz <>", value, "pZfgcz");
+            addCriterion("p_zfgcz <>", value, "pzfgcz");
             return (Criteria) this;
         }
 
         public Criteria andPZfgczGreaterThan(String value) {
-            addCriterion("p_zfgcz >", value, "pZfgcz");
+            addCriterion("p_zfgcz >", value, "pzfgcz");
             return (Criteria) this;
         }
 
         public Criteria andPZfgczGreaterThanOrEqualTo(String value) {
-            addCriterion("p_zfgcz >=", value, "pZfgcz");
+            addCriterion("p_zfgcz >=", value, "pzfgcz");
             return (Criteria) this;
         }
 
         public Criteria andPZfgczLessThan(String value) {
-            addCriterion("p_zfgcz <", value, "pZfgcz");
+            addCriterion("p_zfgcz <", value, "pzfgcz");
             return (Criteria) this;
         }
 
         public Criteria andPZfgczLessThanOrEqualTo(String value) {
-            addCriterion("p_zfgcz <=", value, "pZfgcz");
+            addCriterion("p_zfgcz <=", value, "pzfgcz");
             return (Criteria) this;
         }
 
         public Criteria andPZfgczLike(String value) {
-            addCriterion("p_zfgcz like", value, "pZfgcz");
+            addCriterion("p_zfgcz like", value, "pzfgcz");
             return (Criteria) this;
         }
 
         public Criteria andPZfgczNotLike(String value) {
-            addCriterion("p_zfgcz not like", value, "pZfgcz");
+            addCriterion("p_zfgcz not like", value, "pzfgcz");
             return (Criteria) this;
         }
 
         public Criteria andPZfgczIn(List<String> values) {
-            addCriterion("p_zfgcz in", values, "pZfgcz");
+            addCriterion("p_zfgcz in", values, "pzfgcz");
             return (Criteria) this;
         }
 
         public Criteria andPZfgczNotIn(List<String> values) {
-            addCriterion("p_zfgcz not in", values, "pZfgcz");
+            addCriterion("p_zfgcz not in", values, "pzfgcz");
             return (Criteria) this;
         }
 
         public Criteria andPZfgczBetween(String value1, String value2) {
-            addCriterion("p_zfgcz between", value1, value2, "pZfgcz");
+            addCriterion("p_zfgcz between", value1, value2, "pzfgcz");
             return (Criteria) this;
         }
 
         public Criteria andPZfgczNotBetween(String value1, String value2) {
-            addCriterion("p_zfgcz not between", value1, value2, "pZfgcz");
+            addCriterion("p_zfgcz not between", value1, value2, "pzfgcz");
             return (Criteria) this;
         }
 
@@ -386,62 +386,62 @@ public class AppMonitorManualEntryeExample {
         }
 
         public Criteria andPJlzEqualTo(String value) {
-            addCriterion("p_jlz =", value, "pJlz");
+            addCriterion("p_jlz =", value, "pjlz");
             return (Criteria) this;
         }
 
         public Criteria andPJlzNotEqualTo(String value) {
-            addCriterion("p_jlz <>", value, "pJlz");
+            addCriterion("p_jlz <>", value, "pjlz");
             return (Criteria) this;
         }
 
         public Criteria andPJlzGreaterThan(String value) {
-            addCriterion("p_jlz >", value, "pJlz");
+            addCriterion("p_jlz >", value, "pjlz");
             return (Criteria) this;
         }
 
         public Criteria andPJlzGreaterThanOrEqualTo(String value) {
-            addCriterion("p_jlz >=", value, "pJlz");
+            addCriterion("p_jlz >=", value, "pjlz");
             return (Criteria) this;
         }
 
         public Criteria andPJlzLessThan(String value) {
-            addCriterion("p_jlz <", value, "pJlz");
+            addCriterion("p_jlz <", value, "pjlz");
             return (Criteria) this;
         }
 
         public Criteria andPJlzLessThanOrEqualTo(String value) {
-            addCriterion("p_jlz <=", value, "pJlz");
+            addCriterion("p_jlz <=", value, "pjlz");
             return (Criteria) this;
         }
 
         public Criteria andPJlzLike(String value) {
-            addCriterion("p_jlz like", value, "pJlz");
+            addCriterion("p_jlz like", value, "pjlz");
             return (Criteria) this;
         }
 
         public Criteria andPJlzNotLike(String value) {
-            addCriterion("p_jlz not like", value, "pJlz");
+            addCriterion("p_jlz not like", value, "pjlz");
             return (Criteria) this;
         }
 
         public Criteria andPJlzIn(List<String> values) {
-            addCriterion("p_jlz in", values, "pJlz");
+            addCriterion("p_jlz in", values, "pjlz");
             return (Criteria) this;
         }
 
         public Criteria andPJlzNotIn(List<String> values) {
-            addCriterion("p_jlz not in", values, "pJlz");
+            addCriterion("p_jlz not in", values, "pjlz");
             return (Criteria) this;
         }
 
         public Criteria andPJlzBetween(String value1, String value2) {
-            addCriterion("p_jlz between", value1, value2, "pJlz");
+            addCriterion("p_jlz between", value1, value2, "pjlz");
             return (Criteria) this;
         }
 
         public Criteria andPJlzNotBetween(String value1, String value2) {
-            addCriterion("p_jlz not between", value1, value2, "pJlz");
+            addCriterion("p_jlz not between", value1, value2, "pjlz");
             return (Criteria) this;
         }
 
@@ -456,62 +456,62 @@ public class AppMonitorManualEntryeExample {
         }
 
         public Criteria andPYfgczEqualTo(String value) {
-            addCriterion("p_yfgcz =", value, "pYfgcz");
+            addCriterion("p_yfgcz =", value, "pyfgcz");
             return (Criteria) this;
         }
 
         public Criteria andPYfgczNotEqualTo(String value) {
-            addCriterion("p_yfgcz <>", value, "pYfgcz");
+            addCriterion("p_yfgcz <>", value, "pyfgcz");
             return (Criteria) this;
         }
 
         public Criteria andPYfgczGreaterThan(String value) {
-            addCriterion("p_yfgcz >", value, "pYfgcz");
+            addCriterion("p_yfgcz >", value, "pyfgcz");
             return (Criteria) this;
         }
 
         public Criteria andPYfgczGreaterThanOrEqualTo(String value) {
-            addCriterion("p_yfgcz >=", value, "pYfgcz");
+            addCriterion("p_yfgcz >=", value, "pyfgcz");
             return (Criteria) this;
         }
 
         public Criteria andPYfgczLessThan(String value) {
-            addCriterion("p_yfgcz <", value, "pYfgcz");
+            addCriterion("p_yfgcz <", value, "pyfgcz");
             return (Criteria) this;
         }
 
         public Criteria andPYfgczLessThanOrEqualTo(String value) {
-            addCriterion("p_yfgcz <=", value, "pYfgcz");
+            addCriterion("p_yfgcz <=", value, "pyfgcz");
             return (Criteria) this;
         }
 
         public Criteria andPYfgczLike(String value) {
-            addCriterion("p_yfgcz like", value, "pYfgcz");
+            addCriterion("p_yfgcz like", value, "pyfgcz");
             return (Criteria) this;
         }
 
         public Criteria andPYfgczNotLike(String value) {
-            addCriterion("p_yfgcz not like", value, "pYfgcz");
+            addCriterion("p_yfgcz not like", value, "pyfgcz");
             return (Criteria) this;
         }
 
         public Criteria andPYfgczIn(List<String> values) {
-            addCriterion("p_yfgcz in", values, "pYfgcz");
+            addCriterion("p_yfgcz in", values, "pyfgcz");
             return (Criteria) this;
         }
 
         public Criteria andPYfgczNotIn(List<String> values) {
-            addCriterion("p_yfgcz not in", values, "pYfgcz");
+            addCriterion("p_yfgcz not in", values, "pyfgcz");
             return (Criteria) this;
         }
 
         public Criteria andPYfgczBetween(String value1, String value2) {
-            addCriterion("p_yfgcz between", value1, value2, "pYfgcz");
+            addCriterion("p_yfgcz between", value1, value2, "pyfgcz");
             return (Criteria) this;
         }
 
         public Criteria andPYfgczNotBetween(String value1, String value2) {
-            addCriterion("p_yfgcz not between", value1, value2, "pYfgcz");
+            addCriterion("p_yfgcz not between", value1, value2, "pyfgcz");
             return (Criteria) this;
         }
 
@@ -526,62 +526,62 @@ public class AppMonitorManualEntryeExample {
         }
 
         public Criteria andPDlgczEqualTo(String value) {
-            addCriterion("p_dlgcz =", value, "pDlgcz");
+            addCriterion("p_dlgcz =", value, "pdlgcz");
             return (Criteria) this;
         }
 
         public Criteria andPDlgczNotEqualTo(String value) {
-            addCriterion("p_dlgcz <>", value, "pDlgcz");
+            addCriterion("p_dlgcz <>", value, "pdlgcz");
             return (Criteria) this;
         }
 
         public Criteria andPDlgczGreaterThan(String value) {
-            addCriterion("p_dlgcz >", value, "pDlgcz");
+            addCriterion("p_dlgcz >", value, "pdlgcz");
             return (Criteria) this;
         }
 
         public Criteria andPDlgczGreaterThanOrEqualTo(String value) {
-            addCriterion("p_dlgcz >=", value, "pDlgcz");
+            addCriterion("p_dlgcz >=", value, "pdlgcz");
             return (Criteria) this;
         }
 
         public Criteria andPDlgczLessThan(String value) {
-            addCriterion("p_dlgcz <", value, "pDlgcz");
+            addCriterion("p_dlgcz <", value, "pdlgcz");
             return (Criteria) this;
         }
 
         public Criteria andPDlgczLessThanOrEqualTo(String value) {
-            addCriterion("p_dlgcz <=", value, "pDlgcz");
+            addCriterion("p_dlgcz <=", value, "pdlgcz");
             return (Criteria) this;
         }
 
         public Criteria andPDlgczLike(String value) {
-            addCriterion("p_dlgcz like", value, "pDlgcz");
+            addCriterion("p_dlgcz like", value, "pdlgcz");
             return (Criteria) this;
         }
 
         public Criteria andPDlgczNotLike(String value) {
-            addCriterion("p_dlgcz not like", value, "pDlgcz");
+            addCriterion("p_dlgcz not like", value, "pdlgcz");
             return (Criteria) this;
         }
 
         public Criteria andPDlgczIn(List<String> values) {
-            addCriterion("p_dlgcz in", values, "pDlgcz");
+            addCriterion("p_dlgcz in", values, "pdlgcz");
             return (Criteria) this;
         }
 
         public Criteria andPDlgczNotIn(List<String> values) {
-            addCriterion("p_dlgcz not in", values, "pDlgcz");
+            addCriterion("p_dlgcz not in", values, "pdlgcz");
             return (Criteria) this;
         }
 
         public Criteria andPDlgczBetween(String value1, String value2) {
-            addCriterion("p_dlgcz between", value1, value2, "pDlgcz");
+            addCriterion("p_dlgcz between", value1, value2, "pdlgcz");
             return (Criteria) this;
         }
 
         public Criteria andPDlgczNotBetween(String value1, String value2) {
-            addCriterion("p_dlgcz not between", value1, value2, "pDlgcz");
+            addCriterion("p_dlgcz not between", value1, value2, "pdlgcz");
             return (Criteria) this;
         }
 
@@ -596,62 +596,62 @@ public class AppMonitorManualEntryeExample {
         }
 
         public Criteria andPDlgczsyffEqualTo(String value) {
-            addCriterion("p_dlgczsyff =", value, "pDlgczsyff");
+            addCriterion("p_dlgczsyff =", value, "pdlgczsyff");
             return (Criteria) this;
         }
 
         public Criteria andPDlgczsyffNotEqualTo(String value) {
-            addCriterion("p_dlgczsyff <>", value, "pDlgczsyff");
+            addCriterion("p_dlgczsyff <>", value, "pdlgczsyff");
             return (Criteria) this;
         }
 
         public Criteria andPDlgczsyffGreaterThan(String value) {
-            addCriterion("p_dlgczsyff >", value, "pDlgczsyff");
+            addCriterion("p_dlgczsyff >", value, "pdlgczsyff");
             return (Criteria) this;
         }
 
         public Criteria andPDlgczsyffGreaterThanOrEqualTo(String value) {
-            addCriterion("p_dlgczsyff >=", value, "pDlgczsyff");
+            addCriterion("p_dlgczsyff >=", value, "pdlgczsyff");
             return (Criteria) this;
         }
 
         public Criteria andPDlgczsyffLessThan(String value) {
-            addCriterion("p_dlgczsyff <", value, "pDlgczsyff");
+            addCriterion("p_dlgczsyff <", value, "pdlgczsyff");
             return (Criteria) this;
         }
 
         public Criteria andPDlgczsyffLessThanOrEqualTo(String value) {
-            addCriterion("p_dlgczsyff <=", value, "pDlgczsyff");
+            addCriterion("p_dlgczsyff <=", value, "pdlgczsyff");
             return (Criteria) this;
         }
 
         public Criteria andPDlgczsyffLike(String value) {
-            addCriterion("p_dlgczsyff like", value, "pDlgczsyff");
+            addCriterion("p_dlgczsyff like", value, "pdlgczsyff");
             return (Criteria) this;
         }
 
         public Criteria andPDlgczsyffNotLike(String value) {
-            addCriterion("p_dlgczsyff not like", value, "pDlgczsyff");
+            addCriterion("p_dlgczsyff not like", value, "pdlgczsyff");
             return (Criteria) this;
         }
 
         public Criteria andPDlgczsyffIn(List<String> values) {
-            addCriterion("p_dlgczsyff in", values, "pDlgczsyff");
+            addCriterion("p_dlgczsyff in", values, "pdlgczsyff");
             return (Criteria) this;
         }
 
         public Criteria andPDlgczsyffNotIn(List<String> values) {
-            addCriterion("p_dlgczsyff not in", values, "pDlgczsyff");
+            addCriterion("p_dlgczsyff not in", values, "pdlgczsyff");
             return (Criteria) this;
         }
 
         public Criteria andPDlgczsyffBetween(String value1, String value2) {
-            addCriterion("p_dlgczsyff between", value1, value2, "pDlgczsyff");
+            addCriterion("p_dlgczsyff between", value1, value2, "pdlgczsyff");
             return (Criteria) this;
         }
 
         public Criteria andPDlgczsyffNotBetween(String value1, String value2) {
-            addCriterion("p_dlgczsyff not between", value1, value2, "pDlgczsyff");
+            addCriterion("p_dlgczsyff not between", value1, value2, "pdlgczsyff");
             return (Criteria) this;
         }
 
@@ -666,62 +666,62 @@ public class AppMonitorManualEntryeExample {
         }
 
         public Criteria andPFjgczEqualTo(String value) {
-            addCriterion("p_fjgcz =", value, "pFjgcz");
+            addCriterion("p_fjgcz =", value, "pfjgcz");
             return (Criteria) this;
         }
 
         public Criteria andPFjgczNotEqualTo(String value) {
-            addCriterion("p_fjgcz <>", value, "pFjgcz");
+            addCriterion("p_fjgcz <>", value, "pfjgcz");
             return (Criteria) this;
         }
 
         public Criteria andPFjgczGreaterThan(String value) {
-            addCriterion("p_fjgcz >", value, "pFjgcz");
+            addCriterion("p_fjgcz >", value, "pfjgcz");
             return (Criteria) this;
         }
 
         public Criteria andPFjgczGreaterThanOrEqualTo(String value) {
-            addCriterion("p_fjgcz >=", value, "pFjgcz");
+            addCriterion("p_fjgcz >=", value, "pfjgcz");
             return (Criteria) this;
         }
 
         public Criteria andPFjgczLessThan(String value) {
-            addCriterion("p_fjgcz <", value, "pFjgcz");
+            addCriterion("p_fjgcz <", value, "pfjgcz");
             return (Criteria) this;
         }
 
         public Criteria andPFjgczLessThanOrEqualTo(String value) {
-            addCriterion("p_fjgcz <=", value, "pFjgcz");
+            addCriterion("p_fjgcz <=", value, "pfjgcz");
             return (Criteria) this;
         }
 
         public Criteria andPFjgczLike(String value) {
-            addCriterion("p_fjgcz like", value, "pFjgcz");
+            addCriterion("p_fjgcz like", value, "pfjgcz");
             return (Criteria) this;
         }
 
         public Criteria andPFjgczNotLike(String value) {
-            addCriterion("p_fjgcz not like", value, "pFjgcz");
+            addCriterion("p_fjgcz not like", value, "pfjgcz");
             return (Criteria) this;
         }
 
         public Criteria andPFjgczIn(List<String> values) {
-            addCriterion("p_fjgcz in", values, "pFjgcz");
+            addCriterion("p_fjgcz in", values, "pfjgcz");
             return (Criteria) this;
         }
 
         public Criteria andPFjgczNotIn(List<String> values) {
-            addCriterion("p_fjgcz not in", values, "pFjgcz");
+            addCriterion("p_fjgcz not in", values, "pfjgcz");
             return (Criteria) this;
         }
 
         public Criteria andPFjgczBetween(String value1, String value2) {
-            addCriterion("p_fjgcz between", value1, value2, "pFjgcz");
+            addCriterion("p_fjgcz between", value1, value2, "pfjgcz");
             return (Criteria) this;
         }
 
         public Criteria andPFjgczNotBetween(String value1, String value2) {
-            addCriterion("p_fjgcz not between", value1, value2, "pFjgcz");
+            addCriterion("p_fjgcz not between", value1, value2, "pfjgcz");
             return (Criteria) this;
         }
 
@@ -736,62 +736,62 @@ public class AppMonitorManualEntryeExample {
         }
 
         public Criteria andWZtgczkEqualTo(String value) {
-            addCriterion("w_ztgczk =", value, "wZtgczk");
+            addCriterion("w_ztgczk =", value, "wztgczk");
             return (Criteria) this;
         }
 
         public Criteria andWZtgczkNotEqualTo(String value) {
-            addCriterion("w_ztgczk <>", value, "wZtgczk");
+            addCriterion("w_ztgczk <>", value, "wztgczk");
             return (Criteria) this;
         }
 
         public Criteria andWZtgczkGreaterThan(String value) {
-            addCriterion("w_ztgczk >", value, "wZtgczk");
+            addCriterion("w_ztgczk >", value, "wztgczk");
             return (Criteria) this;
         }
 
         public Criteria andWZtgczkGreaterThanOrEqualTo(String value) {
-            addCriterion("w_ztgczk >=", value, "wZtgczk");
+            addCriterion("w_ztgczk >=", value, "wztgczk");
             return (Criteria) this;
         }
 
         public Criteria andWZtgczkLessThan(String value) {
-            addCriterion("w_ztgczk <", value, "wZtgczk");
+            addCriterion("w_ztgczk <", value, "wztgczk");
             return (Criteria) this;
         }
 
         public Criteria andWZtgczkLessThanOrEqualTo(String value) {
-            addCriterion("w_ztgczk <=", value, "wZtgczk");
+            addCriterion("w_ztgczk <=", value, "wztgczk");
             return (Criteria) this;
         }
 
         public Criteria andWZtgczkLike(String value) {
-            addCriterion("w_ztgczk like", value, "wZtgczk");
+            addCriterion("w_ztgczk like", value, "wztgczk");
             return (Criteria) this;
         }
 
         public Criteria andWZtgczkNotLike(String value) {
-            addCriterion("w_ztgczk not like", value, "wZtgczk");
+            addCriterion("w_ztgczk not like", value, "wztgczk");
             return (Criteria) this;
         }
 
         public Criteria andWZtgczkIn(List<String> values) {
-            addCriterion("w_ztgczk in", values, "wZtgczk");
+            addCriterion("w_ztgczk in", values, "wztgczk");
             return (Criteria) this;
         }
 
         public Criteria andWZtgczkNotIn(List<String> values) {
-            addCriterion("w_ztgczk not in", values, "wZtgczk");
+            addCriterion("w_ztgczk not in", values, "wztgczk");
             return (Criteria) this;
         }
 
         public Criteria andWZtgczkBetween(String value1, String value2) {
-            addCriterion("w_ztgczk between", value1, value2, "wZtgczk");
+            addCriterion("w_ztgczk between", value1, value2, "wztgczk");
             return (Criteria) this;
         }
 
         public Criteria andWZtgczkNotBetween(String value1, String value2) {
-            addCriterion("w_ztgczk not between", value1, value2, "wZtgczk");
+            addCriterion("w_ztgczk not between", value1, value2, "wztgczk");
             return (Criteria) this;
         }
 
@@ -806,62 +806,62 @@ public class AppMonitorManualEntryeExample {
         }
 
         public Criteria andWXgszfwEqualTo(String value) {
-            addCriterion("w_xgszfw =", value, "wXgszfw");
+            addCriterion("w_xgszfw =", value, "wxgszfw");
             return (Criteria) this;
         }
 
         public Criteria andWXgszfwNotEqualTo(String value) {
-            addCriterion("w_xgszfw <>", value, "wXgszfw");
+            addCriterion("w_xgszfw <>", value, "wxgszfw");
             return (Criteria) this;
         }
 
         public Criteria andWXgszfwGreaterThan(String value) {
-            addCriterion("w_xgszfw >", value, "wXgszfw");
+            addCriterion("w_xgszfw >", value, "wxgszfw");
             return (Criteria) this;
         }
 
         public Criteria andWXgszfwGreaterThanOrEqualTo(String value) {
-            addCriterion("w_xgszfw >=", value, "wXgszfw");
+            addCriterion("w_xgszfw >=", value, "wxgszfw");
             return (Criteria) this;
         }
 
         public Criteria andWXgszfwLessThan(String value) {
-            addCriterion("w_xgszfw <", value, "wXgszfw");
+            addCriterion("w_xgszfw <", value, "wxgszfw");
             return (Criteria) this;
         }
 
         public Criteria andWXgszfwLessThanOrEqualTo(String value) {
-            addCriterion("w_xgszfw <=", value, "wXgszfw");
+            addCriterion("w_xgszfw <=", value, "wxgszfw");
             return (Criteria) this;
         }
 
         public Criteria andWXgszfwLike(String value) {
-            addCriterion("w_xgszfw like", value, "wXgszfw");
+            addCriterion("w_xgszfw like", value, "wxgszfw");
             return (Criteria) this;
         }
 
         public Criteria andWXgszfwNotLike(String value) {
-            addCriterion("w_xgszfw not like", value, "wXgszfw");
+            addCriterion("w_xgszfw not like", value, "wxgszfw");
             return (Criteria) this;
         }
 
         public Criteria andWXgszfwIn(List<String> values) {
-            addCriterion("w_xgszfw in", values, "wXgszfw");
+            addCriterion("w_xgszfw in", values, "wxgszfw");
             return (Criteria) this;
         }
 
         public Criteria andWXgszfwNotIn(List<String> values) {
-            addCriterion("w_xgszfw not in", values, "wXgszfw");
+            addCriterion("w_xgszfw not in", values, "wxgszfw");
             return (Criteria) this;
         }
 
         public Criteria andWXgszfwBetween(String value1, String value2) {
-            addCriterion("w_xgszfw between", value1, value2, "wXgszfw");
+            addCriterion("w_xgszfw between", value1, value2, "wxgszfw");
             return (Criteria) this;
         }
 
         public Criteria andWXgszfwNotBetween(String value1, String value2) {
-            addCriterion("w_xgszfw not between", value1, value2, "wXgszfw");
+            addCriterion("w_xgszfw not between", value1, value2, "wxgszfw");
             return (Criteria) this;
         }
 
@@ -876,62 +876,62 @@ public class AppMonitorManualEntryeExample {
         }
 
         public Criteria andWXgzkEqualTo(String value) {
-            addCriterion("w_xgzk =", value, "wXgzk");
+            addCriterion("w_xgzk =", value, "wxgzk");
             return (Criteria) this;
         }
 
         public Criteria andWXgzkNotEqualTo(String value) {
-            addCriterion("w_xgzk <>", value, "wXgzk");
+            addCriterion("w_xgzk <>", value, "wxgzk");
             return (Criteria) this;
         }
 
         public Criteria andWXgzkGreaterThan(String value) {
-            addCriterion("w_xgzk >", value, "wXgzk");
+            addCriterion("w_xgzk >", value, "wxgzk");
             return (Criteria) this;
         }
 
         public Criteria andWXgzkGreaterThanOrEqualTo(String value) {
-            addCriterion("w_xgzk >=", value, "wXgzk");
+            addCriterion("w_xgzk >=", value, "wxgzk");
             return (Criteria) this;
         }
 
         public Criteria andWXgzkLessThan(String value) {
-            addCriterion("w_xgzk <", value, "wXgzk");
+            addCriterion("w_xgzk <", value, "wxgzk");
             return (Criteria) this;
         }
 
         public Criteria andWXgzkLessThanOrEqualTo(String value) {
-            addCriterion("w_xgzk <=", value, "wXgzk");
+            addCriterion("w_xgzk <=", value, "wxgzk");
             return (Criteria) this;
         }
 
         public Criteria andWXgzkLike(String value) {
-            addCriterion("w_xgzk like", value, "wXgzk");
+            addCriterion("w_xgzk like", value, "wxgzk");
             return (Criteria) this;
         }
 
         public Criteria andWXgzkNotLike(String value) {
-            addCriterion("w_xgzk not like", value, "wXgzk");
+            addCriterion("w_xgzk not like", value, "wxgzk");
             return (Criteria) this;
         }
 
         public Criteria andWXgzkIn(List<String> values) {
-            addCriterion("w_xgzk in", values, "wXgzk");
+            addCriterion("w_xgzk in", values, "wxgzk");
             return (Criteria) this;
         }
 
         public Criteria andWXgzkNotIn(List<String> values) {
-            addCriterion("w_xgzk not in", values, "wXgzk");
+            addCriterion("w_xgzk not in", values, "wxgzk");
             return (Criteria) this;
         }
 
         public Criteria andWXgzkBetween(String value1, String value2) {
-            addCriterion("w_xgzk between", value1, value2, "wXgzk");
+            addCriterion("w_xgzk between", value1, value2, "wxgzk");
             return (Criteria) this;
         }
 
         public Criteria andWXgzkNotBetween(String value1, String value2) {
-            addCriterion("w_xgzk not between", value1, value2, "wXgzk");
+            addCriterion("w_xgzk not between", value1, value2, "wxgzk");
             return (Criteria) this;
         }
 
@@ -946,62 +946,62 @@ public class AppMonitorManualEntryeExample {
         }
 
         public Criteria andNJajlEqualTo(String value) {
-            addCriterion("n_jajl =", value, "nJajl");
+            addCriterion("n_jajl =", value, "njajl");
             return (Criteria) this;
         }
 
         public Criteria andNJajlNotEqualTo(String value) {
-            addCriterion("n_jajl <>", value, "nJajl");
+            addCriterion("n_jajl <>", value, "njajl");
             return (Criteria) this;
         }
 
         public Criteria andNJajlGreaterThan(String value) {
-            addCriterion("n_jajl >", value, "nJajl");
+            addCriterion("n_jajl >", value, "njajl");
             return (Criteria) this;
         }
 
         public Criteria andNJajlGreaterThanOrEqualTo(String value) {
-            addCriterion("n_jajl >=", value, "nJajl");
+            addCriterion("n_jajl >=", value, "njajl");
             return (Criteria) this;
         }
 
         public Criteria andNJajlLessThan(String value) {
-            addCriterion("n_jajl <", value, "nJajl");
+            addCriterion("n_jajl <", value, "njajl");
             return (Criteria) this;
         }
 
         public Criteria andNJajlLessThanOrEqualTo(String value) {
-            addCriterion("n_jajl <=", value, "nJajl");
+            addCriterion("n_jajl <=", value, "njajl");
             return (Criteria) this;
         }
 
         public Criteria andNJajlLike(String value) {
-            addCriterion("n_jajl like", value, "nJajl");
+            addCriterion("n_jajl like", value, "njajl");
             return (Criteria) this;
         }
 
         public Criteria andNJajlNotLike(String value) {
-            addCriterion("n_jajl not like", value, "nJajl");
+            addCriterion("n_jajl not like", value, "njajl");
             return (Criteria) this;
         }
 
         public Criteria andNJajlIn(List<String> values) {
-            addCriterion("n_jajl in", values, "nJajl");
+            addCriterion("n_jajl in", values, "njajl");
             return (Criteria) this;
         }
 
         public Criteria andNJajlNotIn(List<String> values) {
-            addCriterion("n_jajl not in", values, "nJajl");
+            addCriterion("n_jajl not in", values, "njajl");
             return (Criteria) this;
         }
 
         public Criteria andNJajlBetween(String value1, String value2) {
-            addCriterion("n_jajl between", value1, value2, "nJajl");
+            addCriterion("n_jajl between", value1, value2, "njajl");
             return (Criteria) this;
         }
 
         public Criteria andNJajlNotBetween(String value1, String value2) {
-            addCriterion("n_jajl not between", value1, value2, "nJajl");
+            addCriterion("n_jajl not between", value1, value2, "njajl");
             return (Criteria) this;
         }
 
@@ -1016,62 +1016,62 @@ public class AppMonitorManualEntryeExample {
         }
 
         public Criteria andNSsEqualTo(String value) {
-            addCriterion("n_ss =", value, "nSs");
+            addCriterion("n_ss =", value, "nss");
             return (Criteria) this;
         }
 
         public Criteria andNSsNotEqualTo(String value) {
-            addCriterion("n_ss <>", value, "nSs");
+            addCriterion("n_ss <>", value, "nss");
             return (Criteria) this;
         }
 
         public Criteria andNSsGreaterThan(String value) {
-            addCriterion("n_ss >", value, "nSs");
+            addCriterion("n_ss >", value, "nss");
             return (Criteria) this;
         }
 
         public Criteria andNSsGreaterThanOrEqualTo(String value) {
-            addCriterion("n_ss >=", value, "nSs");
+            addCriterion("n_ss >=", value, "nss");
             return (Criteria) this;
         }
 
         public Criteria andNSsLessThan(String value) {
-            addCriterion("n_ss <", value, "nSs");
+            addCriterion("n_ss <", value, "nss");
             return (Criteria) this;
         }
 
         public Criteria andNSsLessThanOrEqualTo(String value) {
-            addCriterion("n_ss <=", value, "nSs");
+            addCriterion("n_ss <=", value, "nss");
             return (Criteria) this;
         }
 
         public Criteria andNSsLike(String value) {
-            addCriterion("n_ss like", value, "nSs");
+            addCriterion("n_ss like", value, "nss");
             return (Criteria) this;
         }
 
         public Criteria andNSsNotLike(String value) {
-            addCriterion("n_ss not like", value, "nSs");
+            addCriterion("n_ss not like", value, "nss");
             return (Criteria) this;
         }
 
         public Criteria andNSsIn(List<String> values) {
-            addCriterion("n_ss in", values, "nSs");
+            addCriterion("n_ss in", values, "nss");
             return (Criteria) this;
         }
 
         public Criteria andNSsNotIn(List<String> values) {
-            addCriterion("n_ss not in", values, "nSs");
+            addCriterion("n_ss not in", values, "nss");
             return (Criteria) this;
         }
 
         public Criteria andNSsBetween(String value1, String value2) {
-            addCriterion("n_ss between", value1, value2, "nSs");
+            addCriterion("n_ss between", value1, value2, "nss");
             return (Criteria) this;
         }
 
         public Criteria andNSsNotBetween(String value1, String value2) {
-            addCriterion("n_ss not between", value1, value2, "nSs");
+            addCriterion("n_ss not between", value1, value2, "nss");
             return (Criteria) this;
         }
 
@@ -1086,62 +1086,62 @@ public class AppMonitorManualEntryeExample {
         }
 
         public Criteria andNCsEqualTo(String value) {
-            addCriterion("n_cs =", value, "nCs");
+            addCriterion("n_cs =", value, "ncs");
             return (Criteria) this;
         }
 
         public Criteria andNCsNotEqualTo(String value) {
-            addCriterion("n_cs <>", value, "nCs");
+            addCriterion("n_cs <>", value, "ncs");
             return (Criteria) this;
         }
 
         public Criteria andNCsGreaterThan(String value) {
-            addCriterion("n_cs >", value, "nCs");
+            addCriterion("n_cs >", value, "ncs");
             return (Criteria) this;
         }
 
         public Criteria andNCsGreaterThanOrEqualTo(String value) {
-            addCriterion("n_cs >=", value, "nCs");
+            addCriterion("n_cs >=", value, "ncs");
             return (Criteria) this;
         }
 
         public Criteria andNCsLessThan(String value) {
-            addCriterion("n_cs <", value, "nCs");
+            addCriterion("n_cs <", value, "ncs");
             return (Criteria) this;
         }
 
         public Criteria andNCsLessThanOrEqualTo(String value) {
-            addCriterion("n_cs <=", value, "nCs");
+            addCriterion("n_cs <=", value, "ncs");
             return (Criteria) this;
         }
 
         public Criteria andNCsLike(String value) {
-            addCriterion("n_cs like", value, "nCs");
+            addCriterion("n_cs like", value, "ncs");
             return (Criteria) this;
         }
 
         public Criteria andNCsNotLike(String value) {
-            addCriterion("n_cs not like", value, "nCs");
+            addCriterion("n_cs not like", value, "ncs");
             return (Criteria) this;
         }
 
         public Criteria andNCsIn(List<String> values) {
-            addCriterion("n_cs in", values, "nCs");
+            addCriterion("n_cs in", values, "ncs");
             return (Criteria) this;
         }
 
         public Criteria andNCsNotIn(List<String> values) {
-            addCriterion("n_cs not in", values, "nCs");
+            addCriterion("n_cs not in", values, "ncs");
             return (Criteria) this;
         }
 
         public Criteria andNCsBetween(String value1, String value2) {
-            addCriterion("n_cs between", value1, value2, "nCs");
+            addCriterion("n_cs between", value1, value2, "ncs");
             return (Criteria) this;
         }
 
         public Criteria andNCsNotBetween(String value1, String value2) {
-            addCriterion("n_cs not between", value1, value2, "nCs");
+            addCriterion("n_cs not between", value1, value2, "ncs");
             return (Criteria) this;
         }
 
@@ -1156,62 +1156,62 @@ public class AppMonitorManualEntryeExample {
         }
 
         public Criteria andNJafxEqualTo(String value) {
-            addCriterion("n_jafx =", value, "nJafx");
+            addCriterion("n_jafx =", value, "njafx");
             return (Criteria) this;
         }
 
         public Criteria andNJafxNotEqualTo(String value) {
-            addCriterion("n_jafx <>", value, "nJafx");
+            addCriterion("n_jafx <>", value, "njafx");
             return (Criteria) this;
         }
 
         public Criteria andNJafxGreaterThan(String value) {
-            addCriterion("n_jafx >", value, "nJafx");
+            addCriterion("n_jafx >", value, "njafx");
             return (Criteria) this;
         }
 
         public Criteria andNJafxGreaterThanOrEqualTo(String value) {
-            addCriterion("n_jafx >=", value, "nJafx");
+            addCriterion("n_jafx >=", value, "njafx");
             return (Criteria) this;
         }
 
         public Criteria andNJafxLessThan(String value) {
-            addCriterion("n_jafx <", value, "nJafx");
+            addCriterion("n_jafx <", value, "njafx");
             return (Criteria) this;
         }
 
         public Criteria andNJafxLessThanOrEqualTo(String value) {
-            addCriterion("n_jafx <=", value, "nJafx");
+            addCriterion("n_jafx <=", value, "njafx");
             return (Criteria) this;
         }
 
         public Criteria andNJafxLike(String value) {
-            addCriterion("n_jafx like", value, "nJafx");
+            addCriterion("n_jafx like", value, "njafx");
             return (Criteria) this;
         }
 
         public Criteria andNJafxNotLike(String value) {
-            addCriterion("n_jafx not like", value, "nJafx");
+            addCriterion("n_jafx not like", value, "njafx");
             return (Criteria) this;
         }
 
         public Criteria andNJafxIn(List<String> values) {
-            addCriterion("n_jafx in", values, "nJafx");
+            addCriterion("n_jafx in", values, "njafx");
             return (Criteria) this;
         }
 
         public Criteria andNJafxNotIn(List<String> values) {
-            addCriterion("n_jafx not in", values, "nJafx");
+            addCriterion("n_jafx not in", values, "njafx");
             return (Criteria) this;
         }
 
         public Criteria andNJafxBetween(String value1, String value2) {
-            addCriterion("n_jafx between", value1, value2, "nJafx");
+            addCriterion("n_jafx between", value1, value2, "njafx");
             return (Criteria) this;
         }
 
         public Criteria andNJafxNotBetween(String value1, String value2) {
-            addCriterion("n_jafx not between", value1, value2, "nJafx");
+            addCriterion("n_jafx not between", value1, value2, "njafx");
             return (Criteria) this;
         }
 
@@ -1226,62 +1226,62 @@ public class AppMonitorManualEntryeExample {
         }
 
         public Criteria andNFxEqualTo(String value) {
-            addCriterion("n_fx =", value, "nFx");
+            addCriterion("n_fx =", value, "nfx");
             return (Criteria) this;
         }
 
         public Criteria andNFxNotEqualTo(String value) {
-            addCriterion("n_fx <>", value, "nFx");
+            addCriterion("n_fx <>", value, "nfx");
             return (Criteria) this;
         }
 
         public Criteria andNFxGreaterThan(String value) {
-            addCriterion("n_fx >", value, "nFx");
+            addCriterion("n_fx >", value, "nfx");
             return (Criteria) this;
         }
 
         public Criteria andNFxGreaterThanOrEqualTo(String value) {
-            addCriterion("n_fx >=", value, "nFx");
+            addCriterion("n_fx >=", value, "nfx");
             return (Criteria) this;
         }
 
         public Criteria andNFxLessThan(String value) {
-            addCriterion("n_fx <", value, "nFx");
+            addCriterion("n_fx <", value, "nfx");
             return (Criteria) this;
         }
 
         public Criteria andNFxLessThanOrEqualTo(String value) {
-            addCriterion("n_fx <=", value, "nFx");
+            addCriterion("n_fx <=", value, "nfx");
             return (Criteria) this;
         }
 
         public Criteria andNFxLike(String value) {
-            addCriterion("n_fx like", value, "nFx");
+            addCriterion("n_fx like", value, "nfx");
             return (Criteria) this;
         }
 
         public Criteria andNFxNotLike(String value) {
-            addCriterion("n_fx not like", value, "nFx");
+            addCriterion("n_fx not like", value, "nfx");
             return (Criteria) this;
         }
 
         public Criteria andNFxIn(List<String> values) {
-            addCriterion("n_fx in", values, "nFx");
+            addCriterion("n_fx in", values, "nfx");
             return (Criteria) this;
         }
 
         public Criteria andNFxNotIn(List<String> values) {
-            addCriterion("n_fx not in", values, "nFx");
+            addCriterion("n_fx not in", values, "nfx");
             return (Criteria) this;
         }
 
         public Criteria andNFxBetween(String value1, String value2) {
-            addCriterion("n_fx between", value1, value2, "nFx");
+            addCriterion("n_fx between", value1, value2, "nfx");
             return (Criteria) this;
         }
 
         public Criteria andNFxNotBetween(String value1, String value2) {
-            addCriterion("n_fx not between", value1, value2, "nFx");
+            addCriterion("n_fx not between", value1, value2, "nfx");
             return (Criteria) this;
         }
 
@@ -1296,62 +1296,62 @@ public class AppMonitorManualEntryeExample {
         }
 
         public Criteria andVYcslEqualTo(String value) {
-            addCriterion("v_ycsl =", value, "vYcsl");
+            addCriterion("v_ycsl =", value, "vycsl");
             return (Criteria) this;
         }
 
         public Criteria andVYcslNotEqualTo(String value) {
-            addCriterion("v_ycsl <>", value, "vYcsl");
+            addCriterion("v_ycsl <>", value, "vycsl");
             return (Criteria) this;
         }
 
         public Criteria andVYcslGreaterThan(String value) {
-            addCriterion("v_ycsl >", value, "vYcsl");
+            addCriterion("v_ycsl >", value, "vycsl");
             return (Criteria) this;
         }
 
         public Criteria andVYcslGreaterThanOrEqualTo(String value) {
-            addCriterion("v_ycsl >=", value, "vYcsl");
+            addCriterion("v_ycsl >=", value, "vycsl");
             return (Criteria) this;
         }
 
         public Criteria andVYcslLessThan(String value) {
-            addCriterion("v_ycsl <", value, "vYcsl");
+            addCriterion("v_ycsl <", value, "vycsl");
             return (Criteria) this;
         }
 
         public Criteria andVYcslLessThanOrEqualTo(String value) {
-            addCriterion("v_ycsl <=", value, "vYcsl");
+            addCriterion("v_ycsl <=", value, "vycsl");
             return (Criteria) this;
         }
 
         public Criteria andVYcslLike(String value) {
-            addCriterion("v_ycsl like", value, "vYcsl");
+            addCriterion("v_ycsl like", value, "vycsl");
             return (Criteria) this;
         }
 
         public Criteria andVYcslNotLike(String value) {
-            addCriterion("v_ycsl not like", value, "vYcsl");
+            addCriterion("v_ycsl not like", value, "vycsl");
             return (Criteria) this;
         }
 
         public Criteria andVYcslIn(List<String> values) {
-            addCriterion("v_ycsl in", values, "vYcsl");
+            addCriterion("v_ycsl in", values, "vycsl");
             return (Criteria) this;
         }
 
         public Criteria andVYcslNotIn(List<String> values) {
-            addCriterion("v_ycsl not in", values, "vYcsl");
+            addCriterion("v_ycsl not in", values, "vycsl");
             return (Criteria) this;
         }
 
         public Criteria andVYcslBetween(String value1, String value2) {
-            addCriterion("v_ycsl between", value1, value2, "vYcsl");
+            addCriterion("v_ycsl between", value1, value2, "vycsl");
             return (Criteria) this;
         }
 
         public Criteria andVYcslNotBetween(String value1, String value2) {
-            addCriterion("v_ycsl not between", value1, value2, "vYcsl");
+            addCriterion("v_ycsl not between", value1, value2, "vycsl");
             return (Criteria) this;
         }
 
@@ -1366,62 +1366,62 @@ public class AppMonitorManualEntryeExample {
         }
 
         public Criteria andVDcslEqualTo(String value) {
-            addCriterion("v_dcsl =", value, "vDcsl");
+            addCriterion("v_dcsl =", value, "vdcsl");
             return (Criteria) this;
         }
 
         public Criteria andVDcslNotEqualTo(String value) {
-            addCriterion("v_dcsl <>", value, "vDcsl");
+            addCriterion("v_dcsl <>", value, "vdcsl");
             return (Criteria) this;
         }
 
         public Criteria andVDcslGreaterThan(String value) {
-            addCriterion("v_dcsl >", value, "vDcsl");
+            addCriterion("v_dcsl >", value, "vdcsl");
             return (Criteria) this;
         }
 
         public Criteria andVDcslGreaterThanOrEqualTo(String value) {
-            addCriterion("v_dcsl >=", value, "vDcsl");
+            addCriterion("v_dcsl >=", value, "vdcsl");
             return (Criteria) this;
         }
 
         public Criteria andVDcslLessThan(String value) {
-            addCriterion("v_dcsl <", value, "vDcsl");
+            addCriterion("v_dcsl <", value, "vdcsl");
             return (Criteria) this;
         }
 
         public Criteria andVDcslLessThanOrEqualTo(String value) {
-            addCriterion("v_dcsl <=", value, "vDcsl");
+            addCriterion("v_dcsl <=", value, "vdcsl");
             return (Criteria) this;
         }
 
         public Criteria andVDcslLike(String value) {
-            addCriterion("v_dcsl like", value, "vDcsl");
+            addCriterion("v_dcsl like", value, "vdcsl");
             return (Criteria) this;
         }
 
         public Criteria andVDcslNotLike(String value) {
-            addCriterion("v_dcsl not like", value, "vDcsl");
+            addCriterion("v_dcsl not like", value, "vdcsl");
             return (Criteria) this;
         }
 
         public Criteria andVDcslIn(List<String> values) {
-            addCriterion("v_dcsl in", values, "vDcsl");
+            addCriterion("v_dcsl in", values, "vdcsl");
             return (Criteria) this;
         }
 
         public Criteria andVDcslNotIn(List<String> values) {
-            addCriterion("v_dcsl not in", values, "vDcsl");
+            addCriterion("v_dcsl not in", values, "vdcsl");
             return (Criteria) this;
         }
 
         public Criteria andVDcslBetween(String value1, String value2) {
-            addCriterion("v_dcsl between", value1, value2, "vDcsl");
+            addCriterion("v_dcsl between", value1, value2, "vdcsl");
             return (Criteria) this;
         }
 
         public Criteria andVDcslNotBetween(String value1, String value2) {
-            addCriterion("v_dcsl not between", value1, value2, "vDcsl");
+            addCriterion("v_dcsl not between", value1, value2, "vdcsl");
             return (Criteria) this;
         }
 
@@ -1556,62 +1556,62 @@ public class AppMonitorManualEntryeExample {
         }
 
         public Criteria andVTbcslEqualTo(String value) {
-            addCriterion("v_tbcsl =", value, "vTbcsl");
+            addCriterion("v_tbcsl =", value, "vtbcsl");
             return (Criteria) this;
         }
 
         public Criteria andVTbcslNotEqualTo(String value) {
-            addCriterion("v_tbcsl <>", value, "vTbcsl");
+            addCriterion("v_tbcsl <>", value, "vtbcsl");
             return (Criteria) this;
         }
 
         public Criteria andVTbcslGreaterThan(String value) {
-            addCriterion("v_tbcsl >", value, "vTbcsl");
+            addCriterion("v_tbcsl >", value, "vtbcsl");
             return (Criteria) this;
         }
 
         public Criteria andVTbcslGreaterThanOrEqualTo(String value) {
-            addCriterion("v_tbcsl >=", value, "vTbcsl");
+            addCriterion("v_tbcsl >=", value, "vtbcsl");
             return (Criteria) this;
         }
 
         public Criteria andVTbcslLessThan(String value) {
-            addCriterion("v_tbcsl <", value, "vTbcsl");
+            addCriterion("v_tbcsl <", value, "vtbcsl");
             return (Criteria) this;
         }
 
         public Criteria andVTbcslLessThanOrEqualTo(String value) {
-            addCriterion("v_tbcsl <=", value, "vTbcsl");
+            addCriterion("v_tbcsl <=", value, "vtbcsl");
             return (Criteria) this;
         }
 
         public Criteria andVTbcslLike(String value) {
-            addCriterion("v_tbcsl like", value, "vTbcsl");
+            addCriterion("v_tbcsl like", value, "vtbcsl");
             return (Criteria) this;
         }
 
         public Criteria andVTbcslNotLike(String value) {
-            addCriterion("v_tbcsl not like", value, "vTbcsl");
+            addCriterion("v_tbcsl not like", value, "vtbcsl");
             return (Criteria) this;
         }
 
         public Criteria andVTbcslIn(List<String> values) {
-            addCriterion("v_tbcsl in", values, "vTbcsl");
+            addCriterion("v_tbcsl in", values, "vtbcsl");
             return (Criteria) this;
         }
 
         public Criteria andVTbcslNotIn(List<String> values) {
-            addCriterion("v_tbcsl not in", values, "vTbcsl");
+            addCriterion("v_tbcsl not in", values, "vtbcsl");
             return (Criteria) this;
         }
 
         public Criteria andVTbcslBetween(String value1, String value2) {
-            addCriterion("v_tbcsl between", value1, value2, "vTbcsl");
+            addCriterion("v_tbcsl between", value1, value2, "vtbcsl");
             return (Criteria) this;
         }
 
         public Criteria andVTbcslNotBetween(String value1, String value2) {
-            addCriterion("v_tbcsl not between", value1, value2, "vTbcsl");
+            addCriterion("v_tbcsl not between", value1, value2, "vtbcsl");
             return (Criteria) this;
         }
 
@@ -1626,62 +1626,62 @@ public class AppMonitorManualEntryeExample {
         }
 
         public Criteria andVYdcslEqualTo(String value) {
-            addCriterion("v_ydcsl =", value, "vYdcsl");
+            addCriterion("v_ydcsl =", value, "vydcsl");
             return (Criteria) this;
         }
 
         public Criteria andVYdcslNotEqualTo(String value) {
-            addCriterion("v_ydcsl <>", value, "vYdcsl");
+            addCriterion("v_ydcsl <>", value, "vydcsl");
             return (Criteria) this;
         }
 
         public Criteria andVYdcslGreaterThan(String value) {
-            addCriterion("v_ydcsl >", value, "vYdcsl");
+            addCriterion("v_ydcsl >", value, "vydcsl");
             return (Criteria) this;
         }
 
         public Criteria andVYdcslGreaterThanOrEqualTo(String value) {
-            addCriterion("v_ydcsl >=", value, "vYdcsl");
+            addCriterion("v_ydcsl >=", value, "vydcsl");
             return (Criteria) this;
         }
 
         public Criteria andVYdcslLessThan(String value) {
-            addCriterion("v_ydcsl <", value, "vYdcsl");
+            addCriterion("v_ydcsl <", value, "vydcsl");
             return (Criteria) this;
         }
 
         public Criteria andVYdcslLessThanOrEqualTo(String value) {
-            addCriterion("v_ydcsl <=", value, "vYdcsl");
+            addCriterion("v_ydcsl <=", value, "vydcsl");
             return (Criteria) this;
         }
 
         public Criteria andVYdcslLike(String value) {
-            addCriterion("v_ydcsl like", value, "vYdcsl");
+            addCriterion("v_ydcsl like", value, "vydcsl");
             return (Criteria) this;
         }
 
         public Criteria andVYdcslNotLike(String value) {
-            addCriterion("v_ydcsl not like", value, "vYdcsl");
+            addCriterion("v_ydcsl not like", value, "vydcsl");
             return (Criteria) this;
         }
 
         public Criteria andVYdcslIn(List<String> values) {
-            addCriterion("v_ydcsl in", values, "vYdcsl");
+            addCriterion("v_ydcsl in", values, "vydcsl");
             return (Criteria) this;
         }
 
         public Criteria andVYdcslNotIn(List<String> values) {
-            addCriterion("v_ydcsl not in", values, "vYdcsl");
+            addCriterion("v_ydcsl not in", values, "vydcsl");
             return (Criteria) this;
         }
 
         public Criteria andVYdcslBetween(String value1, String value2) {
-            addCriterion("v_ydcsl between", value1, value2, "vYdcsl");
+            addCriterion("v_ydcsl between", value1, value2, "vydcsl");
             return (Criteria) this;
         }
 
         public Criteria andVYdcslNotBetween(String value1, String value2) {
-            addCriterion("v_ydcsl not between", value1, value2, "vYdcsl");
+            addCriterion("v_ydcsl not between", value1, value2, "vydcsl");
             return (Criteria) this;
         }
 

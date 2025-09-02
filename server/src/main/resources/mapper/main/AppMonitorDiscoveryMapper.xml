@@ -5,19 +5,19 @@
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="mid" jdbcType="VARCHAR" property="mid" />
     <result column="fxsj" jdbcType="TIMESTAMP" property="fxsj" />
-    <result column="s_jl" jdbcType="VARCHAR" property="sJl" />
-    <result column="s_gcz" jdbcType="VARCHAR" property="sGcz" />
-    <result column="s_fw" jdbcType="VARCHAR" property="sFw" />
-    <result column="s_ff" jdbcType="VARCHAR" property="sFf" />
-    <result column="s_wzm" jdbcType="VARCHAR" property="sWzm" />
-    <result column="s_qt_zx" jdbcType="VARCHAR" property="sQtZx" />
-    <result column="s_qt_zy" jdbcType="VARCHAR" property="sQtZy" />
-    <result column="s_qt_zd" jdbcType="VARCHAR" property="sQtZd" />
-    <result column="c_zsbh" jdbcType="VARCHAR" property="cZsbh" />
-    <result column="h_zjajl" jdbcType="VARCHAR" property="hZjajl" />
-    <result column="h_mztds" jdbcType="VARCHAR" property="hMztds" />
-    <result column="h_xwms" jdbcType="VARCHAR" property="hXwms" />
-    <result column="h_hjlxdm" jdbcType="VARCHAR" property="hHjlxdm" />
+    <result column="s_jl" jdbcType="VARCHAR" property="sjl" />
+    <result column="s_gcz" jdbcType="VARCHAR" property="sgcz" />
+    <result column="s_fw" jdbcType="VARCHAR" property="sfw" />
+    <result column="s_ff" jdbcType="VARCHAR" property="sff" />
+    <result column="s_wzm" jdbcType="VARCHAR" property="swzm" />
+    <result column="s_qt_zx" jdbcType="VARCHAR" property="sqtzx" />
+    <result column="s_qt_zy" jdbcType="VARCHAR" property="sqtzy" />
+    <result column="s_qt_zd" jdbcType="VARCHAR" property="sqtzd" />
+    <result column="c_zsbh" jdbcType="VARCHAR" property="czsbh" />
+    <result column="h_zjajl" jdbcType="VARCHAR" property="hzjajl" />
+    <result column="h_mztds" jdbcType="VARCHAR" property="hmztds" />
+    <result column="h_xwms" jdbcType="VARCHAR" property="hxwms" />
+    <result column="h_hjlxdm" jdbcType="VARCHAR" property="hhjlxdm" />
     <result column="scjs" jdbcType="TIMESTAMP" property="scjs" />
     <result column="gczxm" jdbcType="VARCHAR" property="gczxm" />
     <result column="deptcode" jdbcType="VARCHAR" property="deptcode" />
@@ -123,10 +123,10 @@
       scjs, gczxm, deptcode
       )
     values (#{id,jdbcType=VARCHAR}, #{mid,jdbcType=VARCHAR}, #{fxsj,jdbcType=TIMESTAMP}, 
-      #{sJl,jdbcType=VARCHAR}, #{sGcz,jdbcType=VARCHAR}, #{sFw,jdbcType=VARCHAR}, #{sFf,jdbcType=VARCHAR}, 
-      #{sWzm,jdbcType=VARCHAR}, #{sQtZx,jdbcType=VARCHAR}, #{sQtZy,jdbcType=VARCHAR}, 
-      #{sQtZd,jdbcType=VARCHAR}, #{cZsbh,jdbcType=VARCHAR}, #{hZjajl,jdbcType=VARCHAR}, 
-      #{hMztds,jdbcType=VARCHAR}, #{hXwms,jdbcType=VARCHAR}, #{hHjlxdm,jdbcType=VARCHAR}, 
+      #{sjl,jdbcType=VARCHAR}, #{sgcz,jdbcType=VARCHAR}, #{sfw,jdbcType=VARCHAR}, #{sff,jdbcType=VARCHAR}, 
+      #{swzm,jdbcType=VARCHAR}, #{sqtzx,jdbcType=VARCHAR}, #{sqtzy,jdbcType=VARCHAR}, 
+      #{sqtzd,jdbcType=VARCHAR}, #{czsbh,jdbcType=VARCHAR}, #{hzjajl,jdbcType=VARCHAR}, 
+      #{hmztds,jdbcType=VARCHAR}, #{hxwms,jdbcType=VARCHAR}, #{hhjlxdm,jdbcType=VARCHAR}, 
       #{scjs,jdbcType=TIMESTAMP}, #{gczxm,jdbcType=VARCHAR}, #{deptcode,jdbcType=VARCHAR}
       )
   </insert>
@@ -142,43 +142,43 @@
       <if test="fxsj != null">
         fxsj,
       </if>
-      <if test="sJl != null">
+      <if test="sjl != null">
         s_jl,
       </if>
-      <if test="sGcz != null">
+      <if test="sgcz != null">
         s_gcz,
       </if>
-      <if test="sFw != null">
+      <if test="sfw != null">
         s_fw,
       </if>
-      <if test="sFf != null">
+      <if test="sff != null">
         s_ff,
       </if>
-      <if test="sWzm != null">
+      <if test="swzm != null">
         s_wzm,
       </if>
-      <if test="sQtZx != null">
+      <if test="sqtzx != null">
         s_qt_zx,
       </if>
-      <if test="sQtZy != null">
+      <if test="sqtzy != null">
         s_qt_zy,
       </if>
-      <if test="sQtZd != null">
+      <if test="sqtzd != null">
         s_qt_zd,
       </if>
-      <if test="cZsbh != null">
+      <if test="czsbh != null">
         c_zsbh,
       </if>
-      <if test="hZjajl != null">
+      <if test="hzjajl != null">
         h_zjajl,
       </if>
-      <if test="hMztds != null">
+      <if test="hmztds != null">
         h_mztds,
       </if>
-      <if test="hXwms != null">
+      <if test="hxwms != null">
         h_xwms,
       </if>
-      <if test="hHjlxdm != null">
+      <if test="hhjlxdm != null">
         h_hjlxdm,
       </if>
       <if test="scjs != null">
@@ -201,44 +201,44 @@
       <if test="fxsj != null">
         #{fxsj,jdbcType=TIMESTAMP},
       </if>
-      <if test="sJl != null">
-        #{sJl,jdbcType=VARCHAR},
+      <if test="sjl != null">
+        #{sjl,jdbcType=VARCHAR},
       </if>
-      <if test="sGcz != null">
-        #{sGcz,jdbcType=VARCHAR},
+      <if test="sgcz != null">
+        #{sgcz,jdbcType=VARCHAR},
       </if>
-      <if test="sFw != null">
-        #{sFw,jdbcType=VARCHAR},
+      <if test="sfw != null">
+        #{sfw,jdbcType=VARCHAR},
       </if>
-      <if test="sFf != null">
-        #{sFf,jdbcType=VARCHAR},
+      <if test="sff != null">
+        #{sff,jdbcType=VARCHAR},
       </if>
-      <if test="sWzm != null">
-        #{sWzm,jdbcType=VARCHAR},
+      <if test="swzm != null">
+        #{swzm,jdbcType=VARCHAR},
       </if>
-      <if test="sQtZx != null">
-        #{sQtZx,jdbcType=VARCHAR},
+      <if test="sqtzx != null">
+        #{sqtzx,jdbcType=VARCHAR},
       </if>
-      <if test="sQtZy != null">
-        #{sQtZy,jdbcType=VARCHAR},
+      <if test="sqtzy != null">
+        #{sqtzy,jdbcType=VARCHAR},
       </if>
-      <if test="sQtZd != null">
-        #{sQtZd,jdbcType=VARCHAR},
+      <if test="sqtzd != null">
+        #{sqtzd,jdbcType=VARCHAR},
       </if>
-      <if test="cZsbh != null">
-        #{cZsbh,jdbcType=VARCHAR},
+      <if test="czsbh != null">
+        #{czsbh,jdbcType=VARCHAR},
       </if>
-      <if test="hZjajl != null">
-        #{hZjajl,jdbcType=VARCHAR},
+      <if test="hzjajl != null">
+        #{hzjajl,jdbcType=VARCHAR},
       </if>
-      <if test="hMztds != null">
-        #{hMztds,jdbcType=VARCHAR},
+      <if test="hmztds != null">
+        #{hmztds,jdbcType=VARCHAR},
       </if>
-      <if test="hXwms != null">
-        #{hXwms,jdbcType=VARCHAR},
+      <if test="hxwms != null">
+        #{hxwms,jdbcType=VARCHAR},
       </if>
-      <if test="hHjlxdm != null">
-        #{hHjlxdm,jdbcType=VARCHAR},
+      <if test="hhjlxdm != null">
+        #{hhjlxdm,jdbcType=VARCHAR},
       </if>
       <if test="scjs != null">
         #{scjs,jdbcType=TIMESTAMP},
@@ -269,44 +269,44 @@
       <if test="record.fxsj != null">
         fxsj = #{record.fxsj,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.sJl != null">
-        s_jl = #{record.sJl,jdbcType=VARCHAR},
+      <if test="record.sjl != null">
+        s_jl = #{record.sjl,jdbcType=VARCHAR},
       </if>
-      <if test="record.sGcz != null">
-        s_gcz = #{record.sGcz,jdbcType=VARCHAR},
+      <if test="record.sgcz != null">
+        s_gcz = #{record.sgcz,jdbcType=VARCHAR},
       </if>
-      <if test="record.sFw != null">
-        s_fw = #{record.sFw,jdbcType=VARCHAR},
+      <if test="record.sfw != null">
+        s_fw = #{record.sfw,jdbcType=VARCHAR},
       </if>
-      <if test="record.sFf != null">
-        s_ff = #{record.sFf,jdbcType=VARCHAR},
+      <if test="record.sff != null">
+        s_ff = #{record.sff,jdbcType=VARCHAR},
       </if>
-      <if test="record.sWzm != null">
-        s_wzm = #{record.sWzm,jdbcType=VARCHAR},
+      <if test="record.swzm != null">
+        s_wzm = #{record.swzm,jdbcType=VARCHAR},
       </if>
-      <if test="record.sQtZx != null">
-        s_qt_zx = #{record.sQtZx,jdbcType=VARCHAR},
+      <if test="record.sqtzx != null">
+        s_qt_zx = #{record.sqtzx,jdbcType=VARCHAR},
       </if>
-      <if test="record.sQtZy != null">
-        s_qt_zy = #{record.sQtZy,jdbcType=VARCHAR},
+      <if test="record.sqtzy != null">
+        s_qt_zy = #{record.sqtzy,jdbcType=VARCHAR},
       </if>
-      <if test="record.sQtZd != null">
-        s_qt_zd = #{record.sQtZd,jdbcType=VARCHAR},
+      <if test="record.sqtzd != null">
+        s_qt_zd = #{record.sqtzd,jdbcType=VARCHAR},
       </if>
-      <if test="record.cZsbh != null">
-        c_zsbh = #{record.cZsbh,jdbcType=VARCHAR},
+      <if test="record.czsbh != null">
+        c_zsbh = #{record.czsbh,jdbcType=VARCHAR},
       </if>
-      <if test="record.hZjajl != null">
-        h_zjajl = #{record.hZjajl,jdbcType=VARCHAR},
+      <if test="record.hzjajl != null">
+        h_zjajl = #{record.hzjajl,jdbcType=VARCHAR},
       </if>
-      <if test="record.hMztds != null">
-        h_mztds = #{record.hMztds,jdbcType=VARCHAR},
+      <if test="record.hmztds != null">
+        h_mztds = #{record.hmztds,jdbcType=VARCHAR},
       </if>
-      <if test="record.hXwms != null">
-        h_xwms = #{record.hXwms,jdbcType=VARCHAR},
+      <if test="record.hxwms != null">
+        h_xwms = #{record.hxwms,jdbcType=VARCHAR},
       </if>
-      <if test="record.hHjlxdm != null">
-        h_hjlxdm = #{record.hHjlxdm,jdbcType=VARCHAR},
+      <if test="record.hhjlxdm != null">
+        h_hjlxdm = #{record.hhjlxdm,jdbcType=VARCHAR},
       </if>
       <if test="record.scjs != null">
         scjs = #{record.scjs,jdbcType=TIMESTAMP},
@@ -327,19 +327,19 @@
     set id = #{record.id,jdbcType=VARCHAR},
       mid = #{record.mid,jdbcType=VARCHAR},
       fxsj = #{record.fxsj,jdbcType=TIMESTAMP},
-      s_jl = #{record.sJl,jdbcType=VARCHAR},
-      s_gcz = #{record.sGcz,jdbcType=VARCHAR},
-      s_fw = #{record.sFw,jdbcType=VARCHAR},
-      s_ff = #{record.sFf,jdbcType=VARCHAR},
-      s_wzm = #{record.sWzm,jdbcType=VARCHAR},
-      s_qt_zx = #{record.sQtZx,jdbcType=VARCHAR},
-      s_qt_zy = #{record.sQtZy,jdbcType=VARCHAR},
-      s_qt_zd = #{record.sQtZd,jdbcType=VARCHAR},
-      c_zsbh = #{record.cZsbh,jdbcType=VARCHAR},
-      h_zjajl = #{record.hZjajl,jdbcType=VARCHAR},
-      h_mztds = #{record.hMztds,jdbcType=VARCHAR},
-      h_xwms = #{record.hXwms,jdbcType=VARCHAR},
-      h_hjlxdm = #{record.hHjlxdm,jdbcType=VARCHAR},
+      s_jl = #{record.sjl,jdbcType=VARCHAR},
+      s_gcz = #{record.sgcz,jdbcType=VARCHAR},
+      s_fw = #{record.sfw,jdbcType=VARCHAR},
+      s_ff = #{record.sff,jdbcType=VARCHAR},
+      s_wzm = #{record.swzm,jdbcType=VARCHAR},
+      s_qt_zx = #{record.sqtzx,jdbcType=VARCHAR},
+      s_qt_zy = #{record.sqtzy,jdbcType=VARCHAR},
+      s_qt_zd = #{record.sqtzd,jdbcType=VARCHAR},
+      c_zsbh = #{record.czsbh,jdbcType=VARCHAR},
+      h_zjajl = #{record.hzjajl,jdbcType=VARCHAR},
+      h_mztds = #{record.hmztds,jdbcType=VARCHAR},
+      h_xwms = #{record.hxwms,jdbcType=VARCHAR},
+      h_hjlxdm = #{record.hhjlxdm,jdbcType=VARCHAR},
       scjs = #{record.scjs,jdbcType=TIMESTAMP},
       gczxm = #{record.gczxm,jdbcType=VARCHAR},
       deptcode = #{record.deptcode,jdbcType=VARCHAR}
@@ -356,44 +356,44 @@
       <if test="fxsj != null">
         fxsj = #{fxsj,jdbcType=TIMESTAMP},
       </if>
-      <if test="sJl != null">
-        s_jl = #{sJl,jdbcType=VARCHAR},
+      <if test="sjl != null">
+        s_jl = #{sjl,jdbcType=VARCHAR},
       </if>
-      <if test="sGcz != null">
-        s_gcz = #{sGcz,jdbcType=VARCHAR},
+      <if test="sgcz != null">
+        s_gcz = #{sgcz,jdbcType=VARCHAR},
       </if>
-      <if test="sFw != null">
-        s_fw = #{sFw,jdbcType=VARCHAR},
+      <if test="sfw != null">
+        s_fw = #{sfw,jdbcType=VARCHAR},
       </if>
-      <if test="sFf != null">
-        s_ff = #{sFf,jdbcType=VARCHAR},
+      <if test="sff != null">
+        s_ff = #{sff,jdbcType=VARCHAR},
       </if>
-      <if test="sWzm != null">
-        s_wzm = #{sWzm,jdbcType=VARCHAR},
+      <if test="swzm != null">
+        s_wzm = #{swzm,jdbcType=VARCHAR},
       </if>
-      <if test="sQtZx != null">
-        s_qt_zx = #{sQtZx,jdbcType=VARCHAR},
+      <if test="sqtzx != null">
+        s_qt_zx = #{sqtzx,jdbcType=VARCHAR},
       </if>
-      <if test="sQtZy != null">
-        s_qt_zy = #{sQtZy,jdbcType=VARCHAR},
+      <if test="sqtzy != null">
+        s_qt_zy = #{sqtzy,jdbcType=VARCHAR},
       </if>
-      <if test="sQtZd != null">
-        s_qt_zd = #{sQtZd,jdbcType=VARCHAR},
+      <if test="sqtzd != null">
+        s_qt_zd = #{sqtzd,jdbcType=VARCHAR},
       </if>
-      <if test="cZsbh != null">
-        c_zsbh = #{cZsbh,jdbcType=VARCHAR},
+      <if test="czsbh != null">
+        c_zsbh = #{czsbh,jdbcType=VARCHAR},
       </if>
-      <if test="hZjajl != null">
-        h_zjajl = #{hZjajl,jdbcType=VARCHAR},
+      <if test="hzjajl != null">
+        h_zjajl = #{hzjajl,jdbcType=VARCHAR},
       </if>
-      <if test="hMztds != null">
-        h_mztds = #{hMztds,jdbcType=VARCHAR},
+      <if test="hmztds != null">
+        h_mztds = #{hmztds,jdbcType=VARCHAR},
       </if>
-      <if test="hXwms != null">
-        h_xwms = #{hXwms,jdbcType=VARCHAR},
+      <if test="hxwms != null">
+        h_xwms = #{hxwms,jdbcType=VARCHAR},
       </if>
-      <if test="hHjlxdm != null">
-        h_hjlxdm = #{hHjlxdm,jdbcType=VARCHAR},
+      <if test="hhjlxdm != null">
+        h_hjlxdm = #{hhjlxdm,jdbcType=VARCHAR},
       </if>
       <if test="scjs != null">
         scjs = #{scjs,jdbcType=TIMESTAMP},
@@ -411,19 +411,19 @@
     update app_monitor_discovery
     set mid = #{mid,jdbcType=VARCHAR},
       fxsj = #{fxsj,jdbcType=TIMESTAMP},
-      s_jl = #{sJl,jdbcType=VARCHAR},
-      s_gcz = #{sGcz,jdbcType=VARCHAR},
-      s_fw = #{sFw,jdbcType=VARCHAR},
-      s_ff = #{sFf,jdbcType=VARCHAR},
-      s_wzm = #{sWzm,jdbcType=VARCHAR},
-      s_qt_zx = #{sQtZx,jdbcType=VARCHAR},
-      s_qt_zy = #{sQtZy,jdbcType=VARCHAR},
-      s_qt_zd = #{sQtZd,jdbcType=VARCHAR},
-      c_zsbh = #{cZsbh,jdbcType=VARCHAR},
-      h_zjajl = #{hZjajl,jdbcType=VARCHAR},
-      h_mztds = #{hMztds,jdbcType=VARCHAR},
-      h_xwms = #{hXwms,jdbcType=VARCHAR},
-      h_hjlxdm = #{hHjlxdm,jdbcType=VARCHAR},
+      s_jl = #{sjl,jdbcType=VARCHAR},
+      s_gcz = #{sgcz,jdbcType=VARCHAR},
+      s_fw = #{sfw,jdbcType=VARCHAR},
+      s_ff = #{sff,jdbcType=VARCHAR},
+      s_wzm = #{swzm,jdbcType=VARCHAR},
+      s_qt_zx = #{sqtzx,jdbcType=VARCHAR},
+      s_qt_zy = #{sqtzy,jdbcType=VARCHAR},
+      s_qt_zd = #{sqtzd,jdbcType=VARCHAR},
+      c_zsbh = #{czsbh,jdbcType=VARCHAR},
+      h_zjajl = #{hzjajl,jdbcType=VARCHAR},
+      h_mztds = #{hmztds,jdbcType=VARCHAR},
+      h_xwms = #{hxwms,jdbcType=VARCHAR},
+      h_hjlxdm = #{hhjlxdm,jdbcType=VARCHAR},
       scjs = #{scjs,jdbcType=TIMESTAMP},
       gczxm = #{gczxm,jdbcType=VARCHAR},
       deptcode = #{deptcode,jdbcType=VARCHAR}

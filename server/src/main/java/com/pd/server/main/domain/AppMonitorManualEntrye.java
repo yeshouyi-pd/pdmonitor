@@ -9,45 +9,45 @@ public class AppMonitorManualEntrye {
 
     private Date ksgcsj;
 
-    private String pZfgcz;
+    private String pzfgcz;
 
-    private String pJlz;
+    private String pjlz;
 
-    private String pYfgcz;
+    private String pyfgcz;
 
-    private String pDlgcz;
+    private String pdlgcz;
 
-    private String pDlgczsyff;
+    private String pdlgczsyff;
 
-    private String pFjgcz;
+    private String pfjgcz;
 
-    private String wZtgczk;
+    private String wztgczk;
 
-    private String wXgszfw;
+    private String wxgszfw;
 
-    private String wXgzk;
+    private String wxgzk;
 
-    private String nJajl;
+    private String njajl;
 
-    private String nSs;
+    private String nss;
 
-    private String nCs;
+    private String ncs;
 
-    private String nJafx;
+    private String njafx;
 
-    private String nFx;
+    private String nfx;
 
-    private String vYcsl;
+    private String vycsl;
 
-    private String vDcsl;
+    private String vdcsl;
 
     private Date scsj;
 
     private Date gxsj;
 
-    private String vTbcsl;
+    private String vtbcsl;
 
-    private String vYdcsl;
+    private String vydcsl;
 
     private String deptcode;
 
@@ -77,132 +77,132 @@ public class AppMonitorManualEntrye {
         this.ksgcsj = ksgcsj;
     }
 
-    public String getpZfgcz() {
-        return pZfgcz;
+    public String getPzfgcz() {
+        return pzfgcz;
     }
 
-    public void setpZfgcz(String pZfgcz) {
-        this.pZfgcz = pZfgcz;
+    public void setPzfgcz(String pzfgcz) {
+        this.pzfgcz = pzfgcz;
     }
 
-    public String getpJlz() {
-        return pJlz;
+    public String getPjlz() {
+        return pjlz;
     }
 
-    public void setpJlz(String pJlz) {
-        this.pJlz = pJlz;
+    public void setPjlz(String pjlz) {
+        this.pjlz = pjlz;
     }
 
-    public String getpYfgcz() {
-        return pYfgcz;
+    public String getPyfgcz() {
+        return pyfgcz;
     }
 
-    public void setpYfgcz(String pYfgcz) {
-        this.pYfgcz = pYfgcz;
+    public void setPyfgcz(String pyfgcz) {
+        this.pyfgcz = pyfgcz;
     }
 
-    public String getpDlgcz() {
-        return pDlgcz;
+    public String getPdlgcz() {
+        return pdlgcz;
     }
 
-    public void setpDlgcz(String pDlgcz) {
-        this.pDlgcz = pDlgcz;
+    public void setPdlgcz(String pdlgcz) {
+        this.pdlgcz = pdlgcz;
     }
 
-    public String getpDlgczsyff() {
-        return pDlgczsyff;
+    public String getPdlgczsyff() {
+        return pdlgczsyff;
     }
 
-    public void setpDlgczsyff(String pDlgczsyff) {
-        this.pDlgczsyff = pDlgczsyff;
+    public void setPdlgczsyff(String pdlgczsyff) {
+        this.pdlgczsyff = pdlgczsyff;
     }
 
-    public String getpFjgcz() {
-        return pFjgcz;
+    public String getPfjgcz() {
+        return pfjgcz;
     }
 
-    public void setpFjgcz(String pFjgcz) {
-        this.pFjgcz = pFjgcz;
+    public void setPfjgcz(String pfjgcz) {
+        this.pfjgcz = pfjgcz;
     }
 
-    public String getwZtgczk() {
-        return wZtgczk;
+    public String getWztgczk() {
+        return wztgczk;
     }
 
-    public void setwZtgczk(String wZtgczk) {
-        this.wZtgczk = wZtgczk;
+    public void setWztgczk(String wztgczk) {
+        this.wztgczk = wztgczk;
     }
 
-    public String getwXgszfw() {
-        return wXgszfw;
+    public String getWxgszfw() {
+        return wxgszfw;
     }
 
-    public void setwXgszfw(String wXgszfw) {
-        this.wXgszfw = wXgszfw;
+    public void setWxgszfw(String wxgszfw) {
+        this.wxgszfw = wxgszfw;
     }
 
-    public String getwXgzk() {
-        return wXgzk;
+    public String getWxgzk() {
+        return wxgzk;
     }
 
-    public void setwXgzk(String wXgzk) {
-        this.wXgzk = wXgzk;
+    public void setWxgzk(String wxgzk) {
+        this.wxgzk = wxgzk;
     }
 
-    public String getnJajl() {
-        return nJajl;
+    public String getNjajl() {
+        return njajl;
     }
 
-    public void setnJajl(String nJajl) {
-        this.nJajl = nJajl;
+    public void setNjajl(String njajl) {
+        this.njajl = njajl;
     }
 
-    public String getnSs() {
-        return nSs;
+    public String getNss() {
+        return nss;
     }
 
-    public void setnSs(String nSs) {
-        this.nSs = nSs;
+    public void setNss(String nss) {
+        this.nss = nss;
     }
 
-    public String getnCs() {
-        return nCs;
+    public String getNcs() {
+        return ncs;
     }
 
-    public void setnCs(String nCs) {
-        this.nCs = nCs;
+    public void setNcs(String ncs) {
+        this.ncs = ncs;
     }
 
-    public String getnJafx() {
-        return nJafx;
+    public String getNjafx() {
+        return njafx;
     }
 
-    public void setnJafx(String nJafx) {
-        this.nJafx = nJafx;
+    public void setNjafx(String njafx) {
+        this.njafx = njafx;
     }
 
-    public String getnFx() {
-        return nFx;
+    public String getNfx() {
+        return nfx;
     }
 
-    public void setnFx(String nFx) {
-        this.nFx = nFx;
+    public void setNfx(String nfx) {
+        this.nfx = nfx;
     }
 
-    public String getvYcsl() {
-        return vYcsl;
+    public String getVycsl() {
+        return vycsl;
     }
 
-    public void setvYcsl(String vYcsl) {
-        this.vYcsl = vYcsl;
+    public void setVycsl(String vycsl) {
+        this.vycsl = vycsl;
     }
 
-    public String getvDcsl() {
-        return vDcsl;
+    public String getVdcsl() {
+        return vdcsl;
     }
 
-    public void setvDcsl(String vDcsl) {
-        this.vDcsl = vDcsl;
+    public void setVdcsl(String vdcsl) {
+        this.vdcsl = vdcsl;
     }
 
     public Date getScsj() {
@@ -221,20 +221,20 @@ public class AppMonitorManualEntrye {
         this.gxsj = gxsj;
     }
 
-    public String getvTbcsl() {
-        return vTbcsl;
+    public String getVtbcsl() {
+        return vtbcsl;
     }
 
-    public void setvTbcsl(String vTbcsl) {
-        this.vTbcsl = vTbcsl;
+    public void setVtbcsl(String vtbcsl) {
+        this.vtbcsl = vtbcsl;
     }
 
-    public String getvYdcsl() {
-        return vYdcsl;
+    public String getVydcsl() {
+        return vydcsl;
     }
 
-    public void setvYdcsl(String vYdcsl) {
-        this.vYdcsl = vYdcsl;
+    public void setVydcsl(String vydcsl) {
+        this.vydcsl = vydcsl;
     }
 
     public String getDeptcode() {
@@ -251,40 +251,5 @@ public class AppMonitorManualEntrye {
 
     public void setGczxm(String gczxm) {
         this.gczxm = gczxm;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", mid=").append(mid);
-        sb.append(", ksgcsj=").append(ksgcsj);
-        sb.append(", pZfgcz=").append(pZfgcz);
-        sb.append(", pJlz=").append(pJlz);
-        sb.append(", pYfgcz=").append(pYfgcz);
-        sb.append(", pDlgcz=").append(pDlgcz);
-        sb.append(", pDlgczsyff=").append(pDlgczsyff);
-        sb.append(", pFjgcz=").append(pFjgcz);
-        sb.append(", wZtgczk=").append(wZtgczk);
-        sb.append(", wXgszfw=").append(wXgszfw);
-        sb.append(", wXgzk=").append(wXgzk);
-        sb.append(", nJajl=").append(nJajl);
-        sb.append(", nSs=").append(nSs);
-        sb.append(", nCs=").append(nCs);
-        sb.append(", nJafx=").append(nJafx);
-        sb.append(", nFx=").append(nFx);
-        sb.append(", vYcsl=").append(vYcsl);
-        sb.append(", vDcsl=").append(vDcsl);
-        sb.append(", scsj=").append(scsj);
-        sb.append(", gxsj=").append(gxsj);
-        sb.append(", vTbcsl=").append(vTbcsl);
-        sb.append(", vYdcsl=").append(vYdcsl);
-        sb.append(", deptcode=").append(deptcode);
-        sb.append(", gczxm=").append(gczxm);
-        sb.append("]");
-        return sb.toString();
     }
 }
