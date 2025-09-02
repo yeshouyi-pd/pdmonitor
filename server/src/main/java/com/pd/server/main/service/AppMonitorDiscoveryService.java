@@ -73,4 +73,11 @@ public class AppMonitorDiscoveryService {
         appMonitorDiscoveryMapper.deleteByPrimaryKey(id);
     }
 
+    public List<AppMonitorDiscovery> selectByExample(AppMonitorDiscoveryDto appMonitorDiscoveryDto) {
+        AppMonitorDiscoveryExample appMonitorDiscoveryExample = new AppMonitorDiscoveryExample();
+        AppMonitorDiscoveryExample.Criteria criteria = appMonitorDiscoveryExample.createCriteria();
+        criteria.andGczxmEqualTo(appMonitorDiscoveryDto.getGczxm());
+        criteria.andDeptcodeEqualTo(appMonitorDiscoveryDto.getDeptcode());
+        return appMonitorDiscoveryMapper.selectByExample(appMonitorDiscoveryExample);
+    }
 }

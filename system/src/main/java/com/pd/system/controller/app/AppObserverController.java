@@ -2,10 +2,7 @@ package com.pd.system.controller.app;
 
 
 import com.pd.server.config.RedisCode;
-import com.pd.server.main.domain.AppCodeSet;
-import com.pd.server.main.domain.AppCodeType;
-import com.pd.server.main.domain.AppMonitorInfo;
-import com.pd.server.main.domain.AppVersion;
+import com.pd.server.main.domain.*;
 import com.pd.server.main.dto.AppMonitorDiscoveryDto;
 import com.pd.server.main.dto.AppMonitorInfoDto;
 import com.pd.server.main.dto.AppMonitorManualEntryeDto;
@@ -108,7 +105,7 @@ public class AppObserverController {
     }
 
     /**
-     * 根据用户部门和用户信息下载观察过程信息
+     * 根据用户部门和用户信息下载观察过程信息  所有数据
      * @param appMonitorInfoDto
      * @return
      */
@@ -121,7 +118,7 @@ public class AppObserverController {
             List<AppMonitorInfo> list = appMonitorInfoService.selectByExample(appMonitorInfoDto);
             return HttpResult.ok(list);
         }catch (Exception e){
-            return HttpResult.error("上传失败");
+            return HttpResult.error("下载失败");
         }
     }
 
@@ -133,21 +130,43 @@ public class AppObserverController {
 
     /**
      * 上传10分钟 N 信息
-     * 上传 30 分钟P  V  W  N 信息
+     * 上传 30 分钟P  V  W  N
      * 人工观察信息
      * @param appMonitorManualEntryeDto
      * @return
      */
     @PostMapping("/uploadManualEntrye")
     public HttpResult uploadMonituploadManualEntryeorInfo(@RequestBody AppMonitorManualEntryeDto appMonitorManualEntryeDto) {
-        if(StringUtils.isBlank(appMonitorManualEntryeDto.getMid()) || StringUtils.isBlank(appMonitorManualEntryeDto.getId())){
+        if(StringUtils.isBlank(appMonitorManualEntryeDto.getMid()) || StringUtils.isBlank(appMonitorManualEntryeDto.getId())
+        || StringUtils.isBlank(appMonitorManualEntryeDto.getDeptcode()) || StringUtils.isBlank(appMonitorManualEntryeDto.getGczxm())
+        ){
             return HttpResult.error("上传参数异常");
         }
         try {
-            appMonitorManualEntryeService.save(appMonitorManualEntryeDto);
-            return HttpResult.ok();
+            List<AppMonitorManualEntrye> list = appMonitorManualEntryeService.selectByExample(appMonitorManualEntryeDto);
+            return HttpResult.ok(list);
         }catch (Exception e){
             return HttpResult.error("上传失败");
+        }
+    }
+
+
+    /**
+     * 下载人10分钟 N 信息
+     * 下载  30 分钟P  V  W  N   所有数据
+     * @param appMonitorManualEntryeDto
+     * @return
+     */
+    @PostMapping("/downloadManualEntrye")
+    public HttpResult downloadManualEntrye(@RequestBody AppMonitorManualEntryeDto appMonitorManualEntryeDto) {
+        if( StringUtils.isBlank(appMonitorManualEntryeDto.getDeptcode()) || StringUtils.isBlank(appMonitorManualEntryeDto.getGczxm())){
+            return HttpResult.error("参数异常");
+        }
+        try {
+            List<AppMonitorManualEntrye> list = appMonitorManualEntryeService.selectByExample(appMonitorManualEntryeDto);
+            return HttpResult.ok(list);
+        }catch (Exception e){
+            return HttpResult.error("下载失败");
         }
     }
 
@@ -160,7 +179,8 @@ public class AppObserverController {
      */
     @PostMapping("/uploadMonitorDiscovery")
     public HttpResult uploadMonitorDiscovery(@RequestBody AppMonitorDiscoveryDto appMonitorDiscoveryDto) {
-        if(StringUtils.isBlank(appMonitorDiscoveryDto.getMid()) || StringUtils.isBlank(appMonitorDiscoveryDto.getId())){
+        if( StringUtils.isBlank(appMonitorDiscoveryDto.getDeptcode()) || StringUtils.isBlank(appMonitorDiscoveryDto.getGczxm())
+        ||StringUtils.isBlank(appMonitorDiscoveryDto.getDeptcode()) || StringUtils.isBlank(appMonitorDiscoveryDto.getGczxm())){
             return HttpResult.error("上传参数异常");
         }
         try {
@@ -170,6 +190,37 @@ public class AppObserverController {
             return HttpResult.error("上传失败");
         }
     }
+
+
+    /**
+     * 下载所有发信江豚信息
+     * @param appMonitorDiscoveryDto
+     * @return
+     */
+    @PostMapping("/downloadMonitorDiscovery")
+    public HttpResult downloadMonitorDiscovery(@RequestBody AppMonitorDiscoveryDto appMonitorDiscoveryDto) {
+        if( StringUtils.isBlank(appMonitorDiscoveryDto.getDeptcode()) || StringUtils.isBlank(appMonitorDiscoveryDto.getGczxm())){
+            return HttpResult.error("参数异常");
+        }
+        try {
+            List<AppMonitorDiscovery> list = appMonitorDiscoveryService.selectByExample(appMonitorDiscoveryDto);
+            return HttpResult.ok(list);
+        }catch (Exception e){
+            return HttpResult.error("下载失败");
+        }
+    }
+
+
+    //迅游信息分页查询
+
+
+    //关联
+
+
+    //发现江豚信息分页查询 关联迅游信息
+
+
+
 
 
 

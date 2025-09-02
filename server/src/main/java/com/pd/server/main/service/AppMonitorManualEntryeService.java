@@ -74,4 +74,12 @@ public class AppMonitorManualEntryeService {
         appMonitorManualEntryeMapper.deleteByPrimaryKey(id);
     }
 
+    public List<AppMonitorManualEntrye> selectByExample(AppMonitorManualEntryeDto appMonitorManualEntryeDto) {
+        AppMonitorManualEntryeExample appMonitorManualEntryeExample = new AppMonitorManualEntryeExample();
+        AppMonitorManualEntryeExample.Criteria criteria = appMonitorManualEntryeExample.createCriteria();
+        criteria.andDeptcodeEqualTo(appMonitorManualEntryeDto.getDeptcode());
+        criteria.andGczxmEqualTo(appMonitorManualEntryeDto.getGczxm());
+        return appMonitorManualEntryeMapper.selectByExample(appMonitorManualEntryeExample);
+
+    }
 }
