@@ -124,6 +124,11 @@ public class AppMonitorInfoDto {
         @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date gxsj;
 
+    /**
+    * 登录用户所在部门
+    */
+    private String deptcode;
+
     public String getId() {
         return id;
     }
@@ -308,6 +313,14 @@ public class AppMonitorInfoDto {
         this.gxsj = gxsj;
     }
 
+    public String getDeptcode() {
+        return deptcode;
+    }
+
+    public void setDeptcode(String deptcode) {
+        this.deptcode = deptcode;
+    }
+
 
     @Override
     public String toString() {
@@ -338,6 +351,7 @@ public class AppMonitorInfoDto {
             sb.append(", jsgcsj=").append(jsgcsj);
             sb.append(", scsj=").append(scsj);
             sb.append(", gxsj=").append(gxsj);
+            sb.append(", deptcode=").append(deptcode);
         sb.append("]");
         return sb.toString();
     }

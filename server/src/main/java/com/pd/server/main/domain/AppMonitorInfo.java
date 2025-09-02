@@ -49,6 +49,8 @@ public class AppMonitorInfo {
 
     private Date gxsj;
 
+    private String deptcode;
+
     public String getId() {
         return id;
     }
@@ -233,6 +235,14 @@ public class AppMonitorInfo {
         this.gxsj = gxsj;
     }
 
+    public String getDeptcode() {
+        return deptcode;
+    }
+
+    public void setDeptcode(String deptcode) {
+        this.deptcode = deptcode;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -262,6 +272,7 @@ public class AppMonitorInfo {
         sb.append(", jsgcsj=").append(jsgcsj);
         sb.append(", scsj=").append(scsj);
         sb.append(", gxsj=").append(gxsj);
+        sb.append(", deptcode=").append(deptcode);
         sb.append("]");
         return sb.toString();
     }
