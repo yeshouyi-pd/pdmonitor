@@ -39,72 +39,72 @@ public class AppMonitorInfoDto extends PageDto {
     /**
     * 左方观察者
     */
-    private String pZfgcz;
+    private String pzfgcz;
 
     /**
     * 记录者
     */
-    private String pJlz;
+    private String pjlz;
 
     /**
     * 右方观察者
     */
-    private String pYfgcz;
+    private String pyfgcz;
 
     /**
     * 独立观察者
     */
-    private String pDlgcz;
+    private String pdlgcz;
 
     /**
     * 独立观察者所用方法
     */
-    private String pDlgczsyff;
+    private String pdlgczsyff;
 
     /**
     * 附加观察者
     */
-    private String pFjgcz;
+    private String pfjgcz;
 
     /**
     * 总体观察状况
     */
-    private String wZtgczk;
+    private String wztgczk;
 
     /**
     * 眩光所在范围
     */
-    private String wXgszfw;
+    private String wxgszfw;
 
     /**
     * 眩光状况
     */
-    private String wXgzk;
+    private String wxgzk;
 
     /**
     * 近岸距离(米)
     */
-    private String nJajl;
+    private String njajl;
 
     /**
     * 水深(米)
     */
-    private String nSs;
+    private String nss;
 
     /**
     * 船速
     */
-    private String nCs;
+    private String ncs;
 
     /**
     * 近岸方向
     */
-    private String nJafx;
+    private String njafx;
 
     /**
     * 方向
     */
-    private String nFx;
+    private String nfx;
 
     /**
     * 结束观察时间
@@ -177,116 +177,116 @@ public class AppMonitorInfoDto extends PageDto {
         this.ksgcsj = ksgcsj;
     }
 
-    public String getPZfgcz() {
-        return pZfgcz;
+    public String getPzfgcz() {
+        return pzfgcz;
     }
 
-    public void setPZfgcz(String pZfgcz) {
-        this.pZfgcz = pZfgcz;
+    public void setPzfgcz(String pzfgcz) {
+        this.pzfgcz = pzfgcz;
     }
 
-    public String getPJlz() {
-        return pJlz;
+    public String getPjlz() {
+        return pjlz;
     }
 
-    public void setPJlz(String pJlz) {
-        this.pJlz = pJlz;
+    public void setPjlz(String pjlz) {
+        this.pjlz = pjlz;
     }
 
-    public String getPYfgcz() {
-        return pYfgcz;
+    public String getPyfgcz() {
+        return pyfgcz;
     }
 
-    public void setPYfgcz(String pYfgcz) {
-        this.pYfgcz = pYfgcz;
+    public void setPyfgcz(String pyfgcz) {
+        this.pyfgcz = pyfgcz;
     }
 
-    public String getPDlgcz() {
-        return pDlgcz;
+    public String getPdlgcz() {
+        return pdlgcz;
     }
 
-    public void setPDlgcz(String pDlgcz) {
-        this.pDlgcz = pDlgcz;
+    public void setPdlgcz(String pdlgcz) {
+        this.pdlgcz = pdlgcz;
     }
 
-    public String getPDlgczsyff() {
-        return pDlgczsyff;
+    public String getPdlgczsyff() {
+        return pdlgczsyff;
     }
 
-    public void setPDlgczsyff(String pDlgczsyff) {
-        this.pDlgczsyff = pDlgczsyff;
+    public void setPdlgczsyff(String pdlgczsyff) {
+        this.pdlgczsyff = pdlgczsyff;
     }
 
-    public String getPFjgcz() {
-        return pFjgcz;
+    public String getPfjgcz() {
+        return pfjgcz;
     }
 
-    public void setPFjgcz(String pFjgcz) {
-        this.pFjgcz = pFjgcz;
+    public void setPfjgcz(String pfjgcz) {
+        this.pfjgcz = pfjgcz;
     }
 
-    public String getWZtgczk() {
-        return wZtgczk;
+    public String getWztgczk() {
+        return wztgczk;
     }
 
-    public void setWZtgczk(String wZtgczk) {
-        this.wZtgczk = wZtgczk;
+    public void setWztgczk(String wztgczk) {
+        this.wztgczk = wztgczk;
     }
 
-    public String getWXgszfw() {
-        return wXgszfw;
+    public String getWxgszfw() {
+        return wxgszfw;
     }
 
-    public void setWXgszfw(String wXgszfw) {
-        this.wXgszfw = wXgszfw;
+    public void setWxgszfw(String wxgszfw) {
+        this.wxgszfw = wxgszfw;
     }
 
-    public String getWXgzk() {
-        return wXgzk;
+    public String getWxgzk() {
+        return wxgzk;
     }
 
-    public void setWXgzk(String wXgzk) {
-        this.wXgzk = wXgzk;
+    public void setWxgzk(String wxgzk) {
+        this.wxgzk = wxgzk;
     }
 
-    public String getNJajl() {
-        return nJajl;
+    public String getNjajl() {
+        return njajl;
     }
 
-    public void setNJajl(String nJajl) {
-        this.nJajl = nJajl;
+    public void setNjajl(String njajl) {
+        this.njajl = njajl;
     }
 
-    public String getNSs() {
-        return nSs;
+    public String getNss() {
+        return nss;
     }
 
-    public void setNSs(String nSs) {
-        this.nSs = nSs;
+    public void setNss(String nss) {
+        this.nss = nss;
     }
 
-    public String getNCs() {
-        return nCs;
+    public String getNcs() {
+        return ncs;
     }
 
-    public void setNCs(String nCs) {
-        this.nCs = nCs;
+    public void setNcs(String ncs) {
+        this.ncs = ncs;
     }
 
-    public String getNJafx() {
-        return nJafx;
+    public String getNjafx() {
+        return njafx;
     }
 
-    public void setNJafx(String nJafx) {
-        this.nJafx = nJafx;
+    public void setNjafx(String njafx) {
+        this.njafx = njafx;
     }
 
-    public String getNFx() {
-        return nFx;
+    public String getNfx() {
+        return nfx;
     }
 
-    public void setNFx(String nFx) {
-        this.nFx = nFx;
+    public void setNfx(String nfx) {
+        this.nfx = nfx;
     }
 
     public Date getJsgcsj() {
@@ -320,40 +320,4 @@ public class AppMonitorInfoDto extends PageDto {
     public void setDeptcode(String deptcode) {
         this.deptcode = deptcode;
     }
-
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-            sb.append(", id=").append(id);
-            sb.append(", kcclx=").append(kcclx);
-            sb.append(", gczxm=").append(gczxm);
-            sb.append(", gcqy=").append(gcqy);
-            sb.append(", gcdw=").append(gcdw);
-            sb.append(", ksgcsj=").append(ksgcsj);
-            sb.append(", pZfgcz=").append(pZfgcz);
-            sb.append(", pJlz=").append(pJlz);
-            sb.append(", pYfgcz=").append(pYfgcz);
-            sb.append(", pDlgcz=").append(pDlgcz);
-            sb.append(", pDlgczsyff=").append(pDlgczsyff);
-            sb.append(", pFjgcz=").append(pFjgcz);
-            sb.append(", wZtgczk=").append(wZtgczk);
-            sb.append(", wXgszfw=").append(wXgszfw);
-            sb.append(", wXgzk=").append(wXgzk);
-            sb.append(", nJajl=").append(nJajl);
-            sb.append(", nSs=").append(nSs);
-            sb.append(", nCs=").append(nCs);
-            sb.append(", nJafx=").append(nJafx);
-            sb.append(", nFx=").append(nFx);
-            sb.append(", jsgcsj=").append(jsgcsj);
-            sb.append(", scsj=").append(scsj);
-            sb.append(", gxsj=").append(gxsj);
-            sb.append(", deptcode=").append(deptcode);
-        sb.append("]");
-        return sb.toString();
-    }
-
 }
