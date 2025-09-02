@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 
 @RestController
-@RequestMapping("/app/appMonitorDiscovery")
+@RequestMapping("/admin/appMonitorDiscovery")
 public class AppMonitorDiscoveryController {
 
     private static final Logger LOG = LoggerFactory.getLogger(AppMonitorDiscoveryController.class);

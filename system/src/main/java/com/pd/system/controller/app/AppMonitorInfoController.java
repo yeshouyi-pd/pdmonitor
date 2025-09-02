@@ -1,4 +1,4 @@
-package com.pd.system.controller;
+package com.pd.system.controller.app;
 
 import com.pd.server.main.dto.AppMonitorInfoDto;
 import com.pd.server.main.dto.PageDto;

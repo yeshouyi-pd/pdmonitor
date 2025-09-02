@@ -1,10 +1,9 @@
-package com.pd.system.controller;
+package com.pd.system.controller.app;
 
 import com.pd.server.main.dto.AppVersionDto;
 import com.pd.server.main.dto.PageDto;
 import com.pd.server.main.dto.ResponseDto;
 import com.pd.server.main.service.AppVersionService;
-import com.pd.server.util.ValidatorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
