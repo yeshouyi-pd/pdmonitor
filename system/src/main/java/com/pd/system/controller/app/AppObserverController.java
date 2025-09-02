@@ -113,7 +113,7 @@ public class AppObserverController {
      */
     @PostMapping("/downloadMonitorInfo")
     public HttpResult downloadMonitorInfo(@RequestBody AppMonitorInfoDto appMonitorInfoDto) {
-        if( StringUtils.isBlank(appMonitorInfoDto.getDeptcode()) || StringUtils.isBlank(appMonitorInfoDto.getGczxm())){
+        if( StringUtils.isBlank(appMonitorInfoDto.getDeptcode())){
             return HttpResult.error("参数异常");
         }
         try {
@@ -161,7 +161,7 @@ public class AppObserverController {
      */
     @PostMapping("/downloadManualEntrye")
     public HttpResult downloadManualEntrye(@RequestBody AppMonitorManualEntryeDto appMonitorManualEntryeDto) {
-        if( StringUtils.isBlank(appMonitorManualEntryeDto.getDeptcode()) || StringUtils.isBlank(appMonitorManualEntryeDto.getGczxm())){
+        if( StringUtils.isBlank(appMonitorManualEntryeDto.getDeptcode())){
             return HttpResult.error("参数异常");
         }
         try {
@@ -201,7 +201,7 @@ public class AppObserverController {
      */
     @PostMapping("/downloadMonitorDiscovery")
     public HttpResult downloadMonitorDiscovery(@RequestBody AppMonitorDiscoveryDto appMonitorDiscoveryDto) {
-        if( StringUtils.isBlank(appMonitorDiscoveryDto.getDeptcode()) || StringUtils.isBlank(appMonitorDiscoveryDto.getGczxm())){
+        if( StringUtils.isBlank(appMonitorDiscoveryDto.getDeptcode())){
             return HttpResult.error("参数异常");
         }
         try {
