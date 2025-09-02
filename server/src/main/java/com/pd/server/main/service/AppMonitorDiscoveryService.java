@@ -40,11 +40,14 @@ public class AppMonitorDiscoveryService {
     */
     public void save(AppMonitorDiscoveryDto appMonitorDiscoveryDto) {
         AppMonitorDiscovery appMonitorDiscovery = CopyUtil.copy(appMonitorDiscoveryDto, AppMonitorDiscovery.class);
-        if (StringUtils.isEmpty(appMonitorDiscoveryDto.getId())) {
+        try {
+            appMonitorDiscovery.setScjs(new Date());
             this.insert(appMonitorDiscovery);
-        } else {
+        } catch (Exception e) {
             this.update(appMonitorDiscovery);
         }
+
+
     }
 
     /**

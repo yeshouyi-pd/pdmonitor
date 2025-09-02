@@ -4,16 +4,17 @@ package com.pd.system.controller.app;
 import com.pd.server.config.RedisCode;
 import com.pd.server.main.domain.AppCodeSet;
 import com.pd.server.main.domain.AppCodeType;
+import com.pd.server.main.domain.AppMonitorInfo;
 import com.pd.server.main.domain.AppVersion;
+import com.pd.server.main.dto.AppMonitorDiscoveryDto;
+import com.pd.server.main.dto.AppMonitorInfoDto;
+import com.pd.server.main.dto.AppMonitorManualEntryeDto;
 import com.pd.server.main.dto.ResponseDto;
-import com.pd.server.main.service.AppCodeSetService;
-import com.pd.server.main.service.AppCodeTypeService;
-import com.pd.server.main.service.AppVersionService;
+import com.pd.server.main.service.*;
 import com.pd.system.controller.conf.HttpResult;
 import com.pd.system.controller.conf.RedisConfig;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -31,6 +32,15 @@ public class AppObserverController {
 
     @Resource
     private AppCodeTypeService appCodeTypeService;
+
+    @Resource
+    private AppMonitorInfoService appMonitorInfoService;
+
+    @Resource
+    private AppMonitorDiscoveryService appMonitorDiscoveryService;
+
+    @Resource
+    private AppMonitorManualEntryeService appMonitorManualEntryeService;
 
 
     /**
@@ -77,15 +87,64 @@ public class AppObserverController {
 
     }
 
-    //上传查验开始结束信息
 
+    /**
+     * 上传开始和结束信息
+     * @param appMonitorInfoDto
+     * @return
+     */
 
+    @PostMapping("/uploadMonitorInfo")
+    public HttpResult uploadMonitorInfo(@RequestBody AppMonitorInfoDto appMonitorInfoDto) {
+        if(StringUtils.isBlank(appMonitorInfoDto.getId()) || StringUtils.isBlank(appMonitorInfoDto.getDeptcode())){
+            return HttpResult.error("上传参数异常");
+        }
+        try {
+            appMonitorInfoService.save(appMonitorInfoDto);
+            return HttpResult.ok();
+        }catch (Exception e){
+            return HttpResult.error("上传失败");
+        }
+    }
 
+    /**
+     * 上传10分钟 N 信息
+     * 上传 30 分钟P  V  W  N 信息
+     * 人工观察信息
+     * @param appMonitorManualEntryeDto
+     * @return
+     */
+    @PostMapping("/uploadManualEntrye")
+    public HttpResult uploadMonituploadManualEntryeorInfo(@RequestBody AppMonitorManualEntryeDto appMonitorManualEntryeDto) {
+        if(StringUtils.isBlank(appMonitorManualEntryeDto.getMid()) || StringUtils.isBlank(appMonitorManualEntryeDto.getId())){
+            return HttpResult.error("上传参数异常");
+        }
+        try {
+            appMonitorManualEntryeService.save(appMonitorManualEntryeDto);
+            return HttpResult.ok();
+        }catch (Exception e){
+            return HttpResult.error("上传失败");
+        }
+    }
 
-    //上传10分钟 N 信息
+    /**
+     * 获取发现江豚信息
+     * @param appMonitorDiscoveryDto
+     * @return
+     */
+    @PostMapping("/uploadMonitorDiscovery")
+    public HttpResult uploadMonitorDiscovery(@RequestBody AppMonitorDiscoveryDto appMonitorDiscoveryDto) {
+        if(StringUtils.isBlank(appMonitorDiscoveryDto.getMid()) || StringUtils.isBlank(appMonitorDiscoveryDto.getId())){
+            return HttpResult.error("上传参数异常");
+        }
+        try {
+            appMonitorDiscoveryService.save(appMonitorDiscoveryDto);
+            return HttpResult.ok();
+        }catch (Exception e){
+            return HttpResult.error("上传失败");
+        }
+    }
 
-
-    //上传 30 分钟P  V  W  N 信息
 
 
 

@@ -40,11 +40,15 @@ public class AppMonitorManualEntryeService {
     */
     public void save(AppMonitorManualEntryeDto appMonitorManualEntryeDto) {
         AppMonitorManualEntrye appMonitorManualEntrye = CopyUtil.copy(appMonitorManualEntryeDto, AppMonitorManualEntrye.class);
-        if (StringUtils.isEmpty(appMonitorManualEntryeDto.getId())) {
-            this.insert(appMonitorManualEntrye);
-        } else {
-            this.update(appMonitorManualEntrye);
-        }
+          try {
+              appMonitorManualEntrye.setScsj(new Date());
+              this.insert(appMonitorManualEntrye);
+          } catch (Exception e) {
+              appMonitorManualEntrye.setGxsj(new Date());
+              this.update(appMonitorManualEntrye);
+          }
+
+
     }
 
     /**
