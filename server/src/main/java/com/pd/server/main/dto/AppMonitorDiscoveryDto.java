@@ -96,6 +96,9 @@ public class AppMonitorDiscoveryDto extends  PageDto{
 
     private String deptcode;
 
+
+    private String gps;
+
     public String getId() {
         return id;
     }
@@ -246,5 +249,13 @@ public class AppMonitorDiscoveryDto extends  PageDto{
 
     public void setDeptcode(String deptcode) {
         this.deptcode = deptcode;
+    }
+
+    public String getGps() {
+        return gps;
+    }
+
+    public void setGps(String gps) {
+        this.gps = gps;
     }
 }

@@ -41,6 +41,8 @@ public class AppMonitorDiscovery {
 
     private String deptcode;
 
+    private String gps;
+
     public String getId() {
         return id;
     }
@@ -191,5 +193,13 @@ public class AppMonitorDiscovery {
 
     public void setDeptcode(String deptcode) {
         this.deptcode = deptcode;
+    }
+
+    public String getGps() {
+        return gps;
+    }
+
+    public void setGps(String gps) {
+        this.gps = gps;
     }
 }

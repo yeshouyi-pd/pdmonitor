@@ -53,6 +53,8 @@ public class AppMonitorManualEntrye {
 
     private String gczxm;
 
+    private String gps;
+
     public String getId() {
         return id;
     }
@@ -251,5 +253,13 @@ public class AppMonitorManualEntrye {
 
     public void setGczxm(String gczxm) {
         this.gczxm = gczxm;
+    }
+
+    public String getGps() {
+        return gps;
+    }
+
+    public void setGps(String gps) {
+        this.gps = gps;
     }
 }
