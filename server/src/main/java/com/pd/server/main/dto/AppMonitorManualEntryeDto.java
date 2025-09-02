@@ -3,7 +3,7 @@ package com.pd.server.main.dto;
         import java.util.Date;
         import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class AppMonitorManualEntryeDto extends PageDto {
+public class AppMonitorManualEntryeDto {
 
     /**
     * 
@@ -123,6 +123,7 @@ public class AppMonitorManualEntryeDto extends PageDto {
     */
     private String vYdcsl;
 
+
     private String gczxm;
 
     private String deptcode;
@@ -151,131 +152,131 @@ public class AppMonitorManualEntryeDto extends PageDto {
         this.ksgcsj = ksgcsj;
     }
 
-    public String getpZfgcz() {
+    public String getPZfgcz() {
         return pZfgcz;
     }
 
-    public void setpZfgcz(String pZfgcz) {
+    public void setPZfgcz(String pZfgcz) {
         this.pZfgcz = pZfgcz;
     }
 
-    public String getpJlz() {
+    public String getPJlz() {
         return pJlz;
     }
 
-    public void setpJlz(String pJlz) {
+    public void setPJlz(String pJlz) {
         this.pJlz = pJlz;
     }
 
-    public String getpYfgcz() {
+    public String getPYfgcz() {
         return pYfgcz;
     }
 
-    public void setpYfgcz(String pYfgcz) {
+    public void setPYfgcz(String pYfgcz) {
         this.pYfgcz = pYfgcz;
     }
 
-    public String getpDlgcz() {
+    public String getPDlgcz() {
         return pDlgcz;
     }
 
-    public void setpDlgcz(String pDlgcz) {
+    public void setPDlgcz(String pDlgcz) {
         this.pDlgcz = pDlgcz;
     }
 
-    public String getpDlgczsyff() {
+    public String getPDlgczsyff() {
         return pDlgczsyff;
     }
 
-    public void setpDlgczsyff(String pDlgczsyff) {
+    public void setPDlgczsyff(String pDlgczsyff) {
         this.pDlgczsyff = pDlgczsyff;
     }
 
-    public String getpFjgcz() {
+    public String getPFjgcz() {
         return pFjgcz;
     }
 
-    public void setpFjgcz(String pFjgcz) {
+    public void setPFjgcz(String pFjgcz) {
         this.pFjgcz = pFjgcz;
     }
 
-    public String getwZtgczk() {
+    public String getWZtgczk() {
         return wZtgczk;
     }
 
-    public void setwZtgczk(String wZtgczk) {
+    public void setWZtgczk(String wZtgczk) {
         this.wZtgczk = wZtgczk;
     }
 
-    public String getwXgszfw() {
+    public String getWXgszfw() {
         return wXgszfw;
     }
 
-    public void setwXgszfw(String wXgszfw) {
+    public void setWXgszfw(String wXgszfw) {
         this.wXgszfw = wXgszfw;
     }
 
-    public String getwXgzk() {
+    public String getWXgzk() {
         return wXgzk;
     }
 
-    public void setwXgzk(String wXgzk) {
+    public void setWXgzk(String wXgzk) {
         this.wXgzk = wXgzk;
     }
 
-    public String getnJajl() {
+    public String getNJajl() {
         return nJajl;
     }
 
-    public void setnJajl(String nJajl) {
+    public void setNJajl(String nJajl) {
         this.nJajl = nJajl;
     }
 
-    public String getnSs() {
+    public String getNSs() {
         return nSs;
     }
 
-    public void setnSs(String nSs) {
+    public void setNSs(String nSs) {
         this.nSs = nSs;
     }
 
-    public String getnCs() {
+    public String getNCs() {
         return nCs;
     }
 
-    public void setnCs(String nCs) {
+    public void setNCs(String nCs) {
         this.nCs = nCs;
     }
 
-    public String getnJafx() {
+    public String getNJafx() {
         return nJafx;
     }
 
-    public void setnJafx(String nJafx) {
+    public void setNJafx(String nJafx) {
         this.nJafx = nJafx;
     }
 
-    public String getnFx() {
+    public String getNFx() {
         return nFx;
     }
 
-    public void setnFx(String nFx) {
+    public void setNFx(String nFx) {
         this.nFx = nFx;
     }
 
-    public String getvYcsl() {
+    public String getVYcsl() {
         return vYcsl;
     }
 
-    public void setvYcsl(String vYcsl) {
+    public void setVYcsl(String vYcsl) {
         this.vYcsl = vYcsl;
     }
 
-    public String getvDcsl() {
+    public String getVDcsl() {
         return vDcsl;
     }
 
-    public void setvDcsl(String vDcsl) {
+    public void setVDcsl(String vDcsl) {
         this.vDcsl = vDcsl;
     }
 
@@ -295,19 +296,19 @@ public class AppMonitorManualEntryeDto extends PageDto {
         this.gxsj = gxsj;
     }
 
-    public String getvTbcsl() {
+    public String getVTbcsl() {
         return vTbcsl;
     }
 
-    public void setvTbcsl(String vTbcsl) {
+    public void setVTbcsl(String vTbcsl) {
         this.vTbcsl = vTbcsl;
     }
 
-    public String getvYdcsl() {
+    public String getVYdcsl() {
         return vYdcsl;
     }
 
-    public void setvYdcsl(String vYdcsl) {
+    public void setVYdcsl(String vYdcsl) {
         this.vYdcsl = vYdcsl;
     }
 
