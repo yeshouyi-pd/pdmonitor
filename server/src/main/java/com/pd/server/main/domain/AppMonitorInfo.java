@@ -7,6 +7,8 @@ public class AppMonitorInfo {
 
     private String kcclx;
 
+    private String gczzwm;
+
     private String gczxm;
 
     private String gcqy;
@@ -241,5 +243,13 @@ public class AppMonitorInfo {
 
     public void setDeptcode(String deptcode) {
         this.deptcode = deptcode;
+    }
+
+    public String getGczzwm() {
+        return gczzwm;
+    }
+
+    public void setGczzwm(String gczzwm) {
+        this.gczzwm = gczzwm;
     }
 }
