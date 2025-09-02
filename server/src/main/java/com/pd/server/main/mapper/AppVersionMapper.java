@@ -10,7 +10,7 @@ public interface AppVersionMapper {
 
     int deleteByExample(AppVersionExample example);
 
-    int deleteByPrimaryKey(String id);
+    int deleteByPrimaryKey(Long id);
 
     int insert(AppVersion record);
 
@@ -18,13 +18,7 @@ public interface AppVersionMapper {
 
     List<AppVersion> selectByExample(AppVersionExample example);
 
-    AppVersion selectByPrimaryKey(String id);
-
     int updateByExampleSelective(@Param("record") AppVersion record, @Param("example") AppVersionExample example);
 
     int updateByExample(@Param("record") AppVersion record, @Param("example") AppVersionExample example);
-
-    int updateByPrimaryKeySelective(AppVersion record);
-
-    int updateByPrimaryKey(AppVersion record);
 }

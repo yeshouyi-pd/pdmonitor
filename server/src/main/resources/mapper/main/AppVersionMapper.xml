@@ -2,8 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.pd.server.main.mapper.AppVersionMapper">
   <resultMap id="BaseResultMap" type="com.pd.server.main.domain.AppVersion">
-    <id column="id" jdbcType="VARCHAR" property="id" />
-    <result column="version" jdbcType="BIGINT" property="version" />
+    <id column="id" jdbcType="BIGINT" property="id" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -64,7 +63,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, version
+    id
   </sql>
   <select id="selectByExample" parameterType="com.pd.server.main.domain.AppVersionExample" resultMap="BaseResultMap">
     select
@@ -80,15 +79,9 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from app_version
-    where id = #{id,jdbcType=VARCHAR}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from app_version
-    where id = #{id,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
   </delete>
   <delete id="deleteByExample" parameterType="com.pd.server.main.domain.AppVersionExample">
     delete from app_version
@@ -97,8 +90,8 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.pd.server.main.domain.AppVersion">
-    insert into app_version (id, version)
-    values (#{id,jdbcType=VARCHAR}, #{version,jdbcType=BIGINT})
+    insert into app_version (id)
+    values (#{id,jdbcType=BIGINT})
   </insert>
   <insert id="insertSelective" parameterType="com.pd.server.main.domain.AppVersion">
     insert into app_version
@@ -106,16 +99,10 @@
       <if test="id != null">
         id,
       </if>
-      <if test="version != null">
-        version,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
-        #{id,jdbcType=VARCHAR},
-      </if>
-      <if test="version != null">
-        #{version,jdbcType=BIGINT},
+        #{id,jdbcType=BIGINT},
       </if>
     </trim>
   </insert>
@@ -129,10 +116,7 @@
     update app_version
     <set>
       <if test="record.id != null">
-        id = #{record.id,jdbcType=VARCHAR},
-      </if>
-      <if test="record.version != null">
-        version = #{record.version,jdbcType=BIGINT},
+        id = #{record.id,jdbcType=BIGINT},
       </if>
     </set>
     <if test="_parameter != null">
@@ -141,24 +125,9 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update app_version
-    set id = #{record.id,jdbcType=VARCHAR},
-      version = #{record.version,jdbcType=BIGINT}
+    set id = #{record.id,jdbcType=BIGINT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
-  </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.pd.server.main.domain.AppVersion">
-    update app_version
-    <set>
-      <if test="version != null">
-        version = #{version,jdbcType=BIGINT},
-      </if>
-    </set>
-    where id = #{id,jdbcType=VARCHAR}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.pd.server.main.domain.AppVersion">
-    update app_version
-    set version = #{version,jdbcType=BIGINT}
-    where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>
