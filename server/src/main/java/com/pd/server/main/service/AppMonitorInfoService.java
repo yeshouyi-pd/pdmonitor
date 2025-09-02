@@ -49,7 +49,6 @@ public class AppMonitorInfoService {
         AppMonitorInfoExample appMonitorInfoExample = new AppMonitorInfoExample();
         AppMonitorInfoExample.Criteria ca = appMonitorInfoExample.createCriteria();
         ca.andDeptcodeEqualTo(appMonitorInfoDto.getDeptcode());
-        ca.andGczxmEqualTo(appMonitorInfoDto.getGczxm());
         appMonitorInfoExample.setOrderByClause(" ksgcsj desc");
         return appMonitorInfoMapper.selectByExample(appMonitorInfoExample);
 

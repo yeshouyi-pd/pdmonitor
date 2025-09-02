@@ -77,7 +77,6 @@ public class AppMonitorManualEntryeService {
         AppMonitorManualEntryeExample appMonitorManualEntryeExample = new AppMonitorManualEntryeExample();
         AppMonitorManualEntryeExample.Criteria criteria = appMonitorManualEntryeExample.createCriteria();
         criteria.andDeptcodeEqualTo(appMonitorManualEntryeDto.getDeptcode());
-        criteria.andGczxmEqualTo(appMonitorManualEntryeDto.getGczxm());
         return appMonitorManualEntryeMapper.selectByExample(appMonitorManualEntryeExample);
 
     }
