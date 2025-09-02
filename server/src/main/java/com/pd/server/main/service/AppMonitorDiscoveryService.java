@@ -9,8 +9,8 @@ import com.pd.server.util.CopyUtil;
 import com.pd.server.util.UuidUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -25,14 +25,25 @@ public class AppMonitorDiscoveryService {
     /**
     * 列表查询
     */
-    public void list(PageDto pageDto) {
+    public PageDto list(PageDto pageDto) {
     PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
         AppMonitorDiscoveryExample appMonitorDiscoveryExample = new AppMonitorDiscoveryExample();
+        AppMonitorDiscoveryExample.Criteria criteria = appMonitorDiscoveryExample.createCriteria();
+        AppMonitorDiscoveryDto appMonitorDiscoveryDto = CopyUtil.copy(pageDto, AppMonitorDiscoveryDto.class);
+        if(StringUtils.isNotBlank(appMonitorDiscoveryDto.getDeptcode())){
+            criteria.andDeptcodeEqualTo(appMonitorDiscoveryDto.getDeptcode());
+        }
+        if (StringUtils.isNotBlank(appMonitorDiscoveryDto.getGczxm())){
+            criteria.andGczxmEqualTo(appMonitorDiscoveryDto.getGczxm());
+        }
+        appMonitorDiscoveryExample.setOrderByClause(" scjs desc");
+
         List<AppMonitorDiscovery> appMonitorDiscoveryList = appMonitorDiscoveryMapper.selectByExample(appMonitorDiscoveryExample);
         PageInfo<AppMonitorDiscovery> pageInfo = new PageInfo<>(appMonitorDiscoveryList);
         pageDto.setTotal(pageInfo.getTotal());
         List<AppMonitorDiscoveryDto> appMonitorDiscoveryDtoList = CopyUtil.copyList(appMonitorDiscoveryList, AppMonitorDiscoveryDto.class);
         pageDto.setList(appMonitorDiscoveryDtoList);
+        return pageDto;
     }
 
     /**
@@ -78,6 +89,13 @@ public class AppMonitorDiscoveryService {
         AppMonitorDiscoveryExample.Criteria criteria = appMonitorDiscoveryExample.createCriteria();
         criteria.andGczxmEqualTo(appMonitorDiscoveryDto.getGczxm());
         criteria.andDeptcodeEqualTo(appMonitorDiscoveryDto.getDeptcode());
+        return appMonitorDiscoveryMapper.selectByExample(appMonitorDiscoveryExample);
+    }
+
+    public List<AppMonitorDiscovery> selectByMid(String mid) {
+        AppMonitorDiscoveryExample appMonitorDiscoveryExample = new AppMonitorDiscoveryExample();
+        AppMonitorDiscoveryExample.Criteria criteria = appMonitorDiscoveryExample.createCriteria();
+        criteria.andMidEqualTo(mid);
         return appMonitorDiscoveryMapper.selectByExample(appMonitorDiscoveryExample);
     }
 }
