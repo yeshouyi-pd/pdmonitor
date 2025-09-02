@@ -5,6 +5,7 @@ import com.pd.server.config.RedisCode;
 import com.pd.server.main.domain.*;
 import com.pd.server.main.dto.*;
 import com.pd.server.main.service.*;
+import com.pd.server.util.CopyUtil;
 import com.pd.system.controller.conf.HttpResult;
 import com.pd.system.controller.conf.RedisConfig;
 import org.apache.commons.lang.StringUtils;
@@ -63,8 +64,9 @@ public class AppObserverController {
     @GetMapping("/getAppCodeSet")
     public HttpResult getAppCodeSet() {
         List<AppCodeSet> list = appCodeSetService.selectByExample();
+        List<AppCodeSetDto> appCodeSetDtoList = CopyUtil.copyList(list, AppCodeSetDto.class);
         try {
-            return HttpResult.ok(list);
+            return HttpResult.ok(appCodeSetDtoList);
         }catch (Exception e){
             return HttpResult.error("查询失败");
         }
@@ -78,8 +80,9 @@ public class AppObserverController {
     @GetMapping("/getAppCodeType")
     public HttpResult getAppCodeType() {
         List<AppCodeType> list = appCodeTypeService.selectByExample();
+        List<AppCodeTypeDto> AppCodeTypeDtoList = CopyUtil.copyList(list, AppCodeTypeDto.class);
         try {
-            return HttpResult.ok(list);
+            return HttpResult.ok(AppCodeTypeDtoList);
         }catch (Exception e){
             return HttpResult.error("查询失败");
         }
@@ -118,7 +121,8 @@ public class AppObserverController {
         }
         try {
             List<AppMonitorInfo> list = appMonitorInfoService.selectByExample(appMonitorInfoDto);
-            return HttpResult.ok(list);
+            List<AppMonitorInfoDto> respList = CopyUtil.copyList(list, AppMonitorInfoDto.class);
+            return HttpResult.ok(respList);
         }catch (Exception e){
             return HttpResult.error("下载失败");
         }
@@ -166,7 +170,8 @@ public class AppObserverController {
         }
         try {
             List<AppMonitorManualEntrye> list = appMonitorManualEntryeService.selectByExample(appMonitorManualEntryeDto);
-            return HttpResult.ok(list);
+            List<AppMonitorManualEntryeDto> respList = CopyUtil.copyList(list, AppMonitorManualEntryeDto.class);
+            return HttpResult.ok(respList);
         }catch (Exception e){
             return HttpResult.error("下载失败");
         }
@@ -206,7 +211,8 @@ public class AppObserverController {
         }
         try {
             List<AppMonitorDiscovery> list = appMonitorDiscoveryService.selectByExample(appMonitorDiscoveryDto);
-            return HttpResult.ok(list);
+            List<AppMonitorDiscoveryDto> respList = CopyUtil.copyList(list, AppMonitorDiscoveryDto.class);
+            return HttpResult.ok(respList);
         }catch (Exception e){
             return HttpResult.error("下载失败");
         }
@@ -244,7 +250,8 @@ public class AppObserverController {
         }
         try {
             List<AppMonitorDiscovery> list = appMonitorDiscoveryService.selectByMid(mid);
-            return HttpResult.ok(list);
+            List<AppMonitorDiscoveryDto> respList = CopyUtil.copyList(list, AppMonitorDiscoveryDto.class);
+            return HttpResult.ok(respList);
         }catch(Exception e){
             return HttpResult.error("下载失败");
         }
@@ -262,7 +269,8 @@ public class AppObserverController {
         }
         try {
             List<AppMonitorManualEntrye> list = appMonitorManualEntryeService.selectByMid(mid);
-            return HttpResult.ok(list);
+            List<AppMonitorManualEntryeDto> respList = CopyUtil.copyList(list, AppMonitorManualEntryeDto.class);
+            return HttpResult.ok(respList);
         }catch(Exception e){
             return HttpResult.error("下载失败");
         }
@@ -300,7 +308,8 @@ public class AppObserverController {
         }
         try {
             AppMonitorInfo appMonitorInfo =  appMonitorInfoService.findById(id);
-            return HttpResult.ok(appMonitorInfo);
+            AppMonitorInfoDto dao =  CopyUtil.copy(appMonitorInfo ,AppMonitorInfoDto.class);
+            return HttpResult.ok(dao);
         }catch(Exception e){
             return HttpResult.error("下载失败");
         }
