@@ -25,6 +25,7 @@
     <result column="jsgcsj" jdbcType="TIMESTAMP" property="jsgcsj" />
     <result column="scsj" jdbcType="TIMESTAMP" property="scsj" />
     <result column="gxsj" jdbcType="TIMESTAMP" property="gxsj" />
+    <result column="deptcode" jdbcType="VARCHAR" property="deptcode" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -87,7 +88,7 @@
   <sql id="Base_Column_List">
     id, kcclx, gczxm, gcqy, gcdw, ksgcsj, p_zfgcz, p_jlz, p_yfgcz, p_dlgcz, p_dlgczsyff, 
     p_fjgcz, w_ztgczk, w_xgszfw, w_xgzk, n_jajl, n_ss, n_cs, n_jafx, n_fx, jsgcsj, scsj, 
-    gxsj
+    gxsj, deptcode
   </sql>
   <select id="selectByExample" parameterType="com.pd.server.main.domain.AppMonitorInfoExample" resultMap="BaseResultMap">
     select
@@ -127,7 +128,7 @@
       w_ztgczk, w_xgszfw, w_xgzk, 
       n_jajl, n_ss, n_cs, n_jafx, 
       n_fx, jsgcsj, scsj, 
-      gxsj)
+      gxsj, deptcode)
     values (#{id,jdbcType=VARCHAR}, #{kcclx,jdbcType=VARCHAR}, #{gczxm,jdbcType=VARCHAR}, 
       #{gcqy,jdbcType=VARCHAR}, #{gcdw,jdbcType=VARCHAR}, #{ksgcsj,jdbcType=TIMESTAMP}, 
       #{pZfgcz,jdbcType=VARCHAR}, #{pJlz,jdbcType=VARCHAR}, #{pYfgcz,jdbcType=VARCHAR}, 
@@ -135,7 +136,7 @@
       #{wZtgczk,jdbcType=VARCHAR}, #{wXgszfw,jdbcType=VARCHAR}, #{wXgzk,jdbcType=VARCHAR}, 
       #{nJajl,jdbcType=VARCHAR}, #{nSs,jdbcType=VARCHAR}, #{nCs,jdbcType=VARCHAR}, #{nJafx,jdbcType=VARCHAR}, 
       #{nFx,jdbcType=VARCHAR}, #{jsgcsj,jdbcType=TIMESTAMP}, #{scsj,jdbcType=TIMESTAMP}, 
-      #{gxsj,jdbcType=TIMESTAMP})
+      #{gxsj,jdbcType=TIMESTAMP}, #{deptcode,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.pd.server.main.domain.AppMonitorInfo">
     insert into app_monitor_info
@@ -209,6 +210,9 @@
       <if test="gxsj != null">
         gxsj,
       </if>
+      <if test="deptcode != null">
+        deptcode,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -279,6 +283,9 @@
       </if>
       <if test="gxsj != null">
         #{gxsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deptcode != null">
+        #{deptcode,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -360,6 +367,9 @@
       <if test="record.gxsj != null">
         gxsj = #{record.gxsj,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.deptcode != null">
+        deptcode = #{record.deptcode,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -389,7 +399,8 @@
       n_fx = #{record.nFx,jdbcType=VARCHAR},
       jsgcsj = #{record.jsgcsj,jdbcType=TIMESTAMP},
       scsj = #{record.scsj,jdbcType=TIMESTAMP},
-      gxsj = #{record.gxsj,jdbcType=TIMESTAMP}
+      gxsj = #{record.gxsj,jdbcType=TIMESTAMP},
+      deptcode = #{record.deptcode,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -463,6 +474,9 @@
       <if test="gxsj != null">
         gxsj = #{gxsj,jdbcType=TIMESTAMP},
       </if>
+      <if test="deptcode != null">
+        deptcode = #{deptcode,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -489,7 +503,8 @@
       n_fx = #{nFx,jdbcType=VARCHAR},
       jsgcsj = #{jsgcsj,jdbcType=TIMESTAMP},
       scsj = #{scsj,jdbcType=TIMESTAMP},
-      gxsj = #{gxsj,jdbcType=TIMESTAMP}
+      gxsj = #{gxsj,jdbcType=TIMESTAMP},
+      deptcode = #{deptcode,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

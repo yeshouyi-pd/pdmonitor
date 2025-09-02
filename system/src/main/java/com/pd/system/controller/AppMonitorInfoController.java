@@ -1,4 +1,4 @@
-package com.pd.system.controller.app;
+package com.pd.system.controller;
 
 import com.pd.server.main.dto.AppMonitorInfoDto;
 import com.pd.server.main.dto.PageDto;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 
 @RestController
-@RequestMapping("/app/appMonitorInfo")
+@RequestMapping("/admin/appMonitorInfo")
 public class AppMonitorInfoController {
 
     private static final Logger LOG = LoggerFactory.getLogger(AppMonitorInfoController.class);
@@ -56,6 +56,7 @@ public class AppMonitorInfoController {
                 ValidatorUtil.length(appMonitorInfoDto.getNCs(), "船速", 1, 10);
                 ValidatorUtil.length(appMonitorInfoDto.getNJafx(), "近岸方向", 1, 10);
                 ValidatorUtil.length(appMonitorInfoDto.getNFx(), "方向", 1, 10);
+                ValidatorUtil.length(appMonitorInfoDto.getDeptcode(), "登录用户所在部门", 1, 100);
 
         ResponseDto responseDto = new ResponseDto();
         appMonitorInfoService.save(appMonitorInfoDto);
