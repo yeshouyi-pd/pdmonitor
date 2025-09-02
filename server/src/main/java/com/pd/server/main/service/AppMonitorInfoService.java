@@ -40,9 +40,11 @@ public class AppMonitorInfoService {
     */
     public void save(AppMonitorInfoDto appMonitorInfoDto) {
         AppMonitorInfo appMonitorInfo = CopyUtil.copy(appMonitorInfoDto, AppMonitorInfo.class);
-        if (StringUtils.isEmpty(appMonitorInfoDto.getId())) {
+        try {
+            appMonitorInfo.setScsj(new Date());
             this.insert(appMonitorInfo);
-        } else {
+        } catch (Exception e) {
+            appMonitorInfo.setGxsj(new Date());
             this.update(appMonitorInfo);
         }
     }
