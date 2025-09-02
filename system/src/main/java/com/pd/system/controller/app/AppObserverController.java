@@ -145,8 +145,8 @@ public class AppObserverController {
             return HttpResult.error("上传参数异常");
         }
         try {
-            List<AppMonitorManualEntrye> list = appMonitorManualEntryeService.selectByExample(appMonitorManualEntryeDto);
-            return HttpResult.ok(list);
+            appMonitorManualEntryeService.save(appMonitorManualEntryeDto);
+            return HttpResult.ok();
         }catch (Exception e){
             return HttpResult.error("上传失败");
         }

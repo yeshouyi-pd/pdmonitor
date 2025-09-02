@@ -8,50 +8,96 @@ public class AppMonitorManualEntryeDto {
     private String id;
 
     private String mid;
-
+    /**
+     * 人工观察录入时间
+     */
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date ksgcsj;
 
+    /**
+     * 左方观察者
+     */
     private String pzfgcz;
-
+    /**
+     * 记录者
+     */
     private String pjlz;
-
+    /**
+     * 右方观察者
+     */
     private String pyfgcz;
-
+    /**
+     * 独立观察者
+     */
     private String pdlgcz;
-
+    /**
+     * 独立观察者所用方法
+     */
     private String pdlgczsyff;
-
+    /**
+     * 附加观察者
+     */
     private String pfjgcz;
-
+    /**
+     * 总体观察状况
+     */
     private String wztgczk;
 
+    /**
+     * 眩光所在范围
+     */
     private String wxgszfw;
-
+    /**
+     * 眩光状况
+     */
     private String wxgzk;
-
+    /**
+     * 近岸距离(米)
+     */
     private String njajl;
-
+    /**
+     * 水深(米)
+     */
     private String nss;
-
+    /**
+     * 船速
+     */
     private String ncs;
-
+    /**
+     * 近岸方向
+     */
     private String njafx;
-
+    /**
+     * 方向
+     */
     private String nfx;
-
+    /**
+     * 渔船数量
+     */
     private String vycsl;
-
+    /**
+     * 大船数量
+     */
     private String vdcsl;
-
+    /**
+     * 上传时间
+     */
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date scsj;
 
+    /**
+     * 更新时间
+     */
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date gxsj;
+    /**
+     * 停泊船数量
+     */
 
     private String vtbcsl;
-
+    /**
+     * 移动船数量
+     */
     private String vydcsl;
 
     private String deptcode;
