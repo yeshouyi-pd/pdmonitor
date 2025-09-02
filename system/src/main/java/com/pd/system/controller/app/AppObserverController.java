@@ -96,7 +96,7 @@ public class AppObserverController {
 
     @PostMapping("/uploadMonitorInfo")
     public HttpResult uploadMonitorInfo(@RequestBody AppMonitorInfoDto appMonitorInfoDto) {
-        if(StringUtils.isBlank(appMonitorInfoDto.getId()) || StringUtils.isBlank(appMonitorInfoDto.getDeptcode())){
+        if(StringUtils.isBlank(appMonitorInfoDto.getId()) || StringUtils.isBlank(appMonitorInfoDto.getDeptcode()) || StringUtils.isBlank(appMonitorInfoDto.getGczxm())){
             return HttpResult.error("上传参数异常");
         }
         try {
@@ -106,6 +106,30 @@ public class AppObserverController {
             return HttpResult.error("上传失败");
         }
     }
+
+    /**
+     * 根据用户部门和用户信息下载观察过程信息
+     * @param appMonitorInfoDto
+     * @return
+     */
+    @PostMapping("/downloadMonitorInfo")
+    public HttpResult downloadMonitorInfo(@RequestBody AppMonitorInfoDto appMonitorInfoDto) {
+        if( StringUtils.isBlank(appMonitorInfoDto.getDeptcode()) || StringUtils.isBlank(appMonitorInfoDto.getGczxm())){
+            return HttpResult.error("参数异常");
+        }
+        try {
+            List<AppMonitorInfo> list = appMonitorInfoService.selectByExample(appMonitorInfoDto);
+            return HttpResult.ok(list);
+        }catch (Exception e){
+            return HttpResult.error("上传失败");
+        }
+    }
+
+
+
+
+
+
 
     /**
      * 上传10分钟 N 信息
@@ -127,6 +151,8 @@ public class AppObserverController {
         }
     }
 
+
+
     /**
      * 获取发现江豚信息
      * @param appMonitorDiscoveryDto
@@ -144,6 +170,8 @@ public class AppObserverController {
             return HttpResult.error("上传失败");
         }
     }
+
+
 
 
 

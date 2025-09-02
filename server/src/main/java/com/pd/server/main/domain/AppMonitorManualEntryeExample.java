@@ -1684,6 +1684,146 @@ public class AppMonitorManualEntryeExample {
             addCriterion("v_ydcsl not between", value1, value2, "vYdcsl");
             return (Criteria) this;
         }
+
+        public Criteria andDeptcodeIsNull() {
+            addCriterion("deptcode is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptcodeIsNotNull() {
+            addCriterion("deptcode is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptcodeEqualTo(String value) {
+            addCriterion("deptcode =", value, "deptcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptcodeNotEqualTo(String value) {
+            addCriterion("deptcode <>", value, "deptcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptcodeGreaterThan(String value) {
+            addCriterion("deptcode >", value, "deptcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptcodeGreaterThanOrEqualTo(String value) {
+            addCriterion("deptcode >=", value, "deptcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptcodeLessThan(String value) {
+            addCriterion("deptcode <", value, "deptcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptcodeLessThanOrEqualTo(String value) {
+            addCriterion("deptcode <=", value, "deptcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptcodeLike(String value) {
+            addCriterion("deptcode like", value, "deptcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptcodeNotLike(String value) {
+            addCriterion("deptcode not like", value, "deptcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptcodeIn(List<String> values) {
+            addCriterion("deptcode in", values, "deptcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptcodeNotIn(List<String> values) {
+            addCriterion("deptcode not in", values, "deptcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptcodeBetween(String value1, String value2) {
+            addCriterion("deptcode between", value1, value2, "deptcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptcodeNotBetween(String value1, String value2) {
+            addCriterion("deptcode not between", value1, value2, "deptcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andGczxmIsNull() {
+            addCriterion("gczxm is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGczxmIsNotNull() {
+            addCriterion("gczxm is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGczxmEqualTo(String value) {
+            addCriterion("gczxm =", value, "gczxm");
+            return (Criteria) this;
+        }
+
+        public Criteria andGczxmNotEqualTo(String value) {
+            addCriterion("gczxm <>", value, "gczxm");
+            return (Criteria) this;
+        }
+
+        public Criteria andGczxmGreaterThan(String value) {
+            addCriterion("gczxm >", value, "gczxm");
+            return (Criteria) this;
+        }
+
+        public Criteria andGczxmGreaterThanOrEqualTo(String value) {
+            addCriterion("gczxm >=", value, "gczxm");
+            return (Criteria) this;
+        }
+
+        public Criteria andGczxmLessThan(String value) {
+            addCriterion("gczxm <", value, "gczxm");
+            return (Criteria) this;
+        }
+
+        public Criteria andGczxmLessThanOrEqualTo(String value) {
+            addCriterion("gczxm <=", value, "gczxm");
+            return (Criteria) this;
+        }
+
+        public Criteria andGczxmLike(String value) {
+            addCriterion("gczxm like", value, "gczxm");
+            return (Criteria) this;
+        }
+
+        public Criteria andGczxmNotLike(String value) {
+            addCriterion("gczxm not like", value, "gczxm");
+            return (Criteria) this;
+        }
+
+        public Criteria andGczxmIn(List<String> values) {
+            addCriterion("gczxm in", values, "gczxm");
+            return (Criteria) this;
+        }
+
+        public Criteria andGczxmNotIn(List<String> values) {
+            addCriterion("gczxm not in", values, "gczxm");
+            return (Criteria) this;
+        }
+
+        public Criteria andGczxmBetween(String value1, String value2) {
+            addCriterion("gczxm between", value1, value2, "gczxm");
+            return (Criteria) this;
+        }
+
+        public Criteria andGczxmNotBetween(String value1, String value2) {
+            addCriterion("gczxm not between", value1, value2, "gczxm");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {
