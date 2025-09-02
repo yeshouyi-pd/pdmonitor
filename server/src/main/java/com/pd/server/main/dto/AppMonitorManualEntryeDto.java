@@ -100,10 +100,20 @@ public class AppMonitorManualEntryeDto {
      */
     private String vydcsl;
 
+    /**
+     * 用户部门
+     */
     private String deptcode;
 
+
+    /**
+     * 用户登录账号
+     */
     private String gczxm;
 
+    /**
+     *  GPS
+     */
     private String gps;
 
     public String getId() {

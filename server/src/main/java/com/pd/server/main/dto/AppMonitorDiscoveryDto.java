@@ -92,8 +92,14 @@ public class AppMonitorDiscoveryDto extends  PageDto{
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date scjs;
 
+    /**
+     * 用户登录账号
+     */
     private String gczxm;
 
+    /**
+     * 用户部门
+     */
     private String deptcode;
 
 
