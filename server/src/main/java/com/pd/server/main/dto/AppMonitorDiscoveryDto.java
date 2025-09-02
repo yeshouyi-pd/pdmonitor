@@ -3,7 +3,7 @@ package com.pd.server.main.dto;
         import java.util.Date;
         import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class AppMonitorDiscoveryDto {
+public class AppMonitorDiscoveryDto extends PageDto {
 
     /**
     * id
@@ -92,6 +92,11 @@ public class AppMonitorDiscoveryDto {
         @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date scjs;
 
+    private String gczxm;
+
+    private String deptcode;
+
+
     public String getId() {
         return id;
     }
@@ -116,107 +121,107 @@ public class AppMonitorDiscoveryDto {
         this.fxsj = fxsj;
     }
 
-    public String getSJl() {
+    public String getsJl() {
         return sJl;
     }
 
-    public void setSJl(String sJl) {
+    public void setsJl(String sJl) {
         this.sJl = sJl;
     }
 
-    public String getSGcz() {
+    public String getsGcz() {
         return sGcz;
     }
 
-    public void setSGcz(String sGcz) {
+    public void setsGcz(String sGcz) {
         this.sGcz = sGcz;
     }
 
-    public String getSFw() {
+    public String getsFw() {
         return sFw;
     }
 
-    public void setSFw(String sFw) {
+    public void setsFw(String sFw) {
         this.sFw = sFw;
     }
 
-    public String getSFf() {
+    public String getsFf() {
         return sFf;
     }
 
-    public void setSFf(String sFf) {
+    public void setsFf(String sFf) {
         this.sFf = sFf;
     }
 
-    public String getSWzm() {
+    public String getsWzm() {
         return sWzm;
     }
 
-    public void setSWzm(String sWzm) {
+    public void setsWzm(String sWzm) {
         this.sWzm = sWzm;
     }
 
-    public String getSQtZx() {
+    public String getsQtZx() {
         return sQtZx;
     }
 
-    public void setSQtZx(String sQtZx) {
+    public void setsQtZx(String sQtZx) {
         this.sQtZx = sQtZx;
     }
 
-    public String getSQtZy() {
+    public String getsQtZy() {
         return sQtZy;
     }
 
-    public void setSQtZy(String sQtZy) {
+    public void setsQtZy(String sQtZy) {
         this.sQtZy = sQtZy;
     }
 
-    public String getSQtZd() {
+    public String getsQtZd() {
         return sQtZd;
     }
 
-    public void setSQtZd(String sQtZd) {
+    public void setsQtZd(String sQtZd) {
         this.sQtZd = sQtZd;
     }
 
-    public String getCZsbh() {
+    public String getcZsbh() {
         return cZsbh;
     }
 
-    public void setCZsbh(String cZsbh) {
+    public void setcZsbh(String cZsbh) {
         this.cZsbh = cZsbh;
     }
 
-    public String getHZjajl() {
+    public String gethZjajl() {
         return hZjajl;
     }
 
-    public void setHZjajl(String hZjajl) {
+    public void sethZjajl(String hZjajl) {
         this.hZjajl = hZjajl;
     }
 
-    public String getHMztds() {
+    public String gethMztds() {
         return hMztds;
     }
 
-    public void setHMztds(String hMztds) {
+    public void sethMztds(String hMztds) {
         this.hMztds = hMztds;
     }
 
-    public String getHXwms() {
+    public String gethXwms() {
         return hXwms;
     }
 
-    public void setHXwms(String hXwms) {
+    public void sethXwms(String hXwms) {
         this.hXwms = hXwms;
     }
 
-    public String getHHjlxdm() {
+    public String gethHjlxdm() {
         return hHjlxdm;
     }
 
-    public void setHHjlxdm(String hHjlxdm) {
+    public void sethHjlxdm(String hHjlxdm) {
         this.hHjlxdm = hHjlxdm;
     }
 
@@ -228,32 +233,19 @@ public class AppMonitorDiscoveryDto {
         this.scjs = scjs;
     }
 
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-            sb.append(", id=").append(id);
-            sb.append(", mid=").append(mid);
-            sb.append(", fxsj=").append(fxsj);
-            sb.append(", sJl=").append(sJl);
-            sb.append(", sGcz=").append(sGcz);
-            sb.append(", sFw=").append(sFw);
-            sb.append(", sFf=").append(sFf);
-            sb.append(", sWzm=").append(sWzm);
-            sb.append(", sQtZx=").append(sQtZx);
-            sb.append(", sQtZy=").append(sQtZy);
-            sb.append(", sQtZd=").append(sQtZd);
-            sb.append(", cZsbh=").append(cZsbh);
-            sb.append(", hZjajl=").append(hZjajl);
-            sb.append(", hMztds=").append(hMztds);
-            sb.append(", hXwms=").append(hXwms);
-            sb.append(", hHjlxdm=").append(hHjlxdm);
-            sb.append(", scjs=").append(scjs);
-        sb.append("]");
-        return sb.toString();
+    public String getGczxm() {
+        return gczxm;
     }
 
+    public void setGczxm(String gczxm) {
+        this.gczxm = gczxm;
+    }
+
+    public String getDeptcode() {
+        return deptcode;
+    }
+
+    public void setDeptcode(String deptcode) {
+        this.deptcode = deptcode;
+    }
 }
