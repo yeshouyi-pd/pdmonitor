@@ -8,6 +8,7 @@ import com.pd.server.main.service.*;
 import com.pd.system.controller.conf.HttpResult;
 import com.pd.system.controller.conf.RedisConfig;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -35,6 +36,10 @@ public class AppObserverController {
 
     @Resource
     private AppMonitorManualEntryeService appMonitorManualEntryeService;
+
+
+    @Resource
+    private UserService userService;
 
 
     /**
@@ -300,6 +305,24 @@ public class AppObserverController {
             return HttpResult.error("下载失败");
         }
     }
+
+
+    @PostMapping("/appLgoin")
+    public HttpResult appLgoin(@RequestBody UserDto userDto) {
+        if( StringUtils.isBlank(userDto.getLoginName())|| StringUtils.isBlank(userDto.getPassword()) ){
+            return HttpResult.error("参数异常");
+        }
+        userDto.setPassword(userDto.getPassword()+"!@#QWERT");
+        userDto.setPassword(DigestUtils.md5DigestAsHex(userDto.getPassword().getBytes()));
+        User user =  userService.appLgoin(userDto);
+        if(null != user){
+            return HttpResult.error("账号或密码错误");
+        }
+        user.setPassword( null);
+        return HttpResult.ok(user);
+     }
+
+
 
 
 
