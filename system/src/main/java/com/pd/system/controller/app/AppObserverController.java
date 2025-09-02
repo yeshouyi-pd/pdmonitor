@@ -294,7 +294,7 @@ public class AppObserverController {
      * @return
      */
     @GetMapping("/findInfoById/{id}")
-    public HttpResult findInfoById(@PathVariable(value = "mid") String id) {
+    public HttpResult findInfoById(@PathVariable(value = "id") String id) {
         if( StringUtils.isBlank(id)){
             return HttpResult.error("参数异常");
         }
