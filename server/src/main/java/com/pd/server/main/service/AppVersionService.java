@@ -50,7 +50,8 @@ public class AppVersionService {
     * 新增
     */
     private void insert(AppVersion appVersion) {
-        appVersion.setId(UuidUtil.getShortUuid());
+        // 设置一个初始版本号，从1开始
+        appVersion.setId(1L);
         appVersionMapper.insert(appVersion);
     }
 
@@ -58,14 +59,41 @@ public class AppVersionService {
     * 更新
     */
     private void update(AppVersion appVersion) {
-        appVersionMapper.updateByPrimaryKey(appVersion);
+        AppVersionExample example = new AppVersionExample();
+        example.createCriteria().andIdEqualTo(appVersion.getId());
+        appVersionMapper.updateByExampleSelective(appVersion, example);
     }
 
     /**
     * 删除
     */
     public void delete(String id) {
-        appVersionMapper.deleteByPrimaryKey(id);
+        appVersionMapper.deleteByPrimaryKey(Long.valueOf(id));
     }
 
+    /**
+     * 原子性增加版本号
+     */
+    public void incrementVersion() {
+        try {
+            List<AppVersion> versions = appVersionMapper.selectByExample(null);
+            if (!versions.isEmpty()) {
+                AppVersion version = versions.get(0);
+                Long currentId = version.getId();
+                
+                // 创建更新条件
+                AppVersionExample example = new AppVersionExample();
+                example.createCriteria().andIdEqualTo(currentId);
+                
+                // 设置新的版本号
+                version.setId(currentId + 1);
+                
+                // 执行原子性更新
+                appVersionMapper.updateByExampleSelective(version, example);
+            }
+        } catch (Exception e) {
+            // 版本更新失败不影响主业务，只记录日志
+            System.err.println("版本更新失败: " + e.getMessage());
+        }
+    }
 }
