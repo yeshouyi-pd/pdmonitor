@@ -97,4 +97,17 @@ public class AppMonitorDiscoveryService {
         criteria.andMidEqualTo(mid);
         return appMonitorDiscoveryMapper.selectByExample(appMonitorDiscoveryExample);
     }
+
+    /**
+     * 根据mid查询发现江豚信息，按fxsj倒序排列
+     */
+    public List<AppMonitorDiscoveryDto> findByMidOrderByFxsjDesc(String mid) {
+        AppMonitorDiscoveryExample example = new AppMonitorDiscoveryExample();
+        AppMonitorDiscoveryExample.Criteria criteria = example.createCriteria();
+        criteria.andMidEqualTo(mid);
+        example.setOrderByClause("fxsj desc");
+        
+        List<AppMonitorDiscovery> list = appMonitorDiscoveryMapper.selectByExample(example);
+        return CopyUtil.copyList(list, AppMonitorDiscoveryDto.class);
+    }
 }
