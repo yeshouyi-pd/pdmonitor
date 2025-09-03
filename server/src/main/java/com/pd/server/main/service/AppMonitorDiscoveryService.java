@@ -36,6 +36,7 @@ public class AppMonitorDiscoveryService {
         }
         if (StringUtils.isNotBlank(appMonitorDiscoveryDto.getGczxm())){
             criteria.andGczxmEqualTo(appMonitorDiscoveryDto.getGczxm());
+        if (appMonitorDiscoveryDto.getFxsjStart() != null) {
         }
         appMonitorDiscoveryExample.setOrderByClause(" scjs desc");
 

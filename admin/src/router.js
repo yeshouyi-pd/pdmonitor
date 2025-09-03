@@ -106,6 +106,7 @@ import SonarSingleTarget from "./views/sonar/sonarSingleTarget.vue";
 import AppCodeType from "./views/app/appCodeType.vue";
 import AppCodeSet from "./views/app/appCodeSet.vue";
 import AppMonitorInfo from "./views/app/appMonitorInfo.vue";
+import AppMonitorDiscovery from "./views/app/appMonitorDiscovery.vue";
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -531,6 +532,10 @@ export default new Router({
             path: "admin/appMonitorInfo",
             name: "admin/appMonitorInfo",
             component: AppMonitorInfo
+        },{
+            path: "admin/appMonitorDiscovery",
+            name: "admin/appMonitorDiscovery",
+            component: AppMonitorDiscovery
         }]
     }]
 })
