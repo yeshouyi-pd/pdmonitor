@@ -9,6 +9,7 @@ import com.pd.server.util.CopyUtil;
 import com.pd.server.util.UuidUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -43,7 +44,7 @@ public class AppMonitorManualEntryeService {
           try {
               appMonitorManualEntrye.setScsj(new Date());
               this.insert(appMonitorManualEntrye);
-          } catch (Exception e) {
+          } catch (DuplicateKeyException e) {
               appMonitorManualEntrye.setGxsj(new Date());
               this.update(appMonitorManualEntrye);
           }
