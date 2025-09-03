@@ -22,6 +22,18 @@ public class AppMonitorDiscoveryDto extends  PageDto{
     private Date fxsj;
 
     /**
+     * 发现时间-开始
+     */
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    private Date fxsjStart;
+
+    /**
+     * 发现时间-结束
+     */
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    private Date fxsjEnd;
+
+    /**
      * 观察者与动物间距离(米)
      */
     private String sjl;
@@ -127,6 +139,22 @@ public class AppMonitorDiscoveryDto extends  PageDto{
 
     public void setFxsj(Date fxsj) {
         this.fxsj = fxsj;
+    }
+
+    public Date getFxsjStart() {
+        return fxsjStart;
+    }
+
+    public void setFxsjStart(Date fxsjStart) {
+        this.fxsjStart = fxsjStart;
+    }
+
+    public Date getFxsjEnd() {
+        return fxsjEnd;
+    }
+
+    public void setFxsjEnd(Date fxsjEnd) {
+        this.fxsjEnd = fxsjEnd;
     }
 
     public String getSjl() {
