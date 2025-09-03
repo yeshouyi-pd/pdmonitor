@@ -34,9 +34,29 @@ public class AppMonitorDiscoveryService {
         if(StringUtils.isNotBlank(appMonitorDiscoveryDto.getDeptcode())){
             criteria.andDeptcodeEqualTo(appMonitorDiscoveryDto.getDeptcode());
         }
-        if (StringUtils.isNotBlank(appMonitorDiscoveryDto.getGczxm())){
-            criteria.andGczxmEqualTo(appMonitorDiscoveryDto.getGczxm());
+        if (StringUtils.isNotBlank(appMonitorDiscoveryDto.getSgcz())){
+            criteria.andSGczEqualTo(appMonitorDiscoveryDto.getSgcz());
+        }
+        if (StringUtils.isNotBlank(appMonitorDiscoveryDto.getCzsbh())){
+            criteria.andCZsbhEqualTo(appMonitorDiscoveryDto.getCzsbh());
+        }
+        if (StringUtils.isNotBlank(appMonitorDiscoveryDto.getSff())){
+            criteria.andSFfEqualTo(appMonitorDiscoveryDto.getSff());
+        }
+        if (StringUtils.isNotBlank(appMonitorDiscoveryDto.getSwzm())){
+            criteria.andSWzmEqualTo(appMonitorDiscoveryDto.getSwzm());
+        }
+        if (StringUtils.isNotBlank(appMonitorDiscoveryDto.getHxwms())){
+            criteria.andHXwmsEqualTo(appMonitorDiscoveryDto.getHxwms());
+        }
+        if (StringUtils.isNotBlank(appMonitorDiscoveryDto.getHhjlxdm())){
+            criteria.andHHjlxdmEqualTo(appMonitorDiscoveryDto.getHhjlxdm());
+        }
         if (appMonitorDiscoveryDto.getFxsjStart() != null) {
+            criteria.andFxsjGreaterThanOrEqualTo(appMonitorDiscoveryDto.getFxsjStart());
+        }
+        if (appMonitorDiscoveryDto.getFxsjEnd() != null) {
+            criteria.andFxsjLessThanOrEqualTo(appMonitorDiscoveryDto.getFxsjEnd());
         }
         appMonitorDiscoveryExample.setOrderByClause(" scjs desc");
 
