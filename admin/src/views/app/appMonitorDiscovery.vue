@@ -139,6 +139,9 @@
           <td>{{ getCodeName('J', item.hhjlxdm) }}</td>
           <td>
             <div class="hidden-sm hidden-xs btn-group">
+              <button v-on:click="showDetail(item)" class="btn btn-xs btn-info" title="详情">
+                <i class="ace-icon fa fa-info-circle bigger-120"></i>
+              </button>
               <button v-on:click="del(item.id)" class="btn btn-xs btn-danger" title="删除">
                 <i class="ace-icon fa fa-trash-o bigger-120"></i>
               </button>
@@ -148,6 +151,46 @@
         </tbody>
       </table>
       <pagination ref="pagination" v-bind:list="list" v-bind:itemCount="8"></pagination>
+    </div>
+
+    <!-- 详情弹窗 -->
+    <div id="detail-modal" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-lg" role="document" style="max-width: 90%; width: 90%;">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" style="font-weight:600; color:#2c3e50;">发现江豚信息 - 详情</h4>
+          </div>
+          <div class="modal-body">
+            <h5 style="color:#2c3e50; border-bottom:2px solid #3498db; padding-bottom:6px; margin-bottom:12px;">基本信息</h5>
+            <table class="table table-bordered table-striped table-sm" style="margin-bottom:10px;">
+              <tbody>
+                <tr style="height:36px;">
+                  <td style="width:18%; background:#f8f9fa;">观察周期ID</td>
+                  <td style="width:32%;">{{ (detailData.appMonitorInfo && detailData.appMonitorInfo.id) ? detailData.appMonitorInfo.id : '-' }}</td>
+                  <td style="width:18%; background:#f8f9fa;">观察者中文名</td>
+                  <td style="width:32%;">{{ (detailData.appMonitorInfo && detailData.appMonitorInfo.gczzwm) ? detailData.appMonitorInfo.gczzwm : '-' }}</td>
+                </tr>
+                <tr style="height:36px;">
+                  <td style="background:#f8f9fa;">开始观察时间</td>
+                  <td style="color:#856404; background:#fff3cd; font-weight:500;">{{ (detailData.appMonitorInfo && detailData.appMonitorInfo.ksgcsj) ? detailData.appMonitorInfo.ksgcsj : '-' }}</td>
+                  <td style="background:#f8f9fa;">结束观察时间</td>
+                  <td style="color:#856404; background:#fff3cd; font-weight:500;">{{ (detailData.appMonitorInfo && detailData.appMonitorInfo.jsgcsj) ? detailData.appMonitorInfo.jsgcsj : '-' }}</td>
+                </tr>
+                <tr style="height:36px;">
+                  <td style="background:#f8f9fa;">考察船类型</td>
+                  <td>{{ (detailData.appMonitorInfo && detailData.appMonitorInfo.kcclx) ? getCodeName('A', detailData.appMonitorInfo.kcclx) : '-' }}</td>
+                  <td style="background:#f8f9fa;">考察单位</td>
+                  <td>{{ (detailData.appMonitorInfo && detailData.appMonitorInfo.gcdw) ? detailData.appMonitorInfo.gcdw : '-' }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -162,6 +205,8 @@
         queryDto: {},
         items: [],
         codeMap: {},
+        detailItem: {},
+        detailData: {},
       };
     },
     mounted: function () {
@@ -183,6 +228,30 @@
         if (!type || !code || !this.codeMap || !this.codeMap[type]) return code;
         const map = this.codeMap[type] || {};
         return map[code] || code;
+      },
+      showDetail(item) {
+        let _this = this;
+        _this.detailItem = Object.assign({}, item);
+        _this.detailData = {};
+        Loading.show();
+        _this.$ajax.get(process.env.VUE_APP_SERVER + '/system/admin/appMonitorDiscovery/getDetailByMid/' + encodeURIComponent(item.mid))
+          .then((res) => {
+            Loading.hide();
+            const resp = res.data;
+            if (resp && resp.success) {
+              _this.detailData = resp.content || {};
+            } else {
+              _this.detailData = {};
+              Toast.warning(resp && resp.message ? resp.message : '获取详情失败');
+            }
+            $("#detail-modal").modal("show");
+          })
+          .catch(() => {
+            Loading.hide();
+            _this.detailData = {};
+            Toast.error('获取详情失败');
+            $("#detail-modal").modal("show");
+          });
       },
       // 将 datetime-local 值（如 2025-09-03T16:09）转为后端需要的 yyyy-MM-dd HH:mm:ss
       formatDateForBackend(value) {
