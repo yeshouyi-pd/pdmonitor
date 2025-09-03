@@ -315,6 +315,44 @@ public class AppMonitorInfoExample {
             return (Criteria) this;
         }
 
+
+
+        public Criteria andGczzwmEqualTo(String value) {
+            addCriterion("gczzwm =", value, "gczzwm");
+            return (Criteria) this;
+        }
+
+        public Criteria andGczzwmLike(String value) {
+            addCriterion("gczzwm like", value, "gczzwm");
+            return (Criteria) this;
+        }
+
+        public Criteria andGczzwmNotLike(String value) {
+            addCriterion("gczzwm not like", value, "gczzwm");
+            return (Criteria) this;
+        }
+
+        public Criteria andGczzwmIn(List<String> values) {
+            addCriterion("gczzwm in", values, "gczzwm");
+            return (Criteria) this;
+        }
+
+        public Criteria andGczzwmNotIn(List<String> values) {
+            addCriterion("gczzwm not in", values, "gczzwm");
+            return (Criteria) this;
+        }
+
+        public Criteria andGczzwmBetween(String value1, String value2) {
+            addCriterion("gczzwm between", value1, value2, "gczzwm");
+            return (Criteria) this;
+        }
+
+        public Criteria andGczzwmNotBetween(String value1, String value2) {
+            addCriterion("gczzwm not between", value1, value2, "gczzwm");
+            return (Criteria) this;
+        }
+
+
         public Criteria andGcqyIsNull() {
             addCriterion("gcqy is null");
             return (Criteria) this;

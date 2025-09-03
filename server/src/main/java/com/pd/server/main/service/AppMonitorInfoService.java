@@ -27,16 +27,71 @@ public class AppMonitorInfoService {
     * 列表查询
     */
     public PageDto list(PageDto pageDto) {
-    PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
+        PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
         AppMonitorInfoExample appMonitorInfoExample = new AppMonitorInfoExample();
         AppMonitorInfoExample.Criteria ca = appMonitorInfoExample.createCriteria();
         AppMonitorInfoDto appMonitorInfoDto = CopyUtil.copy(pageDto, AppMonitorInfoDto.class);
+        
+        // 部门代码查询
         if(StringUtils.isNotBlank(appMonitorInfoDto.getDeptcode())){
             ca.andDeptcodeEqualTo(appMonitorInfoDto.getDeptcode());
         }
-        if(StringUtils.isNotBlank(appMonitorInfoDto.getGczxm())){
-            ca.andDeptcodeEqualTo(appMonitorInfoDto.getGczxm());
+        
+        // 考察船类型查询
+        if(StringUtils.isNotBlank(appMonitorInfoDto.getKcclx())){
+            ca.andKcclxEqualTo(appMonitorInfoDto.getKcclx());
         }
+        
+        // 观察者中文名查询
+        if(StringUtils.isNotBlank(appMonitorInfoDto.getGczzwm())){
+            ca.andGczzwmLike("%" + appMonitorInfoDto.getGczzwm().trim() + "%");
+        }
+        
+        // 观察者姓名查询
+        if(StringUtils.isNotBlank(appMonitorInfoDto.getGczxm())){
+            ca.andGczxmLike("%" + appMonitorInfoDto.getGczxm().trim() + "%");
+        }
+        
+        // 考察区域查询
+        if(StringUtils.isNotBlank(appMonitorInfoDto.getGcqy())){
+            ca.andGcqyLike("%" + appMonitorInfoDto.getGcqy().trim() + "%");
+        }
+        
+        // 考察单位查询
+        if(StringUtils.isNotBlank(appMonitorInfoDto.getGcdw())){
+            ca.andGcdwLike("%" + appMonitorInfoDto.getGcdw().trim() + "%");
+        }
+        
+        // 独立观察者所用方法查询
+        if(StringUtils.isNotBlank(appMonitorInfoDto.getPdlgczsyff())){
+            ca.andPDlgczsyffEqualTo(appMonitorInfoDto.getPdlgczsyff());
+        }
+        
+        // 总体观察状况查询
+        if(StringUtils.isNotBlank(appMonitorInfoDto.getWztgczk())){
+            ca.andWZtgczkEqualTo(appMonitorInfoDto.getWztgczk());
+        }
+        
+        // 眩光所在范围查询
+        if(StringUtils.isNotBlank(appMonitorInfoDto.getWxgszfw())){
+            ca.andWXgszfwEqualTo(appMonitorInfoDto.getWxgszfw());
+        }
+        
+        // 眩光状况查询
+        if(StringUtils.isNotBlank(appMonitorInfoDto.getWxgzk())){
+            ca.andWXgzkEqualTo(appMonitorInfoDto.getWxgzk());
+        }
+        
+        // 近岸方向查询
+        if(StringUtils.isNotBlank(appMonitorInfoDto.getNjafx())){
+            ca.andNJafxEqualTo(appMonitorInfoDto.getNjafx());
+        }
+        
+        // 方向查询
+        if(StringUtils.isNotBlank(appMonitorInfoDto.getNfx())){
+            ca.andNFxEqualTo(appMonitorInfoDto.getNfx());
+        }
+        
         appMonitorInfoExample.setOrderByClause(" ksgcsj desc");
         List<AppMonitorInfo> appMonitorInfoList = appMonitorInfoMapper.selectByExample(appMonitorInfoExample);
         PageInfo<AppMonitorInfo> pageInfo = new PageInfo<>(appMonitorInfoList);
