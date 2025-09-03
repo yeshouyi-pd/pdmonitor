@@ -5,11 +5,14 @@ import com.pd.server.main.dto.PageDto;
 import com.pd.server.main.dto.ResponseDto;
 import com.pd.server.main.service.AppMonitorInfoService;
 import com.pd.server.util.ValidatorUtil;
+import com.pd.system.controller.conf.RedisConfig;
+import com.pd.server.config.RedisCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/admin/appMonitorInfo")
@@ -71,6 +74,23 @@ public class AppMonitorInfoController {
     public ResponseDto delete(@PathVariable String id) {
         ResponseDto responseDto = new ResponseDto();
         appMonitorInfoService.delete(id);
+        return responseDto;
+    }
+
+    /**
+     * 获取代码映射
+     */
+    @GetMapping("/getCodeMap")
+    public ResponseDto getCodeMap() {
+        ResponseDto responseDto = new ResponseDto();
+        try {
+            Map<String, Map<String, String>> codeMap = (Map<String, Map<String, String>>) RedisConfig.redisTstaticemplate.opsForValue().get(RedisCode.APPCODESET);
+            responseDto.setContent(codeMap);
+        } catch (Exception e) {
+            LOG.error("获取代码映射失败", e);
+            responseDto.setSuccess(false);
+            responseDto.setMessage("获取代码映射失败");
+        }
         return responseDto;
     }
 
