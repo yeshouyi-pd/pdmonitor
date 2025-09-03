@@ -28,6 +28,9 @@
     <result column="deptcode" jdbcType="VARCHAR" property="deptcode" />
     <result column="gczxm" jdbcType="VARCHAR" property="gczxm" />
     <result column="gps" jdbcType="VARCHAR" property="gps" />
+    <result column="types" jdbcType="VARCHAR" property="types" />
+
+
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -90,7 +93,7 @@
   <sql id="Base_Column_List">
     id, mid, ksgcsj, p_zfgcz, p_jlz, p_yfgcz, p_dlgcz, p_dlgczsyff, p_fjgcz, w_ztgczk, 
     w_xgszfw, w_xgzk, n_jajl, n_ss, n_cs, n_jafx, n_fx, v_ycsl, v_dcsl, scsj, gxsj, v_tbcsl, 
-    v_ydcsl, deptcode, gczxm ,gps
+    v_ydcsl, deptcode, gczxm ,gps , types
   </sql>
   <select id="selectByExample" parameterType="com.pd.server.main.domain.AppMonitorManualEntryeExample" resultMap="BaseResultMap">
     select
@@ -130,7 +133,7 @@
       n_jajl, n_ss, n_cs, n_jafx, 
       n_fx, v_ycsl, v_dcsl, 
       scsj, gxsj, v_tbcsl, 
-      v_ydcsl, deptcode, gczxm ,gps
+      v_ydcsl, deptcode, gczxm ,gps ,types
       )
     values (#{id,jdbcType=VARCHAR}, #{mid,jdbcType=VARCHAR}, #{ksgcsj,jdbcType=TIMESTAMP}, 
       #{pzfgcz,jdbcType=VARCHAR}, #{pjlz,jdbcType=VARCHAR}, #{pyfgcz,jdbcType=VARCHAR}, 
@@ -139,7 +142,7 @@
       #{njajl,jdbcType=VARCHAR}, #{nss,jdbcType=VARCHAR}, #{ncs,jdbcType=VARCHAR}, #{njafx,jdbcType=VARCHAR}, 
       #{nfx,jdbcType=VARCHAR}, #{vycsl,jdbcType=VARCHAR}, #{vdcsl,jdbcType=VARCHAR}, 
       #{scsj,jdbcType=TIMESTAMP}, #{gxsj,jdbcType=TIMESTAMP}, #{vtbcsl,jdbcType=VARCHAR}, 
-      #{vydcsl,jdbcType=VARCHAR}, #{deptcode,jdbcType=VARCHAR}, #{gczxm,jdbcType=VARCHAR} , #{gps,jdbcType=VARCHAR}
+      #{vydcsl,jdbcType=VARCHAR}, #{deptcode,jdbcType=VARCHAR}, #{gczxm,jdbcType=VARCHAR} , #{gps,jdbcType=VARCHAR} , #{types,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.pd.server.main.domain.AppMonitorManualEntrye">
@@ -223,6 +226,9 @@
       <if test="gps != null">
         gps,
       </if>
+      <if test="types != null">
+        types,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -302,6 +308,9 @@
       </if>
       <if test="gps != null">
         #{gps,jdbcType=VARCHAR},
+      </if>
+      <if test="types != null">
+        #{types,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -392,6 +401,10 @@
       <if test="record.gps != null">
         gps = #{record.gps,jdbcType=VARCHAR},
       </if>
+      <if test="record.types != null">
+        types = #{record.types,jdbcType=VARCHAR},
+      </if>
+
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -424,7 +437,8 @@
       v_ydcsl = #{record.vydcsl,jdbcType=VARCHAR},
       deptcode = #{record.deptcode,jdbcType=VARCHAR},
       gczxm = #{record.gczxm,jdbcType=VARCHAR},
-      gps = #{record.gps,jdbcType=VARCHAR}
+      gps = #{record.gps,jdbcType=VARCHAR},
+      types = #{record.types,jdbcType=VARCHAR},
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -507,6 +521,9 @@
       <if test="gps != null">
         gps = #{gps,jdbcType=VARCHAR},
       </if>
+      <if test="types != null">
+        types = #{types,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -536,7 +553,8 @@
       v_ydcsl = #{vydcsl,jdbcType=VARCHAR},
       deptcode = #{deptcode,jdbcType=VARCHAR},
       gczxm = #{gczxm,jdbcType=VARCHAR},
-      gps = #{gps,jdbcType=VARCHAR}
+      gps = #{gps,jdbcType=VARCHAR},
+      types = #{types,jdbcType=VARCHAR},
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

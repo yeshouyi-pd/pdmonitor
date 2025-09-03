@@ -116,6 +116,14 @@ public class AppMonitorManualEntryeDto {
      */
     private String gps;
 
+
+    /**
+     * 1 10分钟弹出信息
+     * 2 30分钟弹出全量信息
+     */
+    private String types;
+
+
     public String getId() {
         return id;
     }
@@ -322,5 +330,13 @@ public class AppMonitorManualEntryeDto {
 
     public void setGps(String gps) {
         this.gps = gps;
+    }
+
+    public String getTypes() {
+        return types;
+    }
+
+    public void setTypes(String types) {
+        this.types = types;
     }
 }
