@@ -88,4 +88,17 @@ public class AppMonitorManualEntryeService {
         criteria.andMidEqualTo(mid);
         return appMonitorManualEntryeMapper.selectByExample(appMonitorManualEntryeExample);
     }
+
+    /**
+     * 根据mid查询人工观察信息，按ksgcsj倒序排列
+     */
+    public List<AppMonitorManualEntryeDto> findByMidOrderByKsgcsjDesc(String mid) {
+        AppMonitorManualEntryeExample example = new AppMonitorManualEntryeExample();
+        AppMonitorManualEntryeExample.Criteria criteria = example.createCriteria();
+        criteria.andMidEqualTo(mid);
+        example.setOrderByClause("ksgcsj desc");
+        
+        List<AppMonitorManualEntrye> list = appMonitorManualEntryeMapper.selectByExample(example);
+        return CopyUtil.copyList(list, AppMonitorManualEntryeDto.class);
+    }
 }

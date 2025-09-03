@@ -1,18 +1,27 @@
 package com.pd.system.controller.app;
 
+import com.pd.server.main.domain.AppMonitorInfo;
 import com.pd.server.main.dto.AppMonitorInfoDto;
 import com.pd.server.main.dto.PageDto;
 import com.pd.server.main.dto.ResponseDto;
 import com.pd.server.main.service.AppMonitorInfoService;
+import com.pd.server.util.CopyUtil;
 import com.pd.server.util.ValidatorUtil;
 import com.pd.system.controller.conf.RedisConfig;
 import com.pd.server.config.RedisCode;
+import com.pd.server.main.dto.AppMonitorDiscoveryDto;
+import com.pd.server.main.dto.AppMonitorManualEntryeDto;
+import com.pd.server.main.service.AppMonitorDiscoveryService;
+import com.pd.server.main.service.AppMonitorManualEntryeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Map;
+import java.util.List;
+import java.util.HashMap;
+import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/admin/appMonitorInfo")
@@ -23,6 +32,12 @@ public class AppMonitorInfoController {
 
     @Resource
     private AppMonitorInfoService appMonitorInfoService;
+    
+    @Resource
+    private AppMonitorDiscoveryService appMonitorDiscoveryService;
+    
+    @Resource
+    private AppMonitorManualEntryeService appMonitorManualEntryeService;
 
     /**
     * 列表查询
@@ -90,6 +105,44 @@ public class AppMonitorInfoController {
             LOG.error("获取代码映射失败", e);
             responseDto.setSuccess(false);
             responseDto.setMessage("获取代码映射失败");
+        }
+        return responseDto;
+    }
+
+    /**
+     * 获取详细信息
+     */
+    @GetMapping("/getDetail/{id}")
+    public ResponseDto getDetail(@PathVariable String id) {
+        ResponseDto responseDto = new ResponseDto();
+        try {
+            // 获取观察周期基本信息
+            AppMonitorInfo appMonitorInfo = appMonitorInfoService.findById(id);
+            if (appMonitorInfo == null) {
+                responseDto.setSuccess(false);
+                responseDto.setMessage("未找到指定的观察周期记录");
+                return responseDto;
+            }
+            
+            AppMonitorInfoDto appMonitorInfoDto = CopyUtil.copy(appMonitorInfo, AppMonitorInfoDto.class);
+            
+            // 获取关联的发现江豚信息（根据mid关联，按fxsj倒序）
+            List<AppMonitorDiscoveryDto> discoveryList = appMonitorDiscoveryService.findByMidOrderByFxsjDesc(id);
+            
+            // 获取关联的人工观察信息（根据mid关联，按ksgcsj倒序）
+            List<AppMonitorManualEntryeDto> manualEntryeList = appMonitorManualEntryeService.findByMidOrderByKsgcsjDesc(id);
+            
+            // 组装返回数据
+            Map<String, Object> detailData = new HashMap<>();
+            detailData.put("appMonitorInfo", appMonitorInfoDto);
+            detailData.put("discoveryList", discoveryList);
+            detailData.put("manualEntryeList", manualEntryeList);
+            
+            responseDto.setContent(detailData);
+        } catch (Exception e) {
+            LOG.error("获取详细信息失败", e);
+            responseDto.setSuccess(false);
+            responseDto.setMessage("获取详细信息失败");
         }
         return responseDto;
     }
