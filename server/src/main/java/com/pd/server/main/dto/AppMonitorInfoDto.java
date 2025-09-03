@@ -137,6 +137,11 @@ public class AppMonitorInfoDto extends PageDto {
     private String deptcode;
 
 
+    private String ksgps;
+
+    private String jsgps;
+
+
     public String getId() {
         return id;
     }
@@ -335,5 +340,21 @@ public class AppMonitorInfoDto extends PageDto {
 
     public void setGczzwm(String gczzwm) {
         this.gczzwm = gczzwm;
+    }
+
+    public String getKsgps() {
+        return ksgps;
+    }
+
+    public void setKsgps(String ksgps) {
+        this.ksgps = ksgps;
+    }
+
+    public String getJsgps() {
+        return jsgps;
+    }
+
+    public void setJsgps(String jsgps) {
+        this.jsgps = jsgps;
     }
 }
