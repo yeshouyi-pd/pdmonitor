@@ -55,6 +55,8 @@ public class AppMonitorManualEntrye {
 
     private String gps;
 
+    private String types;
+
     public String getId() {
         return id;
     }
@@ -261,5 +263,13 @@ public class AppMonitorManualEntrye {
 
     public void setGps(String gps) {
         this.gps = gps;
+    }
+
+    public String getTypes() {
+        return types;
+    }
+
+    public void setTypes(String types) {
+        this.types = types;
     }
 }

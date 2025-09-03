@@ -1824,6 +1824,12 @@ public class AppMonitorManualEntryeExample {
             addCriterion("gczxm not between", value1, value2, "gczxm");
             return (Criteria) this;
         }
+
+
+        public Criteria andTypesEqualTo(String value) {
+            addCriterion("types =", value, "types");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {
