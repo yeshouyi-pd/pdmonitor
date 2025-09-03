@@ -10,6 +10,7 @@ import com.pd.server.util.UuidUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -62,7 +63,7 @@ public class AppMonitorInfoService {
         try {
             appMonitorInfo.setScsj(new Date());
             this.insert(appMonitorInfo);
-        } catch (Exception e) {
+        } catch (DuplicateKeyException e) {
             appMonitorInfo.setGxsj(new Date());
             this.update(appMonitorInfo);
         }
