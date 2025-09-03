@@ -273,7 +273,7 @@
                           <th style="min-width: 80px;">群体最少</th>
                           <th style="min-width: 80px;">群体最优</th>
                           <th style="min-width: 80px;">群体最多</th>
-                          <th style="min-width: 80px;">船只编号</th>
+                          <th style="min-width: 80px;">注释编号</th>
                           <th style="min-width: 80px;">近岸距离</th>
                           <th style="min-width: 80px;">水深</th>
                           <th style="min-width: 80px;">环类类型</th>
