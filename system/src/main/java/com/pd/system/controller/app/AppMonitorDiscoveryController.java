@@ -21,6 +21,12 @@ public class AppMonitorDiscoveryController {
     @Resource
     private AppMonitorDiscoveryService appMonitorDiscoveryService;
 
+    // 新增：引入下列服务用于根据 mid 取关联详情
+    @Resource
+    private com.pd.server.main.service.AppMonitorInfoService appMonitorInfoService;
+    @Resource
+    private com.pd.server.main.service.AppMonitorManualEntryeService appMonitorManualEntryeService;
+
     /**
     * 列表查询
     */
@@ -69,4 +75,33 @@ public class AppMonitorDiscoveryController {
         return responseDto;
     }
 
+    /**
+     * 根据 mid 获取关联详情（AppMonitorInfo 基本信息 + 该 mid 下的发现与人工观察列表）
+     */
+    @GetMapping("/getDetailByMid/{mid}")
+    public ResponseDto getDetailByMid(@PathVariable String mid) {
+        ResponseDto responseDto = new ResponseDto();
+        try {
+            com.pd.server.main.domain.AppMonitorInfo appMonitorInfo = appMonitorInfoService.findById(mid);
+            if (appMonitorInfo == null) {
+                responseDto.setSuccess(false);
+                responseDto.setMessage("未找到对应的观察周期记录");
+                return responseDto;
+            }
+            com.pd.server.main.dto.AppMonitorInfoDto appMonitorInfoDto = com.pd.server.util.CopyUtil.copy(appMonitorInfo, com.pd.server.main.dto.AppMonitorInfoDto.class);
+            java.util.List<com.pd.server.main.dto.AppMonitorDiscoveryDto> discoveryList = appMonitorDiscoveryService.findByMidOrderByFxsjDesc(mid);
+            java.util.List<com.pd.server.main.dto.AppMonitorManualEntryeDto> manualEntryeList = appMonitorManualEntryeService.findByMidOrderByKsgcsjDesc(mid);
+
+            java.util.Map<String, Object> detailData = new java.util.HashMap<>();
+            detailData.put("appMonitorInfo", appMonitorInfoDto);
+            detailData.put("discoveryList", discoveryList);
+            detailData.put("manualEntryeList", manualEntryeList);
+            responseDto.setContent(detailData);
+        } catch (Exception e) {
+            LOG.error("根据mid获取详情失败", e);
+            responseDto.setSuccess(false);
+            responseDto.setMessage("获取详情失败");
+        }
+        return responseDto;
+    }
 }
