@@ -317,6 +317,7 @@
                     <table class="table table-bordered table-hover table-striped table-sm">
                       <thead class="thead-dark sticky-top" style="position: sticky; top: 0; z-index: 1000;">
                         <tr>
+                          <th style="min-width: 80px;">观察类型</th>
                           <th style="min-width: 120px;">开始观察时间</th>
                           <th style="min-width: 80px;">左方观察者</th>
                           <th style="min-width: 80px;">记录者</th>
@@ -338,23 +339,24 @@
                       </thead>
                       <tbody>
                         <tr v-for="manual in detailData.manualEntryeList" :key="manual.id">
-                          <td>{{manual.ksgcsj}}</td>
-                          <td>{{manual.pzfgcz}}</td>
-                          <td>{{manual.pjlz}}</td>
-                          <td>{{manual.pyfgcz}}</td>
-                          <td>{{manual.pdlgcz}}</td>
-                          <td>{{getCodeName('B', manual.pdlgczsyff)}}</td>
-                          <td>{{manual.pfjgcz}}</td>
-                          <td>{{getCodeName('C', manual.wztgczk)}}</td>
-                          <td>{{getCodeName('D', manual.wxgszfw)}}</td>
-                          <td>{{getCodeName('E', manual.wxgzk)}}</td>
-                          <td>{{manual.njajl}}</td>
-                          <td>{{manual.nss}}</td>
-                          <td>{{manual.ncs}}</td>
-                          <td>{{getCodeName('F', manual.njafx)}}</td>
-                          <td>{{getCodeName('G', manual.nfx)}}</td>
-                          <td>{{manual.vtbcsl}}</td>
-                          <td>{{manual.vydcsl}}</td>
+                          <td>{{getTypesName(manual.types) || '-'}}</td>
+                          <td>{{manual.ksgcsj || '-'}}</td>
+                          <td>{{manual.pzfgcz || '-'}}</td>
+                          <td>{{manual.pjlz || '-'}}</td>
+                          <td>{{manual.pyfgcz || '-'}}</td>
+                          <td>{{manual.pdlgcz || '-'}}</td>
+                          <td>{{getCodeName('B', manual.pdlgczsyff) || '-'}}</td>
+                          <td>{{manual.pfjgcz || '-'}}</td>
+                          <td>{{getCodeName('C', manual.wztgczk) || '-'}}</td>
+                          <td>{{getCodeName('D', manual.wxgszfw) || '-'}}</td>
+                          <td>{{getCodeName('E', manual.wxgzk) || '-'}}</td>
+                          <td>{{manual.njajl || '-'}}</td>
+                          <td>{{manual.nss || '-'}}</td>
+                          <td>{{manual.ncs || '-'}}</td>
+                          <td>{{getCodeName('F', manual.njafx) || '-'}}</td>
+                          <td>{{getCodeName('G', manual.nfx) || '-'}}</td>
+                          <td>{{manual.vtbcsl || '-'}}</td>
+                          <td>{{manual.vydcsl || '-'}}</td>
                         </tr>
                       </tbody>
                     </table>
@@ -407,7 +409,19 @@
           if (response.success) {
             _this.codeMap = response.content;
           }
-        })
+        });
+      },
+      /**
+       * 观察类型映射：types 1 -> N；2 -> P、V、W、N；其他 -> '-'
+       */
+      getTypesName(value) {
+        if (value === 1 || value === '1') {
+          return 'N';
+        }
+        if (value === 2 || value === '2') {
+          return 'P、V、W、N';
+        }
+        return '-';
       },
 
       /**
