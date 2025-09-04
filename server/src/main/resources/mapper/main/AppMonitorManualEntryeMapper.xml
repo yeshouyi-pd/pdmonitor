@@ -554,7 +554,7 @@
       deptcode = #{deptcode,jdbcType=VARCHAR},
       gczxm = #{gczxm,jdbcType=VARCHAR},
       gps = #{gps,jdbcType=VARCHAR},
-      types = #{types,jdbcType=VARCHAR},
+      types = #{types,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>
