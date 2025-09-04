@@ -463,7 +463,7 @@ public class AppMonitorExpService {
         appMonitorExpDto.setData1(appMonitorDiscoveryDto.getSjl());//距离
         appMonitorExpDto.setData2(appMonitorDiscoveryDto.getSfw());//方位
         appMonitorExpDto.setData3(appMonitorDiscoveryDto.getSgcz());//观察者
-        appMonitorExpDto.setData4(codeMap.get("B").get(appMonitorDiscoveryDto.getSff()) );//观察方法
+        appMonitorExpDto.setData4(codeMap.get("L").get(appMonitorDiscoveryDto.getSff()) );//观察方法
         appMonitorExpDto.setData5(codeMap.get("H").get(appMonitorDiscoveryDto.getSwzm()) );//物种名
         appMonitorExpDto.setData6(appMonitorDiscoveryDto.getSqtzy());//最优
         appMonitorExpDto.setData7(appMonitorDiscoveryDto.getSqtzx());//最小

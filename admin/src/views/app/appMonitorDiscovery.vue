@@ -127,7 +127,7 @@
           <td>{{ item.sjl }}</td>
           <td>{{ item.sgcz }}</td>
           <td>{{ item.sfw }}</td>
-          <td>{{ getCodeName('B', item.sff) }}</td>
+          <td>{{ getCodeName('L', item.sff) }}</td>
           <td>{{ getCodeName('H', item.swzm) }}</td>
           <td>{{ getCodeName('I', item.hxwms) }}</td>
           <td>{{ item.sqtzx }}</td>
