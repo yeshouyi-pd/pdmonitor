@@ -111,6 +111,8 @@ public class AppMonitorManualEntryeDto {
      */
     private String gczxm;
 
+    private String gczzwm;
+
     /**
      *  GPS
      */
@@ -338,5 +340,13 @@ public class AppMonitorManualEntryeDto {
 
     public void setTypes(String types) {
         this.types = types;
+    }
+
+    public String getGczzwm() {
+        return gczzwm;
+    }
+
+    public void setGczzwm(String gczzwm) {
+        this.gczzwm = gczzwm;
     }
 }

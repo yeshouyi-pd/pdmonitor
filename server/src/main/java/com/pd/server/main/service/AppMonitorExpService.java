@@ -88,6 +88,9 @@ public class AppMonitorExpService {
         appMonitorExpDto.setData2(appMonitorInfo.getGczzwm());//观察者中文姓名
         appMonitorExpDto.setData3(appMonitorInfo.getGcqy());//观察区域
         appMonitorExpDto.setData4(appMonitorInfo.getGcdw());//观察单位
+        appMonitorExpDto.setDeptcode(appMonitorInfo.getDeptcode());
+        appMonitorExpDto.setGczxm(appMonitorInfo.getGczxm());
+        appMonitorExpDto.setGczzwm(appMonitorInfo.getGczzwm());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
         this.insert(appMonitorExp);
 
@@ -112,6 +115,9 @@ public class AppMonitorExpService {
             appMonitorExpDto.setDeclong("0");
         }
         appMonitorExpDto.setEvents("B");
+        appMonitorExpDto.setDeptcode(appMonitorInfo.getDeptcode());
+        appMonitorExpDto.setGczxm(appMonitorInfo.getGczxm());
+        appMonitorExpDto.setGczzwm(appMonitorInfo.getGczzwm());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
         this.insert(appMonitorExp);
 
@@ -136,6 +142,9 @@ public class AppMonitorExpService {
             appMonitorExpDto.setDeclong("0");
         }
         appMonitorExpDto.setEvents("E");
+        appMonitorExpDto.setDeptcode(appMonitorInfo.getDeptcode());
+        appMonitorExpDto.setGczxm(appMonitorInfo.getGczxm());
+        appMonitorExpDto.setGczzwm(appMonitorInfo.getGczzwm());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
         this.insert(appMonitorExp);
 
@@ -166,6 +175,9 @@ public class AppMonitorExpService {
         appMonitorExpDto.setData4(appMonitorInfo.getPdlgcz());//独立观察者
         appMonitorExpDto.setData5(appMonitorInfo.getPdlgczsyff());//独立观察者所有方式
         appMonitorExpDto.setData6(appMonitorInfo.getPfjgcz());//附加观察者
+        appMonitorExpDto.setDeptcode(appMonitorInfo.getDeptcode());
+        appMonitorExpDto.setGczxm(appMonitorInfo.getGczxm());
+        appMonitorExpDto.setGczzwm(appMonitorInfo.getGczzwm());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
         this.insert(appMonitorExp);
 
@@ -193,7 +205,9 @@ public class AppMonitorExpService {
         appMonitorExpDto.setData1(appMonitorInfo.getWztgczk());//总体观测状况
         appMonitorExpDto.setData2(appMonitorInfo.getWxgzk());//眩光状况
         appMonitorExpDto.setData3(appMonitorInfo.getWxgszfw());//眩光所在范围
-
+        appMonitorExpDto.setDeptcode(appMonitorInfo.getDeptcode());
+        appMonitorExpDto.setGczxm(appMonitorInfo.getGczxm());
+        appMonitorExpDto.setGczzwm(appMonitorInfo.getGczzwm());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
         this.insert(appMonitorExp);
 
@@ -223,6 +237,9 @@ public class AppMonitorExpService {
         appMonitorExpDto.setData3(appMonitorInfo.getNss());//水深
         appMonitorExpDto.setData4(appMonitorInfo.getNfx());//方向
         appMonitorExpDto.setData5(appMonitorInfo.getNcs());//船速
+        appMonitorExpDto.setDeptcode(appMonitorInfo.getDeptcode());
+        appMonitorExpDto.setGczxm(appMonitorInfo.getGczxm());
+        appMonitorExpDto.setGczzwm(appMonitorInfo.getGczzwm());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
         this.insert(appMonitorExp);
 
@@ -253,6 +270,9 @@ public class AppMonitorExpService {
         appMonitorExpDto.setData4(appMonitorManualEntryeDto.getPdlgcz());//独立观察者
         appMonitorExpDto.setData5(appMonitorManualEntryeDto.getPdlgczsyff());//独立观察者所有方式
         appMonitorExpDto.setData6(appMonitorManualEntryeDto.getPfjgcz());//附加观察者
+        appMonitorExpDto.setDeptcode(appMonitorManualEntryeDto.getDeptcode());
+        appMonitorExpDto.setGczxm(appMonitorManualEntryeDto.getGczxm());
+        appMonitorExpDto.setGczzwm(appMonitorManualEntryeDto.getGczzwm());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
         this.insert(appMonitorExp);
 
@@ -280,6 +300,9 @@ public class AppMonitorExpService {
         appMonitorExpDto.setData1(appMonitorManualEntryeDto.getWztgczk());//总体观测状况
         appMonitorExpDto.setData2(appMonitorManualEntryeDto.getWxgzk());//眩光状况
         appMonitorExpDto.setData3(appMonitorManualEntryeDto.getWxgszfw());//眩光所在范围
+        appMonitorExpDto.setDeptcode(appMonitorManualEntryeDto.getDeptcode());
+        appMonitorExpDto.setGczxm(appMonitorManualEntryeDto.getGczxm());
+        appMonitorExpDto.setGczzwm(appMonitorManualEntryeDto.getGczzwm());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
         this.insert(appMonitorExp);
 
@@ -309,6 +332,9 @@ public class AppMonitorExpService {
         appMonitorExpDto.setData3(appMonitorManualEntryeDto.getNss());//水深
         appMonitorExpDto.setData4(appMonitorManualEntryeDto.getNfx());//方向
         appMonitorExpDto.setData5(appMonitorManualEntryeDto.getNcs());//船速
+        appMonitorExpDto.setDeptcode(appMonitorManualEntryeDto.getDeptcode());
+        appMonitorExpDto.setGczxm(appMonitorManualEntryeDto.getGczxm());
+        appMonitorExpDto.setGczzwm(appMonitorManualEntryeDto.getGczzwm());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
         this.insert(appMonitorExp);
 
@@ -335,6 +361,9 @@ public class AppMonitorExpService {
         appMonitorExpDto.setEvents("V");
         appMonitorExpDto.setData1(appMonitorManualEntryeDto.getVtbcsl());//停泊船数量
         appMonitorExpDto.setData2(appMonitorManualEntryeDto.getVydcsl());//移动船数量
+        appMonitorExpDto.setDeptcode(appMonitorManualEntryeDto.getDeptcode());
+        appMonitorExpDto.setGczxm(appMonitorManualEntryeDto.getGczxm());
+        appMonitorExpDto.setGczzwm(appMonitorManualEntryeDto.getGczzwm());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
         this.insert(appMonitorExp);
 
@@ -368,6 +397,9 @@ public class AppMonitorExpService {
         appMonitorExpDto.setData6(appMonitorDiscoveryDto.getSqtzy());//最优
         appMonitorExpDto.setData7(appMonitorDiscoveryDto.getSqtzx());//最小
         appMonitorExpDto.setData8(appMonitorDiscoveryDto.getSqtzd());//最多
+        appMonitorExpDto.setDeptcode(appMonitorDiscoveryDto.getDeptcode());
+        appMonitorExpDto.setGczxm(appMonitorDiscoveryDto.getGczxm());
+        appMonitorExpDto.setGczzwm(appMonitorDiscoveryDto.getGczzwm());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
         this.insert(appMonitorExp);
 
@@ -396,6 +428,9 @@ public class AppMonitorExpService {
         appMonitorExpDto.setData2(appMonitorDiscoveryDto.getHmztds());//母子豚对数
         appMonitorExpDto.setData3(appMonitorDiscoveryDto.getHhjlxdm());//环境类型
         appMonitorExpDto.setData4(appMonitorDiscoveryDto.getHxwms());//行为描述
+        appMonitorExpDto.setDeptcode(appMonitorDiscoveryDto.getDeptcode());
+        appMonitorExpDto.setGczxm(appMonitorDiscoveryDto.getGczxm());
+        appMonitorExpDto.setGczzwm(appMonitorDiscoveryDto.getGczzwm());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
         this.insert(appMonitorExp);
 
@@ -422,7 +457,9 @@ public class AppMonitorExpService {
         }
         appMonitorExpDto.setEvents("C");
         appMonitorExpDto.setData1(appMonitorDiscoveryDto.getCzsbh());//注释编码
-
+        appMonitorExpDto.setDeptcode(appMonitorDiscoveryDto.getDeptcode());
+        appMonitorExpDto.setGczxm(appMonitorDiscoveryDto.getGczxm());
+        appMonitorExpDto.setGczzwm(appMonitorDiscoveryDto.getGczzwm());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
         this.insert(appMonitorExp);
 

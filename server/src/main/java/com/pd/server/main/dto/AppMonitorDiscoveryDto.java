@@ -114,6 +114,11 @@ public class AppMonitorDiscoveryDto extends  PageDto{
      */
     private String deptcode;
 
+    /**
+     * 观察者所在中文名
+     */
+    private String gczzwm;
+
 
     private String gps;
 
@@ -291,5 +296,13 @@ public class AppMonitorDiscoveryDto extends  PageDto{
 
     public void setGps(String gps) {
         this.gps = gps;
+    }
+
+    public String getGczzwm() {
+        return gczzwm;
+    }
+
+    public void setGczzwm(String gczzwm) {
+        this.gczzwm = gczzwm;
     }
 }
