@@ -88,6 +88,15 @@ public class AppMonitorExpDto {
     */
     private String data11;
 
+
+
+    private String deptcode;
+
+    private String gczxm;
+
+    private String gczzwm;
+
+
     public String getId() {
         return id;
     }
@@ -224,6 +233,29 @@ public class AppMonitorExpDto {
         this.data11 = data11;
     }
 
+    public String getDeptcode() {
+        return deptcode;
+    }
+
+    public void setDeptcode(String deptcode) {
+        this.deptcode = deptcode;
+    }
+
+    public String getGczxm() {
+        return gczxm;
+    }
+
+    public void setGczxm(String gczxm) {
+        this.gczxm = gczxm;
+    }
+
+    public String getGczzwm() {
+        return gczzwm;
+    }
+
+    public void setGczzwm(String gczzwm) {
+        this.gczzwm = gczzwm;
+    }
 
     @Override
     public String toString() {
