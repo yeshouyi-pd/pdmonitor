@@ -163,11 +163,19 @@ public class AppObserverController {
     public HttpResult uploadManualEntrye(@RequestBody AppMonitorManualEntryeDto appMonitorManualEntryeDto) {
         if(StringUtils.isBlank(appMonitorManualEntryeDto.getMid()) || StringUtils.isBlank(appMonitorManualEntryeDto.getId())
         || StringUtils.isBlank(appMonitorManualEntryeDto.getDeptcode()) || StringUtils.isBlank(appMonitorManualEntryeDto.getGczxm())||
-                StringUtils.isBlank(appMonitorManualEntryeDto.getTypes())
-        ){
+                StringUtils.isBlank(appMonitorManualEntryeDto.getTypes())){
             return HttpResult.error("上传参数异常");
         }
+        AppMonitorInfo appMonitorInfo = appMonitorInfoService.findById(appMonitorManualEntryeDto.getMid());
+        if(null == appMonitorInfo){
+            return HttpResult.error("未找到对应的巡查信息");
+        }
+        appMonitorManualEntryeDto.setDeptcode(appMonitorInfo.getDeptcode());
+        appMonitorManualEntryeDto.setGczxm(appMonitorInfo.getGczxm());
+        appMonitorManualEntryeDto.setGczzwm(appMonitorInfo.getGczzwm());
+
         try {
+
               //整点和半点的时候换班，P N W V, 中间的十分钟写 N V
             if("2".equals(appMonitorManualEntryeDto.getTypes())){
                 appMonitorExpService.monitorManualToP(appMonitorManualEntryeDto);
@@ -221,6 +229,13 @@ public class AppObserverController {
         ||StringUtils.isBlank(appMonitorDiscoveryDto.getDeptcode()) || StringUtils.isBlank(appMonitorDiscoveryDto.getGczxm())){
             return HttpResult.error("上传参数异常");
         }
+        AppMonitorInfo appMonitorInfo = appMonitorInfoService.findById(appMonitorDiscoveryDto.getMid());
+        if(null == appMonitorInfo){
+            return HttpResult.error("未找到对应的巡查信息");
+        }
+        appMonitorDiscoveryDto.setDeptcode(appMonitorInfo.getDeptcode());
+        appMonitorDiscoveryDto.setGczxm(appMonitorInfo.getGczxm());
+        appMonitorDiscoveryDto.setGczzwm(appMonitorInfo.getGczzwm());
         try {
             appMonitorExpService.monitorDiscoveryToH(appMonitorDiscoveryDto);
             appMonitorExpService.monitorDiscoveryToC(appMonitorDiscoveryDto);
