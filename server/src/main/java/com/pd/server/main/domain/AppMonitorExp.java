@@ -1,5 +1,7 @@
 package com.pd.server.main.domain;
 
+import java.util.Date;
+
 public class AppMonitorExp {
     private String id;
 
@@ -44,6 +46,10 @@ public class AppMonitorExp {
     private String types;
 
     private String mid;
+
+    private Date cjsj;
+
+    private String bid;
 
     public String getId() {
         return id;
@@ -221,6 +227,22 @@ public class AppMonitorExp {
         this.mid = mid;
     }
 
+    public Date getCjsj() {
+        return cjsj;
+    }
+
+    public void setCjsj(Date cjsj) {
+        this.cjsj = cjsj;
+    }
+
+    public String getBid() {
+        return bid;
+    }
+
+    public void setBid(String bid) {
+        this.bid = bid;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -249,6 +271,8 @@ public class AppMonitorExp {
         sb.append(", gczzwm=").append(gczzwm);
         sb.append(", types=").append(types);
         sb.append(", mid=").append(mid);
+        sb.append(", cjsj=").append(cjsj);
+        sb.append(", bid=").append(bid);
         sb.append("]");
         return sb.toString();
     }

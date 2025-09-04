@@ -24,6 +24,8 @@
     <result column="gczzwm" jdbcType="VARCHAR" property="gczzwm" />
     <result column="types" jdbcType="CHAR" property="types" />
     <result column="mid" jdbcType="VARCHAR" property="mid" />
+    <result column="cjsj" jdbcType="TIMESTAMP" property="cjsj" />
+    <result column="bid" jdbcType="VARCHAR" property="bid" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -85,7 +87,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, date1, time1, decLat, decLong, events, data1, data2, data3, data4, data5, data6, 
-    data7, data8, data9, data10, data11, deptcode, gczxm, gczzwm, types, mid
+    data7, data8, data9, data10, data11, deptcode, gczxm, gczzwm, types, mid, cjsj, bid
   </sql>
   <select id="selectByExample" parameterType="com.pd.server.main.domain.AppMonitorExpExample" resultMap="BaseResultMap">
     select
@@ -125,7 +127,7 @@
       data7, data8, data9, 
       data10, data11, deptcode, 
       gczxm, gczzwm, types, 
-      mid)
+      mid, cjsj, bid)
     values (#{id,jdbcType=VARCHAR}, #{date1,jdbcType=VARCHAR}, #{time1,jdbcType=VARCHAR}, 
       #{declat,jdbcType=VARCHAR}, #{declong,jdbcType=VARCHAR}, #{events,jdbcType=VARCHAR}, 
       #{data1,jdbcType=VARCHAR}, #{data2,jdbcType=VARCHAR}, #{data3,jdbcType=VARCHAR}, 
@@ -133,7 +135,7 @@
       #{data7,jdbcType=VARCHAR}, #{data8,jdbcType=VARCHAR}, #{data9,jdbcType=VARCHAR}, 
       #{data10,jdbcType=VARCHAR}, #{data11,jdbcType=VARCHAR}, #{deptcode,jdbcType=VARCHAR}, 
       #{gczxm,jdbcType=VARCHAR}, #{gczzwm,jdbcType=VARCHAR}, #{types,jdbcType=CHAR}, 
-      #{mid,jdbcType=VARCHAR})
+      #{mid,jdbcType=VARCHAR}, #{cjsj,jdbcType=TIMESTAMP}, #{bid,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.pd.server.main.domain.AppMonitorExp">
     insert into app_monitor_exp
@@ -204,6 +206,12 @@
       <if test="mid != null">
         mid,
       </if>
+      <if test="cjsj != null">
+        cjsj,
+      </if>
+      <if test="bid != null">
+        bid,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -271,6 +279,12 @@
       </if>
       <if test="mid != null">
         #{mid,jdbcType=VARCHAR},
+      </if>
+      <if test="cjsj != null">
+        #{cjsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bid != null">
+        #{bid,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -349,6 +363,12 @@
       <if test="record.mid != null">
         mid = #{record.mid,jdbcType=VARCHAR},
       </if>
+      <if test="record.cjsj != null">
+        cjsj = #{record.cjsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.bid != null">
+        bid = #{record.bid,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -377,7 +397,9 @@
       gczxm = #{record.gczxm,jdbcType=VARCHAR},
       gczzwm = #{record.gczzwm,jdbcType=VARCHAR},
       types = #{record.types,jdbcType=CHAR},
-      mid = #{record.mid,jdbcType=VARCHAR}
+      mid = #{record.mid,jdbcType=VARCHAR},
+      cjsj = #{record.cjsj,jdbcType=TIMESTAMP},
+      bid = #{record.bid,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -448,6 +470,12 @@
       <if test="mid != null">
         mid = #{mid,jdbcType=VARCHAR},
       </if>
+      <if test="cjsj != null">
+        cjsj = #{cjsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bid != null">
+        bid = #{bid,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -473,7 +501,9 @@
       gczxm = #{gczxm,jdbcType=VARCHAR},
       gczzwm = #{gczzwm,jdbcType=VARCHAR},
       types = #{types,jdbcType=CHAR},
-      mid = #{mid,jdbcType=VARCHAR}
+      mid = #{mid,jdbcType=VARCHAR},
+      cjsj = #{cjsj,jdbcType=TIMESTAMP},
+      bid = #{bid,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>
