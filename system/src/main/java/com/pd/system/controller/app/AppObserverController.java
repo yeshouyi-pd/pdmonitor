@@ -78,7 +78,7 @@ public class AppObserverController {
         try {
             return HttpResult.ok(appCodeSetDtoList);
         }catch (Exception e){
-            return HttpResult.error("查询失败");
+            return HttpResult.error("查询失败："+e.getMessage());
         }
 
     }
@@ -94,7 +94,7 @@ public class AppObserverController {
         try {
             return HttpResult.ok(AppCodeTypeDtoList);
         }catch (Exception e){
-            return HttpResult.error("查询失败");
+            return HttpResult.error("查询失败："+e.getMessage());
         }
 
     }
@@ -122,7 +122,7 @@ public class AppObserverController {
             appMonitorInfoService.save(appMonitorInfoDto);
             return HttpResult.ok();
         }catch (Exception e){
-            return HttpResult.error("上传失败");
+            return HttpResult.error("上传失败："+e.getMessage());
         }
     }
 
@@ -141,7 +141,7 @@ public class AppObserverController {
             List<AppMonitorInfoDto> respList = CopyUtil.copyList(list, AppMonitorInfoDto.class);
             return HttpResult.ok(respList);
         }catch (Exception e){
-            return HttpResult.error("下载失败");
+            return HttpResult.error("下载失败："+e.getMessage());
         }
     }
 
@@ -181,7 +181,7 @@ public class AppObserverController {
             appMonitorManualEntryeService.save(appMonitorManualEntryeDto);
             return HttpResult.ok();
         }catch (Exception e){
-            return HttpResult.error("上传失败");
+            return HttpResult.error("上传失败："+e.getMessage());
         }
     }
 
@@ -202,7 +202,7 @@ public class AppObserverController {
             List<AppMonitorManualEntryeDto> respList = CopyUtil.copyList(list, AppMonitorManualEntryeDto.class);
             return HttpResult.ok(respList);
         }catch (Exception e){
-            return HttpResult.error("下载失败");
+            return HttpResult.error("下载失败："+e.getMessage());
         }
     }
 
@@ -227,7 +227,7 @@ public class AppObserverController {
             appMonitorDiscoveryService.save(appMonitorDiscoveryDto);
             return HttpResult.ok();
         }catch (Exception e){
-            return HttpResult.error("上传失败");
+            return HttpResult.error("上传失败："+e.getMessage());
         }
     }
 
@@ -247,7 +247,7 @@ public class AppObserverController {
             List<AppMonitorDiscoveryDto> respList = CopyUtil.copyList(list, AppMonitorDiscoveryDto.class);
             return HttpResult.ok(respList);
         }catch (Exception e){
-            return HttpResult.error("下载失败");
+            return HttpResult.error("下载失败："+e.getMessage());
         }
     }
 
@@ -266,7 +266,7 @@ public class AppObserverController {
             PageDto pageDto = appMonitorInfoService.list(appMonitorInfoDto);
             return HttpResult.ok(pageDto);
         }catch (Exception e){
-            return HttpResult.error("下载失败");
+            return HttpResult.error("下载失败："+e.getMessage());
         }
     }
 
@@ -286,7 +286,7 @@ public class AppObserverController {
             List<AppMonitorDiscoveryDto> respList = CopyUtil.copyList(list, AppMonitorDiscoveryDto.class);
             return HttpResult.ok(respList);
         }catch(Exception e){
-            return HttpResult.error("下载失败");
+            return HttpResult.error("下载失败："+e.getMessage());
         }
     }
 
@@ -305,7 +305,7 @@ public class AppObserverController {
             List<AppMonitorManualEntryeDto> respList = CopyUtil.copyList(list, AppMonitorManualEntryeDto.class);
             return HttpResult.ok(respList);
         }catch(Exception e){
-            return HttpResult.error("下载失败");
+            return HttpResult.error("下载失败："+e.getMessage());
         }
     }
 
@@ -324,7 +324,7 @@ public class AppObserverController {
             PageDto pageDto = appMonitorDiscoveryService.list(appMonitorDiscoveryDto);
             return HttpResult.ok(pageDto);
         }catch (Exception e){
-            return HttpResult.error("下载失败");
+            return HttpResult.error("下载失败："+e.getMessage());
         }
     }
 
@@ -344,7 +344,7 @@ public class AppObserverController {
             AppMonitorInfoDto dao =  CopyUtil.copy(appMonitorInfo ,AppMonitorInfoDto.class);
             return HttpResult.ok(dao);
         }catch(Exception e){
-            return HttpResult.error("下载失败");
+            return HttpResult.error("下载失败："+e.getMessage());
         }
     }
 
