@@ -113,12 +113,14 @@ public class AppObserverController {
             return HttpResult.error("上传参数异常");
         }
         try {
-            appMonitorExpService.monitorInfoToStart(appMonitorInfoDto);
-            appMonitorExpService.monitorInfoToB(appMonitorInfoDto);
-            appMonitorExpService.monitorInfoToP(appMonitorInfoDto);
-            appMonitorExpService.monitorInfoToW(appMonitorInfoDto);
-            appMonitorExpService.monitorInfoToN(appMonitorInfoDto);
-            appMonitorExpService.monitorInfoToE(appMonitorInfoDto);
+            Map<String, Map<String, String>> codeMap = (Map<String, Map<String, String>>) RedisConfig.redisTstaticemplate.opsForValue().get(RedisCode.APPCODESET);
+
+            appMonitorExpService.monitorInfoToStart(appMonitorInfoDto,codeMap);
+            appMonitorExpService.monitorInfoToB(appMonitorInfoDto ,codeMap);
+            appMonitorExpService.monitorInfoToP(appMonitorInfoDto,codeMap);
+            appMonitorExpService.monitorInfoToW(appMonitorInfoDto,codeMap);
+            appMonitorExpService.monitorInfoToN(appMonitorInfoDto,codeMap);
+            appMonitorExpService.monitorInfoToE(appMonitorInfoDto,codeMap);
             appMonitorInfoService.save(appMonitorInfoDto);
             return HttpResult.ok();
         }catch (Exception e){
@@ -175,17 +177,18 @@ public class AppObserverController {
         appMonitorManualEntryeDto.setGczzwm(appMonitorInfo.getGczzwm());
 
         try {
+            Map<String, Map<String, String>> codeMap = (Map<String, Map<String, String>>) RedisConfig.redisTstaticemplate.opsForValue().get(RedisCode.APPCODESET);
 
               //整点和半点的时候换班，P N W V, 中间的十分钟写 N V
             if("2".equals(appMonitorManualEntryeDto.getTypes())){
-                appMonitorExpService.monitorManualToP(appMonitorManualEntryeDto);
-                appMonitorExpService.monitorManualToN(appMonitorManualEntryeDto);
-                appMonitorExpService.monitorManualToW(appMonitorManualEntryeDto);
-                appMonitorExpService.monitorManualToV(appMonitorManualEntryeDto);
+                appMonitorExpService.monitorManualToP(appMonitorManualEntryeDto,codeMap);
+                appMonitorExpService.monitorManualToN(appMonitorManualEntryeDto,codeMap);
+                appMonitorExpService.monitorManualToW(appMonitorManualEntryeDto,codeMap);
+                appMonitorExpService.monitorManualToV(appMonitorManualEntryeDto,codeMap);
 
             }else if("1".equals(appMonitorManualEntryeDto.getTypes())){
-                appMonitorExpService.monitorManualToN(appMonitorManualEntryeDto);
-                appMonitorExpService.monitorManualToV(appMonitorManualEntryeDto);
+                appMonitorExpService.monitorManualToN(appMonitorManualEntryeDto,codeMap);
+                appMonitorExpService.monitorManualToV(appMonitorManualEntryeDto,codeMap);
             }
             appMonitorManualEntryeService.save(appMonitorManualEntryeDto);
             return HttpResult.ok();
@@ -237,9 +240,10 @@ public class AppObserverController {
         appMonitorDiscoveryDto.setGczxm(appMonitorInfo.getGczxm());
         appMonitorDiscoveryDto.setGczzwm(appMonitorInfo.getGczzwm());
         try {
-            appMonitorExpService.monitorDiscoveryToH(appMonitorDiscoveryDto);
-            appMonitorExpService.monitorDiscoveryToC(appMonitorDiscoveryDto);
-            appMonitorExpService.monitorDiscoveryToS(appMonitorDiscoveryDto);
+            Map<String, Map<String, String>> codeMap = (Map<String, Map<String, String>>) RedisConfig.redisTstaticemplate.opsForValue().get(RedisCode.APPCODESET);
+            appMonitorExpService.monitorDiscoveryToH(appMonitorDiscoveryDto,codeMap);
+            appMonitorExpService.monitorDiscoveryToC(appMonitorDiscoveryDto,codeMap);
+            appMonitorExpService.monitorDiscoveryToS(appMonitorDiscoveryDto,codeMap);
             appMonitorDiscoveryService.save(appMonitorDiscoveryDto);
             return HttpResult.ok();
         }catch (Exception e){

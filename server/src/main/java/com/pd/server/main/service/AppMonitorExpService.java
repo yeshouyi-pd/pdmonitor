@@ -7,7 +7,6 @@ import com.pd.server.main.domain.AppMonitorExpExample;
 import com.pd.server.main.dto.*;
 import com.pd.server.main.mapper.AppMonitorExpMapper;
 import com.pd.server.util.CopyUtil;
-import com.pd.server.util.UuidUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang.StringUtils;
@@ -16,6 +15,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class AppMonitorExpService {
@@ -91,7 +91,7 @@ public class AppMonitorExpService {
      * @param appMonitorInfo
      * @return
      */
-    public void monitorInfoToStart(AppMonitorInfoDto appMonitorInfo){
+    public void monitorInfoToStart(AppMonitorInfoDto appMonitorInfo,Map<String, Map<String, String>> codeMap){
         AppMonitorExpDto appMonitorExpDto = new AppMonitorExpDto();
         appMonitorExpDto.setId(IdUtil.getSnowflakeNextIdStr());
         appMonitorExpDto.setDate1(DateUtil.format(appMonitorInfo.getKsgcsj(), "yyyyMMdd"));
@@ -105,14 +105,14 @@ public class AppMonitorExpService {
             appMonitorExpDto.setDeclong("0");
         }
         appMonitorExpDto.setEvents("start");
-        appMonitorExpDto.setData1(appMonitorInfo.getKcclx());//考察船类型
+        appMonitorExpDto.setData1(codeMap.get("A").get(appMonitorInfo.getKcclx()));//考察船类型
         appMonitorExpDto.setData2(appMonitorInfo.getGczzwm());//观察者中文姓名
         appMonitorExpDto.setData3(appMonitorInfo.getGcqy());//观察区域
         appMonitorExpDto.setData4(appMonitorInfo.getGcdw());//观察单位
         appMonitorExpDto.setDeptcode(appMonitorInfo.getDeptcode());
         appMonitorExpDto.setGczxm(appMonitorInfo.getGczxm());
         appMonitorExpDto.setGczzwm(appMonitorInfo.getGczzwm());
-        appMonitorExpDto.setTypes("1");
+        appMonitorExpDto.setTypes("1"); //表类型
         appMonitorExpDto.setMid(appMonitorInfo.getId());
         appMonitorExpDto.setCjsj(appMonitorInfo.getKsgcsj());
         appMonitorExpDto.setBid(appMonitorInfo.getId());
@@ -127,7 +127,7 @@ public class AppMonitorExpService {
      * @param appMonitorInfo
      * @return
      */
-    public void monitorInfoToB(AppMonitorInfoDto appMonitorInfo){
+    public void monitorInfoToB(AppMonitorInfoDto appMonitorInfo,Map<String, Map<String, String>> codeMap){
         AppMonitorExpDto appMonitorExpDto = new AppMonitorExpDto();
         appMonitorExpDto.setId(IdUtil.getSnowflakeNextIdStr());
         appMonitorExpDto.setDate1(DateUtil.format(appMonitorInfo.getKsgcsj(), "yyyyMMdd"));
@@ -144,7 +144,7 @@ public class AppMonitorExpService {
         appMonitorExpDto.setDeptcode(appMonitorInfo.getDeptcode());
         appMonitorExpDto.setGczxm(appMonitorInfo.getGczxm());
         appMonitorExpDto.setGczzwm(appMonitorInfo.getGczzwm());
-        appMonitorExpDto.setTypes("1");
+        appMonitorExpDto.setTypes("1");//表类型
         appMonitorExpDto.setMid(appMonitorInfo.getId());
         appMonitorExpDto.setCjsj(new Date((appMonitorInfo.getKsgcsj().getTime() + 1000)));
         appMonitorExpDto.setBid(appMonitorInfo.getId());
@@ -159,7 +159,7 @@ public class AppMonitorExpService {
      * @param appMonitorInfo
      * @return
      */
-    public void monitorInfoToE(AppMonitorInfoDto appMonitorInfo){
+    public void monitorInfoToE(AppMonitorInfoDto appMonitorInfo,Map<String, Map<String, String>> codeMap){
         AppMonitorExpDto appMonitorExpDto = new AppMonitorExpDto();
         appMonitorExpDto.setId(IdUtil.getSnowflakeNextIdStr());
         appMonitorExpDto.setDate1(DateUtil.format(appMonitorInfo.getJsgcsj(), "yyyyMMdd"));
@@ -191,7 +191,7 @@ public class AppMonitorExpService {
      * @param appMonitorInfo
      * @return
      */
-    public void monitorInfoToP(AppMonitorInfoDto appMonitorInfo){
+    public void monitorInfoToP(AppMonitorInfoDto appMonitorInfo,Map<String, Map<String, String>> codeMap){
         AppMonitorExpDto appMonitorExpDto = new AppMonitorExpDto();
         appMonitorExpDto.setId(IdUtil.getSnowflakeNextIdStr());
         appMonitorExpDto.setDate1(DateUtil.format(appMonitorInfo.getKsgcsj(), "yyyyMMdd"));
@@ -209,7 +209,7 @@ public class AppMonitorExpService {
         appMonitorExpDto.setData2(appMonitorInfo.getPjlz()); //记录者
         appMonitorExpDto.setData3(appMonitorInfo.getPyfgcz());//右方观察者
         appMonitorExpDto.setData4(appMonitorInfo.getPdlgcz());//独立观察者
-        appMonitorExpDto.setData5(appMonitorInfo.getPdlgczsyff());//独立观察者所有方式
+        appMonitorExpDto.setData5(codeMap.get("B").get(appMonitorInfo.getPdlgczsyff()));//独立观察者所有方式
         appMonitorExpDto.setData6(appMonitorInfo.getPfjgcz());//附加观察者
         appMonitorExpDto.setDeptcode(appMonitorInfo.getDeptcode());
         appMonitorExpDto.setGczxm(appMonitorInfo.getGczxm());
@@ -229,7 +229,7 @@ public class AppMonitorExpService {
      * @param appMonitorInfo
      * @return
      */
-    public void monitorInfoToW(AppMonitorInfoDto appMonitorInfo){
+    public void monitorInfoToW(AppMonitorInfoDto appMonitorInfo,Map<String, Map<String, String>> codeMap){
         AppMonitorExpDto appMonitorExpDto = new AppMonitorExpDto();
         appMonitorExpDto.setId(IdUtil.getSnowflakeNextIdStr());
         appMonitorExpDto.setDate1(DateUtil.format(appMonitorInfo.getKsgcsj(), "yyyyMMdd"));
@@ -243,9 +243,9 @@ public class AppMonitorExpService {
             appMonitorExpDto.setDeclong("0");
         }
         appMonitorExpDto.setEvents("W");
-        appMonitorExpDto.setData1(appMonitorInfo.getWztgczk());//总体观测状况
-        appMonitorExpDto.setData2(appMonitorInfo.getWxgzk());//眩光状况
-        appMonitorExpDto.setData3(appMonitorInfo.getWxgszfw());//眩光所在范围
+        appMonitorExpDto.setData1(codeMap.get("C").get(appMonitorInfo.getWztgczk()) );//总体观测状况
+        appMonitorExpDto.setData2(codeMap.get("E").get( appMonitorInfo.getWxgzk()));//眩光状况
+        appMonitorExpDto.setData3(codeMap.get("D").get(appMonitorInfo.getWxgszfw()));//眩光所在范围
         appMonitorExpDto.setDeptcode(appMonitorInfo.getDeptcode());
         appMonitorExpDto.setGczxm(appMonitorInfo.getGczxm());
         appMonitorExpDto.setGczzwm(appMonitorInfo.getGczzwm());
@@ -264,7 +264,7 @@ public class AppMonitorExpService {
      * @param appMonitorInfo
      * @return
      */
-    public void monitorInfoToN(AppMonitorInfoDto appMonitorInfo){
+    public void monitorInfoToN(AppMonitorInfoDto appMonitorInfo,Map<String, Map<String, String>> codeMap){
         AppMonitorExpDto appMonitorExpDto = new AppMonitorExpDto();
         appMonitorExpDto.setId(IdUtil.getSnowflakeNextIdStr());
         appMonitorExpDto.setDate1(DateUtil.format(appMonitorInfo.getKsgcsj(), "yyyyMMdd"));
@@ -279,9 +279,9 @@ public class AppMonitorExpService {
         }
         appMonitorExpDto.setEvents("N");
         appMonitorExpDto.setData1(appMonitorInfo.getNjajl());//距岸距离(米)
-        appMonitorExpDto.setData2(appMonitorInfo.getNjafx());//近岸方向
+        appMonitorExpDto.setData2(codeMap.get("F").get(appMonitorInfo.getNjafx()));//近岸方向
         appMonitorExpDto.setData3(appMonitorInfo.getNss());//水深
-        appMonitorExpDto.setData4(appMonitorInfo.getNfx());//方向
+        appMonitorExpDto.setData4(codeMap.get("G").get(appMonitorInfo.getNfx()));//方向
         appMonitorExpDto.setData5(appMonitorInfo.getNcs());//船速
         appMonitorExpDto.setDeptcode(appMonitorInfo.getDeptcode());
         appMonitorExpDto.setGczxm(appMonitorInfo.getGczxm());
@@ -301,7 +301,7 @@ public class AppMonitorExpService {
      * @param appMonitorManualEntryeDto
      * @return
      */
-    public void monitorManualToP(AppMonitorManualEntryeDto appMonitorManualEntryeDto){
+    public void monitorManualToP(AppMonitorManualEntryeDto appMonitorManualEntryeDto,Map<String, Map<String, String>> codeMap){
         AppMonitorExpDto appMonitorExpDto = new AppMonitorExpDto();
         appMonitorExpDto.setId(IdUtil.getSnowflakeNextIdStr());
         appMonitorExpDto.setDate1(DateUtil.format(appMonitorManualEntryeDto.getKsgcsj(), "yyyyMMdd"));
@@ -319,7 +319,7 @@ public class AppMonitorExpService {
         appMonitorExpDto.setData2(appMonitorManualEntryeDto.getPjlz()); //记录者
         appMonitorExpDto.setData3(appMonitorManualEntryeDto.getPyfgcz());//右方观察者
         appMonitorExpDto.setData4(appMonitorManualEntryeDto.getPdlgcz());//独立观察者
-        appMonitorExpDto.setData5(appMonitorManualEntryeDto.getPdlgczsyff());//独立观察者所有方式
+        appMonitorExpDto.setData5(codeMap.get("B").get(appMonitorManualEntryeDto.getPdlgczsyff()));//独立观察者所有方式
         appMonitorExpDto.setData6(appMonitorManualEntryeDto.getPfjgcz());//附加观察者
         appMonitorExpDto.setDeptcode(appMonitorManualEntryeDto.getDeptcode());
         appMonitorExpDto.setGczxm(appMonitorManualEntryeDto.getGczxm());
@@ -339,7 +339,7 @@ public class AppMonitorExpService {
      * @param appMonitorManualEntryeDto
      * @return
      */
-    public void monitorManualToW(AppMonitorManualEntryeDto  appMonitorManualEntryeDto){
+    public void monitorManualToW(AppMonitorManualEntryeDto  appMonitorManualEntryeDto,Map<String, Map<String, String>> codeMap){
         AppMonitorExpDto appMonitorExpDto = new AppMonitorExpDto();
         appMonitorExpDto.setId(IdUtil.getSnowflakeNextIdStr());
         appMonitorExpDto.setDate1(DateUtil.format(appMonitorManualEntryeDto.getKsgcsj(), "yyyyMMdd"));
@@ -353,9 +353,9 @@ public class AppMonitorExpService {
             appMonitorExpDto.setDeclong("0");
         }
         appMonitorExpDto.setEvents("W");
-        appMonitorExpDto.setData1(appMonitorManualEntryeDto.getWztgczk());//总体观测状况
-        appMonitorExpDto.setData2(appMonitorManualEntryeDto.getWxgzk());//眩光状况
-        appMonitorExpDto.setData3(appMonitorManualEntryeDto.getWxgszfw());//眩光所在范围
+        appMonitorExpDto.setData1(codeMap.get("C").get(appMonitorManualEntryeDto.getWztgczk()) );//总体观测状况
+        appMonitorExpDto.setData2(codeMap.get("E").get(appMonitorManualEntryeDto.getWxgzk()));//眩光状况
+        appMonitorExpDto.setData3(codeMap.get("D").get(appMonitorManualEntryeDto.getWxgszfw()));//眩光所在范围
         appMonitorExpDto.setDeptcode(appMonitorManualEntryeDto.getDeptcode());
         appMonitorExpDto.setGczxm(appMonitorManualEntryeDto.getGczxm());
         appMonitorExpDto.setGczzwm(appMonitorManualEntryeDto.getGczzwm());
@@ -374,7 +374,7 @@ public class AppMonitorExpService {
      * @param appMonitorManualEntryeDto
      * @return
      */
-    public void monitorManualToN(AppMonitorManualEntryeDto  appMonitorManualEntryeDto){
+    public void monitorManualToN(AppMonitorManualEntryeDto  appMonitorManualEntryeDto,Map<String, Map<String, String>> codeMap){
         AppMonitorExpDto appMonitorExpDto = new AppMonitorExpDto();
         appMonitorExpDto.setId(IdUtil.getSnowflakeNextIdStr());
         appMonitorExpDto.setDate1(DateUtil.format(appMonitorManualEntryeDto.getKsgcsj(), "yyyyMMdd"));
@@ -389,9 +389,9 @@ public class AppMonitorExpService {
         }
         appMonitorExpDto.setEvents("N");
         appMonitorExpDto.setData1(appMonitorManualEntryeDto.getNjajl());//距岸距离(米)
-        appMonitorExpDto.setData2(appMonitorManualEntryeDto.getNjafx());//近岸方向
+        appMonitorExpDto.setData2(codeMap.get("F").get(appMonitorManualEntryeDto.getNjafx()) );//近岸方向
         appMonitorExpDto.setData3(appMonitorManualEntryeDto.getNss());//水深
-        appMonitorExpDto.setData4(appMonitorManualEntryeDto.getNfx());//方向
+        appMonitorExpDto.setData4(codeMap.get("G").get(appMonitorManualEntryeDto.getNfx()) );//方向
         appMonitorExpDto.setData5(appMonitorManualEntryeDto.getNcs());//船速
         appMonitorExpDto.setDeptcode(appMonitorManualEntryeDto.getDeptcode());
         appMonitorExpDto.setGczxm(appMonitorManualEntryeDto.getGczxm());
@@ -411,7 +411,7 @@ public class AppMonitorExpService {
      * @param appMonitorManualEntryeDto
      * @return
      */
-    public void monitorManualToV(AppMonitorManualEntryeDto  appMonitorManualEntryeDto){
+    public void monitorManualToV(AppMonitorManualEntryeDto  appMonitorManualEntryeDto,Map<String, Map<String, String>> codeMap){
         AppMonitorExpDto appMonitorExpDto = new AppMonitorExpDto();
         appMonitorExpDto.setId(IdUtil.getSnowflakeNextIdStr());
         appMonitorExpDto.setDate1(DateUtil.format(appMonitorManualEntryeDto.getKsgcsj(), "yyyyMMdd"));
@@ -446,7 +446,7 @@ public class AppMonitorExpService {
      * @param appMonitorDiscoveryDto
      * @return
      */
-    public void monitorDiscoveryToS(AppMonitorDiscoveryDto appMonitorDiscoveryDto){
+    public void monitorDiscoveryToS(AppMonitorDiscoveryDto appMonitorDiscoveryDto,Map<String, Map<String, String>> codeMap){
         AppMonitorExpDto appMonitorExpDto = new AppMonitorExpDto();
         appMonitorExpDto.setId(IdUtil.getSnowflakeNextIdStr());
         appMonitorExpDto.setDate1(DateUtil.format(appMonitorDiscoveryDto.getFxsj(), "yyyyMMdd"));
@@ -463,8 +463,8 @@ public class AppMonitorExpService {
         appMonitorExpDto.setData1(appMonitorDiscoveryDto.getSjl());//距离
         appMonitorExpDto.setData2(appMonitorDiscoveryDto.getSfw());//方位
         appMonitorExpDto.setData3(appMonitorDiscoveryDto.getSgcz());//观察者
-        appMonitorExpDto.setData4(appMonitorDiscoveryDto.getSff());//观察方法
-        appMonitorExpDto.setData5(appMonitorDiscoveryDto.getSwzm());//物种名
+        appMonitorExpDto.setData4(codeMap.get("B").get(appMonitorDiscoveryDto.getSff()) );//观察方法
+        appMonitorExpDto.setData5(codeMap.get("H").get(appMonitorDiscoveryDto.getSwzm()) );//物种名
         appMonitorExpDto.setData6(appMonitorDiscoveryDto.getSqtzy());//最优
         appMonitorExpDto.setData7(appMonitorDiscoveryDto.getSqtzx());//最小
         appMonitorExpDto.setData8(appMonitorDiscoveryDto.getSqtzd());//最多
@@ -486,7 +486,7 @@ public class AppMonitorExpService {
      * @param appMonitorDiscoveryDto
      * @return
      */
-    public void monitorDiscoveryToH(AppMonitorDiscoveryDto appMonitorDiscoveryDto){
+    public void monitorDiscoveryToH(AppMonitorDiscoveryDto appMonitorDiscoveryDto,Map<String, Map<String, String>> codeMap){
         AppMonitorExpDto appMonitorExpDto = new AppMonitorExpDto();
         appMonitorExpDto.setId(IdUtil.getSnowflakeNextIdStr());
         appMonitorExpDto.setDate1(DateUtil.format(appMonitorDiscoveryDto.getFxsj(), "yyyyMMdd"));
@@ -502,8 +502,20 @@ public class AppMonitorExpService {
         appMonitorExpDto.setEvents("H");
         appMonitorExpDto.setData1(appMonitorDiscoveryDto.getHzjajl());//动物距最近岸的距离
         appMonitorExpDto.setData2(appMonitorDiscoveryDto.getHmztds());//母子豚对数
-        appMonitorExpDto.setData3(appMonitorDiscoveryDto.getHhjlxdm());//环境类型
-        appMonitorExpDto.setData4(appMonitorDiscoveryDto.getHxwms());//行为描述
+        if(StringUtils.isNotBlank(appMonitorDiscoveryDto.getHhjlxdm())){
+            String[] hhjlxdms = appMonitorDiscoveryDto.getHhjlxdm().split(",");
+            int len = hhjlxdms.length;
+            StringBuilder hhjlxdm = new StringBuilder();
+            for (int i = 0; i < len; i++){
+                hhjlxdm.append(codeMap.get("J").get(hhjlxdms[i])).append(";");
+            }
+            appMonitorExpDto.setData3(hhjlxdm.toString());
+
+        }else{
+            appMonitorExpDto.setData3("");//环境类型
+        }
+
+        appMonitorExpDto.setData4(codeMap.get("I").get(appMonitorDiscoveryDto.getHxwms()) );//行为描述
         appMonitorExpDto.setDeptcode(appMonitorDiscoveryDto.getDeptcode());
         appMonitorExpDto.setGczxm(appMonitorDiscoveryDto.getGczxm());
         appMonitorExpDto.setGczzwm(appMonitorDiscoveryDto.getGczzwm());
@@ -523,7 +535,7 @@ public class AppMonitorExpService {
      * @param appMonitorDiscoveryDto
      * @return
      */
-    public void monitorDiscoveryToC(AppMonitorDiscoveryDto appMonitorDiscoveryDto){
+    public void monitorDiscoveryToC(AppMonitorDiscoveryDto appMonitorDiscoveryDto,Map<String, Map<String, String>> codeMap){
         AppMonitorExpDto appMonitorExpDto = new AppMonitorExpDto();
         appMonitorExpDto.setId(IdUtil.getSnowflakeNextIdStr());
         appMonitorExpDto.setDate1(DateUtil.format(appMonitorDiscoveryDto.getFxsj(), "yyyyMMdd"));
