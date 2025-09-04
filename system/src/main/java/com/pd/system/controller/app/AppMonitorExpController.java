@@ -1,4 +1,4 @@
-package com.pd.system.controller;
+package com.pd.system.controller.app;
 
 import com.pd.server.main.dto.AppMonitorExpDto;
 import com.pd.server.main.dto.PageDto;
@@ -25,9 +25,9 @@ public class AppMonitorExpController {
     * 列表查询
     */
     @PostMapping("/list")
-    public ResponseDto list(@RequestBody PageDto pageDto) {
+    public ResponseDto list(@RequestBody AppMonitorExpDto appMonitorExpDto) {
         ResponseDto responseDto = new ResponseDto();
-        appMonitorExpService.list(pageDto);
+        PageDto pageDto = appMonitorExpService.list(appMonitorExpDto);
         responseDto.setContent(pageDto);
         return responseDto;
     }
