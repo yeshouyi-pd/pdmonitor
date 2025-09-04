@@ -71,13 +71,15 @@ public class AppMonitorDiscoveryService {
     /**
     * 保存，id有值时更新，无值时新增
     */
-    public void save(AppMonitorDiscoveryDto appMonitorDiscoveryDto) {
+    public boolean save(AppMonitorDiscoveryDto appMonitorDiscoveryDto) {
         AppMonitorDiscovery appMonitorDiscovery = CopyUtil.copy(appMonitorDiscoveryDto, AppMonitorDiscovery.class);
         try {
             appMonitorDiscovery.setScjs(new Date());
             this.insert(appMonitorDiscovery);
+            return true;
         } catch (DuplicateKeyException e) {
             this.update(appMonitorDiscovery);
+            return false;
         }
 
 

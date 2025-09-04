@@ -39,14 +39,16 @@ public class AppMonitorManualEntryeService {
     /**
     * 保存，id有值时更新，无值时新增
     */
-    public void save(AppMonitorManualEntryeDto appMonitorManualEntryeDto) {
+    public boolean save(AppMonitorManualEntryeDto appMonitorManualEntryeDto) {
         AppMonitorManualEntrye appMonitorManualEntrye = CopyUtil.copy(appMonitorManualEntryeDto, AppMonitorManualEntrye.class);
           try {
               appMonitorManualEntrye.setScsj(new Date());
               this.insert(appMonitorManualEntrye);
+              return true;
           } catch (DuplicateKeyException e) {
               appMonitorManualEntrye.setGxsj(new Date());
               this.update(appMonitorManualEntrye);
+              return false ;
           }
 
 

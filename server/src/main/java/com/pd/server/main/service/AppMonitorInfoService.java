@@ -113,14 +113,16 @@ public class AppMonitorInfoService {
     /**
     * 保存，id有值时更新，无值时新增
     */
-    public void save(AppMonitorInfoDto appMonitorInfoDto) {
+    public boolean save(AppMonitorInfoDto appMonitorInfoDto) {
         AppMonitorInfo appMonitorInfo = CopyUtil.copy(appMonitorInfoDto, AppMonitorInfo.class);
         try {
             appMonitorInfo.setScsj(new Date());
             this.insert(appMonitorInfo);
+            return true;
         } catch (DuplicateKeyException e) {
             appMonitorInfo.setGxsj(new Date());
             this.update(appMonitorInfo);
+            return false;
         }
     }
 
