@@ -11,6 +11,7 @@ import com.pd.server.util.CopyUtil;
 import com.pd.system.controller.conf.HttpResult;
 import com.pd.system.controller.conf.RedisConfig;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -56,6 +57,7 @@ public class AppObserverController {
      * @return
      */
     @GetMapping("/getVersion")
+
     public HttpResult getVersion() {
         List<AppVersion> versions = appVersionService.selectByExample();
         if (!versions.isEmpty()) {
@@ -105,11 +107,18 @@ public class AppObserverController {
      */
 
     @PostMapping("/uploadMonitorInfo")
+    @Transactional
     public HttpResult uploadMonitorInfo(@RequestBody AppMonitorInfoDto appMonitorInfoDto) {
         if(StringUtils.isBlank(appMonitorInfoDto.getId()) || StringUtils.isBlank(appMonitorInfoDto.getDeptcode()) || StringUtils.isBlank(appMonitorInfoDto.getGczxm())){
             return HttpResult.error("上传参数异常");
         }
         try {
+            appMonitorExpService.monitorInfoToStart(appMonitorInfoDto);
+            appMonitorExpService.monitorInfoToB(appMonitorInfoDto);
+            appMonitorExpService.monitorInfoToP(appMonitorInfoDto);
+            appMonitorExpService.monitorInfoToW(appMonitorInfoDto);
+            appMonitorExpService.monitorInfoToN(appMonitorInfoDto);
+            appMonitorExpService.monitorInfoToE(appMonitorInfoDto);
             appMonitorInfoService.save(appMonitorInfoDto);
             return HttpResult.ok();
         }catch (Exception e){
@@ -150,6 +159,7 @@ public class AppObserverController {
      * @return
      */
     @PostMapping("/uploadManualEntrye")
+    @Transactional
     public HttpResult uploadManualEntrye(@RequestBody AppMonitorManualEntryeDto appMonitorManualEntryeDto) {
         if(StringUtils.isBlank(appMonitorManualEntryeDto.getMid()) || StringUtils.isBlank(appMonitorManualEntryeDto.getId())
         || StringUtils.isBlank(appMonitorManualEntryeDto.getDeptcode()) || StringUtils.isBlank(appMonitorManualEntryeDto.getGczxm())
@@ -157,6 +167,17 @@ public class AppObserverController {
             return HttpResult.error("上传参数异常");
         }
         try {
+              //整点和半点的时候换班，P N W V, 中间的十分钟写 N V
+            if("2".equals(appMonitorManualEntryeDto.getTypes())){
+                appMonitorExpService.monitorManualToP(appMonitorManualEntryeDto);
+                appMonitorExpService.monitorManualToN(appMonitorManualEntryeDto);
+                appMonitorExpService.monitorManualToW(appMonitorManualEntryeDto);
+                appMonitorExpService.monitorManualToV(appMonitorManualEntryeDto);
+
+            }else if("1".equals(appMonitorManualEntryeDto.getTypes())){
+                appMonitorExpService.monitorManualToN(appMonitorManualEntryeDto);
+                appMonitorExpService.monitorManualToV(appMonitorManualEntryeDto);
+            }
             appMonitorManualEntryeService.save(appMonitorManualEntryeDto);
             return HttpResult.ok();
         }catch (Exception e){
@@ -193,12 +214,16 @@ public class AppObserverController {
      * @return
      */
     @PostMapping("/uploadMonitorDiscovery")
+    @Transactional
     public HttpResult uploadMonitorDiscovery(@RequestBody AppMonitorDiscoveryDto appMonitorDiscoveryDto) {
         if( StringUtils.isBlank(appMonitorDiscoveryDto.getDeptcode()) || StringUtils.isBlank(appMonitorDiscoveryDto.getGczxm())
         ||StringUtils.isBlank(appMonitorDiscoveryDto.getDeptcode()) || StringUtils.isBlank(appMonitorDiscoveryDto.getGczxm())){
             return HttpResult.error("上传参数异常");
         }
         try {
+            appMonitorExpService.monitorDiscoveryToH(appMonitorDiscoveryDto);
+            appMonitorExpService.monitorDiscoveryToC(appMonitorDiscoveryDto);
+            appMonitorExpService.monitorDiscoveryToS(appMonitorDiscoveryDto);
             appMonitorDiscoveryService.save(appMonitorDiscoveryDto);
             return HttpResult.ok();
         }catch (Exception e){

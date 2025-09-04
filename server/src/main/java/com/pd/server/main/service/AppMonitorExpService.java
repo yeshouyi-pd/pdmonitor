@@ -394,25 +394,8 @@ public class AppMonitorExpService {
         appMonitorExpDto.setEvents("H");
         appMonitorExpDto.setData1(appMonitorDiscoveryDto.getHzjajl());//动物距最近岸的距离
         appMonitorExpDto.setData2(appMonitorDiscoveryDto.getHmztds());//母子豚对数
-        appMonitorExpDto.setData3(appMonitorDiscoveryDto.getHxwms());//行为描述
-        int len = appMonitorDiscoveryDto.getHhjlxdm().split(",").length;
-        if(org.apache.commons.lang.StringUtils.isNotBlank(appMonitorDiscoveryDto.getHhjlxdm())  && len>0 ){
-            //最多区5个
-            appMonitorExpDto.setData4(appMonitorDiscoveryDto.getHhjlxdm().split(",")[0]);
-            if(len >1){
-                appMonitorExpDto.setData5(appMonitorDiscoveryDto.getHhjlxdm().split(",")[1]);
-            }
-            if(len >2){
-                appMonitorExpDto.setData6(appMonitorDiscoveryDto.getHhjlxdm().split(",")[2]);
-            }
-            if(len >3){
-                appMonitorExpDto.setData7(appMonitorDiscoveryDto.getHhjlxdm().split(",")[3]);
-            }
-            if(len >4){
-                appMonitorExpDto.setData8(appMonitorDiscoveryDto.getHhjlxdm().split(",")[4]);
-            }
-
-        }
+        appMonitorExpDto.setData3(appMonitorDiscoveryDto.getHhjlxdm());//环境类型
+        appMonitorExpDto.setData4(appMonitorDiscoveryDto.getHxwms());//行为描述
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
         this.insert(appMonitorExp);
 
