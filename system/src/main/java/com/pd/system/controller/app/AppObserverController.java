@@ -162,7 +162,8 @@ public class AppObserverController {
     @Transactional
     public HttpResult uploadManualEntrye(@RequestBody AppMonitorManualEntryeDto appMonitorManualEntryeDto) {
         if(StringUtils.isBlank(appMonitorManualEntryeDto.getMid()) || StringUtils.isBlank(appMonitorManualEntryeDto.getId())
-        || StringUtils.isBlank(appMonitorManualEntryeDto.getDeptcode()) || StringUtils.isBlank(appMonitorManualEntryeDto.getGczxm())
+        || StringUtils.isBlank(appMonitorManualEntryeDto.getDeptcode()) || StringUtils.isBlank(appMonitorManualEntryeDto.getGczxm())||
+                StringUtils.isBlank(appMonitorManualEntryeDto.getTypes())
         ){
             return HttpResult.error("上传参数异常");
         }
