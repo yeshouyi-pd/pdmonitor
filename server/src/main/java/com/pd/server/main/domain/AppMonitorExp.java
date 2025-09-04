@@ -35,6 +35,12 @@ public class AppMonitorExp {
 
     private String data11;
 
+    private String deptcode;
+
+    private String gczxm;
+
+    private String gczzwm;
+
     public String getId() {
         return id;
     }
@@ -171,6 +177,30 @@ public class AppMonitorExp {
         this.data11 = data11;
     }
 
+    public String getDeptcode() {
+        return deptcode;
+    }
+
+    public void setDeptcode(String deptcode) {
+        this.deptcode = deptcode;
+    }
+
+    public String getGczxm() {
+        return gczxm;
+    }
+
+    public void setGczxm(String gczxm) {
+        this.gczxm = gczxm;
+    }
+
+    public String getGczzwm() {
+        return gczzwm;
+    }
+
+    public void setGczzwm(String gczzwm) {
+        this.gczzwm = gczzwm;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -194,6 +224,9 @@ public class AppMonitorExp {
         sb.append(", data9=").append(data9);
         sb.append(", data10=").append(data10);
         sb.append(", data11=").append(data11);
+        sb.append(", deptcode=").append(deptcode);
+        sb.append(", gczxm=").append(gczxm);
+        sb.append(", gczzwm=").append(gczzwm);
         sb.append("]");
         return sb.toString();
     }

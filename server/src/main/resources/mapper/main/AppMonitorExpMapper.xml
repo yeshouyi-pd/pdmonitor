@@ -19,6 +19,9 @@
     <result column="data9" jdbcType="VARCHAR" property="data9" />
     <result column="data10" jdbcType="VARCHAR" property="data10" />
     <result column="data11" jdbcType="VARCHAR" property="data11" />
+    <result column="deptcode" jdbcType="VARCHAR" property="deptcode" />
+    <result column="gczxm" jdbcType="VARCHAR" property="gczxm" />
+    <result column="gczzwm" jdbcType="VARCHAR" property="gczzwm" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -80,7 +83,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, date1, time1, decLat, decLong, events, data1, data2, data3, data4, data5, data6, 
-    data7, data8, data9, data10, data11
+    data7, data8, data9, data10, data11, deptcode, gczxm, gczzwm
   </sql>
   <select id="selectByExample" parameterType="com.pd.server.main.domain.AppMonitorExpExample" resultMap="BaseResultMap">
     select
@@ -118,13 +121,15 @@
       data1, data2, data3, 
       data4, data5, data6, 
       data7, data8, data9, 
-      data10, data11)
+      data10, data11, deptcode, 
+      gczxm, gczzwm)
     values (#{id,jdbcType=VARCHAR}, #{date1,jdbcType=VARCHAR}, #{time1,jdbcType=VARCHAR}, 
       #{declat,jdbcType=VARCHAR}, #{declong,jdbcType=VARCHAR}, #{events,jdbcType=VARCHAR}, 
       #{data1,jdbcType=VARCHAR}, #{data2,jdbcType=VARCHAR}, #{data3,jdbcType=VARCHAR}, 
       #{data4,jdbcType=VARCHAR}, #{data5,jdbcType=VARCHAR}, #{data6,jdbcType=VARCHAR}, 
       #{data7,jdbcType=VARCHAR}, #{data8,jdbcType=VARCHAR}, #{data9,jdbcType=VARCHAR}, 
-      #{data10,jdbcType=VARCHAR}, #{data11,jdbcType=VARCHAR})
+      #{data10,jdbcType=VARCHAR}, #{data11,jdbcType=VARCHAR}, #{deptcode,jdbcType=VARCHAR}, 
+      #{gczxm,jdbcType=VARCHAR}, #{gczzwm,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.pd.server.main.domain.AppMonitorExp">
     insert into app_monitor_exp
@@ -180,6 +185,15 @@
       <if test="data11 != null">
         data11,
       </if>
+      <if test="deptcode != null">
+        deptcode,
+      </if>
+      <if test="gczxm != null">
+        gczxm,
+      </if>
+      <if test="gczzwm != null">
+        gczzwm,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -232,6 +246,15 @@
       </if>
       <if test="data11 != null">
         #{data11,jdbcType=VARCHAR},
+      </if>
+      <if test="deptcode != null">
+        #{deptcode,jdbcType=VARCHAR},
+      </if>
+      <if test="gczxm != null">
+        #{gczxm,jdbcType=VARCHAR},
+      </if>
+      <if test="gczzwm != null">
+        #{gczzwm,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -295,6 +318,15 @@
       <if test="record.data11 != null">
         data11 = #{record.data11,jdbcType=VARCHAR},
       </if>
+      <if test="record.deptcode != null">
+        deptcode = #{record.deptcode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gczxm != null">
+        gczxm = #{record.gczxm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gczzwm != null">
+        gczzwm = #{record.gczzwm,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -318,7 +350,10 @@
       data8 = #{record.data8,jdbcType=VARCHAR},
       data9 = #{record.data9,jdbcType=VARCHAR},
       data10 = #{record.data10,jdbcType=VARCHAR},
-      data11 = #{record.data11,jdbcType=VARCHAR}
+      data11 = #{record.data11,jdbcType=VARCHAR},
+      deptcode = #{record.deptcode,jdbcType=VARCHAR},
+      gczxm = #{record.gczxm,jdbcType=VARCHAR},
+      gczzwm = #{record.gczzwm,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -374,6 +409,15 @@
       <if test="data11 != null">
         data11 = #{data11,jdbcType=VARCHAR},
       </if>
+      <if test="deptcode != null">
+        deptcode = #{deptcode,jdbcType=VARCHAR},
+      </if>
+      <if test="gczxm != null">
+        gczxm = #{gczxm,jdbcType=VARCHAR},
+      </if>
+      <if test="gczzwm != null">
+        gczzwm = #{gczzwm,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -394,7 +438,10 @@
       data8 = #{data8,jdbcType=VARCHAR},
       data9 = #{data9,jdbcType=VARCHAR},
       data10 = #{data10,jdbcType=VARCHAR},
-      data11 = #{data11,jdbcType=VARCHAR}
+      data11 = #{data11,jdbcType=VARCHAR},
+      deptcode = #{deptcode,jdbcType=VARCHAR},
+      gczxm = #{gczxm,jdbcType=VARCHAR},
+      gczzwm = #{gczzwm,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>
