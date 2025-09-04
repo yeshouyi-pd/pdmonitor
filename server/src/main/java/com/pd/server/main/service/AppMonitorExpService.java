@@ -64,6 +64,12 @@ public class AppMonitorExpService {
         appMonitorExpMapper.deleteByPrimaryKey(id);
     }
 
+    public void deleteByMid(String mid) {
+        AppMonitorExpExample appMonitorExpExample = new AppMonitorExpExample();
+        appMonitorExpExample.createCriteria().andMidEqualTo(mid);
+        appMonitorExpMapper.deleteByExample(appMonitorExpExample);
+    }
+
 
     /**
      * 主表 转换 start 信息
@@ -91,7 +97,10 @@ public class AppMonitorExpService {
         appMonitorExpDto.setDeptcode(appMonitorInfo.getDeptcode());
         appMonitorExpDto.setGczxm(appMonitorInfo.getGczxm());
         appMonitorExpDto.setGczzwm(appMonitorInfo.getGczzwm());
+        appMonitorExpDto.setTypes("1");
+        appMonitorExpDto.setMid(appMonitorInfo.getId());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
+        this.deleteByMid(appMonitorInfo.getId());
         this.insert(appMonitorExp);
 
     }
@@ -118,7 +127,10 @@ public class AppMonitorExpService {
         appMonitorExpDto.setDeptcode(appMonitorInfo.getDeptcode());
         appMonitorExpDto.setGczxm(appMonitorInfo.getGczxm());
         appMonitorExpDto.setGczzwm(appMonitorInfo.getGczzwm());
+        appMonitorExpDto.setTypes("1");
+        appMonitorExpDto.setMid(appMonitorInfo.getId());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
+        this.deleteByMid(appMonitorInfo.getId());
         this.insert(appMonitorExp);
 
     }
@@ -145,7 +157,10 @@ public class AppMonitorExpService {
         appMonitorExpDto.setDeptcode(appMonitorInfo.getDeptcode());
         appMonitorExpDto.setGczxm(appMonitorInfo.getGczxm());
         appMonitorExpDto.setGczzwm(appMonitorInfo.getGczzwm());
+        appMonitorExpDto.setTypes("1");
+        appMonitorExpDto.setMid(appMonitorInfo.getId());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
+        this.deleteByMid(appMonitorInfo.getId());
         this.insert(appMonitorExp);
 
     }
@@ -178,7 +193,10 @@ public class AppMonitorExpService {
         appMonitorExpDto.setDeptcode(appMonitorInfo.getDeptcode());
         appMonitorExpDto.setGczxm(appMonitorInfo.getGczxm());
         appMonitorExpDto.setGczzwm(appMonitorInfo.getGczzwm());
+        appMonitorExpDto.setTypes("1");
+        appMonitorExpDto.setMid(appMonitorInfo.getId());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
+        this.deleteByMid(appMonitorInfo.getId());
         this.insert(appMonitorExp);
 
     }
@@ -208,7 +226,10 @@ public class AppMonitorExpService {
         appMonitorExpDto.setDeptcode(appMonitorInfo.getDeptcode());
         appMonitorExpDto.setGczxm(appMonitorInfo.getGczxm());
         appMonitorExpDto.setGczzwm(appMonitorInfo.getGczzwm());
+        appMonitorExpDto.setTypes("1");
+        appMonitorExpDto.setMid(appMonitorInfo.getId());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
+        this.deleteByMid(appMonitorInfo.getId());
         this.insert(appMonitorExp);
 
     }
@@ -240,7 +261,10 @@ public class AppMonitorExpService {
         appMonitorExpDto.setDeptcode(appMonitorInfo.getDeptcode());
         appMonitorExpDto.setGczxm(appMonitorInfo.getGczxm());
         appMonitorExpDto.setGczzwm(appMonitorInfo.getGczzwm());
+        appMonitorExpDto.setTypes("1");
+        appMonitorExpDto.setMid(appMonitorInfo.getId());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
+        this.deleteByMid(appMonitorInfo.getId());
         this.insert(appMonitorExp);
 
     }
@@ -273,7 +297,10 @@ public class AppMonitorExpService {
         appMonitorExpDto.setDeptcode(appMonitorManualEntryeDto.getDeptcode());
         appMonitorExpDto.setGczxm(appMonitorManualEntryeDto.getGczxm());
         appMonitorExpDto.setGczzwm(appMonitorManualEntryeDto.getGczzwm());
+        appMonitorExpDto.setTypes("2");
+        appMonitorExpDto.setMid(appMonitorManualEntryeDto.getId());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
+        this.deleteByMid(appMonitorManualEntryeDto.getId());
         this.insert(appMonitorExp);
 
     }
@@ -303,7 +330,10 @@ public class AppMonitorExpService {
         appMonitorExpDto.setDeptcode(appMonitorManualEntryeDto.getDeptcode());
         appMonitorExpDto.setGczxm(appMonitorManualEntryeDto.getGczxm());
         appMonitorExpDto.setGczzwm(appMonitorManualEntryeDto.getGczzwm());
+        appMonitorExpDto.setTypes("2");
+        appMonitorExpDto.setMid(appMonitorManualEntryeDto.getId());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
+        this.deleteByMid(appMonitorManualEntryeDto.getId());
         this.insert(appMonitorExp);
 
     }
@@ -335,7 +365,10 @@ public class AppMonitorExpService {
         appMonitorExpDto.setDeptcode(appMonitorManualEntryeDto.getDeptcode());
         appMonitorExpDto.setGczxm(appMonitorManualEntryeDto.getGczxm());
         appMonitorExpDto.setGczzwm(appMonitorManualEntryeDto.getGczzwm());
+        appMonitorExpDto.setTypes("2");
+        appMonitorExpDto.setMid(appMonitorManualEntryeDto.getId());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
+        this.deleteByMid(appMonitorManualEntryeDto.getId());
         this.insert(appMonitorExp);
 
     }
@@ -364,7 +397,10 @@ public class AppMonitorExpService {
         appMonitorExpDto.setDeptcode(appMonitorManualEntryeDto.getDeptcode());
         appMonitorExpDto.setGczxm(appMonitorManualEntryeDto.getGczxm());
         appMonitorExpDto.setGczzwm(appMonitorManualEntryeDto.getGczzwm());
+        appMonitorExpDto.setTypes("2");
+        appMonitorExpDto.setMid(appMonitorManualEntryeDto.getId());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
+        this.deleteByMid(appMonitorManualEntryeDto.getId());
         this.insert(appMonitorExp);
 
     }
@@ -400,7 +436,10 @@ public class AppMonitorExpService {
         appMonitorExpDto.setDeptcode(appMonitorDiscoveryDto.getDeptcode());
         appMonitorExpDto.setGczxm(appMonitorDiscoveryDto.getGczxm());
         appMonitorExpDto.setGczzwm(appMonitorDiscoveryDto.getGczzwm());
+        appMonitorExpDto.setTypes("3");
+        appMonitorExpDto.setMid(appMonitorDiscoveryDto.getId());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
+        this.deleteByMid(appMonitorDiscoveryDto.getId());
         this.insert(appMonitorExp);
 
     }
@@ -431,7 +470,10 @@ public class AppMonitorExpService {
         appMonitorExpDto.setDeptcode(appMonitorDiscoveryDto.getDeptcode());
         appMonitorExpDto.setGczxm(appMonitorDiscoveryDto.getGczxm());
         appMonitorExpDto.setGczzwm(appMonitorDiscoveryDto.getGczzwm());
+        appMonitorExpDto.setTypes("3");
+        appMonitorExpDto.setMid(appMonitorDiscoveryDto.getId());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
+        this.deleteByMid(appMonitorDiscoveryDto.getId());
         this.insert(appMonitorExp);
 
     }
@@ -460,7 +502,10 @@ public class AppMonitorExpService {
         appMonitorExpDto.setDeptcode(appMonitorDiscoveryDto.getDeptcode());
         appMonitorExpDto.setGczxm(appMonitorDiscoveryDto.getGczxm());
         appMonitorExpDto.setGczzwm(appMonitorDiscoveryDto.getGczzwm());
+        appMonitorExpDto.setTypes("3");
+        appMonitorExpDto.setMid(appMonitorDiscoveryDto.getId());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
+        this.deleteByMid(appMonitorDiscoveryDto.getId());
         this.insert(appMonitorExp);
 
     }
