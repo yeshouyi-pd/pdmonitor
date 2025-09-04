@@ -3,7 +3,7 @@ package com.pd.server.main.dto;
 
 import java.util.Date;
 
-public class AppMonitorExpDto {
+public class AppMonitorExpDto  extends  PageDto{
 
     /**
     * 

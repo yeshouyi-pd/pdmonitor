@@ -26,14 +26,28 @@ public class AppMonitorExpService {
     /**
     * 列表查询
     */
-    public void list(PageDto pageDto) {
-    PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
+    public PageDto list(PageDto pageDto) {
+        PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
         AppMonitorExpExample appMonitorExpExample = new AppMonitorExpExample();
+        AppMonitorExpExample.Criteria criteria = appMonitorExpExample.createCriteria();
+        // 将分页对象映射为查询DTO以承接前端传参
+        AppMonitorExpDto query = CopyUtil.copy(pageDto, AppMonitorExpDto.class);
+        if (query != null) {
+            if (StringUtils.isNotBlank(query.getGczzwm())) {
+                criteria.andGczzwmEqualTo(query.getGczzwm());
+            }
+            if (StringUtils.isNotBlank(query.getDate1())) {
+                criteria.andDate1EqualTo(query.getDate1());
+            }
+        }
+        // 排序：按日期、时间倒序
+        appMonitorExpExample.setOrderByClause("cjsj asc");
         List<AppMonitorExp> appMonitorExpList = appMonitorExpMapper.selectByExample(appMonitorExpExample);
         PageInfo<AppMonitorExp> pageInfo = new PageInfo<>(appMonitorExpList);
         pageDto.setTotal(pageInfo.getTotal());
         List<AppMonitorExpDto> appMonitorExpDtoList = CopyUtil.copyList(appMonitorExpList, AppMonitorExpDto.class);
         pageDto.setList(appMonitorExpDtoList);
+        return pageDto;
     }
 
     /**
