@@ -132,7 +132,7 @@ public class AppMonitorExpService {
         appMonitorExpDto.setGczzwm(appMonitorInfo.getGczzwm());
         appMonitorExpDto.setTypes("1");
         appMonitorExpDto.setMid(appMonitorInfo.getId());
-        appMonitorExpDto.setCjsj(appMonitorInfo.getKsgcsj());
+        appMonitorExpDto.setCjsj(new Date((appMonitorInfo.getKsgcsj().getTime() + 1000)));
         appMonitorExpDto.setBid(appMonitorInfo.getId());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
         this.deleteByMid(appMonitorInfo.getId(),"B");
@@ -202,7 +202,7 @@ public class AppMonitorExpService {
         appMonitorExpDto.setGczzwm(appMonitorInfo.getGczzwm());
         appMonitorExpDto.setTypes("1");
         appMonitorExpDto.setMid(appMonitorInfo.getId());
-        appMonitorExpDto.setCjsj(new Date((appMonitorInfo.getKsgcsj().getTime() + 1000)));
+        appMonitorExpDto.setCjsj(new Date((appMonitorInfo.getKsgcsj().getTime() + 2000)));
         appMonitorExpDto.setBid(appMonitorInfo.getId());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
         this.deleteByMid(appMonitorInfo.getId(),"P");
@@ -237,7 +237,7 @@ public class AppMonitorExpService {
         appMonitorExpDto.setGczzwm(appMonitorInfo.getGczzwm());
         appMonitorExpDto.setTypes("1");
         appMonitorExpDto.setMid(appMonitorInfo.getId());
-        appMonitorExpDto.setCjsj(new Date((appMonitorInfo.getKsgcsj().getTime() + 2000)));
+        appMonitorExpDto.setCjsj(new Date((appMonitorInfo.getKsgcsj().getTime() + 3000)));
         appMonitorExpDto.setBid(appMonitorInfo.getId());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
         this.deleteByMid(appMonitorInfo.getId(),"W");
@@ -274,7 +274,7 @@ public class AppMonitorExpService {
         appMonitorExpDto.setGczzwm(appMonitorInfo.getGczzwm());
         appMonitorExpDto.setTypes("1");
         appMonitorExpDto.setMid(appMonitorInfo.getId());
-        appMonitorExpDto.setCjsj(new Date((appMonitorInfo.getKsgcsj().getTime() + 3000)));
+        appMonitorExpDto.setCjsj(new Date((appMonitorInfo.getKsgcsj().getTime() + 4000)));
         appMonitorExpDto.setBid(appMonitorInfo.getId());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
         this.deleteByMid(appMonitorInfo.getId(),"N");
