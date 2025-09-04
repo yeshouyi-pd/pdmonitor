@@ -1,6 +1,7 @@
 package com.pd.server.main.domain;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class AppMonitorExpExample {
@@ -1641,6 +1642,136 @@ public class AppMonitorExpExample {
 
         public Criteria andMidNotBetween(String value1, String value2) {
             addCriterion("mid not between", value1, value2, "mid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCjsjIsNull() {
+            addCriterion("cjsj is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCjsjIsNotNull() {
+            addCriterion("cjsj is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCjsjEqualTo(Date value) {
+            addCriterion("cjsj =", value, "cjsj");
+            return (Criteria) this;
+        }
+
+        public Criteria andCjsjNotEqualTo(Date value) {
+            addCriterion("cjsj <>", value, "cjsj");
+            return (Criteria) this;
+        }
+
+        public Criteria andCjsjGreaterThan(Date value) {
+            addCriterion("cjsj >", value, "cjsj");
+            return (Criteria) this;
+        }
+
+        public Criteria andCjsjGreaterThanOrEqualTo(Date value) {
+            addCriterion("cjsj >=", value, "cjsj");
+            return (Criteria) this;
+        }
+
+        public Criteria andCjsjLessThan(Date value) {
+            addCriterion("cjsj <", value, "cjsj");
+            return (Criteria) this;
+        }
+
+        public Criteria andCjsjLessThanOrEqualTo(Date value) {
+            addCriterion("cjsj <=", value, "cjsj");
+            return (Criteria) this;
+        }
+
+        public Criteria andCjsjIn(List<Date> values) {
+            addCriterion("cjsj in", values, "cjsj");
+            return (Criteria) this;
+        }
+
+        public Criteria andCjsjNotIn(List<Date> values) {
+            addCriterion("cjsj not in", values, "cjsj");
+            return (Criteria) this;
+        }
+
+        public Criteria andCjsjBetween(Date value1, Date value2) {
+            addCriterion("cjsj between", value1, value2, "cjsj");
+            return (Criteria) this;
+        }
+
+        public Criteria andCjsjNotBetween(Date value1, Date value2) {
+            addCriterion("cjsj not between", value1, value2, "cjsj");
+            return (Criteria) this;
+        }
+
+        public Criteria andBidIsNull() {
+            addCriterion("bid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBidIsNotNull() {
+            addCriterion("bid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBidEqualTo(String value) {
+            addCriterion("bid =", value, "bid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBidNotEqualTo(String value) {
+            addCriterion("bid <>", value, "bid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBidGreaterThan(String value) {
+            addCriterion("bid >", value, "bid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBidGreaterThanOrEqualTo(String value) {
+            addCriterion("bid >=", value, "bid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBidLessThan(String value) {
+            addCriterion("bid <", value, "bid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBidLessThanOrEqualTo(String value) {
+            addCriterion("bid <=", value, "bid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBidLike(String value) {
+            addCriterion("bid like", value, "bid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBidNotLike(String value) {
+            addCriterion("bid not like", value, "bid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBidIn(List<String> values) {
+            addCriterion("bid in", values, "bid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBidNotIn(List<String> values) {
+            addCriterion("bid not in", values, "bid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBidBetween(String value1, String value2) {
+            addCriterion("bid between", value1, value2, "bid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBidNotBetween(String value1, String value2) {
+            addCriterion("bid not between", value1, value2, "bid");
             return (Criteria) this;
         }
     }

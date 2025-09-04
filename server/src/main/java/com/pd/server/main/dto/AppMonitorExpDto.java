@@ -1,6 +1,8 @@
 package com.pd.server.main.dto;
 
 
+import java.util.Date;
+
 public class AppMonitorExpDto {
 
     /**
@@ -100,6 +102,10 @@ public class AppMonitorExpDto {
     private String types;
 
     private String mid;
+
+    private Date cjsj;
+
+    private String bid;
 
 
     public String getId() {
@@ -276,6 +282,22 @@ public class AppMonitorExpDto {
 
     public void setMid(String mid) {
         this.mid = mid;
+    }
+
+    public Date getCjsj() {
+        return cjsj;
+    }
+
+    public void setCjsj(Date cjsj) {
+        this.cjsj = cjsj;
+    }
+
+    public String getBid() {
+        return bid;
+    }
+
+    public void setBid(String bid) {
+        this.bid = bid;
     }
 
     @Override
