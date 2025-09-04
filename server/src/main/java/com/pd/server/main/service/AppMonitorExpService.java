@@ -64,9 +64,9 @@ public class AppMonitorExpService {
         appMonitorExpMapper.deleteByPrimaryKey(id);
     }
 
-    public void deleteByMid(String mid) {
+    public void deleteByMid(String mid,String ev) {
         AppMonitorExpExample appMonitorExpExample = new AppMonitorExpExample();
-        appMonitorExpExample.createCriteria().andMidEqualTo(mid);
+        appMonitorExpExample.createCriteria().andMidEqualTo(mid).andEventsEqualTo(ev);
         appMonitorExpMapper.deleteByExample(appMonitorExpExample);
     }
 
@@ -100,7 +100,7 @@ public class AppMonitorExpService {
         appMonitorExpDto.setTypes("1");
         appMonitorExpDto.setMid(appMonitorInfo.getId());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
-        this.deleteByMid(appMonitorInfo.getId());
+        this.deleteByMid(appMonitorInfo.getId(),"start");
         this.insert(appMonitorExp);
 
     }
@@ -130,7 +130,7 @@ public class AppMonitorExpService {
         appMonitorExpDto.setTypes("1");
         appMonitorExpDto.setMid(appMonitorInfo.getId());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
-        this.deleteByMid(appMonitorInfo.getId());
+        this.deleteByMid(appMonitorInfo.getId(),"B");
         this.insert(appMonitorExp);
 
     }
@@ -160,7 +160,7 @@ public class AppMonitorExpService {
         appMonitorExpDto.setTypes("1");
         appMonitorExpDto.setMid(appMonitorInfo.getId());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
-        this.deleteByMid(appMonitorInfo.getId());
+        this.deleteByMid(appMonitorInfo.getId(),"E");
         this.insert(appMonitorExp);
 
     }
@@ -196,7 +196,7 @@ public class AppMonitorExpService {
         appMonitorExpDto.setTypes("1");
         appMonitorExpDto.setMid(appMonitorInfo.getId());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
-        this.deleteByMid(appMonitorInfo.getId());
+        this.deleteByMid(appMonitorInfo.getId(),"P");
         this.insert(appMonitorExp);
 
     }
@@ -229,7 +229,7 @@ public class AppMonitorExpService {
         appMonitorExpDto.setTypes("1");
         appMonitorExpDto.setMid(appMonitorInfo.getId());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
-        this.deleteByMid(appMonitorInfo.getId());
+        this.deleteByMid(appMonitorInfo.getId(),"W");
         this.insert(appMonitorExp);
 
     }
@@ -264,7 +264,7 @@ public class AppMonitorExpService {
         appMonitorExpDto.setTypes("1");
         appMonitorExpDto.setMid(appMonitorInfo.getId());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
-        this.deleteByMid(appMonitorInfo.getId());
+        this.deleteByMid(appMonitorInfo.getId(),"N");
         this.insert(appMonitorExp);
 
     }
@@ -300,7 +300,7 @@ public class AppMonitorExpService {
         appMonitorExpDto.setTypes("2");
         appMonitorExpDto.setMid(appMonitorManualEntryeDto.getId());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
-        this.deleteByMid(appMonitorManualEntryeDto.getId());
+        this.deleteByMid(appMonitorManualEntryeDto.getId(),"P");
         this.insert(appMonitorExp);
 
     }
@@ -333,7 +333,7 @@ public class AppMonitorExpService {
         appMonitorExpDto.setTypes("2");
         appMonitorExpDto.setMid(appMonitorManualEntryeDto.getId());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
-        this.deleteByMid(appMonitorManualEntryeDto.getId());
+        this.deleteByMid(appMonitorManualEntryeDto.getId(),"W");
         this.insert(appMonitorExp);
 
     }
@@ -368,7 +368,7 @@ public class AppMonitorExpService {
         appMonitorExpDto.setTypes("2");
         appMonitorExpDto.setMid(appMonitorManualEntryeDto.getId());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
-        this.deleteByMid(appMonitorManualEntryeDto.getId());
+        this.deleteByMid(appMonitorManualEntryeDto.getId(),"N");
         this.insert(appMonitorExp);
 
     }
@@ -400,7 +400,7 @@ public class AppMonitorExpService {
         appMonitorExpDto.setTypes("2");
         appMonitorExpDto.setMid(appMonitorManualEntryeDto.getId());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
-        this.deleteByMid(appMonitorManualEntryeDto.getId());
+        this.deleteByMid(appMonitorManualEntryeDto.getId(),"V");
         this.insert(appMonitorExp);
 
     }
@@ -439,7 +439,7 @@ public class AppMonitorExpService {
         appMonitorExpDto.setTypes("3");
         appMonitorExpDto.setMid(appMonitorDiscoveryDto.getId());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
-        this.deleteByMid(appMonitorDiscoveryDto.getId());
+        this.deleteByMid(appMonitorDiscoveryDto.getId(),"S");
         this.insert(appMonitorExp);
 
     }
@@ -473,7 +473,7 @@ public class AppMonitorExpService {
         appMonitorExpDto.setTypes("3");
         appMonitorExpDto.setMid(appMonitorDiscoveryDto.getId());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
-        this.deleteByMid(appMonitorDiscoveryDto.getId());
+        this.deleteByMid(appMonitorDiscoveryDto.getId(),"H");
         this.insert(appMonitorExp);
 
     }
@@ -505,7 +505,7 @@ public class AppMonitorExpService {
         appMonitorExpDto.setTypes("3");
         appMonitorExpDto.setMid(appMonitorDiscoveryDto.getId());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
-        this.deleteByMid(appMonitorDiscoveryDto.getId());
+        this.deleteByMid(appMonitorDiscoveryDto.getId(),"C");
         this.insert(appMonitorExp);
 
     }
