@@ -1503,6 +1503,146 @@ public class AppMonitorExpExample {
             addCriterion("gczzwm not between", value1, value2, "gczzwm");
             return (Criteria) this;
         }
+
+        public Criteria andTypesIsNull() {
+            addCriterion("types is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypesIsNotNull() {
+            addCriterion("types is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypesEqualTo(String value) {
+            addCriterion("types =", value, "types");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypesNotEqualTo(String value) {
+            addCriterion("types <>", value, "types");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypesGreaterThan(String value) {
+            addCriterion("types >", value, "types");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypesGreaterThanOrEqualTo(String value) {
+            addCriterion("types >=", value, "types");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypesLessThan(String value) {
+            addCriterion("types <", value, "types");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypesLessThanOrEqualTo(String value) {
+            addCriterion("types <=", value, "types");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypesLike(String value) {
+            addCriterion("types like", value, "types");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypesNotLike(String value) {
+            addCriterion("types not like", value, "types");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypesIn(List<String> values) {
+            addCriterion("types in", values, "types");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypesNotIn(List<String> values) {
+            addCriterion("types not in", values, "types");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypesBetween(String value1, String value2) {
+            addCriterion("types between", value1, value2, "types");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypesNotBetween(String value1, String value2) {
+            addCriterion("types not between", value1, value2, "types");
+            return (Criteria) this;
+        }
+
+        public Criteria andMidIsNull() {
+            addCriterion("mid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMidIsNotNull() {
+            addCriterion("mid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMidEqualTo(String value) {
+            addCriterion("mid =", value, "mid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMidNotEqualTo(String value) {
+            addCriterion("mid <>", value, "mid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMidGreaterThan(String value) {
+            addCriterion("mid >", value, "mid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMidGreaterThanOrEqualTo(String value) {
+            addCriterion("mid >=", value, "mid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMidLessThan(String value) {
+            addCriterion("mid <", value, "mid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMidLessThanOrEqualTo(String value) {
+            addCriterion("mid <=", value, "mid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMidLike(String value) {
+            addCriterion("mid like", value, "mid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMidNotLike(String value) {
+            addCriterion("mid not like", value, "mid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMidIn(List<String> values) {
+            addCriterion("mid in", values, "mid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMidNotIn(List<String> values) {
+            addCriterion("mid not in", values, "mid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMidBetween(String value1, String value2) {
+            addCriterion("mid between", value1, value2, "mid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMidNotBetween(String value1, String value2) {
+            addCriterion("mid not between", value1, value2, "mid");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

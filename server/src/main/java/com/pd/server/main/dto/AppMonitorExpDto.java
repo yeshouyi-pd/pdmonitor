@@ -97,6 +97,11 @@ public class AppMonitorExpDto {
     private String gczzwm;
 
 
+    private String types;
+
+    private String mid;
+
+
     public String getId() {
         return id;
     }
@@ -255,6 +260,22 @@ public class AppMonitorExpDto {
 
     public void setGczzwm(String gczzwm) {
         this.gczzwm = gczzwm;
+    }
+
+    public String getTypes() {
+        return types;
+    }
+
+    public void setTypes(String types) {
+        this.types = types;
+    }
+
+    public String getMid() {
+        return mid;
+    }
+
+    public void setMid(String mid) {
+        this.mid = mid;
     }
 
     @Override

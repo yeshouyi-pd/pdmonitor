@@ -41,6 +41,10 @@ public class AppMonitorExp {
 
     private String gczzwm;
 
+    private String types;
+
+    private String mid;
+
     public String getId() {
         return id;
     }
@@ -201,6 +205,22 @@ public class AppMonitorExp {
         this.gczzwm = gczzwm;
     }
 
+    public String getTypes() {
+        return types;
+    }
+
+    public void setTypes(String types) {
+        this.types = types;
+    }
+
+    public String getMid() {
+        return mid;
+    }
+
+    public void setMid(String mid) {
+        this.mid = mid;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -227,6 +247,8 @@ public class AppMonitorExp {
         sb.append(", deptcode=").append(deptcode);
         sb.append(", gczxm=").append(gczxm);
         sb.append(", gczzwm=").append(gczzwm);
+        sb.append(", types=").append(types);
+        sb.append(", mid=").append(mid);
         sb.append("]");
         return sb.toString();
     }
