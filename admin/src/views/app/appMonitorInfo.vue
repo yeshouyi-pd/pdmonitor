@@ -285,7 +285,7 @@
                           <td>{{discovery.sjl}}</td>
                           <td>{{discovery.sgcz}}</td>
                           <td>{{discovery.sfw}}</td>
-                          <td>{{getCodeName('B', discovery.sff)}}</td>
+                          <td>{{getCodeName('L', discovery.sff)}}</td>
                           <td>{{getCodeName('H', discovery.swzm)}}</td>
                           <td>{{getCodeName('I', discovery.hxwms)}}</td>
                           <td>{{discovery.sqtzx || '-'}}</td>
