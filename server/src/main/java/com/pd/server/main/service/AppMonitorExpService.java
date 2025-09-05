@@ -39,6 +39,9 @@ public class AppMonitorExpService {
             if (StringUtils.isNotBlank(query.getDate1())) {
                 criteria.andDate1EqualTo(query.getDate1());
             }
+            if (StringUtils.isNotBlank(query.getGczxm())) {
+                criteria.andGczxmEqualTo(query.getGczxm());
+            }
         }
         // 排序：按日期、时间倒序
         appMonitorExpExample.setOrderByClause("cjsj asc");
@@ -49,6 +52,30 @@ public class AppMonitorExpService {
         pageDto.setList(appMonitorExpDtoList);
         return pageDto;
     }
+
+    public List<AppMonitorExpDto> listByDay(AppMonitorExpDto appMonitorExpDto) {
+
+        AppMonitorExpExample appMonitorExpExample = new AppMonitorExpExample();
+        AppMonitorExpExample.Criteria criteria = appMonitorExpExample.createCriteria();
+
+        if (appMonitorExpDto != null) {
+            if (StringUtils.isNotBlank(appMonitorExpDto.getGczzwm())) {
+                criteria.andGczzwmEqualTo(appMonitorExpDto.getGczzwm());
+            }
+            if (StringUtils.isNotBlank(appMonitorExpDto.getDate1())) {
+                criteria.andDate1EqualTo(appMonitorExpDto.getDate1().replaceAll("-", ""));
+            }
+            if (StringUtils.isNotBlank(appMonitorExpDto.getGczxm())) {
+                criteria.andGczxmEqualTo(appMonitorExpDto.getGczxm());
+            }
+        }
+        // 排序：按日期、时间倒序
+        appMonitorExpExample.setOrderByClause("cjsj asc");
+        List<AppMonitorExp> appMonitorExpList = appMonitorExpMapper.selectByExample(appMonitorExpExample);
+        List<AppMonitorExpDto> appMonitorExpDtoList = CopyUtil.copyList(appMonitorExpList, AppMonitorExpDto.class);
+        return appMonitorExpDtoList;
+    }
+
 
     /**
     * 保存，id有值时更新，无值时新增
