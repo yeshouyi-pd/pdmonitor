@@ -32,6 +32,11 @@
                         查询
                       </button>
                       &nbsp;&nbsp;&nbsp;
+
+                        <button type="button" v-on:click="exportQueryall()"    class="btn btn-sm btn-warning btn-round" style="margin-right: 10px;">
+                          <i class="ace-icon fa fa-leaf"></i>
+                          导出
+                        </button>
                       <a href="javascript:location.replace(location.href);" class="btn btn-sm btn-success btn-round">
                         <i class="ace-icon fa fa-refresh"></i>
                         重置
@@ -93,14 +98,17 @@
 </template>
 
 <script>
-  import Pagination from "../../components/pagination";
-  export default {
+import Pagination from "../../components/pagination";
+import qs from "qs";
+
+export default {
     components: { Pagination },
     name: "admin-appMonitorExp",
     data: function () {
       return {
         queryDto: {},
         items: [],
+        isExporting:false,
       };
     },
     mounted: function () {
@@ -110,6 +118,15 @@
       _this.list(1);
     },
     methods: {
+
+       exportQueryall() {
+         this.queryDto.deptcode= Tool.getLoginUser().deptcode;
+         this.$forceUpdate();
+          let data = qs.stringify(this.queryDto);
+         window.location.href = process.env.VUE_APP_SERVER + "/system/excel/exportCarinfo?" + data;
+      },
+
+
       // 返回当天日期，格式 yyyy-MM-dd，适用于 input[type=date]
       todayAsInputDate() {
         const d = new Date();

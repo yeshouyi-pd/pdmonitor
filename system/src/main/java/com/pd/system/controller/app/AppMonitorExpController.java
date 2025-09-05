@@ -1,10 +1,12 @@
 package com.pd.system.controller.app;
 
 import com.pd.server.main.dto.AppMonitorExpDto;
+import com.pd.server.main.dto.LoginUserDto;
 import com.pd.server.main.dto.PageDto;
 import com.pd.server.main.dto.ResponseDto;
 import com.pd.server.main.service.AppMonitorExpService;
 import com.pd.server.util.ValidatorUtil;
+import com.pd.system.controller.conf.BaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +15,7 @@ import javax.annotation.Resource;
 
 @RestController
 @RequestMapping("/admin/appMonitorExp")
-public class AppMonitorExpController {
+public class AppMonitorExpController extends BaseController {
 
     private static final Logger LOG = LoggerFactory.getLogger(AppMonitorExpController.class);
     public static final String BUSINESS_NAME = "导出记录";
@@ -27,6 +29,8 @@ public class AppMonitorExpController {
     @PostMapping("/list")
     public ResponseDto list(@RequestBody AppMonitorExpDto appMonitorExpDto) {
         ResponseDto responseDto = new ResponseDto();
+        LoginUserDto requestHeader = getRequestHeader();
+        appMonitorExpDto.setGczxm(requestHeader.getLoginName());
         PageDto pageDto = appMonitorExpService.list(appMonitorExpDto);
         responseDto.setContent(pageDto);
         return responseDto;
