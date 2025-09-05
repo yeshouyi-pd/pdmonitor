@@ -8,6 +8,12 @@ public class AppVersionDto {
     */
     private Integer id;
 
+    private String version;
+
+    private String downloadurl;
+
+    private String description;
+
     public Integer getId() {
         return id;
     }
@@ -16,6 +22,29 @@ public class AppVersionDto {
         this.id = id;
     }
 
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public String getDownloadurl() {
+        return downloadurl;
+    }
+
+    public void setDownloadurl(String downloadurl) {
+        this.downloadurl = downloadurl;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     @Override
     public String toString() {

@@ -163,6 +163,216 @@ public class AppVersionExample {
             addCriterion("id not between", value1, value2, "id");
             return (Criteria) this;
         }
+
+        public Criteria andVersionIsNull() {
+            addCriterion("version is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andVersionIsNotNull() {
+            addCriterion("version is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andVersionEqualTo(String value) {
+            addCriterion("version =", value, "version");
+            return (Criteria) this;
+        }
+
+        public Criteria andVersionNotEqualTo(String value) {
+            addCriterion("version <>", value, "version");
+            return (Criteria) this;
+        }
+
+        public Criteria andVersionGreaterThan(String value) {
+            addCriterion("version >", value, "version");
+            return (Criteria) this;
+        }
+
+        public Criteria andVersionGreaterThanOrEqualTo(String value) {
+            addCriterion("version >=", value, "version");
+            return (Criteria) this;
+        }
+
+        public Criteria andVersionLessThan(String value) {
+            addCriterion("version <", value, "version");
+            return (Criteria) this;
+        }
+
+        public Criteria andVersionLessThanOrEqualTo(String value) {
+            addCriterion("version <=", value, "version");
+            return (Criteria) this;
+        }
+
+        public Criteria andVersionLike(String value) {
+            addCriterion("version like", value, "version");
+            return (Criteria) this;
+        }
+
+        public Criteria andVersionNotLike(String value) {
+            addCriterion("version not like", value, "version");
+            return (Criteria) this;
+        }
+
+        public Criteria andVersionIn(List<String> values) {
+            addCriterion("version in", values, "version");
+            return (Criteria) this;
+        }
+
+        public Criteria andVersionNotIn(List<String> values) {
+            addCriterion("version not in", values, "version");
+            return (Criteria) this;
+        }
+
+        public Criteria andVersionBetween(String value1, String value2) {
+            addCriterion("version between", value1, value2, "version");
+            return (Criteria) this;
+        }
+
+        public Criteria andVersionNotBetween(String value1, String value2) {
+            addCriterion("version not between", value1, value2, "version");
+            return (Criteria) this;
+        }
+
+        public Criteria andDownloadurlIsNull() {
+            addCriterion("downloadUrl is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDownloadurlIsNotNull() {
+            addCriterion("downloadUrl is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDownloadurlEqualTo(String value) {
+            addCriterion("downloadUrl =", value, "downloadurl");
+            return (Criteria) this;
+        }
+
+        public Criteria andDownloadurlNotEqualTo(String value) {
+            addCriterion("downloadUrl <>", value, "downloadurl");
+            return (Criteria) this;
+        }
+
+        public Criteria andDownloadurlGreaterThan(String value) {
+            addCriterion("downloadUrl >", value, "downloadurl");
+            return (Criteria) this;
+        }
+
+        public Criteria andDownloadurlGreaterThanOrEqualTo(String value) {
+            addCriterion("downloadUrl >=", value, "downloadurl");
+            return (Criteria) this;
+        }
+
+        public Criteria andDownloadurlLessThan(String value) {
+            addCriterion("downloadUrl <", value, "downloadurl");
+            return (Criteria) this;
+        }
+
+        public Criteria andDownloadurlLessThanOrEqualTo(String value) {
+            addCriterion("downloadUrl <=", value, "downloadurl");
+            return (Criteria) this;
+        }
+
+        public Criteria andDownloadurlLike(String value) {
+            addCriterion("downloadUrl like", value, "downloadurl");
+            return (Criteria) this;
+        }
+
+        public Criteria andDownloadurlNotLike(String value) {
+            addCriterion("downloadUrl not like", value, "downloadurl");
+            return (Criteria) this;
+        }
+
+        public Criteria andDownloadurlIn(List<String> values) {
+            addCriterion("downloadUrl in", values, "downloadurl");
+            return (Criteria) this;
+        }
+
+        public Criteria andDownloadurlNotIn(List<String> values) {
+            addCriterion("downloadUrl not in", values, "downloadurl");
+            return (Criteria) this;
+        }
+
+        public Criteria andDownloadurlBetween(String value1, String value2) {
+            addCriterion("downloadUrl between", value1, value2, "downloadurl");
+            return (Criteria) this;
+        }
+
+        public Criteria andDownloadurlNotBetween(String value1, String value2) {
+            addCriterion("downloadUrl not between", value1, value2, "downloadurl");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionIsNull() {
+            addCriterion("description is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionIsNotNull() {
+            addCriterion("description is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionEqualTo(String value) {
+            addCriterion("description =", value, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionNotEqualTo(String value) {
+            addCriterion("description <>", value, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionGreaterThan(String value) {
+            addCriterion("description >", value, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionGreaterThanOrEqualTo(String value) {
+            addCriterion("description >=", value, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionLessThan(String value) {
+            addCriterion("description <", value, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionLessThanOrEqualTo(String value) {
+            addCriterion("description <=", value, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionLike(String value) {
+            addCriterion("description like", value, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionNotLike(String value) {
+            addCriterion("description not like", value, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionIn(List<String> values) {
+            addCriterion("description in", values, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionNotIn(List<String> values) {
+            addCriterion("description not in", values, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionBetween(String value1, String value2) {
+            addCriterion("description between", value1, value2, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionNotBetween(String value1, String value2) {
+            addCriterion("description not between", value1, value2, "description");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {
