@@ -18,7 +18,13 @@ public interface AppVersionMapper {
 
     List<AppVersion> selectByExample(AppVersionExample example);
 
+    AppVersion selectByPrimaryKey(Long id);
+
     int updateByExampleSelective(@Param("record") AppVersion record, @Param("example") AppVersionExample example);
 
     int updateByExample(@Param("record") AppVersion record, @Param("example") AppVersionExample example);
+
+    int updateByPrimaryKeySelective(AppVersion record);
+
+    int updateByPrimaryKey(AppVersion record);
 }
