@@ -33,9 +33,6 @@ public class AppMonitorExpService {
         // 将分页对象映射为查询DTO以承接前端传参
         AppMonitorExpDto query = CopyUtil.copy(pageDto, AppMonitorExpDto.class);
         if (query != null) {
-            if (StringUtils.isNotBlank(query.getGczzwm())) {
-                criteria.andGczzwmEqualTo(query.getGczzwm());
-            }
             if (StringUtils.isNotBlank(query.getDate1())) {
                 criteria.andDate1EqualTo(query.getDate1());
             }
@@ -59,9 +56,6 @@ public class AppMonitorExpService {
         AppMonitorExpExample.Criteria criteria = appMonitorExpExample.createCriteria();
 
         if (appMonitorExpDto != null) {
-            if (StringUtils.isNotBlank(appMonitorExpDto.getGczzwm())) {
-                criteria.andGczzwmEqualTo(appMonitorExpDto.getGczzwm());
-            }
             if (StringUtils.isNotBlank(appMonitorExpDto.getDate1())) {
                 criteria.andDate1EqualTo(appMonitorExpDto.getDate1().replaceAll("-", ""));
             }

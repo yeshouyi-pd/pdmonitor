@@ -18,9 +18,9 @@
                 <table style="font-size: 1.1em; width:100%" class="text-right">
                   <tbody>
                   <tr style="height:50px;">
-                    <td style="width:12%">观察者中文名：</td>
+                    <td style="width:12%">观察者账号：</td>
                     <td style="width:13%">
-                      <input class="input-sm" type="text" v-model="queryDto.gczzwm" style="width:90%; height:32px;"/>
+                      <input class="input-sm" type="text" v-model="queryDto.gczxm" style="width:90%; height:32px;"/>
                     </td>
                     <td style="width:12%">日期：</td>
                     <td style="width:13%">
@@ -118,10 +118,7 @@ export default {
       _this.list(1);
     },
     methods: {
-
        exportQueryall() {
-         this.queryDto.deptcode= Tool.getLoginUser().deptcode;
-         this.$forceUpdate();
           let data = qs.stringify(this.queryDto);
          window.location.href = process.env.VUE_APP_SERVER + "/system/excel/exportCarinfo?" + data;
       },

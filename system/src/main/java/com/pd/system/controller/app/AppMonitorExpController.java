@@ -29,8 +29,6 @@ public class AppMonitorExpController extends BaseController {
     @PostMapping("/list")
     public ResponseDto list(@RequestBody AppMonitorExpDto appMonitorExpDto) {
         ResponseDto responseDto = new ResponseDto();
-        LoginUserDto requestHeader = getRequestHeader();
-        appMonitorExpDto.setGczxm(requestHeader.getLoginName());
         PageDto pageDto = appMonitorExpService.list(appMonitorExpDto);
         responseDto.setContent(pageDto);
         return responseDto;
