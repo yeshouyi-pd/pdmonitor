@@ -35,6 +35,11 @@ public enum RedisCode {
     SBBHEQUIPMAP("sbbh_equip_map"),//设备sn对应的设备信息
 
     SBBHSBMC("sbbh_sbmc"),//设备sn对应的设备名称
+
+
+    APPCODETYPE("APP_CODE_TYPE"),//app类型缓存
+
+    APPCODESET("APP_CODE_SET"),//app类型缓存
     ;
 
     private String desc;

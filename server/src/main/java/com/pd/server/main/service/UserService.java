@@ -152,4 +152,15 @@ private UserMapper userMapper;
     public List<String> glyCode(){
         return userMapper.glyCode();
     }
+
+    public User appLgoin(UserDto userDto) {
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andLoginNameEqualTo(userDto.getLoginName()).andPasswordEqualTo(userDto.getPassword());
+        List<User> userList = userMapper.selectByExample(userExample);
+        User user = null;
+        if (!CollectionUtils.isEmpty(userList)) {
+            user = userList.get(0);
+        }
+        return user;
+    }
 }

@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pd.server.main.mapper.AppMonitorDiscoveryMapper">
+  <resultMap id="BaseResultMap" type="com.pd.server.main.domain.AppMonitorDiscovery">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="mid" jdbcType="VARCHAR" property="mid" />
+    <result column="fxsj" jdbcType="TIMESTAMP" property="fxsj" />
+    <result column="s_jl" jdbcType="VARCHAR" property="sjl" />
+    <result column="s_gcz" jdbcType="VARCHAR" property="sgcz" />
+    <result column="s_fw" jdbcType="VARCHAR" property="sfw" />
+    <result column="s_ff" jdbcType="VARCHAR" property="sff" />
+    <result column="s_wzm" jdbcType="VARCHAR" property="swzm" />
+    <result column="s_qt_zx" jdbcType="VARCHAR" property="sqtzx" />
+    <result column="s_qt_zy" jdbcType="VARCHAR" property="sqtzy" />
+    <result column="s_qt_zd" jdbcType="VARCHAR" property="sqtzd" />
+    <result column="c_zsbh" jdbcType="VARCHAR" property="czsbh" />
+    <result column="h_zjajl" jdbcType="VARCHAR" property="hzjajl" />
+    <result column="h_mztds" jdbcType="VARCHAR" property="hmztds" />
+    <result column="h_xwms" jdbcType="VARCHAR" property="hxwms" />
+    <result column="h_hjlxdm" jdbcType="VARCHAR" property="hhjlxdm" />
+    <result column="scjs" jdbcType="TIMESTAMP" property="scjs" />
+    <result column="gczxm" jdbcType="VARCHAR" property="gczxm" />
+    <result column="deptcode" jdbcType="VARCHAR" property="deptcode" />
+    <result column="gps" jdbcType="VARCHAR" property="gps" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, mid, fxsj, s_jl, s_gcz, s_fw, s_ff, s_wzm, s_qt_zx, s_qt_zy, s_qt_zd, c_zsbh, 
+    h_zjajl, h_mztds, h_xwms, h_hjlxdm, scjs, gczxm, deptcode ,gps
+  </sql>
+  <select id="selectByExample" parameterType="com.pd.server.main.domain.AppMonitorDiscoveryExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from app_monitor_discovery
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from app_monitor_discovery
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from app_monitor_discovery
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pd.server.main.domain.AppMonitorDiscoveryExample">
+    delete from app_monitor_discovery
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pd.server.main.domain.AppMonitorDiscovery">
+    insert into app_monitor_discovery (id, mid, fxsj, 
+      s_jl, s_gcz, s_fw, s_ff, 
+      s_wzm, s_qt_zx, s_qt_zy, 
+      s_qt_zd, c_zsbh, h_zjajl, 
+      h_mztds, h_xwms, h_hjlxdm, 
+      scjs, gczxm, deptcode ,gps
+      )
+    values (#{id,jdbcType=VARCHAR}, #{mid,jdbcType=VARCHAR}, #{fxsj,jdbcType=TIMESTAMP}, 
+      #{sjl,jdbcType=VARCHAR}, #{sgcz,jdbcType=VARCHAR}, #{sfw,jdbcType=VARCHAR}, #{sff,jdbcType=VARCHAR}, 
+      #{swzm,jdbcType=VARCHAR}, #{sqtzx,jdbcType=VARCHAR}, #{sqtzy,jdbcType=VARCHAR}, 
+      #{sqtzd,jdbcType=VARCHAR}, #{czsbh,jdbcType=VARCHAR}, #{hzjajl,jdbcType=VARCHAR}, 
+      #{hmztds,jdbcType=VARCHAR}, #{hxwms,jdbcType=VARCHAR}, #{hhjlxdm,jdbcType=VARCHAR}, 
+      #{scjs,jdbcType=TIMESTAMP}, #{gczxm,jdbcType=VARCHAR}, #{deptcode,jdbcType=VARCHAR} ,#{gps,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.pd.server.main.domain.AppMonitorDiscovery">
+    insert into app_monitor_discovery
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="mid != null">
+        mid,
+      </if>
+      <if test="fxsj != null">
+        fxsj,
+      </if>
+      <if test="sjl != null">
+        s_jl,
+      </if>
+      <if test="sgcz != null">
+        s_gcz,
+      </if>
+      <if test="sfw != null">
+        s_fw,
+      </if>
+      <if test="sff != null">
+        s_ff,
+      </if>
+      <if test="swzm != null">
+        s_wzm,
+      </if>
+      <if test="sqtzx != null">
+        s_qt_zx,
+      </if>
+      <if test="sqtzy != null">
+        s_qt_zy,
+      </if>
+      <if test="sqtzd != null">
+        s_qt_zd,
+      </if>
+      <if test="czsbh != null">
+        c_zsbh,
+      </if>
+      <if test="hzjajl != null">
+        h_zjajl,
+      </if>
+      <if test="hmztds != null">
+        h_mztds,
+      </if>
+      <if test="hxwms != null">
+        h_xwms,
+      </if>
+      <if test="hhjlxdm != null">
+        h_hjlxdm,
+      </if>
+      <if test="scjs != null">
+        scjs,
+      </if>
+      <if test="gczxm != null">
+        gczxm,
+      </if>
+      <if test="deptcode != null">
+        deptcode,
+      </if>
+      <if test="gps != null">
+        gps,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="mid != null">
+        #{mid,jdbcType=VARCHAR},
+      </if>
+      <if test="fxsj != null">
+        #{fxsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sjl != null">
+        #{sjl,jdbcType=VARCHAR},
+      </if>
+      <if test="sgcz != null">
+        #{sgcz,jdbcType=VARCHAR},
+      </if>
+      <if test="sfw != null">
+        #{sfw,jdbcType=VARCHAR},
+      </if>
+      <if test="sff != null">
+        #{sff,jdbcType=VARCHAR},
+      </if>
+      <if test="swzm != null">
+        #{swzm,jdbcType=VARCHAR},
+      </if>
+      <if test="sqtzx != null">
+        #{sqtzx,jdbcType=VARCHAR},
+      </if>
+      <if test="sqtzy != null">
+        #{sqtzy,jdbcType=VARCHAR},
+      </if>
+      <if test="sqtzd != null">
+        #{sqtzd,jdbcType=VARCHAR},
+      </if>
+      <if test="czsbh != null">
+        #{czsbh,jdbcType=VARCHAR},
+      </if>
+      <if test="hzjajl != null">
+        #{hzjajl,jdbcType=VARCHAR},
+      </if>
+      <if test="hmztds != null">
+        #{hmztds,jdbcType=VARCHAR},
+      </if>
+      <if test="hxwms != null">
+        #{hxwms,jdbcType=VARCHAR},
+      </if>
+      <if test="hhjlxdm != null">
+        #{hhjlxdm,jdbcType=VARCHAR},
+      </if>
+      <if test="scjs != null">
+        #{scjs,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gczxm != null">
+        #{gczxm,jdbcType=VARCHAR},
+      </if>
+      <if test="deptcode != null">
+        #{deptcode,jdbcType=VARCHAR},
+      </if>
+      <if test="gps != null">
+        #{gps,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pd.server.main.domain.AppMonitorDiscoveryExample" resultType="java.lang.Long">
+    select count(*) from app_monitor_discovery
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update app_monitor_discovery
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mid != null">
+        mid = #{record.mid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fxsj != null">
+        fxsj = #{record.fxsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.sjl != null">
+        s_jl = #{record.sjl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sgcz != null">
+        s_gcz = #{record.sgcz,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sfw != null">
+        s_fw = #{record.sfw,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sff != null">
+        s_ff = #{record.sff,jdbcType=VARCHAR},
+      </if>
+      <if test="record.swzm != null">
+        s_wzm = #{record.swzm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sqtzx != null">
+        s_qt_zx = #{record.sqtzx,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sqtzy != null">
+        s_qt_zy = #{record.sqtzy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sqtzd != null">
+        s_qt_zd = #{record.sqtzd,jdbcType=VARCHAR},
+      </if>
+      <if test="record.czsbh != null">
+        c_zsbh = #{record.czsbh,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hzjajl != null">
+        h_zjajl = #{record.hzjajl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hmztds != null">
+        h_mztds = #{record.hmztds,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hxwms != null">
+        h_xwms = #{record.hxwms,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hhjlxdm != null">
+        h_hjlxdm = #{record.hhjlxdm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.scjs != null">
+        scjs = #{record.scjs,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.gczxm != null">
+        gczxm = #{record.gczxm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deptcode != null">
+        deptcode = #{record.deptcode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gps != null">
+        gps = #{record.gps,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update app_monitor_discovery
+    set id = #{record.id,jdbcType=VARCHAR},
+      mid = #{record.mid,jdbcType=VARCHAR},
+      fxsj = #{record.fxsj,jdbcType=TIMESTAMP},
+      s_jl = #{record.sjl,jdbcType=VARCHAR},
+      s_gcz = #{record.sgcz,jdbcType=VARCHAR},
+      s_fw = #{record.sfw,jdbcType=VARCHAR},
+      s_ff = #{record.sff,jdbcType=VARCHAR},
+      s_wzm = #{record.swzm,jdbcType=VARCHAR},
+      s_qt_zx = #{record.sqtzx,jdbcType=VARCHAR},
+      s_qt_zy = #{record.sqtzy,jdbcType=VARCHAR},
+      s_qt_zd = #{record.sqtzd,jdbcType=VARCHAR},
+      c_zsbh = #{record.czsbh,jdbcType=VARCHAR},
+      h_zjajl = #{record.hzjajl,jdbcType=VARCHAR},
+      h_mztds = #{record.hmztds,jdbcType=VARCHAR},
+      h_xwms = #{record.hxwms,jdbcType=VARCHAR},
+      h_hjlxdm = #{record.hhjlxdm,jdbcType=VARCHAR},
+      scjs = #{record.scjs,jdbcType=TIMESTAMP},
+      gczxm = #{record.gczxm,jdbcType=VARCHAR},
+      deptcode = #{record.deptcode,jdbcType=VARCHAR},
+      gps = #{record.gps,jdbcType=VARCHAR}
+
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pd.server.main.domain.AppMonitorDiscovery">
+    update app_monitor_discovery
+    <set>
+      <if test="mid != null">
+        mid = #{mid,jdbcType=VARCHAR},
+      </if>
+      <if test="fxsj != null">
+        fxsj = #{fxsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sjl != null">
+        s_jl = #{sjl,jdbcType=VARCHAR},
+      </if>
+      <if test="sgcz != null">
+        s_gcz = #{sgcz,jdbcType=VARCHAR},
+      </if>
+      <if test="sfw != null">
+        s_fw = #{sfw,jdbcType=VARCHAR},
+      </if>
+      <if test="sff != null">
+        s_ff = #{sff,jdbcType=VARCHAR},
+      </if>
+      <if test="swzm != null">
+        s_wzm = #{swzm,jdbcType=VARCHAR},
+      </if>
+      <if test="sqtzx != null">
+        s_qt_zx = #{sqtzx,jdbcType=VARCHAR},
+      </if>
+      <if test="sqtzy != null">
+        s_qt_zy = #{sqtzy,jdbcType=VARCHAR},
+      </if>
+      <if test="sqtzd != null">
+        s_qt_zd = #{sqtzd,jdbcType=VARCHAR},
+      </if>
+      <if test="czsbh != null">
+        c_zsbh = #{czsbh,jdbcType=VARCHAR},
+      </if>
+      <if test="hzjajl != null">
+        h_zjajl = #{hzjajl,jdbcType=VARCHAR},
+      </if>
+      <if test="hmztds != null">
+        h_mztds = #{hmztds,jdbcType=VARCHAR},
+      </if>
+      <if test="hxwms != null">
+        h_xwms = #{hxwms,jdbcType=VARCHAR},
+      </if>
+      <if test="hhjlxdm != null">
+        h_hjlxdm = #{hhjlxdm,jdbcType=VARCHAR},
+      </if>
+      <if test="scjs != null">
+        scjs = #{scjs,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gczxm != null">
+        gczxm = #{gczxm,jdbcType=VARCHAR},
+      </if>
+      <if test="deptcode != null">
+        deptcode = #{deptcode,jdbcType=VARCHAR},
+      </if>
+      <if test="gps != null">
+        gps = #{gps,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pd.server.main.domain.AppMonitorDiscovery">
+    update app_monitor_discovery
+    set mid = #{mid,jdbcType=VARCHAR},
+      fxsj = #{fxsj,jdbcType=TIMESTAMP},
+      s_jl = #{sjl,jdbcType=VARCHAR},
+      s_gcz = #{sgcz,jdbcType=VARCHAR},
+      s_fw = #{sfw,jdbcType=VARCHAR},
+      s_ff = #{sff,jdbcType=VARCHAR},
+      s_wzm = #{swzm,jdbcType=VARCHAR},
+      s_qt_zx = #{sqtzx,jdbcType=VARCHAR},
+      s_qt_zy = #{sqtzy,jdbcType=VARCHAR},
+      s_qt_zd = #{sqtzd,jdbcType=VARCHAR},
+      c_zsbh = #{czsbh,jdbcType=VARCHAR},
+      h_zjajl = #{hzjajl,jdbcType=VARCHAR},
+      h_mztds = #{hmztds,jdbcType=VARCHAR},
+      h_xwms = #{hxwms,jdbcType=VARCHAR},
+      h_hjlxdm = #{hhjlxdm,jdbcType=VARCHAR},
+      scjs = #{scjs,jdbcType=TIMESTAMP},
+      gczxm = #{gczxm,jdbcType=VARCHAR},
+      deptcode = #{deptcode,jdbcType=VARCHAR},
+      gps = #{gps,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
