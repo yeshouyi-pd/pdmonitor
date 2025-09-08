@@ -1,0 +1,150 @@
+package com.pd.system.controller.app;
+
+import com.pd.server.main.domain.AppMonitorInfo;
+import com.pd.server.main.dto.AppMonitorInfoDto;
+import com.pd.server.main.dto.PageDto;
+import com.pd.server.main.dto.ResponseDto;
+import com.pd.server.main.service.AppMonitorInfoService;
+import com.pd.server.util.CopyUtil;
+import com.pd.server.util.ValidatorUtil;
+import com.pd.system.controller.conf.RedisConfig;
+import com.pd.server.config.RedisCode;
+import com.pd.server.main.dto.AppMonitorDiscoveryDto;
+import com.pd.server.main.dto.AppMonitorManualEntryeDto;
+import com.pd.server.main.service.AppMonitorDiscoveryService;
+import com.pd.server.main.service.AppMonitorManualEntryeService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import java.util.Map;
+import java.util.List;
+import java.util.HashMap;
+import java.util.ArrayList;
+
+@RestController
+@RequestMapping("/admin/appMonitorInfo")
+public class AppMonitorInfoController {
+
+    private static final Logger LOG = LoggerFactory.getLogger(AppMonitorInfoController.class);
+    public static final String BUSINESS_NAME = "观察周期";
+
+    @Resource
+    private AppMonitorInfoService appMonitorInfoService;
+    
+    @Resource
+    private AppMonitorDiscoveryService appMonitorDiscoveryService;
+    
+    @Resource
+    private AppMonitorManualEntryeService appMonitorManualEntryeService;
+
+    /**
+    * 列表查询
+    */
+    @PostMapping("/list")
+    public ResponseDto list(@RequestBody  AppMonitorInfoDto appMonitorInfoDto) {
+        ResponseDto responseDto = new ResponseDto();
+        PageDto pageDto = appMonitorInfoService.list(appMonitorInfoDto);
+        responseDto.setContent(pageDto);
+        return responseDto;
+    }
+
+    /**
+    * 保存，id有值时更新，无值时新增
+    */
+    @PostMapping("/save")
+    public ResponseDto save(@RequestBody AppMonitorInfoDto appMonitorInfoDto) {
+        // 保存校验
+                ValidatorUtil.length(appMonitorInfoDto.getKcclx(), "考察船类型", 1, 30);
+                ValidatorUtil.length(appMonitorInfoDto.getGczxm(), "观察者姓名", 1, 100);
+                ValidatorUtil.length(appMonitorInfoDto.getGcqy(), "考察区域", 1, 100);
+                ValidatorUtil.length(appMonitorInfoDto.getGcdw(), "考察单位", 1, 100);
+                ValidatorUtil.length(appMonitorInfoDto.getPzfgcz(), "左方观察者", 1, 100);
+                ValidatorUtil.length(appMonitorInfoDto.getPjlz(), "记录者", 1, 100);
+                ValidatorUtil.length(appMonitorInfoDto.getPyfgcz(), "右方观察者", 1, 100);
+                ValidatorUtil.length(appMonitorInfoDto.getPdlgcz(), "独立观察者", 1, 100);
+                ValidatorUtil.length(appMonitorInfoDto.getPdlgczsyff(), "独立观察者所用方法", 1, 100);
+                ValidatorUtil.length(appMonitorInfoDto.getPfjgcz(), "附加观察者", 1, 100);
+                ValidatorUtil.length(appMonitorInfoDto.getWztgczk(), "总体观察状况", 1, 30);
+                ValidatorUtil.length(appMonitorInfoDto.getWxgszfw(), "眩光所在范围", 1, 30);
+                ValidatorUtil.length(appMonitorInfoDto.getWxgzk(), "眩光状况", 1, 30);
+                ValidatorUtil.length(appMonitorInfoDto.getNjajl(), "近岸距离(米)", 1, 10);
+                ValidatorUtil.length(appMonitorInfoDto.getNss(), "水深(米)", 1, 10);
+                ValidatorUtil.length(appMonitorInfoDto.getNcs(), "船速", 1, 10);
+                ValidatorUtil.length(appMonitorInfoDto.getNjafx(), "近岸方向", 1, 10);
+                ValidatorUtil.length(appMonitorInfoDto.getNfx(), "方向", 1, 10);
+                ValidatorUtil.length(appMonitorInfoDto.getDeptcode(), "登录用户所在部门", 1, 100);
+
+        ResponseDto responseDto = new ResponseDto();
+        appMonitorInfoService.save(appMonitorInfoDto);
+        responseDto.setContent(appMonitorInfoDto);
+        return responseDto;
+    }
+
+    /**
+    * 删除
+    */
+    @DeleteMapping("/delete/{id}")
+    public ResponseDto delete(@PathVariable String id) {
+        ResponseDto responseDto = new ResponseDto();
+        appMonitorInfoService.delete(id);
+        return responseDto;
+    }
+
+    /**
+     * 获取代码映射
+     */
+    @GetMapping("/getCodeMap")
+    public ResponseDto getCodeMap() {
+        ResponseDto responseDto = new ResponseDto();
+        try {
+            Map<String, Map<String, String>> codeMap = (Map<String, Map<String, String>>) RedisConfig.redisTstaticemplate.opsForValue().get(RedisCode.APPCODESET);
+            responseDto.setContent(codeMap);
+        } catch (Exception e) {
+            LOG.error("获取代码映射失败", e);
+            responseDto.setSuccess(false);
+            responseDto.setMessage("获取代码映射失败");
+        }
+        return responseDto;
+    }
+
+    /**
+     * 获取详细信息
+     */
+    @GetMapping("/getDetail/{id}")
+    public ResponseDto getDetail(@PathVariable String id) {
+        ResponseDto responseDto = new ResponseDto();
+        try {
+            // 获取观察周期基本信息
+            AppMonitorInfo appMonitorInfo = appMonitorInfoService.findById(id);
+            if (appMonitorInfo == null) {
+                responseDto.setSuccess(false);
+                responseDto.setMessage("未找到指定的观察周期记录");
+                return responseDto;
+            }
+            
+            AppMonitorInfoDto appMonitorInfoDto = CopyUtil.copy(appMonitorInfo, AppMonitorInfoDto.class);
+            
+            // 获取关联的发现江豚信息（根据mid关联，按fxsj倒序）
+            List<AppMonitorDiscoveryDto> discoveryList = appMonitorDiscoveryService.findByMidOrderByFxsjDesc(id);
+            
+            // 获取关联的人工观察信息（根据mid关联，按ksgcsj倒序）
+            List<AppMonitorManualEntryeDto> manualEntryeList = appMonitorManualEntryeService.findByMidOrderByKsgcsjDesc(id);
+            
+            // 组装返回数据
+            Map<String, Object> detailData = new HashMap<>();
+            detailData.put("appMonitorInfo", appMonitorInfoDto);
+            detailData.put("discoveryList", discoveryList);
+            detailData.put("manualEntryeList", manualEntryeList);
+            
+            responseDto.setContent(detailData);
+        } catch (Exception e) {
+            LOG.error("获取详细信息失败", e);
+            responseDto.setSuccess(false);
+            responseDto.setMessage("获取详细信息失败");
+        }
+        return responseDto;
+    }
+
+}

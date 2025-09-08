@@ -1,0 +1,509 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pd.server.main.mapper.AppMonitorExpMapper">
+  <resultMap id="BaseResultMap" type="com.pd.server.main.domain.AppMonitorExp">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="date1" jdbcType="VARCHAR" property="date1" />
+    <result column="time1" jdbcType="VARCHAR" property="time1" />
+    <result column="decLat" jdbcType="VARCHAR" property="declat" />
+    <result column="decLong" jdbcType="VARCHAR" property="declong" />
+    <result column="events" jdbcType="VARCHAR" property="events" />
+    <result column="data1" jdbcType="VARCHAR" property="data1" />
+    <result column="data2" jdbcType="VARCHAR" property="data2" />
+    <result column="data3" jdbcType="VARCHAR" property="data3" />
+    <result column="data4" jdbcType="VARCHAR" property="data4" />
+    <result column="data5" jdbcType="VARCHAR" property="data5" />
+    <result column="data6" jdbcType="VARCHAR" property="data6" />
+    <result column="data7" jdbcType="VARCHAR" property="data7" />
+    <result column="data8" jdbcType="VARCHAR" property="data8" />
+    <result column="data9" jdbcType="VARCHAR" property="data9" />
+    <result column="data10" jdbcType="VARCHAR" property="data10" />
+    <result column="data11" jdbcType="VARCHAR" property="data11" />
+    <result column="deptcode" jdbcType="VARCHAR" property="deptcode" />
+    <result column="gczxm" jdbcType="VARCHAR" property="gczxm" />
+    <result column="gczzwm" jdbcType="VARCHAR" property="gczzwm" />
+    <result column="types" jdbcType="CHAR" property="types" />
+    <result column="mid" jdbcType="VARCHAR" property="mid" />
+    <result column="cjsj" jdbcType="TIMESTAMP" property="cjsj" />
+    <result column="bid" jdbcType="VARCHAR" property="bid" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, date1, time1, decLat, decLong, events, data1, data2, data3, data4, data5, data6, 
+    data7, data8, data9, data10, data11, deptcode, gczxm, gczzwm, types, mid, cjsj, bid
+  </sql>
+  <select id="selectByExample" parameterType="com.pd.server.main.domain.AppMonitorExpExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from app_monitor_exp
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from app_monitor_exp
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from app_monitor_exp
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pd.server.main.domain.AppMonitorExpExample">
+    delete from app_monitor_exp
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pd.server.main.domain.AppMonitorExp">
+    insert into app_monitor_exp (id, date1, time1, 
+      decLat, decLong, events, 
+      data1, data2, data3, 
+      data4, data5, data6, 
+      data7, data8, data9, 
+      data10, data11, deptcode, 
+      gczxm, gczzwm, types, 
+      mid, cjsj, bid)
+    values (#{id,jdbcType=VARCHAR}, #{date1,jdbcType=VARCHAR}, #{time1,jdbcType=VARCHAR}, 
+      #{declat,jdbcType=VARCHAR}, #{declong,jdbcType=VARCHAR}, #{events,jdbcType=VARCHAR}, 
+      #{data1,jdbcType=VARCHAR}, #{data2,jdbcType=VARCHAR}, #{data3,jdbcType=VARCHAR}, 
+      #{data4,jdbcType=VARCHAR}, #{data5,jdbcType=VARCHAR}, #{data6,jdbcType=VARCHAR}, 
+      #{data7,jdbcType=VARCHAR}, #{data8,jdbcType=VARCHAR}, #{data9,jdbcType=VARCHAR}, 
+      #{data10,jdbcType=VARCHAR}, #{data11,jdbcType=VARCHAR}, #{deptcode,jdbcType=VARCHAR}, 
+      #{gczxm,jdbcType=VARCHAR}, #{gczzwm,jdbcType=VARCHAR}, #{types,jdbcType=CHAR}, 
+      #{mid,jdbcType=VARCHAR}, #{cjsj,jdbcType=TIMESTAMP}, #{bid,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pd.server.main.domain.AppMonitorExp">
+    insert into app_monitor_exp
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="date1 != null">
+        date1,
+      </if>
+      <if test="time1 != null">
+        time1,
+      </if>
+      <if test="declat != null">
+        decLat,
+      </if>
+      <if test="declong != null">
+        decLong,
+      </if>
+      <if test="events != null">
+        events,
+      </if>
+      <if test="data1 != null">
+        data1,
+      </if>
+      <if test="data2 != null">
+        data2,
+      </if>
+      <if test="data3 != null">
+        data3,
+      </if>
+      <if test="data4 != null">
+        data4,
+      </if>
+      <if test="data5 != null">
+        data5,
+      </if>
+      <if test="data6 != null">
+        data6,
+      </if>
+      <if test="data7 != null">
+        data7,
+      </if>
+      <if test="data8 != null">
+        data8,
+      </if>
+      <if test="data9 != null">
+        data9,
+      </if>
+      <if test="data10 != null">
+        data10,
+      </if>
+      <if test="data11 != null">
+        data11,
+      </if>
+      <if test="deptcode != null">
+        deptcode,
+      </if>
+      <if test="gczxm != null">
+        gczxm,
+      </if>
+      <if test="gczzwm != null">
+        gczzwm,
+      </if>
+      <if test="types != null">
+        types,
+      </if>
+      <if test="mid != null">
+        mid,
+      </if>
+      <if test="cjsj != null">
+        cjsj,
+      </if>
+      <if test="bid != null">
+        bid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="date1 != null">
+        #{date1,jdbcType=VARCHAR},
+      </if>
+      <if test="time1 != null">
+        #{time1,jdbcType=VARCHAR},
+      </if>
+      <if test="declat != null">
+        #{declat,jdbcType=VARCHAR},
+      </if>
+      <if test="declong != null">
+        #{declong,jdbcType=VARCHAR},
+      </if>
+      <if test="events != null">
+        #{events,jdbcType=VARCHAR},
+      </if>
+      <if test="data1 != null">
+        #{data1,jdbcType=VARCHAR},
+      </if>
+      <if test="data2 != null">
+        #{data2,jdbcType=VARCHAR},
+      </if>
+      <if test="data3 != null">
+        #{data3,jdbcType=VARCHAR},
+      </if>
+      <if test="data4 != null">
+        #{data4,jdbcType=VARCHAR},
+      </if>
+      <if test="data5 != null">
+        #{data5,jdbcType=VARCHAR},
+      </if>
+      <if test="data6 != null">
+        #{data6,jdbcType=VARCHAR},
+      </if>
+      <if test="data7 != null">
+        #{data7,jdbcType=VARCHAR},
+      </if>
+      <if test="data8 != null">
+        #{data8,jdbcType=VARCHAR},
+      </if>
+      <if test="data9 != null">
+        #{data9,jdbcType=VARCHAR},
+      </if>
+      <if test="data10 != null">
+        #{data10,jdbcType=VARCHAR},
+      </if>
+      <if test="data11 != null">
+        #{data11,jdbcType=VARCHAR},
+      </if>
+      <if test="deptcode != null">
+        #{deptcode,jdbcType=VARCHAR},
+      </if>
+      <if test="gczxm != null">
+        #{gczxm,jdbcType=VARCHAR},
+      </if>
+      <if test="gczzwm != null">
+        #{gczzwm,jdbcType=VARCHAR},
+      </if>
+      <if test="types != null">
+        #{types,jdbcType=CHAR},
+      </if>
+      <if test="mid != null">
+        #{mid,jdbcType=VARCHAR},
+      </if>
+      <if test="cjsj != null">
+        #{cjsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bid != null">
+        #{bid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pd.server.main.domain.AppMonitorExpExample" resultType="java.lang.Long">
+    select count(*) from app_monitor_exp
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update app_monitor_exp
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.date1 != null">
+        date1 = #{record.date1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.time1 != null">
+        time1 = #{record.time1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.declat != null">
+        decLat = #{record.declat,jdbcType=VARCHAR},
+      </if>
+      <if test="record.declong != null">
+        decLong = #{record.declong,jdbcType=VARCHAR},
+      </if>
+      <if test="record.events != null">
+        events = #{record.events,jdbcType=VARCHAR},
+      </if>
+      <if test="record.data1 != null">
+        data1 = #{record.data1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.data2 != null">
+        data2 = #{record.data2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.data3 != null">
+        data3 = #{record.data3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.data4 != null">
+        data4 = #{record.data4,jdbcType=VARCHAR},
+      </if>
+      <if test="record.data5 != null">
+        data5 = #{record.data5,jdbcType=VARCHAR},
+      </if>
+      <if test="record.data6 != null">
+        data6 = #{record.data6,jdbcType=VARCHAR},
+      </if>
+      <if test="record.data7 != null">
+        data7 = #{record.data7,jdbcType=VARCHAR},
+      </if>
+      <if test="record.data8 != null">
+        data8 = #{record.data8,jdbcType=VARCHAR},
+      </if>
+      <if test="record.data9 != null">
+        data9 = #{record.data9,jdbcType=VARCHAR},
+      </if>
+      <if test="record.data10 != null">
+        data10 = #{record.data10,jdbcType=VARCHAR},
+      </if>
+      <if test="record.data11 != null">
+        data11 = #{record.data11,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deptcode != null">
+        deptcode = #{record.deptcode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gczxm != null">
+        gczxm = #{record.gczxm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gczzwm != null">
+        gczzwm = #{record.gczzwm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.types != null">
+        types = #{record.types,jdbcType=CHAR},
+      </if>
+      <if test="record.mid != null">
+        mid = #{record.mid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cjsj != null">
+        cjsj = #{record.cjsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.bid != null">
+        bid = #{record.bid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update app_monitor_exp
+    set id = #{record.id,jdbcType=VARCHAR},
+      date1 = #{record.date1,jdbcType=VARCHAR},
+      time1 = #{record.time1,jdbcType=VARCHAR},
+      decLat = #{record.declat,jdbcType=VARCHAR},
+      decLong = #{record.declong,jdbcType=VARCHAR},
+      events = #{record.events,jdbcType=VARCHAR},
+      data1 = #{record.data1,jdbcType=VARCHAR},
+      data2 = #{record.data2,jdbcType=VARCHAR},
+      data3 = #{record.data3,jdbcType=VARCHAR},
+      data4 = #{record.data4,jdbcType=VARCHAR},
+      data5 = #{record.data5,jdbcType=VARCHAR},
+      data6 = #{record.data6,jdbcType=VARCHAR},
+      data7 = #{record.data7,jdbcType=VARCHAR},
+      data8 = #{record.data8,jdbcType=VARCHAR},
+      data9 = #{record.data9,jdbcType=VARCHAR},
+      data10 = #{record.data10,jdbcType=VARCHAR},
+      data11 = #{record.data11,jdbcType=VARCHAR},
+      deptcode = #{record.deptcode,jdbcType=VARCHAR},
+      gczxm = #{record.gczxm,jdbcType=VARCHAR},
+      gczzwm = #{record.gczzwm,jdbcType=VARCHAR},
+      types = #{record.types,jdbcType=CHAR},
+      mid = #{record.mid,jdbcType=VARCHAR},
+      cjsj = #{record.cjsj,jdbcType=TIMESTAMP},
+      bid = #{record.bid,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pd.server.main.domain.AppMonitorExp">
+    update app_monitor_exp
+    <set>
+      <if test="date1 != null">
+        date1 = #{date1,jdbcType=VARCHAR},
+      </if>
+      <if test="time1 != null">
+        time1 = #{time1,jdbcType=VARCHAR},
+      </if>
+      <if test="declat != null">
+        decLat = #{declat,jdbcType=VARCHAR},
+      </if>
+      <if test="declong != null">
+        decLong = #{declong,jdbcType=VARCHAR},
+      </if>
+      <if test="events != null">
+        events = #{events,jdbcType=VARCHAR},
+      </if>
+      <if test="data1 != null">
+        data1 = #{data1,jdbcType=VARCHAR},
+      </if>
+      <if test="data2 != null">
+        data2 = #{data2,jdbcType=VARCHAR},
+      </if>
+      <if test="data3 != null">
+        data3 = #{data3,jdbcType=VARCHAR},
+      </if>
+      <if test="data4 != null">
+        data4 = #{data4,jdbcType=VARCHAR},
+      </if>
+      <if test="data5 != null">
+        data5 = #{data5,jdbcType=VARCHAR},
+      </if>
+      <if test="data6 != null">
+        data6 = #{data6,jdbcType=VARCHAR},
+      </if>
+      <if test="data7 != null">
+        data7 = #{data7,jdbcType=VARCHAR},
+      </if>
+      <if test="data8 != null">
+        data8 = #{data8,jdbcType=VARCHAR},
+      </if>
+      <if test="data9 != null">
+        data9 = #{data9,jdbcType=VARCHAR},
+      </if>
+      <if test="data10 != null">
+        data10 = #{data10,jdbcType=VARCHAR},
+      </if>
+      <if test="data11 != null">
+        data11 = #{data11,jdbcType=VARCHAR},
+      </if>
+      <if test="deptcode != null">
+        deptcode = #{deptcode,jdbcType=VARCHAR},
+      </if>
+      <if test="gczxm != null">
+        gczxm = #{gczxm,jdbcType=VARCHAR},
+      </if>
+      <if test="gczzwm != null">
+        gczzwm = #{gczzwm,jdbcType=VARCHAR},
+      </if>
+      <if test="types != null">
+        types = #{types,jdbcType=CHAR},
+      </if>
+      <if test="mid != null">
+        mid = #{mid,jdbcType=VARCHAR},
+      </if>
+      <if test="cjsj != null">
+        cjsj = #{cjsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bid != null">
+        bid = #{bid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pd.server.main.domain.AppMonitorExp">
+    update app_monitor_exp
+    set date1 = #{date1,jdbcType=VARCHAR},
+      time1 = #{time1,jdbcType=VARCHAR},
+      decLat = #{declat,jdbcType=VARCHAR},
+      decLong = #{declong,jdbcType=VARCHAR},
+      events = #{events,jdbcType=VARCHAR},
+      data1 = #{data1,jdbcType=VARCHAR},
+      data2 = #{data2,jdbcType=VARCHAR},
+      data3 = #{data3,jdbcType=VARCHAR},
+      data4 = #{data4,jdbcType=VARCHAR},
+      data5 = #{data5,jdbcType=VARCHAR},
+      data6 = #{data6,jdbcType=VARCHAR},
+      data7 = #{data7,jdbcType=VARCHAR},
+      data8 = #{data8,jdbcType=VARCHAR},
+      data9 = #{data9,jdbcType=VARCHAR},
+      data10 = #{data10,jdbcType=VARCHAR},
+      data11 = #{data11,jdbcType=VARCHAR},
+      deptcode = #{deptcode,jdbcType=VARCHAR},
+      gczxm = #{gczxm,jdbcType=VARCHAR},
+      gczzwm = #{gczzwm,jdbcType=VARCHAR},
+      types = #{types,jdbcType=CHAR},
+      mid = #{mid,jdbcType=VARCHAR},
+      cjsj = #{cjsj,jdbcType=TIMESTAMP},
+      bid = #{bid,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

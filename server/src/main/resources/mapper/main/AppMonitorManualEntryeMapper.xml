@@ -1,0 +1,560 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pd.server.main.mapper.AppMonitorManualEntryeMapper">
+  <resultMap id="BaseResultMap" type="com.pd.server.main.domain.AppMonitorManualEntrye">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="mid" jdbcType="VARCHAR" property="mid" />
+    <result column="ksgcsj" jdbcType="TIMESTAMP" property="ksgcsj" />
+    <result column="p_zfgcz" jdbcType="VARCHAR" property="pzfgcz" />
+    <result column="p_jlz" jdbcType="VARCHAR" property="pjlz" />
+    <result column="p_yfgcz" jdbcType="VARCHAR" property="pyfgcz" />
+    <result column="p_dlgcz" jdbcType="VARCHAR" property="pdlgcz" />
+    <result column="p_dlgczsyff" jdbcType="VARCHAR" property="pdlgczsyff" />
+    <result column="p_fjgcz" jdbcType="VARCHAR" property="pfjgcz" />
+    <result column="w_ztgczk" jdbcType="VARCHAR" property="wztgczk" />
+    <result column="w_xgszfw" jdbcType="VARCHAR" property="wxgszfw" />
+    <result column="w_xgzk" jdbcType="VARCHAR" property="wxgzk" />
+    <result column="n_jajl" jdbcType="VARCHAR" property="njajl" />
+    <result column="n_ss" jdbcType="VARCHAR" property="nss" />
+    <result column="n_cs" jdbcType="VARCHAR" property="ncs" />
+    <result column="n_jafx" jdbcType="VARCHAR" property="njafx" />
+    <result column="n_fx" jdbcType="VARCHAR" property="nfx" />
+    <result column="v_ycsl" jdbcType="VARCHAR" property="vycsl" />
+    <result column="v_dcsl" jdbcType="VARCHAR" property="vdcsl" />
+    <result column="scsj" jdbcType="TIMESTAMP" property="scsj" />
+    <result column="gxsj" jdbcType="TIMESTAMP" property="gxsj" />
+    <result column="v_tbcsl" jdbcType="VARCHAR" property="vtbcsl" />
+    <result column="v_ydcsl" jdbcType="VARCHAR" property="vydcsl" />
+    <result column="deptcode" jdbcType="VARCHAR" property="deptcode" />
+    <result column="gczxm" jdbcType="VARCHAR" property="gczxm" />
+    <result column="gps" jdbcType="VARCHAR" property="gps" />
+    <result column="types" jdbcType="VARCHAR" property="types" />
+
+
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, mid, ksgcsj, p_zfgcz, p_jlz, p_yfgcz, p_dlgcz, p_dlgczsyff, p_fjgcz, w_ztgczk, 
+    w_xgszfw, w_xgzk, n_jajl, n_ss, n_cs, n_jafx, n_fx, v_ycsl, v_dcsl, scsj, gxsj, v_tbcsl, 
+    v_ydcsl, deptcode, gczxm ,gps , types
+  </sql>
+  <select id="selectByExample" parameterType="com.pd.server.main.domain.AppMonitorManualEntryeExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from app_monitor_manual_entrye
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from app_monitor_manual_entrye
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from app_monitor_manual_entrye
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pd.server.main.domain.AppMonitorManualEntryeExample">
+    delete from app_monitor_manual_entrye
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pd.server.main.domain.AppMonitorManualEntrye">
+    insert into app_monitor_manual_entrye (id, mid, ksgcsj, 
+      p_zfgcz, p_jlz, p_yfgcz, 
+      p_dlgcz, p_dlgczsyff, p_fjgcz, 
+      w_ztgczk, w_xgszfw, w_xgzk, 
+      n_jajl, n_ss, n_cs, n_jafx, 
+      n_fx, v_ycsl, v_dcsl, 
+      scsj, gxsj, v_tbcsl, 
+      v_ydcsl, deptcode, gczxm ,gps ,types
+      )
+    values (#{id,jdbcType=VARCHAR}, #{mid,jdbcType=VARCHAR}, #{ksgcsj,jdbcType=TIMESTAMP}, 
+      #{pzfgcz,jdbcType=VARCHAR}, #{pjlz,jdbcType=VARCHAR}, #{pyfgcz,jdbcType=VARCHAR}, 
+      #{pdlgcz,jdbcType=VARCHAR}, #{pdlgczsyff,jdbcType=VARCHAR}, #{pfjgcz,jdbcType=VARCHAR}, 
+      #{wztgczk,jdbcType=VARCHAR}, #{wxgszfw,jdbcType=VARCHAR}, #{wxgzk,jdbcType=VARCHAR}, 
+      #{njajl,jdbcType=VARCHAR}, #{nss,jdbcType=VARCHAR}, #{ncs,jdbcType=VARCHAR}, #{njafx,jdbcType=VARCHAR}, 
+      #{nfx,jdbcType=VARCHAR}, #{vycsl,jdbcType=VARCHAR}, #{vdcsl,jdbcType=VARCHAR}, 
+      #{scsj,jdbcType=TIMESTAMP}, #{gxsj,jdbcType=TIMESTAMP}, #{vtbcsl,jdbcType=VARCHAR}, 
+      #{vydcsl,jdbcType=VARCHAR}, #{deptcode,jdbcType=VARCHAR}, #{gczxm,jdbcType=VARCHAR} , #{gps,jdbcType=VARCHAR} , #{types,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.pd.server.main.domain.AppMonitorManualEntrye">
+    insert into app_monitor_manual_entrye
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="mid != null">
+        mid,
+      </if>
+      <if test="ksgcsj != null">
+        ksgcsj,
+      </if>
+      <if test="pzfgcz != null">
+        p_zfgcz,
+      </if>
+      <if test="pjlz != null">
+        p_jlz,
+      </if>
+      <if test="pyfgcz != null">
+        p_yfgcz,
+      </if>
+      <if test="pdlgcz != null">
+        p_dlgcz,
+      </if>
+      <if test="pdlgczsyff != null">
+        p_dlgczsyff,
+      </if>
+      <if test="pfjgcz != null">
+        p_fjgcz,
+      </if>
+      <if test="wztgczk != null">
+        w_ztgczk,
+      </if>
+      <if test="wxgszfw != null">
+        w_xgszfw,
+      </if>
+      <if test="wxgzk != null">
+        w_xgzk,
+      </if>
+      <if test="njajl != null">
+        n_jajl,
+      </if>
+      <if test="nss != null">
+        n_ss,
+      </if>
+      <if test="ncs != null">
+        n_cs,
+      </if>
+      <if test="njafx != null">
+        n_jafx,
+      </if>
+      <if test="nfx != null">
+        n_fx,
+      </if>
+      <if test="vycsl != null">
+        v_ycsl,
+      </if>
+      <if test="vdcsl != null">
+        v_dcsl,
+      </if>
+      <if test="scsj != null">
+        scsj,
+      </if>
+      <if test="gxsj != null">
+        gxsj,
+      </if>
+      <if test="vtbcsl != null">
+        v_tbcsl,
+      </if>
+      <if test="vydcsl != null">
+        v_ydcsl,
+      </if>
+      <if test="deptcode != null">
+        deptcode,
+      </if>
+      <if test="gczxm != null">
+        gczxm,
+      </if>
+      <if test="gps != null">
+        gps,
+      </if>
+      <if test="types != null">
+        types,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="mid != null">
+        #{mid,jdbcType=VARCHAR},
+      </if>
+      <if test="ksgcsj != null">
+        #{ksgcsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pzfgcz != null">
+        #{pzfgcz,jdbcType=VARCHAR},
+      </if>
+      <if test="pjlz != null">
+        #{pjlz,jdbcType=VARCHAR},
+      </if>
+      <if test="pyfgcz != null">
+        #{pyfgcz,jdbcType=VARCHAR},
+      </if>
+      <if test="pdlgcz != null">
+        #{pdlgcz,jdbcType=VARCHAR},
+      </if>
+      <if test="pdlgczsyff != null">
+        #{pdlgczsyff,jdbcType=VARCHAR},
+      </if>
+      <if test="pfjgcz != null">
+        #{pfjgcz,jdbcType=VARCHAR},
+      </if>
+      <if test="wztgczk != null">
+        #{wztgczk,jdbcType=VARCHAR},
+      </if>
+      <if test="wxgszfw != null">
+        #{wxgszfw,jdbcType=VARCHAR},
+      </if>
+      <if test="wxgzk != null">
+        #{wxgzk,jdbcType=VARCHAR},
+      </if>
+      <if test="njajl != null">
+        #{njajl,jdbcType=VARCHAR},
+      </if>
+      <if test="nss != null">
+        #{nss,jdbcType=VARCHAR},
+      </if>
+      <if test="ncs != null">
+        #{ncs,jdbcType=VARCHAR},
+      </if>
+      <if test="njafx != null">
+        #{njafx,jdbcType=VARCHAR},
+      </if>
+      <if test="nfx != null">
+        #{nfx,jdbcType=VARCHAR},
+      </if>
+      <if test="vycsl != null">
+        #{vycsl,jdbcType=VARCHAR},
+      </if>
+      <if test="vdcsl != null">
+        #{vdcsl,jdbcType=VARCHAR},
+      </if>
+      <if test="scsj != null">
+        #{scsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gxsj != null">
+        #{gxsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="vtbcsl != null">
+        #{vtbcsl,jdbcType=VARCHAR},
+      </if>
+      <if test="vydcsl != null">
+        #{vydcsl,jdbcType=VARCHAR},
+      </if>
+      <if test="deptcode != null">
+        #{deptcode,jdbcType=VARCHAR},
+      </if>
+      <if test="gczxm != null">
+        #{gczxm,jdbcType=VARCHAR},
+      </if>
+      <if test="gps != null">
+        #{gps,jdbcType=VARCHAR},
+      </if>
+      <if test="types != null">
+        #{types,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pd.server.main.domain.AppMonitorManualEntryeExample" resultType="java.lang.Long">
+    select count(*) from app_monitor_manual_entrye
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update app_monitor_manual_entrye
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mid != null">
+        mid = #{record.mid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ksgcsj != null">
+        ksgcsj = #{record.ksgcsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.pzfgcz != null">
+        p_zfgcz = #{record.pzfgcz,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pjlz != null">
+        p_jlz = #{record.pjlz,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pyfgcz != null">
+        p_yfgcz = #{record.pyfgcz,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pdlgcz != null">
+        p_dlgcz = #{record.pdlgcz,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pdlgczsyff != null">
+        p_dlgczsyff = #{record.pdlgczsyff,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pfjgcz != null">
+        p_fjgcz = #{record.pfjgcz,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wztgczk != null">
+        w_ztgczk = #{record.wztgczk,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wxgszfw != null">
+        w_xgszfw = #{record.wxgszfw,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wxgzk != null">
+        w_xgzk = #{record.wxgzk,jdbcType=VARCHAR},
+      </if>
+      <if test="record.njajl != null">
+        n_jajl = #{record.njajl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.nss != null">
+        n_ss = #{record.nss,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ncs != null">
+        n_cs = #{record.ncs,jdbcType=VARCHAR},
+      </if>
+      <if test="record.njafx != null">
+        n_jafx = #{record.njafx,jdbcType=VARCHAR},
+      </if>
+      <if test="record.nfx != null">
+        n_fx = #{record.nfx,jdbcType=VARCHAR},
+      </if>
+      <if test="record.vycsl != null">
+        v_ycsl = #{record.vycsl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.vdcsl != null">
+        v_dcsl = #{record.vdcsl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.scsj != null">
+        scsj = #{record.scsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.gxsj != null">
+        gxsj = #{record.gxsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.vtbcsl != null">
+        v_tbcsl = #{record.vtbcsl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.vydcsl != null">
+        v_ydcsl = #{record.vydcsl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deptcode != null">
+        deptcode = #{record.deptcode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gczxm != null">
+        gczxm = #{record.gczxm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gps != null">
+        gps = #{record.gps,jdbcType=VARCHAR},
+      </if>
+      <if test="record.types != null">
+        types = #{record.types,jdbcType=VARCHAR},
+      </if>
+
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update app_monitor_manual_entrye
+    set id = #{record.id,jdbcType=VARCHAR},
+      mid = #{record.mid,jdbcType=VARCHAR},
+      ksgcsj = #{record.ksgcsj,jdbcType=TIMESTAMP},
+      p_zfgcz = #{record.pzfgcz,jdbcType=VARCHAR},
+      p_jlz = #{record.pjlz,jdbcType=VARCHAR},
+      p_yfgcz = #{record.pyfgcz,jdbcType=VARCHAR},
+      p_dlgcz = #{record.pdlgcz,jdbcType=VARCHAR},
+      p_dlgczsyff = #{record.pdlgczsyff,jdbcType=VARCHAR},
+      p_fjgcz = #{record.pfjgcz,jdbcType=VARCHAR},
+      w_ztgczk = #{record.wztgczk,jdbcType=VARCHAR},
+      w_xgszfw = #{record.wxgszfw,jdbcType=VARCHAR},
+      w_xgzk = #{record.wxgzk,jdbcType=VARCHAR},
+      n_jajl = #{record.njajl,jdbcType=VARCHAR},
+      n_ss = #{record.nss,jdbcType=VARCHAR},
+      n_cs = #{record.ncs,jdbcType=VARCHAR},
+      n_jafx = #{record.njafx,jdbcType=VARCHAR},
+      n_fx = #{record.nfx,jdbcType=VARCHAR},
+      v_ycsl = #{record.vycsl,jdbcType=VARCHAR},
+      v_dcsl = #{record.vdcsl,jdbcType=VARCHAR},
+      scsj = #{record.scsj,jdbcType=TIMESTAMP},
+      gxsj = #{record.gxsj,jdbcType=TIMESTAMP},
+      v_tbcsl = #{record.vtbcsl,jdbcType=VARCHAR},
+      v_ydcsl = #{record.vydcsl,jdbcType=VARCHAR},
+      deptcode = #{record.deptcode,jdbcType=VARCHAR},
+      gczxm = #{record.gczxm,jdbcType=VARCHAR},
+      gps = #{record.gps,jdbcType=VARCHAR},
+      types = #{record.types,jdbcType=VARCHAR},
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pd.server.main.domain.AppMonitorManualEntrye">
+    update app_monitor_manual_entrye
+    <set>
+      <if test="mid != null">
+        mid = #{mid,jdbcType=VARCHAR},
+      </if>
+      <if test="ksgcsj != null">
+        ksgcsj = #{ksgcsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pzfgcz != null">
+        p_zfgcz = #{pzfgcz,jdbcType=VARCHAR},
+      </if>
+      <if test="pjlz != null">
+        p_jlz = #{pjlz,jdbcType=VARCHAR},
+      </if>
+      <if test="pyfgcz != null">
+        p_yfgcz = #{pyfgcz,jdbcType=VARCHAR},
+      </if>
+      <if test="pdlgcz != null">
+        p_dlgcz = #{pdlgcz,jdbcType=VARCHAR},
+      </if>
+      <if test="pdlgczsyff != null">
+        p_dlgczsyff = #{pdlgczsyff,jdbcType=VARCHAR},
+      </if>
+      <if test="pfjgcz != null">
+        p_fjgcz = #{pfjgcz,jdbcType=VARCHAR},
+      </if>
+      <if test="wztgczk != null">
+        w_ztgczk = #{wztgczk,jdbcType=VARCHAR},
+      </if>
+      <if test="wxgszfw != null">
+        w_xgszfw = #{wxgszfw,jdbcType=VARCHAR},
+      </if>
+      <if test="wxgzk != null">
+        w_xgzk = #{wxgzk,jdbcType=VARCHAR},
+      </if>
+      <if test="njajl != null">
+        n_jajl = #{njajl,jdbcType=VARCHAR},
+      </if>
+      <if test="nss != null">
+        n_ss = #{nss,jdbcType=VARCHAR},
+      </if>
+      <if test="ncs != null">
+        n_cs = #{ncs,jdbcType=VARCHAR},
+      </if>
+      <if test="njafx != null">
+        n_jafx = #{njafx,jdbcType=VARCHAR},
+      </if>
+      <if test="nfx != null">
+        n_fx = #{nfx,jdbcType=VARCHAR},
+      </if>
+      <if test="vycsl != null">
+        v_ycsl = #{vycsl,jdbcType=VARCHAR},
+      </if>
+      <if test="vdcsl != null">
+        v_dcsl = #{vdcsl,jdbcType=VARCHAR},
+      </if>
+      <if test="scsj != null">
+        scsj = #{scsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gxsj != null">
+        gxsj = #{gxsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="vtbcsl != null">
+        v_tbcsl = #{vtbcsl,jdbcType=VARCHAR},
+      </if>
+      <if test="vydcsl != null">
+        v_ydcsl = #{vydcsl,jdbcType=VARCHAR},
+      </if>
+      <if test="deptcode != null">
+        deptcode = #{deptcode,jdbcType=VARCHAR},
+      </if>
+      <if test="gczxm != null">
+        gczxm = #{gczxm,jdbcType=VARCHAR},
+      </if>
+      <if test="gps != null">
+        gps = #{gps,jdbcType=VARCHAR},
+      </if>
+      <if test="types != null">
+        types = #{types,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pd.server.main.domain.AppMonitorManualEntrye">
+    update app_monitor_manual_entrye
+    set mid = #{mid,jdbcType=VARCHAR},
+      ksgcsj = #{ksgcsj,jdbcType=TIMESTAMP},
+      p_zfgcz = #{pzfgcz,jdbcType=VARCHAR},
+      p_jlz = #{pjlz,jdbcType=VARCHAR},
+      p_yfgcz = #{pyfgcz,jdbcType=VARCHAR},
+      p_dlgcz = #{pdlgcz,jdbcType=VARCHAR},
+      p_dlgczsyff = #{pdlgczsyff,jdbcType=VARCHAR},
+      p_fjgcz = #{pfjgcz,jdbcType=VARCHAR},
+      w_ztgczk = #{wztgczk,jdbcType=VARCHAR},
+      w_xgszfw = #{wxgszfw,jdbcType=VARCHAR},
+      w_xgzk = #{wxgzk,jdbcType=VARCHAR},
+      n_jajl = #{njajl,jdbcType=VARCHAR},
+      n_ss = #{nss,jdbcType=VARCHAR},
+      n_cs = #{ncs,jdbcType=VARCHAR},
+      n_jafx = #{njafx,jdbcType=VARCHAR},
+      n_fx = #{nfx,jdbcType=VARCHAR},
+      v_ycsl = #{vycsl,jdbcType=VARCHAR},
+      v_dcsl = #{vdcsl,jdbcType=VARCHAR},
+      scsj = #{scsj,jdbcType=TIMESTAMP},
+      gxsj = #{gxsj,jdbcType=TIMESTAMP},
+      v_tbcsl = #{vtbcsl,jdbcType=VARCHAR},
+      v_ydcsl = #{vydcsl,jdbcType=VARCHAR},
+      deptcode = #{deptcode,jdbcType=VARCHAR},
+      gczxm = #{gczxm,jdbcType=VARCHAR},
+      gps = #{gps,jdbcType=VARCHAR},
+      types = #{types,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
