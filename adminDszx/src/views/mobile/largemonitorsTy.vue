@@ -231,7 +231,8 @@ export default {
     getEquipmentByTy(){
       let _this = this;
       Loading.show();
-      _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/getTyEquipment').then((res)=>{
+      let obj = {'sblb':'0001','dqzl':'A2'}
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/waterEquipment/findAll',obj).then((res)=>{
         Loading.hide();
         let response = res.data;
         _this.equipments = response.content;
