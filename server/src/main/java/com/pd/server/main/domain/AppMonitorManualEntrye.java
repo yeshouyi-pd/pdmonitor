@@ -57,6 +57,10 @@ public class AppMonitorManualEntrye {
 
     private String types;
 
+    private String vjlsc;
+
+    private String czsbh;
+
     public String getId() {
         return id;
     }
@@ -271,5 +275,21 @@ public class AppMonitorManualEntrye {
 
     public void setTypes(String types) {
         this.types = types;
+    }
+
+    public String getVjlsc() {
+        return vjlsc;
+    }
+
+    public void setVjlsc(String vjlsc) {
+        this.vjlsc = vjlsc;
+    }
+
+    public String getCzsbh() {
+        return czsbh;
+    }
+
+    public void setCzsbh(String czsbh) {
+        this.czsbh = czsbh;
     }
 }
