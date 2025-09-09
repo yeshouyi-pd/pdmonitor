@@ -179,16 +179,16 @@ public class AppObserverController {
         try {
             Map<String, Map<String, String>> codeMap = (Map<String, Map<String, String>>) RedisConfig.redisTstaticemplate.opsForValue().get(RedisCode.APPCODESET);
 
-              //整点和半点的时候换班，P N W V, 中间的十分钟写 N V
+
             if("2".equals(appMonitorManualEntryeDto.getTypes())){
                 appMonitorExpService.monitorManualToP(appMonitorManualEntryeDto,codeMap);
                 appMonitorExpService.monitorManualToN(appMonitorManualEntryeDto,codeMap);
                 appMonitorExpService.monitorManualToW(appMonitorManualEntryeDto,codeMap);
                 appMonitorExpService.monitorManualToV(appMonitorManualEntryeDto,codeMap);
-
             }else if("1".equals(appMonitorManualEntryeDto.getTypes())){
                 appMonitorExpService.monitorManualToN(appMonitorManualEntryeDto,codeMap);
-                appMonitorExpService.monitorManualToV(appMonitorManualEntryeDto,codeMap);
+            }else if("3".equals(appMonitorManualEntryeDto.getTypes())){
+                appMonitorExpService.monitorManualToC(appMonitorManualEntryeDto,codeMap);
             }
             appMonitorManualEntryeService.save(appMonitorManualEntryeDto);
             return HttpResult.ok();
@@ -242,7 +242,6 @@ public class AppObserverController {
         try {
             Map<String, Map<String, String>> codeMap = (Map<String, Map<String, String>>) RedisConfig.redisTstaticemplate.opsForValue().get(RedisCode.APPCODESET);
             appMonitorExpService.monitorDiscoveryToH(appMonitorDiscoveryDto,codeMap);
-            appMonitorExpService.monitorDiscoveryToC(appMonitorDiscoveryDto,codeMap);
             appMonitorExpService.monitorDiscoveryToS(appMonitorDiscoveryDto,codeMap);
             appMonitorDiscoveryService.save(appMonitorDiscoveryDto);
             return HttpResult.ok();

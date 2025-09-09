@@ -1830,6 +1830,11 @@ public class AppMonitorManualEntryeExample {
             addCriterion("types =", value, "types");
             return (Criteria) this;
         }
+
+        public Criteria andCzsbhEqualTo(String value) {
+            addCriterion("c_zsbh =", value, "czsbh");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

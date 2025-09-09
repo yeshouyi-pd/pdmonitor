@@ -120,10 +120,21 @@ public class AppMonitorManualEntryeDto {
 
 
     /**
-     * 1 10分钟弹出信息
-     * 2 30分钟弹出全量信息
+     * 1  N
+     * 2 PVWN
+     * 3 c
      */
     private String types;
+
+    /**
+     * 记录时长
+     */
+    private String vjlsc;
+
+    /**
+     * 注释编码
+     */
+    private String czsbh;
 
 
     public String getId() {
@@ -348,5 +359,21 @@ public class AppMonitorManualEntryeDto {
 
     public void setGczzwm(String gczzwm) {
         this.gczzwm = gczzwm;
+    }
+
+    public String getVjlsc() {
+        return vjlsc;
+    }
+
+    public void setVjlsc(String vjlsc) {
+        this.vjlsc = vjlsc;
+    }
+
+    public String getCzsbh() {
+        return czsbh;
+    }
+
+    public void setCzsbh(String czsbh) {
+        this.czsbh = czsbh;
     }
 }
