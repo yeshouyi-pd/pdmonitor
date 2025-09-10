@@ -44,18 +44,121 @@
             createAmap(){
               let _this = this;
               let loginuser = Tool.getLoginUser();
-              console.log(loginuser.deptcode);
-              let usergps = loginuser.deptgpsmap[loginuser.deptcode];
-              _this.amap = new AMap.Map('equipmentamap', {
-                resizeEnable: true,
-                zoom: 8,
-                features: ['bg']
-              });
-              console.log(usergps);
-              if(!Tool.isEmpty(usergps)){
-                _this.amap.setCenter(usergps.split(","));
+              if(_this.LOCAL_ZHBHT || _this.LOCAL_VIDEO){
+                _this.amap = new AMap.Map('equipmentamap', {
+                  center: [113.73,22.30],
+                  resizeEnable: true,
+                  zoom: 11,
+                  // mapStyle: _this.mapStyle
+                });
+                let polygonArr = new Array();//多边形覆盖物节点坐标数组
+                polygonArr.push([113.666667, 22.4]);
+                polygonArr.push([113.716667, 22.4]);
+                polygonArr.push([113.716667, 22.183333]);
+                polygonArr.push([113.666667, 22.183333]);
+                let  polygon = new AMap.Polygon({
+                  path: polygonArr,//设置多边形边界路径
+                  strokeColor: "#6A8F71", //线颜色
+                  strokeOpacity: 0.2, //线透明度
+                  strokeWeight: 3,    //线宽
+                  fillColor: "#85C5A0", //填充色
+                  fillOpacity: 0.35//填充透明度
+                });
+                let polygonArr2 = new Array();//多边形覆盖物节点坐标数组
+                polygonArr2.push([113.716667, 22.4]);
+                polygonArr2.push([113.869444, 22.4]);
+                polygonArr2.push([113.869444, 22.366667]);
+                polygonArr2.push([113.766667, 22.366667]);
+                polygonArr2.push([113.766667, 22.216667]);
+                polygonArr2.push([113.816667, 22.216667]);
+                polygonArr2.push([113.833333, 22.183333]);
+                polygonArr2.push([113.716667, 22.183333]);
+                let  polygon2 = new AMap.Polygon({
+                  path: polygonArr2,//设置多边形边界路径
+                  strokeColor: "#76987C", //线颜色
+                  strokeOpacity: 0.2, //线透明度
+                  strokeWeight: 3,    //线宽
+                  fillColor: "#BFE39B", //填充色
+                  fillOpacity: 0.35//填充透明度
+                });
+                let polygonArr3 = new Array();//多边形覆盖物节点坐标数组
+                polygonArr3.push([113.869444, 22.366667]);
+                polygonArr3.push([113.869444, 22.333333]);
+                polygonArr3.push([113.847778, 22.273056]);
+                polygonArr3.push([113.838889, 22.266667]);
+                polygonArr3.push([113.816667, 22.216667]);
+                polygonArr3.push([113.766667, 22.216667]);
+                polygonArr3.push([113.766667, 22.366667]);
+                let  polygon3 = new AMap.Polygon({
+                  path: polygonArr3,//设置多边形边界路径
+                  strokeColor: "#908983", //线颜色
+                  strokeOpacity: 0.2, //线透明度
+                  strokeWeight: 3,    //线宽
+                  fillColor: "#B59A8F", //填充色
+                  fillOpacity: 0.35//填充透明度
+                });
+                let overlayGroup = new AMap.OverlayGroup([polygon,polygon2,polygon3])
+                _this.amap.add(overlayGroup);
+                // 创建纯文本标记
+                let text = new AMap.Text({
+                  text:'实验区',
+                  anchor:'center', // 设置文本标记锚点
+                  style:{
+                    'height': '15rem',
+                    'background-color': 'rgba(133, 197, 160, 0)',
+                    'text-align': 'center',
+                    'font-size': '20px',
+                    'border-width': 0,
+                    'color': 'white',
+                    'writing-mode':'vertical-lr'
+                  },
+                  position: [113.691667, 22.291667]
+                });
+                text.setMap(_this.amap);
+                // 创建纯文本标记
+                let text1 = new AMap.Text({
+                  text:'缓冲区',
+                  anchor:'center', // 设置文本标记锚点
+                  style:{
+                    'height': '15rem',
+                    'background-color': 'rgba(133, 197, 160, 0)',
+                    'text-align': 'center',
+                    'font-size': '20px',
+                    'border-width': 0,
+                    'color': 'white',
+                    'writing-mode':'vertical-lr'
+                  },
+                  position: [113.741667, 22.291667]
+                });
+                text1.setMap(_this.amap);
+                // 创建纯文本标记
+                let text2 = new AMap.Text({
+                  text:'核心区',
+                  anchor:'center', // 设置文本标记锚点
+                  style:{
+                    'height': '15rem',
+                    'background-color': 'rgba(133, 197, 160, 0)',
+                    'text-align': 'center',
+                    'font-size': '20px',
+                    'border-width': 0,
+                    'color': 'white',
+                    'writing-mode':'vertical-lr'
+                  },
+                  position: [113.791667, 22.291667]
+                });
+                text2.setMap(_this.amap);
               }else{
-                _this.amap.setCenter([114.299945,30.593221]);
+                let usergps = loginuser.deptgpsmap[loginuser.deptcode];
+                _this.amap = new AMap.Map('equipmentamap', {
+                  resizeEnable: true,
+                  zoom: 8,
+                  features: ['bg']
+                });
+                if(!Tool.isEmpty(usergps)){
+                  _this.amap.setCenter(usergps.split(","));
+                }else{
+                  _this.amap.setCenter([114.299945,30.593221]);
+                }
               }
             },
             findDeviceInfo(){
