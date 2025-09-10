@@ -33,9 +33,6 @@ public class AppMonitorExpService {
         // 将分页对象映射为查询DTO以承接前端传参
         AppMonitorExpDto query = CopyUtil.copy(pageDto, AppMonitorExpDto.class);
         if (query != null) {
-            if (StringUtils.isNotBlank(query.getGczzwm())) {
-                criteria.andGczzwmEqualTo(query.getGczzwm());
-            }
             if (StringUtils.isNotBlank(query.getDate1())) {
                 criteria.andDate1EqualTo(query.getDate1());
             }
@@ -59,9 +56,6 @@ public class AppMonitorExpService {
         AppMonitorExpExample.Criteria criteria = appMonitorExpExample.createCriteria();
 
         if (appMonitorExpDto != null) {
-            if (StringUtils.isNotBlank(appMonitorExpDto.getGczzwm())) {
-                criteria.andGczzwmEqualTo(appMonitorExpDto.getGczzwm());
-            }
             if (StringUtils.isNotBlank(appMonitorExpDto.getDate1())) {
                 criteria.andDate1EqualTo(appMonitorExpDto.getDate1().replaceAll("-", ""));
             }
@@ -454,6 +448,7 @@ public class AppMonitorExpService {
         appMonitorExpDto.setEvents("V");
         appMonitorExpDto.setData1(appMonitorManualEntryeDto.getVtbcsl());//停泊船数量
         appMonitorExpDto.setData2(appMonitorManualEntryeDto.getVydcsl());//移动船数量
+        appMonitorExpDto.setData3(appMonitorManualEntryeDto.getVjlsc());//记录市场
         appMonitorExpDto.setDeptcode(appMonitorManualEntryeDto.getDeptcode());
         appMonitorExpDto.setGczxm(appMonitorManualEntryeDto.getGczxm());
         appMonitorExpDto.setGczzwm(appMonitorManualEntryeDto.getGczzwm());
@@ -464,6 +459,40 @@ public class AppMonitorExpService {
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
         this.deleteByMid(appMonitorManualEntryeDto.getId(),"V");
         this.insert(appMonitorExp);
+
+    }
+
+    /**
+     * 观察表 转换 C 信息 Types 是表类型
+     * @param appMonitorManualEntryeDto
+     * @param codeMap
+     */
+    public void monitorManualToC(AppMonitorManualEntryeDto appMonitorManualEntryeDto, Map<String, Map<String, String>> codeMap) {
+        AppMonitorExpDto appMonitorExpDto = new AppMonitorExpDto();
+        appMonitorExpDto.setId(IdUtil.getSnowflakeNextIdStr());
+        appMonitorExpDto.setDate1(DateUtil.format(appMonitorManualEntryeDto.getKsgcsj(), "yyyyMMdd"));
+        appMonitorExpDto.setTime1(DateUtil.format(appMonitorManualEntryeDto.getKsgcsj(), "HHmm"));
+        if(org.apache.commons.lang.StringUtils.isNotBlank(appMonitorManualEntryeDto.getGps()) &&
+                appMonitorManualEntryeDto.getGps().split(",").length ==2){
+            appMonitorExpDto.setDeclat(appMonitorManualEntryeDto.getGps().split(",")[0]);
+            appMonitorExpDto.setDeclong(appMonitorManualEntryeDto.getGps().split(",")[1]);
+        }else{
+            appMonitorExpDto.setDeclat("0");
+            appMonitorExpDto.setDeclong("0");
+        }
+        appMonitorExpDto.setEvents("C");
+        appMonitorExpDto.setData1(appMonitorManualEntryeDto.getCzsbh());//注释编码
+        appMonitorExpDto.setDeptcode(appMonitorManualEntryeDto.getDeptcode());
+        appMonitorExpDto.setGczxm(appMonitorManualEntryeDto.getGczxm());
+        appMonitorExpDto.setGczzwm(appMonitorManualEntryeDto.getGczzwm());
+        appMonitorExpDto.setTypes ("2");
+        appMonitorExpDto.setMid(appMonitorManualEntryeDto.getId());
+        appMonitorExpDto.setCjsj(appMonitorManualEntryeDto.getKsgcsj());
+        appMonitorExpDto.setBid(appMonitorManualEntryeDto.getMid());
+        AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
+        this.deleteByMid(appMonitorManualEntryeDto.getId(),"C");
+        this.insert(appMonitorExp);
+
 
     }
 
@@ -558,7 +587,7 @@ public class AppMonitorExpService {
 
 
     /**
-     * 发现江豚 转换 C 信息
+     * 发现江豚 转换 C 信息 --弃用
      * @param appMonitorDiscoveryDto
      * @return
      */
@@ -589,6 +618,7 @@ public class AppMonitorExpService {
         this.insert(appMonitorExp);
 
     }
+
 
 
 }

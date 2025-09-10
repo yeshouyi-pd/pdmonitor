@@ -29,6 +29,8 @@
     <result column="gczxm" jdbcType="VARCHAR" property="gczxm" />
     <result column="gps" jdbcType="VARCHAR" property="gps" />
     <result column="types" jdbcType="VARCHAR" property="types" />
+    <result column="vjlsc" jdbcType="VARCHAR" property="vjlsc" />
+    <result column="czsbh" jdbcType="VARCHAR" property="czsbh" />
 
 
   </resultMap>
@@ -93,7 +95,7 @@
   <sql id="Base_Column_List">
     id, mid, ksgcsj, p_zfgcz, p_jlz, p_yfgcz, p_dlgcz, p_dlgczsyff, p_fjgcz, w_ztgczk, 
     w_xgszfw, w_xgzk, n_jajl, n_ss, n_cs, n_jafx, n_fx, v_ycsl, v_dcsl, scsj, gxsj, v_tbcsl, 
-    v_ydcsl, deptcode, gczxm ,gps , types
+    v_ydcsl, deptcode, gczxm ,gps , types ,vjlsc , czsbh
   </sql>
   <select id="selectByExample" parameterType="com.pd.server.main.domain.AppMonitorManualEntryeExample" resultMap="BaseResultMap">
     select
@@ -133,7 +135,7 @@
       n_jajl, n_ss, n_cs, n_jafx, 
       n_fx, v_ycsl, v_dcsl, 
       scsj, gxsj, v_tbcsl, 
-      v_ydcsl, deptcode, gczxm ,gps ,types
+      v_ydcsl, deptcode, gczxm ,gps ,types ,vjlsc , czsbh
       )
     values (#{id,jdbcType=VARCHAR}, #{mid,jdbcType=VARCHAR}, #{ksgcsj,jdbcType=TIMESTAMP}, 
       #{pzfgcz,jdbcType=VARCHAR}, #{pjlz,jdbcType=VARCHAR}, #{pyfgcz,jdbcType=VARCHAR}, 
@@ -142,7 +144,8 @@
       #{njajl,jdbcType=VARCHAR}, #{nss,jdbcType=VARCHAR}, #{ncs,jdbcType=VARCHAR}, #{njafx,jdbcType=VARCHAR}, 
       #{nfx,jdbcType=VARCHAR}, #{vycsl,jdbcType=VARCHAR}, #{vdcsl,jdbcType=VARCHAR}, 
       #{scsj,jdbcType=TIMESTAMP}, #{gxsj,jdbcType=TIMESTAMP}, #{vtbcsl,jdbcType=VARCHAR}, 
-      #{vydcsl,jdbcType=VARCHAR}, #{deptcode,jdbcType=VARCHAR}, #{gczxm,jdbcType=VARCHAR} , #{gps,jdbcType=VARCHAR} , #{types,jdbcType=VARCHAR}
+      #{vydcsl,jdbcType=VARCHAR}, #{deptcode,jdbcType=VARCHAR}, #{gczxm,jdbcType=VARCHAR} , #{gps,jdbcType=VARCHAR} , #{types,jdbcType=VARCHAR},
+      #{vjlsc,jdbcType=VARCHAR}, #{czsbh,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.pd.server.main.domain.AppMonitorManualEntrye">
@@ -229,6 +232,12 @@
       <if test="types != null">
         types,
       </if>
+      <if test="vjlsc != null">
+        vjlsc,
+      </if>
+      <if test="czsbh != null">
+        czsbh,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -312,6 +321,13 @@
       <if test="types != null">
         #{types,jdbcType=VARCHAR},
       </if>
+      <if test="vjlsc != null">
+        #{vjlsc,jdbcType=VARCHAR},
+      </if>
+      <if test="czsbh != null">
+        #{czsbh,jdbcType=VARCHAR},
+      </if>
+
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.pd.server.main.domain.AppMonitorManualEntryeExample" resultType="java.lang.Long">
@@ -404,6 +420,12 @@
       <if test="record.types != null">
         types = #{record.types,jdbcType=VARCHAR},
       </if>
+      <if test="record.vjlsc != null">
+        vjlsc = #{record.vjlsc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.czsbh != null">
+        czsbh = #{record.czsbh,jdbcType=VARCHAR},
+      </if>
 
     </set>
     <if test="_parameter != null">
@@ -439,6 +461,8 @@
       gczxm = #{record.gczxm,jdbcType=VARCHAR},
       gps = #{record.gps,jdbcType=VARCHAR},
       types = #{record.types,jdbcType=VARCHAR},
+     vjlsc = #{record.vjlsc,jdbcType=VARCHAR},
+     czsbh = #{record.czsbh,jdbcType=VARCHAR},
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -524,6 +548,12 @@
       <if test="types != null">
         types = #{types,jdbcType=VARCHAR},
       </if>
+      <if test="vjlsc != null">
+        vjlsc = #{vjlsc,jdbcType=VARCHAR},
+      </if>
+      <if test="czsbh != null">
+        czsbh = #{czsbh,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -554,7 +584,10 @@
       deptcode = #{deptcode,jdbcType=VARCHAR},
       gczxm = #{gczxm,jdbcType=VARCHAR},
       gps = #{gps,jdbcType=VARCHAR},
-      types = #{types,jdbcType=VARCHAR}
+      types = #{types,jdbcType=VARCHAR},
+      vjlsc = #{vjlsc,jdbcType=VARCHAR},
+      czsbh = #{czsbh,jdbcType=VARCHAR}
+
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>
