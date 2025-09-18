@@ -170,7 +170,14 @@ public class AppObserverController {
         }
         AppMonitorInfo appMonitorInfo = appMonitorInfoService.findById(appMonitorManualEntryeDto.getMid());
         if(null == appMonitorInfo){
-            return HttpResult.error("未找到对应的巡查信息");
+            //return HttpResult.error("未找到对应的巡查信息");
+            appMonitorManualEntryeDto.setDeptcode("-");
+            appMonitorManualEntryeDto.setGczxm("-");
+            appMonitorManualEntryeDto.setGczzwm("-");
+        }else{
+            appMonitorManualEntryeDto.setDeptcode(appMonitorInfo.getDeptcode());
+            appMonitorManualEntryeDto.setGczxm(appMonitorInfo.getGczxm());
+            appMonitorManualEntryeDto.setGczzwm(appMonitorInfo.getGczzwm());
         }
         appMonitorManualEntryeDto.setDeptcode(appMonitorInfo.getDeptcode());
         appMonitorManualEntryeDto.setGczxm(appMonitorInfo.getGczxm());
@@ -234,7 +241,14 @@ public class AppObserverController {
         }
         AppMonitorInfo appMonitorInfo = appMonitorInfoService.findById(appMonitorDiscoveryDto.getMid());
         if(null == appMonitorInfo){
-            return HttpResult.error("未找到对应的巡查信息");
+            //return HttpResult.error("未找到对应的巡查信息");
+            appMonitorDiscoveryDto.setDeptcode("-");
+            appMonitorDiscoveryDto.setGczxm("-");
+            appMonitorDiscoveryDto.setGczzwm("-");
+        }else{
+            appMonitorDiscoveryDto.setDeptcode(appMonitorInfo.getDeptcode());
+            appMonitorDiscoveryDto.setGczxm(appMonitorInfo.getGczxm());
+            appMonitorDiscoveryDto.setGczzwm(appMonitorInfo.getGczzwm());
         }
         appMonitorDiscoveryDto.setDeptcode(appMonitorInfo.getDeptcode());
         appMonitorDiscoveryDto.setGczxm(appMonitorInfo.getGczxm());
