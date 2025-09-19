@@ -419,7 +419,13 @@
           return 'N';
         }
         if (value === 2 || value === '2') {
-          return 'P、V、W、N';
+          return 'P、W、N';
+        }
+        if (value === 3 || value === '3') {
+          return 'C';
+        }
+        if (value === 4 || value === '4') {
+          return 'V';
         }
         return '-';
       },
