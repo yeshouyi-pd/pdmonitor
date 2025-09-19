@@ -112,6 +112,7 @@ public class AppObserverController {
         if(StringUtils.isBlank(appMonitorInfoDto.getId()) || StringUtils.isBlank(appMonitorInfoDto.getDeptcode()) || StringUtils.isBlank(appMonitorInfoDto.getGczxm())){
             return HttpResult.error("上传参数异常");
         }
+
         try {
             Map<String, Map<String, String>> codeMap = (Map<String, Map<String, String>>) RedisConfig.redisTstaticemplate.opsForValue().get(RedisCode.APPCODESET);
 
@@ -168,6 +169,7 @@ public class AppObserverController {
                 StringUtils.isBlank(appMonitorManualEntryeDto.getTypes())){
             return HttpResult.error("上传参数异常");
         }
+        appMonitorManualEntryeDto.setGczzwm("-");
 
         try {
             Map<String, Map<String, String>> codeMap = (Map<String, Map<String, String>>) RedisConfig.redisTstaticemplate.opsForValue().get(RedisCode.APPCODESET);
@@ -226,6 +228,7 @@ public class AppObserverController {
         ||StringUtils.isBlank(appMonitorDiscoveryDto.getDeptcode()) || StringUtils.isBlank(appMonitorDiscoveryDto.getGczxm())){
             return HttpResult.error("上传参数异常");
         }
+        appMonitorDiscoveryDto.setGczzwm("-");
         try {
             Map<String, Map<String, String>> codeMap = (Map<String, Map<String, String>>) RedisConfig.redisTstaticemplate.opsForValue().get(RedisCode.APPCODESET);
             appMonitorExpService.monitorDiscoveryToH(appMonitorDiscoveryDto,codeMap);
