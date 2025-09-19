@@ -191,11 +191,12 @@ public class AppObserverController {
                 appMonitorExpService.monitorManualToP(appMonitorManualEntryeDto,codeMap);
                 appMonitorExpService.monitorManualToN(appMonitorManualEntryeDto,codeMap);
                 appMonitorExpService.monitorManualToW(appMonitorManualEntryeDto,codeMap);
-                appMonitorExpService.monitorManualToV(appMonitorManualEntryeDto,codeMap);
             }else if("1".equals(appMonitorManualEntryeDto.getTypes())){
                 appMonitorExpService.monitorManualToN(appMonitorManualEntryeDto,codeMap);
             }else if("3".equals(appMonitorManualEntryeDto.getTypes())){
                 appMonitorExpService.monitorManualToC(appMonitorManualEntryeDto,codeMap);
+            }else if("4".equals(appMonitorManualEntryeDto.getTypes())){
+                appMonitorExpService.monitorManualToV(appMonitorManualEntryeDto,codeMap);
             }
             appMonitorManualEntryeService.save(appMonitorManualEntryeDto);
             return HttpResult.ok();
