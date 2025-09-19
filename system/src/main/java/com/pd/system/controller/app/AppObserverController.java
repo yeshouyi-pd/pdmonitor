@@ -168,20 +168,6 @@ public class AppObserverController {
                 StringUtils.isBlank(appMonitorManualEntryeDto.getTypes())){
             return HttpResult.error("上传参数异常");
         }
-        AppMonitorInfo appMonitorInfo = appMonitorInfoService.findById(appMonitorManualEntryeDto.getMid());
-        if(null == appMonitorInfo){
-            //return HttpResult.error("未找到对应的巡查信息");
-            appMonitorManualEntryeDto.setDeptcode("-");
-            appMonitorManualEntryeDto.setGczxm("-");
-            appMonitorManualEntryeDto.setGczzwm("-");
-        }else{
-            appMonitorManualEntryeDto.setDeptcode(appMonitorInfo.getDeptcode());
-            appMonitorManualEntryeDto.setGczxm(appMonitorInfo.getGczxm());
-            appMonitorManualEntryeDto.setGczzwm(appMonitorInfo.getGczzwm());
-        }
-        appMonitorManualEntryeDto.setDeptcode(appMonitorInfo.getDeptcode());
-        appMonitorManualEntryeDto.setGczxm(appMonitorInfo.getGczxm());
-        appMonitorManualEntryeDto.setGczzwm(appMonitorInfo.getGczzwm());
 
         try {
             Map<String, Map<String, String>> codeMap = (Map<String, Map<String, String>>) RedisConfig.redisTstaticemplate.opsForValue().get(RedisCode.APPCODESET);
@@ -236,24 +222,10 @@ public class AppObserverController {
     @PostMapping("/uploadMonitorDiscovery")
     @Transactional
     public HttpResult uploadMonitorDiscovery(@RequestBody AppMonitorDiscoveryDto appMonitorDiscoveryDto) {
-        if( StringUtils.isBlank(appMonitorDiscoveryDto.getDeptcode()) || StringUtils.isBlank(appMonitorDiscoveryDto.getGczxm())
+        if( StringUtils.isBlank(appMonitorDiscoveryDto.getMid()) || StringUtils.isBlank(appMonitorDiscoveryDto.getId())
         ||StringUtils.isBlank(appMonitorDiscoveryDto.getDeptcode()) || StringUtils.isBlank(appMonitorDiscoveryDto.getGczxm())){
             return HttpResult.error("上传参数异常");
         }
-        AppMonitorInfo appMonitorInfo = appMonitorInfoService.findById(appMonitorDiscoveryDto.getMid());
-        if(null == appMonitorInfo){
-            //return HttpResult.error("未找到对应的巡查信息");
-            appMonitorDiscoveryDto.setDeptcode("-");
-            appMonitorDiscoveryDto.setGczxm("-");
-            appMonitorDiscoveryDto.setGczzwm("-");
-        }else{
-            appMonitorDiscoveryDto.setDeptcode(appMonitorInfo.getDeptcode());
-            appMonitorDiscoveryDto.setGczxm(appMonitorInfo.getGczxm());
-            appMonitorDiscoveryDto.setGczzwm(appMonitorInfo.getGczzwm());
-        }
-        appMonitorDiscoveryDto.setDeptcode(appMonitorInfo.getDeptcode());
-        appMonitorDiscoveryDto.setGczxm(appMonitorInfo.getGczxm());
-        appMonitorDiscoveryDto.setGczzwm(appMonitorInfo.getGczzwm());
         try {
             Map<String, Map<String, String>> codeMap = (Map<String, Map<String, String>>) RedisConfig.redisTstaticemplate.opsForValue().get(RedisCode.APPCODESET);
             appMonitorExpService.monitorDiscoveryToH(appMonitorDiscoveryDto,codeMap);
