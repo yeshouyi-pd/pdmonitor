@@ -120,7 +120,7 @@ public class AppObserverController {
             appMonitorExpService.monitorInfoToB(appMonitorInfoDto ,codeMap);
             appMonitorExpService.monitorInfoToP(appMonitorInfoDto,codeMap);
             appMonitorExpService.monitorInfoToW(appMonitorInfoDto,codeMap);
-            appMonitorExpService.monitorInfoToN(appMonitorInfoDto,codeMap);
+            //appMonitorExpService.monitorInfoToN(appMonitorInfoDto,codeMap);
             appMonitorExpService.monitorInfoToE(appMonitorInfoDto,codeMap);
             appMonitorInfoService.save(appMonitorInfoDto);
             return HttpResult.ok();
@@ -231,8 +231,8 @@ public class AppObserverController {
         appMonitorDiscoveryDto.setGczzwm("-");
         try {
             Map<String, Map<String, String>> codeMap = (Map<String, Map<String, String>>) RedisConfig.redisTstaticemplate.opsForValue().get(RedisCode.APPCODESET);
-            appMonitorExpService.monitorDiscoveryToH(appMonitorDiscoveryDto,codeMap);
             appMonitorExpService.monitorDiscoveryToS(appMonitorDiscoveryDto,codeMap);
+            appMonitorExpService.monitorDiscoveryToH(appMonitorDiscoveryDto,codeMap);
             appMonitorDiscoveryService.save(appMonitorDiscoveryDto);
             return HttpResult.ok();
         }catch (Exception e){

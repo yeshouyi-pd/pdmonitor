@@ -577,7 +577,7 @@ public class AppMonitorExpService {
         appMonitorExpDto.setGczzwm(appMonitorDiscoveryDto.getGczzwm());
         appMonitorExpDto.setTypes("3");
         appMonitorExpDto.setMid(appMonitorDiscoveryDto.getId());
-        appMonitorExpDto.setCjsj(appMonitorDiscoveryDto.getFxsj());
+        appMonitorExpDto.setCjsj (new Date((appMonitorDiscoveryDto.getFxsj().getTime() + 1000)));
         appMonitorExpDto.setBid(appMonitorDiscoveryDto.getMid());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
         this.deleteByMid(appMonitorDiscoveryDto.getId(),"H");
