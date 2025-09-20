@@ -26,45 +26,6 @@ public class ExcelController extends BaseController{
     public void exportCarinfo(AppMonitorExpDto appMonitorExpDto, HttpServletRequest request, HttpServletResponse response) throws Exception {
         List<AppMonitorExpDto> list = appMonitorExpService.listByDay(appMonitorExpDto);
 
-        // 内存排序：根据 mid 分组，先找到每个分组的最小时间，按最小时间对分组排序，分组内按时间升序
-        if (list != null && !list.isEmpty()) {
-            // 1. 按 mid 分组
-            Map<String, List<AppMonitorExpDto>> groupedByMid = list.stream()
-                    .filter(item -> item.getMid() != null) // 过滤掉 mid 为 null 的数据
-                    .collect(Collectors.groupingBy(AppMonitorExpDto::getMid));
-            
-            // 2. 对每个分组内按 cjsj 升序排序
-            groupedByMid.forEach((mid, groupList) -> {
-                groupList.sort(Comparator.comparing(AppMonitorExpDto::getCjsj, 
-                    Comparator.nullsLast(Comparator.naturalOrder())));
-            });
-            
-            // 3. 计算每个分组的最小时间，用于分组排序
-            Map<String, Date> groupMinTimes = new HashMap<>();
-            groupedByMid.forEach((mid, groupList) -> {
-                Date minTime = groupList.stream()
-                        .map(AppMonitorExpDto::getCjsj)
-                        .filter(Objects::nonNull)
-                        .min(Comparator.naturalOrder())
-                        .orElse(new Date(Long.MAX_VALUE)); // 如果没有有效时间，使用最大时间
-                groupMinTimes.put(mid, minTime);
-            });
-            
-            // 4. 按分组最小时间升序排序，然后展平所有分组
-            List<AppMonitorExpDto> sortedList = groupedByMid.entrySet().stream()
-                    .sorted(Comparator.comparing(entry -> groupMinTimes.get(entry.getKey())))
-                    .flatMap(entry -> entry.getValue().stream())
-                    .collect(Collectors.toList());
-            
-            // 5. 处理 mid 为 null 的数据，添加到列表末尾
-            List<AppMonitorExpDto> nullMidList = list.stream()
-                    .filter(item -> item.getMid() == null)
-                    .collect(Collectors.toList());
-            sortedList.addAll(nullMidList);
-            
-            list = sortedList;
-        }
-
         try {
             // 创建Excel工作簿
             XSSFWorkbook workbook = new XSSFWorkbook();
