@@ -3,6 +3,7 @@ package com.pd.system.controller.app;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.IdUtil;
+import com.alibaba.fastjson.JSON;
 import com.pd.server.config.RedisCode;
 import com.pd.server.main.domain.*;
 import com.pd.server.main.dto.*;
@@ -11,6 +12,8 @@ import com.pd.server.util.CopyUtil;
 import com.pd.system.controller.conf.HttpResult;
 import com.pd.system.controller.conf.RedisConfig;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +26,8 @@ import java.util.Map;
 @RequestMapping("/app/ob")
 public class AppObserverController {
 
+
+    private static final Logger LOG = LoggerFactory.getLogger(AppObserverController.class);
     @Resource
     private AppVersionService appVersionService;
 
@@ -125,6 +130,8 @@ public class AppObserverController {
             appMonitorInfoService.save(appMonitorInfoDto);
             return HttpResult.ok();
         }catch (Exception e){
+            LOG.info("uploadMonitorInfo上传失败：{}", e.getMessage());
+            LOG.info("uploadMonitorInfo上传失败：{}", JSON.toJSONString(appMonitorInfoDto));
             return HttpResult.error("上传失败："+e.getMessage());
         }
     }
@@ -189,6 +196,8 @@ public class AppObserverController {
             appMonitorManualEntryeService.save(appMonitorManualEntryeDto);
             return HttpResult.ok();
         }catch (Exception e){
+            LOG.info("uploadManualEntrye上传失败：{}", e.getMessage());
+            LOG.info("uploadManualEntrye上传失败：{}", JSON.toJSONString(appMonitorManualEntryeDto));
             return HttpResult.error("上传失败："+e.getMessage());
         }
     }
@@ -236,6 +245,8 @@ public class AppObserverController {
             appMonitorDiscoveryService.save(appMonitorDiscoveryDto);
             return HttpResult.ok();
         }catch (Exception e){
+            LOG.info("uploadMonitorDiscovery上传失败：{}", e.getMessage());
+            LOG.info("uploadMonitorDiscovery传失败：{}", JSON.toJSONString(appMonitorDiscoveryDto));
             return HttpResult.error("上传失败："+e.getMessage());
         }
     }
