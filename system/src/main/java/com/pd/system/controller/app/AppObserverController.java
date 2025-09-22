@@ -130,8 +130,8 @@ public class AppObserverController {
             appMonitorInfoService.save(appMonitorInfoDto);
             return HttpResult.ok();
         }catch (Exception e){
-            LOG.info("uploadMonitorInfo上传失败：{}", e.getMessage());
-            LOG.info("uploadMonitorInfo上传失败：{}", JSON.toJSONString(appMonitorInfoDto));
+            LOG.error("uploadMonitorInfo上传失败：{}", e.getMessage());
+            LOG.error("uploadMonitorInfo上传失败：{}", JSON.toJSONString(appMonitorInfoDto));
             return HttpResult.error("上传失败："+e.getMessage());
         }
     }
@@ -196,8 +196,8 @@ public class AppObserverController {
             appMonitorManualEntryeService.save(appMonitorManualEntryeDto);
             return HttpResult.ok();
         }catch (Exception e){
-            LOG.info("uploadManualEntrye上传失败：{}", e.getMessage());
-            LOG.info("uploadManualEntrye上传失败：{}", JSON.toJSONString(appMonitorManualEntryeDto));
+            LOG.error("uploadManualEntrye上传失败：{}", e.getMessage());
+            LOG.error("uploadManualEntrye上传失败：{}", JSON.toJSONString(appMonitorManualEntryeDto));
             return HttpResult.error("上传失败："+e.getMessage());
         }
     }
@@ -245,8 +245,8 @@ public class AppObserverController {
             appMonitorDiscoveryService.save(appMonitorDiscoveryDto);
             return HttpResult.ok();
         }catch (Exception e){
-            LOG.info("uploadMonitorDiscovery上传失败：{}", e.getMessage());
-            LOG.info("uploadMonitorDiscovery传失败：{}", JSON.toJSONString(appMonitorDiscoveryDto));
+            LOG.error("uploadMonitorDiscovery上传失败：{}", e.getMessage());
+            LOG.error("uploadMonitorDiscovery传失败：{}", JSON.toJSONString(appMonitorDiscoveryDto));
             return HttpResult.error("上传失败："+e.getMessage());
         }
     }
