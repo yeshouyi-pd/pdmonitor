@@ -31,7 +31,7 @@
     <result column="types" jdbcType="VARCHAR" property="types" />
     <result column="vjlsc" jdbcType="VARCHAR" property="vjlsc" />
     <result column="czsbh" jdbcType="VARCHAR" property="czsbh" />
-
+    <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
 
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -95,7 +95,7 @@
   <sql id="Base_Column_List">
     id, mid, ksgcsj, p_zfgcz, p_jlz, p_yfgcz, p_dlgcz, p_dlgczsyff, p_fjgcz, w_ztgczk, 
     w_xgszfw, w_xgzk, n_jajl, n_ss, n_cs, n_jafx, n_fx, v_ycsl, v_dcsl, scsj, gxsj, v_tbcsl, 
-    v_ydcsl, deptcode, gczxm ,gps , types ,vjlsc , czsbh
+    v_ydcsl, deptcode, gczxm ,gps , types ,vjlsc , czsbh ,sbbh
   </sql>
   <select id="selectByExample" parameterType="com.pd.server.main.domain.AppMonitorManualEntryeExample" resultMap="BaseResultMap">
     select
@@ -135,7 +135,7 @@
       n_jajl, n_ss, n_cs, n_jafx, 
       n_fx, v_ycsl, v_dcsl, 
       scsj, gxsj, v_tbcsl, 
-      v_ydcsl, deptcode, gczxm ,gps ,types ,vjlsc , czsbh
+      v_ydcsl, deptcode, gczxm ,gps ,types ,vjlsc , czsbh ,sbbh
       )
     values (#{id,jdbcType=VARCHAR}, #{mid,jdbcType=VARCHAR}, #{ksgcsj,jdbcType=TIMESTAMP}, 
       #{pzfgcz,jdbcType=VARCHAR}, #{pjlz,jdbcType=VARCHAR}, #{pyfgcz,jdbcType=VARCHAR}, 
@@ -145,7 +145,7 @@
       #{nfx,jdbcType=VARCHAR}, #{vycsl,jdbcType=VARCHAR}, #{vdcsl,jdbcType=VARCHAR}, 
       #{scsj,jdbcType=TIMESTAMP}, #{gxsj,jdbcType=TIMESTAMP}, #{vtbcsl,jdbcType=VARCHAR}, 
       #{vydcsl,jdbcType=VARCHAR}, #{deptcode,jdbcType=VARCHAR}, #{gczxm,jdbcType=VARCHAR} , #{gps,jdbcType=VARCHAR} , #{types,jdbcType=VARCHAR},
-      #{vjlsc,jdbcType=VARCHAR}, #{czsbh,jdbcType=VARCHAR}
+      #{vjlsc,jdbcType=VARCHAR}, #{czsbh,jdbcType=VARCHAR} ,  #{sbbh,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.pd.server.main.domain.AppMonitorManualEntrye">
@@ -238,6 +238,9 @@
       <if test="czsbh != null">
         czsbh,
       </if>
+      <if test="sbbh != null">
+        sbbh,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -326,6 +329,9 @@
       </if>
       <if test="czsbh != null">
         #{czsbh,jdbcType=VARCHAR},
+      </if>
+      <if test="sbbh != null">
+        #{sbbh,jdbcType=VARCHAR},
       </if>
 
     </trim>
@@ -426,6 +432,9 @@
       <if test="record.czsbh != null">
         czsbh = #{record.czsbh,jdbcType=VARCHAR},
       </if>
+      <if test="record.sbbh != null">
+        sbbh = #{record.sbbh,jdbcType=VARCHAR},
+      </if>
 
     </set>
     <if test="_parameter != null">
@@ -463,6 +472,7 @@
       types = #{record.types,jdbcType=VARCHAR},
      vjlsc = #{record.vjlsc,jdbcType=VARCHAR},
      czsbh = #{record.czsbh,jdbcType=VARCHAR},
+     sbbh = #{record.sbbh,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -554,6 +564,9 @@
       <if test="czsbh != null">
         czsbh = #{czsbh,jdbcType=VARCHAR},
       </if>
+      <if test="sbbh != null">
+        sbbh = #{sbbh,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -586,7 +599,8 @@
       gps = #{gps,jdbcType=VARCHAR},
       types = #{types,jdbcType=VARCHAR},
       vjlsc = #{vjlsc,jdbcType=VARCHAR},
-      czsbh = #{czsbh,jdbcType=VARCHAR}
+      czsbh = #{czsbh,jdbcType=VARCHAR},
+      sbbh = #{sbbh,jdbcType=VARCHAR}
 
     where id = #{id,jdbcType=VARCHAR}
   </update>

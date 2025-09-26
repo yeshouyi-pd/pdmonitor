@@ -61,6 +61,8 @@ public class AppMonitorManualEntrye {
 
     private String czsbh;
 
+    private String sbbh;
+
     public String getId() {
         return id;
     }
@@ -291,5 +293,13 @@ public class AppMonitorManualEntrye {
 
     public void setCzsbh(String czsbh) {
         this.czsbh = czsbh;
+    }
+
+    public String getSbbh() {
+        return sbbh;
+    }
+
+    public void setSbbh(String sbbh) {
+        this.sbbh = sbbh;
     }
 }
