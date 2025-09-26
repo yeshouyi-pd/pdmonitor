@@ -129,6 +129,7 @@ export default {
       let _this = this;
       _this.amap.clearMap();
       _this.getGpsBySbsn();
+      _this.selectGpsOb();
       _this.getPontoonGpsBySbsn();
     },
     /**
@@ -200,13 +201,51 @@ export default {
                 position: item.gps.split(","),
                 icon: '//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-default.png',
                 anchor:'bottom-center',
-                offset: new AMap.Pixel(0, 0),
+                offset: new AMap.Pixel(0, 10),
                 map: _this.amap
               });
               marker.setLabel({
                 direction:'center',
                 offset:new AMap.Pixel(0, -5),
                 content: item.ts, //设置文本标注内容
+              });
+            }
+          })
+        }
+      })
+    },
+    /**
+     * 获取人工观察数据
+     */
+    selectGpsOb(){
+      let _this = this;
+      let obj = {
+        "stime":_this.stime,
+        "etime":_this.etime,
+        "sbbh":_this.curSbsn
+      }
+      Loading.show();
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileTyToday/selectGpsOb', obj).then((response)=>{
+        Loading.hide();
+        let resp = response.data;
+        let gpslist = resp.content;
+        if(gpslist && gpslist.length>0){
+          gpslist.forEach(function (item){
+            if(item.declat != '0' && item.declat != 'NaN'){
+              console.log(JSON.stringify(item))
+              const lat = parseFloat(item.declat);
+              const lng = parseFloat(item.declong);
+              let marker = new AMap.Marker({
+                position: [lat , lng ],
+                icon: '//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-red.png',
+                anchor:'bottom-center',
+                offset: new AMap.Pixel(0, -10),
+                map: _this.amap
+              });
+              marker.setLabel({
+                direction:'center',
+                offset:new AMap.Pixel(0, -5),
+                content: item.data6, //设置文本标注内容
               });
             }
           })
