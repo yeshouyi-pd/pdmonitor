@@ -23,6 +23,15 @@ public class AppMonitorExpService {
     @Resource
     private AppMonitorExpMapper appMonitorExpMapper;
 
+
+    public List<AppMonitorExpDto> listNoGps(){
+        AppMonitorExpExample appMonitorExpExample = new AppMonitorExpExample();
+        AppMonitorExpExample.Criteria criteria = appMonitorExpExample.createCriteria();
+        criteria.andDeclatEqualTo("0");//未获取到
+        List<AppMonitorExp> appMonitorExpList = appMonitorExpMapper.selectByExample(appMonitorExpExample);
+        return CopyUtil.copyList(appMonitorExpList, AppMonitorExpDto.class);
+    }
+
     /**
     * 列表查询
     */
@@ -89,7 +98,7 @@ public class AppMonitorExpService {
     /**
     * 更新
     */
-    private void update(AppMonitorExp appMonitorExp) {
+    public void update(AppMonitorExp appMonitorExp) {
         appMonitorExpMapper.updateByPrimaryKey(appMonitorExp);
     }
 
