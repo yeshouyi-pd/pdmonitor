@@ -43,6 +43,8 @@ public class AppMonitorDiscovery {
 
     private String gps;
 
+    private String sbbh;
+
     public String getId() {
         return id;
     }
@@ -201,5 +203,13 @@ public class AppMonitorDiscovery {
 
     public void setGps(String gps) {
         this.gps = gps;
+    }
+
+    public String getSbbh() {
+        return sbbh;
+    }
+
+    public void setSbbh(String sbbh) {
+        this.sbbh = sbbh;
     }
 }
