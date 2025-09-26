@@ -1,7 +1,7 @@
 LOCAL_KEY_REMEMBER_USER = "LOCAL_KEY_REMEMBER_USER"; // 记住我
 LOCAL_ZHBHT=false;//珠江保护区
-LOCAL_SSBRL=true;//水生哺乳类
-LOCAL_VIDEO=false;//珠江视频
+LOCAL_SSBRL=true;//水生哺乳类   --江豚
+LOCAL_VIDEO=false;//珠江视频  -- 白海豚
 LOCAL_TLBHQ=false;//铜陵保护区
 
 LocalStorage = {

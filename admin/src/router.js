@@ -123,13 +123,13 @@ export default new Router({
     base:process.env.BASE_URL,
     routes:[{
         path: "*",
-        redirect: "/login",
+        redirect: "/login", //白海豚打包  loginVideo
     },{
         path: "",
-        redirect: "/login",
+        redirect: "/login",//白海豚打包  loginVideo
     },{
-        path: "/login",
-        component:Login
+        path: "/login",//白海豚打包  loginVideo
+        component:Login //白海豚打包  LoginVideo
     },{
         path: "/mobile/largemonitorsTy",
         component: LargemonitorsTy
