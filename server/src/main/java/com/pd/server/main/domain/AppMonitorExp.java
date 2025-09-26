@@ -51,6 +51,8 @@ public class AppMonitorExp {
 
     private String bid;
 
+    private String sbbh;
+
     public String getId() {
         return id;
     }
@@ -243,6 +245,14 @@ public class AppMonitorExp {
         this.bid = bid;
     }
 
+    public String getSbbh() {
+        return sbbh;
+    }
+
+    public void setSbbh(String sbbh) {
+        this.sbbh = sbbh;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -273,6 +283,7 @@ public class AppMonitorExp {
         sb.append(", mid=").append(mid);
         sb.append(", cjsj=").append(cjsj);
         sb.append(", bid=").append(bid);
+        sb.append(", sbbh=").append(sbbh);
         sb.append("]");
         return sb.toString();
     }

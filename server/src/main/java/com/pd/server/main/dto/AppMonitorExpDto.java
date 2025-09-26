@@ -107,6 +107,8 @@ public class AppMonitorExpDto  extends  PageDto{
 
     private String bid;
 
+    private String sbbh;
+
 
     public String getId() {
         return id;
@@ -298,6 +300,14 @@ public class AppMonitorExpDto  extends  PageDto{
 
     public void setBid(String bid) {
         this.bid = bid;
+    }
+
+    public String getSbbh() {
+        return sbbh;
+    }
+
+    public void setSbbh(String sbbh) {
+        this.sbbh = sbbh;
     }
 
     @Override

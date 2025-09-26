@@ -1774,6 +1774,76 @@ public class AppMonitorExpExample {
             addCriterion("bid not between", value1, value2, "bid");
             return (Criteria) this;
         }
+
+        public Criteria andSbbhIsNull() {
+            addCriterion("sbbh is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSbbhIsNotNull() {
+            addCriterion("sbbh is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSbbhEqualTo(String value) {
+            addCriterion("sbbh =", value, "sbbh");
+            return (Criteria) this;
+        }
+
+        public Criteria andSbbhNotEqualTo(String value) {
+            addCriterion("sbbh <>", value, "sbbh");
+            return (Criteria) this;
+        }
+
+        public Criteria andSbbhGreaterThan(String value) {
+            addCriterion("sbbh >", value, "sbbh");
+            return (Criteria) this;
+        }
+
+        public Criteria andSbbhGreaterThanOrEqualTo(String value) {
+            addCriterion("sbbh >=", value, "sbbh");
+            return (Criteria) this;
+        }
+
+        public Criteria andSbbhLessThan(String value) {
+            addCriterion("sbbh <", value, "sbbh");
+            return (Criteria) this;
+        }
+
+        public Criteria andSbbhLessThanOrEqualTo(String value) {
+            addCriterion("sbbh <=", value, "sbbh");
+            return (Criteria) this;
+        }
+
+        public Criteria andSbbhLike(String value) {
+            addCriterion("sbbh like", value, "sbbh");
+            return (Criteria) this;
+        }
+
+        public Criteria andSbbhNotLike(String value) {
+            addCriterion("sbbh not like", value, "sbbh");
+            return (Criteria) this;
+        }
+
+        public Criteria andSbbhIn(List<String> values) {
+            addCriterion("sbbh in", values, "sbbh");
+            return (Criteria) this;
+        }
+
+        public Criteria andSbbhNotIn(List<String> values) {
+            addCriterion("sbbh not in", values, "sbbh");
+            return (Criteria) this;
+        }
+
+        public Criteria andSbbhBetween(String value1, String value2) {
+            addCriterion("sbbh between", value1, value2, "sbbh");
+            return (Criteria) this;
+        }
+
+        public Criteria andSbbhNotBetween(String value1, String value2) {
+            addCriterion("sbbh not between", value1, value2, "sbbh");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {
