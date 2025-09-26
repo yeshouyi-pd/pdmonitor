@@ -1835,6 +1835,11 @@ public class AppMonitorManualEntryeExample {
             addCriterion("c_zsbh =", value, "czsbh");
             return (Criteria) this;
         }
+
+        public Criteria andSbbhEqualTo(String value) {
+            addCriterion("sbbh =", value, "sbbh");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {
