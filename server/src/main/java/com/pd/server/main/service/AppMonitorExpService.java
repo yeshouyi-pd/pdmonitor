@@ -137,6 +137,7 @@ public class AppMonitorExpService {
         appMonitorExpDto.setMid(appMonitorInfo.getId());
         appMonitorExpDto.setCjsj(appMonitorInfo.getKsgcsj());
         appMonitorExpDto.setBid(appMonitorInfo.getId());
+        appMonitorExpDto.setSbbh(appMonitorInfo.getSbbh());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
         this.deleteByMid(appMonitorInfo.getId(),"start");
         this.insert(appMonitorExp);
@@ -169,6 +170,7 @@ public class AppMonitorExpService {
         appMonitorExpDto.setMid(appMonitorInfo.getId());
         appMonitorExpDto.setCjsj(new Date((appMonitorInfo.getKsgcsj().getTime() + 1000)));
         appMonitorExpDto.setBid(appMonitorInfo.getId());
+        appMonitorExpDto.setSbbh(appMonitorInfo.getSbbh());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
         this.deleteByMid(appMonitorInfo.getId(),"B");
         this.insert(appMonitorExp);
@@ -201,6 +203,7 @@ public class AppMonitorExpService {
         appMonitorExpDto.setMid(appMonitorInfo.getId());
         appMonitorExpDto.setCjsj(appMonitorInfo.getJsgcsj());
         appMonitorExpDto.setBid(appMonitorInfo.getId());
+        appMonitorExpDto.setSbbh(appMonitorInfo.getSbbh());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
         this.deleteByMid(appMonitorInfo.getId(),"E");
         this.insert(appMonitorExp);
@@ -239,6 +242,7 @@ public class AppMonitorExpService {
         appMonitorExpDto.setMid(appMonitorInfo.getId());
         appMonitorExpDto.setCjsj(new Date((appMonitorInfo.getKsgcsj().getTime() + 2000)));
         appMonitorExpDto.setBid(appMonitorInfo.getId());
+        appMonitorExpDto.setSbbh(appMonitorInfo.getSbbh());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
         this.deleteByMid(appMonitorInfo.getId(),"P");
         this.insert(appMonitorExp);
@@ -274,6 +278,7 @@ public class AppMonitorExpService {
         appMonitorExpDto.setMid(appMonitorInfo.getId());
         appMonitorExpDto.setCjsj(new Date((appMonitorInfo.getKsgcsj().getTime() + 3000)));
         appMonitorExpDto.setBid(appMonitorInfo.getId());
+        appMonitorExpDto.setSbbh(appMonitorInfo.getSbbh());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
         this.deleteByMid(appMonitorInfo.getId(),"W");
         this.insert(appMonitorExp);
@@ -311,6 +316,7 @@ public class AppMonitorExpService {
         appMonitorExpDto.setMid(appMonitorInfo.getId());
         appMonitorExpDto.setCjsj(new Date((appMonitorInfo.getKsgcsj().getTime() + 4000)));
         appMonitorExpDto.setBid(appMonitorInfo.getId());
+        appMonitorExpDto.setSbbh(appMonitorInfo.getSbbh());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
         this.deleteByMid(appMonitorInfo.getId(),"N");
         this.insert(appMonitorExp);
@@ -349,6 +355,7 @@ public class AppMonitorExpService {
         appMonitorExpDto.setMid(appMonitorManualEntryeDto.getId());
         appMonitorExpDto.setCjsj(appMonitorManualEntryeDto.getKsgcsj());
         appMonitorExpDto.setBid(appMonitorManualEntryeDto.getMid());
+        appMonitorExpDto.setSbbh(appMonitorManualEntryeDto.getSbbh());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
         this.deleteByMid(appMonitorManualEntryeDto.getId(),"P");
         this.insert(appMonitorExp);
@@ -384,6 +391,7 @@ public class AppMonitorExpService {
         appMonitorExpDto.setMid(appMonitorManualEntryeDto.getId());
         appMonitorExpDto.setCjsj(appMonitorManualEntryeDto.getKsgcsj());
         appMonitorExpDto.setBid(appMonitorManualEntryeDto.getMid());
+        appMonitorExpDto.setSbbh(appMonitorManualEntryeDto.getSbbh());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
         this.deleteByMid(appMonitorManualEntryeDto.getId(),"W");
         this.insert(appMonitorExp);
@@ -421,6 +429,7 @@ public class AppMonitorExpService {
         appMonitorExpDto.setMid(appMonitorManualEntryeDto.getId());
         appMonitorExpDto.setCjsj(appMonitorManualEntryeDto.getKsgcsj());
         appMonitorExpDto.setBid(appMonitorManualEntryeDto.getMid());
+        appMonitorExpDto.setSbbh(appMonitorManualEntryeDto.getSbbh());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
         this.deleteByMid(appMonitorManualEntryeDto.getId(),"N");
         this.insert(appMonitorExp);
@@ -456,6 +465,7 @@ public class AppMonitorExpService {
         appMonitorExpDto.setMid(appMonitorManualEntryeDto.getId());
         appMonitorExpDto.setCjsj(appMonitorManualEntryeDto.getKsgcsj());
         appMonitorExpDto.setBid(appMonitorManualEntryeDto.getMid());
+        appMonitorExpDto.setSbbh(appMonitorManualEntryeDto.getSbbh());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
         this.deleteByMid(appMonitorManualEntryeDto.getId(),"V");
         this.insert(appMonitorExp);
@@ -489,6 +499,7 @@ public class AppMonitorExpService {
         appMonitorExpDto.setMid(appMonitorManualEntryeDto.getId());
         appMonitorExpDto.setCjsj(appMonitorManualEntryeDto.getKsgcsj());
         appMonitorExpDto.setBid(appMonitorManualEntryeDto.getMid());
+        appMonitorExpDto.setSbbh(appMonitorManualEntryeDto.getSbbh());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
         this.deleteByMid(appMonitorManualEntryeDto.getId(),"C");
         this.insert(appMonitorExp);
@@ -531,6 +542,7 @@ public class AppMonitorExpService {
         appMonitorExpDto.setMid(appMonitorDiscoveryDto.getId());
         appMonitorExpDto.setCjsj(appMonitorDiscoveryDto.getFxsj());
         appMonitorExpDto.setBid(appMonitorDiscoveryDto.getMid());
+        appMonitorExpDto.setSbbh(appMonitorDiscoveryDto.getSbbh());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
         this.deleteByMid(appMonitorDiscoveryDto.getId(),"S");
         this.insert(appMonitorExp);
@@ -579,6 +591,7 @@ public class AppMonitorExpService {
         appMonitorExpDto.setMid(appMonitorDiscoveryDto.getId());
         appMonitorExpDto.setCjsj (new Date((appMonitorDiscoveryDto.getFxsj().getTime() + 1000)));
         appMonitorExpDto.setBid(appMonitorDiscoveryDto.getMid());
+        appMonitorExpDto.setSbbh(appMonitorDiscoveryDto.getSbbh());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
         this.deleteByMid(appMonitorDiscoveryDto.getId(),"H");
         this.insert(appMonitorExp);
@@ -613,6 +626,7 @@ public class AppMonitorExpService {
         appMonitorExpDto.setMid(appMonitorDiscoveryDto.getId());
         appMonitorExpDto.setCjsj(appMonitorDiscoveryDto.getFxsj());
         appMonitorExpDto.setBid(appMonitorDiscoveryDto.getMid());
+        appMonitorExpDto.setSbbh(appMonitorDiscoveryDto.getSbbh());
         AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
         this.deleteByMid(appMonitorDiscoveryDto.getId(),"C");
         this.insert(appMonitorExp);
