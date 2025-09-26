@@ -13,6 +13,12 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -23,11 +29,33 @@ public class AppMonitorExpService {
     @Resource
     private AppMonitorExpMapper appMonitorExpMapper;
 
+    public List<AppMonitorExpDto> getShowGps(EquipmentFileTyDto equipmentFileTyDto) throws ParseException {
+        if(StringUtils.isBlank(equipmentFileTyDto.getSbbh())){
+            return null;
+        }else{
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            AppMonitorExpExample appMonitorExpExample = new AppMonitorExpExample();
+            AppMonitorExpExample.Criteria criteria = appMonitorExpExample.createCriteria();
+            criteria.andSbbhEqualTo(equipmentFileTyDto.getSbbh());
+            criteria.andEventsEqualTo("S");
+            if(StringUtils.isNotBlank(equipmentFileTyDto.getStime())){
+                criteria.andCjsjGreaterThanOrEqualTo( sdf.parse(equipmentFileTyDto.getStime() + " 00:00:00"));
+            }
+            if (StringUtils.isNotBlank(equipmentFileTyDto.getEtime())){
+                criteria.andCjsjLessThanOrEqualTo( sdf.parse(equipmentFileTyDto.getEtime() + " 23:59:59"));
+            }
+            List<AppMonitorExp> appMonitorExps = appMonitorExpMapper.selectByExample(appMonitorExpExample);
+            return CopyUtil.copyList(appMonitorExps, AppMonitorExpDto.class);
+        }
+
+    }
+
 
     public List<AppMonitorExpDto> listNoGps(){
         AppMonitorExpExample appMonitorExpExample = new AppMonitorExpExample();
         AppMonitorExpExample.Criteria criteria = appMonitorExpExample.createCriteria();
         criteria.andDeclatEqualTo("0");//未获取到
+        criteria.andEventsEqualTo("S");//发现江豚
         List<AppMonitorExp> appMonitorExpList = appMonitorExpMapper.selectByExample(appMonitorExpExample);
         return CopyUtil.copyList(appMonitorExpList, AppMonitorExpDto.class);
     }

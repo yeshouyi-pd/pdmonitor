@@ -39,13 +39,22 @@ public class AppSyncGps {
                 ca.andSbbhEqualTo(appMonitorExpDto.getSbbh());
                 ca.andRqEqualTo(sdf.format( appMonitorExpDto.getCjsj()));
                 ca.andCjsjLessThan(appMonitorExpDto.getCjsj());
-                // 只取最新的一条记录
                 example.setOrderByClause(" cjsj desc limit 1 ");
-
                 List<String> gpsList = pontoonGpsService.selectGpsByExample(example);
                 if (CollectionUtil.isNotEmpty(gpsList)) {
                     appMonitorExpDto.setDeclat(gpsList.get(0).split(",")[0]);
                     appMonitorExpDto.setDeclong(gpsList.get(0).split(",")[1]);
+                }else{
+                    example.clear();
+                    ca.andSbbhEqualTo(appMonitorExpDto.getSbbh());
+                    ca.andRqEqualTo(sdf.format( appMonitorExpDto.getCjsj()));
+                    ca.andCjsjGreaterThan(appMonitorExpDto.getCjsj());
+                    example.setOrderByClause(" cjsj desc limit 1 ");
+                    List<String> gpsListS = pontoonGpsService.selectGpsByExample(example);
+                    if (CollectionUtil.isNotEmpty(gpsListS)) {
+                        appMonitorExpDto.setDeclat(gpsListS.get(0).split(",")[0]);
+                        appMonitorExpDto.setDeclong(gpsListS.get(0).split(",")[1]);
+                    }
                 }
                 AppMonitorExp appMonitorExp = CopyUtil.copy(appMonitorExpDto, AppMonitorExp.class);
                 appMonitorExpService.update(appMonitorExp);

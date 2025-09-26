@@ -7,6 +7,7 @@ import com.pd.server.main.domain.EquipmentFileTyTodayExample;
 import com.pd.server.main.dto.*;
 import com.pd.server.main.dto.basewx.my.GpsKVDto;
 import com.pd.server.main.dto.basewx.my.TyDataDto;
+import com.pd.server.main.service.AppMonitorExpService;
 import com.pd.server.main.service.EquipmentFileTyService;
 import com.pd.server.main.service.EquipmentFileTyTodayService;
 import com.pd.server.util.DateUtil;
@@ -19,6 +20,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -36,6 +38,9 @@ public class EquipmentFileTyTodayController extends BaseWxController {
     private EquipmentFileTyTodayService equipmentFileTyTodayService;
     @Resource
     private EquipmentFileTyService equipmentFileTyService;
+    @Resource
+    private AppMonitorExpService appMonitorExpService;
+
 
     @GetMapping("/getDataStatistics/{sbbh}")
     public ResponseDto getDataStatistics(@PathVariable String sbbh){
@@ -78,6 +83,21 @@ public class EquipmentFileTyTodayController extends BaseWxController {
         responseDto.setContent(gpsList);
         return responseDto;
     }
+
+    /**
+     * 人工观察GPS
+     * @param equipmentFileTyDto
+     * @return
+     * @throws ParseException
+     */
+    @PostMapping("/selectGpsOb")
+    public ResponseDto selectGpsOb(@RequestBody EquipmentFileTyDto equipmentFileTyDto) throws ParseException {
+        ResponseDto responseDto = new ResponseDto();
+        List<AppMonitorExpDto> showGps = appMonitorExpService.getShowGps(equipmentFileTyDto);
+        responseDto.setContent(showGps);
+        return responseDto;
+    }
+
 
     @PostMapping("/selectTodayGps")
     public ResponseDto selectTodayGps(@RequestBody EquipmentFileTyTodayDto todayDto){
