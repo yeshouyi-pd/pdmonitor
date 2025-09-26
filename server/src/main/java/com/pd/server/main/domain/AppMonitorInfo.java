@@ -57,6 +57,8 @@ public class AppMonitorInfo {
 
     private String jsgps;
 
+    private String sbbh;
+
     public String getId() {
         return id;
     }
@@ -271,5 +273,13 @@ public class AppMonitorInfo {
 
     public void setJsgps(String jsgps) {
         this.jsgps = jsgps;
+    }
+
+    public String getSbbh() {
+        return sbbh;
+    }
+
+    public void setSbbh(String sbbh) {
+        this.sbbh = sbbh;
     }
 }

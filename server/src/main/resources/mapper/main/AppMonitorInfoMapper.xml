@@ -29,6 +29,7 @@
     <result column="gczzwm" jdbcType="VARCHAR" property="gczzwm" />
     <result column="ksgps" jdbcType="VARCHAR" property="ksgps" />
     <result column="jsgps" jdbcType="VARCHAR" property="jsgps" />
+    <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -91,7 +92,7 @@
   <sql id="Base_Column_List">
     id, kcclx, gczxm, gcqy, gcdw, ksgcsj, p_zfgcz, p_jlz, p_yfgcz, p_dlgcz, p_dlgczsyff, 
     p_fjgcz, w_ztgczk, w_xgszfw, w_xgzk, n_jajl, n_ss, n_cs, n_jafx, n_fx, jsgcsj, scsj, 
-    gxsj, deptcode ,gczzwm ,ksgps , jsgps
+    gxsj, deptcode ,gczzwm ,ksgps , jsgps ,sbbh
   </sql>
   <select id="selectByExample" parameterType="com.pd.server.main.domain.AppMonitorInfoExample" resultMap="BaseResultMap">
     select
@@ -131,7 +132,7 @@
       w_ztgczk, w_xgszfw, w_xgzk, 
       n_jajl, n_ss, n_cs, n_jafx, 
       n_fx, jsgcsj, scsj, 
-      gxsj, deptcode ,gczzwm , ksgps , jsgps)
+      gxsj, deptcode ,gczzwm , ksgps , jsgps ,sbbh)
     values (#{id,jdbcType=VARCHAR}, #{kcclx,jdbcType=VARCHAR}, #{gczxm,jdbcType=VARCHAR}, 
       #{gcqy,jdbcType=VARCHAR}, #{gcdw,jdbcType=VARCHAR}, #{ksgcsj,jdbcType=TIMESTAMP}, 
       #{pzfgcz,jdbcType=VARCHAR}, #{pjlz,jdbcType=VARCHAR}, #{pyfgcz,jdbcType=VARCHAR}, 
@@ -139,8 +140,8 @@
       #{wztgczk,jdbcType=VARCHAR}, #{wxgszfw,jdbcType=VARCHAR}, #{wxgzk,jdbcType=VARCHAR}, 
       #{njajl,jdbcType=VARCHAR}, #{nss,jdbcType=VARCHAR}, #{ncs,jdbcType=VARCHAR}, #{njafx,jdbcType=VARCHAR}, 
       #{nfx,jdbcType=VARCHAR}, #{jsgcsj,jdbcType=TIMESTAMP}, #{scsj,jdbcType=TIMESTAMP}, 
-      #{gxsj,jdbcType=TIMESTAMP}, #{deptcode,jdbcType=VARCHAR},#{gczzwm,jdbcType=VARCHAR} ,
-      #{ksgps,jdbcType=TIMESTAMP}, #{jsgps,jdbcType=VARCHAR}      )
+      #{gxsj,jdbcType=TIMESTAMP}, #{deptcode,jdbcType=VARCHAR}, #{gczzwm,jdbcType=VARCHAR} ,
+      #{ksgps,jdbcType=TIMESTAMP}, #{jsgps,jdbcType=VARCHAR}  ,  #{sbbh,jdbcType=VARCHAR}    )
   </insert>
   <insert id="insertSelective" parameterType="com.pd.server.main.domain.AppMonitorInfo">
     insert into app_monitor_info
@@ -226,6 +227,9 @@
       <if test="jsgps != null">
         jsgps,
       </if>
+      <if test="sbbh != null">
+        sbbh,
+      </if>
 
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -309,6 +313,9 @@
       </if>
       <if test="jsgps != null">
         #{jsgps,jdbcType=VARCHAR},
+      </if>
+      <if test="sbbh != null">
+        #{sbbh,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -402,6 +409,9 @@
       <if test="record.jsgps != null">
         jsgps = #{record.jsgps,jdbcType=VARCHAR},
       </if>
+      <if test="record.sbbh != null">
+        sbbh = #{record.sbbh,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -435,7 +445,8 @@
       deptcode = #{record.deptcode,jdbcType=VARCHAR},
       gczzwm = #{record.gczzwm,jdbcType=VARCHAR},
       ksgps = #{record.ksgps,jdbcType=VARCHAR},
-      jsgps = #{record.jsgps,jdbcType=VARCHAR}
+      jsgps = #{record.jsgps,jdbcType=VARCHAR},
+      sbbh = #{record.sbbh,jdbcType=VARCHAR}
 
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -523,6 +534,9 @@
       <if test="jsgps != null">
         jsgps = #{jsgps,jdbcType=VARCHAR},
       </if>
+      <if test="sbbh != null">
+        sbbh = #{sbbh,jdbcType=VARCHAR},
+      </if>
 
 
     </set>
@@ -555,7 +569,8 @@
       deptcode = #{deptcode,jdbcType=VARCHAR},
       gczzwm = #{gczzwm,jdbcType=VARCHAR},
       ksgps = #{ksgps,jdbcType=VARCHAR},
-      jsgps = #{jsgps,jdbcType=VARCHAR}
+      jsgps = #{jsgps,jdbcType=VARCHAR},
+      sbbh = #{sbbh,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>
