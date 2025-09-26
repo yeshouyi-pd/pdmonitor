@@ -8,6 +8,7 @@ import com.pd.server.main.dto.AppMonitorExpDto;
 import com.pd.server.main.service.AppMonitorExpService;
 import com.pd.server.main.service.PontoonGpsService;
 import com.pd.server.util.CopyUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -29,6 +30,9 @@ public class AppSyncGps {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         List<AppMonitorExpDto> appMonitorExpDtos = appMonitorExpService.listNoGps();
         for (AppMonitorExpDto appMonitorExpDto : appMonitorExpDtos) {
+            if(StringUtils.isBlank(appMonitorExpDto.getSbbh())){ //要是没有编号直接跳转
+                continue;
+            }
             try {
                 PontoonGpsExample example = new PontoonGpsExample();
                 PontoonGpsExample.Criteria ca = example.createCriteria();
