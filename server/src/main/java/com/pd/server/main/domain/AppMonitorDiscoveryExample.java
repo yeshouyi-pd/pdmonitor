@@ -1414,6 +1414,11 @@ public class AppMonitorDiscoveryExample {
             addCriterion("deptcode not between", value1, value2, "deptcode");
             return (Criteria) this;
         }
+
+        public Criteria andSbbhEqualTo(String value) {
+            addCriterion("sbbh =", value, "sbbh");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

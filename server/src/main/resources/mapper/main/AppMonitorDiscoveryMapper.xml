@@ -22,6 +22,7 @@
     <result column="gczxm" jdbcType="VARCHAR" property="gczxm" />
     <result column="deptcode" jdbcType="VARCHAR" property="deptcode" />
     <result column="gps" jdbcType="VARCHAR" property="gps" />
+    <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -83,7 +84,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, mid, fxsj, s_jl, s_gcz, s_fw, s_ff, s_wzm, s_qt_zx, s_qt_zy, s_qt_zd, c_zsbh, 
-    h_zjajl, h_mztds, h_xwms, h_hjlxdm, scjs, gczxm, deptcode ,gps
+    h_zjajl, h_mztds, h_xwms, h_hjlxdm, scjs, gczxm, deptcode ,gps ,sbbh
   </sql>
   <select id="selectByExample" parameterType="com.pd.server.main.domain.AppMonitorDiscoveryExample" resultMap="BaseResultMap">
     select
@@ -121,14 +122,15 @@
       s_wzm, s_qt_zx, s_qt_zy, 
       s_qt_zd, c_zsbh, h_zjajl, 
       h_mztds, h_xwms, h_hjlxdm, 
-      scjs, gczxm, deptcode ,gps
+      scjs, gczxm, deptcode ,gps ,sbbh
       )
     values (#{id,jdbcType=VARCHAR}, #{mid,jdbcType=VARCHAR}, #{fxsj,jdbcType=TIMESTAMP}, 
       #{sjl,jdbcType=VARCHAR}, #{sgcz,jdbcType=VARCHAR}, #{sfw,jdbcType=VARCHAR}, #{sff,jdbcType=VARCHAR}, 
       #{swzm,jdbcType=VARCHAR}, #{sqtzx,jdbcType=VARCHAR}, #{sqtzy,jdbcType=VARCHAR}, 
       #{sqtzd,jdbcType=VARCHAR}, #{czsbh,jdbcType=VARCHAR}, #{hzjajl,jdbcType=VARCHAR}, 
       #{hmztds,jdbcType=VARCHAR}, #{hxwms,jdbcType=VARCHAR}, #{hhjlxdm,jdbcType=VARCHAR}, 
-      #{scjs,jdbcType=TIMESTAMP}, #{gczxm,jdbcType=VARCHAR}, #{deptcode,jdbcType=VARCHAR} ,#{gps,jdbcType=VARCHAR}
+      #{scjs,jdbcType=TIMESTAMP}, #{gczxm,jdbcType=VARCHAR}, #{deptcode,jdbcType=VARCHAR} ,#{gps,jdbcType=VARCHAR} ,
+      #{sbbh,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.pd.server.main.domain.AppMonitorDiscovery">
@@ -194,6 +196,9 @@
       <if test="gps != null">
         gps,
       </if>
+      <if test="sbbh != null">
+        sbbh,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -256,6 +261,10 @@
       <if test="gps != null">
         #{gps,jdbcType=VARCHAR},
       </if>
+      <if test="sbbh != null">
+        #{sbbh,jdbcType=VARCHAR},
+      </if>
+
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.pd.server.main.domain.AppMonitorDiscoveryExample" resultType="java.lang.Long">
@@ -327,6 +336,9 @@
       <if test="record.gps != null">
         gps = #{record.gps,jdbcType=VARCHAR},
       </if>
+      <if test="record.sbbh != null">
+        sbbh = #{record.sbbh,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -353,7 +365,8 @@
       scjs = #{record.scjs,jdbcType=TIMESTAMP},
       gczxm = #{record.gczxm,jdbcType=VARCHAR},
       deptcode = #{record.deptcode,jdbcType=VARCHAR},
-      gps = #{record.gps,jdbcType=VARCHAR}
+      gps = #{record.gps,jdbcType=VARCHAR},
+      sbbh = #{record.sbbh,jdbcType=VARCHAR}
 
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -419,6 +432,9 @@
       <if test="gps != null">
         gps = #{gps,jdbcType=VARCHAR},
       </if>
+      <if test="sbbh != null">
+        sbbh = #{sbbh,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -442,7 +458,8 @@
       scjs = #{scjs,jdbcType=TIMESTAMP},
       gczxm = #{gczxm,jdbcType=VARCHAR},
       deptcode = #{deptcode,jdbcType=VARCHAR},
-      gps = #{gps,jdbcType=VARCHAR}
+      gps = #{gps,jdbcType=VARCHAR},
+      sbbh = #{sbbh,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

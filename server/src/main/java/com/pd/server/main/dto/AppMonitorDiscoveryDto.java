@@ -122,6 +122,11 @@ public class AppMonitorDiscoveryDto extends  PageDto{
 
     private String gps;
 
+    /**
+     * 设备编码
+     */
+    private String sbbh;
+
     public String getId() {
         return id;
     }
@@ -304,5 +309,13 @@ public class AppMonitorDiscoveryDto extends  PageDto{
 
     public void setGczzwm(String gczzwm) {
         this.gczzwm = gczzwm;
+    }
+
+    public String getSbbh() {
+        return sbbh;
+    }
+
+    public void setSbbh(String sbbh) {
+        this.sbbh = sbbh;
     }
 }
