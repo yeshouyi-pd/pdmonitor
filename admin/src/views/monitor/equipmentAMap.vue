@@ -188,9 +188,9 @@
                           map: _this.amap
                         });
                         marker.setLabel({
-                          direction:'center',
-                          offset: new AMap.Pixel(10, 0),  //设置文本标注偏移量
-                          content: "<div style='color: #000'>"+devices[i].fzwz+"</div>", //设置文本标注内容
+                          direction:'top',
+                          offset: new AMap.Pixel(0, 10),  //设置文本标注偏移量
+                          content: "<div style='color: #FFA421'>"+devices[i].fzwz+"</div>", //设置文本标注内容
                           style:{
                             'color': 'black'
                           }
@@ -215,9 +215,9 @@
                           map: _this.amap
                         });
                         marker.setLabel({
-                          direction:'center',
-                          offset: new AMap.Pixel(10, 0),  //设置文本标注偏移量
-                          content: "<div style='color: #000'>"+devices[i].fzwz+"</div>", //设置文本标注内容
+                          direction:'top',
+                          offset: new AMap.Pixel(0, 10),  //设置文本标注偏移量
+                          content: "<div style='color: green'>"+devices[i].fzwz+"</div>", //设置文本标注内容
                         });
                         marker.content = [];
                         marker.content.push(devices[i].deptcode);
