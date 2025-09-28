@@ -190,7 +190,7 @@
                         marker.setLabel({
                           direction:'top',
                           offset: new AMap.Pixel(0, 10),  //设置文本标注偏移量
-                          content: "<div style='color: #FFA421'>"+devices[i].fzwz+"</div>", //设置文本标注内容
+                          content: "<div style='color: green'>"+devices[i].fzwz+"</div>", //设置文本标注内容
                           style:{
                             'color': 'black'
                           }
