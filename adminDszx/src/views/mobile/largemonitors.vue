@@ -26,9 +26,7 @@
       <div class="pain">
         <div class="h25">
           <div class="imgs">
-            <div class="imgs">
-              <swiper-video id="swiperVideoTop" :list="swiperVideoTop" style="text-align: center;width: 100% ;height: 100%;"></swiper-video>
-            </div>
+            <swiper-video id="swiperVideoTop" :list="swiperVideoTop" style="text-align: center;width: 100% ;height: 100%;"></swiper-video>
           </div>
         </div>
         <div class="h37">

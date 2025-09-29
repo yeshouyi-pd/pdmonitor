@@ -1,7 +1,7 @@
 <template>
   <div class="swiper-container" :id="id">
     <div class="swiper-wrapper" style="height: 300px" >
-      <div class="swiper-slide" v-for="item in list" style="width: 100%;height: 100%;">
+      <div class="swiper-slide" :id="'swiper-slide-'+id" v-for="item in list" style="width: 100%;height: 100%;">
         <video width="100%" height="100%" autoplay controls>
           <source class="video" title="主监控位" :src="item"/>
         </video>
@@ -36,7 +36,7 @@ export default {
             observer:true,
             observeParents:true,
           })
-          var videos = document.querySelectorAll(".swiper-slide video");
+          var videos = document.querySelectorAll('#swiper-slide-'+this.id+" video");
           for (var i = 0; i < videos.length; i++) {
             videos[i].addEventListener("ended", function() {
               if (_this.mySwiper.activeIndex === videos.length - 1) {
