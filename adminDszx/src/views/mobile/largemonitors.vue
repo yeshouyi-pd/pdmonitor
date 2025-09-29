@@ -26,18 +26,13 @@
       <div class="pain">
         <div class="h25">
           <div class="imgs">
-            <video width="100%" height="100%" autoplay="autoplay" loop="loop" controls>
-              <source class="video" title="主监控位" src="/video/12.mp4"/>
-            </video>
+            <div class="imgs">
+              <swiper-video id="swiperVideoTop" :list="swiperVideoTop" style="text-align: center;width: 100% ;height: 100%;"></swiper-video>
+            </div>
           </div>
         </div>
         <div class="h37">
-          <div class="imgs"  v-if="LOCAL_TLBHQ || LOCAL_ZHBHT">
-            <video width="100%" height="100%" autoplay="autoplay" loop="loop" controls>
-              <source class="video" title="主监控位" src="/video/13.mp4"/>
-            </video>
-          </div>
-          <div class="imgs" v-else>
+          <div class="imgs">
             <swiper-video id="swiperVideo" :list="swiperVideo" style="text-align: center;width: 100% ;height: 100%;"></swiper-video>
           </div>
         </div>
@@ -140,9 +135,8 @@ export default {
   components:{EquipmentAMap,Swiper,SwiperVideo},
   data: function (){
     return {
-      swiperVideo:[
-        "/video/13.mp4","/video/14.mp4","/video/15.mp4","/video/16.mp4"
-      ],
+      swiperVideoTop:["/video/20250624153459.mp4","/video/20250805174653.mp4","/video/20250805174922.mp4","/video/0535ce331b6b98663266f6ef22e61767_raw.mp4","/video/d961730715e37479a46ae9caf6da9a2f_raw.mp4","/video/ff5c986d9ad223f47bb3cdfb5328bfdb_raw.mp4"],
+      swiperVideo:["/video/bf9eb11e4054d2e3a67804a52125a3b1_raw.mp4","/video/a9a14ced44cca820607a9a5ceb995dd6_raw.mp4","/video/7b51d96ea9ef4a9da5ace9723176ec46_raw.mp4"],
       tdhList:[
         {key:"C11", value:"9"},
         {key:"C12", value:"5"},
