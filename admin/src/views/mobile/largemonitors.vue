@@ -268,7 +268,7 @@ export default {
       }else{
         let socketUrl="";
         if(_this.LOCAL_SSBRL){
-          socketUrl="ws://119.3.2.53:9091/monitor/websocket/21_"+new Date().getTime();
+          socketUrl="ws://159.226.163.121:9091/monitor/websocket/21_"+new Date().getTime();
         }else if(_this.LOCAL_TLBHQ){
           socketUrl="ws://111.38.21.161:7002/monitor/websocket/21_"+new Date().getTime();
         }else{

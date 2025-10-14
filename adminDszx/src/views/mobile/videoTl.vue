@@ -12,7 +12,7 @@
     </header>
     <div class="page-first-div">
       <div class="left-box">
-        <iframe ref="firstIframe" @click="vueSendMsg('firstIframe')" v-trigger  width="100%" height="100%" src="http://119.3.2.53:8808/" scrolling="no" frameborder="0"></iframe>
+        <iframe ref="firstIframe" @click="vueSendMsg('firstIframe')" v-trigger  width="100%" height="100%" src="http://159.226.163.121:8808/" scrolling="no" frameborder="0"></iframe>
         <!--        <div class="left-box-item">-->
         <!--          &lt;!&ndash;          <div style="height: 5%;margin-top: 10px;display: flex;flex-direction: row;align-items: center;margin-left: 20px;">&ndash;&gt;-->
         <!--          &lt;!&ndash;            <div v-on:click="back()" style="color: rgb(255, 255, 255);font-size: 16px;border: 1px solid #043769;background-color:rgb(10,33,61);width: 15%;text-align: center;padding: 5px 0;cursor: pointer">&ndash;&gt;-->
@@ -20,7 +20,7 @@
         <!--          &lt;!&ndash;            </div>&ndash;&gt;-->
         <!--          &lt;!&ndash;          </div>&ndash;&gt;-->
         <!--          <div class="left-video-box">-->
-        <!--            <iframe ref="firstIframe" @click="vueSendMsg(4,'firstIframe')" v-trigger width="100%" height="100%" src="http://119.3.2.53:9909/" scrolling="no" frameborder="0"></iframe>-->
+        <!--            <iframe ref="firstIframe" @click="vueSendMsg(4,'firstIframe')" v-trigger width="100%" height="100%" src="http://159.226.163.121:9909/" scrolling="no" frameborder="0"></iframe>-->
         <!--          </div>-->
         <!--          <div class="left-text-style">7号浮标</div>-->
         <!--        </div>-->

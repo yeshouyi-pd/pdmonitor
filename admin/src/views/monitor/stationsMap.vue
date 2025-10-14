@@ -89,7 +89,7 @@ export default {
       if(typeof(WebSocket) == "undefined") {
         alert("您的浏览器不支持WebSocket,无法实时更新数据,请使用谷歌、火狐或IE11等浏览器!");
       }else{
-        let socketUrl="ws://119.3.2.53:9091/monitor/sendCommandWebSocketServer/23_"+new Date().getTime();
+        let socketUrl="ws://159.226.163.121:9091/monitor/sendCommandWebSocketServer/23_"+new Date().getTime();
         //let socketUrl="ws://192.168.10.13:9091/monitor/sendCommandWebSocketServer/23_"+new Date().getTime();
         console.log(socketUrl);
         if(socket!=null){
@@ -136,7 +136,7 @@ export default {
       if(typeof(WebSocket) == "undefined") {
         alert("您的浏览器不支持WebSocket,无法实时更新数据,请使用谷歌、火狐或IE11等浏览器!");
       }else{
-        let socketUrl="ws://119.3.2.53:9091/monitor/stationsWebSocketServer/22_"+new Date().getTime();
+        let socketUrl="ws://159.226.163.121:9091/monitor/stationsWebSocketServer/22_"+new Date().getTime();
         //let socketUrl="ws://192.168.10.13:9091/monitor/stationsWebSocketServer/22_"+new Date().getTime();
         console.log(socketUrl);
         if(socket!=null){
