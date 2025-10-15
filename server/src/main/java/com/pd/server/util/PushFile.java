@@ -15,15 +15,12 @@ public class PushFile {
     public static void pushFile1(String fileurl){
         HashMap<String, Object> paramMap = new HashMap<>();
         try {
-            HttpUtil.downloadFile(fileurl, FileUtil.file("C:/file"));
             String uploadUrl = "http://117.164.188.3:8880/sonar_dolphin/api/recognize/sonar_dolphin/record/acceptance_file"; // 远程服务器上传URL
-            File file = new File("C:\\file\\"+fileurl.substring(fileurl.lastIndexOf("/")+1));
-
+            File file = new File(fileurl.replace("http://159.226.163.121:8081","D:\\FileinfoApi53"));
             //文件上传只需将参数中的键指定（默认file），值设为文件对象即可，对于使用者来说，文件上传与普通表单提交并无区别
             paramMap.put("file", file);
             String result= HttpUtil.post(uploadUrl, paramMap);
             LOG.error("完成文件推送："+result);
-            file.delete();
         }catch (Exception e){
             LOG.error("向江西赣江推送文件错误："+e.getMessage()+"---"+fileurl);
         }finally {
@@ -33,7 +30,7 @@ public class PushFile {
     }
 
     public static void main(String[] args){
-       pushFile1("http://49.239.193.146:49053/tempData/JXYSA4001/2023_09_08_13_07_15_2023_09_08_13_09_22_3_A4.txt");
+       pushFile1("http://159.226.163.121:8081/tempData/JXYSA4001/2025_10_14_16_45_05.jpg");
     }
 
 
