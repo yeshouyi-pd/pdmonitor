@@ -1,7 +1,7 @@
 <template>
   <div class="wrap" id="app">
     <header style="position: relative;">
-      <img src="/largemonitors/assets/imgs/headertitle.png" style="position: absolute;left: 30%;top:20px;width: 750px;">
+      <img :src="loginUser.ipstart" style="position: absolute;left: 30%;top:20px;width: 750px;">
       <div class="lefttitle" v-if="!LOCAL_VIDEO">
         <img src="/largemonitors/assets/imgs/左上角title.png" alt="" style="width: 220px;">
         <span>
@@ -203,7 +203,8 @@ export default {
       topDayType:'4',
       eventDayType:'3',
       canPlay:false,
-      timeHandle:null
+      timeHandle:null,
+      loginUser:{}
     }
   },
   watch: {
@@ -218,6 +219,7 @@ export default {
   },
   created() {
     let _this = this;
+    _this.loginUser =Tool.getLoginUser();
     //获取所有的设备，因为要用到设备的位置
     _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getDevice').then((res)=>{
       let response = res.data;

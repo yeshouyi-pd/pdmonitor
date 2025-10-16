@@ -1,7 +1,7 @@
 <template>
   <div style="width: 1920px;height: 100vh;background-image: url('/static/image/environment/bg02.png');background-size: 100%;margin: auto">
     <header style="position: relative;background: none">
-      <img src="/largemonitors/assets/imgs/headertitle1.png" style="position: absolute;left: 30%;top:20px;width: 750px;">
+      <img :src="loginUser.ipstart" style="position: absolute;left: 30%;top:20px;width: 750px;">
       <div class="lefttitle" style="top: 15px;left: 25px;color: #fff;display: flex;">
         <!--        <img src="/largemonitors/assets/imgs/左上角title.png" alt="" style="width: 250px;">-->
         <!--        <span>-->
@@ -78,11 +78,13 @@ export default {
       devices:[],
       videoEvents:[],
       sbbhSxt:'',//设备编号
-      tdh:0//通道号
+      tdh:0,//通道号
+      loginUser:{}
     }
   },
   created() {
     let _this = this;
+    _this.loginUser =Tool.getLoginUser();
     if(!Tool.isEmpty(location.search)){
       const params = new URLSearchParams(location.search);
       _this.tdh = params.get("tdh");
@@ -152,9 +154,7 @@ export default {
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/welcome/getExplainVideoEvent', {sfysp:1}).then((response)=>{
         let resp = response.data;
         _this.videoEvents = resp.content;
-        if( _this.videoEvents.length > 0 ){
-          _this.getPlayUrl(_this.videoEvents[0]);
-        }
+        _this.getPlayUrl(_this.videoEvents[0]);
       })
     },
     back(){

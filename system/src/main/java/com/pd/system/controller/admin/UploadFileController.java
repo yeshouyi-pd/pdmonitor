@@ -43,20 +43,11 @@ public class UploadFileController  extends BaseController {
     @Resource
     private RedisTemplate redisTemplate;
 
-
     @Resource
     private FileService fileService;
 
     @Resource
     private FileinfoService fileinfoService;
-
-
-
-
-
-
-
-
 
 
     @RequestMapping("/upload")

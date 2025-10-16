@@ -16,19 +16,19 @@
                   <a href="index.html" class="navbar-brand">
                     <small  v-if="LOCAL_ZHBHT">
                       <img style="height: 28px;margin-top: -8px;" src="/static/image/loginButtom.png"/>
-                      中华白海豚种群数量分布定点声学监测平台V1.0
+                      {{loginUser.ipend}}
                     </small>
                     <small  v-if="LOCAL_VIDEO">
                       <img style="height: 28px;margin-top: -8px;" src="/static/image/loginButtom.png"/>
-                      中华白海豚环境耦合实时监测系统
+                      {{loginUser.ipend}}
                     </small>
                     <small  v-if="LOCAL_SSBRL">
                       <img style="height: 40px;margin-top: -8px;" src="/static/image/RPCD512-1.png"/>
-                      水生哺乳类声影像智慧监测管理平台V1.0
+                      {{loginUser.ipend}}
                     </small>
                     <small  v-if="LOCAL_TLBHQ">
                       <img style="height: 40px;margin-top: -8px;" src="/static/image/RPCD512-1.png"/>
-                      水生哺乳类声影像智慧监测管理平台V1.0
+                      {{loginUser.ipend}}
                     </small>
                   </a>
               </div>
@@ -288,6 +288,7 @@
         mounted:function(){//mounted初始化方法
             let _this = this; //this 变成本地变量  避坑
             _this.loginUser =Tool.getLoginUser();
+            console.log(_this.loginUser);
             _this.getallres(_this.loginUser);//获取所有菜单
             $("body").removeClass('login-layout light-login');
             $("body").attr('class', 'no-skin');

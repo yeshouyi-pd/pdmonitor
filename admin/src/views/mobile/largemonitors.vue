@@ -1,7 +1,7 @@
 <template>
   <div class="wrap" id="app">
     <header style="position: relative;">
-      <img src="/largemonitors/assets/imgs/headertitle1.png" style="position: absolute;left: 37.9%;top:20px;width: 450px;">
+      <img :src="loginUser.ipstart" style="position: absolute;left: 37.9%;top:20px;width: 450px;">
       <div class="lefttitle" v-if="LOCAL_TLBHQ">
         <img src="/largemonitors/assets/imgs/左上角title.png" alt="">
         <span>
@@ -193,11 +193,13 @@ export default {
       dayBling:false,
       LOCAL_SSBRL:LOCAL_SSBRL,
       LOCAL_TLBHQ:LOCAL_TLBHQ,
-      LOCAL_ZHBHT:LOCAL_ZHBHT
+      LOCAL_ZHBHT:LOCAL_ZHBHT,
+      loginUser:{}
     }
   },
   created() {
     let _this = this;
+    _this.loginUser =Tool.getLoginUser();
     //获取所有的设备，因为要用到设备的位置
     _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getDevice').then((res)=>{
       let response = res.data;

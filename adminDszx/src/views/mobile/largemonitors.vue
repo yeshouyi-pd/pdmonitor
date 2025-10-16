@@ -1,7 +1,7 @@
 <template>
   <div class="wrap" id="app">
     <header style="position: relative;">
-      <img src="/largemonitors/assets/imgs/dszxTitle.png" style="position: absolute;left: 37.9%;top:20px;width: 450px;">
+      <img :src="loginUser.ipstart" style="position: absolute;left: 37.9%;top:20px;width: 450px;">
       <div class="lefttitle" v-if="LOCAL_TLBHQ">
         <img src="/largemonitors/assets/imgs/左上角title.png" alt="">
         <span>
@@ -20,17 +20,23 @@
           <div @click="toAzimuthDp" style="cursor: pointer;">方位</div>
         </span>
       </div>
-      <img class="right-top-img" src="/static/RPCD14.png"/>
     </header>
     <div class="content">
       <div class="pain">
         <div class="h25">
           <div class="imgs">
-            <swiper-video id="swiperVideoTop" :list="swiperVideoTop" style="text-align: center;width: 100% ;height: 100%;"></swiper-video>
+            <video width="100%" height="100%" autoplay="autoplay" loop="loop" controls>
+              <source class="video" title="主监控位" src="/video/12.mp4"/>
+            </video>
           </div>
         </div>
         <div class="h37">
-          <div class="imgs">
+          <div class="imgs"  v-if="LOCAL_TLBHQ || LOCAL_ZHBHT">
+            <video width="100%" height="100%" autoplay="autoplay" loop="loop" controls>
+              <source class="video" title="主监控位" src="/video/13.mp4"/>
+            </video>
+          </div>
+          <div class="imgs" v-else>
             <swiper-video id="swiperVideo" :list="swiperVideo" style="text-align: center;width: 100% ;height: 100%;"></swiper-video>
           </div>
         </div>
@@ -42,7 +48,7 @@
       </div>
       <div class="bcenter">
         <div class="h63">
-          <EquipmentAMap v-bind:height-max="heightMax"></EquipmentAMap>
+          <EquipmentAMap v-bind:height-max="heightMax" :click-map-point="clickMapPoint"></EquipmentAMap>
         </div>
         <div class="h37">
           <span>分析数据</span>
@@ -133,8 +139,9 @@ export default {
   components:{EquipmentAMap,Swiper,SwiperVideo},
   data: function (){
     return {
-      swiperVideoTop:["/video/20250624153459.mp4","/video/20250805174653.mp4","/video/20250805174922.mp4","/video/0535ce331b6b98663266f6ef22e61767_raw.mp4","/video/d961730715e37479a46ae9caf6da9a2f_raw.mp4","/video/ff5c986d9ad223f47bb3cdfb5328bfdb_raw.mp4"],
-      swiperVideo:["/video/bf9eb11e4054d2e3a67804a52125a3b1_raw.mp4","/video/a9a14ced44cca820607a9a5ceb995dd6_raw.mp4","/video/7b51d96ea9ef4a9da5ace9723176ec46_raw.mp4"],
+      swiperVideo:[
+        "/video/13.mp4","/video/14.mp4","/video/15.mp4","/video/16.mp4"
+      ],
       tdhList:[
         {key:"C11", value:"9"},
         {key:"C12", value:"5"},
@@ -186,11 +193,13 @@ export default {
       dayBling:false,
       LOCAL_SSBRL:LOCAL_SSBRL,
       LOCAL_TLBHQ:LOCAL_TLBHQ,
-      LOCAL_ZHBHT:LOCAL_ZHBHT
+      LOCAL_ZHBHT:LOCAL_ZHBHT,
+      loginUser:{}
     }
   },
   created() {
     let _this = this;
+    _this.loginUser =Tool.getLoginUser();
     //获取所有的设备，因为要用到设备的位置
     _this.$ajax.get(process.env.VUE_APP_SERVER + '/monitor/welcome/getDevice').then((res)=>{
       let response = res.data;
@@ -259,7 +268,15 @@ export default {
       if(typeof(WebSocket) == "undefined") {
         alert("您的浏览器不支持WebSocket,无法实时更新数据,请使用谷歌、火狐或IE11等浏览器!");
       }else{
-        let socketUrl="ws://58.215.212.246:39091/monitor/websocket/21_"+new Date().getTime();
+        let socketUrl="";
+        if(_this.LOCAL_SSBRL){
+          socketUrl="ws://159.226.163.121:9091/monitor/websocket/21_"+new Date().getTime();
+        }else if(_this.LOCAL_TLBHQ){
+          socketUrl="ws://111.38.21.161:7002/monitor/websocket/21_"+new Date().getTime();
+        }else{
+          socketUrl="ws://49.239.193.146:50091/monitor/websocket/21_"+new Date().getTime();
+        }
+        //let socketUrl="ws://192.168.10.13:9091/monitor/websocket/21_"+new Date().getTime();
         console.log(socketUrl);
         if(socket!=null){
           socket.close();
@@ -411,7 +428,7 @@ export default {
     },
     getPointerDay(){
       let _this = this;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/welcome/getPointerDay',{type:'zjglj',sbbh:'DSZXA4001'}).then((res)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/welcome/getPointerDay',{}).then((res)=>{
         let response = res.data.content;
         if(!Tool.isEmpty(response)){
           _this.gauge2(response.decibelValue);
@@ -929,11 +946,5 @@ body {
 }
 /deep/.el-progress-circle__track {
   stroke: #061073;
-}
-.right-top-img{
-  width: 70px;
-  position: absolute;
-  right: 20px;
-  top: 10px;
 }
 </style>

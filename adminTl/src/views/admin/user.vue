@@ -153,41 +153,41 @@
           <div class="modal-body">
             <form class="form-horizontal">
               <div class="form-group">
-                <label class="col-sm-2 control-label">账号</label>
-                <div class="col-sm-3">
+                <label class="col-sm-1 control-label">账号</label>
+                <div class="col-sm-5">
                   <input v-model="user.loginName"   v-bind:disabled="user.id" class="form-control">
                 </div>
-                <label class="col-sm-2 control-label">密码</label>
-                <div class="col-sm-3">
+                <label class="col-sm-1 control-label">密码</label>
+                <div class="col-sm-5">
                   <input v-model="user.password"   class="form-control">
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-2 control-label">用户名称</label>
-                <div class="col-sm-3">
+                <label class="col-sm-1 control-label">用户名称</label>
+                <div class="col-sm-5">
                   <input v-model="user.name" class="form-control">
                 </div>
-                <label class="col-sm-2 control-label">证件号码</label>
-                <div class="col-sm-3">
+                <label class="col-sm-1 control-label">证件号码</label>
+                <div class="col-sm-5">
                   <input v-model="user.sfzhm" class="form-control">
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="col-sm-2 control-label">部门</label>
-                <div class="col-sm-3">
+                <label class="col-sm-1 control-label">部门</label>
+                <div class="col-sm-5">
                   <div class="row">
                     <div class="col-sm-9">
                       <input  style="display: none" v-model="user.deptcode"  class="form-control">
                       <input   disabled="disabled"  v-for="updept in alldept.filter(t=>{return t.deptcode===user.deptcode})" v-bind:value="updept.deptname"       class="form-control">
                     </div>
-                    <div class="col-sm-3 " >
+                    <div class="col-sm-5 " >
                       <button  s  v-on:click="chencktreeid()" type="button" class="btn btn-success " >选择部门</button>
                     </div>
                   </div>
                 </div>
-                <label class="col-sm-2 control-label">角色</label>
-                <div class="col-sm-3">
+                <label class="col-sm-1 control-label">角色</label>
+                <div class="col-sm-5">
                   <select v-model="user.rode" class="form-control">
                     <option v-for="o in roles" v-bind:value="o.id">{{o.name}}</option>
                   </select>
@@ -196,18 +196,18 @@
               </div>
 
               <div class="form-group">
-                <label class="col-sm-2 control-label">用户有效期</label>
-                <div class="col-sm-3">
-                  <Dategreater  @methodName="ipstartDate" style="width:100%" idValue="yhyxq"   :setValue="user.yhyxq"></Dategreater>
+                <label class="col-sm-1 control-label">用户有效期</label>
+                <div class="col-sm-5">
+                  <Dategreater  @methodName="yhyxqDate" style="width:100%" idValue="yhyxq"   :setValue="user.yhyxq"></Dategreater>
                 </div>
-                <label class="col-sm-2 control-label">密码有效期</label>
-                <div class="col-sm-3">
-                  <Dategreater @methodName="ipendDate" style="width:100%" idValue="mmyxq"   :setValue="user.mmyxq"></Dategreater>
+                <label class="col-sm-1 control-label">密码有效期</label>
+                <div class="col-sm-5">
+                  <Dategreater @methodName="mmyxqDate" style="width:100%" idValue="mmyxq"   :setValue="user.mmyxq"></Dategreater>
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-2 control-label">是否启用</label>
-                <div class="col-sm-3">
+                <label class="col-sm-1 control-label">是否启用</label>
+                <div class="col-sm-5">
                   <div class="radio">
                     <label>
                       <input name="form-zt-radio" type="radio"  value="Y" v-model="user.zt" class="ace input-lg" />
@@ -219,8 +219,8 @@
                     </label>
                   </div>
                 </div>
-                <label class="col-sm-2 control-label">能否下载</label>
-                <div class="col-sm-3">
+                <label class="col-sm-1 control-label">能否下载</label>
+                <div class="col-sm-5">
                   <div class="radio">
                     <label>
                       <input name="form-xz-radio" type="radio"  value="Y" v-model="user.yj" class="ace input-lg" />
@@ -233,7 +233,49 @@
                   </div>
                 </div>
               </div>
-
+              <div class="form-group">
+                <label class="col-sm-1 control-label">大屏图片</label>
+                <div class="col-sm-5">
+                  <div>
+                    <!-- 输入框和上传按钮的组合 -->
+                    <div class="input-group">
+                      <input type="text" 
+                             v-model="user.ipstart" 
+                             class="form-control" 
+                             placeholder="请输入图片路径或选择文件上传"
+                             id="image-path-input" />
+                      <div class="input-group-btn">
+                        <button type="button" 
+                                class="btn btn-primary btn-sm" 
+                                id="upload-btn"
+                                title="选择文件上传"
+                                style="border-radius: 0 4px 4px 0; border-left: 1px solid #ccc;">
+                          <i class="ace-icon fa fa-upload"></i>
+                          上传
+                        </button>
+                      </div>
+                    </div>
+                    <!-- 隐藏的文件输入框 -->
+                    <input type="file" 
+                           id="input-file" 
+                           name="file" 
+                           style="display: none;"
+                           accept="image/*" />
+                    <!-- 图片预览 -->
+                    <div v-if="user.ipstart" class="mt-2">
+                      <img :src="getImageUrl(user.ipstart)"
+                           style="max-width: 200px; max-height: 150px; border: 1px solid #ddd; border-radius: 4px;"
+                           alt="大屏图片预览" 
+                           @error="handleImageError" />
+                      <div class="text-muted small mt-1">{{getImageUrl(user.ipstart)}}</div>
+                    </div>
+                  </div>
+                </div>
+                <label class="col-sm-1 control-label">首页名字</label>
+                <div class="col-sm-5">
+                  <input v-model="user.ipend" class="form-control">
+                </div>
+              </div>
             </form>
           </div>
           <div class="modal-footer">
@@ -261,7 +303,9 @@ export default {
         roles:[],
         checktrees:[],
         alldept:[],
-        LOCAL_ZHBHT:LOCAL_ZHBHT
+        selectedFile: null, // 选择的文件
+        LOCAL_ZHBHT:LOCAL_ZHBHT,
+        imgPath:process.env.VUE_APP_SERVER
       }
     },
     mounted: function() {
@@ -273,15 +317,164 @@ export default {
       _this.getDeptTree();
       // sidebar激活样式方法一
       // this.$parent.activeSidebar("system-user-sidebar");
-
+      $('#form-modal').on('hidden.bs.modal', function () {
+        // 弹窗关闭时完全重置文件输入组件
+        _this.handleFileClear();
+      });
+      // 确保DOM完全渲染后再初始化文件上传功能
+      _this.$nextTick(function() {
+        _this.initFileUpload();
+      });
     },
     methods: {
-      ipstartDate(rep){
+      /**
+       * 处理文件选择并上传
+       */
+      handleFileSelect(file) {
+        let _this = this;
+        // 文件大小限制（5MB）
+        if (file.size > 5 * 1024 * 1024) {
+          Toast.error("文件大小不能超过5MB！", {icon: 0, title: "提示"});
+          return;
+        }
+        // 上传文件到后台
+        _this.uploadFile(file);
+      },
+
+      /**
+       * 处理文件清除
+       */
+      handleFileClear() {
+        let _this = this;
+        console.log('文件已被清除');
+
+        // 清除相关数据
+        _this.user.ipstart = '';
+        _this.selectedFile = null;
+
+        // 清空文件输入框
+        $('#input-file').val('');
+        
+        // 清空文本输入框
+        $('#image-path-input').val('');
+
+        // 强制更新视图
+        _this.$forceUpdate();
+      },
+
+      /**
+       * 初始化文件上传功能
+       */
+      initFileUpload() {
+        let _this = this;
+        
+        // 确保DOM完全渲染后再初始化
+        _this.$nextTick(function() {
+          // 绑定上传按钮点击事件
+          $('#upload-btn').off('click').on('click', function() {
+            $('#input-file').click();
+          });
+
+          // 绑定文件选择事件
+          $('#input-file').off('change').on('change', function(event) {
+            let files = event.target.files;
+            if (files && files.length > 0) {
+              _this.handleFileSelect(files[0]);
+            }
+          });
+
+          // 绑定输入框变化事件
+          $('#image-path-input').off('input').on('input', function() {
+            _this.$forceUpdate();
+          });
+        });
+      },
+
+      /**
+       * 获取图片完整URL
+       */
+      getImageUrl(imagePath) {
+        if (!imagePath) return '';
+        
+        // 如果已经是完整URL，直接返回
+        if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+          return imagePath;
+        }
+        
+        // 如果是相对路径，拼接服务器地址
+        return this.imgPath + imagePath;
+      },
+
+      /**
+       * 处理图片加载错误
+       */
+      handleImageError(event) {
+        console.warn('图片加载失败:', event.target.src);
+        // 可以在这里添加默认图片或错误提示
+      },
+
+      /**
+       * 重置文件上传组件
+       */
+      resetFileUpload() {
+        let _this = this;
+        
+        // 清空文件输入框
+        $('#input-file').val('');
+        
+        // 清空输入框
+        $('#image-path-input').val('');
+        
+        // 重新初始化
+        _this.initFileUpload();
+      },
+
+      /**
+       * 上传文件到后台
+       */
+      uploadFile(file) {
+        let _this = this;
+        // 创建FormData对象
+        let formData = new FormData();
+        formData.append('file', file);
+        formData.append('use', 'user'); // 用户头像使用user目录
+        // 显示上传进度
+        Loading.show("文件上传中...");
+        _this.$ajax.post(process.env.VUE_APP_SERVER + '/system/uploadfile/upload', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          },
+          timeout: 30000 // 30秒超时
+        }).then((response) => {
+          Loading.hide();
+          let resp = response.data;
+          if (resp.success) {
+            // 上传成功，保存文件路径
+            _this.user.ipstart = process.env.VUE_APP_SERVER + resp.content;
+            _this.selectedFile = file;
+            Toast.success("文件上传成功！", {icon: 0, title: "提示"});
+            console.log('文件上传成功，路径:', resp.content);
+            _this.$forceUpdate();
+          } else {
+            Toast.error(resp.message || "文件上传失败！", {icon: 0, title: "提示"});
+          }
+        }).catch((error) => {
+          Loading.hide();
+          console.error('文件上传失败:', error);
+          if (error.code === 'ECONNABORTED') {
+            Toast.error("文件上传超时，请重试！", {icon: 0, title: "提示"});
+          } else {
+            Toast.error("文件上传失败，请重试！", {icon: 0, title: "提示"});
+          }
+        });
+      },
+
+      yhyxqDate(rep){
         let _this = this;
         _this.user.yhyxq = rep;
         _this.$forceUpdate();
       },
-      ipendDate(rep){
+      mmyxqDate(rep){
         let _this = this;
         _this.user.mmyxq = rep;
         _this.$forceUpdate();
@@ -325,8 +518,18 @@ export default {
         _this.user = {};
         _this.user.zt = "Y";
         _this.user.yj = "Y";
+        _this.user.ipstart = ''; // 确保清空图片路径
+        _this.selectedFile = null;
         _this.$forceUpdate();
         $("#form-modal").modal("show");
+
+        // 模态框显示后重新初始化文件上传功能
+        _this.$nextTick(function() {
+          // 先重置组件状态
+          _this.resetFileUpload();
+          // 然后重新初始化
+          _this.initFileUpload();
+        });
       },
 
       /**
@@ -336,8 +539,17 @@ export default {
         let _this = this;
         _this.user = $.extend({}, user);
         _this.user.password='';
+        _this.selectedFile = null; // 清空选择的文件
         _this.$forceUpdate();
         $("#form-modal").modal("show");
+
+        // 模态框显示后重新初始化文件上传功能
+        _this.$nextTick(function() {
+          // 先重置组件状态
+          _this.resetFileUpload();
+          // 然后重新初始化
+          _this.initFileUpload();
+        });
       },
 
       /**
@@ -377,6 +589,8 @@ export default {
                 || (!Validator.require(_this.user.password, "密码"))
                 || (!Validator.require(_this.user.rode, "角色"))
                 || (!Validator.require(_this.user.deptcode, "部门"))
+                || (!Validator.require(_this.user.ipstart, "大屏图片"))
+                || (!Validator.require(_this.user.ipend, "项目首页名称"))
 
         ) {
           return;
