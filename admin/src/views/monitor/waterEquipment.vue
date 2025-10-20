@@ -519,6 +519,16 @@
         ) {
           return;
         }
+        if("0005"==_this.waterEquipment.sblb){
+          if(1 != 1
+              || !Validator.require(_this.waterEquipment.jdfw, "播放主题")
+          ){
+            return;
+          }
+          if(!_this.waterEquipment.jdfw.includes(",")){
+            return Toast.warning("播放主题格式填写错误");
+          }
+        }
         if(_this.waterEquipment.gps){
           let arr = _this.waterEquipment.gps.split(",");
           if(!(arr && arr.length==2)){

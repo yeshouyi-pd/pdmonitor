@@ -394,28 +394,38 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                 String[] topicArr = jdfw.split(";");//WHPD[meg],WHPD[updata];RPCD[meg],RPCD[updata]
                 //如果接收文件时间和生成文件时间没有超过5分钟
                 if(new Date().getTime()-DateUtil.toDate(cjsj,"yyyy-MM-dd HH:mm:ss").getTime()<=300000){
-                    Map<String,String> mapAttr = (Map<String, String>) redisTstaticemplate.opsForValue().get(RedisCode.ATTRECODEKEY);
-                    //调用李响程序，进行指令下发
-                    // 1. 获取客户端实例
-                    MqttClientSpace client = MqttClientSpace.getInstance(
-                            mapAttr.get("mqttBrokerUrl"),
-                            mapAttr.get("mqttClientId"),
-                            mapAttr.get("mqttUserName"),
-                            mapAttr.get("mqttPassWord")
-                    );
+                    // 获取MQTT客户端实例
+                    MqttClientSpace client = MqttClientSpace.getInstance();
+                    if(client == null){
+                        LOG.error("MQTT客户端未初始化，无法发送消息。请检查monitor.jar是否正常启动");
+                        return;
+                    }
+                    
+                    // 确保client是final的，以便在lambda中使用
+                    final MqttClientSpace finalClient = client;
                     byte[] messageStart = hexStringToByteArray(hex);
+                    LOG.info("MQTT客户端状态: {}", finalClient.getConnectionStatus());
+                    
                     for(int i=0;i<topicArr.length;i++){
                         String oneitem = topicArr[i];
                         String[] oneArr = oneitem.split(",");
+                        if(oneArr.length < 2){
+                            LOG.error("主题配置格式错误: {}", oneitem);
+                            continue;
+                        }
+                        LOG.info("处理主题配置 - 发布主题: {}, 订阅主题: {}", oneArr[0], oneArr[1]);
                         // 2. 订阅返回主题
-                        client.subTopic(oneArr[1]);
+                        // finalClient.subTopic(oneArr[1]);
                         // 3. 发布消息
-                        client.publishMessage(oneArr[0], messageStart, 2);
+                        finalClient.publishMessage(oneArr[0], messageStart, 2);
+                        
+                        // 确保oneArr[0]是final的，以便在lambda中使用
+                        final String publishTopic = oneArr[0];
                         // 提交一个延迟执行的任务，关闭指令
                         scheduledExecutorService.schedule(() -> {
                             //43 52 44 02 00 07 10 02 4C
                             byte[] messageStop = new byte[] { 0x43, 0x52, 0x44, 0x02, 0x00, 0x07, 0x10, 0x02, 0x4C };
-                            client.publishMessage(oneArr[0], messageStop, 2);
+                            finalClient.publishMessage(publishTopic, messageStop, 2);
 
                         },300, TimeUnit.SECONDS);
                     }
@@ -436,6 +446,8 @@ public class EquipmentFileShjService extends AbstractScanRequest{
         }
         return data;
     }
+    
+    
 
 
     //信标文件

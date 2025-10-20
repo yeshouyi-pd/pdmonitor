@@ -20,10 +20,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -102,18 +99,36 @@ public class WxRedisConfig implements CommandLineRunner {
     public synchronized static boolean init_sbsnCenterCodeMap(){
         try {
             List<WaterEquipment> list = waterEquipmentstaticMapper.selectByExample(null);
+            //设备sn-部门
             Map<String, String> map = list.stream().collect(Collectors.toMap(p -> p.getSbsn(), p -> p.getDeptcode()));
-            Map<String, WaterEquipment> sbbhEquipMap = list.stream().collect(Collectors.toMap(p -> "equip-"+p.getSbsn(), p -> p ));
-            Map<String, String> sbmcmap = list.stream().collect(Collectors.toMap(p -> "sbmc-"+p.getSbsn(), p -> p.getSbmc()));
             String s = JSONObject.toJSONString(map);
             JSONObject jsonObj = JSONObject.parseObject(s);
+            redisTstaticemplate.opsForValue().set(RedisCode.SBSNCENTERCODE, jsonObj);
+            //设备sn-设备
+            Map<String, WaterEquipment> sbbhEquipMap = list.stream().collect(Collectors.toMap(p -> "equip-"+p.getSbsn(), p -> p ));
             String s1 = JSONObject.toJSONString(sbbhEquipMap);
             JSONObject jsonObj1 = JSONObject.parseObject(s1);
+            redisTstaticemplate.opsForValue().set(RedisCode.SBBHEQUIPMAP, jsonObj1);
+            //设备sn-设备名称
+            Map<String, String> sbmcmap = list.stream().collect(Collectors.toMap(p -> "sbmc-"+p.getSbsn(), p -> p.getSbmc()));
             String s2 = JSONObject.toJSONString(sbmcmap);
             JSONObject jsonObj2 = JSONObject.parseObject(s2);
-            redisTstaticemplate.opsForValue().set(RedisCode.SBSNCENTERCODE, jsonObj);
-            redisTstaticemplate.opsForValue().set(RedisCode.SBBHEQUIPMAP, jsonObj1);
             redisTstaticemplate.opsForValue().set(RedisCode.SBBHSBMC, jsonObj2);
+            //驱离设备sn-设备
+            Map<String, WaterEquipment> topicEquipMap = new HashMap<>();
+            Map<String, String> topicSbbhMap = new HashMap<>();
+            for(WaterEquipment waterEquipment :list){
+                if("0005".equals(waterEquipment.getSblb())){
+                    topicEquipMap.put(waterEquipment.getSbsn(),waterEquipment);
+                    topicSbbhMap.put(waterEquipment.getJdfw(),waterEquipment.getSbsn());
+                }
+            }
+            String s3 = JSONObject.toJSONString(topicEquipMap);
+            JSONObject jsonObj3 = JSONObject.parseObject(s3);
+            redisTstaticemplate.opsForValue().set(RedisCode.SBBHTOPICSBMC, jsonObj3);
+            String s4 = JSONObject.toJSONString(topicSbbhMap);
+            JSONObject jsonObj4 = JSONObject.parseObject(s4);
+            redisTstaticemplate.opsForValue().set(RedisCode.TOPICSBBH, jsonObj4);
         } catch (Exception e) {
             e.printStackTrace();
             return false;

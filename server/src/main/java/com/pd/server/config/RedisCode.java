@@ -36,6 +36,9 @@ public enum RedisCode {
 
     SBBHSBMC("sbbh_sbmc"),//设备sn对应的设备名称
 
+    SBBHTOPICSBMC("sbbh_topic_sbmc"),//驱离设备sn对应的设备信息
+
+    TOPICSBBH("topic_sbbh"),//驱离设备主题对应的设备sn
 
     APPCODETYPE("APP_CODE_TYPE"),//app类型缓存
 

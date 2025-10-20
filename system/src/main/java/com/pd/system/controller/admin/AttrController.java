@@ -68,4 +68,26 @@ public class AttrController extends BaseController {
         responseDto.setContent(attrkey);
         return responseDto;
     }
+    
+    /**
+     * 检查MQTT客户端状态（重定向到monitor模块）
+     */
+    @GetMapping("/mqtt/status")
+    public ResponseDto getMqttStatus() {
+        ResponseDto responseDto = new ResponseDto();
+        responseDto.setContent("MQTT状态检查功能已移至monitor模块，请访问 /monitor/mqtt/status");
+        responseDto.setSuccess(false);
+        return responseDto;
+    }
+    
+    /**
+     * 重新初始化MQTT客户端（重定向到monitor模块）
+     */
+    @PostMapping("/mqtt/reinit")
+    public ResponseDto reinitMqtt() {
+        ResponseDto responseDto = new ResponseDto();
+        responseDto.setContent("MQTT重新初始化功能已移至monitor模块，请访问 /monitor/mqtt/reinit");
+        responseDto.setSuccess(false);
+        return responseDto;
+    }
 }

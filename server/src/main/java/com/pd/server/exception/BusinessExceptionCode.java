@@ -14,6 +14,7 @@ public enum BusinessExceptionCode {
     CENTER_CODE_EXIST("代码和名称已存在"),
     PROJECT_CODE_EXIST("项目编号已存在"),
     EQUIPMENT_EXIST("设备不唯一，设备sn已存在"),
+    EQUIPMENT_TOPIC_EXIST("设备,设备类别和主题不唯一，设备,设备类别和主题已存在"),
     XJBH_EXIST("相机编号已存在");
 
     private String desc;

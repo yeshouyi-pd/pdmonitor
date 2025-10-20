@@ -2,6 +2,7 @@ package com.pd.server.main.service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.pd.server.config.MqttClientSpace;
 import com.pd.server.exception.BusinessException;
 import com.pd.server.exception.BusinessExceptionCode;
 import com.pd.server.main.domain.WaterEquiplog;
@@ -14,6 +15,8 @@ import com.pd.server.main.mapper.WaterEquiplogMapper;
 import com.pd.server.main.mapper.WaterEquipmentMapper;
 import com.pd.server.util.CopyUtil;
 import com.pd.server.util.UuidUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -26,6 +29,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class WaterEquipmentService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(WaterEquipmentService.class);
 
     @Resource
     private WaterEquipmentMapper waterEquipmentMapper;
@@ -90,21 +95,31 @@ public class WaterEquipmentService {
     */
     public void save(WaterEquipmentDto waterEquipmentDto, LoginUserDto loginUserDto) {
         WaterEquipment waterEquipment = CopyUtil.copy(waterEquipmentDto, WaterEquipment.class);
+        //判断发声设备,发声设备的设备类别和主题唯一性
+        if(!StringUtils.isEmpty(waterEquipmentDto.getSbsn()) && "0005".equals(waterEquipment.getSblb()) && !StringUtils.isEmpty(waterEquipmentDto.getJdfw())){
+            WaterEquipmentExample example = new WaterEquipmentExample();
+            WaterEquipmentExample.Criteria topicCa = example.createCriteria();
+//                topicCa.andSbsnEqualTo(waterEquipment.getSbsn());
+            topicCa.andSblbEqualTo("0005");
+            topicCa.andJdfwEqualTo(waterEquipment.getJdfw().trim());
+            List<WaterEquipment> lists = waterEquipmentMapper.selectByExample(example);
+            for(WaterEquipment item : lists){
+                if(!item.getSbsn().equals(waterEquipmentDto.getSbsn())){
+                    throw new BusinessException(BusinessExceptionCode.EQUIPMENT_TOPIC_EXIST);
+                }
+            }
+        }
         if (StringUtils.isEmpty(waterEquipmentDto.getId())) {
+            //判断设备编号的唯一性
             WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
             WaterEquipmentExample.Criteria ca = waterEquipmentExample.createCriteria();
-            //ca.andIpEqualTo(waterEquipment.getIp());
-            //ca.andPortEqualTo(waterEquipment.getPort());
             ca.andSbsnEqualTo(waterEquipment.getSbsn());
-            //ca.andCenterCodeEqualTo(waterEquipment.getCenterCode());
             List<WaterEquipment> waterEquipmentList = waterEquipmentMapper.selectByExample(waterEquipmentExample);
             if (!CollectionUtils.isEmpty(waterEquipmentList)) {
                 throw new BusinessException(BusinessExceptionCode.EQUIPMENT_EXIST);
-            }else{
-                //waterEquipment.setDeptcode(loginUserDto.getDeptcode());
-                waterEquipment.setCreateBy(loginUserDto.getName());
-                waterEquipment.setCreateTime(new Date());
             }
+            waterEquipment.setCreateBy(loginUserDto.getName());
+            waterEquipment.setCreateTime(new Date());
             this.insert(waterEquipment);
             WaterEquiplog equiplog = new WaterEquiplog();
             equiplog.setId(UuidUtil.getShortUuid());
@@ -120,13 +135,32 @@ public class WaterEquipmentService {
             waterEquipment.setGxsj(new Date());
             this.update(waterEquipment);
         }
+        try {
+            // 获取MQTT客户端实例
+            MqttClientSpace client = MqttClientSpace.getInstance();
+            if(client == null){
+                LOG.error("MQTT客户端未初始化，无法订阅消息。");
+                return;
+            }else{
+                String[] topicArr = waterEquipmentDto.getJdfw().split(";");
+                for(int i=0;i<topicArr.length;i++) {
+                    String[] oneArr = topicArr[i].split(",");
+                    if(oneArr.length < 2){
+                        LOG.error("主题配置格式错误: {}", topicArr[i]);
+                        continue;
+                    }
+                    client.subTopic(oneArr[1]);
+                }
+            }
+        }catch (Exception e){
+            LOG.error("处理新增修改发生设备消息订阅发生错误");
+        }
     }
 
     /**
     * 新增
     */
     private void insert(WaterEquipment waterEquipment) {
-                Date now = new Date();
         waterEquipment.setId(UuidUtil.getShortUuid());
         waterEquipmentMapper.insert(waterEquipment);
     }
