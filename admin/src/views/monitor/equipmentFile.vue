@@ -71,7 +71,7 @@
       <div style="display: flex;flex-wrap: wrap;margin-bottom: 30px;">
         <div v-for="(item,index) in equipmentFiles" style="margin:20px;width: 150px;height: 300px;text-align: center;">
           <div style="text-align: center;width: 100px;margin: 0 auto;">
-            <img alt="无图片" :src="item.tplj.replace(/http:\/\/[^\/]+/, picServer).replace('.txt', '.jpg')" style="width: 100px;height: 200px;cursor: pointer;" v-on:click="checkImg(item,index)">
+            <img alt="无图片" :src="item.tplj.replace(/http:\/\/[^/]+/, picServer).replace('.txt', '.jpg')" style="width: 100px;height: 200px;cursor: pointer;" v-on:click="checkImg(item,index)">
           </div>
           <div style="margin: 0 auto;">{{waterEquipments|optionNSArray(item.sbbh)}}</div>
           <div style="margin: 0 auto;word-wrap: break-word;">{{item.cjsj}}</div>
@@ -185,7 +185,7 @@ export default {
       waterEquipments:[],
       userDto:null,
       shj:LOCAL_SSBRL,
-      picServer:process.env.PIC_SERVER
+      picServer:process.env.VUE_APP_PIC_SERVER
     }
   },
   mounted() {
@@ -288,8 +288,13 @@ export default {
      */
     checkImg(item,index){
       let _this = this;
+      console.log(item.tplj);
+      console.log(_this.picServer);
+      console.log(process.env.VUE_APP_SERVER);
+      console.log(process.env.VUE_APP_PIC_SERVER);
+      console.log(item.tplj.replace(/http:\/\/[^/]+/, _this.picServer));
       _this.curIndex = index;
-      _this.curTplj = item.tplj.replace(/http:\/\/[^\/]+/, _this.picServer).replace('.txt', '.jpg');
+      _this.curTplj = item.tplj.replace(/http:\/\/[^/]+/, _this.picServer).replace('.txt', '.jpg');
       _this.curSbsn = item.sbbh;
       _this.curCjsj = item.cjsj;
       _this.curWjmc = item.tplj;
