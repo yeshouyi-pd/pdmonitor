@@ -81,6 +81,132 @@ public class ExportFileController extends BaseWxController{
     private BeconFileTyService beconFileTyService;
     @Resource
     private BeconFileStatisticsService beconFileStatisticsService;
+    @Resource
+    private SolarPannelService solarPannelService;
+
+    /**
+     * 太阳能电池板导出
+     */
+    @GetMapping("/exportSolarPannel")
+    public void exportSolarPannel(HttpServletRequest request, HttpServletResponse response){
+        try {
+            SolarPannelExample example = new SolarPannelExample();
+            SolarPannelExample.Criteria ca = example.createCriteria();
+            if(!StringUtils.isEmpty(request.getParameter("deviceName"))){
+                ca.andDeviceNameEqualTo(request.getParameter("deviceName"));
+            }
+            if(!StringUtils.isEmpty(request.getParameter("stime"))){
+                ca.andUpdateTimeGreaterThanOrEqualTo(request.getParameter("stime")+" 00:00:00");
+            }
+            if(!StringUtils.isEmpty(request.getParameter("etime"))){
+                ca.andUpdateTimeLessThanOrEqualTo(request.getParameter("etime")+" 23:59:59");
+            }
+            example.setOrderByClause(" update_time desc ");
+            List<SolarPannel> lists = solarPannelService.list(example);
+            //导出
+            XSSFWorkbook workbook = new XSSFWorkbook();
+            //设置字体大小
+            XSSFFont fontCommon = workbook.createFont();
+            fontCommon.setFontHeightInPoints((short)12); // 设置字体大小为12磅
+            //设置公共单元格样式
+            XSSFCellStyle cellStyleCommon = workbook.createCellStyle();
+            cellStyleCommon.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+            cellStyleCommon.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
+            XSSFCellStyle cellStyleCommonLeft = workbook.createCellStyle();
+            cellStyleCommonLeft.setAlignment(XSSFCellStyle.ALIGN_LEFT);
+            cellStyleCommonLeft.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
+            //cellStyleCommon.setFont(fontCommon);
+            //设置字体加粗
+            XSSFFont font = workbook.createFont();
+            font.setBoldweight(XSSFFont.BOLDWEIGHT_BOLD);
+            font.setFontHeightInPoints((short)12); // 设置字体大小为12磅
+            XSSFCellStyle cellStyleTitle = workbook.createCellStyle();
+            cellStyleTitle.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+            cellStyleTitle.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
+            cellStyleTitle.setFont(font);
+            // 创建一个工作表
+            String fileName = "太阳能板数据(" + new Date().getTime() + ").xls";
+            XSSFSheet sheet = workbook.createSheet("太阳能板数据");
+            // 自适应列宽度
+            sheet.autoSizeColumn(1, true);
+            sheet.setDefaultColumnWidth(18);
+            sheet.setDefaultRowHeight((short)(40*10));
+            // 添加表头行
+            XSSFRow titleRow = sheet.createRow(0);//第1行
+            List<String> titleStrList = Arrays.asList("设备名称","设备编号","设备温度","电池电压","负载电压","负载电流","当日用电","当月累计用电","太阳能电压","太阳能电流","发电功率","当日累计充电","当月累计充电","电池电量","更新时间");
+            for(int i=0;i<titleStrList.size();i++){
+                XSSFCell cell = titleRow.createCell(i);
+                cell.setCellValue(titleStrList.get(i));
+                cell.setCellStyle(cellStyleTitle);
+            }
+            int i=0;
+            for(SolarPannel entity : lists){
+                XSSFRow comRow = sheet.createRow(i+1);
+                XSSFCell comCell0 = comRow.createCell(0);
+                comCell0.setCellValue(entity.getDeviceName());
+                comCell0.setCellStyle(cellStyleCommon);
+                XSSFCell comCell1 = comRow.createCell(1);
+                comCell1.setCellValue(entity.getDeviceNumber());
+                comCell1.setCellStyle(cellStyleCommon);
+                XSSFCell comCell2 = comRow.createCell(2);
+                comCell2.setCellValue(entity.getTemperature());
+                comCell2.setCellStyle(cellStyleCommonLeft);
+                XSSFCell comCell3 = comRow.createCell(3);
+                comCell3.setCellValue(entity.getBatteryVoltage());
+                comCell3.setCellStyle(cellStyleCommonLeft);
+                XSSFCell comCell4 = comRow.createCell(4);
+                comCell4.setCellValue(entity.getLoadVoltage());
+                comCell4.setCellStyle(cellStyleCommonLeft);
+                XSSFCell comCell5 = comRow.createCell(5);
+                comCell5.setCellValue(entity.getLoadCurrent());
+                comCell5.setCellStyle(cellStyleCommonLeft);
+                XSSFCell comCell6 = comRow.createCell(6);
+                comCell6.setCellValue(entity.getDailyElectricityConsumption());
+                comCell6.setCellStyle(cellStyleCommonLeft);
+                XSSFCell comCell7 = comRow.createCell(7);
+                comCell7.setCellValue(entity.getMonthlyElectricityConsumption());
+                comCell7.setCellStyle(cellStyleCommonLeft);
+                XSSFCell comCell8 = comRow.createCell(8);
+                comCell8.setCellValue(entity.getSolarPanelVoltage());
+                comCell8.setCellStyle(cellStyleCommonLeft);
+                XSSFCell comCell9 = comRow.createCell(9);
+                comCell9.setCellValue(entity.getSolarPannelCurrent());
+                comCell9.setCellStyle(cellStyleCommonLeft);
+                XSSFCell comCell10 = comRow.createCell(10);
+                comCell10.setCellValue(entity.getPowerGeneration());
+                comCell10.setCellStyle(cellStyleCommonLeft);
+                XSSFCell comCell11 = comRow.createCell(11);
+                comCell11.setCellValue(entity.getDailyCharge());
+                comCell11.setCellStyle(cellStyleCommonLeft);
+                XSSFCell comCell12 = comRow.createCell(12);
+                comCell12.setCellValue(entity.getMonthlyCharge());
+                comCell12.setCellStyle(cellStyleCommonLeft);
+                XSSFCell comCell13 = comRow.createCell(13);
+                comCell13.setCellValue(entity.getBatteryPercent());
+                comCell13.setCellStyle(cellStyleCommonLeft);
+                XSSFCell comCell14 = comRow.createCell(14);
+                comCell14.setCellValue(DateUtil.getFormatDate(entity.getUpdateTime(),"yyyy-MM-dd HH:mm:ss"));
+                comCell14.setCellStyle(cellStyleCommonLeft);
+                i++;
+            }
+            response.setHeader("content-Type", "application/vnd.ms-excel");
+            // 下载文件的默认名称
+            String agent = request.getHeader("User-Agent");
+            if (agent.contains("MSIE") || agent.contains("Trident") || agent.contains("Edge")) {
+                response.setHeader("Content-Disposition",
+                        "attachment; filename=" + URLEncoder.encode(fileName, "UTF-8"));
+            } else {
+                response.setHeader("Content-Disposition",
+                        "attachment; filename=\"" + new String((fileName).getBytes("UTF-8"), "ISO-8859-1") + "\"");
+            }
+            response.setCharacterEncoding("utf-8");
+            ServletOutputStream out = response.getOutputStream();
+            workbook.write(out);
+            out.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
     /**
      * 定点基站导出

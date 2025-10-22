@@ -46,6 +46,12 @@ public class SolarPannelController {
         if(!StringUtils.isEmpty(pageDto.getDeviceNumber())){
             ca.andDeviceNumberEqualTo(pageDto.getDeviceNumber());
         }
+        if(!StringUtils.isEmpty(pageDto.getStime())){
+            ca.andUpdateTimeGreaterThanOrEqualTo(pageDto.getStime()+" 00:00:00");
+        }
+        if(!StringUtils.isEmpty(pageDto.getEtime())){
+            ca.andUpdateTimeLessThanOrEqualTo(pageDto.getEtime()+" 23:59:59");
+        }
         solarPannelExample.setOrderByClause(" update_time desc ");
         List<SolarPannel> solarPannelList = solarPannelService.list(solarPannelExample);
         PageInfo<SolarPannel> pageInfo = new PageInfo<>(solarPannelList);

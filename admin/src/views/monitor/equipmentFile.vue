@@ -288,11 +288,6 @@ export default {
      */
     checkImg(item,index){
       let _this = this;
-      console.log(item.tplj);
-      console.log(_this.picServer);
-      console.log(process.env.VUE_APP_SERVER);
-      console.log(process.env.VUE_APP_PIC_SERVER);
-      console.log(item.tplj.replace(/http:\/\/[^/]+/, _this.picServer));
       _this.curIndex = index;
       _this.curTplj = item.tplj.replace(/http:\/\/[^/]+/, _this.picServer).replace('.txt', '.jpg');
       _this.curSbsn = item.sbbh;

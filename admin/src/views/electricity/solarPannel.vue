@@ -16,21 +16,25 @@
                 <td style="width: 20%">
                   <input class="form-control" type="text"  v-model="solarPannelDto.deviceName"/>
                 </td>
-<!--                <td style="width: 10%">-->
-<!--                  设备编号：-->
-<!--                </td>-->
-<!--                <td style="width: 20%">-->
-<!--                  <input class="form-control" type="text" v-model="solarPannelDto.deviceNumber"/>-->
-<!--                </td>-->
+                <td style="width:10%">
+                  更新日期：
+                </td>
+                <td style="width: 25%">
+                  <times v-bind:startTime="startTime" v-bind:endTime="endTime" start-id="spstime" end-id="spetime"></times>
+                </td>
                 <td style="width: 20%" class="text-center">
-                  <button  type="button" v-on:click="list(1)" class="btn btn-sm  btn-info btn-round">
+                  <button  type="button" v-on:click="list(1)" class="btn btn-sm  btn-info btn-round" style="margin-right: 10px;">
                     <i class="ace-icon fa fa-book"></i>
                     查询
                   </button>
-                  <a href="javascript:location.replace(location.href);"  class="btn btn-sm   btn-success btn-round" style="margin-left: 10px;">
+                  <a href="javascript:location.replace(location.href);"  class="btn btn-sm   btn-success btn-round" style="margin-right: 10px;">
                     <i class="ace-icon fa fa-refresh"></i>
                     重置
                   </a>
+                  <button type="button" v-on:click="exportExcel()" class="btn btn-sm btn-info btn-round" style="margin-right: 10px;">
+                    <i class="ace-icon fa fa-download"></i>
+                    导出
+                  </button>
                 </td>
               </tr>
               </tbody>
@@ -300,10 +304,11 @@
   </div>
 </template>
 <script>
-import Pagination from "@/components/pagination";
+import Pagination from "../../components/pagination";
+import Times from "../../components/times";
 export default {
   name: 'solar-pannel',
-  components: {Pagination},
+  components: {Pagination,Times},
   data: function (){
     return {
       solarPannels:[],
@@ -317,6 +322,42 @@ export default {
     _this.list(1);
   },
   methods: {
+    exportExcel(){
+      let _this = this;
+      let paramsStr = "";
+      if("460100"==Tool.getLoginUser().deptcode){
+        paramsStr = "deptcode="+Tool.getLoginUser().deptcode;
+      }else{
+        paramsStr = "deptcode="+Tool.getLoginUser().deptcode+"&xmbh="+Tool.getLoginUser().xmbh;
+      }
+      if(Tool.isNotEmpty(_this.solarPannelDto.stime)){
+        paramsStr = paramsStr + "&stime="+_this.solarPannelDto.stime;
+      }
+      if(Tool.isNotEmpty(_this.solarPannelDto.etime)){
+        paramsStr = paramsStr + "&etime="+_this.solarPannelDto.etime;
+      }
+      if(Tool.isNotEmpty(_this.solarPannelDto.deviceName)){
+        paramsStr = paramsStr + "&deviceName="+_this.solarPannelDto.deviceName;
+      }
+      let url = process.env.VUE_APP_SERVER + '/monitor/export/exportSolarPannel?'+paramsStr;
+      window.location.href = url;
+    },
+    /**
+     *开始时间
+     */
+    startTime(rep){
+      let _this = this;
+      _this.solarPannelDto.stime = rep;
+      _this.$forceUpdate();
+    },
+    /**
+     *结束时间
+     */
+    endTime(rep){
+      let _this = this;
+      _this.solarPannelDto.etime = rep;
+      _this.$forceUpdate();
+    },
     /**
      * 列表查询
      */

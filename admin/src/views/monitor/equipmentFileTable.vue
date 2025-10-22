@@ -145,7 +145,8 @@ export default {
       curTplj:'',
       details:[],
       userDto:null,
-      shj:LOCAL_SSBRL
+      shj:LOCAL_SSBRL,
+      picServer:process.env.VUE_APP_PIC_SERVER
     }
   },
   mounted() {
@@ -215,7 +216,7 @@ export default {
         for(let i=0;i<_this.details.length;i++){
           let tempTplj = _this.details[i].tplj;
           if(tempTplj.includes("jpg") || tempTplj.includes("png")){
-            _this.curTplj = tempTplj;
+            _this.curTplj = tempTplj.replace(/http:\/\/[^/]+/, _this.picServer);
             _this.$forceUpdate();
           }
         }
