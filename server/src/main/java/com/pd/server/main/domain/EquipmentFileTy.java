@@ -53,6 +53,8 @@ public class EquipmentFileTy {
 
     private String wjmc;
 
+    private Integer syncFlag;
+
     public String getId() {
         return id;
     }
@@ -253,6 +255,14 @@ public class EquipmentFileTy {
         this.wjmc = wjmc;
     }
 
+    public Integer getSyncFlag() {
+        return syncFlag;
+    }
+
+    public void setSyncFlag(Integer syncFlag) {
+        this.syncFlag = syncFlag;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -284,6 +294,7 @@ public class EquipmentFileTy {
         sb.append(", ts=").append(ts);
         sb.append(", txtlx=").append(txtlx);
         sb.append(", wjmc=").append(wjmc);
+        sb.append(", syncFlag=").append(syncFlag);
         sb.append("]");
         return sb.toString();
     }
