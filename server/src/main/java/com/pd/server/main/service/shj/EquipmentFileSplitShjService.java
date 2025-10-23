@@ -71,8 +71,8 @@ public class EquipmentFileSplitShjService {
             String wjlx = equipmentFile.getWjlx();
             String txtlx = equipmentFile.getTxtlx();
 
-            LOG.debug("开始分发数据，EquipmentFile ID: {}, wjlx: {}, txtlx: {}", 
-                    equipmentFile.getId(), wjlx, txtlx);
+            //LOG.debug("开始分发数据，EquipmentFile ID: {}, wjlx: {}, txtlx: {}", 
+                 //   equipmentFile.getId(), wjlx, txtlx);
 
             // 判断分发规则
             if ("3".equals(wjlx) && ("3".equals(txtlx) || "5".equals(txtlx))) {
@@ -80,15 +80,24 @@ public class EquipmentFileSplitShjService {
                 saveToCluster(equipmentFile);
             } else if ("1".equals(wjlx) && (StringUtils.isBlank(txtlx) || "0".equals(txtlx) || "1".equals(txtlx))) {
                 // 写入EquipmentFilePPic表
+                if(StringUtils.isBlank(txtlx)){
+                    equipmentFile.setTxtlx("0");
+                }
                 saveToPic(equipmentFile);
             } else if ("3".equals(wjlx) && ("1".equals(txtlx) || "2".equals(txtlx) || "4".equals(txtlx) || "6".equals(txtlx))) {
                 // 写入EquipmentFilePTxt表
                 saveToTxt(equipmentFile);
             } else if ("4".equals(wjlx) && (StringUtils.isBlank(txtlx) || "0".equals(txtlx))) {
                 // 写入EquipmentFilePVideo表
+                if(StringUtils.isBlank(txtlx)){
+                    equipmentFile.setTxtlx("0");
+                }
                 saveToVideo(equipmentFile);
             } else if ("2".equals(wjlx) && (StringUtils.isBlank(txtlx) || "0".equals(txtlx) || "1".equals(txtlx))) {
                 // 写入EquipmentFilePWav表
+                if(StringUtils.isBlank(txtlx)){
+                    equipmentFile.setTxtlx("0");
+                }
                 saveToWav(equipmentFile);
             } else {
                 LOG.warn("未匹配到分发规则，EquipmentFile ID: {}, wjlx: {}, txtlx: {}", 
@@ -109,8 +118,8 @@ public class EquipmentFileSplitShjService {
             EquipmentFilePCluster cluster = new EquipmentFilePCluster();
             copyCommonFields(equipmentFile, cluster);
             equipmentFilePClusterMapper.insertSelective(cluster);
-            LOG.debug("成功保存到聚类表，EquipmentFile ID: {}, 新ID: {}", 
-                    equipmentFile.getId(), cluster.getId());
+            //LOG.debug("成功保存到聚类表，EquipmentFile ID: {}, 新ID: {}", 
+                  //  equipmentFile.getId(), cluster.getId());
         } catch (Exception e) {
             LOG.error("保存到聚类表失败，EquipmentFile ID: {}, 错误信息: {}", 
                     equipmentFile.getId(), e.getMessage(), e);
@@ -125,8 +134,8 @@ public class EquipmentFileSplitShjService {
             EquipmentFilePPic pic = new EquipmentFilePPic();
             copyCommonFields(equipmentFile, pic);
             equipmentFilePPicMapper.insertSelective(pic);
-            LOG.debug("成功保存到图片表，EquipmentFile ID: {}, 新ID: {}", 
-                    equipmentFile.getId(), pic.getId());
+            //LOG.debug("成功保存到图片表，EquipmentFile ID: {}, 新ID: {}", 
+                   // equipmentFile.getId(), pic.getId());
         } catch (Exception e) {
             LOG.error("保存到图片表失败，EquipmentFile ID: {}, 错误信息: {}", 
                     equipmentFile.getId(), e.getMessage(), e);
@@ -141,8 +150,8 @@ public class EquipmentFileSplitShjService {
             EquipmentFilePTxt txt = new EquipmentFilePTxt();
             copyCommonFields(equipmentFile, txt);
             equipmentFilePTxtMapper.insertSelective(txt);
-            LOG.debug("成功保存到文本表，EquipmentFile ID: {}, 新ID: {}", 
-                    equipmentFile.getId(), txt.getId());
+            //LOG.debug("成功保存到文本表，EquipmentFile ID: {}, 新ID: {}", 
+                  //  equipmentFile.getId(), txt.getId());
         } catch (Exception e) {
             LOG.error("保存到文本表失败，EquipmentFile ID: {}, 错误信息: {}", 
                     equipmentFile.getId(), e.getMessage(), e);
@@ -157,8 +166,8 @@ public class EquipmentFileSplitShjService {
             EquipmentFilePVideo video = new EquipmentFilePVideo();
             copyCommonFields(equipmentFile, video);
             equipmentFilePVideoMapper.insertSelective(video);
-            LOG.debug("成功保存到视频表，EquipmentFile ID: {}, 新ID: {}", 
-                    equipmentFile.getId(), video.getId());
+            //LOG.debug("成功保存到视频表，EquipmentFile ID: {}, 新ID: {}", 
+                 //   equipmentFile.getId(), video.getId());
         } catch (Exception e) {
             LOG.error("保存到视频表失败，EquipmentFile ID: {}, 错误信息: {}", 
                     equipmentFile.getId(), e.getMessage(), e);
@@ -173,8 +182,8 @@ public class EquipmentFileSplitShjService {
             EquipmentFilePWav wav = new EquipmentFilePWav();
             copyCommonFields(equipmentFile, wav);
             equipmentFilePWavMapper.insertSelective(wav);
-            LOG.debug("成功保存到音频表，EquipmentFile ID: {}, 新ID: {}", 
-                    equipmentFile.getId(), wav.getId());
+            //LOG.debug("成功保存到音频表，EquipmentFile ID: {}, 新ID: {}", 
+                  //  equipmentFile.getId(), wav.getId());
         } catch (Exception e) {
             LOG.error("保存到音频表失败，EquipmentFile ID: {}, 错误信息: {}", 
                     equipmentFile.getId(), e.getMessage(), e);

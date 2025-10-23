@@ -20,6 +20,7 @@ import org.springframework.util.StringUtils;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -48,7 +49,10 @@ public class EquipmentFileShjService extends AbstractScanRequest{
     public static BeconFileService beconFileServiceStatic;
     public static BeconFileTodayService beconFileTodayServiceStatic;
     public static AngleFileService angleFileServiceStatic;
+    public static EquipmentFileSplitShjService equipmentFileSplitShjServiceStatic;
     public static ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(10);
+    // 专门用于数据分发的线程池
+    public static ExecutorService distributeExecutorService = Executors.newFixedThreadPool(10);
 
     @Resource
     private RedisTemplate redisTemplate;
@@ -85,6 +89,9 @@ public class EquipmentFileShjService extends AbstractScanRequest{
     @Resource
     private AngleFileService angleFileService;
 
+    @Resource
+    private EquipmentFileSplitShjService equipmentFileSplitShjService;
+
     @PostConstruct
     protected void init() {
         redisTstaticemplate = redisTemplate;
@@ -104,7 +111,9 @@ public class EquipmentFileShjService extends AbstractScanRequest{
         beconFileServiceStatic = beconFileService;
         beconFileTodayServiceStatic = beconFileTodayService;
         angleFileServiceStatic = angleFileService;
+        equipmentFileSplitShjServiceStatic = equipmentFileSplitShjService;
     }
+
 
     /**
      * 设备文件
@@ -277,6 +286,19 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                 result.put("entity",beforeEntity);
                 return result.toJSONString();
             }else {
+                /**
+                 * 保存数据
+                 */
+                // 异步分发保存数据
+                distributeExecutorService.execute(() -> {
+                    try {
+                        equipmentFileSplitShjServiceStatic.distributeAndSave(entity);
+                    } catch (Exception e) {
+                        LOG.error("异步分发保存失败，EquipmentFile ID: {}, 错误信息: {}", 
+                                entity.getId(), e.getMessage(), e);
+                    }
+                });
+                
                 equipmentFileMapperStatic.insert(entity);
                 todayMapperStatic.insertEquipFile(entity);
                 data="保存成功";

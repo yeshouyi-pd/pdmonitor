@@ -21,6 +21,8 @@ import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.regex.Pattern;
 
 @Service
@@ -39,6 +41,9 @@ public class EquipmentFileTyShjService extends AbstractScanRequest{
     public static BeconFileTyTodayService beconFileTyTodayServiceStatic;
     public static AngleFileService angleFileServiceStatic;
     public static AttrService attrServiceStatic;
+    public static EquipmentFileSplitTyService equipmentFileSplitTyServiceStatic;
+    // 专门用于数据分发的线程池
+    public static ExecutorService distributeTyExecutorService = Executors.newFixedThreadPool(10);
 
     @Resource
     private RedisTemplate redisTemplate;
@@ -63,6 +68,9 @@ public class EquipmentFileTyShjService extends AbstractScanRequest{
     @Resource
     private AttrService attrService;
 
+    @Resource
+    private EquipmentFileSplitTyService equipmentFileSplitTyService;
+
     @PostConstruct
     protected void init() {
         redisTstaticemplate = redisTemplate;
@@ -76,6 +84,7 @@ public class EquipmentFileTyShjService extends AbstractScanRequest{
         beconFileTyTodayServiceStatic = beconFileTyTodayService;
         angleFileServiceStatic = angleFileService;
         attrServiceStatic = attrService;
+        equipmentFileSplitTyServiceStatic  = equipmentFileSplitTyService;
     }
 
     /**
@@ -164,6 +173,18 @@ public class EquipmentFileTyShjService extends AbstractScanRequest{
                     tyEvent.setSm1(obj.getString("sd"));
                     equipmentTyEventMapperStatic.insert(tyEvent);
                 }
+                /**
+                 * 保存数据
+                 */
+                // 异步分发保存数据
+                distributeTyExecutorService.execute(() -> {
+                    try {
+                        equipmentFileSplitTyServiceStatic.distributeAndSave(entity);
+                    } catch (Exception e) {
+                        LOG.error("异步分发保存失败，EquipmentFile ID: {}, 错误信息: {}",
+                                entity.getId(), e.getMessage(), e);
+                    }
+                });
                 equipmentFileTyMapperStatic.insert(entity);
                 todayMapperStatic.insertEquipTy(entity);
                 data="保存成功";

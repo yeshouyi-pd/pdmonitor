@@ -52,133 +52,142 @@ public class EquipmentFileSplitTyService {
     /**
      * 异步分发保存数据
      * 根据EquipmentFile对象的wjlx和txtlx字段判断写入到哪个表
-     * 
+     *
      * 分发规则：
      * wjlx = 3 时 txtlx = 3 或者 txtlx = 5 写入EquipmentFileTCluster表  聚类
      * wjlx = 1 时 txtlx 为空 或者 txtlx = 0 或者 txtlx = 1 写入EquipmentFileTPic表
      * wjlx = 3 时 txtlx = 1 或者 txtlx = 2 或者 txtlx = 4 或者 txtlx = 6 写入EquipmentFileTTxt表
      * wjlx = 4 时 txtlx 为空 或者 txtlx = 0 写入EquipmentFileTVideo表
      * wjlx = 2 时 txtlx 为空 或者 txtlx = 0 或者 txtlx = 1 写入EquipmentFileTWav表
-     * 
-     * @param equipmentFile 要分发的EquipmentFile对象
+     *
+     * @param equipmentFileTy 要分发的EquipmentFile对象
      */
-    public void distributeAndSave(EquipmentFile equipmentFile) {
+    public void distributeAndSave(EquipmentFileTy equipmentFileTy) {
         try {
-            if (equipmentFile == null) {
+            if (equipmentFileTy == null) {
                 LOG.warn("EquipmentFile对象为空，跳过分发");
                 return;
             }
 
-            String wjlx = equipmentFile.getWjlx();
-            String txtlx = equipmentFile.getTxtlx();
+            String wjlx = equipmentFileTy.getWjlx();
+            String txtlx = equipmentFileTy.getTxtlx();
 
-            LOG.debug("开始分发数据，EquipmentFile ID: {}, wjlx: {}, txtlx: {}", 
-                    equipmentFile.getId(), wjlx, txtlx);
+            //LOG.debug("开始分发数据，equipmentFileTy ID: {}, wjlx: {}, txtlx: {}",
+                  //  equipmentFileTy.getId(), wjlx, txtlx);
 
             // 判断分发规则
             if ("3".equals(wjlx) && ("3".equals(txtlx) || "5".equals(txtlx))) {
                 // 写入EquipmentFileTCluster表
-                saveToCluster(equipmentFile);
+                saveToCluster(equipmentFileTy);
             } else if ("1".equals(wjlx) && (StringUtils.isBlank(txtlx) || "0".equals(txtlx) || "1".equals(txtlx))) {
+               if(StringUtils.isBlank(txtlx)){
+                   equipmentFileTy.setTxtlx("0");
+               }
                 // 写入EquipmentFileTPic表
-                saveToPic(equipmentFile);
+                saveToPic(equipmentFileTy);
             } else if ("3".equals(wjlx) && ("1".equals(txtlx) || "2".equals(txtlx) || "4".equals(txtlx) || "6".equals(txtlx))) {
                 // 写入EquipmentFileTTxt表
-                saveToTxt(equipmentFile);
+                saveToTxt(equipmentFileTy);
             } else if ("4".equals(wjlx) && (StringUtils.isBlank(txtlx) || "0".equals(txtlx))) {
                 // 写入EquipmentFileTVideo表
-                saveToVideo(equipmentFile);
+                if(StringUtils.isBlank(txtlx)){
+                    equipmentFileTy.setTxtlx("0");
+                }
+                saveToVideo(equipmentFileTy);
             } else if ("2".equals(wjlx) && (StringUtils.isBlank(txtlx) || "0".equals(txtlx) || "1".equals(txtlx))) {
                 // 写入EquipmentFileTWav表
-                saveToWav(equipmentFile);
+                if(StringUtils.isBlank(txtlx)){
+                    equipmentFileTy.setTxtlx("0");
+                }
+                saveToWav(equipmentFileTy);
             } else {
-                LOG.warn("未匹配到分发规则，EquipmentFile ID: {}, wjlx: {}, txtlx: {}", 
-                        equipmentFile.getId(), wjlx, txtlx);
+                LOG.warn("未匹配到分发规则，EquipmentFile ID: {}, wjlx: {}, txtlx: {}",
+                        equipmentFileTy.getId(), wjlx, txtlx);
             }
 
         } catch (Exception e) {
-            LOG.error("分发数据时发生异常，EquipmentFile ID: {}, 错误信息: {}", 
-                    equipmentFile != null ? equipmentFile.getId() : "null", e.getMessage(), e);
+            LOG.error("分发数据时发生异常，EquipmentFile ID: {}, 错误信息: {}",
+                    equipmentFileTy != null ? equipmentFileTy.getId() : "null", e.getMessage(), e);
         }
     }
 
     /**
      * 保存到聚类表
      */
-    private void saveToCluster(EquipmentFile equipmentFile) {
+    private void saveToCluster(EquipmentFileTy equipmentFileTy) {
         try {
             EquipmentFileTCluster cluster = new EquipmentFileTCluster();
-            copyCommonFields(equipmentFile, cluster);
+            copyCommonFields(equipmentFileTy, cluster);
             equipmentFileTClusterMapper.insertSelective(cluster);
-            LOG.debug("成功保存到聚类表，EquipmentFile ID: {}, 新ID: {}", 
-                    equipmentFile.getId(), cluster.getId());
+            //LOG.debug("成功保存到聚类表，EquipmentFile ID: {}, 新ID: {}",
+                  //  equipmentFileTy.getId(), cluster.getId());
         } catch (Exception e) {
-            LOG.error("保存到聚类表失败，EquipmentFile ID: {}, 错误信息: {}", 
-                    equipmentFile.getId(), e.getMessage(), e);
+            LOG.error("保存到聚类表失败，EquipmentFile ID: {}, 错误信息: {}",
+                    equipmentFileTy.getId(), e.getMessage(), e);
         }
     }
 
     /**
      * 保存到图片表
      */
-    private void saveToPic(EquipmentFile equipmentFile) {
+    private void saveToPic(EquipmentFileTy equipmentFileTy) {
         try {
             EquipmentFileTPic pic = new EquipmentFileTPic();
-            copyCommonFields(equipmentFile, pic);
+            copyCommonFields(equipmentFileTy, pic);
             equipmentFileTPicMapper.insertSelective(pic);
-            LOG.debug("成功保存到图片表，EquipmentFile ID: {}, 新ID: {}", 
-                    equipmentFile.getId(), pic.getId());
+            //LOG.debug("成功保存到图片表，EquipmentFile ID: {}, 新ID: {}",
+                  //  equipmentFileTy.getId(), pic.getId());
         } catch (Exception e) {
-            LOG.error("保存到图片表失败，EquipmentFile ID: {}, 错误信息: {}", 
-                    equipmentFile.getId(), e.getMessage(), e);
+            LOG.error("保存到图片表失败，EquipmentFile ID: {}, 错误信息: {}",
+                    equipmentFileTy.getId(), e.getMessage(), e);
         }
     }
 
     /**
      * 保存到文本表
      */
-    private void saveToTxt(EquipmentFile equipmentFile) {
+    private void saveToTxt(EquipmentFileTy equipmentFileTy) {
         try {
             EquipmentFileTTxt txt = new EquipmentFileTTxt();
-            copyCommonFields(equipmentFile, txt);
+            copyCommonFields(equipmentFileTy, txt);
             equipmentFileTTxtMapper.insertSelective(txt);
-            LOG.debug("成功保存到文本表，EquipmentFile ID: {}, 新ID: {}", 
-                    equipmentFile.getId(), txt.getId());
+            //LOG.debug("成功保存到文本表，EquipmentFile ID: {}, 新ID: {}",
+                //    equipmentFileTy.getId(), txt.getId());
         } catch (Exception e) {
-            LOG.error("保存到文本表失败，EquipmentFile ID: {}, 错误信息: {}", 
-                    equipmentFile.getId(), e.getMessage(), e);
+            LOG.error("保存到文本表失败，EquipmentFile ID: {}, 错误信息: {}",
+                    equipmentFileTy.getId(), e.getMessage(), e);
         }
     }
 
     /**
      * 保存到视频表
      */
-    private void saveToVideo(EquipmentFile equipmentFile) {
+    private void saveToVideo(EquipmentFileTy equipmentFileTy) {
         try {
             EquipmentFileTVideo video = new EquipmentFileTVideo();
-            copyCommonFields(equipmentFile, video);
+            copyCommonFields(equipmentFileTy, video);
             equipmentFileTVideoMapper.insertSelective(video);
-            LOG.debug("成功保存到视频表，EquipmentFile ID: {}, 新ID: {}", 
-                    equipmentFile.getId(), video.getId());
+            //LOG.debug("成功保存到视频表，EquipmentFile ID: {}, 新ID: {}",
+                  //  equipmentFileTy.getId(), video.getId());
         } catch (Exception e) {
-            LOG.error("保存到视频表失败，EquipmentFile ID: {}, 错误信息: {}", 
-                    equipmentFile.getId(), e.getMessage(), e);
+            LOG.error("保存到视频表失败，EquipmentFile ID: {}, 错误信息: {}",
+                    equipmentFileTy.getId(), e.getMessage(), e);
         }
     }
 
     /**
      * 保存到音频表
      */
-    private void saveToWav(EquipmentFile equipmentFile) {
+    private void saveToWav(EquipmentFileTy equipmentFileTy) {
         try {
             EquipmentFileTWav wav = new EquipmentFileTWav();
-            copyCommonFields(equipmentFile, wav);
+            copyCommonFields(equipmentFileTy, wav);
             equipmentFileTWavMapper.insertSelective(wav);
-            LOG.debug("成功保存到音频表，EquipmentFile ID: {}, 新ID: {}", 
-                    equipmentFile.getId(), wav.getId());
+            //LOG.debug("成功保存到音频表，EquipmentFile ID: {}, 新ID: {}",
+                  //  equipmentFileTy.getId(), wav.getId());
         } catch (Exception e) {
-            LOG.error("保存到音频表失败，EquipmentFile ID: {}, 错误信息: {}", 
-                    equipmentFile.getId(), e.getMessage(), e);
+            LOG.error("保存到音频表失败，EquipmentFile ID: {}, 错误信息: {}",
+                    equipmentFileTy.getId(), e.getMessage(), e);
         }
     }
 
@@ -186,7 +195,7 @@ public class EquipmentFileSplitTyService {
      * 复制公共字段
      * 所有目标表都有相同的字段结构，除了id（自增）和sync_flag（不需要）
      */
-    private void copyCommonFields(EquipmentFile source, Object target) {
+    private void copyCommonFields(EquipmentFileTy source, Object target) {
         if (target instanceof EquipmentFileTCluster) {
 
             EquipmentFileTCluster cluster = (EquipmentFileTCluster) target;
