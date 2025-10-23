@@ -9,64 +9,67 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 历史 EquipmentFile 迁移
  * 历史 equipment_file_event 迁移
  */
 @Service
-public class EquipmentFileMigrationShjService {
+public class EquipmentFileMigrationTyService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(EquipmentFileMigrationShjService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(EquipmentFileMigrationTyService.class);
 
     /**
      * 待迁移数据源
      */
     @Resource
-    private EquipmentFileMapper equipmentFileMapper;
+    private EquipmentFileTyMapper  equipmentFileTyMapper;
 
     /**
      * 待迁移数据事件源
      */
     @Resource
-    private EquipmentFileEventMapper equipmentFileEventMapper;
+    private EquipmentTyEventMapper equipmentTyEventMapper;
 
     /**
      * 聚类 33 35
      */
     @Resource
-    private EquipmentFilePClusterMapper equipmentFilePClusterMapper;
+    private EquipmentFileTClusterMapper equipmentFileTClusterMapper;
 
     /**
      * 图片pic 10 11
      */
     @Resource
-    private EquipmentFilePPicMapper equipmentFilePPicMapper;
+    private EquipmentFileTPicMapper equipmentFileTPicMapper;
 
     /**
      * mp4 40
      */
     @Resource
-    private EquipmentFilePVideoMapper equipmentFilePVideoMapper;
+    private EquipmentFileTVideoMapper equipmentFileTVideoMapper;
 
     /**
      * 文件 31 32 34 36
      */
     @Resource
-    private EquipmentFilePTxtMapper   equipmentFilePTxtMapper;
+    private EquipmentFileTTxtMapper   equipmentFileTTxtMapper;
 
     /**
      * 音档 20 21
      */
     @Resource
-    private EquipmentFilePWavMapper equipmentFilePWavMapper;
+    private EquipmentFileTWavMapper equipmentFileTWavMapper;
 
     /**
      * 线程池 - 建议使用10个线程
      */
-    private final ExecutorService executorPService = Executors.newFixedThreadPool(10);
+    private final ExecutorService executorTyService = Executors.newFixedThreadPool(10);
     
     /**
      * 迁移状态标志
@@ -150,13 +153,13 @@ public class EquipmentFileMigrationShjService {
                 }
                 
                 // 查询待迁移的数据
-                EquipmentFileExample example = new EquipmentFileExample();
-                EquipmentFileExample.Criteria criteria = example.createCriteria();
+                EquipmentFileTyExample example = new EquipmentFileTyExample();
+                EquipmentFileTyExample.Criteria criteria = example.createCriteria();
                 criteria.andSyncFlagEqualTo(0);
                 example.setOrderByClause(" cjsj ASC limit 5000");
 
                 // 使用selectByExample方法查询前5000条
-                List<EquipmentFile> result = equipmentFileMapper.selectByExample(example);
+                List<EquipmentFileTy> result = equipmentFileTyMapper.selectByExample(example);
 
                 if (result.isEmpty()) {
                     LOG.info("没有更多数据需要迁移，迁移完成");
@@ -186,7 +189,7 @@ public class EquipmentFileMigrationShjService {
     /**
      * 迁移EquipmentFileEvent数据
      * 根据syncFlag=0查询，每次查询5000条
-     * 根据equipmentFileId关联EquipmentFilePCluster表更新kssj、jssj、jtnr字段
+     * 根据equipmentFileId关联EquipmentFileTCluster表更新kssj、jssj、jtnr字段
      */
     private void migrateEquipmentFileEvents() {
         LOG.info("开始迁移EquipmentFileEvent数据...");
@@ -200,13 +203,13 @@ public class EquipmentFileMigrationShjService {
                 }
                 
                 // 查询待迁移的EquipmentFileEvent数据
-                EquipmentFileEventExample example = new EquipmentFileEventExample();
-                EquipmentFileEventExample.Criteria criteria = example.createCriteria();
+                EquipmentTyEventExample example = new EquipmentTyEventExample();
+                EquipmentTyEventExample.Criteria criteria = example.createCriteria();
                 criteria.andSyncFlagEqualTo(0);
                 example.setOrderByClause("limit 5000");
 
                 // 使用selectByExample方法查询前5000条
-                List<EquipmentFileEvent> result = equipmentFileEventMapper.selectByExample(example);
+                List<EquipmentTyEvent> result = equipmentTyEventMapper.selectByExample(example);
 
                 if (result.isEmpty()) {
                     LOG.info("没有更多EquipmentFileEvent数据需要迁移，迁移完成");
@@ -235,17 +238,17 @@ public class EquipmentFileMigrationShjService {
     /**
      * 使用多线程迁移一批EquipmentFileEvent数据
      */
-    private void migrateEventBatchWithMultiThread(List<EquipmentFileEvent> equipmentFileEvents) {
-        int batchSize = equipmentFileEvents.size();
+    private void migrateEventBatchWithMultiThread(List<EquipmentTyEvent> equipmentTyEvents) {
+        int batchSize = equipmentTyEvents.size();
         CountDownLatch latch = new CountDownLatch(batchSize);
         
-        for (EquipmentFileEvent equipmentFileEvent : equipmentFileEvents) {
-            executorPService.submit(() -> {
+        for (EquipmentTyEvent equipmentTyEvent : equipmentTyEvents) {
+            executorTyService.submit(() -> {
                 try {
-                    migrateSingleEquipmentFileEvent(equipmentFileEvent);
+                    migrateSingleEquipmentFileEvent(equipmentTyEvent);
                 } catch (Exception e) {
-                    LOG.error("迁移单条EquipmentFileEvent数据失败，ID: {}, 错误: {}", 
-                            equipmentFileEvent.getId(), e.getMessage(), e);
+                    LOG.error("迁移单条EquipmentFileEvent数据失败，ID: {}, 错误: {}",
+                            equipmentTyEvent.getId(), e.getMessage(), e);
                 } finally {
                     latch.countDown();
                 }
@@ -266,52 +269,48 @@ public class EquipmentFileMigrationShjService {
 
     /**
      * 迁移单条EquipmentFileEvent数据
-     * 根据equipmentFileId关联EquipmentFilePCluster表更新kssj、jssj、jtnr字段
+     * 根据equipmentFileId关联EquipmentFileTCluster表更新kssj、jssj、jtnr字段
      */
-    private void migrateSingleEquipmentFileEvent(EquipmentFileEvent equipmentFileEvent) {
+    private void migrateSingleEquipmentFileEvent(EquipmentTyEvent equipmentTyEvent) {
         try {
-            String equipmentFileId = equipmentFileEvent.getEquipmentFileId();
+            String equipmentFileId = equipmentTyEvent.getBz();
             boolean migrationSuccess = false;
             
             if (StringUtils.isNotBlank(equipmentFileId)) {
-                // 根据equipmentFileId查询EquipmentFilePCluster表
-                EquipmentFilePClusterExample clusterExample = new EquipmentFilePClusterExample();
+                // 根据equipmentFileId查询EquipmentFileTCluster表
+                EquipmentFileTClusterExample clusterExample = new EquipmentFileTClusterExample();
                 clusterExample.createCriteria().andBidEqualTo(equipmentFileId);
-                List<EquipmentFilePCluster> clusters = equipmentFilePClusterMapper.selectByExample(clusterExample);
+                List<EquipmentFileTCluster> clusters = equipmentFileTClusterMapper.selectByExample(clusterExample);
                 
                 if (!clusters.isEmpty()) {
                     // 更新第一个匹配的记录
-                    EquipmentFilePCluster cluster = clusters.get(0);
-                    cluster.setKssj(equipmentFileEvent.getKssj());
-                    cluster.setJssj(equipmentFileEvent.getJssj());
-                    cluster.setJtnr(equipmentFileEvent.getJtnr());
+                    EquipmentFileTCluster cluster = clusters.get(0);
+                    cluster.setKssj(equipmentTyEvent.getKssj());
+                    cluster.setJssj(equipmentTyEvent.getJssj());
+                    cluster.setSm6(equipmentTyEvent.getSm1()); //将拖曳的SM1 保存到equipmentFileTCluster的SM6中
                     
-                    equipmentFilePClusterMapper.updateByPrimaryKeySelective(cluster);
+                    equipmentFileTClusterMapper.updateByPrimaryKeySelective(cluster);
                     migrationSuccess = true;
-                    LOG.debug("成功更新EquipmentFilePCluster，ID: {}, equipmentFileId: {}", 
-                            equipmentFileEvent.getId(), equipmentFileId);
+                    LOG.debug("成功更新EquipmentFileTCluster，ID: {}, equipmentFileId: {}",
+                            equipmentTyEvent.getId(), equipmentFileId);
                 } else {
-                    LOG.warn("未找到对应的EquipmentFilePCluster记录，ID: {}, equipmentFileId: {}", 
-                            equipmentFileEvent.getId(), equipmentFileId);
+                    LOG.warn("未找到对应的EquipmentFileTCluster记录，ID: {}, equipmentFileId: {}",
+                            equipmentTyEvent.getId(), equipmentFileId);
                     migrationSuccess = false;
                 }
             } else {
-                LOG.warn("EquipmentFileEvent的equipmentFileId为空，跳过数据，ID: {}", 
-                        equipmentFileEvent.getId());
+                LOG.warn("EquipmentFileEvent的equipmentFileId为空，跳过数据，ID: {}",
+                        equipmentTyEvent.getId());
                 migrationSuccess = false;
             }
             
             // 更新sync_flag状态
-            updateEventSyncFlag(equipmentFileEvent.getId(), migrationSuccess);
+            updateEventSyncFlag(equipmentTyEvent.getId(), migrationSuccess);
             
-            if (migrationSuccess) {
-                LOG.debug("成功迁移EquipmentFileEvent，ID: {}", equipmentFileEvent.getId());
-            } else {
-                LOG.debug("跳过EquipmentFileEvent数据，ID: {}", equipmentFileEvent.getId());
-            }
+
             
         } catch (Exception e) {
-            LOG.error("迁移EquipmentFileEvent数据失败，ID: {}", equipmentFileEvent.getId(), e);
+            LOG.error("迁移EquipmentFileEvent数据失败，ID: {}", equipmentTyEvent.getId(), e);
             throw e;
         }
     }
@@ -322,14 +321,14 @@ public class EquipmentFileMigrationShjService {
      */
     private void updateEventSyncFlag(String id, boolean migrationSuccess) {
         try {
-            EquipmentFileEvent updateRecord = new EquipmentFileEvent();
+            EquipmentTyEvent  updateRecord = new EquipmentTyEvent();
             updateRecord.setId(id);
             if (migrationSuccess) {
                 updateRecord.setSyncFlag(1); // 成功迁移
             } else {
                 updateRecord.setSyncFlag(2); // 跳过数据
             }
-            equipmentFileEventMapper.updateByPrimaryKeySelective(updateRecord);
+            equipmentTyEventMapper.updateByPrimaryKeySelective(updateRecord);
         } catch (Exception e) {
             LOG.error("更新EquipmentFileEvent sync_flag失败，ID: {}", id, e);
             throw e;
@@ -340,17 +339,17 @@ public class EquipmentFileMigrationShjService {
      * 使用多线程迁移一批数据
      * CountDownLatch建议使用10个线程进行并发处理
      */
-    private void migrateBatchWithMultiThread(List<EquipmentFile> equipmentFiles) {
-        int batchSize = equipmentFiles.size();
+    private void migrateBatchWithMultiThread(List<EquipmentFileTy> equipmentFileTys) {
+        int batchSize = equipmentFileTys.size();
         CountDownLatch latch = new CountDownLatch(batchSize);
         
-        for (EquipmentFile equipmentFile : equipmentFiles) {
-            executorPService.submit(() -> {
+        for (EquipmentFileTy equipmentFileTy : equipmentFileTys) {
+            executorTyService.submit(() -> {
                 try {
-                    migrateSingleEquipmentFile(equipmentFile);
+                    migrateSingleEquipmentFile(equipmentFileTy);
                 } catch (Exception e) {
-                    LOG.error("迁移单条EquipmentFile数据失败，ID: {}, 错误: {}", 
-                            equipmentFile.getId(), e.getMessage(), e);
+                    LOG.error("迁移单条EquipmentFile数据失败，ID: {}, 错误: {}",
+                            equipmentFileTy.getId(), e.getMessage(), e);
                 } finally {
                     latch.countDown();
                 }
@@ -375,67 +374,67 @@ public class EquipmentFileMigrationShjService {
      * 使用事务确保分发写入成功后才修改sync_flag为1
      */
 
-    private void migrateSingleEquipmentFile(EquipmentFile equipmentFile) {
+    private void migrateSingleEquipmentFile(EquipmentFileTy equipmentFileTy) {
         try {
-            String wjlx = equipmentFile.getWjlx();
-            String txtlx = equipmentFile.getTxtlx();
+            String wjlx = equipmentFileTy.getWjlx();
+            String txtlx = equipmentFileTy.getTxtlx();
             boolean migrationSuccess = false;
             
             // 分发规则：
-            // wjlx = 3 时 txtlx = 3 或者 txtlx = 5 写入EquipmentFilePCluster表  聚类
-            // wjlx = 1 时 txtlx 为空 或者 txtlx = 0 或者 txtlx = 1 写入EquipmentFilePPic表
-            // wjlx = 3 时 txtlx = 1 或者 txtlx = 2 或者 txtlx = 4 或者 txtlx = 6 写入EquipmentFilePTxt表
-            // wjlx = 4 时 txtlx 为空 或者 txtlx = 0 写入EquipmentFilePVideo表
-            // wjlx = 2 时 txtlx 为空 或者 txtlx = 0 或者 txtlx = 1 写入EquipmentFilePWav表
+            // wjlx = 3 时 txtlx = 3 或者 txtlx = 5 写入EquipmentFileTCluster表  聚类
+            // wjlx = 1 时 txtlx 为空 或者 txtlx = 0 或者 txtlx = 1 写入EquipmentFileTPic表
+            // wjlx = 3 时 txtlx = 1 或者 txtlx = 2 或者 txtlx = 4 或者 txtlx = 6 写入EquipmentFileTTxt表
+            // wjlx = 4 时 txtlx 为空 或者 txtlx = 0 写入EquipmentFileTVideo表
+            // wjlx = 2 时 txtlx 为空 或者 txtlx = 0 或者 txtlx = 1 写入EquipmentFileTWav表
             
             if ("3".equals(wjlx) && ("3".equals(txtlx) || "5".equals(txtlx))) {
                 // 聚类
-                saveToClusterTable(equipmentFile);
+                saveToClusterTable(equipmentFileTy);
                 migrationSuccess = true;
             } else if ("1".equals(wjlx) && (StringUtils.isBlank(txtlx) || "0".equals(txtlx) || "1".equals(txtlx))) {
                 // 图片
                 if(StringUtils.isBlank(txtlx)){
-                    equipmentFile.setTxtlx("0");
+                    equipmentFileTy.setTxtlx("0");
                 }
-                saveToPicTable(equipmentFile);
+                saveToPicTable(equipmentFileTy);
                 migrationSuccess = true;
             } else if ("3".equals(wjlx) && ("1".equals(txtlx) || "2".equals(txtlx) || "4".equals(txtlx) || "6".equals(txtlx))) {
                 // 文件
-                saveToTxtTable(equipmentFile);
+                saveToTxtTable(equipmentFileTy);
                 migrationSuccess = true;
             } else if ("4".equals(wjlx) && (StringUtils.isBlank(txtlx) || "0".equals(txtlx))) {
                 // 视频
                 if(StringUtils.isBlank(txtlx)){
-                    equipmentFile.setTxtlx("0");
+                    equipmentFileTy.setTxtlx("0");
                 }
-                saveToVideoTable(equipmentFile);
+                saveToVideoTable(equipmentFileTy);
                 migrationSuccess = true;
             } else if ("2".equals(wjlx) && (StringUtils.isBlank(txtlx) || "0".equals(txtlx) || "1".equals(txtlx))) {
                 // 音频
                 if(StringUtils.isBlank(txtlx)){
-                    equipmentFile.setTxtlx("0");
+                    equipmentFileTy.setTxtlx("0");
                 }
-                saveToWavTable(equipmentFile);
+                saveToWavTable(equipmentFileTy);
                 migrationSuccess = true;
             } else {
                 // 未匹配到分发规则，跳过数据
-                LOG.warn("未匹配到分发规则，跳过数据，ID: {}, wjlx: {}, txtlx: {}", 
-                        equipmentFile.getId(), wjlx, txtlx);
+                LOG.warn("未匹配到分发规则，跳过数据，ID: {}, wjlx: {}, txtlx: {}",
+                        equipmentFileTy.getId(), wjlx, txtlx);
                 migrationSuccess = false;
             }
             
             // 更新sync_flag状态
-            updateSyncFlag(equipmentFile.getId(), migrationSuccess);
+            updateSyncFlag(equipmentFileTy.getId(), migrationSuccess);
             
             if (migrationSuccess) {
-                LOG.debug("成功迁移，ID: {}", equipmentFile.getId());
+                LOG.debug("成功迁移，ID: {}", equipmentFileTy.getId());
             } else {
-                LOG.debug("跳过数据，ID: {}", equipmentFile.getId());
+                LOG.debug("跳过数据，ID: {}", equipmentFileTy.getId());
             }
 
 
         } catch (Exception e) {
-            LOG.error("迁移EquipmentFile数据失败，ID: {}", equipmentFile.getId(), e);
+            LOG.error("迁移EquipmentFile数据失败，ID: {}", equipmentFileTy.getId(), e);
             // 使用事务，如果迁移失败会回滚，确保数据一致性
             throw e;
         }
@@ -444,15 +443,15 @@ public class EquipmentFileMigrationShjService {
     /**
      * 保存到聚类表
      */
-    private void saveToClusterTable(EquipmentFile equipmentFile) {
+    private void saveToClusterTable(EquipmentFileTy equipmentFileTy) {
         try {
-            EquipmentFilePCluster cluster = new EquipmentFilePCluster();
-            copyEquipmentFileToTarget(equipmentFile, cluster);
-            cluster.setBid(equipmentFile.getId());
-            equipmentFilePClusterMapper.insertSelective(cluster);
-            LOG.debug("成功保存到聚类表，ID: {}", equipmentFile.getId());
+            EquipmentFileTCluster cluster = new EquipmentFileTCluster();
+            copyEquipmentFileToTarget(equipmentFileTy, cluster);
+            cluster.setBid(equipmentFileTy.getId());
+            equipmentFileTClusterMapper.insertSelective(cluster);
+            LOG.debug("成功保存到聚类表，ID: {}", equipmentFileTy.getId());
         } catch (Exception e) {
-            LOG.error("保存到聚类表失败，ID: {}", equipmentFile.getId(), e);
+            LOG.error("保存到聚类表失败，ID: {}", equipmentFileTy.getId(), e);
             throw e;
         }
     }
@@ -460,16 +459,16 @@ public class EquipmentFileMigrationShjService {
     /**
      * 保存到图片表
      */
-    private void saveToPicTable(EquipmentFile equipmentFile) {
+    private void saveToPicTable(EquipmentFileTy equipmentFileTy) {
         try {
-            EquipmentFilePPic pic = new EquipmentFilePPic();
-            copyEquipmentFileToTarget(equipmentFile, pic);
-            pic.setBid(equipmentFile.getId());
+            EquipmentFileTPic pic = new EquipmentFileTPic();
+            copyEquipmentFileToTarget(equipmentFileTy, pic);
+            pic.setBid(equipmentFileTy.getId());
             
-            equipmentFilePPicMapper.insertSelective(pic);
-            LOG.debug("成功保存到图片表，ID: {}", equipmentFile.getId());
+            equipmentFileTPicMapper.insertSelective(pic);
+            LOG.debug("成功保存到图片表，ID: {}", equipmentFileTy.getId());
         } catch (Exception e) {
-            LOG.error("保存到图片表失败，ID: {}", equipmentFile.getId(), e);
+            LOG.error("保存到图片表失败，ID: {}", equipmentFileTy.getId(), e);
             throw e;
         }
     }
@@ -477,16 +476,16 @@ public class EquipmentFileMigrationShjService {
     /**
      * 保存到文件表
      */
-    private void saveToTxtTable(EquipmentFile equipmentFile) {
+    private void saveToTxtTable(EquipmentFileTy equipmentFileTy) {
         try {
-            EquipmentFilePTxt txt = new EquipmentFilePTxt();
-            copyEquipmentFileToTarget(equipmentFile, txt);
-            txt.setBid(equipmentFile.getId());
+            EquipmentFileTTxt txt = new EquipmentFileTTxt();
+            copyEquipmentFileToTarget(equipmentFileTy, txt);
+            txt.setBid(equipmentFileTy.getId());
             
-            equipmentFilePTxtMapper.insertSelective(txt);
-            LOG.debug("成功保存到文件表，ID: {}", equipmentFile.getId());
+            equipmentFileTTxtMapper.insertSelective(txt);
+            LOG.debug("成功保存到文件表，ID: {}", equipmentFileTy.getId());
         } catch (Exception e) {
-            LOG.error("保存到文件表失败，ID: {}", equipmentFile.getId(), e);
+            LOG.error("保存到文件表失败，ID: {}", equipmentFileTy.getId(), e);
             throw e;
         }
     }
@@ -494,16 +493,16 @@ public class EquipmentFileMigrationShjService {
     /**
      * 保存到视频表
      */
-    private void saveToVideoTable(EquipmentFile equipmentFile) {
+    private void saveToVideoTable(EquipmentFileTy equipmentFileTy) {
         try {
-            EquipmentFilePVideo video = new EquipmentFilePVideo();
-            copyEquipmentFileToTarget(equipmentFile, video);
-            video.setBid(equipmentFile.getId());
+            EquipmentFileTVideo video = new EquipmentFileTVideo();
+            copyEquipmentFileToTarget(equipmentFileTy, video);
+            video.setBid(equipmentFileTy.getId());
             
-            equipmentFilePVideoMapper.insertSelective(video);
-            LOG.debug("成功保存到视频表，ID: {}", equipmentFile.getId());
+            equipmentFileTVideoMapper.insertSelective(video);
+            LOG.debug("成功保存到视频表，ID: {}", equipmentFileTy.getId());
         } catch (Exception e) {
-            LOG.error("保存到视频表失败，ID: {}", equipmentFile.getId(), e);
+            LOG.error("保存到视频表失败，ID: {}", equipmentFileTy.getId(), e);
             throw e;
         }
     }
@@ -511,16 +510,16 @@ public class EquipmentFileMigrationShjService {
     /**
      * 保存到音频表
      */
-    private void saveToWavTable(EquipmentFile equipmentFile) {
+    private void saveToWavTable(EquipmentFileTy equipmentFileTy) {
         try {
-            EquipmentFilePWav wav = new EquipmentFilePWav();
-            copyEquipmentFileToTarget(equipmentFile, wav);
-            wav.setBid(equipmentFile.getId());
+            EquipmentFileTWav wav = new EquipmentFileTWav();
+            copyEquipmentFileToTarget(equipmentFileTy, wav);
+            wav.setBid(equipmentFileTy.getId());
             
-            equipmentFilePWavMapper.insertSelective(wav);
-            LOG.debug("成功保存到音频表，ID: {}", equipmentFile.getId());
+            equipmentFileTWavMapper.insertSelective(wav);
+            LOG.debug("成功保存到音频表，ID: {}", equipmentFileTy.getId());
         } catch (Exception e) {
-            LOG.error("保存到音频表失败，ID: {}", equipmentFile.getId(), e);
+            LOG.error("保存到音频表失败，ID: {}", equipmentFileTy.getId(), e);
             throw e;
         }
     }
@@ -528,10 +527,10 @@ public class EquipmentFileMigrationShjService {
     /**
      * 复制EquipmentFile的公共字段到目标对象
      */
-    private void copyEquipmentFileToTarget(EquipmentFile source, Object target) {
+    private void copyEquipmentFileToTarget(EquipmentFileTy source, Object target) {
         try {
-            if (target instanceof EquipmentFilePCluster) {
-                EquipmentFilePCluster cluster = (EquipmentFilePCluster) target;
+            if (target instanceof EquipmentFileTCluster) {
+                EquipmentFileTCluster cluster = (EquipmentFileTCluster) target;
                 cluster.setSbbh(source.getSbbh());
                 cluster.setTplj(source.getTplj());
                 cluster.setCjsj(source.getCjsj());
@@ -556,8 +555,8 @@ public class EquipmentFileMigrationShjService {
                 cluster.setTs(source.getTs());
                 cluster.setTxtlx(source.getTxtlx());
                 cluster.setWjmc(source.getWjmc());
-            } else if (target instanceof EquipmentFilePPic) {
-                EquipmentFilePPic pic = (EquipmentFilePPic) target;
+            } else if (target instanceof EquipmentFileTPic) {
+                EquipmentFileTPic pic = (EquipmentFileTPic) target;
                 pic.setSbbh(source.getSbbh());
                 pic.setTplj(source.getTplj());
                 pic.setCjsj(source.getCjsj());
@@ -582,8 +581,8 @@ public class EquipmentFileMigrationShjService {
                 pic.setTs(source.getTs());
                 pic.setTxtlx(source.getTxtlx());
                 pic.setWjmc(source.getWjmc());
-            } else if (target instanceof EquipmentFilePTxt) {
-                EquipmentFilePTxt txt = (EquipmentFilePTxt) target;
+            } else if (target instanceof EquipmentFileTTxt) {
+                EquipmentFileTTxt txt = (EquipmentFileTTxt) target;
                 txt.setSbbh(source.getSbbh());
                 txt.setTplj(source.getTplj());
                 txt.setCjsj(source.getCjsj());
@@ -608,8 +607,8 @@ public class EquipmentFileMigrationShjService {
                 txt.setTs(source.getTs());
                 txt.setTxtlx(source.getTxtlx());
                 txt.setWjmc(source.getWjmc());
-            } else if (target instanceof EquipmentFilePVideo) {
-                EquipmentFilePVideo video = (EquipmentFilePVideo) target;
+            } else if (target instanceof EquipmentFileTVideo) {
+                EquipmentFileTVideo video = (EquipmentFileTVideo) target;
                 video.setSbbh(source.getSbbh());
                 video.setTplj(source.getTplj());
                 video.setCjsj(source.getCjsj());
@@ -634,8 +633,8 @@ public class EquipmentFileMigrationShjService {
                 video.setTs(source.getTs());
                 video.setTxtlx(source.getTxtlx());
                 video.setWjmc(source.getWjmc());
-            } else if (target instanceof EquipmentFilePWav) {
-                EquipmentFilePWav wav = (EquipmentFilePWav) target;
+            } else if (target instanceof EquipmentFileTWav) {
+                EquipmentFileTWav wav = (EquipmentFileTWav) target;
                 wav.setSbbh(source.getSbbh());
                 wav.setTplj(source.getTplj());
                 wav.setCjsj(source.getCjsj());
@@ -673,14 +672,14 @@ public class EquipmentFileMigrationShjService {
      */
     private void updateSyncFlag(String id, boolean migrationSuccess) {
         try {
-            EquipmentFile updateRecord = new EquipmentFile();
+            EquipmentFileTy updateRecord = new EquipmentFileTy();
             updateRecord.setId(id);
             if (migrationSuccess) {
                 updateRecord.setSyncFlag(1); // 成功迁移
             } else {
                 updateRecord.setSyncFlag(2); // 跳过数据
             }
-            equipmentFileMapper.updateByPrimaryKeySelective(updateRecord);
+            equipmentFileTyMapper.updateByPrimaryKeySelective(updateRecord);
         } catch (Exception e) {
             LOG.error("更新sync_flag失败，ID: {}", id, e);
             throw e;
@@ -696,20 +695,20 @@ public class EquipmentFileMigrationShjService {
         // 设置关闭标志
         isShuttingDown = true;
         
-        if (executorPService != null && !executorPService.isShutdown()) {
+        if (executorTyService != null && !executorTyService.isShutdown()) {
             LOG.info("正在关闭线程池...");
-            executorPService.shutdown();
+            executorTyService.shutdown();
             try {
                 // 等待正在执行的任务完成，最多等待60秒
-                if (!executorPService.awaitTermination(60, TimeUnit.SECONDS)) {
+                if (!executorTyService.awaitTermination(60, TimeUnit.SECONDS)) {
                     LOG.warn("线程池未能在60秒内正常关闭，强制关闭");
-                    executorPService.shutdownNow();
+                    executorTyService.shutdownNow();
                 } else {
                     LOG.info("线程池已正常关闭");
                 }
             } catch (InterruptedException e) {
                 LOG.warn("等待线程池关闭时被中断，强制关闭");
-                executorPService.shutdownNow();
+                executorTyService.shutdownNow();
                 Thread.currentThread().interrupt();
             }
         }
@@ -753,19 +752,19 @@ public class EquipmentFileMigrationShjService {
     public void getMigrationStatistics() {
         try {
             // 查询已迁移的数据
-            EquipmentFileExample migratedExample = new EquipmentFileExample();
+            EquipmentFileTyExample migratedExample = new EquipmentFileTyExample();
             migratedExample.createCriteria().andSyncFlagEqualTo(1);
-            long migratedCount = equipmentFileMapper.countByExample(migratedExample);
+            long migratedCount = equipmentFileTyMapper.countByExample(migratedExample);
             
             // 查询跳过的数据
-            EquipmentFileExample skippedExample = new EquipmentFileExample();
+            EquipmentFileTyExample skippedExample = new EquipmentFileTyExample();
             skippedExample.createCriteria().andSyncFlagEqualTo(2);
-            long skippedCount = equipmentFileMapper.countByExample(skippedExample);
+            long skippedCount = equipmentFileTyMapper.countByExample(skippedExample);
             
             // 查询待迁移的数据
-            EquipmentFileExample pendingExample = new EquipmentFileExample();
+            EquipmentFileTyExample pendingExample = new EquipmentFileTyExample();
             pendingExample.createCriteria().andSyncFlagEqualTo(0);
-            long pendingCount = equipmentFileMapper.countByExample(pendingExample);
+            long pendingCount = equipmentFileTyMapper.countByExample(pendingExample);
             
             LOG.info("迁移统计信息:");
             LOG.info("已迁移数据: {}", migratedCount);

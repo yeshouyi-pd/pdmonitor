@@ -185,6 +185,7 @@ public class EquipmentFileTyShjService extends AbstractScanRequest{
                                 entity.getId(), e.getMessage(), e);
                     }
                 });
+                entity.setSm6(null);
                 equipmentFileTyMapperStatic.insert(entity);
                 todayMapperStatic.insertEquipTy(entity);
                 data="保存成功";
