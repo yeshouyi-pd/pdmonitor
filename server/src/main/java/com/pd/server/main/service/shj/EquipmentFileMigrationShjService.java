@@ -77,6 +77,11 @@ public class EquipmentFileMigrationShjService {
      * 迁移运行状态标志
      */
     private volatile boolean isRunning = false;
+    
+    /**
+     * EquipmentFileEvent迁移运行状态标志
+     */
+    private volatile boolean isEventRunning = false;
 
     /**
      * 开始迁移
@@ -98,6 +103,29 @@ public class EquipmentFileMigrationShjService {
             // 确保运行状态被重置
             isRunning = false;
             LOG.info("迁移服务已停止");
+        }
+    }
+
+    /**
+     * 开始EquipmentFileEvent迁移
+     */
+    public void migrateEventStart() {
+        // 检查是否已经在运行
+        if (isEventRunning) {
+            LOG.warn("EquipmentFileEvent迁移服务已经在运行中，请勿重复启动");
+            return;
+        }
+        
+        LOG.info("启动EquipmentFileEvent迁移服务...");
+        isShuttingDown = false;
+        isEventRunning = true;
+        
+        try {
+            this.migrateEquipmentFileEvents();
+        } finally {
+            // 确保运行状态被重置
+            isEventRunning = false;
+            LOG.info("EquipmentFileEvent迁移服务已停止");
         }
     }
 
@@ -155,7 +183,158 @@ public class EquipmentFileMigrationShjService {
         }
     }
 
+    /**
+     * 迁移EquipmentFileEvent数据
+     * 根据syncFlag=0查询，每次查询5000条
+     * 根据equipmentFileId关联EquipmentFilePCluster表更新kssj、jssj、jtnr字段
+     */
+    private void migrateEquipmentFileEvents() {
+        LOG.info("开始迁移EquipmentFileEvent数据...");
+        
+        try {
+            while (true) {
+                // 检查是否正在关闭
+                if (isShuttingDown) {
+                    LOG.info("检测到关闭信号，停止EquipmentFileEvent迁移");
+                    break;
+                }
+                
+                // 查询待迁移的EquipmentFileEvent数据
+                EquipmentFileEventExample example = new EquipmentFileEventExample();
+                EquipmentFileEventExample.Criteria criteria = example.createCriteria();
+                criteria.andSyncFlagEqualTo(0);
+                example.setOrderByClause("limit 5000");
 
+                // 使用selectByExample方法查询前5000条
+                List<EquipmentFileEvent> result = equipmentFileEventMapper.selectByExample(example);
+
+                if (result.isEmpty()) {
+                    LOG.info("没有更多EquipmentFileEvent数据需要迁移，迁移完成");
+                    break;
+                }
+                LOG.info("查询到{}条EquipmentFileEvent数据，开始迁移...", result.size());
+                
+                // 使用多线程进行迁移
+                migrateEventBatchWithMultiThread(result);
+                
+                // 如果结果少于5000条，说明没有更多数据了
+                if (result.size() < 5000) {
+                    LOG.info("没有更多EquipmentFileEvent数据需要迁移，迁移完成");
+                    break;
+                }
+                // 避免内存溢出，稍微休息一下
+                Thread.sleep(100);
+            }
+            
+        } catch (Exception e) {
+            LOG.error("迁移EquipmentFileEvent数据时发生异常", e);
+            throw new RuntimeException("EquipmentFileEvent迁移失败", e);
+        }
+    }
+
+    /**
+     * 使用多线程迁移一批EquipmentFileEvent数据
+     */
+    private void migrateEventBatchWithMultiThread(List<EquipmentFileEvent> equipmentFileEvents) {
+        int batchSize = equipmentFileEvents.size();
+        CountDownLatch latch = new CountDownLatch(batchSize);
+        
+        for (EquipmentFileEvent equipmentFileEvent : equipmentFileEvents) {
+            executorService.submit(() -> {
+                try {
+                    migrateSingleEquipmentFileEvent(equipmentFileEvent);
+                } catch (Exception e) {
+                    LOG.error("迁移单条EquipmentFileEvent数据失败，ID: {}, 错误: {}", 
+                            equipmentFileEvent.getId(), e.getMessage(), e);
+                } finally {
+                    latch.countDown();
+                }
+            });
+        }
+        
+        try {
+            // 等待所有线程完成，最多等待10秒
+            boolean finished = latch.await(10, TimeUnit.SECONDS);
+            if (!finished) {
+                LOG.warn("EquipmentFileEvent迁移超时，部分数据可能未完成迁移");
+            }
+        } catch (InterruptedException e) {
+            LOG.error("等待EquipmentFileEvent迁移完成时被中断", e);
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    /**
+     * 迁移单条EquipmentFileEvent数据
+     * 根据equipmentFileId关联EquipmentFilePCluster表更新kssj、jssj、jtnr字段
+     */
+    private void migrateSingleEquipmentFileEvent(EquipmentFileEvent equipmentFileEvent) {
+        try {
+            String equipmentFileId = equipmentFileEvent.getEquipmentFileId();
+            boolean migrationSuccess = false;
+            
+            if (StringUtils.isNotBlank(equipmentFileId)) {
+                // 根据equipmentFileId查询EquipmentFilePCluster表
+                EquipmentFilePClusterExample clusterExample = new EquipmentFilePClusterExample();
+                clusterExample.createCriteria().andBidEqualTo(equipmentFileId);
+                List<EquipmentFilePCluster> clusters = equipmentFilePClusterMapper.selectByExample(clusterExample);
+                
+                if (!clusters.isEmpty()) {
+                    // 更新第一个匹配的记录
+                    EquipmentFilePCluster cluster = clusters.get(0);
+                    cluster.setKssj(equipmentFileEvent.getKssj());
+                    cluster.setJssj(equipmentFileEvent.getJssj());
+                    cluster.setJtnr(equipmentFileEvent.getJtnr());
+                    
+                    equipmentFilePClusterMapper.updateByPrimaryKeySelective(cluster);
+                    migrationSuccess = true;
+                    LOG.debug("成功更新EquipmentFilePCluster，ID: {}, equipmentFileId: {}", 
+                            equipmentFileEvent.getId(), equipmentFileId);
+                } else {
+                    LOG.warn("未找到对应的EquipmentFilePCluster记录，ID: {}, equipmentFileId: {}", 
+                            equipmentFileEvent.getId(), equipmentFileId);
+                    migrationSuccess = false;
+                }
+            } else {
+                LOG.warn("EquipmentFileEvent的equipmentFileId为空，跳过数据，ID: {}", 
+                        equipmentFileEvent.getId());
+                migrationSuccess = false;
+            }
+            
+            // 更新sync_flag状态
+            updateEventSyncFlag(equipmentFileEvent.getId(), migrationSuccess);
+            
+            if (migrationSuccess) {
+                LOG.debug("成功迁移EquipmentFileEvent，ID: {}", equipmentFileEvent.getId());
+            } else {
+                LOG.debug("跳过EquipmentFileEvent数据，ID: {}", equipmentFileEvent.getId());
+            }
+            
+        } catch (Exception e) {
+            LOG.error("迁移EquipmentFileEvent数据失败，ID: {}", equipmentFileEvent.getId(), e);
+            throw e;
+        }
+    }
+
+    /**
+     * 更新EquipmentFileEvent的sync_flag状态
+     * 成功迁移：sync_flag=1，跳过数据：sync_flag=2
+     */
+    private void updateEventSyncFlag(String id, boolean migrationSuccess) {
+        try {
+            EquipmentFileEvent updateRecord = new EquipmentFileEvent();
+            updateRecord.setId(id);
+            if (migrationSuccess) {
+                updateRecord.setSyncFlag(1); // 成功迁移
+            } else {
+                updateRecord.setSyncFlag(2); // 跳过数据
+            }
+            equipmentFileEventMapper.updateByPrimaryKeySelective(updateRecord);
+        } catch (Exception e) {
+            LOG.error("更新EquipmentFileEvent sync_flag失败，ID: {}", id, e);
+            throw e;
+        }
+    }
 
     /**
      * 使用多线程迁移一批数据
@@ -537,6 +716,7 @@ public class EquipmentFileMigrationShjService {
         
         // 重置运行状态
         isRunning = false;
+        isEventRunning = false;
         LOG.info("迁移服务已关闭");
     }
 
@@ -546,13 +726,25 @@ public class EquipmentFileMigrationShjService {
      * 获取迁移服务状态
      */
     public String getMigrationStatus() {
+        StringBuilder status = new StringBuilder();
+        
         if (isRunning) {
-            return "迁移服务正在运行中";
-        } else if (isShuttingDown) {
-            return "迁移服务正在关闭中";
+            status.append("EquipmentFile迁移服务正在运行中; ");
         } else {
-            return "迁移服务已停止";
+            status.append("EquipmentFile迁移服务已停止; ");
         }
+        
+        if (isEventRunning) {
+            status.append("EquipmentFileEvent迁移服务正在运行中; ");
+        } else {
+            status.append("EquipmentFileEvent迁移服务已停止; ");
+        }
+        
+        if (isShuttingDown) {
+            status.append("服务正在关闭中");
+        }
+        
+        return status.toString();
     }
 
     /**

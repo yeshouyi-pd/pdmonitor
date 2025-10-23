@@ -39,6 +39,22 @@ public class EquipmentFileMigrationController {
 
 
     /**
+     * 开始EquipmentFileEvent迁移
+     * GET /api/migration/equipment-file-events
+     */
+    @GetMapping("/equipment-file-events")
+    public String startEventMigration() {
+        try {
+            LOG.info("收到EquipmentFileEvent迁移请求");
+            migrationService.migrateEventStart();
+            return "EquipmentFileEvent迁移完成";
+        } catch (Exception e) {
+            LOG.error("EquipmentFileEvent迁移失败", e);
+            return "EquipmentFileEvent迁移失败: " + e.getMessage();
+        }
+    }
+
+    /**
      * 获取迁移服务状态
      * GET /api/migration/status
      */
