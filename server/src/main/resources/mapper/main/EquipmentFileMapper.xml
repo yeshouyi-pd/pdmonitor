@@ -27,6 +27,7 @@
     <result column="ts" jdbcType="VARCHAR" property="ts" />
     <result column="txtlx" jdbcType="VARCHAR" property="txtlx" />
     <result column="wjmc" jdbcType="VARCHAR" property="wjmc" />
+    <result column="sync_flag" jdbcType="INTEGER" property="syncFlag" />
   </resultMap>
   <resultMap id="StatisticsResultMap" type="com.pd.server.main.dto.basewx.my.AlarmNumbersDto">
     <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
@@ -143,7 +144,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, sbbh, tplj, cjsj, create_time, nf, yf, rq, xs, fz, deptcode, xmbh, wjlx, jczl, 
-    ly, sm1, sm2, sm3, sm4, sm5, sm6, `type`, ts, txtlx, wjmc
+    ly, sm1, sm2, sm3, sm4, sm5, sm6, `type`, ts, txtlx, wjmc, sync_flag
   </sql>
   <select id="selectByExample" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultMap="BaseResultMap">
     select
@@ -237,16 +238,16 @@
       deptcode, xmbh, wjlx, 
       jczl, ly, sm1, sm2, 
       sm3, sm4, sm5, sm6, 
-      `type`, ts, txtlx, wjmc
-      )
+      `type`, ts, txtlx, wjmc, 
+      sync_flag)
     values (#{id,jdbcType=VARCHAR}, #{sbbh,jdbcType=VARCHAR}, #{tplj,jdbcType=VARCHAR}, 
       #{cjsj,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, #{nf,jdbcType=VARCHAR}, 
       #{yf,jdbcType=VARCHAR}, #{rq,jdbcType=VARCHAR}, #{xs,jdbcType=VARCHAR}, #{fz,jdbcType=VARCHAR}, 
       #{deptcode,jdbcType=VARCHAR}, #{xmbh,jdbcType=VARCHAR}, #{wjlx,jdbcType=VARCHAR}, 
       #{jczl,jdbcType=VARCHAR}, #{ly,jdbcType=VARCHAR}, #{sm1,jdbcType=VARCHAR}, #{sm2,jdbcType=VARCHAR}, 
       #{sm3,jdbcType=VARCHAR}, #{sm4,jdbcType=VARCHAR}, #{sm5,jdbcType=VARCHAR}, #{sm6,jdbcType=VARCHAR}, 
-      #{type,jdbcType=VARCHAR}, #{ts,jdbcType=VARCHAR}, #{txtlx,jdbcType=VARCHAR}, #{wjmc,jdbcType=VARCHAR}
-      )
+      #{type,jdbcType=VARCHAR}, #{ts,jdbcType=VARCHAR}, #{txtlx,jdbcType=VARCHAR}, #{wjmc,jdbcType=VARCHAR}, 
+      #{syncFlag,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.pd.server.main.domain.EquipmentFile">
     insert into equipment_file
@@ -326,6 +327,9 @@
       <if test="wjmc != null">
         wjmc,
       </if>
+      <if test="syncFlag != null">
+        sync_flag,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -402,6 +406,9 @@
       </if>
       <if test="wjmc != null">
         #{wjmc,jdbcType=VARCHAR},
+      </if>
+      <if test="syncFlag != null">
+        #{syncFlag,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -501,6 +508,9 @@
       <if test="record.wjmc != null">
         wjmc = #{record.wjmc,jdbcType=VARCHAR},
       </if>
+      <if test="record.syncFlag != null">
+        sync_flag = #{record.syncFlag,jdbcType=INTEGER},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -532,7 +542,8 @@
       `type` = #{record.type,jdbcType=VARCHAR},
       ts = #{record.ts,jdbcType=VARCHAR},
       txtlx = #{record.txtlx,jdbcType=VARCHAR},
-      wjmc = #{record.wjmc,jdbcType=VARCHAR}
+      wjmc = #{record.wjmc,jdbcType=VARCHAR},
+      sync_flag = #{record.syncFlag,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -612,6 +623,9 @@
       <if test="wjmc != null">
         wjmc = #{wjmc,jdbcType=VARCHAR},
       </if>
+      <if test="syncFlag != null">
+        sync_flag = #{syncFlag,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -640,7 +654,8 @@
       `type` = #{type,jdbcType=VARCHAR},
       ts = #{ts,jdbcType=VARCHAR},
       txtlx = #{txtlx,jdbcType=VARCHAR},
-      wjmc = #{wjmc,jdbcType=VARCHAR}
+      wjmc = #{wjmc,jdbcType=VARCHAR},
+      sync_flag = #{syncFlag,jdbcType=INTEGER}
     where id = #{id,jdbcType=VARCHAR}
   </update>
   <select id="lists" parameterType="com.pd.server.main.domain.EquipmentFileExample" resultMap="BaseResultMap">

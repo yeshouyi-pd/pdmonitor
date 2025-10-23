@@ -53,7 +53,7 @@ public class EquipmentFile {
 
     private String wjmc;
 
-    private String sbmc;//手机端需要
+    private Integer syncFlag;
 
     public String getId() {
         return id;
@@ -255,12 +255,12 @@ public class EquipmentFile {
         this.wjmc = wjmc;
     }
 
-    public String getSbmc() {
-        return sbmc;
+    public Integer getSyncFlag() {
+        return syncFlag;
     }
 
-    public void setSbmc(String sbmc) {
-        this.sbmc = sbmc;
+    public void setSyncFlag(Integer syncFlag) {
+        this.syncFlag = syncFlag;
     }
 
     @Override
@@ -294,6 +294,7 @@ public class EquipmentFile {
         sb.append(", ts=").append(ts);
         sb.append(", txtlx=").append(txtlx);
         sb.append(", wjmc=").append(wjmc);
+        sb.append(", syncFlag=").append(syncFlag);
         sb.append("]");
         return sb.toString();
     }
