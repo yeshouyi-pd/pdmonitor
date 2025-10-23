@@ -28,7 +28,7 @@ public class EquipmentFileMigrationController {
     public String startMigration() {
         try {
             LOG.info("收到迁移请求");
-            migrationService.migrateEquipmentFiles();
+            migrationService.migrateStart();
             return "迁移完成";
         } catch (Exception e) {
             LOG.error("迁移失败", e);
@@ -36,19 +36,19 @@ public class EquipmentFileMigrationController {
         }
     }
 
+
+
     /**
-     * 测试迁移功能
-     * GET /api/migration/test
+     * 获取迁移服务状态
+     * GET /api/migration/status
      */
-    @GetMapping("/test")
-    public String testMigration() {
+    @GetMapping("/status")
+    public String getStatus() {
         try {
-            LOG.info("收到测试迁移请求");
-            migrationService.testMigration();
-            return "测试迁移完成";
+            return migrationService.getMigrationStatus();
         } catch (Exception e) {
-            LOG.error("测试迁移失败", e);
-            return "测试迁移失败: " + e.getMessage();
+            LOG.error("获取服务状态失败", e);
+            return "获取服务状态失败: " + e.getMessage();
         }
     }
 

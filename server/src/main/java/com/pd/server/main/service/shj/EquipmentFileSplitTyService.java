@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
+/**
+ * 接口信息分发 拖曳
+ */
 @Service
 public class EquipmentFileSplitTyService {
 
