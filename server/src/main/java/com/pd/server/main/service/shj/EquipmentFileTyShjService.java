@@ -160,6 +160,7 @@ public class EquipmentFileTyShjService extends AbstractScanRequest{
                     tyEvent.setTs(entity.getTs());
                     tyEvent.setBz(entity.getId());
                     tyEvent.setSm(entity.getSm2());
+                    entity.setSm6(obj.getString("sd"));//参分表参数传递
                     tyEvent.setSm1(obj.getString("sd"));
                     equipmentTyEventMapperStatic.insert(tyEvent);
                 }
