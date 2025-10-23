@@ -27,7 +27,7 @@ public class EquipmentTyEvent {
 
     private String sm3;
 
-    private String gps;
+    private Integer syncFlag;
 
     public String getId() {
         return id;
@@ -133,12 +133,12 @@ public class EquipmentTyEvent {
         this.sm3 = sm3;
     }
 
-    public String getGps() {
-        return gps;
+    public Integer getSyncFlag() {
+        return syncFlag;
     }
 
-    public void setGps(String gps) {
-        this.gps = gps;
+    public void setSyncFlag(Integer syncFlag) {
+        this.syncFlag = syncFlag;
     }
 
     @Override
@@ -160,6 +160,7 @@ public class EquipmentTyEvent {
         sb.append(", sm1=").append(sm1);
         sb.append(", sm2=").append(sm2);
         sb.append(", sm3=").append(sm3);
+        sb.append(", syncFlag=").append(syncFlag);
         sb.append("]");
         return sb.toString();
     }

@@ -15,7 +15,7 @@
     <result column="sm1" jdbcType="VARCHAR" property="sm1" />
     <result column="sm2" jdbcType="VARCHAR" property="sm2" />
     <result column="sm3" jdbcType="VARCHAR" property="sm3" />
-    <result column="gps" jdbcType="VARCHAR" property="gps" />
+    <result column="sync_flag" jdbcType="INTEGER" property="syncFlag" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -76,7 +76,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, sbbh, kssj, jssj, rq, ts, deptcode, xmbh, bz, sm, sm1, sm2, sm3
+    id, sbbh, kssj, jssj, rq, ts, deptcode, xmbh, bz, sm, sm1, sm2, sm3, sync_flag
   </sql>
   <select id="selectByExampleExport" parameterType="com.pd.server.main.domain.EquipmentTyEventExample" resultMap="BaseResultMap">
     select a.*,b.sm2 as gps
@@ -191,11 +191,11 @@
     insert into equipment_ty_event (id, sbbh, kssj, 
       jssj, rq, ts, deptcode, 
       xmbh, bz, sm, sm1, 
-      sm2, sm3)
+      sm2, sm3, sync_flag)
     values (#{id,jdbcType=VARCHAR}, #{sbbh,jdbcType=VARCHAR}, #{kssj,jdbcType=VARCHAR}, 
       #{jssj,jdbcType=VARCHAR}, #{rq,jdbcType=VARCHAR}, #{ts,jdbcType=VARCHAR}, #{deptcode,jdbcType=VARCHAR}, 
       #{xmbh,jdbcType=VARCHAR}, #{bz,jdbcType=VARCHAR}, #{sm,jdbcType=VARCHAR}, #{sm1,jdbcType=VARCHAR}, 
-      #{sm2,jdbcType=VARCHAR}, #{sm3,jdbcType=VARCHAR})
+      #{sm2,jdbcType=VARCHAR}, #{sm3,jdbcType=VARCHAR}, #{syncFlag,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.pd.server.main.domain.EquipmentTyEvent">
     insert into equipment_ty_event
@@ -239,6 +239,9 @@
       <if test="sm3 != null">
         sm3,
       </if>
+      <if test="syncFlag != null">
+        sync_flag,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -279,6 +282,9 @@
       </if>
       <if test="sm3 != null">
         #{sm3,jdbcType=VARCHAR},
+      </if>
+      <if test="syncFlag != null">
+        #{syncFlag,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -330,6 +336,9 @@
       <if test="record.sm3 != null">
         sm3 = #{record.sm3,jdbcType=VARCHAR},
       </if>
+      <if test="record.syncFlag != null">
+        sync_flag = #{record.syncFlag,jdbcType=INTEGER},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -349,7 +358,8 @@
       sm = #{record.sm,jdbcType=VARCHAR},
       sm1 = #{record.sm1,jdbcType=VARCHAR},
       sm2 = #{record.sm2,jdbcType=VARCHAR},
-      sm3 = #{record.sm3,jdbcType=VARCHAR}
+      sm3 = #{record.sm3,jdbcType=VARCHAR},
+      sync_flag = #{record.syncFlag,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -393,6 +403,9 @@
       <if test="sm3 != null">
         sm3 = #{sm3,jdbcType=VARCHAR},
       </if>
+      <if test="syncFlag != null">
+        sync_flag = #{syncFlag,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -409,7 +422,8 @@
       sm = #{sm,jdbcType=VARCHAR},
       sm1 = #{sm1,jdbcType=VARCHAR},
       sm2 = #{sm2,jdbcType=VARCHAR},
-      sm3 = #{sm3,jdbcType=VARCHAR}
+      sm3 = #{sm3,jdbcType=VARCHAR},
+      sync_flag = #{syncFlag,jdbcType=INTEGER}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

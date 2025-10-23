@@ -1013,6 +1013,66 @@ public class EquipmentTyEventExample {
             addCriterion("sm3 not between", value1, value2, "sm3");
             return (Criteria) this;
         }
+
+        public Criteria andSyncFlagIsNull() {
+            addCriterion("sync_flag is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSyncFlagIsNotNull() {
+            addCriterion("sync_flag is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSyncFlagEqualTo(Integer value) {
+            addCriterion("sync_flag =", value, "syncFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andSyncFlagNotEqualTo(Integer value) {
+            addCriterion("sync_flag <>", value, "syncFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andSyncFlagGreaterThan(Integer value) {
+            addCriterion("sync_flag >", value, "syncFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andSyncFlagGreaterThanOrEqualTo(Integer value) {
+            addCriterion("sync_flag >=", value, "syncFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andSyncFlagLessThan(Integer value) {
+            addCriterion("sync_flag <", value, "syncFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andSyncFlagLessThanOrEqualTo(Integer value) {
+            addCriterion("sync_flag <=", value, "syncFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andSyncFlagIn(List<Integer> values) {
+            addCriterion("sync_flag in", values, "syncFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andSyncFlagNotIn(List<Integer> values) {
+            addCriterion("sync_flag not in", values, "syncFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andSyncFlagBetween(Integer value1, Integer value2) {
+            addCriterion("sync_flag between", value1, value2, "syncFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andSyncFlagNotBetween(Integer value1, Integer value2) {
+            addCriterion("sync_flag not between", value1, value2, "syncFlag");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {
