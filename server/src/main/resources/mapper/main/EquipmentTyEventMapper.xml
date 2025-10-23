@@ -15,6 +15,7 @@
     <result column="sm1" jdbcType="VARCHAR" property="sm1" />
     <result column="sm2" jdbcType="VARCHAR" property="sm2" />
     <result column="sm3" jdbcType="VARCHAR" property="sm3" />
+    <result column="gps" jdbcType="VARCHAR" property="gps" />
     <result column="sync_flag" jdbcType="INTEGER" property="syncFlag" />
   </resultMap>
   <sql id="Example_Where_Clause">

@@ -27,6 +27,8 @@ public class EquipmentTyEvent {
 
     private String sm3;
 
+    private String gps;
+
     private Integer syncFlag;
 
     public String getId() {
@@ -139,6 +141,14 @@ public class EquipmentTyEvent {
 
     public void setSyncFlag(Integer syncFlag) {
         this.syncFlag = syncFlag;
+    }
+
+    public String getGps() {
+        return gps;
+    }
+
+    public void setGps(String gps) {
+        this.gps = gps;
     }
 
     @Override
