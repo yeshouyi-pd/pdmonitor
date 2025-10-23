@@ -1,9 +1,12 @@
-package com.pd.server.main.controller;
+package com.pd.monitor.controller;
 
 import com.pd.server.main.service.shj.EquipmentFileMigrationShjService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
@@ -12,7 +15,7 @@ import javax.annotation.Resource;
  * 提供迁移功能的REST API接口
  */
 @RestController
-@RequestMapping("/api/migration")
+@RequestMapping("/migration")
 public class EquipmentFileMigrationController {
 
     private static final Logger LOG = LoggerFactory.getLogger(EquipmentFileMigrationController.class);
