@@ -1,0 +1,539 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pd.server.main.mapper.EquipmentFilePTxtMapper">
+  <resultMap id="BaseResultMap" type="com.pd.server.main.domain.EquipmentFilePTxt">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="bid" jdbcType="VARCHAR" property="bid" />
+    <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
+    <result column="tplj" jdbcType="VARCHAR" property="tplj" />
+    <result column="cjsj" jdbcType="TIMESTAMP" property="cjsj" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="nf" jdbcType="VARCHAR" property="nf" />
+    <result column="yf" jdbcType="VARCHAR" property="yf" />
+    <result column="rq" jdbcType="VARCHAR" property="rq" />
+    <result column="xs" jdbcType="VARCHAR" property="xs" />
+    <result column="fz" jdbcType="VARCHAR" property="fz" />
+    <result column="deptcode" jdbcType="VARCHAR" property="deptcode" />
+    <result column="xmbh" jdbcType="VARCHAR" property="xmbh" />
+    <result column="wjlx" jdbcType="VARCHAR" property="wjlx" />
+    <result column="jczl" jdbcType="VARCHAR" property="jczl" />
+    <result column="ly" jdbcType="VARCHAR" property="ly" />
+    <result column="sm1" jdbcType="VARCHAR" property="sm1" />
+    <result column="sm2" jdbcType="VARCHAR" property="sm2" />
+    <result column="sm3" jdbcType="VARCHAR" property="sm3" />
+    <result column="sm4" jdbcType="VARCHAR" property="sm4" />
+    <result column="sm5" jdbcType="VARCHAR" property="sm5" />
+    <result column="sm6" jdbcType="VARCHAR" property="sm6" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="ts" jdbcType="VARCHAR" property="ts" />
+    <result column="txtlx" jdbcType="VARCHAR" property="txtlx" />
+    <result column="wjmc" jdbcType="VARCHAR" property="wjmc" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, bid, sbbh, tplj, cjsj, create_time, nf, yf, rq, xs, fz, deptcode, xmbh, wjlx, 
+    jczl, ly, sm1, sm2, sm3, sm4, sm5, sm6, `type`, ts, txtlx, wjmc
+  </sql>
+  <select id="selectByExample" parameterType="com.pd.server.main.domain.EquipmentFilePTxtExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from equipment_file_p_txt
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from equipment_file_p_txt
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from equipment_file_p_txt
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pd.server.main.domain.EquipmentFilePTxtExample">
+    delete from equipment_file_p_txt
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pd.server.main.domain.EquipmentFilePTxt">
+    insert into equipment_file_p_txt (id, bid, sbbh, 
+      tplj, cjsj, create_time, 
+      nf, yf, rq, xs, 
+      fz, deptcode, xmbh, 
+      wjlx, jczl, ly, sm1, 
+      sm2, sm3, sm4, sm5, 
+      sm6, `type`, ts, txtlx, 
+      wjmc)
+    values (#{id,jdbcType=BIGINT}, #{bid,jdbcType=VARCHAR}, #{sbbh,jdbcType=VARCHAR}, 
+      #{tplj,jdbcType=VARCHAR}, #{cjsj,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{nf,jdbcType=VARCHAR}, #{yf,jdbcType=VARCHAR}, #{rq,jdbcType=VARCHAR}, #{xs,jdbcType=VARCHAR}, 
+      #{fz,jdbcType=VARCHAR}, #{deptcode,jdbcType=VARCHAR}, #{xmbh,jdbcType=VARCHAR}, 
+      #{wjlx,jdbcType=VARCHAR}, #{jczl,jdbcType=VARCHAR}, #{ly,jdbcType=VARCHAR}, #{sm1,jdbcType=VARCHAR}, 
+      #{sm2,jdbcType=VARCHAR}, #{sm3,jdbcType=VARCHAR}, #{sm4,jdbcType=VARCHAR}, #{sm5,jdbcType=VARCHAR}, 
+      #{sm6,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{ts,jdbcType=VARCHAR}, #{txtlx,jdbcType=VARCHAR}, 
+      #{wjmc,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pd.server.main.domain.EquipmentFilePTxt">
+    insert into equipment_file_p_txt
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="bid != null">
+        bid,
+      </if>
+      <if test="sbbh != null">
+        sbbh,
+      </if>
+      <if test="tplj != null">
+        tplj,
+      </if>
+      <if test="cjsj != null">
+        cjsj,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="nf != null">
+        nf,
+      </if>
+      <if test="yf != null">
+        yf,
+      </if>
+      <if test="rq != null">
+        rq,
+      </if>
+      <if test="xs != null">
+        xs,
+      </if>
+      <if test="fz != null">
+        fz,
+      </if>
+      <if test="deptcode != null">
+        deptcode,
+      </if>
+      <if test="xmbh != null">
+        xmbh,
+      </if>
+      <if test="wjlx != null">
+        wjlx,
+      </if>
+      <if test="jczl != null">
+        jczl,
+      </if>
+      <if test="ly != null">
+        ly,
+      </if>
+      <if test="sm1 != null">
+        sm1,
+      </if>
+      <if test="sm2 != null">
+        sm2,
+      </if>
+      <if test="sm3 != null">
+        sm3,
+      </if>
+      <if test="sm4 != null">
+        sm4,
+      </if>
+      <if test="sm5 != null">
+        sm5,
+      </if>
+      <if test="sm6 != null">
+        sm6,
+      </if>
+      <if test="type != null">
+        `type`,
+      </if>
+      <if test="ts != null">
+        ts,
+      </if>
+      <if test="txtlx != null">
+        txtlx,
+      </if>
+      <if test="wjmc != null">
+        wjmc,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="bid != null">
+        #{bid,jdbcType=VARCHAR},
+      </if>
+      <if test="sbbh != null">
+        #{sbbh,jdbcType=VARCHAR},
+      </if>
+      <if test="tplj != null">
+        #{tplj,jdbcType=VARCHAR},
+      </if>
+      <if test="cjsj != null">
+        #{cjsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="nf != null">
+        #{nf,jdbcType=VARCHAR},
+      </if>
+      <if test="yf != null">
+        #{yf,jdbcType=VARCHAR},
+      </if>
+      <if test="rq != null">
+        #{rq,jdbcType=VARCHAR},
+      </if>
+      <if test="xs != null">
+        #{xs,jdbcType=VARCHAR},
+      </if>
+      <if test="fz != null">
+        #{fz,jdbcType=VARCHAR},
+      </if>
+      <if test="deptcode != null">
+        #{deptcode,jdbcType=VARCHAR},
+      </if>
+      <if test="xmbh != null">
+        #{xmbh,jdbcType=VARCHAR},
+      </if>
+      <if test="wjlx != null">
+        #{wjlx,jdbcType=VARCHAR},
+      </if>
+      <if test="jczl != null">
+        #{jczl,jdbcType=VARCHAR},
+      </if>
+      <if test="ly != null">
+        #{ly,jdbcType=VARCHAR},
+      </if>
+      <if test="sm1 != null">
+        #{sm1,jdbcType=VARCHAR},
+      </if>
+      <if test="sm2 != null">
+        #{sm2,jdbcType=VARCHAR},
+      </if>
+      <if test="sm3 != null">
+        #{sm3,jdbcType=VARCHAR},
+      </if>
+      <if test="sm4 != null">
+        #{sm4,jdbcType=VARCHAR},
+      </if>
+      <if test="sm5 != null">
+        #{sm5,jdbcType=VARCHAR},
+      </if>
+      <if test="sm6 != null">
+        #{sm6,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="ts != null">
+        #{ts,jdbcType=VARCHAR},
+      </if>
+      <if test="txtlx != null">
+        #{txtlx,jdbcType=VARCHAR},
+      </if>
+      <if test="wjmc != null">
+        #{wjmc,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pd.server.main.domain.EquipmentFilePTxtExample" resultType="java.lang.Long">
+    select count(*) from equipment_file_p_txt
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update equipment_file_p_txt
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.bid != null">
+        bid = #{record.bid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sbbh != null">
+        sbbh = #{record.sbbh,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tplj != null">
+        tplj = #{record.tplj,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cjsj != null">
+        cjsj = #{record.cjsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.nf != null">
+        nf = #{record.nf,jdbcType=VARCHAR},
+      </if>
+      <if test="record.yf != null">
+        yf = #{record.yf,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rq != null">
+        rq = #{record.rq,jdbcType=VARCHAR},
+      </if>
+      <if test="record.xs != null">
+        xs = #{record.xs,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fz != null">
+        fz = #{record.fz,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deptcode != null">
+        deptcode = #{record.deptcode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.xmbh != null">
+        xmbh = #{record.xmbh,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wjlx != null">
+        wjlx = #{record.wjlx,jdbcType=VARCHAR},
+      </if>
+      <if test="record.jczl != null">
+        jczl = #{record.jczl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ly != null">
+        ly = #{record.ly,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sm1 != null">
+        sm1 = #{record.sm1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sm2 != null">
+        sm2 = #{record.sm2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sm3 != null">
+        sm3 = #{record.sm3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sm4 != null">
+        sm4 = #{record.sm4,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sm5 != null">
+        sm5 = #{record.sm5,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sm6 != null">
+        sm6 = #{record.sm6,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null">
+        `type` = #{record.type,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ts != null">
+        ts = #{record.ts,jdbcType=VARCHAR},
+      </if>
+      <if test="record.txtlx != null">
+        txtlx = #{record.txtlx,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wjmc != null">
+        wjmc = #{record.wjmc,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update equipment_file_p_txt
+    set id = #{record.id,jdbcType=BIGINT},
+      bid = #{record.bid,jdbcType=VARCHAR},
+      sbbh = #{record.sbbh,jdbcType=VARCHAR},
+      tplj = #{record.tplj,jdbcType=VARCHAR},
+      cjsj = #{record.cjsj,jdbcType=TIMESTAMP},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      nf = #{record.nf,jdbcType=VARCHAR},
+      yf = #{record.yf,jdbcType=VARCHAR},
+      rq = #{record.rq,jdbcType=VARCHAR},
+      xs = #{record.xs,jdbcType=VARCHAR},
+      fz = #{record.fz,jdbcType=VARCHAR},
+      deptcode = #{record.deptcode,jdbcType=VARCHAR},
+      xmbh = #{record.xmbh,jdbcType=VARCHAR},
+      wjlx = #{record.wjlx,jdbcType=VARCHAR},
+      jczl = #{record.jczl,jdbcType=VARCHAR},
+      ly = #{record.ly,jdbcType=VARCHAR},
+      sm1 = #{record.sm1,jdbcType=VARCHAR},
+      sm2 = #{record.sm2,jdbcType=VARCHAR},
+      sm3 = #{record.sm3,jdbcType=VARCHAR},
+      sm4 = #{record.sm4,jdbcType=VARCHAR},
+      sm5 = #{record.sm5,jdbcType=VARCHAR},
+      sm6 = #{record.sm6,jdbcType=VARCHAR},
+      `type` = #{record.type,jdbcType=VARCHAR},
+      ts = #{record.ts,jdbcType=VARCHAR},
+      txtlx = #{record.txtlx,jdbcType=VARCHAR},
+      wjmc = #{record.wjmc,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pd.server.main.domain.EquipmentFilePTxt">
+    update equipment_file_p_txt
+    <set>
+      <if test="bid != null">
+        bid = #{bid,jdbcType=VARCHAR},
+      </if>
+      <if test="sbbh != null">
+        sbbh = #{sbbh,jdbcType=VARCHAR},
+      </if>
+      <if test="tplj != null">
+        tplj = #{tplj,jdbcType=VARCHAR},
+      </if>
+      <if test="cjsj != null">
+        cjsj = #{cjsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="nf != null">
+        nf = #{nf,jdbcType=VARCHAR},
+      </if>
+      <if test="yf != null">
+        yf = #{yf,jdbcType=VARCHAR},
+      </if>
+      <if test="rq != null">
+        rq = #{rq,jdbcType=VARCHAR},
+      </if>
+      <if test="xs != null">
+        xs = #{xs,jdbcType=VARCHAR},
+      </if>
+      <if test="fz != null">
+        fz = #{fz,jdbcType=VARCHAR},
+      </if>
+      <if test="deptcode != null">
+        deptcode = #{deptcode,jdbcType=VARCHAR},
+      </if>
+      <if test="xmbh != null">
+        xmbh = #{xmbh,jdbcType=VARCHAR},
+      </if>
+      <if test="wjlx != null">
+        wjlx = #{wjlx,jdbcType=VARCHAR},
+      </if>
+      <if test="jczl != null">
+        jczl = #{jczl,jdbcType=VARCHAR},
+      </if>
+      <if test="ly != null">
+        ly = #{ly,jdbcType=VARCHAR},
+      </if>
+      <if test="sm1 != null">
+        sm1 = #{sm1,jdbcType=VARCHAR},
+      </if>
+      <if test="sm2 != null">
+        sm2 = #{sm2,jdbcType=VARCHAR},
+      </if>
+      <if test="sm3 != null">
+        sm3 = #{sm3,jdbcType=VARCHAR},
+      </if>
+      <if test="sm4 != null">
+        sm4 = #{sm4,jdbcType=VARCHAR},
+      </if>
+      <if test="sm5 != null">
+        sm5 = #{sm5,jdbcType=VARCHAR},
+      </if>
+      <if test="sm6 != null">
+        sm6 = #{sm6,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        `type` = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="ts != null">
+        ts = #{ts,jdbcType=VARCHAR},
+      </if>
+      <if test="txtlx != null">
+        txtlx = #{txtlx,jdbcType=VARCHAR},
+      </if>
+      <if test="wjmc != null">
+        wjmc = #{wjmc,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pd.server.main.domain.EquipmentFilePTxt">
+    update equipment_file_p_txt
+    set bid = #{bid,jdbcType=VARCHAR},
+      sbbh = #{sbbh,jdbcType=VARCHAR},
+      tplj = #{tplj,jdbcType=VARCHAR},
+      cjsj = #{cjsj,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      nf = #{nf,jdbcType=VARCHAR},
+      yf = #{yf,jdbcType=VARCHAR},
+      rq = #{rq,jdbcType=VARCHAR},
+      xs = #{xs,jdbcType=VARCHAR},
+      fz = #{fz,jdbcType=VARCHAR},
+      deptcode = #{deptcode,jdbcType=VARCHAR},
+      xmbh = #{xmbh,jdbcType=VARCHAR},
+      wjlx = #{wjlx,jdbcType=VARCHAR},
+      jczl = #{jczl,jdbcType=VARCHAR},
+      ly = #{ly,jdbcType=VARCHAR},
+      sm1 = #{sm1,jdbcType=VARCHAR},
+      sm2 = #{sm2,jdbcType=VARCHAR},
+      sm3 = #{sm3,jdbcType=VARCHAR},
+      sm4 = #{sm4,jdbcType=VARCHAR},
+      sm5 = #{sm5,jdbcType=VARCHAR},
+      sm6 = #{sm6,jdbcType=VARCHAR},
+      `type` = #{type,jdbcType=VARCHAR},
+      ts = #{ts,jdbcType=VARCHAR},
+      txtlx = #{txtlx,jdbcType=VARCHAR},
+      wjmc = #{wjmc,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
