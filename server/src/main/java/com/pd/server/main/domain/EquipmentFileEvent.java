@@ -31,6 +31,8 @@ public class EquipmentFileEvent {
 
     private String sm3;
 
+    private Integer syncFlag;
+
     public String getId() {
         return id;
     }
@@ -151,6 +153,14 @@ public class EquipmentFileEvent {
         this.sm3 = sm3;
     }
 
+    public Integer getSyncFlag() {
+        return syncFlag;
+    }
+
+    public void setSyncFlag(Integer syncFlag) {
+        this.syncFlag = syncFlag;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -172,6 +182,7 @@ public class EquipmentFileEvent {
         sb.append(", sm1=").append(sm1);
         sb.append(", sm2=").append(sm2);
         sb.append(", sm3=").append(sm3);
+        sb.append(", syncFlag=").append(syncFlag);
         sb.append("]");
         return sb.toString();
     }
