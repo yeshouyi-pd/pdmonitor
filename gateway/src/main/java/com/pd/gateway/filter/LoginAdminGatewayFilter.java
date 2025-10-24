@@ -56,6 +56,14 @@ public class LoginAdminGatewayFilter implements GatewayFilter, Ordered {
                 || path.contains("/monitor/admin/currentMeter/getAllDataByTime")
                 || path.contains("/monitor/admin/equipmentFileToday/statisticsAlarmNumsByTimeSum")
                 || path.contains("/system/admin/attr/findByAttrKey/restartinterval")
+                || path.contains("/monitor/migration/equipment-files")
+                || path.contains("/monitor/migration/equipment-file-events")
+                || path.contains("/monitor/migration/equipment-files/status")
+                || path.contains("/monitor/migration/equipment-files/statistics")
+                || path.contains("/migration-ty/migration/equipment-files")
+                || path.contains("/migration-ty/migration/equipment-file-events")
+                || path.contains("/migration-ty/migration/equipment-files/status")
+                || path.contains("/migration-ty/migration/equipment-files/statistics")
         ){
             LOG.info("不需要控台登录验证：{}", path);
             return chain.filter(exchange);

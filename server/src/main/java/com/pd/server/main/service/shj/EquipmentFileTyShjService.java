@@ -171,6 +171,7 @@ public class EquipmentFileTyShjService extends AbstractScanRequest{
                     tyEvent.setSm(entity.getSm2());
                     entity.setSm6(obj.getString("sd"));//参分表参数传递
                     tyEvent.setSm1(obj.getString("sd"));
+                    tyEvent.setSyncFlag(1);
                     equipmentTyEventMapperStatic.insert(tyEvent);
                 }
                 /**
@@ -187,7 +188,7 @@ public class EquipmentFileTyShjService extends AbstractScanRequest{
                 });
                 entity.setSm6(null);
                 //正式更新需要加上下面一行
-                //entity.setSyncFlag(1);
+                entity.setSyncFlag(1);
                 equipmentFileTyMapperStatic.insert(entity);
                 todayMapperStatic.insertEquipTy(entity);
                 data="保存成功";

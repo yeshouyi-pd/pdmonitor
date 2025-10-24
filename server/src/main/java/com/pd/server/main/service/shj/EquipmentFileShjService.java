@@ -217,6 +217,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                     fileEvent.setJtnr(entity.getSm1());
                     fileEvent.setDeptcode(deptcode);
                     fileEvent.setEquipmentFileId(entity.getId());
+                    fileEvent.setSyncFlag(1);
                     equipmentFileEventMapperStatic.insertSelective(fileEvent);
                     staticAzimuthAngle(sbbh,deptcode,fileEvent.getRq(),fileEvent.getJtnr());
                     //南京设备对接无人机
@@ -233,6 +234,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                         fileEvent.setJtnr(entity.getSm1());
                         fileEvent.setDeptcode(deptcode);
                         fileEvent.setEquipmentFileId(entity.getId());
+                        fileEvent.setSyncFlag(1);
                         equipmentFileEventMapperStatic.insertSelective(fileEvent);
                         staticAzimuthAngle(sbbh,deptcode,fileEvent.getRq(),fileEvent.getJtnr());
                         //南京设备对接无人机
@@ -269,7 +271,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                             }
                         });
                         //正式更新需要加上下面一行
-                        //beforeEntity.setSyncFlag(1);
+                        beforeEntity.setSyncFlag(1);
                         equipmentFileMapperStatic.insert(beforeEntity);
                         todayMapperStatic.insertEquipFile(beforeEntity);
                         redisTstaticemplate.opsForValue().set(sbbh+"WB", JSONObject.toJSONString(entity));
@@ -295,7 +297,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                                     }
                                 });
                                 //正式更新需要加上下面一行
-                                //beforeEntity.setSyncFlag(1);
+                                beforeEntity.setSyncFlag(1);
                                 equipmentFileMapperStatic.insert(beforeEntity);
                                 todayMapperStatic.insertEquipFile(beforeEntity);
                                 //白海豚写剪切视频的事件，李响读了去剪切视频
@@ -330,7 +332,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                     }
                 });
                 //正式更新需要加上下面一行
-                //beforeEntity.setSyncFlag(1);
+                entity.setSyncFlag(1);
                 equipmentFileMapperStatic.insert(entity);
                 todayMapperStatic.insertEquipFile(entity);
                 data="保存成功";
