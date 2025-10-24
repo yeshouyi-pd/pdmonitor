@@ -1,6 +1,7 @@
 package com.pd.server.main.service.shj;
 
 
+import com.github.pagehelper.PageHelper;
 import com.pd.server.main.domain.*;
 import com.pd.server.main.mapper.*;
 import org.apache.commons.lang.StringUtils;
@@ -153,10 +154,8 @@ public class EquipmentFileMigrationShjService {
                 EquipmentFileExample example = new EquipmentFileExample();
                 EquipmentFileExample.Criteria criteria = example.createCriteria();
                 criteria.andSyncFlagEqualTo(0);
-                example.setOrderByClause(" cjsj ASC limit 5000");
-
                 // 使用selectByExample方法查询前5000条
-                List<EquipmentFile> result = equipmentFileMapper.selectByExample(example);
+                List<EquipmentFile> result = equipmentFileMapper.limitExample(example);
 
                 if (result.isEmpty()) {
                     LOG.info("没有更多数据需要迁移，迁移完成");
@@ -203,10 +202,8 @@ public class EquipmentFileMigrationShjService {
                 EquipmentFileEventExample example = new EquipmentFileEventExample();
                 EquipmentFileEventExample.Criteria criteria = example.createCriteria();
                 criteria.andSyncFlagEqualTo(0);
-                example.setOrderByClause("limit 5000");
-
                 // 使用selectByExample方法查询前5000条
-                List<EquipmentFileEvent> result = equipmentFileEventMapper.selectByExample(example);
+                List<EquipmentFileEvent> result = equipmentFileEventMapper.limitExample(example);
 
                 if (result.isEmpty()) {
                     LOG.info("没有更多EquipmentFileEvent数据需要迁移，迁移完成");

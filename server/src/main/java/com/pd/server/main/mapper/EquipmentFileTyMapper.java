@@ -38,4 +38,6 @@ public interface EquipmentFileTyMapper {
     List<GpsKVDto> selectGpsByExample(EquipmentFileTyExample example);
 
     List<GpsKVDto> selectGpsByDto(@Param("record") EquipmentFileTyDto record);
+
+    List<EquipmentFileTy> limitExample(EquipmentFileTyExample example);
 }

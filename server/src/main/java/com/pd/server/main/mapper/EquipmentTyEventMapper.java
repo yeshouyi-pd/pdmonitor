@@ -39,4 +39,6 @@ public interface EquipmentTyEventMapper {
     int updateByPrimaryKeySelective(EquipmentTyEvent record);
 
     int updateByPrimaryKey(EquipmentTyEvent record);
+
+    List<EquipmentTyEvent> limitExample(EquipmentTyEventExample example);
 }

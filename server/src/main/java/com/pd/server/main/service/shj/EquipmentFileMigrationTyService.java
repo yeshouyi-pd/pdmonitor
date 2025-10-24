@@ -156,10 +156,8 @@ public class EquipmentFileMigrationTyService {
                 EquipmentFileTyExample example = new EquipmentFileTyExample();
                 EquipmentFileTyExample.Criteria criteria = example.createCriteria();
                 criteria.andSyncFlagEqualTo(0);
-                example.setOrderByClause(" cjsj ASC limit 5000");
-
                 // 使用selectByExample方法查询前5000条
-                List<EquipmentFileTy> result = equipmentFileTyMapper.selectByExample(example);
+                List<EquipmentFileTy> result = equipmentFileTyMapper.limitExample(example);
 
                 if (result.isEmpty()) {
                     LOG.info("没有更多数据需要迁移，迁移完成");
@@ -206,10 +204,9 @@ public class EquipmentFileMigrationTyService {
                 EquipmentTyEventExample example = new EquipmentTyEventExample();
                 EquipmentTyEventExample.Criteria criteria = example.createCriteria();
                 criteria.andSyncFlagEqualTo(0);
-                example.setOrderByClause("limit 5000");
 
                 // 使用selectByExample方法查询前5000条
-                List<EquipmentTyEvent> result = equipmentTyEventMapper.selectByExample(example);
+                List<EquipmentTyEvent> result = equipmentTyEventMapper.limitExample(example);
 
                 if (result.isEmpty()) {
                     LOG.info("没有更多EquipmentFileEvent数据需要迁移，迁移完成");
@@ -257,7 +254,7 @@ public class EquipmentFileMigrationTyService {
         
         try {
             // 等待所有线程完成，最多等待10秒
-            boolean finished = latch.await(10, TimeUnit.SECONDS);
+            boolean finished = latch.await(1, TimeUnit.SECONDS);
             if (!finished) {
                 LOG.warn("EquipmentFileEvent迁移超时，部分数据可能未完成迁移");
             }
@@ -358,7 +355,7 @@ public class EquipmentFileMigrationTyService {
         
         try {
             // 等待所有线程完成，最多等待30分钟
-            boolean finished = latch.await(10, TimeUnit.SECONDS);
+            boolean finished = latch.await(1, TimeUnit.SECONDS);
             if (!finished) {
                 LOG.warn("迁移超时，部分数据可能未完成迁移");
             }

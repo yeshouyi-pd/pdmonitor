@@ -45,4 +45,5 @@ public interface EquipmentFileEventMapper {
 
     List<EquipmentFileEvent> getEquipmentEventByDeptdate(EquipmentFileEventExample example);
 
+    List<EquipmentFileEvent> limitExample(EquipmentFileEventExample example);
 }

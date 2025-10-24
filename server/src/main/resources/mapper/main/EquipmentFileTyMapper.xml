@@ -583,4 +583,20 @@
     </if>
     order by cjsj DESC
   </select>
+
+  <select id="limitExample" parameterType="com.pd.server.main.domain.EquipmentFileTyExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from equipment_file_ty
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    limit 5000
+  </select>
 </mapper>

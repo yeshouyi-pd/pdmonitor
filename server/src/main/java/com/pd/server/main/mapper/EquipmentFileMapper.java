@@ -88,4 +88,6 @@ public interface EquipmentFileMapper {
     List<EquipmenInfo> getthisDeptEquipmentday(EquipmentFileExample equipmentFileExample);
 
     List<EquipmentMainListDto> getthisDeptEquipmentinfoday(EquipmentFileExample equipmentFileExample);
+
+    List<EquipmentFile> limitExample(EquipmentFileExample example);
 }
