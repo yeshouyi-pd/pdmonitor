@@ -64,15 +64,7 @@ public class EquipmentFileMigrationShjService {
     @Resource
     private EquipmentFilePWavMapper equipmentFilePWavMapper;
 
-    /**
-     * 线程池 - 建议使用10个线程
-     */
-    private final ExecutorService executorPService = Executors.newFixedThreadPool(10);
-    
-    /**
-     * 迁移状态标志
-     */
-    private volatile boolean isShuttingDown = false;
+
     
     /**
      * 迁移运行状态标志
@@ -95,7 +87,7 @@ public class EquipmentFileMigrationShjService {
         }
         
         LOG.info("启动迁移服务...");
-        isShuttingDown = false;
+
         isRunning = true;
         
         try {
@@ -118,7 +110,7 @@ public class EquipmentFileMigrationShjService {
         }
         
         LOG.info("启动EquipmentFileEvent迁移服务...");
-        isShuttingDown = false;
+
         isEventRunning = true;
         
         try {
@@ -144,12 +136,6 @@ public class EquipmentFileMigrationShjService {
 
         try {
             while (true) {
-                // 检查是否正在关闭
-                if (isShuttingDown) {
-                    LOG.info("检测到关闭信号，停止迁移");
-                    break;
-                }
-                
                 // 查询待迁移的数据
                 EquipmentFileExample example = new EquipmentFileExample();
                 EquipmentFileExample.Criteria criteria = example.createCriteria();
@@ -162,9 +148,10 @@ public class EquipmentFileMigrationShjService {
                     break;
                 }
                 LOG.info("查询到{}条数据，开始迁移...", result.size());
-                
-                // 使用多线程进行迁移，使用事务确保数据一致性
-                migrateBatchWithMultiThread(result);
+
+                for (EquipmentFile equipmentFile : result) {
+                    migrateSingleEquipmentFile(equipmentFile);
+                }
                 
                 // 如果结果少于5000条，说明没有更多数据了
                 if (result.size() < 5000) {
@@ -192,11 +179,7 @@ public class EquipmentFileMigrationShjService {
         
         try {
             while (true) {
-                // 检查是否正在关闭
-                if (isShuttingDown) {
-                    LOG.info("检测到关闭信号，停止EquipmentFileEvent迁移");
-                    break;
-                }
+
                 
                 // 查询待迁移的EquipmentFileEvent数据
                 EquipmentFileEventExample example = new EquipmentFileEventExample();
@@ -212,7 +195,9 @@ public class EquipmentFileMigrationShjService {
                 LOG.info("查询到{}条EquipmentFileEvent数据，开始迁移...", result.size());
                 
                 // 使用多线程进行迁移
-                migrateEventBatchWithMultiThread(result);
+                for (EquipmentFileEvent equipmentFileEvent : result) {
+                    migrateSingleEquipmentFileEvent(equipmentFileEvent);
+                }
                 
                 // 如果结果少于5000条，说明没有更多数据了
                 if (result.size() < 5000) {
@@ -229,37 +214,7 @@ public class EquipmentFileMigrationShjService {
         }
     }
 
-    /**
-     * 使用多线程迁移一批EquipmentFileEvent数据
-     */
-    private void migrateEventBatchWithMultiThread(List<EquipmentFileEvent> equipmentFileEvents) {
-        int batchSize = equipmentFileEvents.size();
-        CountDownLatch latch = new CountDownLatch(batchSize);
-        
-        for (EquipmentFileEvent equipmentFileEvent : equipmentFileEvents) {
-            executorPService.submit(() -> {
-                try {
-                    migrateSingleEquipmentFileEvent(equipmentFileEvent);
-                } catch (Exception e) {
-                    LOG.error("迁移单条EquipmentFileEvent数据失败，ID: {}, 错误: {}", 
-                            equipmentFileEvent.getId(), e.getMessage(), e);
-                } finally {
-                    latch.countDown();
-                }
-            });
-        }
-        
-        try {
-            // 等待所有线程完成，最多等待10秒
-            boolean finished = latch.await(1, TimeUnit.SECONDS);
-            if (!finished) {
-                LOG.warn("EquipmentFileEvent迁移超时，部分数据可能未完成迁移");
-            }
-        } catch (InterruptedException e) {
-            LOG.error("等待EquipmentFileEvent迁移完成时被中断", e);
-            Thread.currentThread().interrupt();
-        }
-    }
+
 
     /**
      * 迁移单条EquipmentFileEvent数据
@@ -333,38 +288,7 @@ public class EquipmentFileMigrationShjService {
         }
     }
 
-    /**
-     * 使用多线程迁移一批数据
-     * CountDownLatch建议使用10个线程进行并发处理
-     */
-    private void migrateBatchWithMultiThread(List<EquipmentFile> equipmentFiles) {
-        int batchSize = equipmentFiles.size();
-        CountDownLatch latch = new CountDownLatch(batchSize);
-        
-        for (EquipmentFile equipmentFile : equipmentFiles) {
-            executorPService.submit(() -> {
-                try {
-                    migrateSingleEquipmentFile(equipmentFile);
-                } catch (Exception e) {
-                    LOG.error("迁移单条EquipmentFile数据失败，ID: {}, 错误: {}", 
-                            equipmentFile.getId(), e.getMessage(), e);
-                } finally {
-                    latch.countDown();
-                }
-            });
-        }
-        
-        try {
-            // 等待所有线程完成，最多等待30分钟
-            boolean finished = latch.await(1, TimeUnit.SECONDS);
-            if (!finished) {
-                LOG.warn("迁移超时，部分数据可能未完成迁移");
-            }
-        } catch (InterruptedException e) {
-            LOG.error("等待迁移完成时被中断", e);
-            Thread.currentThread().interrupt();
-        }
-    }
+
 
     /**
      * 迁移单条EquipmentFile数据
@@ -690,27 +614,6 @@ public class EquipmentFileMigrationShjService {
     public void shutdown() {
         LOG.info("开始关闭迁移服务...");
         
-        // 设置关闭标志
-        isShuttingDown = true;
-        
-        if (executorPService != null && !executorPService.isShutdown()) {
-            LOG.info("正在关闭线程池...");
-            executorPService.shutdown();
-            try {
-                // 等待正在执行的任务完成，最多等待60秒
-                if (!executorPService.awaitTermination(60, TimeUnit.SECONDS)) {
-                    LOG.warn("线程池未能在60秒内正常关闭，强制关闭");
-                    executorPService.shutdownNow();
-                } else {
-                    LOG.info("线程池已正常关闭");
-                }
-            } catch (InterruptedException e) {
-                LOG.warn("等待线程池关闭时被中断，强制关闭");
-                executorPService.shutdownNow();
-                Thread.currentThread().interrupt();
-            }
-        }
-        
         // 重置运行状态
         isRunning = false;
         isEventRunning = false;
@@ -736,10 +639,7 @@ public class EquipmentFileMigrationShjService {
         } else {
             status.append("EquipmentFileEvent迁移服务已停止; ");
         }
-        
-        if (isShuttingDown) {
-            status.append("服务正在关闭中");
-        }
+
         
         return status.toString();
     }
