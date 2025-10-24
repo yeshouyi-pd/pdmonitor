@@ -254,6 +254,22 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                     String entityJson = (String) redisTstaticemplate.opsForValue().get(sbbh+"WB");
                     beforeEntity = JSONObject.parseObject(entityJson,EquipmentFile.class);
                     if(!StringUtils.isEmpty(beforeEntity.getCjsj())&&isOverThreeMinute(DateUtil.getFormatDate(beforeEntity.getCjsj(),"yyyy-MM-dd HH:mm:ss"),cjsj)){
+
+                        /**
+                         * 保存数据
+                         */
+                        // 异步分发保存数据
+                        final EquipmentFile sentity = beforeEntity;
+                        distributeExecutorService.execute(() -> {
+                            try {
+                                equipmentFileSplitShjServiceStatic.distributeAndSave(sentity);
+                            } catch (Exception e) {
+                                LOG.error("异步分发保存失败，EquipmentFile ID: {}, 错误信息: {}",
+                                        entity.getId(), e.getMessage(), e);
+                            }
+                        });
+                        //正式更新需要加上下面一行
+                        //beforeEntity.setSyncFlag(1);
                         equipmentFileMapperStatic.insert(beforeEntity);
                         todayMapperStatic.insertEquipFile(beforeEntity);
                         redisTstaticemplate.opsForValue().set(sbbh+"WB", JSONObject.toJSONString(entity));
@@ -265,6 +281,21 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                         try{
                             EquipmentFile lastFile = equipmentFileMapperStatic.selectLastOneBySbbh(sbbh);
                             if(!StringUtils.isEmpty(beforeEntity.getCjsj())&&!StringUtils.isEmpty(lastFile.getCjsj())&&isOverThreeMinute(DateUtil.getFormatDate(lastFile.getCjsj(),"yyyy-MM-dd HH:mm:ss"),DateUtil.getFormatDate(beforeEntity.getCjsj(),"yyyy-MM-dd HH:mm:ss"))){
+                                /**
+                                 * 保存数据
+                                 */
+                                // 异步分发保存数据
+                                final EquipmentFile sentity = beforeEntity;
+                                distributeExecutorService.execute(() -> {
+                                    try {
+                                        equipmentFileSplitShjServiceStatic.distributeAndSave(sentity);
+                                    } catch (Exception e) {
+                                        LOG.error("异步分发保存失败，EquipmentFile ID: {}, 错误信息: {}",
+                                                entity.getId(), e.getMessage(), e);
+                                    }
+                                });
+                                //正式更新需要加上下面一行
+                                //beforeEntity.setSyncFlag(1);
                                 equipmentFileMapperStatic.insert(beforeEntity);
                                 todayMapperStatic.insertEquipFile(beforeEntity);
                                 //白海豚写剪切视频的事件，李响读了去剪切视频
@@ -298,7 +329,8 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                                 entity.getId(), e.getMessage(), e);
                     }
                 });
-                
+                //正式更新需要加上下面一行
+                //beforeEntity.setSyncFlag(1);
                 equipmentFileMapperStatic.insert(entity);
                 todayMapperStatic.insertEquipFile(entity);
                 data="保存成功";
