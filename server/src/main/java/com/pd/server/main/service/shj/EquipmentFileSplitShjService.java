@@ -184,6 +184,7 @@ public class EquipmentFileSplitShjService {
     private void saveToWav(EquipmentFile equipmentFile) {
         try {
             EquipmentFilePWav wav = new EquipmentFilePWav();
+            copyCommonFields(equipmentFile, wav);
             equipmentFilePWavMapper.insertSelective(wav);
             //LOG.debug("成功保存到音频表，EquipmentFile ID: {}, 新ID: {}", 
                   //  equipmentFile.getId(), wav.getId());
