@@ -217,7 +217,7 @@ public class EquipmentFileSplitShjService {
             cluster.setWjlx(source.getWjlx());
             cluster.setJczl(source.getJczl());
             cluster.setLy(source.getLy());
-            cluster.setSm1(source.getSm1());
+            //cluster.setSm1(source.getSm1());
             cluster.setSm2(source.getSm2());
             cluster.setSm3(source.getSm3());
             cluster.setSm4(source.getSm4());
