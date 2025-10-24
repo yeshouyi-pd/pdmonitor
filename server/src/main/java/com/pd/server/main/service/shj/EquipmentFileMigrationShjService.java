@@ -254,7 +254,7 @@ public class EquipmentFileMigrationShjService {
         
         try {
             // 等待所有线程完成，最多等待10秒
-            boolean finished = latch.await(10, TimeUnit.SECONDS);
+            boolean finished = latch.await(1, TimeUnit.SECONDS);
             if (!finished) {
                 LOG.warn("EquipmentFileEvent迁移超时，部分数据可能未完成迁移");
             }
@@ -359,7 +359,7 @@ public class EquipmentFileMigrationShjService {
         
         try {
             // 等待所有线程完成，最多等待30分钟
-            boolean finished = latch.await(10, TimeUnit.SECONDS);
+            boolean finished = latch.await(1, TimeUnit.SECONDS);
             if (!finished) {
                 LOG.warn("迁移超时，部分数据可能未完成迁移");
             }
