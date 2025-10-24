@@ -227,13 +227,11 @@ public class EquipmentFileSplitTyService {
             cluster.setTs(source.getTs());
             cluster.setTxtlx(source.getTxtlx());
             cluster.setWjmc(source.getWjmc());
-            if("1012".equals(cluster.getType())){
-                String wjmc = cluster.getTplj().substring(cluster.getTplj().lastIndexOf("/")+1,cluster.getTplj().lastIndexOf("_A2.txt"));
-                String kssj = wjmc.substring(0,4)+"-"+wjmc.substring(5,7)+"-"+wjmc.substring(8,10)+" "+wjmc.substring(11,13)+":"+wjmc.substring(14,16)+":"+wjmc.substring(17,19);
-                String jssj = wjmc.substring(20,24)+"-"+wjmc.substring(25,27)+"-"+wjmc.substring(28,30)+" "+wjmc.substring(31,33)+":"+wjmc.substring(34,36)+":"+wjmc.substring(37,39);
-                cluster.setKssj(kssj);
-                cluster.setJssj(jssj);
-            }
+            String wjmc = cluster.getTplj().substring(cluster.getTplj().lastIndexOf("/")+1,cluster.getTplj().lastIndexOf("_A2.txt"));
+            String kssj = wjmc.substring(0,4)+"-"+wjmc.substring(5,7)+"-"+wjmc.substring(8,10)+" "+wjmc.substring(11,13)+":"+wjmc.substring(14,16)+":"+wjmc.substring(17,19);
+            String jssj = wjmc.substring(20,24)+"-"+wjmc.substring(25,27)+"-"+wjmc.substring(28,30)+" "+wjmc.substring(31,33)+":"+wjmc.substring(34,36)+":"+wjmc.substring(37,39);
+            cluster.setKssj(kssj);
+            cluster.setJssj(jssj);
 
         } else if (target instanceof EquipmentFileTPic) {
             EquipmentFileTPic pic = (EquipmentFileTPic) target;

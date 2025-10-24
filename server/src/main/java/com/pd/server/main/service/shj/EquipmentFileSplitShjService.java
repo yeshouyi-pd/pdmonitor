@@ -119,8 +119,9 @@ public class EquipmentFileSplitShjService {
     private void saveToCluster(EquipmentFile equipmentFile) {
         try {
             EquipmentFilePCluster cluster = new EquipmentFilePCluster();
-            copyCommonFields(equipmentFile, cluster);
-            equipmentFilePClusterMapper.insertSelective(cluster);
+            if(copyCommonFields(equipmentFile, cluster)){
+                equipmentFilePClusterMapper.insertSelective(cluster);
+            }
             //LOG.debug("成功保存到聚类表，EquipmentFile ID: {}, 新ID: {}", 
                   //  equipmentFile.getId(), cluster.getId());
         } catch (Exception e) {
@@ -183,7 +184,6 @@ public class EquipmentFileSplitShjService {
     private void saveToWav(EquipmentFile equipmentFile) {
         try {
             EquipmentFilePWav wav = new EquipmentFilePWav();
-            copyCommonFields(equipmentFile, wav);
             equipmentFilePWavMapper.insertSelective(wav);
             //LOG.debug("成功保存到音频表，EquipmentFile ID: {}, 新ID: {}", 
                   //  equipmentFile.getId(), wav.getId());
@@ -197,7 +197,7 @@ public class EquipmentFileSplitShjService {
      * 复制公共字段
      * 所有目标表都有相同的字段结构，除了id（自增）和sync_flag（不需要）
      */
-    private void copyCommonFields(EquipmentFile source, Object target) {
+    private boolean copyCommonFields(EquipmentFile source, Object target) {
         if (target instanceof EquipmentFilePCluster) {
 
             EquipmentFilePCluster cluster = (EquipmentFilePCluster) target;
@@ -239,16 +239,17 @@ public class EquipmentFileSplitShjService {
                     cluster.setKssj(kssj);
                     cluster.setJssj(jssj);
                     cluster.setJtnr(cluster.getSm1());
-
+                    return true;
                 }else {
                     if(!kssj.equals(jssj)){
                         cluster.setKssj(kssj);
                         cluster.setJssj(jssj);
                         cluster.setJtnr(cluster.getSm1());
+                        return true;
                     }
                 }
             }
-
+            return false;
 
         } else if (target instanceof EquipmentFilePPic) {
             EquipmentFilePPic pic = (EquipmentFilePPic) target;
@@ -277,6 +278,7 @@ public class EquipmentFileSplitShjService {
             pic.setTs(source.getTs());
             pic.setTxtlx(source.getTxtlx());
             pic.setWjmc(source.getWjmc());
+            return true;
         } else if (target instanceof EquipmentFilePTxt) {
             EquipmentFilePTxt txt = (EquipmentFilePTxt) target;
             txt.setBid(source.getId());
@@ -304,6 +306,7 @@ public class EquipmentFileSplitShjService {
             txt.setTs(source.getTs());
             txt.setTxtlx(source.getTxtlx());
             txt.setWjmc(source.getWjmc());
+            return true;
         } else if (target instanceof EquipmentFilePVideo) {
             EquipmentFilePVideo video = (EquipmentFilePVideo) target;
             video.setBid(source.getId());
@@ -331,6 +334,7 @@ public class EquipmentFileSplitShjService {
             video.setTs(source.getTs());
             video.setTxtlx(source.getTxtlx());
             video.setWjmc(source.getWjmc());
+            return true;
         } else if (target instanceof EquipmentFilePWav) {
             EquipmentFilePWav wav = (EquipmentFilePWav) target;
             wav.setBid(source.getId());
@@ -358,6 +362,8 @@ public class EquipmentFileSplitShjService {
             wav.setTs(source.getTs());
             wav.setTxtlx(source.getTxtlx());
             wav.setWjmc(source.getWjmc());
+            return true;
         }
+        return true;
     }
 }
