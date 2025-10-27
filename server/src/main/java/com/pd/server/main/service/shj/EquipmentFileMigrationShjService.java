@@ -139,7 +139,7 @@ public class EquipmentFileMigrationShjService {
                 // 查询待迁移的数据
                 EquipmentFileExample example = new EquipmentFileExample();
                 EquipmentFileExample.Criteria criteria = example.createCriteria();
-                criteria.andSyncFlagEqualTo(0);
+                criteria.andSyncFlagEqualTo(1);
                 // 使用selectByExample方法查询前5000条
                 List<EquipmentFile> result = equipmentFileMapper.limitExample(example);
 
@@ -597,7 +597,7 @@ public class EquipmentFileMigrationShjService {
             EquipmentFile updateRecord = new EquipmentFile();
             updateRecord.setId(id);
             if (migrationSuccess) {
-                updateRecord.setSyncFlag(1); // 成功迁移
+                updateRecord.setSyncFlag(3); // 成功迁移
             } else {
                 updateRecord.setSyncFlag(2); // 跳过数据
             }
