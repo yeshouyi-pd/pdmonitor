@@ -21,7 +21,7 @@ import java.util.concurrent.*;
 public class EquipmentFileMigrationShjService {
 
     private static final Logger LOG = LoggerFactory.getLogger(EquipmentFileMigrationShjService.class);
-
+    private final ExecutorService executorPService = Executors.newFixedThreadPool(70);
     /**
      * 待迁移数据源
      */
@@ -148,10 +148,24 @@ public class EquipmentFileMigrationShjService {
                     break;
                 }
                 LOG.info("查询到{}条数据，开始迁移...", result.size());
+                // 创建同步计数器
+                CountDownLatch latch = new CountDownLatch(result.size());
 
                 for (EquipmentFile equipmentFile : result) {
-                    migrateSingleEquipmentFile(equipmentFile);
+                    executorPService.submit(() -> {
+                        try {
+                            migrateSingleEquipmentFile(equipmentFile);
+                        } catch (Exception e) {
+                            LOG.error("迁移EquipmentFile数据失败，ID: {}", equipmentFile.getId(), e);
+                            // 标记迁移失败
+                            updateSyncFlag(equipmentFile.getId(), false);
+                        } finally {
+                            latch.countDown();
+                        }
+                    });
                 }
+                // 等待当前批次所有任务完成
+                latch.await();
                 
                 // 如果结果少于5000条，说明没有更多数据了
                 if (result.size() < 5000) {
@@ -193,12 +207,27 @@ public class EquipmentFileMigrationShjService {
                     break;
                 }
                 LOG.info("查询到{}条EquipmentFileEvent数据，开始迁移...", result.size());
-                
-                // 使用多线程进行迁移
+
+                // 创建同步计数器
+                CountDownLatch latch = new CountDownLatch(result.size());
+
                 for (EquipmentFileEvent equipmentFileEvent : result) {
-                    migrateSingleEquipmentFileEvent(equipmentFileEvent);
+                    executorPService.submit(() -> {
+                        try {
+                            migrateSingleEquipmentFileEvent(equipmentFileEvent);
+                        } catch (Exception e) {
+                            LOG.error("迁移EquipmentFile数据失败，ID: {}", equipmentFileEvent.getId(), e);
+                            // 标记迁移失败
+                            updateSyncFlag(equipmentFileEvent.getId(), false);
+                        } finally {
+                            latch.countDown();
+                        }
+                    });
                 }
-                
+                // 等待当前批次所有任务完成
+                latch.await();
+
+
                 // 如果结果少于5000条，说明没有更多数据了
                 if (result.size() < 5000) {
                     LOG.info("没有更多EquipmentFileEvent数据需要迁移，迁移完成");
@@ -277,7 +306,7 @@ public class EquipmentFileMigrationShjService {
             EquipmentFileEvent updateRecord = new EquipmentFileEvent();
             updateRecord.setId(id);
             if (migrationSuccess) {
-                updateRecord.setSyncFlag(1); // 成功迁移
+                updateRecord.setSyncFlag(3); // 成功迁移
             } else {
                 updateRecord.setSyncFlag(2); // 跳过数据
             }
@@ -597,7 +626,7 @@ public class EquipmentFileMigrationShjService {
             EquipmentFile updateRecord = new EquipmentFile();
             updateRecord.setId(id);
             if (migrationSuccess) {
-                updateRecord.setSyncFlag(1); // 成功迁移
+                updateRecord.setSyncFlag(3); // 成功迁移
             } else {
                 updateRecord.setSyncFlag(2); // 跳过数据
             }
