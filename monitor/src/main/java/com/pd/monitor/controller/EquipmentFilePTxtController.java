@@ -72,7 +72,7 @@ public class EquipmentFilePTxtController {
     * 删除
     */
     @DeleteMapping("/delete/{id}")
-    public ResponseDto delete(@PathVariable String id) {
+    public ResponseDto delete(@PathVariable Long id) {
         ResponseDto responseDto = new ResponseDto();
         equipmentFilePTxtService.delete(id);
         return responseDto;

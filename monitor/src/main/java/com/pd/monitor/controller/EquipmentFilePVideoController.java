@@ -72,7 +72,7 @@ public class EquipmentFilePVideoController {
     * 删除
     */
     @DeleteMapping("/delete/{id}")
-    public ResponseDto delete(@PathVariable String id) {
+    public ResponseDto delete(@PathVariable Long id) {
         ResponseDto responseDto = new ResponseDto();
         equipmentFilePVideoService.delete(id);
         return responseDto;
