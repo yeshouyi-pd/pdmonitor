@@ -3,6 +3,8 @@ package com.pd.server.main.mapper;
 import com.pd.server.main.domain.EquipmentFilePTxt;
 import com.pd.server.main.domain.EquipmentFilePTxtExample;
 import java.util.List;
+
+import com.pd.server.main.dto.basewx.my.EquipmentFileDwjkDto;
 import org.apache.ibatis.annotations.Param;
 
 public interface EquipmentFilePTxtMapper {
@@ -27,4 +29,6 @@ public interface EquipmentFilePTxtMapper {
     int updateByPrimaryKeySelective(EquipmentFilePTxt record);
 
     int updateByPrimaryKey(EquipmentFilePTxt record);
+
+    List<EquipmentFileDwjkDto> listAllDw(EquipmentFilePTxtExample example);
 }

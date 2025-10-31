@@ -16,6 +16,7 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import java.net.InetAddress;
 import java.util.Date;
 import java.util.Map;
 
@@ -221,30 +222,134 @@ public class MqttClientSpace implements ApplicationContextAware {
             return;
         }
         
+        // 为避免客户端ID冲突，为clientId添加唯一后缀
+        // 使用时间戳和主机名确保唯一性，避免多个实例冲突
+        String originalClientId = clientId;
+        try {
+            String hostname = InetAddress.getLocalHost().getHostName();
+            // 使用主机名和时间戳生成唯一标识
+            // 格式: 原clientId_主机名_时间戳
+            String uniqueSuffix = "_" + hostname + "_" + System.currentTimeMillis();
+            this.clientId = clientId + uniqueSuffix;
+            LOG.info("为客户端ID添加唯一后缀以避免冲突 - 原始ID: {}, 新ID: {}", originalClientId, this.clientId);
+        } catch (Exception e) {
+            // 如果获取主机名失败，仅使用时间戳
+            String uniqueSuffix = "_" + System.currentTimeMillis();
+            this.clientId = clientId + uniqueSuffix;
+            LOG.warn("为客户端ID添加唯一后缀时发生异常，使用时间戳: {}", e.getMessage());
+            LOG.info("为客户端ID添加唯一后缀以避免冲突 - 原始ID: {}, 新ID: {} (使用时间戳)", originalClientId, this.clientId);
+        }
+        
         mqttConnectOptions = new MqttConnectOptions();
         mqttConnectOptions.setUserName(userName);
         mqttConnectOptions.setPassword(passWord.toCharArray());
         mqttConnectOptions.setCleanSession(true);
         mqttConnectOptions.setConnectionTimeout(30); // 设置连接超时时间
-        mqttConnectOptions.setKeepAliveInterval(60); // 设置心跳间隔
-        mqttConnectOptions.setAutomaticReconnect(true); // 启用自动重连
+        
+        // 将心跳间隔从60秒调整为30秒，确保连接保持活跃
+        // 如果服务器端有更短的超时设置，频繁的心跳可以避免连接被断开
+        mqttConnectOptions.setKeepAliveInterval(30); // 设置心跳间隔为30秒（原来是60秒）
+        
+        // 设置MQTT版本，使用MQTT 3.1.1版本以获得更好的兼容性
+        mqttConnectOptions.setMqttVersion(MqttConnectOptions.MQTT_VERSION_3_1_1);
+        
+        // 启用自动重连
+        mqttConnectOptions.setAutomaticReconnect(true);
+        
+        // 注意：setMaxReconnectDelay方法在某些MQTT客户端版本中可能不可用
+        // 如果需要控制重连延迟，可以在重连逻辑中实现
+        
+        // 设置遗嘱消息（可选，但在连接异常断开时可以通知服务器）
+        // 注意：这需要根据实际业务需求来决定是否启用
+        // mqttConnectOptions.setWill("client/disconnected", ("客户端 " + clientId + " 异常断开").getBytes(), 0, false);
+        
+        // 设置是否允许服务器自动重连时恢复之前的会话
+        // 由于我们使用的是CleanSession=true，这个设置影响不大，但保持默认值
+        mqttConnectOptions.setCleanSession(true);
+        
+        LOG.info("MQTT连接选项配置 - KeepAlive: {}秒, 连接超时: {}秒, 自动重连: {}, MQTT版本: {}", 
+                mqttConnectOptions.getKeepAliveInterval(), 
+                mqttConnectOptions.getConnectionTimeout(),
+                mqttConnectOptions.isAutomaticReconnect(),
+                mqttConnectOptions.getMqttVersion() == MqttConnectOptions.MQTT_VERSION_3_1_1 ? "3.1.1" : "3.1");
         memoryPersistence = new MemoryPersistence();
         
         try {
             LOG.info("正在初始化MQTT客户端 - brokerUrl: {}, clientId: {}", brokerUrl, clientId);
+            
+            // 如果存在旧连接，先尝试关闭（防止客户端ID冲突）
+            if (mqttClient != null) {
+                try {
+                    if (mqttClient.isConnected()) {
+                        LOG.warn("检测到已存在的MQTT连接，先关闭旧连接以避免冲突");
+                        mqttClient.disconnect();
+                    }
+                    mqttClient.close();
+                } catch (Exception e) {
+                    LOG.warn("关闭旧MQTT连接时发生异常: {}", e.getMessage());
+                }
+            }
+            
             mqttClient = new org.eclipse.paho.client.mqttv3.MqttClient(brokerUrl, clientId, memoryPersistence);
             
             if (!mqttClient.isConnected()) {
-                LOG.info("正在连接MQTT服务器...");
+                LOG.info("正在连接MQTT服务器... - brokerUrl: {}, clientId: {}", brokerUrl, clientId);
                 mqttClient.connect(mqttConnectOptions);
-                LOG.info("MQTT连接成功");
+                
+                // 连接成功后立即验证连接状态
+                if (mqttClient.isConnected()) {
+                    LOG.info("MQTT连接成功 - clientId: {}, 服务器URI: {}", clientId, mqttClient.getServerURI());
+                    
+                    // 等待一小段时间后再次验证，确保连接稳定
+                    try {
+                        Thread.sleep(500); // 等待500ms
+                        if (!mqttClient.isConnected()) {
+                            LOG.error("连接后立即断开！clientId: {}, 可能是客户端ID冲突或服务器端主动断开", clientId);
+                        } else {
+                            LOG.info("连接验证通过，连接稳定 - clientId: {}", clientId);
+                        }
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        LOG.warn("连接验证等待被中断", e);
+                    }
+                } else {
+                    LOG.error("连接后立即断开！clientId: {}", clientId);
+                }
             }
             
             // 注册回调，确保收到消息时自动调用 messageArrived 方法
             mqttClient.setCallback(new MqttCallback() {
                 @Override
                 public void connectionLost(Throwable cause) {
-                    LOG.warn("MQTT连接丢失: " + (cause != null ? cause.getMessage() : "未知原因"));
+                    // 增强错误日志记录，便于诊断问题
+                    if (cause != null) {
+                        // 检查是否是EOFException（通常表示服务器端主动断开）
+                        Throwable rootCause = cause;
+                        while (rootCause.getCause() != null) {
+                            rootCause = rootCause.getCause();
+                        }
+                        
+                        if (rootCause instanceof java.io.EOFException) {
+                            LOG.error("MQTT连接被服务器端突然关闭 (EOFException) - 这可能是因为:");
+                            LOG.error("  1. 服务器端心跳超时设置太短");
+                            LOG.error("  2. 服务器端检测到连接异常或协议错误");
+                            LOG.error("  3. 网络中间设备（防火墙/NAT）主动断开连接");
+                            LOG.error("  4. 服务器端连接数限制或资源不足");
+                            LOG.error("建议检查: MQTT服务器配置、网络防火墙设置、心跳间隔配置");
+                        }
+                        
+                        LOG.warn("MQTT连接丢失 - 错误类型: {}, 错误消息: {}, 根本原因: {}, 完整堆栈: ", 
+                                cause.getClass().getName(), 
+                                cause.getMessage(),
+                                rootCause.getClass().getName() + ": " + rootCause.getMessage(),
+                                cause);
+                    } else {
+                        LOG.warn("MQTT连接丢失: 未知原因 (cause为null)");
+                    }
+                    LOG.warn("连接丢失时的客户端状态 - brokerUrl: {}, clientId: {}, isConnected: {}, initialized: {}", 
+                            brokerUrl, clientId, 
+                            mqttClient != null ? mqttClient.isConnected() : false, 
+                            initialized);
                     initialized = false; // 重置初始化状态，允许重新连接
                     needResubscribe = true; // 标记需要重新订阅主题
                     
@@ -369,20 +474,52 @@ public class MqttClientSpace implements ApplicationContextAware {
             if (!mqttClient.isConnected()) {
                 if (mqttConnectOptions != null) {
                     try {
-                        LOG.info("正在尝试重新连接MQTT服务器...");
+                        LOG.info("正在尝试重新连接MQTT服务器... - brokerUrl: {}, clientId: {}", brokerUrl, clientId);
                         mqttClient.connect(mqttConnectOptions);
-                        LOG.info("MQTT重连成功");
-                        initialized = true;
-                        reconnecting = false;
-                        reconnectAttempts = 0; // 重置重连次数
                         
-                        // 重连成功后重新订阅主题
-                        if (needResubscribe) {
-                            LOG.info("重连成功，开始重新订阅主题...");
-                            resubscribeAllTopics();
+                        // 重连成功后立即验证连接状态
+                        if (mqttClient.isConnected()) {
+                            LOG.info("MQTT重连成功 - clientId: {}, 服务器URI: {}", clientId, mqttClient.getServerURI());
+                            
+                            // 等待一小段时间后再次验证，确保连接稳定
+                            try {
+                                Thread.sleep(500); // 等待500ms
+                                if (!mqttClient.isConnected()) {
+                                    LOG.error("重连后立即断开！clientId: {}, 可能是客户端ID冲突或服务器端主动断开", clientId);
+                                    initialized = false;
+                                    return;
+                                } else {
+                                    LOG.info("重连验证通过，连接稳定 - clientId: {}", clientId);
+                                }
+                            } catch (InterruptedException e) {
+                                Thread.currentThread().interrupt();
+                                LOG.warn("重连验证等待被中断", e);
+                            }
+                            
+                            initialized = true;
+                            reconnecting = false;
+                            reconnectAttempts = 0; // 重置重连次数
+                            
+                            // 重连成功后重新订阅主题
+                            if (needResubscribe) {
+                                LOG.info("重连成功，开始重新订阅主题...");
+                                resubscribeAllTopics();
+                            }
+                        } else {
+                            LOG.error("重连后立即断开！clientId: {}", clientId);
+                            initialized = false;
                         }
                     } catch (MqttException e) {
-                        LOG.error("MQTT重连失败: " + e.getMessage(), e);
+                        LOG.error("MQTT重连失败 - clientId: {}, 错误代码: {}, 错误消息: {}", 
+                                clientId, e.getReasonCode(), e.getMessage(), e);
+                        // 记录详细的异常信息，帮助诊断问题
+                        if (e.getReasonCode() == MqttException.REASON_CODE_CLIENT_EXCEPTION) {
+                            LOG.error("重连失败原因: 客户端异常，可能是客户端ID冲突或其他客户端配置问题");
+                        } else if (e.getReasonCode() == MqttException.REASON_CODE_NOT_AUTHORIZED) {
+                            LOG.error("重连失败原因: 认证失败，请检查用户名和密码");
+                        } else if (e.getReasonCode() == MqttException.REASON_CODE_CONNECTION_LOST) {
+                            LOG.error("重连失败原因: 连接丢失，可能是网络问题或服务器主动断开");
+                        }
                         initialized = false;
                     }
                 } else {

@@ -43,9 +43,9 @@ public class EquipmentFileEventDwDto {
     private String deptcode;
 
     /**
-     * equipment_file表主键，用于下载视频
+     * 图片路径
      */
-    private String equipmentFileId;
+    private String tplj;
 
     public String getId() {
         return id;
@@ -111,11 +111,11 @@ public class EquipmentFileEventDwDto {
         this.deptcode = deptcode;
     }
 
-    public String getEquipmentFileId() {
-        return equipmentFileId;
+    public String getTplj() {
+        return tplj;
     }
 
-    public void setEquipmentFileId(String equipmentFileId) {
-        this.equipmentFileId = equipmentFileId;
+    public void setTplj(String tplj) {
+        this.tplj = tplj;
     }
 }

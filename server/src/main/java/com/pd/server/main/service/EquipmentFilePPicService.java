@@ -4,6 +4,7 @@ import com.pd.server.main.domain.EquipmentFilePPic;
 import com.pd.server.main.domain.EquipmentFilePPicExample;
 import com.pd.server.main.dto.EquipmentFilePPicDto;
 import com.pd.server.main.dto.PageDto;
+import com.pd.server.main.dto.basewx.my.EquipmentFileDwjkDto;
 import com.pd.server.main.mapper.EquipmentFilePPicMapper;
 import com.pd.server.util.CopyUtil;
 import com.pd.server.util.UuidUtil;
@@ -68,4 +69,7 @@ public class EquipmentFilePPicService {
         equipmentFilePPicMapper.deleteByPrimaryKey(id);
     }
 
+    public List<EquipmentFileDwjkDto> listAllDw(EquipmentFilePPicExample example){
+        return equipmentFilePPicMapper.listAllDw(example);
+    }
 }

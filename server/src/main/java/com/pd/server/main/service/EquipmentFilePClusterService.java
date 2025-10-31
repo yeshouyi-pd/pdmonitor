@@ -1,9 +1,15 @@
 package com.pd.server.main.service;
 
+import com.pd.server.main.domain.EquipmentFileEvent;
 import com.pd.server.main.domain.EquipmentFilePCluster;
 import com.pd.server.main.domain.EquipmentFilePClusterExample;
+import com.pd.server.main.domain.EquipmentTyEvent;
 import com.pd.server.main.dto.EquipmentFilePClusterDto;
 import com.pd.server.main.dto.PageDto;
+import com.pd.server.main.dto.basewx.my.EquipmentFileDwjkDto;
+import com.pd.server.main.dto.basewx.my.EquipmentFileEventDwDto;
+import com.pd.server.main.dto.basewx.my.WrjEventDto;
+import com.pd.server.main.dto.basewx.my.WrjTcDto;
 import com.pd.server.main.mapper.EquipmentFilePClusterMapper;
 import com.pd.server.util.CopyUtil;
 import com.pd.server.util.UuidUtil;
@@ -68,4 +74,27 @@ public class EquipmentFilePClusterService {
         equipmentFilePClusterMapper.deleteByPrimaryKey(id);
     }
 
+    public List<EquipmentFilePCluster> selectLastDw(EquipmentFilePClusterExample example){
+        return equipmentFilePClusterMapper.selectLastDw(example);
+    }
+
+    //含拖曳的聚类
+    public List<EquipmentFileDwjkDto> listAllDw(EquipmentFilePClusterExample example){
+        return equipmentFilePClusterMapper.listAllDw(example);
+    }
+
+    //只有A4的聚类
+    public List<EquipmentFileEventDwDto> listDw(EquipmentFilePClusterExample example){
+        return equipmentFilePClusterMapper.listDw(example);
+    }
+
+    //含拖曳的聚类
+    public List<WrjEventDto> listAllWrj(EquipmentFilePClusterExample example){
+        return equipmentFilePClusterMapper.listAllWrj(example);
+    }
+
+    //含拖曳的聚类
+    public List<WrjTcDto> listSumTsWrj(EquipmentFilePClusterExample example){
+        return equipmentFilePClusterMapper.listSumTsWrj(example);
+    }
 }

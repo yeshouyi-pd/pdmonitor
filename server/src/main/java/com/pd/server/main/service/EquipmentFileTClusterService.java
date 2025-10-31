@@ -4,6 +4,7 @@ import com.pd.server.main.domain.EquipmentFileTCluster;
 import com.pd.server.main.domain.EquipmentFileTClusterExample;
 import com.pd.server.main.dto.EquipmentFileTClusterDto;
 import com.pd.server.main.dto.PageDto;
+import com.pd.server.main.dto.basewx.my.EquipmentTyEventDwDto;
 import com.pd.server.main.mapper.EquipmentFileTClusterMapper;
 import com.pd.server.util.CopyUtil;
 import com.pd.server.util.UuidUtil;
@@ -68,4 +69,7 @@ public class EquipmentFileTClusterService {
         equipmentFileTClusterMapper.deleteByPrimaryKey(id);
     }
 
+    public List<EquipmentTyEventDwDto> listAllDw(EquipmentFileTClusterExample example){
+        return equipmentFileTClusterMapper.listAllDw(example);
+    }
 }

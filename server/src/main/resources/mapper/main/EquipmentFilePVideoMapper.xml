@@ -29,6 +29,12 @@
     <result column="txtlx" jdbcType="VARCHAR" property="txtlx" />
     <result column="wjmc" jdbcType="VARCHAR" property="wjmc" />
   </resultMap>
+  <resultMap id="OtherMap" type="com.pd.server.main.dto.basewx.my.EquipmentFileDwjkDto">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
+    <result column="tplj" jdbcType="VARCHAR" property="tplj" />
+    <result column="cjsj" jdbcType="TIMESTAMP" property="cjsj" />
+  </resultMap>
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -536,4 +542,15 @@
       wjmc = #{wjmc,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <select id="listAllDw" parameterType="com.pd.server.main.domain.EquipmentFilePVideoExample" resultMap="OtherMap">
+    select id, sbbh, tplj, cjsj from equipment_file_p_video
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    union all
+    select id, sbbh, tplj, cjsj from equipment_file_t_video
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
 </mapper>

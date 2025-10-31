@@ -4,6 +4,7 @@ import com.pd.server.main.domain.EquipmentFilePVideo;
 import com.pd.server.main.domain.EquipmentFilePVideoExample;
 import com.pd.server.main.dto.EquipmentFilePVideoDto;
 import com.pd.server.main.dto.PageDto;
+import com.pd.server.main.dto.basewx.my.EquipmentFileDwjkDto;
 import com.pd.server.main.mapper.EquipmentFilePVideoMapper;
 import com.pd.server.util.CopyUtil;
 import com.pd.server.util.UuidUtil;
@@ -68,4 +69,7 @@ public class EquipmentFilePVideoService {
         equipmentFilePVideoMapper.deleteByPrimaryKey(id);
     }
 
+    public List<EquipmentFileDwjkDto> listAllDw(EquipmentFilePVideoExample example){
+        return equipmentFilePVideoMapper.listAllDw(example);
+    }
 }

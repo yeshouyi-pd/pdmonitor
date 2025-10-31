@@ -32,6 +32,16 @@
     <result column="jssj" jdbcType="VARCHAR" property="jssj" />
     <result column="jtnr" jdbcType="VARCHAR" property="jtnr" />
   </resultMap>
+  <resultMap id="OtherMap" type="com.pd.server.main.dto.basewx.my.EquipmentTyEventDwDto">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
+    <result column="kssj" jdbcType="VARCHAR" property="kssj" />
+    <result column="jssj" jdbcType="VARCHAR" property="jssj" />
+    <result column="rq" jdbcType="VARCHAR" property="rq" />
+    <result column="ts" jdbcType="VARCHAR" property="ts" />
+    <result column="deptcode" jdbcType="VARCHAR" property="deptcode" />
+    <result column="tplj" jdbcType="VARCHAR" property="tplj" />
+  </resultMap>
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -583,4 +593,14 @@
       jtnr = #{jtnr,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <select id="listAllDw" parameterType="com.pd.server.main.domain.EquipmentFileTClusterExample" resultMap="OtherMap">
+    select id,sbbh,kssj,jssj,rq,ts,deptcode,tplj
+    from equipment_file_t_cluster
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
 </mapper>

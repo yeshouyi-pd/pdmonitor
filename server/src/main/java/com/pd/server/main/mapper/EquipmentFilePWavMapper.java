@@ -3,6 +3,8 @@ package com.pd.server.main.mapper;
 import com.pd.server.main.domain.EquipmentFilePWav;
 import com.pd.server.main.domain.EquipmentFilePWavExample;
 import java.util.List;
+
+import com.pd.server.main.dto.basewx.my.EquipmentFileDwjkDto;
 import org.apache.ibatis.annotations.Param;
 
 public interface EquipmentFilePWavMapper {
@@ -27,4 +29,6 @@ public interface EquipmentFilePWavMapper {
     int updateByPrimaryKeySelective(EquipmentFilePWav record);
 
     int updateByPrimaryKey(EquipmentFilePWav record);
+
+    List<EquipmentFileDwjkDto> listAllDw(EquipmentFilePWavExample example);
 }

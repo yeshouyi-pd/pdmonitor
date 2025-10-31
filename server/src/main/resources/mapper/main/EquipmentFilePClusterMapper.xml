@@ -32,6 +32,33 @@
     <result column="jssj" jdbcType="VARCHAR" property="jssj" />
     <result column="jtnr" jdbcType="VARCHAR" property="jtnr" />
   </resultMap>
+  <resultMap id="OtherMap" type="com.pd.server.main.dto.basewx.my.EquipmentFileDwjkDto">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
+    <result column="tplj" jdbcType="VARCHAR" property="tplj" />
+    <result column="cjsj" jdbcType="TIMESTAMP" property="cjsj" />
+  </resultMap>
+  <resultMap id="FileEventDwDto" type="com.pd.server.main.dto.basewx.my.EquipmentFileEventDwDto">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
+    <result column="kssj" jdbcType="VARCHAR" property="kssj" />
+    <result column="jssj" jdbcType="VARCHAR" property="jssj" />
+    <result column="rq" jdbcType="VARCHAR" property="rq" />
+    <result column="ts" jdbcType="VARCHAR" property="ts" />
+    <result column="jtnr" jdbcType="VARCHAR" property="jtnr" />
+    <result column="deptcode" jdbcType="VARCHAR" property="deptcode" />
+  </resultMap>
+  <resultMap id="WrjEventDto" type="com.pd.server.main.dto.basewx.my.WrjEventDto">
+    <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
+    <result column="kssj" jdbcType="VARCHAR" property="kssj" />
+    <result column="jssj" jdbcType="VARCHAR" property="jssj" />
+    <result column="ts" jdbcType="VARCHAR" property="ts" />
+  </resultMap>
+  <resultMap id="WrjTcDto" type="com.pd.server.main.dto.basewx.my.WrjTcDto">
+    <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
+    <result column="rq" jdbcType="VARCHAR" property="rq" />
+    <result column="ts" jdbcType="VARCHAR" property="ts" />
+  </resultMap>
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -583,4 +610,58 @@
       jtnr = #{jtnr,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <select id="selectLastDw" parameterType="com.pd.server.main.domain.EquipmentFilePClusterExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from equipment_file_p_cluster
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+     limit 1
+  </select>
+  <select id="listAllDw" parameterType="com.pd.server.main.domain.EquipmentFilePClusterExample" resultMap="OtherMap">
+    select id, sbbh, tplj, cjsj from equipment_file_p_cluster
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    union all
+    select id, sbbh, tplj, cjsj from equipment_file_t_cluster
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <select id="listDw" parameterType="com.pd.server.main.domain.EquipmentFilePClusterExample" resultMap="FileEventDwDto">
+    select id, sbbh, kssj, jssj, rq, ts, jtnr, deptcode, tplj from equipment_file_p_cluster
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <select id="listAllWrj" parameterType="com.pd.server.main.domain.EquipmentFilePClusterExample" resultMap="WrjEventDto">
+    select sbbh, kssj, jssj, ts from equipment_file_p_cluster
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    union all
+    select sbbh, kssj, jssj, ts from equipment_file_t_cluster
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <select id="listSumTsWrj" parameterType="com.pd.server.main.domain.EquipmentFilePClusterExample" resultMap="WrjTcDto">
+    select sbbh, rq, ts from equipment_file_p_cluster
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    union all
+    select sbbh, rq, ts from equipment_file_t_cluster
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
 </mapper>
