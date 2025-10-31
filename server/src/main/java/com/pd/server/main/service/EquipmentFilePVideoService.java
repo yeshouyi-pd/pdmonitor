@@ -68,4 +68,7 @@ public class EquipmentFilePVideoService {
         equipmentFilePVideoMapper.deleteByPrimaryKey(id);
     }
 
+    public List<EquipmentFilePVideo> listAll(EquipmentFilePVideoExample example) {
+        return equipmentFilePVideoMapper.selectByExample(example);
+    }
 }

@@ -68,4 +68,11 @@ public class EquipmentFilePPicService {
         equipmentFilePPicMapper.deleteByPrimaryKey(id);
     }
 
+    public List<EquipmentFilePPic> selectByExampleOnlyId(EquipmentFilePPicExample equipmentFileExample) {
+        return equipmentFilePPicMapper.selectByExampleOnlyId(equipmentFileExample);
+    }
+
+    public List<EquipmentFilePPic> selectByExample(EquipmentFilePPicExample equipmentFileExampleId) {
+        return equipmentFilePPicMapper.selectByExample(equipmentFileExampleId);
+    }
 }

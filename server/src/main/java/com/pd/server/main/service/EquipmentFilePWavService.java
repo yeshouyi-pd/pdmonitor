@@ -68,4 +68,7 @@ public class EquipmentFilePWavService {
         equipmentFilePWavMapper.deleteByPrimaryKey(id);
     }
 
+    public List<EquipmentFilePWav> listAll(EquipmentFilePWavExample example) {
+        return equipmentFilePWavMapper.selectByExample(example);
+    }
 }

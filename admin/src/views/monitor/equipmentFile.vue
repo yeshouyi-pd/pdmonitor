@@ -259,7 +259,7 @@ export default {
         _this.equipmentFileDto.xmbh=Tool.getLoginUser().xmbh;
       }
       _this.$forceUpdate();
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFile/lists',_this.equipmentFileDto).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileP/lists',_this.equipmentFileDto).then((response)=>{
         let resp = response.data;
         _this.equipmentFiles = resp.content.list;
         _this.$refs.pagination.render(page, resp.content.total);
@@ -309,13 +309,7 @@ export default {
         lj=obj.tplj.substring(0,obj.tplj.lastIndexOf('.')+1)+'txt';
       }
       let paramsStr = "fileUrl="+lj.substring(0,lj.lastIndexOf("/")+1)+"&fileName="+lj.substring(lj.lastIndexOf("/")+1,lj.length);
-      // let url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downAudioFile?'+paramsStr;
-      let url = "";
-      if(_this.shj){
-        url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downAudioFile53?'+paramsStr;
-      }else{
-        url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downAudioFile?'+paramsStr;
-      }
+       let url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downAudioFile?'+paramsStr;
       _this.$ajax.get(url).then((response)=>{
         if((response.data && typeof response.data == 'string'&& response.data.includes("系统异常"))||(response.data.message && response.data.message.includes("系统异常"))){
           Toast.error("未找到该文件！");
@@ -356,12 +350,8 @@ export default {
         paramsStr = paramsStr + "&sbbh="+_this.equipmentFileDto.sbbh;
       }
       //Loading.show();
-      let url = "";
-      if(_this.shj){
-        url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downVideoZip53?'+paramsStr;
-      }else{
-        url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downVideoZip?'+paramsStr;
-      }
+      let url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downVideoZip?'+paramsStr;
+
       _this.$ajax.get(url).then((response)=>{
         //Loading.hide();
         if(response.data && response.data.message && response.data.message.includes("系统异常")){
