@@ -29,6 +29,41 @@
     <result column="txtlx" jdbcType="VARCHAR" property="txtlx" />
     <result column="wjmc" jdbcType="VARCHAR" property="wjmc" />
   </resultMap>
+
+  <resultMap id="BaseResultMapKVint" type="com.pd.server.main.dto.KvIntDto">
+    <result column="key" jdbcType="VARCHAR" property="key" />
+    <result column="value" jdbcType="VARCHAR" property="value" />
+  </resultMap>
+
+  <resultMap id="getthisDeptEquipment" type="com.pd.server.main.dto.EquipmenInfo">
+    <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
+    <result column="sbmc" jdbcType="VARCHAR" property="sbmc" />
+  </resultMap>
+
+  <resultMap id="getthisDeptEquipmentinfo" type="com.pd.server.main.dto.EquipmentMainListDto">
+    <id column="id" property="id"/>
+    <result column="deptcode" jdbcType="VARCHAR" property="deptcode" />
+    <result column="cjsj" jdbcType="TIMESTAMP" property="cjsj" />
+    <result column="tplj" jdbcType="VARCHAR" property="tplj" />
+    <association property="playDto" javaType="com.pd.server.main.dto.PlayDtoWav" resultMap="playDtomap"></association>
+  </resultMap>
+
+  <resultMap type="com.pd.server.main.dto.PlayDtoWav" id="playDtomap">
+    <result column="tplj" jdbcType="VARCHAR"  property="src"/>
+  </resultMap>
+
+  <resultMap id="getthisDeptjxsjJT" type="com.pd.server.main.dto.EquipmentMainDto">
+    <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
+    <result column="sbmc" jdbcType="VARCHAR" property="sbmc" />
+    <collection property="list" ofType="com.pd.server.main.dto.EquipmentMainListDto">
+      <id column="id" property="id"/>
+      <result column="deptcode" jdbcType="VARCHAR" property="deptcode" />
+      <result column="cjsj" jdbcType="TIMESTAMP" property="cjsj" />
+      <result column="tplj" jdbcType="VARCHAR" property="tplj" />
+      <association property="playDto" javaType="com.pd.server.main.dto.PlayDtoWav" resultMap="playDtomap"></association>
+    </collection>
+  </resultMap>
+
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -47,6 +82,36 @@
                 </when>
                 <when test="criterion.listValue">
                   and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+
+  <sql id="Example_Where_Clause_p">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and p.${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and p.${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and p.${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and p.${criterion.condition}
                   <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
                     #{listItem}
                   </foreach>
@@ -552,4 +617,91 @@
       wjmc = #{wjmc,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="getAlljcsjByDeptgetDay" parameterType="com.pd.server.main.domain.EquipmentFilePPicExample"  resultMap="BaseResultMap">
+    SELECT * FROM  equipment_file_p_pic
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+     order by cjsj desc limit 1
+  </select>
+
+  <select id="getAlljcsjByDept" parameterType="com.pd.server.main.domain.EquipmentFilePPicExample"  resultMap="BaseResultMapKVint">
+    SELECT deptcode `key` ,COUNT(*)  `value` FROM  equipment_file_p_pic
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+     GROUP  BY  deptcode
+
+  </select>
+
+  <select id="getthisDeptEquipmentday" parameterType="com.pd.server.main.domain.EquipmentFilePPicExample" resultMap="getthisDeptEquipment">
+    SELECT DISTINCT p.sbbh, e.sbmc
+    FROM equipment_file_p_pic p
+    INNER JOIN water_equipment e ON p.sbbh = e.sbsn
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause_p" />
+    </if>
+
+  </select>
+
+  <select id="getthisDeptEquipmentinfoday" parameterType="com.pd.server.main.domain.EquipmentFilePPicExample" resultMap="getthisDeptEquipmentinfo">
+    SELECT
+    id,
+    cjsj,
+    tplj,
+    deptcode  FROM `equipment_file_p_pic`
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+      ORDER BY cjsj  DESC
+  </select>
+
+  <select id="getthisDeptjxsjJT" parameterType="com.pd.server.main.domain.EquipmentFilePPicExample" resultMap="getthisDeptjxsjJT">
+    SELECT
+    b.id,
+    b.cjsj,
+    b.tplj,
+    b.sbbh,
+    b.deptcode,
+    a.sbmc
+    FROM
+    water_equipment a,
+    (SELECT
+    *
+    FROM
+    equipment_file_today
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    AND TO_DAYS(cjsj) = TO_DAYS(NOW())
+    AND txtlx = '1') b
+    WHERE a.sbsn = b.sbbh
+    UNION
+    ALL
+    SELECT
+    d.id,
+    d.cjsj,
+    d.tplj,
+    d.sbbh,
+    d.deptcode,
+    c.sbmc
+    FROM
+    water_equipment c,
+    (SELECT
+    *
+    FROM
+    equipment_file_ty_today
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    AND TO_DAYS(cjsj) = TO_DAYS(NOW())
+    AND txtlx = '1') d
+    WHERE c.sbsn = d.sbbh
+    ORDER BY cjsj  DESC
+
+
+  </select>
+
+
 </mapper>

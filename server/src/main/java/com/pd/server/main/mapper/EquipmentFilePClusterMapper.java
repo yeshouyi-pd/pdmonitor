@@ -3,6 +3,8 @@ package com.pd.server.main.mapper;
 import com.pd.server.main.domain.EquipmentFilePCluster;
 import com.pd.server.main.domain.EquipmentFilePClusterExample;
 import java.util.List;
+
+import com.pd.server.main.dto.EventDto;
 import org.apache.ibatis.annotations.Param;
 
 public interface EquipmentFilePClusterMapper {
@@ -27,4 +29,9 @@ public interface EquipmentFilePClusterMapper {
     int updateByPrimaryKeySelective(EquipmentFilePCluster record);
 
     int updateByPrimaryKey(EquipmentFilePCluster record);
+
+
+    List<EventDto> getEquipmentEventByDept(EquipmentFilePClusterExample equipmentFileEventExample);
+
+    List<EquipmentFilePCluster> getEquipmentEventByDeptdate(EquipmentFilePClusterExample equipmentFileEventExample);
 }

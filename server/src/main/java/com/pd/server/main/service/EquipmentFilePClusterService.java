@@ -3,6 +3,7 @@ package com.pd.server.main.service;
 import com.pd.server.main.domain.EquipmentFilePCluster;
 import com.pd.server.main.domain.EquipmentFilePClusterExample;
 import com.pd.server.main.dto.EquipmentFilePClusterDto;
+import com.pd.server.main.dto.EventDto;
 import com.pd.server.main.dto.PageDto;
 import com.pd.server.main.mapper.EquipmentFilePClusterMapper;
 import com.pd.server.util.CopyUtil;
@@ -68,4 +69,15 @@ public class EquipmentFilePClusterService {
         equipmentFilePClusterMapper.deleteByPrimaryKey(id);
     }
 
+    public  List<EventDto>  getEquipmentEventByDept(EquipmentFilePClusterExample equipmentFileEventExample) {
+        return equipmentFilePClusterMapper.getEquipmentEventByDept(equipmentFileEventExample);
+    }
+
+    public List<EquipmentFilePCluster> getEquipmentEventByDeptdate(EquipmentFilePClusterExample equipmentFileEventExample) {
+        return equipmentFilePClusterMapper.getEquipmentEventByDeptdate(equipmentFileEventExample);
+    }
+
+    public List<EquipmentFilePCluster> listByexample(EquipmentFilePClusterExample equipmentFileEventExample) {
+        return equipmentFilePClusterMapper.selectByExample(equipmentFileEventExample);
+    }
 }

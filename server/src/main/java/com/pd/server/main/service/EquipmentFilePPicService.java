@@ -2,8 +2,7 @@ package com.pd.server.main.service;
 
 import com.pd.server.main.domain.EquipmentFilePPic;
 import com.pd.server.main.domain.EquipmentFilePPicExample;
-import com.pd.server.main.dto.EquipmentFilePPicDto;
-import com.pd.server.main.dto.PageDto;
+import com.pd.server.main.dto.*;
 import com.pd.server.main.mapper.EquipmentFilePPicMapper;
 import com.pd.server.util.CopyUtil;
 import com.pd.server.util.UuidUtil;
@@ -74,5 +73,25 @@ public class EquipmentFilePPicService {
 
     public List<EquipmentFilePPic> selectByExample(EquipmentFilePPicExample equipmentFileExampleId) {
         return equipmentFilePPicMapper.selectByExample(equipmentFileExampleId);
+    }
+
+    public List<EquipmentFilePPic> getAlljcsjByDeptgetDay(EquipmentFilePPicExample example) {
+        return equipmentFilePPicMapper.getAlljcsjByDeptgetDay(example);
+    }
+
+    public List<KvIntDto> getAlljcsjByDept(EquipmentFilePPicExample example) {
+        return equipmentFilePPicMapper.getAlljcsjByDept(example);
+    }
+
+    public List<EquipmenInfo> getthisDeptEquipmentday(EquipmentFilePPicExample equipmentFileExample) {
+        return equipmentFilePPicMapper.getthisDeptEquipmentday(equipmentFileExample);
+    }
+
+    public List<EquipmentMainListDto> getthisDeptEquipmentinfoday(EquipmentFilePPicExample equipmentFileExample) {
+        return equipmentFilePPicMapper.getthisDeptEquipmentinfoday(equipmentFileExample);
+    }
+
+    public List<EquipmentMainDto> getthisDeptjxsjJT(EquipmentFilePPicExample equipmentFileExample) {
+        return equipmentFilePPicMapper.getthisDeptjxsjJT(equipmentFileExample);
     }
 }

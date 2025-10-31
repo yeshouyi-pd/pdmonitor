@@ -3,6 +3,11 @@ package com.pd.server.main.mapper;
 import com.pd.server.main.domain.EquipmentFilePPic;
 import com.pd.server.main.domain.EquipmentFilePPicExample;
 import java.util.List;
+
+import com.pd.server.main.dto.EquipmenInfo;
+import com.pd.server.main.dto.EquipmentMainDto;
+import com.pd.server.main.dto.EquipmentMainListDto;
+import com.pd.server.main.dto.KvIntDto;
 import org.apache.ibatis.annotations.Param;
 
 public interface EquipmentFilePPicMapper {
@@ -29,4 +34,14 @@ public interface EquipmentFilePPicMapper {
     int updateByPrimaryKeySelective(EquipmentFilePPic record);
 
     int updateByPrimaryKey(EquipmentFilePPic record);
+
+    List<EquipmentFilePPic> getAlljcsjByDeptgetDay(EquipmentFilePPicExample example);
+
+    List<KvIntDto> getAlljcsjByDept(EquipmentFilePPicExample example);
+
+    List<EquipmenInfo> getthisDeptEquipmentday(EquipmentFilePPicExample equipmentFileExample);
+
+    List<EquipmentMainListDto> getthisDeptEquipmentinfoday(EquipmentFilePPicExample equipmentFileExample);
+
+    List<EquipmentMainDto> getthisDeptjxsjJT(EquipmentFilePPicExample equipmentFileExample);
 }
