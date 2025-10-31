@@ -72,4 +72,7 @@ public class EquipmentFilePWavService {
     public List<EquipmentFileDwjkDto> listAllDw(EquipmentFilePWavExample example){
         return equipmentFilePWavMapper.listAllDw(example);
     }
+    public List<EquipmentFilePWav> listAll(EquipmentFilePWavExample example) {
+        return equipmentFilePWavMapper.selectByExample(example);
+    }
 }

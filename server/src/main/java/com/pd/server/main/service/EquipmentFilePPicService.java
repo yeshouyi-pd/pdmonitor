@@ -72,4 +72,11 @@ public class EquipmentFilePPicService {
     public List<EquipmentFileDwjkDto> listAllDw(EquipmentFilePPicExample example){
         return equipmentFilePPicMapper.listAllDw(example);
     }
+    public List<EquipmentFilePPic> selectByExampleOnlyId(EquipmentFilePPicExample equipmentFileExample) {
+        return equipmentFilePPicMapper.selectByExampleOnlyId(equipmentFileExample);
+    }
+
+    public List<EquipmentFilePPic> selectByExample(EquipmentFilePPicExample equipmentFileExampleId) {
+        return equipmentFilePPicMapper.selectByExample(equipmentFileExampleId);
+    }
 }

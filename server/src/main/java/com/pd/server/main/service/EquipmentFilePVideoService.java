@@ -72,4 +72,7 @@ public class EquipmentFilePVideoService {
     public List<EquipmentFileDwjkDto> listAllDw(EquipmentFilePVideoExample example){
         return equipmentFilePVideoMapper.listAllDw(example);
     }
+    public List<EquipmentFilePVideo> listAll(EquipmentFilePVideoExample example) {
+        return equipmentFilePVideoMapper.selectByExample(example);
+    }
 }

@@ -51,6 +51,12 @@ public class DownloadAudioController {
     @Resource
     public VideoEventService videoEventService;
 
+    @Resource
+    private EquipmentFilePVideoService equipmentFilePVideoService;
+
+    @Resource
+    private EquipmentFilePWavService equipmentFilePWavService;
+
     /**
      * A4聚类文件下载
      * @param request
@@ -139,18 +145,17 @@ public class DownloadAudioController {
         String fileUrl = attrService.findByAttrKey("fileUrl");//http://49.239.193.146:8082/
         String filePath = attrService.findByAttrKey("filePath");
         String wjmc = request.getParameter("wjmc");
-        EquipmentFileExample example = new EquipmentFileExample();
-        EquipmentFileExample.Criteria ca = example.createCriteria();
+        EquipmentFilePVideoExample example = new EquipmentFilePVideoExample();
+        EquipmentFilePVideoExample.Criteria ca = example.createCriteria();
         ca.andWjmcEqualTo(wjmc);
-        ca.andWjlxEqualTo("4");
-        List<EquipmentFile> lists = equipmentFileService.listAll(example);
+        List<EquipmentFilePVideo> lists = equipmentFilePVideoService.listAll(example);
         if (lists.size() != 0) {
             // 创建临时路径,存放压缩文件
             String zipFilePath = attrService.findByAttrKey("downloadPath")+"\\我的zip.zip";
             // 压缩输出流,包装流,将临时文件输出流包装成压缩流,将所有文件输出到这里,打成zip包
             ZipOutputStream zipOut = new ZipOutputStream(new FileOutputStream(zipFilePath));
             // 循环调用压缩文件方法,将一个一个需要下载的文件打入压缩文件包
-            for (EquipmentFile entity : lists) {
+            for (EquipmentFilePVideo entity : lists) {
                 // 该方法在下面定义
                 fileToZip(entity.getTplj().replace(fileUrl,filePath), zipOut);
             }
@@ -382,8 +387,8 @@ public class DownloadAudioController {
         String sbbh = request.getParameter("sbbh");
         String stime = request.getParameter("stime");
         String etime = request.getParameter("etime");
-        EquipmentFileExample example = new EquipmentFileExample();
-        EquipmentFileExample.Criteria ca = example.createCriteria();
+        EquipmentFilePWavExample example = new EquipmentFilePWavExample();
+        EquipmentFilePWavExample.Criteria ca = example.createCriteria();
         if(!StringUtils.isEmpty(sbbh)){
             ca.andSbbhEqualTo(sbbh);
         }
@@ -397,8 +402,7 @@ public class DownloadAudioController {
         }else{
             ca.andRqLessThanOrEqualTo(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd"));
         }
-        ca.andWjlxEqualTo("2");
-        List<EquipmentFile> lists = equipmentFileService.listAll(example);
+        List<EquipmentFilePWav> lists = equipmentFilePWavService.listAll(example);
         if (lists.size() != 0) {
             // 创建临时路径,存放压缩文件
             String picStorePath = (String) redisTemplate.opsForValue().get(RedisCode.STATICPATH);//静态路径地址
@@ -407,7 +411,7 @@ public class DownloadAudioController {
             ZipOutputStream zipOut = new ZipOutputStream(new FileOutputStream(zipFilePath));
             // 循环调用压缩文件方法,将一个一个需要下载的文件打入压缩文件包
             List<String> fileNameList = new ArrayList<>();
-            for (EquipmentFile entity : lists) {
+            for (EquipmentFilePWav entity : lists) {
                 // 该方法在下面定义
                 fileVideoToZip(entity.getTplj().replace(fileUrl,filePath), zipOut, fileNameList);
             }
