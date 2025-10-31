@@ -34,6 +34,10 @@
                     <i class="ace-icon fa fa-refresh"></i>
                     重置
                   </a>
+                  <button type="button" v-on:click="exportExcel()" class="btn btn-sm btn-info btn-round" style="margin-right: 10px;">
+                    <i class="ace-icon fa fa-download"></i>
+                    导出
+                  </button>
                 </td>
               </tr>
               </tbody>
@@ -86,6 +90,12 @@ export default {
     _this.initMap();
   },
   methods: {
+    exportExcel(){
+      let _this = this;
+      let paramsStr = "sbbh="+_this.curSbsn+"&stime="+_this.stime+"&etime="+_this.etime;
+      let url = process.env.VUE_APP_SERVER + '/monitor/export/exportPontoonGps?'+paramsStr;
+      window.location.href = url;
+    },
     /**
      *开始时间
      */

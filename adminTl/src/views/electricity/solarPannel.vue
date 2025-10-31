@@ -31,6 +31,10 @@
                     <i class="ace-icon fa fa-refresh"></i>
                     重置
                   </a>
+                  <button type="button" v-on:click="exportExcel()" class="btn btn-sm btn-info btn-round" style="margin-right: 10px;">
+                    <i class="ace-icon fa fa-download"></i>
+                    导出
+                  </button>
                 </td>
               </tr>
               </tbody>
@@ -317,6 +321,26 @@ export default {
     _this.list(1);
   },
   methods: {
+    exportExcel(){
+      let _this = this;
+      let paramsStr = "";
+      if("460100"==Tool.getLoginUser().deptcode){
+        paramsStr = "deptcode="+Tool.getLoginUser().deptcode;
+      }else{
+        paramsStr = "deptcode="+Tool.getLoginUser().deptcode+"&xmbh="+Tool.getLoginUser().xmbh;
+      }
+      if(Tool.isNotEmpty(_this.solarPannelDto.stime)){
+        paramsStr = paramsStr + "&stime="+_this.solarPannelDto.stime;
+      }
+      if(Tool.isNotEmpty(_this.solarPannelDto.etime)){
+        paramsStr = paramsStr + "&etime="+_this.solarPannelDto.etime;
+      }
+      if(Tool.isNotEmpty(_this.solarPannelDto.deviceName)){
+        paramsStr = paramsStr + "&deviceName="+_this.solarPannelDto.deviceName;
+      }
+      let url = process.env.VUE_APP_SERVER + '/monitor/export/exportSolarPannel?'+paramsStr;
+      window.location.href = url;
+    },
     /**
      * 列表查询
      */

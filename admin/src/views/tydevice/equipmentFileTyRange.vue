@@ -2,7 +2,7 @@
   <div>
     <div class="widget-box">
       <div class="widget-header">
-        <h4 class="widget-title">图片管理查询</h4>
+        <h4 class="widget-title">路线图</h4>
       </div>
       <div class="widget-body">
         <div class="widget-main">
@@ -34,6 +34,10 @@
                     <i class="ace-icon fa fa-refresh"></i>
                     重置
                   </a>
+                  <button type="button" v-on:click="exportExcel()" class="btn btn-sm btn-info btn-round" style="margin-right: 10px;">
+                    <i class="ace-icon fa fa-download"></i>
+                    导出
+                  </button>
                 </td>
               </tr>
               </tbody>
@@ -86,6 +90,12 @@ export default {
     _this.initMap();
   },
   methods: {
+    exportExcel(){
+      let _this = this;
+      let paramsStr = "sbbh="+_this.curSbsn+"&stime="+_this.stime+"&etime="+_this.etime;
+      let url = process.env.VUE_APP_SERVER + '/monitor/export/exportPontoonGps?'+paramsStr;
+      window.location.href = url;
+    },
     /**
      *开始时间
      */
