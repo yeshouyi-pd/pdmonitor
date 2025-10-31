@@ -218,7 +218,7 @@ public class EquipmentFileMigrationShjService {
                         } catch (Exception e) {
                             LOG.error("迁移EquipmentFile数据失败，ID: {}", equipmentFileEvent.getId(), e);
                             // 标记迁移失败
-                            updateSyncFlag(equipmentFileEvent.getId(), false);
+                            updateEventSyncFlag(equipmentFileEvent.getId(), false);
                         } finally {
                             latch.countDown();
                         }
