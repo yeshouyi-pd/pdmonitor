@@ -2,6 +2,7 @@ package com.pd.server.main.service;
 
 import com.pd.server.main.domain.*;
 import com.pd.server.main.dto.EquipmentFilePClusterDto;
+import com.pd.server.main.dto.EventDto;
 import com.pd.server.main.dto.PageDto;
 import com.pd.server.main.dto.basewx.my.EquipmentFileDwjkDto;
 import com.pd.server.main.dto.basewx.my.EquipmentFileEventDwDto;
@@ -112,5 +113,16 @@ public class EquipmentFilePClusterService {
 
     public Integer countTsByExample(EquipmentFilePClusterExample example){
         return equipmentFilePClusterMapper.countTsByExample(example);
+    }
+    public  List<EventDto>  getEquipmentEventByDept(EquipmentFilePClusterExample equipmentFileEventExample) {
+        return equipmentFilePClusterMapper.getEquipmentEventByDept(equipmentFileEventExample);
+    }
+
+    public List<EquipmentFilePCluster> getEquipmentEventByDeptdate(EquipmentFilePClusterExample equipmentFileEventExample) {
+        return equipmentFilePClusterMapper.getEquipmentEventByDeptdate(equipmentFileEventExample);
+    }
+
+    public List<EquipmentFilePCluster> listByexample(EquipmentFilePClusterExample equipmentFileEventExample) {
+        return equipmentFilePClusterMapper.selectByExample(equipmentFileEventExample);
     }
 }

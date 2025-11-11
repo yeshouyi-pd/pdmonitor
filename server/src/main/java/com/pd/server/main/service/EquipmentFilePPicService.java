@@ -8,6 +8,7 @@ import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
 import com.pd.server.main.dto.basewx.my.EquipmentFileDwjkDto;
 import com.pd.server.main.dto.basewx.my.PredationStaticticsDto;
 import com.pd.server.main.dto.basewx.my.SmsIntDto;
+import com.pd.server.main.dto.*;
 import com.pd.server.main.mapper.EquipmentFilePPicMapper;
 import com.pd.server.util.CopyUtil;
 import com.github.pagehelper.PageHelper;
@@ -95,5 +96,25 @@ public class EquipmentFilePPicService {
 
     public PredationStaticticsDto predationStatictics(EquipmentFilePPicExample example){
         return equipmentFilePPicMapper.predationStatictics(example);
+    }
+
+    public List<EquipmentFilePPic> getAlljcsjByDeptgetDay(EquipmentFilePPicExample example) {
+        return equipmentFilePPicMapper.getAlljcsjByDeptgetDay(example);
+    }
+
+    public List<KvIntDto> getAlljcsjByDept(EquipmentFilePPicExample example) {
+        return equipmentFilePPicMapper.getAlljcsjByDept(example);
+    }
+
+    public List<EquipmenInfo> getthisDeptEquipmentday(EquipmentFilePPicExample equipmentFileExample) {
+        return equipmentFilePPicMapper.getthisDeptEquipmentday(equipmentFileExample);
+    }
+
+    public List<EquipmentMainListDto> getthisDeptEquipmentinfoday(EquipmentFilePPicExample equipmentFileExample) {
+        return equipmentFilePPicMapper.getthisDeptEquipmentinfoday(equipmentFileExample);
+    }
+
+    public List<EquipmentMainDto> getthisDeptjxsjJT(EquipmentFilePPicExample equipmentFileExample) {
+        return equipmentFilePPicMapper.getthisDeptjxsjJT(equipmentFileExample);
     }
 }

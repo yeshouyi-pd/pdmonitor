@@ -59,6 +59,12 @@
     <result column="rq" jdbcType="VARCHAR" property="rq" />
     <result column="ts" jdbcType="VARCHAR" property="ts" />
   </resultMap>
+
+  <resultMap id="BaseResultMapKV" type="com.pd.server.main.dto.EventDto">
+    <result column="deptcode" jdbcType="VARCHAR" property="deptcode" />
+    <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
+    <result column="value" jdbcType="INTEGER" property="value" />
+  </resultMap>
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -697,4 +703,23 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
+
+  <select id="getEquipmentEventByDept" parameterType="com.pd.server.main.domain.EquipmentFilePClusterExample"  resultMap="BaseResultMapKV">
+    SELECT  deptcode , sbbh ,COUNT(*)  `value` FROM  equipment_file_p_cluster
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    GROUP  BY  deptcode , sbbh
+
+  </select>
+
+
+  <select id="getEquipmentEventByDeptdate" parameterType="com.pd.server.main.domain.EquipmentFilePClusterExample"  resultMap="BaseResultMap">
+    SELECT   * FROM  equipment_file_p_cluster
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    order by rq desc limit 1
+  </select>
+
 </mapper>

@@ -239,13 +239,13 @@ public class EquipmentFileSplitShjService {
                 if(eventsbsn.contains(cluster.getSbbh())){
                     cluster.setKssj(kssj);
                     cluster.setJssj(jssj);
-                    cluster.setJtnr(cluster.getSm1());
+                    cluster.setJtnr(source.getSm1());
                     return true;
                 }else {
                     if(!kssj.equals(jssj)){
                         cluster.setKssj(kssj);
                         cluster.setJssj(jssj);
-                        cluster.setJtnr(cluster.getSm1());
+                        cluster.setJtnr(source.getSm1());
                         return true;
                     }
                 }

@@ -8,6 +8,8 @@ import com.pd.server.main.dto.basewx.my.EquipmentFileDwjkDto;
 import com.pd.server.main.dto.basewx.my.EquipmentFileEventDwDto;
 import com.pd.server.main.dto.basewx.my.WrjEventDto;
 import com.pd.server.main.dto.basewx.my.WrjTcDto;
+
+import com.pd.server.main.dto.EventDto;
 import org.apache.ibatis.annotations.Param;
 
 public interface EquipmentFilePClusterMapper {
@@ -49,4 +51,9 @@ public interface EquipmentFilePClusterMapper {
 
     Integer countTsByExample(EquipmentFilePClusterExample example);
 
+
+
+    List<EventDto> getEquipmentEventByDept(EquipmentFilePClusterExample equipmentFileEventExample);
+
+    List<EquipmentFilePCluster> getEquipmentEventByDeptdate(EquipmentFilePClusterExample equipmentFileEventExample);
 }

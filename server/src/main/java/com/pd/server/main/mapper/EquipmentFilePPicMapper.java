@@ -8,6 +8,11 @@ import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
 import com.pd.server.main.dto.basewx.my.EquipmentFileDwjkDto;
 import com.pd.server.main.dto.basewx.my.PredationStaticticsDto;
 import com.pd.server.main.dto.basewx.my.SmsIntDto;
+
+import com.pd.server.main.dto.EquipmenInfo;
+import com.pd.server.main.dto.EquipmentMainDto;
+import com.pd.server.main.dto.EquipmentMainListDto;
+import com.pd.server.main.dto.KvIntDto;
 import org.apache.ibatis.annotations.Param;
 
 public interface EquipmentFilePPicMapper {
@@ -45,4 +50,14 @@ public interface EquipmentFilePPicMapper {
 
     PredationStaticticsDto predationStatictics(EquipmentFilePPicExample example);
 
+
+    List<EquipmentFilePPic> getAlljcsjByDeptgetDay(EquipmentFilePPicExample example);
+
+    List<KvIntDto> getAlljcsjByDept(EquipmentFilePPicExample example);
+
+    List<EquipmenInfo> getthisDeptEquipmentday(EquipmentFilePPicExample equipmentFileExample);
+
+    List<EquipmentMainListDto> getthisDeptEquipmentinfoday(EquipmentFilePPicExample equipmentFileExample);
+
+    List<EquipmentMainDto> getthisDeptjxsjJT(EquipmentFilePPicExample equipmentFileExample);
 }
