@@ -6,7 +6,6 @@ import com.pd.server.main.dto.EquipmentFileTPicDto;
 import com.pd.server.main.dto.PageDto;
 import com.pd.server.main.mapper.EquipmentFileTPicMapper;
 import com.pd.server.util.CopyUtil;
-import com.pd.server.util.UuidUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
@@ -14,7 +13,6 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
-        import java.util.Date;
 
 @Service
 public class EquipmentFileTPicService {
@@ -67,5 +65,14 @@ public class EquipmentFileTPicService {
     public void delete(Long id) {
         equipmentFileTPicMapper.deleteByPrimaryKey(id);
     }
+
+    public List<EquipmentFileTPic> selectByExample(EquipmentFileTPicExample example) {
+        return equipmentFileTPicMapper.selectByExample(example);
+    }
+
+    public List<EquipmentFileTPic> selectByExampleOnlyId(EquipmentFileTPicExample example) {
+        return equipmentFileTPicMapper.selectByExampleOnlyId(example);
+    }
+
 
 }

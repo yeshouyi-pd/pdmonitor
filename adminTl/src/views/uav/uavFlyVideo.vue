@@ -101,7 +101,7 @@
                 <div style="text-align: center;">{{ldTime}}</div>
               </div>
               <div v-for="(tplj,index) in tpljList" :key="index">
-                <img alt="无图片" style="width: 150px;height: 250px;margin: 0 10px;" :src="tplj.substring(0,tplj.lastIndexOf('.')+1)+'jpg'">
+                <img alt="无图片" style="width: 150px;height: 250px;margin: 0 10px;" :src="tplj.replace('txt','jpg')">
               </div>
             </div>
             <div style="margin-top: 20px;display: flex;">

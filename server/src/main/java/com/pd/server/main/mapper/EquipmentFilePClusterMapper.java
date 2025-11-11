@@ -1,11 +1,9 @@
 package com.pd.server.main.mapper;
 
-import com.pd.server.main.domain.EquipmentFileEvent;
-import com.pd.server.main.domain.EquipmentFilePCluster;
-import com.pd.server.main.domain.EquipmentFilePClusterExample;
+import com.pd.server.main.domain.*;
+
 import java.util.List;
 
-import com.pd.server.main.domain.EquipmentTyEvent;
 import com.pd.server.main.dto.basewx.my.EquipmentFileDwjkDto;
 import com.pd.server.main.dto.basewx.my.EquipmentFileEventDwDto;
 import com.pd.server.main.dto.basewx.my.WrjEventDto;
@@ -41,7 +39,14 @@ public interface EquipmentFilePClusterMapper {
 
     List<EquipmentFileEventDwDto> listDw(EquipmentFilePClusterExample example);//只有A4的聚类
 
-    List<WrjEventDto> listAllWrj(EquipmentFilePClusterExample example);//含拖曳的聚类
+    List<WrjEventDto> listAllTs(EquipmentFilePClusterExample example);//含拖曳的聚类
 
-    List<WrjTcDto> listSumTsWrj(EquipmentFilePClusterExample example);//含拖曳的聚类
+    List<WrjTcDto> listSumTs(EquipmentFilePClusterExample example);//含拖曳的聚类
+
+    List<WrjTcDto> listSumTsGroup(EquipmentFilePClusterExample example);//含拖曳的聚类
+
+    List<EquipmentFilePCluster> selectByExampleOnlyId(EquipmentFilePClusterExample example);
+
+    Integer countTsByExample(EquipmentFilePClusterExample example);
+
 }

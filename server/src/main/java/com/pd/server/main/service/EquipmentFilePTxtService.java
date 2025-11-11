@@ -73,4 +73,8 @@ public class EquipmentFilePTxtService {
     public List<EquipmentFileDwjkDto> listAllDw(EquipmentFilePTxtExample example){
         return equipmentFilePTxtMapper.listAllDw(example);
     }
+
+    public List<EquipmentFilePTxt> selectByExample(EquipmentFilePTxtExample example){
+        return equipmentFilePTxtMapper.selectByExample(example);
+    }
 }

@@ -633,16 +633,16 @@
   </wsdl:binding>
   <wsdl:service name="FileInfo">
     <wsdl:port name="FileInfoSoap" binding="tns:FileInfoSoap">
-      <soap:address location="http://49.239.193.146:49053/FileInfo.asmx" />
+      <soap:address location="http://146.56.226.176:8088/FileInfo.asmx" />
     </wsdl:port>
     <wsdl:port name="FileInfoSoap12" binding="tns:FileInfoSoap12">
-      <soap12:address location="http://49.239.193.146:49053/FileInfo.asmx" />
+      <soap12:address location="http://146.56.226.176:8088/FileInfo.asmx" />
     </wsdl:port>
     <wsdl:port name="FileInfoHttpGet" binding="tns:FileInfoHttpGet">
-      <http:address location="http://49.239.193.146:49053/FileInfo.asmx" />
+      <http:address location="http://146.56.226.176:8088/FileInfo.asmx" />
     </wsdl:port>
     <wsdl:port name="FileInfoHttpPost" binding="tns:FileInfoHttpPost">
-      <http:address location="http://49.239.193.146:49053/FileInfo.asmx" />
+      <http:address location="http://146.56.226.176:8088/FileInfo.asmx" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

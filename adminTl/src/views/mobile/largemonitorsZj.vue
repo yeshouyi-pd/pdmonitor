@@ -227,7 +227,6 @@ export default {
       _this.$forceUpdate();
       _this.a4Device = response.content.a4List;
       _this.$forceUpdate();
-      //_this.getSevenDayEvent();//左下角最近7天的总事件
       _this.getAlarmEventData();//右中最近7天的总事件
       _this.getRightTopData();//右上角获取当日声学侦测次数、事件(群次)、捕食次数
       _this.getPointer();
@@ -251,7 +250,6 @@ export default {
       _this.curTopSbbh=sbbh;
       _this.curEventSbbh=sbbh;
       _this.curBottomSbbh=sbbh;
-      //_this.getSevenDayEvent();//左下角最近7天的总事件
       _this.getAlarmEventData();//右中最近7天的总事件
       _this.getRightTopData();//右上角获取当日声学侦测次数、事件(群次)、捕食次数
       //_this.getPointer();
@@ -461,7 +459,6 @@ export default {
       // 计时器为空，操作
       _this.intervalId = setInterval(() => {
         console.log("刷新" + new Date());
-        //_this.getSevenDayEvent();//左下角最近7天的总事件
         _this.getAlarmEventData();//右中最近7天的总事件
         _this.getA4AndA2JL();//中间下方，获取A2设备和A4设备聚类
         _this.getRightTopData();//右上角获取当日声学侦测次数、事件(群次)、捕食次数

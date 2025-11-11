@@ -2,11 +2,10 @@ package com.pd.monitor.quartz;
 
 import com.pd.monitor.utils.SendSmsTool;
 import com.pd.monitor.wx.conf.WxRedisConfig;
-import com.pd.server.main.domain.EquipmentFileExample;
+import com.pd.server.main.domain.EquipmentFilePPicExample;
 import com.pd.server.main.domain.EquipmentFileTodayExample;
 import com.pd.server.main.dto.basewx.my.SmsIntDto;
-import com.pd.server.main.service.EquipmentFileEventService;
-import com.pd.server.main.service.EquipmentFileService;
+import com.pd.server.main.service.EquipmentFilePPicService;
 import com.pd.server.main.service.EquipmentFileTodayService;
 import com.pd.server.util.DateUtil;
 import org.slf4j.Logger;
@@ -28,7 +27,7 @@ public class SendSmsQuartzJs {
     @Resource
     private EquipmentFileTodayService equipmentFileTodayService;
     @Resource
-    private EquipmentFileService equipmentFileService;
+    private EquipmentFilePPicService equipmentFilePPicService;
 
 
     /**
@@ -41,13 +40,12 @@ public class SendSmsQuartzJs {
         String phoneNum = attrMap.get("phoneNumberJs");
         String lasthour = DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(),-1),"yyyy-MM-dd ")+"20:00:00";
         String nowhour = DateUtil.getFormatDate(new Date(),"yyyy-MM-dd ")+"08:00:00";
-        EquipmentFileExample todayExample = new EquipmentFileExample();
-        EquipmentFileExample.Criteria todayCa = todayExample.createCriteria();
-        todayCa.andSbbhIn(Arrays.asList("JSA4001","JSA4002"));
-        todayCa.andTxtlxEqualTo("1");
-        todayCa.andCjsjGreaterThanOrEqualTo(lasthour);
-        todayCa.andCjsjLessThan(nowhour);
-        List<SmsIntDto> list = equipmentFileService.sendSmsQuery(todayExample);
+        EquipmentFilePPicExample example = new EquipmentFilePPicExample();
+        EquipmentFilePPicExample.Criteria ca = example.createCriteria();
+        ca.andSbbhIn(Arrays.asList("JSA4001","JSA4002"));
+        ca.andCjsjGreaterThanOrEqualTo(lasthour);
+        ca.andCjsjLessThan(nowhour);
+        List<SmsIntDto> list = equipmentFilePPicService.sendSmsQuery(example);
         Map<String,Integer> sbbhBjcs = new HashMap<>();
         for (SmsIntDto entity : list){
             sbbhBjcs.put(entity.getSbbh(),entity.getBjcs());
@@ -60,9 +58,8 @@ public class SendSmsQuartzJs {
         phoneNum = null;
         a1 = null;
         a2 = null;
-        list.clear();
-        sbbhBjcs.clear();
-        System.gc();
+        list = null;
+        sbbhBjcs = null;
     }
 
     /**
@@ -94,9 +91,8 @@ public class SendSmsQuartzJs {
         phoneNum = null;
         a1 = null;
         a2 = null;
-        list.clear();
-        sbbhBjcs.clear();
-        System.gc();
+        list = null;
+        sbbhBjcs = null;
     }
 
     /**
@@ -128,9 +124,8 @@ public class SendSmsQuartzJs {
         phoneNum = null;
         a1 = null;
         a2 = null;
-        list.clear();
-        sbbhBjcs.clear();
-        System.gc();
+        list = null;
+        sbbhBjcs = null;
     }
 
     /**
@@ -162,8 +157,7 @@ public class SendSmsQuartzJs {
         phoneNum = null;
         a1 = null;
         a2 = null;
-        list.clear();
-        sbbhBjcs.clear();
-        System.gc();
+        list = null;
+        sbbhBjcs = null;
     }
 }

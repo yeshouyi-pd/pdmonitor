@@ -4,10 +4,12 @@ import com.pd.server.main.domain.EquipmentFilePPic;
 import com.pd.server.main.domain.EquipmentFilePPicExample;
 import com.pd.server.main.dto.EquipmentFilePPicDto;
 import com.pd.server.main.dto.PageDto;
+import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
 import com.pd.server.main.dto.basewx.my.EquipmentFileDwjkDto;
+import com.pd.server.main.dto.basewx.my.PredationStaticticsDto;
+import com.pd.server.main.dto.basewx.my.SmsIntDto;
 import com.pd.server.main.mapper.EquipmentFilePPicMapper;
 import com.pd.server.util.CopyUtil;
-import com.pd.server.util.UuidUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
@@ -15,7 +17,6 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
-        import java.util.Date;
 
 @Service
 public class EquipmentFilePPicService {
@@ -78,5 +79,21 @@ public class EquipmentFilePPicService {
 
     public List<EquipmentFilePPic> selectByExample(EquipmentFilePPicExample equipmentFileExampleId) {
         return equipmentFilePPicMapper.selectByExample(equipmentFileExampleId);
+    }
+
+    public List<AlarmNumbersDto> statisticsAlarmNumsByMinute(EquipmentFilePPicExample example){
+        return equipmentFilePPicMapper.statisticsAlarmNumsByMinute(example);
+    }
+
+    public List<AlarmNumbersDto> statisticsAlarmNumsByHour(EquipmentFilePPicExample example){
+        return equipmentFilePPicMapper.statisticsAlarmNumsByHour(example);
+    }
+
+    public List<SmsIntDto> sendSmsQuery(EquipmentFilePPicExample example){
+        return equipmentFilePPicMapper.sendSmsQuery(example);
+    }
+
+    public PredationStaticticsDto predationStatictics(EquipmentFilePPicExample example){
+        return equipmentFilePPicMapper.predationStatictics(example);
     }
 }

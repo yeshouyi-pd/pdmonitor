@@ -75,4 +75,8 @@ public class EquipmentFilePWavService {
     public List<EquipmentFilePWav> listAll(EquipmentFilePWavExample example) {
         return equipmentFilePWavMapper.selectByExample(example);
     }
+
+    public List<EquipmentFilePWav> selectByExample(EquipmentFilePWavExample example){
+        return equipmentFilePWavMapper.selectByExample(example);
+    }
 }

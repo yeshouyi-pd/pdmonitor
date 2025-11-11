@@ -754,7 +754,7 @@ public class DwjkController extends BaseWxController {
             ca.andDeptcodeIn(listdept);
         }
         ca.andRqEqualTo(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd"));
-        List<WrjEventDto> list = equipmentFilePClusterService.listAllWrj(example);
+        List<WrjEventDto> list = equipmentFilePClusterService.listAllTs(example);
         responseDto.setCode("0000");
         responseDto.setContent(list);
         return responseDto;
@@ -800,7 +800,7 @@ public class DwjkController extends BaseWxController {
         }
         ca.andRqGreaterThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(),-4),"yyyy-MM-dd"));
         ca.andRqLessThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(),-1),"yyyy-MM-dd"));
-        List<WrjTcDto> list = equipmentFilePClusterService.listSumTsWrj(example);
+        List<WrjTcDto> list = equipmentFilePClusterService.listSumTs(example);
         Map<String,Object> resultMap = new HashMap<>();
         if(!CollectionUtils.isEmpty(list)){
             Map<String, List<WrjTcDto>> map = list.stream().sorted(Comparator.comparing(WrjTcDto::getRq)).collect(Collectors.groupingBy(WrjTcDto::getSbbh));

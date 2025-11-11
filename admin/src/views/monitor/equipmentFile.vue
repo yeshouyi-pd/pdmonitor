@@ -154,13 +154,6 @@
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
-<!--    <div class="form-group">
-      <div class="col-sm-10">
-        <Uploads    v-bind:suffixs="['mp4']"
-                    v-bind:use="'1'"
-                    v-bind:mainid="'1'" ></Uploads>
-      </div>
-    </div>-->
   </div>
 </template>
 <script>
@@ -216,7 +209,7 @@ export default {
     beforePic(){
       let _this = this;
       _this.curIndex = _this.curIndex-1;
-      _this.curTplj = _this.equipmentFiles[_this.curIndex].tplj.substring(0,_this.equipmentFiles[_this.curIndex].tplj.lastIndexOf('.')+1)+'jpg';
+      _this.curTplj = _this.equipmentFiles[_this.curIndex].tplj.replace(/http:\/\/[^/]+/, _this.picServer);
       _this.curSbsn = _this.equipmentFiles[_this.curIndex].sbbh;
       _this.curCjsj = _this.equipmentFiles[_this.curIndex].cjsj;
       _this.curWjmc = _this.equipmentFiles[_this.curIndex].tplj;
@@ -225,7 +218,7 @@ export default {
     nextPic(){
       let _this = this;
       _this.curIndex = _this.curIndex+1;
-      _this.curTplj = _this.equipmentFiles[_this.curIndex].tplj.substring(0,_this.equipmentFiles[_this.curIndex].tplj.lastIndexOf('.')+1)+'jpg';
+      _this.curTplj = _this.equipmentFiles[_this.curIndex].tplj.replace(/http:\/\/[^/]+/, _this.picServer);
       _this.curSbsn = _this.equipmentFiles[_this.curIndex].sbbh;
       _this.curCjsj = _this.equipmentFiles[_this.curIndex].cjsj;
       _this.curWjmc = _this.equipmentFiles[_this.curIndex].tplj;
@@ -264,24 +257,7 @@ export default {
         _this.equipmentFiles = resp.content.list;
         _this.$refs.pagination.render(page, resp.content.total);
         Loading.hide();
-        //_this.getTs(_this.equipmentFiles);
       })
-    },
-    getTs(equipmentFiles){
-      let _this = this;
-      for(let i=0;i<equipmentFiles.length;i++){
-        let id = equipmentFiles[i].id;
-        _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFile/getTs/'+equipmentFiles[i].wjmc+"/"+equipmentFiles[i].sbbh).then((response)=>{
-          Loading.hide();
-          let resp = response.data;
-          let item = resp.content;
-          if(!Tool.isEmpty(item)){
-            document.getElementById(id).innerText="("+item.ts+")";
-          }else{
-            document.getElementById(id).innerText="";
-          }
-        })
-      }
     },
     /**
      * 查看原图
@@ -289,7 +265,7 @@ export default {
     checkImg(item,index){
       let _this = this;
       _this.curIndex = index;
-      _this.curTplj = item.tplj.replace(/http:\/\/[^/]+/, _this.picServer).replace('.txt', '.jpg');
+      _this.curTplj = item.tplj.replace(/http:\/\/[^/]+/, _this.picServer);
       _this.curSbsn = item.sbbh;
       _this.curCjsj = item.cjsj;
       _this.curWjmc = item.tplj;
@@ -349,15 +325,12 @@ export default {
       if(Tool.isNotEmpty(_this.equipmentFileDto.sbbh)){
         paramsStr = paramsStr + "&sbbh="+_this.equipmentFileDto.sbbh;
       }
-      //Loading.show();
       let url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downVideoZip?'+paramsStr;
-
       _this.$ajax.get(url).then((response)=>{
-        //Loading.hide();
         if(response.data && response.data.message && response.data.message.includes("系统异常")){
           Toast.error("系统异常，请联系管理员！");
         }else if(response.data && response.data.includes("未找到")){
-          Toast.error("未找到对应视频！");
+          Toast.error("未找到对应音频！");
         }else{
           window.location.href = url;
         }

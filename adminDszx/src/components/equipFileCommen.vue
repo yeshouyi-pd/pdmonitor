@@ -129,7 +129,7 @@ export default {
       _this.equipmentFileDto.size=_this.$refs.pagination.size;
       _this.equipmentFileDto.etime=_this.cjsj;
       _this.$forceUpdate();
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFile/yueYangChoose', _this.equipmentFileDto).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileP/yueYangChoose', _this.equipmentFileDto).then((response)=>{
         Loading.hide();
         let resp = response.data;
         _this.equipmentFiles = resp.content.list;

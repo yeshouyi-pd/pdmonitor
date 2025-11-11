@@ -38,6 +38,10 @@
                     <i class="ace-icon fa fa-leaf"></i>
                     导出
                   </button>
+                  <button type="button" v-on:click="downloadEvent()" class="btn btn-xs btn-info" style="margin-right: 10px;">
+                    <i class="ace-icon fa fa-download"></i>
+                    下载文件
+                  </button>
                 </td>
               </tr>
               </tbody>
@@ -76,7 +80,7 @@
               <button :id="'xz'+item.id" v-if="userDto.yj=='Y'" v-on:click="downloadVideo(item.id)" class="btn btn-xs btn-info" style="margin-left: 10px;">
                 <i class="ace-icon fa fa-volume-down bigger-120">下载视频</i>
               </button>
-              <button :id="item.id" v-on:click="watchVideo(item.id)" class="btn btn-xs btn-info" style="margin-left: 10px;">
+              <button :id="item.id" v-on:click="watchVideo(item.cjsj)" class="btn btn-xs btn-info" style="margin-left: 10px;">
                 <i class="ace-icon fa  fa-video-camera bigger-120">历史回放</i>
               </button>
             </div>
@@ -194,6 +198,38 @@ export default {
     });
   },
   methods: {
+    //下载文件
+    downloadEvent(){
+      let _this = this;
+      let param = "";
+      if("460100"!=Tool.getLoginUser().deptcode){
+        param+="&xmbh="+Tool.getLoginUser().xmbh;
+      }
+      if(!Tool.isEmpty(_this.equipmentFileEventDto.sbbh)){
+        param+="&sbbh="+_this.equipmentFileEventDto.sbbh;
+      }else{
+        Toast.error("请选择设备编号！");
+        return;
+      }
+      if(!Tool.isEmpty(_this.equipmentFileEventDto.stime)){
+        param+="&stime="+_this.equipmentFileEventDto.stime;
+      }else{
+        Toast.error("请选择开始日期！");
+        return;
+      }
+      if(!Tool.isEmpty(_this.equipmentFileEventDto.etime)){
+        param+="&etime="+_this.equipmentFileEventDto.etime;
+      }else{
+        Toast.error("请选择结束日期！");
+        return;
+      }
+      let diff = _this.getDateDiff(_this.equipmentFileEventDto.stime,_this.equipmentFileEventDto.etime);
+      if(diff>=3){
+        Toast.error("日期相差不能超过3天！");
+        return;
+      }
+      window.location.href = process.env.VUE_APP_SERVER + '/monitor/download/audio/downloadEquipmentFileEvent?'+param.substring(1,param.length);
+    },
     exportExcle(){
       let _this = this;
       let param = "";
@@ -216,9 +252,9 @@ export default {
       }
     },
     //是否有视频
-    hasVideo(id){
+    hasVideo(cjsj,id){
       let _this = this;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileEvent/videoList', {'id':id}).then((response)=> {
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileP/videoList', {'cjsj':cjsj}).then((response)=> {
         let resp = response.data;
         let videoDatas = resp.content;
         if(videoDatas.length>0){
@@ -231,12 +267,12 @@ export default {
       })
     },
     //历史回放
-    watchVideo(id){
+    watchVideo(cjsj){
       let _this = this;
       $("#playbox").empty();
       _this.canPlay = false;
       Loading.show();
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileEvent/videoList', {'id':id}).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileP/videoList', {'cjsj':cjsj}).then((response)=>{
          let resp = response.data;
          let videoDatas = resp.content;
          _this.$forceUpdate();
@@ -264,7 +300,7 @@ export default {
       let _this = this;
       let url = '';
       if(_this.shj){
-        url="http://49.239.193.146:49053/FileInfo.asmx/GetPlayUrl";
+        url="http://146.56.226.176:8088/FileInfo.asmx/GetPlayUrl";
       }else{
         url="http://49.239.193.146:49082/FileInfo.asmx/GetPlayUrl";
       }
@@ -484,31 +520,21 @@ export default {
       if("460100"!=Tool.getLoginUser().deptcode){
         _this.equipmentFileEventDto.xmbh=Tool.getLoginUser().xmbh;
       }
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileEvent/list', _this.equipmentFileEventDto).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileP/listClusters', _this.equipmentFileEventDto).then((response)=>{
         Loading.hide();
         let resp = response.data;
         _this.equipmentFileEvents = resp.content.list;
         _this.$refs.pagination.render(page, resp.content.total);
         _this.$nextTick(function (){
           for(let i=0;i<_this.equipmentFileEvents.length;i++){
-            _this.hasVideo(_this.equipmentFileEvents[i].id);
+            _this.hasVideo(_this.equipmentFileEvents[i].cjsj,_this.equipmentFileEvents[i].id);
           }
         });
       })
     },
-    downloadFile(id){
-      let url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downAudioFileById?id='+id;
-      console.log(url);
-      window.location.href = url;
-    },
     downloadVideo(id){
       let _this = this;
-      let url = "";
-      if(_this.shj){
-        url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downZipByA4Id53?id='+id;
-      }else {
-        url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downZipByA4Id?id='+id;
-      }
+      let url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downZipByA4Id?id='+id;
       _this.$ajax.get(url).then((response)=>{
         if(response.data && response.data.message && response.data.message.includes("系统异常")){
           Toast.error("系统异常，请联系管理员！");
@@ -518,7 +544,34 @@ export default {
           window.location.href = url;
         }
       })
+    },
+    getDateDiff(dateStr1, dateStr2) {
+      // 处理常见的日期分隔符（兼容 "-" 和 "/"）
+      const formatDateStr = (str) => str.replace(/\//g, '-');
+      // 将字符串转换为 Date 对象
+      const date1 = new Date(formatDateStr(dateStr1));
+      const date2 = new Date(formatDateStr(dateStr2));
+      // 验证日期有效性
+      if (isNaN(date1) || isNaN(date2)) {
+        throw new Error('Invalid date format. Use "YYYY-MM-DD" or "YYYY/MM/DD"');
+      }
+      // 转换为 UTC 时间消除时区影响
+      const utc1 = Date.UTC(
+          date1.getFullYear(),
+          date1.getMonth(),
+          date1.getDate()
+      );
+      const utc2 = Date.UTC(
+          date2.getFullYear(),
+          date2.getMonth(),
+          date2.getDate()
+      );
+      // 计算天数差（绝对值）
+      const timeDiff = Math.abs(utc2 - utc1);
+      const dayDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+      return dayDiff;
     }
+
   }
 }
 </script>

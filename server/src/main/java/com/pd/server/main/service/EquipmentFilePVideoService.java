@@ -72,7 +72,20 @@ public class EquipmentFilePVideoService {
     public List<EquipmentFileDwjkDto> listAllDw(EquipmentFilePVideoExample example){
         return equipmentFilePVideoMapper.listAllDw(example);
     }
+
     public List<EquipmentFilePVideo> listAll(EquipmentFilePVideoExample example) {
         return equipmentFilePVideoMapper.selectByExample(example);
+    }
+
+    public List<EquipmentFilePVideo> selectByExample(EquipmentFilePVideoExample example) {
+        return equipmentFilePVideoMapper.selectByExample(example);
+    }
+
+    public EquipmentFilePVideo selectByExampleOnlyIdLimitOne(EquipmentFilePVideoExample example){
+        return equipmentFilePVideoMapper.selectByExampleOnlyIdLimitOne(example);
+    }
+
+    public EquipmentFilePVideo selectByPrimaryKey(Long id){
+        return equipmentFilePVideoMapper.selectByPrimaryKey(id);
     }
 }

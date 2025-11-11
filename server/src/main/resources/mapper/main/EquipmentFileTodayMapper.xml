@@ -57,6 +57,12 @@
     <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
     <result column="rq" jdbcType="VARCHAR" property="rq" />
   </resultMap>
+  <resultMap id="WrjEventDto" type="com.pd.server.main.dto.basewx.my.WrjEventDto">
+    <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
+    <result column="kssj" jdbcType="VARCHAR" property="kssj" />
+    <result column="jssj" jdbcType="VARCHAR" property="jssj" />
+    <result column="ts" jdbcType="VARCHAR" property="ts" />
+  </resultMap>
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -671,6 +677,12 @@
 
   <select id="noTodaySbbhDtoList" parameterType="com.pd.server.main.domain.EquipmentFileTodayExample" resultMap="NoTodaySbbh">
     select DISTINCT rq,sbbh from equipment_file_today
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <select id="listAllTs" parameterType="com.pd.server.main.domain.EquipmentFileTodayExample" resultMap="WrjEventDto">
+    select sbbh,cjsj as kssj,cjsj as jssj,sm6 as ts from equipment_file_today
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>

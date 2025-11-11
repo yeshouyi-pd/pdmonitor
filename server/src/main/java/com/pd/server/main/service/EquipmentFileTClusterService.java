@@ -5,9 +5,9 @@ import com.pd.server.main.domain.EquipmentFileTClusterExample;
 import com.pd.server.main.dto.EquipmentFileTClusterDto;
 import com.pd.server.main.dto.PageDto;
 import com.pd.server.main.dto.basewx.my.EquipmentTyEventDwDto;
+import com.pd.server.main.dto.basewx.my.GpsKVDto;
 import com.pd.server.main.mapper.EquipmentFileTClusterMapper;
 import com.pd.server.util.CopyUtil;
-import com.pd.server.util.UuidUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,6 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
-        import java.util.Date;
 
 @Service
 public class EquipmentFileTClusterService {
@@ -71,5 +70,21 @@ public class EquipmentFileTClusterService {
 
     public List<EquipmentTyEventDwDto> listAllDw(EquipmentFileTClusterExample example){
         return equipmentFileTClusterMapper.listAllDw(example);
+    }
+
+    public List<EquipmentFileTCluster> selectByExample(EquipmentFileTClusterExample example){
+        return equipmentFileTClusterMapper.selectByExample(example);
+    }
+
+    public List<GpsKVDto> selectGpsByExample(EquipmentFileTClusterExample example){
+        return equipmentFileTClusterMapper.selectGpsByExample(example);
+    }
+
+    public List<EquipmentFileTCluster> selectByExampleOnlyId(EquipmentFileTClusterExample example) {
+        return equipmentFileTClusterMapper.selectByExampleOnlyId(example);
+    }
+
+    public EquipmentFileTCluster selectByPrimaryKey(Long id){
+        return equipmentFileTClusterMapper.selectByPrimaryKey(id);
     }
 }

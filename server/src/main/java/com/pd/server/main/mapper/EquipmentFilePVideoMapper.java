@@ -1,5 +1,7 @@
 package com.pd.server.main.mapper;
 
+import com.pd.server.main.domain.EquipmentFilePPic;
+import com.pd.server.main.domain.EquipmentFilePPicExample;
 import com.pd.server.main.domain.EquipmentFilePVideo;
 import com.pd.server.main.domain.EquipmentFilePVideoExample;
 import java.util.List;
@@ -31,4 +33,6 @@ public interface EquipmentFilePVideoMapper {
     int updateByPrimaryKey(EquipmentFilePVideo record);
 
     List<EquipmentFileDwjkDto> listAllDw(EquipmentFilePVideoExample example);
+
+    EquipmentFilePVideo selectByExampleOnlyIdLimitOne(EquipmentFilePVideoExample example);
 }

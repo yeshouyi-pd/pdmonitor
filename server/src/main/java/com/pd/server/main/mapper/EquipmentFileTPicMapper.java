@@ -18,6 +18,8 @@ public interface EquipmentFileTPicMapper {
 
     List<EquipmentFileTPic> selectByExample(EquipmentFileTPicExample example);
 
+    List<EquipmentFileTPic> selectByExampleOnlyId(EquipmentFileTPicExample example);
+
     EquipmentFileTPic selectByPrimaryKey(Long id);
 
     int updateByExampleSelective(@Param("record") EquipmentFileTPic record, @Param("example") EquipmentFileTPicExample example);

@@ -104,6 +104,7 @@
                     <span v-if="item.tplj.includes('txt')">文件</span>
                     <span v-if="item.tplj.includes('wav')">音频</span>
                     <span v-if="item.tplj.includes('png') || item.tplj.includes('jpg')">图片</span>
+                    <span v-if="item.tplj.includes('mp4')">视频</span>
                   </td>
                   <td>{{item.tplj}}</td>
                   <td>
@@ -145,7 +146,8 @@ export default {
       curTplj:'',
       details:[],
       userDto:null,
-      shj:LOCAL_SSBRL
+      shj:LOCAL_SSBRL,
+      picServer:process.env.VUE_APP_PIC_SERVER
     }
   },
   mounted() {
@@ -197,7 +199,7 @@ export default {
       if("460100"!=Tool.getLoginUser().deptcode){
         _this.equipmentFileDto.xmbh=Tool.getLoginUser().xmbh;
       }
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFile/lists', _this.equipmentFileDto).then((response) => {
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileP/lists',_this.equipmentFileDto).then((response)=>{
         Loading.hide();
         let resp = response.data;
         _this.equipmentFiles = resp.content.list;
@@ -208,14 +210,14 @@ export default {
     detail(item){
       let _this = this;
       Loading.show();
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFile/detail/'+item.wjmc, {}).then((response) => {
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileP/allFile', {'cjsj':item.cjsj}).then((response) => {
         Loading.hide();
         let resp = response.data;
         _this.details = resp.content;
         for(let i=0;i<_this.details.length;i++){
           let tempTplj = _this.details[i].tplj;
           if(tempTplj.includes("jpg") || tempTplj.includes("png")){
-            _this.curTplj = tempTplj;
+            _this.curTplj = tempTplj.replace(/http:\/\/[^/]+/, _this.picServer);
             _this.$forceUpdate();
           }
         }
@@ -224,15 +226,8 @@ export default {
     },
     //下载文件
     downloadFile(obj){
-      let _this = this;
       let paramsStr = "fileUrl="+obj.tplj.substring(0,obj.tplj.lastIndexOf("/")+1)+"&fileName="+obj.tplj.substring(obj.tplj.lastIndexOf("/")+1,obj.tplj.length);
-      let url = "";
-      if(_this.shj){
-        url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downAudioFile53?'+paramsStr;
-      }else{
-        url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downAudioFile?'+paramsStr;
-      }
-      console.log(url);
+      let url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downAudioFile?'+paramsStr;
       window.location.href = url;
     }
   }

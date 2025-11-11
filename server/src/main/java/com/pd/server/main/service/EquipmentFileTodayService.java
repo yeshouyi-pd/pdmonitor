@@ -8,6 +8,7 @@ import com.pd.server.main.dto.*;
 import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
 import com.pd.server.main.dto.basewx.my.NoTodaySbbhDto;
 import com.pd.server.main.dto.basewx.my.SmsIntDto;
+import com.pd.server.main.dto.basewx.my.WrjEventDto;
 import com.pd.server.main.mapper.EquipmentFileTodayMapper;
 import com.pd.server.util.CopyUtil;
 import com.pd.server.util.UuidUtil;
@@ -25,6 +26,10 @@ public class EquipmentFileTodayService {
 
     @Resource
     private EquipmentFileTodayMapper equipmentFileTodayMapper;
+
+    public List<WrjEventDto> listAllTs(EquipmentFileTodayExample example){
+        return equipmentFileTodayMapper.listAllTs(example);
+    }
 
     public long countByExample(EquipmentFileTodayExample example){
         return equipmentFileTodayMapper.countByExample(example);

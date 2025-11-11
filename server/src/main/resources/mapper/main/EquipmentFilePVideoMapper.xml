@@ -553,4 +553,15 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
+  <select id="selectByExampleOnlyIdLimitOne" parameterType="com.pd.server.main.domain.EquipmentFilePVideoExample" resultMap="BaseResultMap">
+    select id
+    from equipment_file_p_video
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    limit 1
+  </select>
 </mapper>

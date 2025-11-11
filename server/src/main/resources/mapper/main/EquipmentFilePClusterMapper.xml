@@ -642,7 +642,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <select id="listAllWrj" parameterType="com.pd.server.main.domain.EquipmentFilePClusterExample" resultMap="WrjEventDto">
+  <select id="listAllTs" parameterType="com.pd.server.main.domain.EquipmentFilePClusterExample" resultMap="WrjEventDto">
     select sbbh, kssj, jssj, ts from equipment_file_p_cluster
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -653,13 +653,46 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <select id="listSumTsWrj" parameterType="com.pd.server.main.domain.EquipmentFilePClusterExample" resultMap="WrjTcDto">
+  <select id="listSumTs" parameterType="com.pd.server.main.domain.EquipmentFilePClusterExample" resultMap="WrjTcDto">
     select sbbh, rq, ts from equipment_file_p_cluster
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
     union all
     select sbbh, rq, ts from equipment_file_t_cluster
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <select id="listSumTsGroup" parameterType="com.pd.server.main.domain.EquipmentFilePClusterExample" resultMap="WrjTcDto">
+    select sbbh,sum(ts) as ts,rq from equipment_file_p_cluster
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    GROUP BY sbbh,rq
+    union all
+    select sbbh,sum(ts) as ts,rq from equipment_file_t_cluster
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    GROUP BY sbbh,rq
+  </select>
+  <select id="selectByExampleOnlyId" parameterType="com.pd.server.main.domain.EquipmentFilePClusterExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    id
+    from equipment_file_p_cluster
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="countTsByExample" parameterType="com.pd.server.main.domain.EquipmentFilePClusterExample" resultType="java.lang.Integer">
+    select sum(ts) from equipment_file_p_cluster
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>

@@ -253,7 +253,7 @@ export default {
         return;
       }
       Loading.show();
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentTyEvent/save', _this.equipmentTyEvent).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileT/saveTCluster', _this.equipmentTyEvent).then((response)=>{
         Loading.hide();
         let resp = response.data;
         if (resp.success) {
@@ -276,7 +276,7 @@ export default {
       if("460100"!=Tool.getLoginUser().deptcode){
         _this.equipmentTyEventDto.xmbh=Tool.getLoginUser().xmbh;
       }
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentTyEvent/list', _this.equipmentTyEventDto).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileT/listClusters', _this.equipmentTyEventDto).then((response)=>{
         Loading.hide();
         let resp = response.data;
         _this.equipmentTyEvents = resp.content.list;
@@ -284,24 +284,12 @@ export default {
       })
     },
     downloadFile(id){
-      let _this = this;
-      let url = "";
-      if(_this.shj){
-        url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downAudioFileById53?id='+id;
-      }else{
-        url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downAudioFileById?id='+id;
-      }
-      console.log(url);
+      let url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downAudioFileById?id='+id;
       window.location.href = url;
     },
     downloadVedio(id){
       let _this = this;
-      let url = "";
-      if(_this.shj){
-        url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downZipById53?id='+id;
-      }else{
-        url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downZipById?id='+id;
-      }
+      let url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downZipById?id='+id;
       _this.$ajax.get(url).then((response)=>{
         if(response.data && response.data.message && response.data.message.includes("系统异常")){
           Toast.error("系统异常，请联系管理员！");
@@ -316,7 +304,7 @@ export default {
       let _this = this;
       Confirm.show("删除后不可恢复，确认删除？", function () {
         Loading.show();
-        _this.$ajax.delete(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentTyEvent/delete/' + id).then((response)=>{
+        _this.$ajax.delete(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileT/delete/' + id).then((response)=>{
           Loading.hide();
           let resp = response.data;
           if (resp.success) {

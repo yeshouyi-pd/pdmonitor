@@ -182,7 +182,6 @@ export default {
       heightMax:'',
       devices:[],
       swiperData:[],
-      videoData:[],
       videoHeight:140,
       intervalIdTemp:null,
       secondCount:30,
@@ -220,7 +219,6 @@ export default {
     _this.heightMax = h*0.6-20;
     _this.dataRefreh();
     window.getSwipeData = _this.getSwipeData;
-    window.getVideoData = _this.getVideoData;
   },
   methods: {
     clickMapPoint(sbmc,sbbh){
@@ -330,20 +328,6 @@ export default {
       }
     },
     getPointerSecond(){
-      let _this = this;
-      // _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/welcome/getPointerSecond',{}).then((res)=>{
-      //   let response = res.data.content;
-      //   if(!Tool.isEmpty(response)){
-      //     _this.gauge1(response.decibelValue);
-      //   }else{
-      //     _this.gauge1(124);
-      //   }
-      //   //108-115
-      //
-      // })
-      _this.getNoRequestData();
-    },
-    getNoRequestData(){
       let _this = this;
       _this.intervalIdTemp = setInterval(() => {
         let value = Math.ceil(Math.random()*(115-108))+108;
@@ -631,7 +615,6 @@ export default {
         let eventDatas = response.content;
         if(eventDatas && eventDatas.length>0){
           _this.getSwipeData(eventDatas[0].sbbh,eventDatas[0].kssj,eventDatas[0].jssj);
-          _this.getVideoData(eventDatas[0].sbbh,eventDatas[0].kssj,eventDatas[0].jssj);
         }
         _this.config.data = []
         for(let i=0;i<eventDatas.length;i++){
@@ -644,7 +627,6 @@ export default {
     },
     getSwipeData(sbbh,kssj,jssj){
       let _this = this;
-      _this.getVideoData(sbbh,kssj,jssj)
       let item = {
         "sbbh":sbbh,
         "kssj":kssj,
@@ -665,38 +647,6 @@ export default {
         _this.swiperData=$.extend([], temp);
         _this.$forceUpdate();
       })
-    },
-    getVideoData(sbbh,kssj,jssj){
-      let _this = this;
-      let item = {
-        "sbbh":sbbh,
-        "kssj":kssj,
-        "jssj":jssj
-      }
-      _this.videoData=[];
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/welcome/getVideoData',item).then((response)=>{
-        let resp = response.data;
-        _this.videoData = resp.content;
-        if(_this.videoData.length<2){
-          _this.videoHeight = 280;
-        }else{
-          _this.videoHeight = 140;
-        }
-        _this.$forceUpdate();
-      })
-    },
-    optionMapKV(object, key) {
-      if (!object || !key) {
-        return "";
-      } else {
-        let result = "";
-        for (let enums in object) {
-          if (key === enums) {
-            result = object[enums];
-          }
-        }
-        return result;
-      }
     },
     optionKVArray(list, key) {
       if (!list || !key) {

@@ -7,9 +7,7 @@ import com.github.pagehelper.PageInfo;
 import com.pd.monitor.wx.conf.BaseWxController;
 import com.pd.server.main.domain.*;
 import com.pd.server.main.dto.*;
-import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
-import com.pd.server.main.dto.basewx.my.PredationNumDwDto;
-import com.pd.server.main.dto.basewx.my.VideoEventDpDto;
+import com.pd.server.main.dto.basewx.my.*;
 import com.pd.server.main.service.*;
 import com.pd.server.util.CopyUtil;
 import com.pd.server.util.DateUtil;
@@ -21,7 +19,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -39,11 +36,6 @@ public class WelcomeController extends BaseWxController{
     @Resource
     private WaterQualityResultService waterQualityResultService;
     /**
-     * 水质告警
-     */
-    @Resource
-    private EquipmentFileService equipmentFileService;
-    /**
      * 设备信息
      */
     @Resource
@@ -53,17 +45,19 @@ public class WelcomeController extends BaseWxController{
     @Resource
     private EquipmentFileTodayService equipmentFileTodayService;
     @Resource
-    private EquipmentTyEventService equipmentTyEventService;
-    @Resource
     private PointerSecondService pointerSecondService;
     @Resource
     private PointerDayService pointerDayService;
     @Resource
     private PredationNumService predationNumService;
     @Resource
-    private EquipmentFileEventService equipmentFileEventService;
-    @Resource
     private VideoEventService videoEventService;
+    @Resource
+    private EquipmentFilePClusterService equipmentFilePClusterService;
+    @Resource
+    private EquipmentFilePPicService equipmentFilePPicService;
+    @Resource
+    private EquipmentFilePVideoService equipmentFilePVideoService;
 
     @PostMapping("/staticMonth")
     public ResponseDto staticMonth(@RequestBody VideoEventDto pageDto){
@@ -166,36 +160,42 @@ public class WelcomeController extends BaseWxController{
         return responseDto;
     }
 
+    /**
+     * 1.查询阵列(A4)和拖曳(A2)的当天聚类事件
+     * 2.查询单听(A1)当天的声谱图数据
+     * 3.合并1，2的查询结果，如果没有数据执行3，如果有数据就直接返回
+     * 3.查询最近7天以内的聚类事件
+     * @return
+     */
     @GetMapping("/getEventData")
     public ResponseDto getEventData() {
         ResponseDto responseDto = new ResponseDto();
         LoginUserDto user = getRequestHeader();
-        if(null != user) {
-            if (!StringUtils.isEmpty(user.getDeptcode())) {
-                WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
-                waterEquipmentExample.createCriteria().andDqzlEqualTo("A4");
-                List<String> a4SbbhList = waterEquipmentService.findSbbh(waterEquipmentExample);
-                List<String> listdept = getUpdeptcode(user.getDeptcode());
-                EquipmentTyEventExample example = new EquipmentTyEventExample();
-                EquipmentTyEventExample.Criteria  ca = example.createCriteria();
-                EquipmentTyEventExample example1 = new EquipmentTyEventExample();
-                EquipmentTyEventExample.Criteria  ca1 = example1.createCriteria();
-                if(!CollectionUtils.isEmpty(listdept)){
-                    ca.andDeptcodeIn(listdept);
-                    ca1.andDeptcodeIn(listdept);
-                }
-                ca.andRqEqualTo(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd"));
-                List<EquipmentTyEvent> list = equipmentTyEventService.listByDp(example,String.join(",",a4SbbhList));
-                if(CollectionUtils.isEmpty(list)){
-                    ca1.andRqLessThan(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd"));
-                    ca1.andRqGreaterThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(),-7),"yyyy-MM-dd"));
-                    list = equipmentTyEventService.listByDp(example1,String.join(",",a4SbbhList));
-                }
-                if(!CollectionUtils.isEmpty(list)){
-                    list = list.stream().sorted(Comparator.comparing(EquipmentTyEvent::getKssj).reversed()).collect(Collectors.toList());
-                }
-                responseDto.setContent(list);
+        if(null != user && !StringUtils.isEmpty(user.getDeptcode())) {
+            EquipmentFilePClusterExample clusterExample = new EquipmentFilePClusterExample();
+            EquipmentFilePClusterExample.Criteria clusterCa = clusterExample.createCriteria();
+            List<String> listdept = getUpdeptcode(user.getDeptcode());
+            if(!CollectionUtils.isEmpty(listdept)){
+                clusterCa.andDeptcodeIn(listdept);
             }
+            clusterCa.andRqEqualTo(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd"));
+            List<WrjEventDto> resultList = equipmentFilePClusterService.listAllTs(clusterExample);
+            WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
+            waterEquipmentExample.createCriteria().andDqzlEqualTo("A1").andDeptcodeIn(listdept);
+            List<String> sbbhList = waterEquipmentService.findSbbh(waterEquipmentExample);
+            EquipmentFileTodayExample todayExample = new EquipmentFileTodayExample();
+            EquipmentFileTodayExample.Criteria todayCa = todayExample.createCriteria();
+            todayCa.andSbbhIn(sbbhList);
+            todayCa.andRqEqualTo(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd"));
+            todayCa.andTxtlxEqualTo("1");
+            resultList.addAll(equipmentFileTodayService.listAllTs(todayExample));
+            if(resultList.isEmpty()){
+                clusterCa.andRqLessThan(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd"));
+                clusterCa.andRqGreaterThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(),-7),"yyyy-MM-dd"));
+                resultList = equipmentFilePClusterService.listAllTs(clusterExample);
+            }
+            responseDto.setContent(resultList.stream().sorted(Comparator.comparing(WrjEventDto::getKssj).reversed()).collect(Collectors.toList()));
+            return responseDto;
         }
         return responseDto;
     }
@@ -330,17 +330,18 @@ public class WelcomeController extends BaseWxController{
         if(null != user) {
             if (!StringUtils.isEmpty(user.getDeptcode())) {
                 List<String> listdept = getUpdeptcode(user.getDeptcode());
-                EquipmentFileExample equipmentFileExample = new EquipmentFileExample();
-                EquipmentFileExample.Criteria  equipmentFileExampleca = equipmentFileExample.createCriteria();
+                EquipmentFileTodayExample todayExample = new EquipmentFileTodayExample();
+                EquipmentFileTodayExample.Criteria  todayCa = todayExample.createCriteria();
                 if(!CollectionUtils.isEmpty(listdept)){
-                    equipmentFileExampleca.andDeptcodeIn(listdept);
+                    todayCa.andDeptcodeIn(listdept);
                 }
                 if(!StringUtils.isEmpty(xmbh)){
                     if(!CollectionUtils.isEmpty(user.getXmbhsbsns().get(xmbh))){
-                        equipmentFileExampleca.andSbbhIn(user.getXmbhsbsns().get(xmbh));
+                        todayCa.andSbbhIn(user.getXmbhsbsns().get(xmbh));
                     }
                 }
-                List<WelcomeKvDto>  list  =  equipmentFileService.getWarningDate(equipmentFileExample);
+                todayCa.andTxtlxEqualTo("1");
+                List<WelcomeKvDto>  list  =  equipmentFileTodayService.getWarningDate(todayExample);
                 //事件次数
                 EquipmentFileTodayExample example = new EquipmentFileTodayExample();
                 EquipmentFileTodayExample.Criteria ca = example.createCriteria();
@@ -515,70 +516,27 @@ public class WelcomeController extends BaseWxController{
         return responseDto;
     }
 
-    @PostMapping("/getSevenDayEvent")
-    public ResponseDto getSevenDayEvent(@RequestBody JSONObject jsonObject){
-        ResponseDto responseDto = new ResponseDto();
-        EquipmentTyEventExample example = new EquipmentTyEventExample();
-        EquipmentTyEventExample.Criteria ca = example.createCriteria();
-        PredationNumExample preExample = new PredationNumExample();
-        PredationNumExample.Criteria preCa = preExample.createCriteria();
-        if(!StringUtils.isEmpty(jsonObject.get("type"))&&"zjglj".equals(jsonObject.get("type"))){
-            ca.andSbbhEqualTo(jsonObject.getString("sbbh"));
-            preCa.andSbbhEqualTo(jsonObject.getString("sbbh"));
-        }else{
-            LoginUserDto user = getRequestHeader();
-            List<String> listdept = getUpdeptcode(user.getDeptcode());
-            if(!CollectionUtils.isEmpty(listdept)){
-                ca.andDeptcodeIn(listdept);
-                preCa.andDeptcodeIn(listdept);
-            }
-        }
-        ca.andRqGreaterThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(),-7),"yyyy-MM-dd"));
-        ca.andRqLessThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(),-1),"yyyy-MM-dd"));
-        preCa.andCjsjGreaterThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(),-7),"yyyy-MM-dd"),"%Y-%m-%d");
-        preCa.andCjsjLessThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(),-1),"yyyy-MM-dd"),"%Y-%m-%d");
-        List<EquipmentTyEvent> list = new ArrayList<>();
-        if(!StringUtils.isEmpty(jsonObject.get("type"))&&"zjglj".equals(jsonObject.get("type"))){
-            WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
-            waterEquipmentExample.createCriteria().andDqzlEqualTo("A1");
-            List<String> sbbhs = waterEquipmentService.findSbbh(waterEquipmentExample);
-            if(sbbhs.contains(jsonObject.getString("sbbh"))){
-                list = predationNumService.listEventCount(preExample);
-                list.stream().forEach(entity -> entity.setRq(entity.getRq().substring(0,10)));
-            }else{
-                list = equipmentTyEventService.listEventCount(example);
-            }
-        }else{
-            list = equipmentTyEventService.listSumTs(example);
-        }
-        Map<String,Object> resultMap = new HashMap<>();
-        if(!CollectionUtils.isEmpty(list)){
-            Map<String, List<EquipmentTyEvent>> map = list.stream().sorted(Comparator.comparing(EquipmentTyEvent::getRq)).collect(Collectors.groupingBy(EquipmentTyEvent::getSbbh));
-            List<String> rqs= list.stream().sorted(Comparator.comparing(EquipmentTyEvent::getRq)).filter(Objects::nonNull).map(EquipmentTyEvent::getRq).distinct().collect(Collectors.toList());
-            resultMap.put("map",map);
-            resultMap.put("rqs",rqs);
-        }
-        responseDto.setContent(resultMap);
-        return responseDto;
-    }
-
+    /**
+     * 统计阵列(PCluster)和拖曳设备(TCluster)三天之前的聚类总头数-按天统计
+     * @return
+     */
     @GetMapping("/getThreeDayTs")
     public ResponseDto getThreeDayTs(){
         ResponseDto responseDto = new ResponseDto();
-        EquipmentTyEventExample example = new EquipmentTyEventExample();
-        EquipmentTyEventExample.Criteria ca = example.createCriteria();
+        EquipmentFilePClusterExample example = new EquipmentFilePClusterExample();
+        EquipmentFilePClusterExample.Criteria ca = example.createCriteria();
         LoginUserDto user = getRequestHeader();
         List<String> listdept = getUpdeptcode(user.getDeptcode());
         if(!CollectionUtils.isEmpty(listdept)){
             ca.andDeptcodeIn(listdept);
         }
-        ca.andRqGreaterThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(),-4),"yyyy-MM-dd"));
+        ca.andRqGreaterThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(),-3),"yyyy-MM-dd"));
         ca.andRqLessThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(),-1),"yyyy-MM-dd"));
-        List<EquipmentTyEvent> list = equipmentTyEventService.listSumTs(example);
+        List<WrjTcDto> list = equipmentFilePClusterService.listSumTsGroup(example);
         Map<String,Object> resultMap = new HashMap<>();
         if(!CollectionUtils.isEmpty(list)){
-            Map<String, List<EquipmentTyEvent>> map = list.stream().sorted(Comparator.comparing(EquipmentTyEvent::getRq)).collect(Collectors.groupingBy(EquipmentTyEvent::getSbbh));
-            List<String> rqs= list.stream().sorted(Comparator.comparing(EquipmentTyEvent::getRq)).filter(Objects::nonNull).map(EquipmentTyEvent::getRq).distinct().collect(Collectors.toList());
+            Map<String, List<WrjTcDto>> map = list.stream().sorted(Comparator.comparing(WrjTcDto::getRq)).collect(Collectors.groupingBy(WrjTcDto::getSbbh));
+            List<String> rqs= list.stream().sorted(Comparator.comparing(WrjTcDto::getRq)).filter(Objects::nonNull).map(WrjTcDto::getRq).distinct().collect(Collectors.toList());
             resultMap.put("map",map);
             resultMap.put("rqs",rqs);
         }
@@ -589,8 +547,8 @@ public class WelcomeController extends BaseWxController{
     @PostMapping("/getSwipeData")
     public ResponseDto getSwipeData(@RequestBody Map<String,String> map){
         ResponseDto responseDto = new ResponseDto();
-        EquipmentFileExample example = new EquipmentFileExample();
-        EquipmentFileExample.Criteria ca = example.createCriteria();
+        EquipmentFilePPicExample example = new EquipmentFilePPicExample();
+        EquipmentFilePPicExample.Criteria ca = example.createCriteria();
         if(!StringUtils.isEmpty(map.get("sbbh"))){
             ca.andSbbhEqualTo(map.get("sbbh"));
         }
@@ -600,8 +558,7 @@ public class WelcomeController extends BaseWxController{
         if(!StringUtils.isEmpty(map.get("jssj"))){
             ca.andCjsjLessThanOrEqualTo(DateUtil.toDate(map.get("jssj"),"yyyy-MM-dd HH:mm:ss"));
         }
-        ca.andWjlxEqualTo("1");
-        List<EquipmentFile> list = equipmentFileService.listAllDw(example);
+        List<EquipmentFileDwjkDto> list = equipmentFilePPicService.listAllDw(example);
         responseDto.setContent(list);
         return responseDto;
     }
@@ -609,8 +566,8 @@ public class WelcomeController extends BaseWxController{
     @PostMapping("/getVideoData")
     public ResponseDto getVideoData(@RequestBody Map<String,String> map){
         ResponseDto responseDto = new ResponseDto();
-        EquipmentFileExample example = new EquipmentFileExample();
-        EquipmentFileExample.Criteria ca = example.createCriteria();
+        EquipmentFilePVideoExample example = new EquipmentFilePVideoExample();
+        EquipmentFilePVideoExample.Criteria ca = example.createCriteria();
         if(!StringUtils.isEmpty(map.get("sbbh"))){
             ca.andSbbhEqualTo(map.get("sbbh"));
         }
@@ -620,8 +577,7 @@ public class WelcomeController extends BaseWxController{
         if(!StringUtils.isEmpty(map.get("jssj"))){
             ca.andCjsjLessThanOrEqualTo(DateUtil.toDate(map.get("jssj"),"yyyy-MM-dd HH:mm:ss"));
         }
-        ca.andWjlxEqualTo("4");
-        List<EquipmentFile> list = equipmentFileService.listAllDw(example);
+        List<EquipmentFilePVideo> list = equipmentFilePVideoService.selectByExample(example);
         responseDto.setContent(list);
         return responseDto;
     }
@@ -629,23 +585,10 @@ public class WelcomeController extends BaseWxController{
     @GetMapping ("/getLastVedio")
     public ResponseDto getLastVedio(){
         ResponseDto responseDto = new ResponseDto();
-        EquipmentFile equipmentFile = equipmentFileService.selectVideoDp();
-        responseDto.setContent(equipmentFile);
-        return responseDto;
-    }
-
-    @GetMapping("/getVideoDataNew")
-    public ResponseDto getVideoDataNew(){
-        ResponseDto responseDto = new ResponseDto();
-        //EquipmentFile equipmentFile = equipmentFileService.selectVideoDp();
-        EquipmentFileEvent equipmentFileEvent = equipmentFileEventService.selectByDp();
-        EquipmentFile equipmentFile = equipmentFileService.selectByPrimaryKey(equipmentFileEvent.getEquipmentFileId());
-        EquipmentFileExample example = new EquipmentFileExample();
-        EquipmentFileExample.Criteria ca = example.createCriteria();
-        ca.andWjmcEqualTo(equipmentFile.getWjmc());
-        ca.andWjlxEqualTo("4");
-        List<EquipmentFile> lists = equipmentFileService.listAll(example);
-        responseDto.setContent(lists!=null&&lists.size()>0?lists.get(0):null);
+        EquipmentFilePVideoExample example = new EquipmentFilePVideoExample();
+        example.setOrderByClause(" cjsj desc ");
+        EquipmentFilePVideo equipmentFilePVideo = equipmentFilePVideoService.selectByExampleOnlyIdLimitOne(example);
+        responseDto.setContent(equipmentFilePVideoService.selectByPrimaryKey(equipmentFilePVideo.getId()));
         return responseDto;
     }
 

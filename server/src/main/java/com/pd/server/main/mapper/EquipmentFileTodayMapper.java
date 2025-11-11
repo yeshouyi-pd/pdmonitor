@@ -12,6 +12,7 @@ import com.pd.server.main.dto.WelcomeKvDto;
 import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
 import com.pd.server.main.dto.basewx.my.NoTodaySbbhDto;
 import com.pd.server.main.dto.basewx.my.SmsIntDto;
+import com.pd.server.main.dto.basewx.my.WrjEventDto;
 import org.apache.ibatis.annotations.Param;
 
 public interface EquipmentFileTodayMapper {
@@ -59,4 +60,6 @@ public interface EquipmentFileTodayMapper {
     List<SmsIntDto> sendSmsQueryXz(EquipmentFileTodayExample example);
 
     List<NoTodaySbbhDto> noTodaySbbhDtoList(EquipmentFileTodayExample example);
+
+    List<WrjEventDto> listAllTs(EquipmentFileTodayExample example);
 }
