@@ -151,7 +151,7 @@
                 let usergps = loginuser.deptgpsmap[loginuser.deptcode];
                 _this.amap = new AMap.Map('equipmentamap', {
                   resizeEnable: true,
-                  zoom: 8,
+                  zoom: 12,
                   features: ['bg']
                 });
                 if(!Tool.isEmpty(usergps)){
