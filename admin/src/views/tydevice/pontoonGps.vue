@@ -53,6 +53,7 @@
           <th>设备sn</th>
           <th>采集时间</th>
           <th>gps</th>
+          <th style="width: 20%;">操作</th>
         </tr>
         </thead>
         <tbody>
@@ -61,6 +62,11 @@
           <td>{{item.sbbh}}</td>
           <td>{{item.cjsj}}</td>
           <td>{{item.gps}}</td>
+          <td>
+            <button v-on:click="deleteInfo(item.id)" class="btn btn-xs btn-danger" title="删除">
+              <i class="ace-icon fa fa-trash-o bigger-120">删除</i>
+            </button>
+          </td>
         </tr>
         </tbody>
       </table>
@@ -139,6 +145,22 @@ export default {
         _this.pontoonGpss = resp.content.list;
         _this.$refs.pagination.render(page, resp.content.total);
       })
+    },
+    deleteInfo(id){
+      let _this = this;
+      Confirm.show("删除后不可恢复，确认删除？", function () {
+        Loading.show();
+        _this.$ajax.delete(process.env.VUE_APP_SERVER + '/monitor/admin/pontoonGps/delete/' + id).then((response)=>{
+          Loading.hide();
+          let resp = response.data;
+          if (resp.success) {
+            _this.list(1);
+            Toast.success("删除成功！");
+          }else{
+            Toast.warning(resp.message);
+          }
+        })
+      });
     }
   }
 }

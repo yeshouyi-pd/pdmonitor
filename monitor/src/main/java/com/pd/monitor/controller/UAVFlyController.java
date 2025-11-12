@@ -68,7 +68,7 @@ public class UAVFlyController {
             }
             uavFlyVideoDto.setVideoUrl(jsonObject.getString("wjlj"));
             uavFlyVideoDto.setCjsj(jsonObject.getString("cjsj"));
-            //uavFlyVideoDto.setDeptcode(waterEquipmentList.get(0).getDeptcode());
+            uavFlyVideoDto.setDeptcode(jsonObject.getString("deptcode"));
             uavFlyVideoService.save(uavFlyVideoDto);
             return responseDto;
         }catch (Exception e){

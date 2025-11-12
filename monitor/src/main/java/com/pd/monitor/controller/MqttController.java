@@ -203,23 +203,5 @@ public class MqttController {
         }
         return responseDto;
     }
-    
-    /**
-     * 测试坐标转换（度分秒格式）
-     */
-    @GetMapping("/test-coordinates")
-    public ResponseDto<String> testCoordinates() {
-        ResponseDto<String> responseDto = new ResponseDto<>();
-        try {
-            MqttClientSpace.testCoordinateConversion();
-            responseDto.setContent("坐标转换测试完成，请查看日志");
-            responseDto.setSuccess(true);
-        } catch (Exception e) {
-            LOG.error("坐标转换测试失败", e);
-            responseDto.setContent("坐标转换测试失败: " + e.getMessage());
-            responseDto.setSuccess(false);
-        }
-        return responseDto;
-    }
 
 }

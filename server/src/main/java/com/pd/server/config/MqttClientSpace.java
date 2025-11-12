@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.pd.server.main.domain.WaterEquiplog;
 import com.pd.server.main.domain.WaterEquipment;
 import com.pd.server.main.mapper.WaterEquiplogMapper;
+import com.pd.server.main.service.VoicePowerDeviceService;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.slf4j.Logger;
@@ -46,25 +47,7 @@ public class MqttClientSpace implements ApplicationContextAware {
 
     public static RedisTemplate redisTstaticemplate;
     public static WaterEquiplogMapper waterEquiplogMapperStatic;
-
-    @Resource
-    private RedisTemplate redisTemplate;
-    @Resource
-    private WaterEquiplogMapper waterEquiplogMapper;
-
-    @PostConstruct
-    protected void initStruct() {
-        LOG.info("开始初始化MqttClientSpace静态变量...");
-        LOG.info("redisTemplate注入状态: {}", redisTemplate != null ? "已注入" : "未注入");
-        LOG.info("waterEquiplogMapper注入状态: {}", waterEquiplogMapper != null ? "已注入" : "未注入");
-        
-        redisTstaticemplate = redisTemplate;
-        waterEquiplogMapperStatic = waterEquiplogMapper;
-        
-        LOG.info("静态变量初始化完成 - redisTstaticemplate: {}, waterEquiplogMapperStatic: {}", 
-                redisTstaticemplate != null ? "已设置" : "未设置", 
-                waterEquiplogMapperStatic != null ? "已设置" : "未设置");
-    }
+    public static VoicePowerDeviceService voicePowerDeviceServiceStatic;
 
     private MqttClientSpace(String brokerUrl, String clientId, String userName, String passWord) {
         this.brokerUrl = brokerUrl;
@@ -93,37 +76,11 @@ public class MqttClientSpace implements ApplicationContextAware {
     }
     
     /**
-     * 初始化MQTT客户端（在程序启动时调用）
-     */
-    public static void initializeMqttClient(String brokerUrl, String clientId, String userName, String passWord) {
-        if (initializationAttempted) {
-            LOG.info("MQTT客户端初始化已经尝试过，跳过重复初始化");
-            return;
-        }
-        
-        synchronized (MqttClientSpace.class) {
-            if (initializationAttempted) {
-                LOG.info("MQTT客户端初始化已经尝试过，跳过重复初始化");
-                return;
-            }
-            
-            if (instance == null) {
-                LOG.info("正在初始化MQTT客户端...");
-                instance = new MqttClientSpace(brokerUrl, clientId, userName, passWord);
-                LOG.info("MQTT客户端初始化完成");
-
-            } else {
-                LOG.info("MQTT客户端已经初始化");
-            }
-            initializationAttempted = true;
-        }
-    }
-    
-    /**
      * 初始化MQTT客户端（带依赖注入）
      */
-    public static void initializeMqttClient(String brokerUrl, String clientId, String userName, String passWord, 
-                                          RedisTemplate redisTemplate, WaterEquiplogMapper waterEquiplogMapper) {
+    public static void initializeMqttClient(String brokerUrl, String clientId, String userName, String passWord,
+                                            RedisTemplate redisTemplate, WaterEquiplogMapper waterEquiplogMapper,
+                                            VoicePowerDeviceService voicePowerDeviceService) {
         if (initializationAttempted) {
             LOG.info("MQTT客户端初始化已经尝试过，跳过重复初始化");
             return;
@@ -142,6 +99,7 @@ public class MqttClientSpace implements ApplicationContextAware {
                 // 手动设置静态变量
                 redisTstaticemplate = redisTemplate;
                 waterEquiplogMapperStatic = waterEquiplogMapper;
+                voicePowerDeviceServiceStatic = voicePowerDeviceService;
                 LOG.info("静态变量手动设置完成: {}", getStaticInitStatus());
                 
                 LOG.info("MQTT客户端初始化完成");
@@ -149,34 +107,6 @@ public class MqttClientSpace implements ApplicationContextAware {
                 LOG.info("MQTT客户端已经初始化");
             }
             initializationAttempted = true;
-        }
-    }
-    
-    /**
-     * 强制重新初始化MQTT客户端（用于重新初始化）
-     */
-    public static void forceReinitializeMqttClient(String brokerUrl, String clientId, String userName, String passWord) {
-        synchronized (MqttClientSpace.class) {
-            LOG.info("正在强制重新初始化MQTT客户端...");
-            
-            // 关闭现有连接
-            if (instance != null) {
-                try {
-                    instance.close();
-                } catch (Exception e) {
-                    LOG.warn("关闭现有MQTT连接时发生错误: " + e.getMessage());
-                }
-            }
-            
-            // 重置状态
-            instance = null;
-            initializationAttempted = false;
-            
-            // 重新创建实例
-            instance = new MqttClientSpace(brokerUrl, clientId, userName, passWord);
-            initializationAttempted = true;
-            
-            LOG.info("MQTT客户端强制重新初始化完成");
         }
     }
     
@@ -407,37 +337,13 @@ public class MqttClientSpace implements ApplicationContextAware {
             LOG.info("topic:" + topic + ";message:" + messageContent);
             
             // 检查是否包含$GNRMC和,A,字符串
-            if (messageContent.contains("$GNRMC") && messageContent.contains(",A,")) {
+            if (messageContent.contains("$GNRMC") || messageContent.contains("PLAY")) {
                 LOG.info("检测到GPS NMEA数据，开始解析...");
-                
-                // 检查Redis模板是否可用
-                if (redisTstaticemplate == null) {
-                    LOG.warn("Redis模板未初始化，尝试从Spring容器获取...");
-                    // 尝试从Spring容器获取Redis模板
-                    if (applicationContext != null) {
-                        try {
-                            redisTstaticemplate = applicationContext.getBean(RedisTemplate.class);
-                            LOG.info("从Spring容器成功获取Redis模板");
-                        } catch (Exception e) {
-                            LOG.error("从Spring容器获取Redis模板失败: {}", e.getMessage());
-                        }
-                    }
-                    
-                    if (redisTstaticemplate == null) {
-                        LOG.warn("Redis模板未初始化，跳过GPS数据解析");
-                        return;
-                    }
+                if(messageContent.contains("$GNRMC")){
+                    parseGNRMCData(topic, messageContent);
                 }
-                
-                Map<String,String> topicSbbhMap = (Map<String, String>) redisTstaticemplate.opsForValue().get(RedisCode.TOPICSBBH);
-                if (topicSbbhMap != null) {
-                    for(String key : topicSbbhMap.keySet()){
-                        if(key.contains(topic)){
-                            parseGNRMCData(topicSbbhMap.get(key), messageContent);
-                        }
-                    }
-                } else {
-                    LOG.warn("未找到主题 {} 对应的设备编号，跳过GPS数据解析", topic);
+                if(messageContent.contains("PLAY")){
+                    savePlayData(topic);
                 }
             } else {
                 LOG.debug("消息不包含GPS NMEA数据，跳过解析");
@@ -686,14 +592,26 @@ public class MqttClientSpace implements ApplicationContextAware {
         }
         initialized = false;
     }
-    
+
+    /**
+     * savePlayData记录播放
+     */
+    private void savePlayData(String topic){
+        try {
+            voicePowerDeviceServiceStatic.updateIsPlay(topic.substring(0,topic.indexOf("[")));
+            LOG.error("当前发声设备播放-主题：{}",topic);
+        } catch (Exception e) {
+            LOG.error("记录PLAY数据时发生错误: " + e.getMessage(), e);
+        }
+    }
+
     /**
      * 解析GNRMC GPS数据
      * GNRMC格式: $GNRMC,时间,状态,纬度,纬度方向,经度,经度方向,速度,航向,日期,磁偏角,磁偏角方向,模式*校验和
      * 例如: $GNRMC,123519.00,A,4807.038,N,01131.000,E,022.4,,230394,,W*6A
      *      $GNRMC,081805.00,A,3027.380,N,11418.938,E,0.032,,161025,,,A,V*19
      */
-    private void parseGNRMCData(String sbbh,String messageContent) {
+    private void parseGNRMCData(String topic,String messageContent) {
         try {
             // 查找$GNRMC行
             String[] lines = messageContent.split("\n");
@@ -732,7 +650,7 @@ public class MqttClientSpace implements ApplicationContextAware {
                         LOG.info("  日期: " + date);
                         
                         // 这里可以添加业务逻辑，比如保存到数据库或发送到其他服务
-                        processGPSData(sbbh, time, status, latDecimal, lonDecimal, speedKmh, course, date);
+                        processGPSData(topic, time, status, latDecimal, lonDecimal, speedKmh, course, date);
                     } else {
                         LOG.warn("GNRMC数据字段不完整，字段数量: " + fields.length);
                     }
@@ -788,47 +706,24 @@ public class MqttClientSpace implements ApplicationContextAware {
      * 处理解析后的GPS数据
      * 可以在这里添加具体的业务逻辑
      */
-    private void processGPSData(String sbbh, String time, String status, double latitude, double longitude,
+    private void processGPSData(String topic, String time, String status, double latitude, double longitude,
                                double speed, String course, String date) {
         try {
             LOG.info("开始处理GPS数据...");
             
             // 检查Redis模板是否可用
             if (redisTstaticemplate == null) {
-                LOG.warn("Redis模板未初始化，尝试从Spring容器获取...");
-                if (applicationContext != null) {
-                    try {
-                        redisTstaticemplate = applicationContext.getBean(RedisTemplate.class);
-                        LOG.info("从Spring容器成功获取Redis模板");
-                    } catch (Exception e) {
-                        LOG.error("从Spring容器获取Redis模板失败: {}", e.getMessage());
-                    }
-                }
-                
-                if (redisTstaticemplate == null) {
-                    LOG.warn("Redis模板未初始化，跳过GPS数据处理");
-                    return;
-                }
+                LOG.warn("Redis模板未初始化，跳过GPS数据处理");
+                return;
             }
-            
+
             // 检查数据库映射器是否可用
             if (waterEquiplogMapperStatic == null) {
-                LOG.warn("数据库映射器未初始化，尝试从Spring容器获取...");
-                if (applicationContext != null) {
-                    try {
-                        waterEquiplogMapperStatic = applicationContext.getBean(WaterEquiplogMapper.class);
-                        LOG.info("从Spring容器成功获取数据库映射器");
-                    } catch (Exception e) {
-                        LOG.error("从Spring容器获取数据库映射器失败: {}", e.getMessage());
-                    }
-                }
-                
-                if (waterEquiplogMapperStatic == null) {
-                    LOG.warn("数据库映射器未初始化，跳过GPS数据处理");
-                    return;
-                }
+                LOG.warn("数据库映射器未初始化，跳过GPS数据处理");
+                return;
             }
-            
+
+            String sbbh = topicToSbbh(topic);
             // 获取设备信息
             Map<String, JSONObject> sbbhEquipMap = (Map<String, JSONObject>) redisTstaticemplate.opsForValue().get(RedisCode.SBBHEQUIPMAP);
             if (sbbhEquipMap == null || sbbhEquipMap.isEmpty()) {
@@ -866,9 +761,23 @@ public class MqttClientSpace implements ApplicationContextAware {
             LOG.info("GPS数据处理完成，设备编号: {}, 坐标: {},{}", sbbh, latitude, longitude);
             
         } catch (Exception e) {
-            LOG.error("处理GPS数据时发生异常，设备编号: " + sbbh, e);
+            LOG.error("处理GPS数据时发生异常，主题: " + topic, e);
             // 不重新抛出异常，避免影响MQTT连接
         }
+    }
+
+    public String topicToSbbh(String topic){
+        Map<String,String> topicSbbhMap = (Map<String, String>) redisTstaticemplate.opsForValue().get(RedisCode.TOPICSBBH);
+        if (topicSbbhMap != null) {
+            for(String key : topicSbbhMap.keySet()){
+                if(key.contains(topic)){
+                    return topicSbbhMap.get(key);
+                }
+            }
+        } else {
+            LOG.warn("未找到主题 {} 对应的设备编号", topic);
+        }
+        return "";
     }
     
     /**
@@ -905,67 +814,6 @@ public class MqttClientSpace implements ApplicationContextAware {
         return String.format("Redis模板: %s, 数据库映射器: %s", 
                 redisTstaticemplate != null ? "已初始化" : "未初始化",
                 waterEquiplogMapperStatic != null ? "已初始化" : "未初始化");
-    }
-    
-    /**
-     * 测试坐标转换方法（用于验证转换准确性）
-     */
-    public static void testCoordinateConversion() {
-        LOG.info("开始测试坐标转换（度分秒格式）...");
-        
-        // 测试用例1: 纬度 3027.380 N (30度27分380秒)
-        double lat1 = testConvertToDecimalDegrees("3027.380", "N");
-        double expectedLat1 = 30.0 + 27.0/60.0 + 380.0/3600.0; // 30.4611
-        LOG.info("纬度测试: 3027.380 N -> {} (期望: {})", lat1, expectedLat1);
-        
-        // 测试用例2: 经度 11418.938 E (114度18分938秒)
-        double lon1 = testConvertToDecimalDegrees("11418.938", "E");
-        double expectedLon1 = 114.0 + 18.0/60.0 + 938.0/3600.0; // 114.3161
-        LOG.info("经度测试: 11418.938 E -> {} (期望: {})", lon1, expectedLon1);
-        
-        // 测试用例3: 南纬 3027.380 S
-        double lat2 = testConvertToDecimalDegrees("3027.380", "S");
-        double expectedLat2 = -(30.0 + 27.0/60.0 + 380.0/3600.0); // -30.4611
-        LOG.info("南纬测试: 3027.380 S -> {} (期望: {})", lat2, expectedLat2);
-        
-        // 测试用例4: 西经 11418.938 W
-        double lon2 = testConvertToDecimalDegrees("11418.938", "W");
-        double expectedLon2 = -(114.0 + 18.0/60.0 + 938.0/3600.0); // -114.3161
-        LOG.info("西经测试: 11418.938 W -> {} (期望: {})", lon2, expectedLon2);
-        
-        LOG.info("坐标转换测试完成");
-    }
-    
-    /**
-     * 静态方法版本的坐标转换（用于测试）
-     */
-    private static double testConvertToDecimalDegrees(String coordinate, String direction) {
-        try {
-            double coord = Double.parseDouble(coordinate);
-            
-            // 分离度、分、秒
-            int degrees = (int) (coord / 100);
-            double minutesAndSeconds = coord - (degrees * 100);
-            
-            // 分离分和秒
-            int minutes = (int) minutesAndSeconds;
-            double seconds = (minutesAndSeconds - minutes) * 100; // 将小数部分转换为秒
-            
-            // 转换为十进制度: 度 + 分/60 + 秒/3600
-            double decimal = degrees + (minutes / 60.0) + (seconds / 3600.0);
-            
-            // 南纬和西经为负值
-            if ("S".equals(direction) || "W".equals(direction)) {
-                decimal = -decimal;
-            }
-            
-            // 保留6位小数
-            decimal = Math.round(decimal * 1000000.0) / 1000000.0;
-            
-            return decimal;
-        } catch (NumberFormatException e) {
-            return 0.0;
-        }
     }
 
     /**
@@ -1043,29 +891,5 @@ public class MqttClientSpace implements ApplicationContextAware {
         this.type = type;
     }
 
-    // main方法建议移除或仅做简单演示
-    public static void main(String[] args) throws InterruptedException {
-        try {
-            MqttClientSpace testXH = MqttClientSpace.getInstance("tcp://47.244.23.44", "subClient", "benben", "123456");
-            testXH.type = "temperature";
-            byte[] message = {0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x31, (byte) 0xCA};
-            testXH.publishMessage("WHPD[meg]", message, 2);
-            Thread.sleep(20000);
-
-            testXH.type = "waterDepth";
-            byte[] message2 = {0x34, 0x03, 0x00, 0x15, 0x00, 0x02, (byte) 0xD0, (byte) 0x6A};
-            testXH.publishMessage("WHPD[meg]", message2, 2);
-            Thread.sleep(20000);
-
-            testXH.type = "waterVelocity";
-            byte[] message3 = {0x34, 0x03, 0x00, 0x0F, 0x00, 0x02, (byte) 0xF1, (byte) 0xAD};
-            testXH.publishMessage("WHPD[meg]", message3, 2);
-            Thread.sleep(20000);
-
-            testXH.close();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }
 }
 

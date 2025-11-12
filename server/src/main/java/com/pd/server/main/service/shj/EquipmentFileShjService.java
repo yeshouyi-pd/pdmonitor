@@ -50,6 +50,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
     public static BeconFileTodayService beconFileTodayServiceStatic;
     public static AngleFileService angleFileServiceStatic;
     public static EquipmentFileSplitShjService equipmentFileSplitShjServiceStatic;
+    public static VoicePowerDeviceService voicePowerDeviceServiceStatic;
     public static ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(10);
     // 专门用于数据分发的线程池
     public static ExecutorService distributeExecutorService = Executors.newFixedThreadPool(10);
@@ -88,7 +89,8 @@ public class EquipmentFileShjService extends AbstractScanRequest{
     private BeconFileTodayService beconFileTodayService;
     @Resource
     private AngleFileService angleFileService;
-
+    @Resource
+    private VoicePowerDeviceService voicePowerDeviceService;
     @Resource
     private EquipmentFileSplitShjService equipmentFileSplitShjService;
 
@@ -112,6 +114,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
         beconFileTodayServiceStatic = beconFileTodayService;
         angleFileServiceStatic = angleFileService;
         equipmentFileSplitShjServiceStatic = equipmentFileSplitShjService;
+        voicePowerDeviceServiceStatic = voicePowerDeviceService;
     }
 
 
@@ -432,7 +435,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
             spaceFileDto.setRq(DateUtil.getFormatDate(spaceFileDto.getCjsj(),"yyyy-MM-dd"));
             spaceFileServiceStatic.save(spaceFileDto);
             //发送指令，播放音频
-            publishMessage(waterEquipment.getJdfw(),waterEquipment.getSm1(),cjsj);
+            publishMessage(waterEquipment.getSbsn(),waterEquipment.getJdfw(),waterEquipment.getSm1(),cjsj);
             JSONObject result = new JSONObject();
             result.put("data","保存成功");
             result.put("otherFile",true);
@@ -444,24 +447,16 @@ public class EquipmentFileShjService extends AbstractScanRequest{
     }
 
     //发送指令，播放驱离文件，停指播放驱离文件
-    public static void publishMessage(String jdfw,String hex, String cjsj){
+    public static void publishMessage(String sbbh,String jdfw,String hex, String cjsj){
         try {
             if(!StringUtils.isEmpty(jdfw) && !StringUtils.isEmpty(hex)){
-                String[] topicArr = jdfw.split(";");//WHPD[meg],WHPD[updata];RPCD[meg],RPCD[updata]
                 //如果接收文件时间和生成文件时间没有超过5分钟
                 if(new Date().getTime()-DateUtil.toDate(cjsj,"yyyy-MM-dd HH:mm:ss").getTime()<=300000){
-                    // 获取MQTT客户端实例
-                    MqttClientSpace client = MqttClientSpace.getInstance();
-                    if(client == null){
-                        LOG.error("MQTT客户端未初始化，无法发送消息。请检查monitor.jar是否正常启动");
-                        return;
-                    }
-                    
-                    // 确保client是final的，以便在lambda中使用
-                    final MqttClientSpace finalClient = client;
-                    byte[] messageStart = hexStringToByteArray(hex);
-                    LOG.info("MQTT客户端状态: {}", finalClient.getConnectionStatus());
-                    
+                    //1先根据设备编号去缓存中取数据，如果有，就比较缓存中数据的发送指令时间和接收文件时间有没有超过五分钟
+                    //1.1如果超过5分钟，就走发送指令流程；如果没有超过5分钟就忽略当前文件
+                    //2缓存中没有数据，就根据设备编号和当天日期查询数据库最后一条数据
+                    //2.2如果没有查询出来数据，就走发送指令流程；如果查询出来数据就比较发送指令时间和当前时间有没有超过五分钟，后续执行1.1
+                    String[] topicArr = jdfw.split(";");//WHPD[meg],WHPD[updata];RPCD[meg],RPCD[updata]
                     for(int i=0;i<topicArr.length;i++){
                         String oneitem = topicArr[i];
                         String[] oneArr = oneitem.split(",");
@@ -470,27 +465,64 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                             continue;
                         }
                         LOG.info("处理主题配置 - 发布主题: {}, 订阅主题: {}", oneArr[0], oneArr[1]);
-                        // 2. 订阅返回主题
-                        // finalClient.subTopic(oneArr[1]);
-                        // 3. 发布消息
-                        finalClient.publishMessage(oneArr[0], messageStart, 2);
-                        
-                        // 确保oneArr[0]是final的，以便在lambda中使用
-                        final String publishTopic = oneArr[0];
-                        // 提交一个延迟执行的任务，关闭指令
-                        scheduledExecutorService.schedule(() -> {
-                            //43 52 44 02 00 07 10 02 4C
-                            byte[] messageStop = new byte[] { 0x43, 0x52, 0x44, 0x02, 0x00, 0x07, 0x10, 0x02, 0x4C };
-                            finalClient.publishMessage(publishTopic, messageStop, 2);
-
-                        },300, TimeUnit.SECONDS);
+                        String topicName = oneArr[0].substring(0,oneArr[0].indexOf("["));
+                        if(!StringUtils.isEmpty(redisTstaticemplate.opsForValue().get(topicName+"QLWJ"))) {
+                            String entityJson = (String) redisTstaticemplate.opsForValue().get(topicName + "QLWJ");
+                            VoicePowerDevice voicePowerDevice = JSONObject.parseObject(entityJson, VoicePowerDevice.class);
+                            if(DateUtil.toDate(cjsj,"yyyy-MM-dd HH:mm:ss").getTime()-voicePowerDevice.getSendTime().getTime()>300000){
+                                sendTopTopic(sbbh,oneArr[0],hex);
+                            }
+                        }else{
+                            VoicePowerDevice voicePowerDevice = voicePowerDeviceServiceStatic.selectTodayLastData(topicName);
+                            if(voicePowerDevice==null){
+                                sendTopTopic(sbbh,oneArr[0],hex);
+                            }else{
+                                if(DateUtil.toDate(cjsj,"yyyy-MM-dd HH:mm:ss").getTime()-voicePowerDevice.getSendTime().getTime()>300000){
+                                    sendTopTopic(sbbh,oneArr[0],hex);
+                                }
+                            }
+                        }
                     }
+
                 }
             }
         }catch (Exception e){
             LOG.error("发送指令失败："+e.getMessage());
         }
     }
+
+    //发送指令，停止指令
+    public static void sendTopTopic(String sbbh,String topic,String hex){
+        // 获取MQTT客户端实例
+        MqttClientSpace client = MqttClientSpace.getInstance();
+        if(client == null){
+            LOG.error("MQTT客户端未初始化，无法发送消息。请检查monitor.jar是否正常启动");
+            return;
+        }
+        // 确保client是final的，以便在lambda中使用
+        final MqttClientSpace finalClient = client;
+        byte[] messageStart = hexStringToByteArray(hex);
+        LOG.info("MQTT客户端状态: {}", finalClient.getConnectionStatus());
+        // 2. 订阅返回主题
+        // finalClient.subTopic(oneArr[1]);
+        // 3. 发布消息 保存发送指令
+        String topicName = topic.substring(0,topic.indexOf("["));
+        VoicePowerDevice voicePowerDevice = voicePowerDeviceServiceStatic.saveData(topicName);
+        redisTstaticemplate.opsForValue().set(topicName+"QLWJ", JSONObject.toJSONString(voicePowerDevice));
+        finalClient.publishMessage(topic, messageStart, 2);
+        LOG.error("发声设备发送指令-设备编号: {},主题: {}", sbbh, topic);
+        // 确保oneArr[0]是final的，以便在lambda中使用
+        final String publishTopic = topic;
+        // 提交一个延迟执行的任务，关闭指令
+        scheduledExecutorService.schedule(() -> {
+            voicePowerDeviceServiceStatic.updateStopTime(topicName);
+            //43 52 44 02 00 07 10 02 4C
+            byte[] messageStop = new byte[] { 0x43, 0x52, 0x44, 0x02, 0x00, 0x07, 0x10, 0x02, 0x4C };
+            finalClient.publishMessage(publishTopic, messageStop, 2);
+            LOG.error("发声设备停止指令-设备编号: {},主题: {}", sbbh, publishTopic);
+        },300, TimeUnit.SECONDS);
+    }
+
 
     public static byte[] hexStringToByteArray(String hex) {
         hex = hex.replaceAll("\\s+", ""); // 去掉空格

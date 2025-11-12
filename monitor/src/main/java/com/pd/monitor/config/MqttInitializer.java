@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.pd.server.config.MqttClientSpace;
 import com.pd.server.config.RedisCode;
 import com.pd.server.main.mapper.WaterEquiplogMapper;
+import com.pd.server.main.service.VoicePowerDeviceService;
 import com.pd.server.main.service.WaterEquipmentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +31,8 @@ public class MqttInitializer implements CommandLineRunner {
     private RedisTemplate<String, Object> redisTemplate;
     @Resource
     private WaterEquiplogMapper waterEquiplogMapper;
+    @Resource
+    private VoicePowerDeviceService voicePowerDeviceService;
 
     @Override
     public void run(String... args) throws Exception {
@@ -79,7 +82,7 @@ public class MqttInitializer implements CommandLineRunner {
             
             // 初始化MQTT客户端（带依赖注入）
             MqttClientSpace.initializeMqttClient(mqttBrokerUrl, mqttClientId, mqttUserName, mqttPassWord, 
-                                               redisTemplate, waterEquiplogMapper); // WaterEquiplogMapper在server模块中，这里先传null
+                                               redisTemplate, waterEquiplogMapper, voicePowerDeviceService); // WaterEquiplogMapper在server模块中，这里先传null
             
             // 验证初始化结果
             MqttClientSpace client = MqttClientSpace.getInstance();
