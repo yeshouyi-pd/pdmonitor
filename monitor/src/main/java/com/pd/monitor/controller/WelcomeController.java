@@ -183,14 +183,14 @@ public class WelcomeController extends BaseWxController{
             WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
             waterEquipmentExample.createCriteria().andDqzlEqualTo("A1").andDeptcodeIn(listdept);
             List<String> sbbhList = waterEquipmentService.findSbbh(waterEquipmentExample);
-            EquipmentFileTodayExample todayExample = new EquipmentFileTodayExample();
-            EquipmentFileTodayExample.Criteria todayCa = todayExample.createCriteria();
             if(!sbbhList.isEmpty()){
+                EquipmentFileTodayExample todayExample = new EquipmentFileTodayExample();
+                EquipmentFileTodayExample.Criteria todayCa = todayExample.createCriteria();
                 todayCa.andSbbhIn(sbbhList);
+                todayCa.andRqEqualTo(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd"));
+                todayCa.andTxtlxEqualTo("1");
+                resultList.addAll(equipmentFileTodayService.listAllTs(todayExample));
             }
-            todayCa.andRqEqualTo(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd"));
-            todayCa.andTxtlxEqualTo("1");
-            resultList.addAll(equipmentFileTodayService.listAllTs(todayExample));
             if(resultList.isEmpty()){
                 clusterCa.andRqLessThan(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd"));
                 clusterCa.andRqGreaterThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(),-7),"yyyy-MM-dd"));
