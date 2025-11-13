@@ -185,7 +185,9 @@ public class WelcomeController extends BaseWxController{
             List<String> sbbhList = waterEquipmentService.findSbbh(waterEquipmentExample);
             EquipmentFileTodayExample todayExample = new EquipmentFileTodayExample();
             EquipmentFileTodayExample.Criteria todayCa = todayExample.createCriteria();
-            todayCa.andSbbhIn(sbbhList);
+            if(!sbbhList.isEmpty()){
+                todayCa.andSbbhIn(sbbhList);
+            }
             todayCa.andRqEqualTo(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd"));
             todayCa.andTxtlxEqualTo("1");
             resultList.addAll(equipmentFileTodayService.listAllTs(todayExample));
