@@ -3,7 +3,7 @@ package com.pd.server.main.dto;
         import java.util.Date;
         import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class VoicePowerDeviceDto {
+public class VoicePowerDeviceDto extends PageDto{
 
     /**
     * 
@@ -28,7 +28,7 @@ public class VoicePowerDeviceDto {
     /**
     * 发送指令时间
     */
-        @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date sendTime;
 
     /**
@@ -39,8 +39,13 @@ public class VoicePowerDeviceDto {
     /**
     * 停止指令时间
     */
-        @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date stopTime;
+
+    /**
+     * 部门编号
+     */
+    private String deptcode;
 
     public String getId() {
         return id;
@@ -98,6 +103,13 @@ public class VoicePowerDeviceDto {
         this.stopTime = stopTime;
     }
 
+    public String getDeptcode() {
+        return deptcode;
+    }
+
+    public void setDeptcode(String deptcode) {
+        this.deptcode = deptcode;
+    }
 
     @Override
     public String toString() {
@@ -112,6 +124,7 @@ public class VoicePowerDeviceDto {
             sb.append(", sendTime=").append(sendTime);
             sb.append(", isPlay=").append(isPlay);
             sb.append(", stopTime=").append(stopTime);
+            sb.append(", deptcode=").append(deptcode);
         sb.append("]");
         return sb.toString();
     }

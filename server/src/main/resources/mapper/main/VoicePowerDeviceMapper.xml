@@ -9,6 +9,7 @@
     <result column="send_time" jdbcType="TIMESTAMP" property="sendTime" />
     <result column="is_play" jdbcType="INTEGER" property="isPlay" />
     <result column="stop_time" jdbcType="TIMESTAMP" property="stopTime" />
+    <result column="deptcode" jdbcType="VARCHAR" property="deptcode" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -69,7 +70,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, sbbh, topic_name, rq, send_time, is_play, stop_time
+    id, sbbh, topic_name, rq, send_time, is_play, stop_time, deptcode
   </sql>
   <select id="selectByExample" parameterType="com.pd.server.main.domain.VoicePowerDeviceExample" resultMap="BaseResultMap">
     select
@@ -104,10 +105,10 @@
   <insert id="insert" parameterType="com.pd.server.main.domain.VoicePowerDevice">
     insert into voice_power_device (id, sbbh, topic_name, 
       rq, send_time, is_play, 
-      stop_time)
+      stop_time, deptcode)
     values (#{id,jdbcType=VARCHAR}, #{sbbh,jdbcType=VARCHAR}, #{topicName,jdbcType=VARCHAR}, 
       #{rq,jdbcType=VARCHAR}, #{sendTime,jdbcType=TIMESTAMP}, #{isPlay,jdbcType=INTEGER}, 
-      #{stopTime,jdbcType=TIMESTAMP})
+      #{stopTime,jdbcType=TIMESTAMP}, #{deptcode,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.pd.server.main.domain.VoicePowerDevice">
     insert into voice_power_device
@@ -133,6 +134,9 @@
       <if test="stopTime != null">
         stop_time,
       </if>
+      <if test="deptcode != null">
+        deptcode,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -155,6 +159,9 @@
       </if>
       <if test="stopTime != null">
         #{stopTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deptcode != null">
+        #{deptcode,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -188,6 +195,9 @@
       <if test="record.stopTime != null">
         stop_time = #{record.stopTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.deptcode != null">
+        deptcode = #{record.deptcode,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -201,7 +211,8 @@
       rq = #{record.rq,jdbcType=VARCHAR},
       send_time = #{record.sendTime,jdbcType=TIMESTAMP},
       is_play = #{record.isPlay,jdbcType=INTEGER},
-      stop_time = #{record.stopTime,jdbcType=TIMESTAMP}
+      stop_time = #{record.stopTime,jdbcType=TIMESTAMP},
+      deptcode = #{record.deptcode,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -227,6 +238,9 @@
       <if test="stopTime != null">
         stop_time = #{stopTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="deptcode != null">
+        deptcode = #{deptcode,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -237,7 +251,8 @@
       rq = #{rq,jdbcType=VARCHAR},
       send_time = #{sendTime,jdbcType=TIMESTAMP},
       is_play = #{isPlay,jdbcType=INTEGER},
-      stop_time = #{stopTime,jdbcType=TIMESTAMP}
+      stop_time = #{stopTime,jdbcType=TIMESTAMP},
+      deptcode = #{deptcode,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

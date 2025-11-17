@@ -71,7 +71,7 @@
       <div style="display: flex;flex-wrap: wrap;margin-bottom: 30px;">
         <div v-for="(item,index) in equipmentFiles" style="margin:20px;width: 150px;height: 300px;text-align: center;">
           <div style="text-align: center;width: 100px;margin: 0 auto;">
-            <img alt="无图片" :src="item.tplj.substring(0,item.tplj.lastIndexOf('.')+1)+'jpg'" style="width: 100px;height: 200px;cursor: pointer;" v-on:click="checkImg(item,index)">
+            <img alt="无图片" :src="item.tplj" style="width: 100px;height: 200px;cursor: pointer;" v-on:click="checkImg(item,index)">
           </div>
           <div style="margin: 0 auto;">{{waterEquipments|optionNSArray(item.sbbh)}}</div>
           <div style="margin: 0 auto;word-wrap: break-word;">{{item.cjsj}}</div>
@@ -209,7 +209,7 @@ export default {
     beforePic(){
       let _this = this;
       _this.curIndex = _this.curIndex-1;
-      _this.curTplj = _this.equipmentFiles[_this.curIndex].tplj.replace(/http:\/\/[^/]+/, _this.picServer);
+      _this.curTplj = _this.equipmentFiles[_this.curIndex].tplj;
       _this.curSbsn = _this.equipmentFiles[_this.curIndex].sbbh;
       _this.curCjsj = _this.equipmentFiles[_this.curIndex].cjsj;
       _this.curWjmc = _this.equipmentFiles[_this.curIndex].tplj;
@@ -218,7 +218,7 @@ export default {
     nextPic(){
       let _this = this;
       _this.curIndex = _this.curIndex+1;
-      _this.curTplj = _this.equipmentFiles[_this.curIndex].tplj.replace(/http:\/\/[^/]+/, _this.picServer);
+      _this.curTplj = _this.equipmentFiles[_this.curIndex].tplj;
       _this.curSbsn = _this.equipmentFiles[_this.curIndex].sbbh;
       _this.curCjsj = _this.equipmentFiles[_this.curIndex].cjsj;
       _this.curWjmc = _this.equipmentFiles[_this.curIndex].tplj;
@@ -265,7 +265,7 @@ export default {
     checkImg(item,index){
       let _this = this;
       _this.curIndex = index;
-      _this.curTplj = item.tplj.replace(/http:\/\/[^/]+/, _this.picServer);
+      _this.curTplj = item.tplj;
       _this.curSbsn = item.sbbh;
       _this.curCjsj = item.cjsj;
       _this.curWjmc = item.tplj;

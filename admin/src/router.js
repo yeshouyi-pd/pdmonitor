@@ -108,6 +108,7 @@ import AppCodeSet from "./views/app/appCodeSet.vue";
 import AppMonitorInfo from "./views/app/appMonitorInfo.vue";
 import AppMonitorDiscovery from "./views/app/appMonitorDiscovery.vue";
 import AppMonitorExp from "./views/app/appMonitorExp.vue";
+import VoicePowerDevice from "./views/fsdevice/voicePowerDevice.vue";
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -541,6 +542,10 @@ export default new Router({
             path: "admin/appMonitorExp",
             name: "admin/appMonitorExp",
             component: AppMonitorExp
+        },{
+            path: "fsdevice/voicePowerDevice",
+            name: "fsdevice/voicePowerDevice",
+            component: VoicePowerDevice
         }]
     }]
 })

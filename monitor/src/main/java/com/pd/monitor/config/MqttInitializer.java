@@ -22,7 +22,7 @@ import java.util.Map;
  * 使用独立的包路径避免与system.jar冲突
  */
 @Component
-@Order(1) // 确保在RedisConfig之后执行
+@Order(Integer.MAX_VALUE) // 确保在RedisConfig之后执行
 public class MqttInitializer implements CommandLineRunner {
 
     private static final Logger LOG = LoggerFactory.getLogger(MqttInitializer.class);
@@ -60,7 +60,7 @@ public class MqttInitializer implements CommandLineRunner {
             
             // 等待Redis配置加载完成
             Thread.sleep(3000);
-            
+
             @SuppressWarnings("unchecked")
             Map<String, String> mapAttr = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.ATTRECODEKEY);
             if (mapAttr == null || mapAttr.isEmpty()) {
@@ -72,14 +72,14 @@ public class MqttInitializer implements CommandLineRunner {
             String mqttClientId = mapAttr.get("mqttClientId");
             String mqttUserName = mapAttr.get("mqttUserName");
             String mqttPassWord = mapAttr.get("mqttPassWord");
-            
-            if (StringUtils.isEmpty(mqttBrokerUrl) || StringUtils.isEmpty(mqttClientId) || 
+
+            if (StringUtils.isEmpty(mqttBrokerUrl) || StringUtils.isEmpty(mqttClientId) ||
                 StringUtils.isEmpty(mqttUserName) || StringUtils.isEmpty(mqttPassWord)) {
-                LOG.warn("MQTT配置参数不完整，跳过MQTT客户端初始化 - brokerUrl: {}, clientId: {}, userName: {}, passWord: {}", 
+                LOG.warn("MQTT配置参数不完整，跳过MQTT客户端初始化 - brokerUrl: {}, clientId: {}, userName: {}, passWord: {}",
                          mqttBrokerUrl, mqttClientId, mqttUserName, mqttPassWord != null ? "***" : "null");
                 return false;
             }
-            
+
             // 初始化MQTT客户端（带依赖注入）
             MqttClientSpace.initializeMqttClient(mqttBrokerUrl, mqttClientId, mqttUserName, mqttPassWord, 
                                                redisTemplate, waterEquiplogMapper, voicePowerDeviceService); // WaterEquiplogMapper在server模块中，这里先传null

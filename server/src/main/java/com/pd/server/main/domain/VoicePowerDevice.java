@@ -17,6 +17,8 @@ public class VoicePowerDevice {
 
     private Date stopTime;
 
+    private String deptcode;
+
     public String getId() {
         return id;
     }
@@ -73,6 +75,14 @@ public class VoicePowerDevice {
         this.stopTime = stopTime;
     }
 
+    public String getDeptcode() {
+        return deptcode;
+    }
+
+    public void setDeptcode(String deptcode) {
+        this.deptcode = deptcode;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -86,6 +96,7 @@ public class VoicePowerDevice {
         sb.append(", sendTime=").append(sendTime);
         sb.append(", isPlay=").append(isPlay);
         sb.append(", stopTime=").append(stopTime);
+        sb.append(", deptcode=").append(deptcode);
         sb.append("]");
         return sb.toString();
     }

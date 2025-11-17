@@ -564,6 +564,76 @@ public class VoicePowerDeviceExample {
             addCriterion("stop_time not between", value1, value2, "stopTime");
             return (Criteria) this;
         }
+
+        public Criteria andDeptcodeIsNull() {
+            addCriterion("deptcode is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptcodeIsNotNull() {
+            addCriterion("deptcode is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptcodeEqualTo(String value) {
+            addCriterion("deptcode =", value, "deptcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptcodeNotEqualTo(String value) {
+            addCriterion("deptcode <>", value, "deptcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptcodeGreaterThan(String value) {
+            addCriterion("deptcode >", value, "deptcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptcodeGreaterThanOrEqualTo(String value) {
+            addCriterion("deptcode >=", value, "deptcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptcodeLessThan(String value) {
+            addCriterion("deptcode <", value, "deptcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptcodeLessThanOrEqualTo(String value) {
+            addCriterion("deptcode <=", value, "deptcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptcodeLike(String value) {
+            addCriterion("deptcode like", value, "deptcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptcodeNotLike(String value) {
+            addCriterion("deptcode not like", value, "deptcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptcodeIn(List<String> values) {
+            addCriterion("deptcode in", values, "deptcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptcodeNotIn(List<String> values) {
+            addCriterion("deptcode not in", values, "deptcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptcodeBetween(String value1, String value2) {
+            addCriterion("deptcode between", value1, value2, "deptcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptcodeNotBetween(String value1, String value2) {
+            addCriterion("deptcode not between", value1, value2, "deptcode");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

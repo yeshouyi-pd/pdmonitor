@@ -102,6 +102,7 @@ import SonarBiomass from "./views/sonar/sonarBiomass.vue";
 import SonarEcho from "./views/sonar/sonarEcho.vue";
 import SonarEchoSv from "./views/sonar/sonarEchoSv.vue";
 import SonarSingleTarget from "./views/sonar/sonarSingleTarget.vue";
+import VoicePowerDevice from "./views/fsdevice/voicePowerDevice.vue";
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -511,6 +512,10 @@ export default new Router({
             path: "sonar/sonarSingleTarget",
             name: "sonar/sonarSingleTarget",
             component: SonarSingleTarget
+        },{
+            path: "fsdevice/voicePowerDevice",
+            name: "fsdevice/voicePowerDevice",
+            component: VoicePowerDevice
         }]
     }]
 })

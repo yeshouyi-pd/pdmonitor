@@ -205,10 +205,10 @@ public class DateUtil {
         //String str = sdf.format(new Date());
         //System.out.println(sdf.format(getNextDay(new Date())));
         //System.out.println(sdf.format(getYearBefore(new Date())));
-        System.out.println(sdf.format(getSecondLater(DateUtil.toDate("2024-03-19 08:50:00","yyyy-MM-dd HH:mm:ss"),-180)));
-        System.out.println(sdf.format(getSecondLater(DateUtil.toDate("2024-03-19 08:50:00","yyyy-MM-dd HH:mm:ss"),180)));
-        System.out.println(sdf.format(getSecondLater(DateUtil.toDate("2024-03-19 08:56:05","yyyy-MM-dd HH:mm:ss"),0)));
-        System.out.println(sdf.format(getSecondLater(DateUtil.toDate("2024-03-19 08:56:05","yyyy-MM-dd HH:mm:ss"),180)));
+//        System.out.println(sdf.format(getSecondLater(DateUtil.toDate("2024-03-19 08:50:00","yyyy-MM-dd HH:mm:ss"),-180)));
+//        System.out.println(sdf.format(getSecondLater(DateUtil.toDate("2024-03-19 08:50:00","yyyy-MM-dd HH:mm:ss"),180)));
+//        System.out.println(sdf.format(getSecondLater(DateUtil.toDate("2024-03-19 08:56:05","yyyy-MM-dd HH:mm:ss"),0)));
+        System.out.println(sdf.format(getMinutesLater(DateUtil.toDate("2024-03-19 08:56:05","yyyy-MM-dd HH:mm:ss"),-3)));
 
         String str = "2022_09_08_14_29_43_2022_09_08_14_29_46_1_A2.txt";//\d{n,}
         //2022_09_05_20_18_16.jpg

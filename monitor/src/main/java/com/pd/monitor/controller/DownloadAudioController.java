@@ -21,6 +21,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.io.File;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.stream.Collectors;
@@ -101,7 +103,7 @@ public class DownloadAudioController {
             lists = equipmentFilePClusterService.selectByExample(equipmentFileExampleId);
         }
         // 目标文件夹a
-        File destDir = new File("C:/A4File");
+        File destDir = new File("D:/A4File");
         // 确保目标文件夹存在
         if (!destDir.exists()) {
             destDir.mkdirs();
@@ -111,14 +113,14 @@ public class DownloadAudioController {
         }
         String filePath = attrService.findByAttrKey("filePath");
         for(EquipmentFilePCluster event : lists){
-            FileUtil.copyFile(new File(event.getTplj().replaceAll("http://[^/]+", Matcher.quoteReplacement(filePath)).replace("/", "\\")), FileUtil.file("C:/A4File"));
+            FileUtil.copyFile(new File(event.getTplj().replaceAll("http://[^/]+", Matcher.quoteReplacement(filePath)).replace("/", "\\")), FileUtil.file("D:/A4File"));
         }
-        ZipUtil.zip("C:/A4File");
+        ZipUtil.zip("D:/A4File");
         //拼接下载默认名称并转为ISO-8859-1格式
         response.setHeader("Content-Disposition", "attchment;filename=A4File.zip");
         //该流不可以手动关闭,手动关闭下载会出问题,下载完成后会自动关闭
         ServletOutputStream outputStream = response.getOutputStream();
-        FileInputStream inputStream = new FileInputStream("C:/A4File.zip");
+        FileInputStream inputStream = new FileInputStream("D:/A4File.zip");
         // 如果是SpringBoot框架,在这个路径
         // org.apache.tomcat.util.http.fileupload.IOUtils产品
         // 否则需要自主引入apache的 commons-io依赖
@@ -202,14 +204,14 @@ public class DownloadAudioController {
     public void downZipByA4Id(HttpServletRequest request, HttpServletResponse response) throws Exception{
         response.setCharacterEncoding("UTF-8");
         String filePath = attrService.findByAttrKey("filePath");
-        Long id = Long.getLong(request.getParameter("id"));
+        Long id = Long.parseLong(request.getParameter("id"));
         EquipmentFilePCluster pCluster = equipmentFilePClusterService.selectByPrimaryKey(id);
         EquipmentFilePVideoExample example = new EquipmentFilePVideoExample();
         EquipmentFilePVideoExample.Criteria ca = example.createCriteria();
         ca.andCjsjEqualTo(pCluster.getCjsj());
         List<EquipmentFilePVideo> lists = equipmentFilePVideoService.selectByExample(example);
         // 此处模拟处理ids,拿到文件下载url
-//        List<String> paths = new ArrayList<>();
+//        List<String> paths = new ArrayList<>();	D:\FileinfoApi/tempData/RPCDA4004/2023_10_26_10_41_17_2023_10_26_10_42_41_1_A4_TD34.mp4
 //        paths.add("C:\\Users\\Administrator\\Desktop\\2022_09_28_09_24_06_2022_09_28_09_24_08_1_A2_TD34.mp4");
 //        paths.add("C:\\Users\\Administrator\\Desktop\\2022_09_28_09_24_06_2022_09_28_09_24_08_1_A2_TD33.mp4");
         if (lists.size() != 0) {
@@ -305,6 +307,7 @@ public class DownloadAudioController {
     }
 
     public static void fileToZip(String filePath,ZipOutputStream zipOut) throws IOException {
+        System.out.println(filePath);
         // 需要压缩的文件
         File file = new File(filePath);
         // 获取文件名称,如果有特殊命名需求,可以将参数列表拓展,传fileName
@@ -472,6 +475,46 @@ public class DownloadAudioController {
             // in = new BufferedInputStream(conn.getInputStream());
             // 这和上面两句一样的效果
             in = new BufferedInputStream(new FileInputStream(path.replaceAll("http://[^/]+", Matcher.quoteReplacement(filePath)).replace("/", "\\")));
+            response.reset();
+            response.setContentType("application/octet-stream");
+            fileName = new String(fileName.getBytes(), "ISO-8859-1");
+            response.setHeader("Content-Disposition", "attachment; filename="+fileName);
+            // 将网络输入流转换为输出流
+            int i;
+            while ((i = in.read()) != -1) {
+                response.getOutputStream().write(i);
+            }
+            in.close();
+            response.getOutputStream().close();
+        }catch (IOException e){
+            try{
+                String result = "未找到该文件";
+                response.getOutputStream().write(result.getBytes());
+                in.close();
+                response.getOutputStream().close();
+            }catch (IOException exception){
+                System.out.println("关闭流失败");
+            }
+        }
+    }
+
+    /**
+     * 直接根据文件路径下载文件
+     */
+    @GetMapping("/downAudioFileByOtherServer")
+    public void downAudioFileByOtherServer(HttpServletRequest request, HttpServletResponse response) {
+        response.setCharacterEncoding("UTF-8");
+        BufferedInputStream in = null;
+        try{
+            String fileName = request.getParameter("fileName");
+            String path = request.getParameter("fileUrl")+fileName;
+            URL url = new URL(path);
+            HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+            conn.setConnectTimeout(30000);
+            conn.setReadTimeout(30000);
+            in = new BufferedInputStream(conn.getInputStream());
+            // 这和上面两句一样的效果
+            // in = new BufferedInputStream(new FileInputStream(path.replace(fileUrl,filePath).replace("http:\\","http:\\\\")));
             response.reset();
             response.setContentType("application/octet-stream");
             fileName = new String(fileName.getBytes(), "ISO-8859-1");

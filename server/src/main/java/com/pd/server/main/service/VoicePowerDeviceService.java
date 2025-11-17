@@ -39,14 +39,8 @@ public class VoicePowerDeviceService {
     /**
     * 列表查询
     */
-    public void list(PageDto pageDto) {
-    PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
-        VoicePowerDeviceExample voicePowerDeviceExample = new VoicePowerDeviceExample();
-        List<VoicePowerDevice> voicePowerDeviceList = voicePowerDeviceMapper.selectByExample(voicePowerDeviceExample);
-        PageInfo<VoicePowerDevice> pageInfo = new PageInfo<>(voicePowerDeviceList);
-        pageDto.setTotal(pageInfo.getTotal());
-        List<VoicePowerDeviceDto> voicePowerDeviceDtoList = CopyUtil.copyList(voicePowerDeviceList, VoicePowerDeviceDto.class);
-        pageDto.setList(voicePowerDeviceDtoList);
+    public List<VoicePowerDevice> selectByExample(VoicePowerDeviceExample example) {
+        return voicePowerDeviceMapper.selectByExample(example);
     }
 
     /**
@@ -111,20 +105,35 @@ public class VoicePowerDeviceService {
         voicePowerDevice.setTopicName(topic);
         voicePowerDevice.setRq(DateUtil.getFormatDate(new Date(), "yyyy-MM-dd"));
         voicePowerDevice.setSendTime(new Date());
+        voicePowerDevice.setDeptcode(sbbhToDeptcode(voicePowerDevice.getSbbh()));
         voicePowerDeviceMapper.insert(voicePowerDevice);
         return voicePowerDevice;
     }
 
+    public String sbbhToDeptcode(String sbbh){
+        try {
+            Map<String,String> map = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.SBSNCENTERCODE);
+            return map.get(sbbh);
+        }catch (Exception e){
+            LOG.error("根据驱离设备设备编号 {} 查询部门错误", sbbh);
+        }
+        return "";
+    }
+
     public String topicToSbbh(String topic){
-        Map<String,String> topicSbbhMap = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.TOPICSBBH);
-        if (topicSbbhMap != null) {
-            for(String key : topicSbbhMap.keySet()){
-                if(key.contains(topic)){
-                    return topicSbbhMap.get(key);
+        try {
+            Map<String,String> topicSbbhMap = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.TOPICSBBH);
+            if (topicSbbhMap != null) {
+                for(String key : topicSbbhMap.keySet()){
+                    if(key.contains(topic)){
+                        return topicSbbhMap.get(key);
+                    }
                 }
+            } else {
+                LOG.error("未找到主题 {} 对应的设备编号", topic);
             }
-        } else {
-            LOG.warn("未找到主题 {} 对应的设备编号", topic);
+        }catch (Exception e){
+            LOG.error("根据主题 {} 查询驱离设备设备编号错误", topic);
         }
         return "";
     }
@@ -133,19 +142,31 @@ public class VoicePowerDeviceService {
      * 根据id修改播放状态
      */
     public void updateIsPlay(String topicName){
-        String entityJson = (String) redisTemplate.opsForValue().get(topicName + "QLWJ");
-        VoicePowerDevice voicePowerDevice = JSONObject.parseObject(entityJson, VoicePowerDevice.class);
-        voicePowerDevice.setIsPlay(1);
-        voicePowerDeviceMapper.updateByPrimaryKeySelective(voicePowerDevice);
+        try {
+            if(!StringUtils.isEmpty(redisTemplate.opsForValue().get(topicName + "QLWJ"))){
+                String entityJson = (String) redisTemplate.opsForValue().get(topicName + "QLWJ");
+                VoicePowerDevice voicePowerDevice = JSONObject.parseObject(entityJson, VoicePowerDevice.class);
+                voicePowerDevice.setIsPlay(1);
+                voicePowerDeviceMapper.updateByPrimaryKeySelective(voicePowerDevice);
+            }
+        }catch (Exception e){
+            LOG.error("根据主题 {} 修改播放状态错误", topicName);
+        }
     }
 
     /**
      * 根据id修改停止时间
      */
     public void updateStopTime(String topicName){
-        String entityJson = (String) redisTemplate.opsForValue().get(topicName + "QLWJ");
-        VoicePowerDevice voicePowerDevice = JSONObject.parseObject(entityJson, VoicePowerDevice.class);
-        voicePowerDevice.setStopTime(new Date());
-        voicePowerDeviceMapper.updateByPrimaryKeySelective(voicePowerDevice);
+        try {
+            if(!StringUtils.isEmpty(redisTemplate.opsForValue().get(topicName + "QLWJ"))){
+                String entityJson = (String) redisTemplate.opsForValue().get(topicName + "QLWJ");
+                VoicePowerDevice voicePowerDevice = JSONObject.parseObject(entityJson, VoicePowerDevice.class);
+                voicePowerDevice.setStopTime(new Date());
+                voicePowerDeviceMapper.updateByPrimaryKeySelective(voicePowerDevice);
+            }
+        }catch (Exception e){
+            LOG.error("根据主题 {} 修改停止时间错误", topicName);
+        }
     }
 }

@@ -388,7 +388,7 @@ export default {
             let jdarr =  rqandjd[1].split(",");//0:105和1:235
             for(let j=0;j<jdarr.length;j++){
               if(jdarr[j].split(":").length==2){
-                item.push([1.5,jdarr[j].split(":")[1]]);
+                item.push([_this.getRandomNumber(),jdarr[j].split(":")[1]]);
               }
             }
             _this.echartsData.push(item);
@@ -398,6 +398,9 @@ export default {
       }
       _this.loopEchartsData(_this.echartsData,_this.title);
       $("#echart-modal").modal("show");
+    },
+    getRandomNumber() {
+      return Math.random() * (3 - 0.1) + 0.1;
     },
     loopEchartsData(list,title){
       let _this = this;

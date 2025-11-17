@@ -314,7 +314,7 @@ export default {
     download(item){
       let wjlj = item.wjlj;
       let paramsStr = "fileUrl="+wjlj.substring(0,wjlj.lastIndexOf("/")+1)+"&fileName="+wjlj.substring(wjlj.lastIndexOf("/")+1,wjlj.length);
-      window.location.href = process.env.VUE_APP_SERVER + '/monitor/download/audio/downAudioFile?'+paramsStr;
+      window.location.href = process.env.VUE_APP_SERVER + '/monitor/download/audio/downAudioFileByOtherServer?'+paramsStr;
     },
     /**
      *开始时间
