@@ -247,7 +247,7 @@ public class EquipmentFileSplitShjService {
             EquipmentFilePPic pic = new EquipmentFilePPic();
             //判断雾报
             EquipmentFile saveEntity = isMistData(equipmentFile);
-            LOG.error("雾报返回的数据："+JSONObject.toJSONString(saveEntity));
+            //LOG.error("雾报返回的数据："+JSONObject.toJSONString(saveEntity));
             if(saveEntity!=null){
                 copyCommonFields(saveEntity, pic);
                 equipmentFilePPicMapper.insertSelective(pic);
@@ -320,7 +320,7 @@ public class EquipmentFileSplitShjService {
         if(attrMap.get("predationsbsn").contains(equipmentFile.getSbbh())){
             //判断是否是雾报(前后三分钟都没有报警的数据是雾报数据，雾报数据不保存)
             EquipmentFile beforeEntity = new EquipmentFile();
-            LOG.error("缓存中的数据："+redisTemplate.opsForValue().get(equipmentFile.getSbbh()+"WB"));
+            //LOG.error("缓存中的数据："+redisTemplate.opsForValue().get(equipmentFile.getSbbh()+"WB"));
             if(!org.springframework.util.StringUtils.isEmpty(redisTemplate.opsForValue().get(equipmentFile.getSbbh()+"WB"))){
                 String entityJson = (String) redisTemplate.opsForValue().get(equipmentFile.getSbbh()+"WB");
                 beforeEntity = JSONObject.parseObject(entityJson,EquipmentFile.class);
