@@ -66,7 +66,7 @@ public class EquipmentFileSplitShjService {
     private EquipmentFilePWavMapper equipmentFilePWavMapper;
 
     @Resource
-    private AttrService attrService;
+    private EquipmentFileTodayMapper  equipmentFileTodayMapper;
 
     @Resource
     private AzimuthAngleService azimuthAngleService;
@@ -162,6 +162,7 @@ public class EquipmentFileSplitShjService {
         try {
             EquipmentFilePCluster cluster = new EquipmentFilePCluster();
             if(copyCommonFields(equipmentFile, cluster)){
+                equipmentFileTodayMapper.insertEquipFile(equipmentFile);
                 equipmentFilePClusterMapper.insertSelective(cluster);
                 //统计方位角次数
                 staticAzimuthAngle(cluster.getSbbh(),cluster.getDeptcode(),cluster.getRq(),cluster.getJtnr());
@@ -250,6 +251,7 @@ public class EquipmentFileSplitShjService {
             //LOG.error("雾报返回的数据："+JSONObject.toJSONString(saveEntity));
             if(saveEntity!=null){
                 copyCommonFields(saveEntity, pic);
+                equipmentFileTodayMapper.insertEquipFile(equipmentFile);
                 equipmentFilePPicMapper.insertSelective(pic);
                 //白海豚写剪切视频的事件，李响读了去剪切视频
                 if(saveEntity.getSbbh().contains("RPCD")||saveEntity.getSbbh().contains("tl")){
@@ -271,6 +273,7 @@ public class EquipmentFileSplitShjService {
         try {
             EquipmentFilePTxt txt = new EquipmentFilePTxt();
             copyCommonFields(equipmentFile, txt);
+            equipmentFileTodayMapper.insertEquipFile(equipmentFile);
             equipmentFilePTxtMapper.insertSelective(txt);
             //LOG.debug("成功保存到文本表，EquipmentFile ID: {}, 新ID: {}", 
                   //  equipmentFile.getId(), txt.getId());
@@ -287,6 +290,7 @@ public class EquipmentFileSplitShjService {
         try {
             EquipmentFilePVideo video = new EquipmentFilePVideo();
             copyCommonFields(equipmentFile, video);
+            equipmentFileTodayMapper.insertEquipFile(equipmentFile);
             equipmentFilePVideoMapper.insertSelective(video);
             //LOG.debug("成功保存到视频表，EquipmentFile ID: {}, 新ID: {}", 
                  //   equipmentFile.getId(), video.getId());
@@ -303,6 +307,7 @@ public class EquipmentFileSplitShjService {
         try {
             EquipmentFilePWav wav = new EquipmentFilePWav();
             copyCommonFields(equipmentFile, wav);
+            equipmentFileTodayMapper.insertEquipFile(equipmentFile);
             equipmentFilePWavMapper.insertSelective(wav);
             //LOG.debug("成功保存到音频表，EquipmentFile ID: {}, 新ID: {}", 
                   //  equipmentFile.getId(), wav.getId());

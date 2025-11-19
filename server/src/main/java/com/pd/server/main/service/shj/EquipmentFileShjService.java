@@ -214,7 +214,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
             //正式更新需要加上下面一行
             entity.setSyncFlag(3);
             //equipmentFileMapperStatic.insert(entity);
-            todayMapperStatic.insertEquipFile(entity);
+            //todayMapperStatic.insertEquipFile(entity);
             data="保存成功";
             JSONObject result = new JSONObject();
             result.put("data",data);
