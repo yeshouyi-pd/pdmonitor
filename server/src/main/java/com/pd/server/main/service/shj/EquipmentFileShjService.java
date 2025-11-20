@@ -54,6 +54,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
     public static ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(10);
     // 专门用于数据分发的线程池
     public static ExecutorService distributeExecutorService = Executors.newFixedThreadPool(10);
+    public static EquipmentFilePPicService equipmentFilePPicServiceStatic;
 
     @Resource
     private RedisTemplate redisTemplate;
@@ -93,6 +94,8 @@ public class EquipmentFileShjService extends AbstractScanRequest{
     private VoicePowerDeviceService voicePowerDeviceService;
     @Resource
     private EquipmentFileSplitShjService equipmentFileSplitShjService;
+    @Resource
+    private EquipmentFilePPicService equipmentFilePPicService;
 
     @PostConstruct
     protected void init() {
@@ -115,6 +118,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
         angleFileServiceStatic = angleFileService;
         equipmentFileSplitShjServiceStatic = equipmentFileSplitShjService;
         voicePowerDeviceServiceStatic = voicePowerDeviceService;
+        equipmentFilePPicServiceStatic = equipmentFilePPicService;
     }
 
 
@@ -202,24 +206,81 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                     return data;
                 }
             }
-            // 异步分发保存数据
-            distributeExecutorService.execute(() -> {
-                try {
-                    equipmentFileSplitShjServiceStatic.distributeAndSave(entity);
-                } catch (Exception e) {
-                    LOG.error("异步分发保存失败，EquipmentFile ID: {}, 错误信息: {}",
-                            entity.getId(), e.getMessage(), e);
+            String predationsbsn = attrServiceStatic.findByAttrKey("predationsbsn");
+            if(predationsbsn.contains(sbbh)&&("1002".equals(typeUtil.get(TypeUtils.TYPE))||"1003".equals(typeUtil.get(TypeUtils.TYPE))||"1005".equals(typeUtil.get(TypeUtils.TYPE))||"1006".equals(typeUtil.get(TypeUtils.TYPE)))){
+                //判断是否是雾报(前后三分钟都没有报警的数据是雾报数据，雾报数据不保存)
+                EquipmentFile beforeEntity = new EquipmentFile();
+                LOG.error("缓存中的数据："+redisTstaticemplate.opsForValue().get(sbbh+"WB"));
+                if(!StringUtils.isEmpty(redisTstaticemplate.opsForValue().get(sbbh+"WB"))){
+                    String entityJson = (String) redisTstaticemplate.opsForValue().get(sbbh+"WB");
+                    beforeEntity = JSONObject.parseObject(entityJson,EquipmentFile.class);
+                    if(!StringUtils.isEmpty(beforeEntity.getCjsj())&&isOverThreeMinute(DateUtil.getFormatDate(beforeEntity.getCjsj(),"yyyy-MM-dd HH:mm:ss"),cjsj)){
+                        /**
+                         * 保存数据
+                         */
+                        // 异步分发保存数据
+                        final EquipmentFile sentity = beforeEntity;
+                        distributeExecutorService.execute(() -> {
+                            try {
+                                equipmentFileSplitShjServiceStatic.distributeAndSave(sentity);
+                            } catch (Exception e) {
+                                LOG.error("异步分发保存失败，EquipmentFile ID: {}, 错误信息: {}",
+                                        entity.getId(), e.getMessage(), e);
+                            }
+                        });
+                        redisTstaticemplate.opsForValue().set(sbbh+"WB", JSONObject.toJSONString(entity));
+
+                    }else{
+                        try{
+                            EquipmentFilePPicExample example = new EquipmentFilePPicExample();
+                            EquipmentFilePPicExample.Criteria ca = example.createCriteria();
+                            ca.andSbbhEqualTo(sbbh);
+                            ca.andCjsjLessThanOrEqualTo(DateUtil.getMinutesLater(beforeEntity.getCjsj(),-3));
+                            List<EquipmentFilePPic> lastFile = equipmentFilePPicServiceStatic.selectByExample(example);
+                            if(!lastFile.isEmpty()){
+                                // 异步分发保存数据
+                                final EquipmentFile sentity = beforeEntity;
+                                distributeExecutorService.execute(() -> {
+                                    try {
+                                        equipmentFileSplitShjServiceStatic.distributeAndSave(sentity);
+                                    } catch (Exception e) {
+                                        LOG.error("异步分发保存失败，EquipmentFile ID: {}, 错误信息: {}",
+                                                entity.getId(), e.getMessage(), e);
+                                    }
+                                });
+                            }
+                        }catch (Exception e){
+                            LOG.error("错误："+e.getMessage());
+                        }
+                        redisTstaticemplate.opsForValue().set(sbbh+"WB", JSONObject.toJSONString(entity));
+                    }
+                }else{
+                    redisTstaticemplate.opsForValue().set(sbbh+"WB", JSONObject.toJSONString(entity));
                 }
-            });
-            //正式更新需要加上下面一行
-            entity.setSyncFlag(3);
-            //equipmentFileMapperStatic.insert(entity);
-            //todayMapperStatic.insertEquipFile(entity);
-            data="保存成功";
-            JSONObject result = new JSONObject();
-            result.put("data",data);
-            result.put("entity",entity);
-            return result.toJSONString();
+                data="保存成功";
+                JSONObject result = new JSONObject();
+                result.put("data",data);
+                result.put("entity",beforeEntity);
+                return result.toJSONString();
+            }else {
+                /**
+                 * 保存数据
+                 */
+                // 异步分发保存数据
+                distributeExecutorService.execute(() -> {
+                    try {
+                        equipmentFileSplitShjServiceStatic.distributeAndSave(entity);
+                    } catch (Exception e) {
+                        LOG.error("异步分发保存失败，EquipmentFile ID: {}, 错误信息: {}",
+                                entity.getId(), e.getMessage(), e);
+                    }
+                });
+                data="保存成功";
+                JSONObject result = new JSONObject();
+                result.put("data",data);
+                result.put("entity",entity);
+                return result.toJSONString();
+            }
         }else {
             data="该图片已保存过";
             return data;
@@ -514,4 +575,18 @@ public class EquipmentFileShjService extends AbstractScanRequest{
         }
     }
 
+
+    /**
+     * 雾报间隔时间
+     */
+    public Boolean isOverThreeMinute(String curDateStr, String nextDateStr){
+        Map<String,String> attrMap = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.ATTRECODEKEY);
+        Date begin = DateUtil.toDate(curDateStr,"yyyy-MM-dd HH:mm");
+        Date end = DateUtil.toDate(nextDateStr,"yyyy-MM-dd HH:mm");
+        long minute=(end.getTime()-begin.getTime())/(1000*60);//除以1000是为了转换成秒
+        if(minute<=Integer.parseInt(attrMap.get("predationInterval"))){
+            return true;
+        }
+        return false;
+    }
 }

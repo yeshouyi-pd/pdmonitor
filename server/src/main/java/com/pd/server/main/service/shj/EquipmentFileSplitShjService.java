@@ -8,15 +8,13 @@ import com.pd.server.main.dto.AzimuthAngleRqDto;
 import com.pd.server.main.dto.CameraMiddleDto;
 import com.pd.server.main.mapper.*;
 import com.pd.server.main.service.*;
-import com.pd.server.util.DateUtil;
-import com.pd.server.util.FileShjServiceTool;
-import com.pd.server.util.MQUtil;
-import com.pd.server.util.PushFile;
+import com.pd.server.util.*;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -162,8 +160,8 @@ public class EquipmentFileSplitShjService {
         try {
             EquipmentFilePCluster cluster = new EquipmentFilePCluster();
             if(copyCommonFields(equipmentFile, cluster)){
-                equipmentFileTodayMapper.insertEquipFile(equipmentFile);
                 equipmentFilePClusterMapper.insertSelective(cluster);
+                insertEquipFile(equipmentFile);
                 //统计方位角次数
                 staticAzimuthAngle(cluster.getSbbh(),cluster.getDeptcode(),cluster.getRq(),cluster.getJtnr());
                 //南京设备对接无人机
@@ -211,32 +209,36 @@ public class EquipmentFileSplitShjService {
      * 方位角统计
      */
     public void staticAzimuthAngle(String sbbh,String deptcode,String rq,String jtnr){
-        JSONObject jsonObject = FileShjServiceTool.getStatic(jtnr);
-        Map<String, Map<String,Integer>> rqMap = (Map<String, Map<String, Integer>>) jsonObject.get("rqMap");
-        Map<String,Integer> rqTsMap = (Map<String, Integer>) jsonObject.get("rqTsMap");
-        for(String xsStr : rqMap.keySet()){
-            Map<String,Integer> jdNum = rqMap.get(xsStr);
-            String[] rqArr = xsStr.split("_");
-            AzimuthAngleDto dto = new AzimuthAngleDto();
-            dto.setSbbh(sbbh);
-            dto.setRq(rq);
-            dto.setXs(rqArr[0]+"-"+rqArr[1]+"-"+rqArr[2]+" "+rqArr[3]);
-            dto.setFz(rqArr[0]+"-"+rqArr[1]+"-"+rqArr[2]+" "+rqArr[3]+":"+rqArr[4]);
-            dto.setTs(rqTsMap.get(xsStr));
-            dto.setDeptcode(deptcode);
-            dto.setNorthNortheast(jdNum.get("north_northeast"));
-            dto.setNortheastEast(jdNum.get("northeast_east"));
-            dto.setEastEastsouth(jdNum.get("east_eastsouth"));
-            dto.setEastsouthSouth(jdNum.get("eastsouth_south"));
-            dto.setSouthSouthwest(jdNum.get("south_southwest"));
-            dto.setSouthwestWest(jdNum.get("southwest_west"));
-            dto.setWestWestnorth(jdNum.get("west_westnorth"));
-            dto.setWestnorthNorth(jdNum.get("westnorth_north"));
-            azimuthAngleService.save(dto);
-            AzimuthAngleRqDto rqDto = new AzimuthAngleRqDto();
-            rqDto.setSbbh(sbbh);
-            rqDto.setRq(rq);
-            azimuthAngleRqService.save(rqDto);
+        try {
+            JSONObject jsonObject = FileShjServiceTool.getStatic(jtnr);
+            Map<String, Map<String,Integer>> rqMap = (Map<String, Map<String, Integer>>) jsonObject.get("rqMap");
+            Map<String,Integer> rqTsMap = (Map<String, Integer>) jsonObject.get("rqTsMap");
+            for(String xsStr : rqMap.keySet()){
+                Map<String,Integer> jdNum = rqMap.get(xsStr);
+                String[] rqArr = xsStr.split("_");
+                AzimuthAngleDto dto = new AzimuthAngleDto();
+                dto.setSbbh(sbbh);
+                dto.setRq(rq);
+                dto.setXs(rqArr[0]+"-"+rqArr[1]+"-"+rqArr[2]+" "+rqArr[3]);
+                dto.setFz(rqArr[0]+"-"+rqArr[1]+"-"+rqArr[2]+" "+rqArr[3]+":"+rqArr[4]);
+                dto.setTs(rqTsMap.get(xsStr));
+                dto.setDeptcode(deptcode);
+                dto.setNorthNortheast(jdNum.get("north_northeast"));
+                dto.setNortheastEast(jdNum.get("northeast_east"));
+                dto.setEastEastsouth(jdNum.get("east_eastsouth"));
+                dto.setEastsouthSouth(jdNum.get("eastsouth_south"));
+                dto.setSouthSouthwest(jdNum.get("south_southwest"));
+                dto.setSouthwestWest(jdNum.get("southwest_west"));
+                dto.setWestWestnorth(jdNum.get("west_westnorth"));
+                dto.setWestnorthNorth(jdNum.get("westnorth_north"));
+                azimuthAngleService.save(dto);
+                AzimuthAngleRqDto rqDto = new AzimuthAngleRqDto();
+                rqDto.setSbbh(sbbh);
+                rqDto.setRq(rq);
+                azimuthAngleRqService.save(rqDto);
+            }
+        }catch (Exception e){
+            LOG.error("方位角统计错误："+e.getMessage());
         }
     }
 
@@ -246,23 +248,27 @@ public class EquipmentFileSplitShjService {
     private void saveToPic(EquipmentFile equipmentFile) {
         try {
             EquipmentFilePPic pic = new EquipmentFilePPic();
-            //判断雾报
-            EquipmentFile saveEntity = isMistData(equipmentFile);
-            //LOG.error("雾报返回的数据："+JSONObject.toJSONString(saveEntity));
-            if(saveEntity!=null){
-                copyCommonFields(saveEntity, pic);
-                equipmentFileTodayMapper.insertEquipFile(equipmentFile);
-                equipmentFilePPicMapper.insertSelective(pic);
-                //白海豚写剪切视频的事件，李响读了去剪切视频
-                if(saveEntity.getSbbh().contains("RPCD")||saveEntity.getSbbh().contains("tl")){
-                    saveNewEvent(saveEntity);
-                }
+            copyCommonFields(equipmentFile, pic);
+            equipmentFilePPicMapper.insertSelective(pic);
+            insertEquipFile(equipmentFile);
+            //白海豚写剪切视频的事件，李响读了去剪切视频
+            if(equipmentFile.getSbbh().contains("RPCD")||equipmentFile.getSbbh().contains("tl")){
+                saveNewEvent(equipmentFile);
             }
             //LOG.debug("成功保存到图片表，EquipmentFile ID: {}, 新ID: {}", 
                    // equipmentFile.getId(), pic.getId());
         } catch (Exception e) {
             LOG.error("保存到图片表失败，EquipmentFile ID: {}, 错误信息: {}", 
                     equipmentFile.getId(), e.getMessage(), e);
+        }
+    }
+
+    public void insertEquipFile(EquipmentFile saveEntity){
+        try {
+            equipmentFileTodayMapper.insertEquipFile(saveEntity);
+        }catch (DuplicateKeyException e){
+            saveEntity.setId(UuidUtil.getShortUuid());
+            insertEquipFile(saveEntity);
         }
     }
 
@@ -273,8 +279,8 @@ public class EquipmentFileSplitShjService {
         try {
             EquipmentFilePTxt txt = new EquipmentFilePTxt();
             copyCommonFields(equipmentFile, txt);
-            equipmentFileTodayMapper.insertEquipFile(equipmentFile);
             equipmentFilePTxtMapper.insertSelective(txt);
+            insertEquipFile(equipmentFile);
             //LOG.debug("成功保存到文本表，EquipmentFile ID: {}, 新ID: {}", 
                   //  equipmentFile.getId(), txt.getId());
         } catch (Exception e) {
@@ -290,8 +296,8 @@ public class EquipmentFileSplitShjService {
         try {
             EquipmentFilePVideo video = new EquipmentFilePVideo();
             copyCommonFields(equipmentFile, video);
-            equipmentFileTodayMapper.insertEquipFile(equipmentFile);
             equipmentFilePVideoMapper.insertSelective(video);
+            insertEquipFile(equipmentFile);
             //LOG.debug("成功保存到视频表，EquipmentFile ID: {}, 新ID: {}", 
                  //   equipmentFile.getId(), video.getId());
         } catch (Exception e) {
@@ -307,8 +313,8 @@ public class EquipmentFileSplitShjService {
         try {
             EquipmentFilePWav wav = new EquipmentFilePWav();
             copyCommonFields(equipmentFile, wav);
-            equipmentFileTodayMapper.insertEquipFile(equipmentFile);
             equipmentFilePWavMapper.insertSelective(wav);
+            insertEquipFile(equipmentFile);
             //LOG.debug("成功保存到音频表，EquipmentFile ID: {}, 新ID: {}", 
                   //  equipmentFile.getId(), wav.getId());
         } catch (Exception e) {
@@ -319,37 +325,118 @@ public class EquipmentFileSplitShjService {
 
     /**
      * 判断是否是雾报数据
+     * 使用分布式锁防止并发时多条数据返回同一条数据
      */
     private EquipmentFile isMistData(EquipmentFile equipmentFile){
         Map<String,String> attrMap = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.ATTRECODEKEY);
         if(attrMap.get("predationsbsn").contains(equipmentFile.getSbbh())){
-            //判断是否是雾报(前后三分钟都没有报警的数据是雾报数据，雾报数据不保存)
-            EquipmentFile beforeEntity = new EquipmentFile();
-            //LOG.error("缓存中的数据："+redisTemplate.opsForValue().get(equipmentFile.getSbbh()+"WB"));
-            if(!org.springframework.util.StringUtils.isEmpty(redisTemplate.opsForValue().get(equipmentFile.getSbbh()+"WB"))){
-                String entityJson = (String) redisTemplate.opsForValue().get(equipmentFile.getSbbh()+"WB");
-                beforeEntity = JSONObject.parseObject(entityJson,EquipmentFile.class);
-                if(!org.springframework.util.StringUtils.isEmpty(beforeEntity.getCjsj())&&isOverThreeMinute(DateUtil.getFormatDate(beforeEntity.getCjsj(),"yyyy-MM-dd HH:mm:ss"),DateUtil.getFormatDate(equipmentFile.getCjsj(),"yyyy-MM-dd HH:mm:ss"))){
-                    redisTemplate.opsForValue().set(equipmentFile.getSbbh()+"WB", JSONObject.toJSONString(equipmentFile));;
-                    return beforeEntity;
-                }else {
-                    EquipmentFilePPicExample example = new EquipmentFilePPicExample();
-                    EquipmentFilePPicExample.Criteria ca = example.createCriteria();
-                    ca.andSbbhEqualTo(equipmentFile.getSbbh());
-                    ca.andCjsjLessThanOrEqualTo(DateUtil.getMinutesLater(beforeEntity.getCjsj(),-3));
-                    List<EquipmentFilePPic> lastFile = equipmentFilePPicMapper.selectByExample(example);
-                    if(!lastFile.isEmpty()){
-                        return beforeEntity;
+            // 使用分布式锁防止并发问题
+            String lockKey = "mist_data_lock:" + equipmentFile.getSbbh();
+            // 使用唯一标识作为锁值，确保只能由持有者释放
+            String lockValue = UuidUtil.getUuid();
+            Boolean lockAcquired = false;
+            try {
+                // 循环等待获取分布式锁，确保同一设备的数据串行执行
+                // 最大等待时间5秒，避免无限等待
+                long maxWaitTime = 5000; // 5秒
+                long startTime = System.currentTimeMillis();
+                int retryCount = 0;
+                
+                while (!lockAcquired && (System.currentTimeMillis() - startTime) < maxWaitTime) {
+                    // 尝试获取分布式锁，超时时间10秒
+                    lockAcquired = redisTemplate.opsForValue().setIfAbsent(lockKey, lockValue, 10, TimeUnit.SECONDS);
+                    
+                    if (!lockAcquired) {
+                        retryCount++;
+                        try {
+                            // 等待100ms后重试
+                            Thread.sleep(100);
+                            // 每次重试时生成新的锁值（虽然理论上不需要，但为了安全）
+                            if (retryCount % 10 == 0) {
+                                lockValue = UuidUtil.getUuid();
+                            }
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                            LOG.warn("获取雾报数据锁时被中断，设备编号: {}", equipmentFile.getSbbh());
+                            break;
+                        }
                     }
-                    redisTemplate.opsForValue().set(equipmentFile.getSbbh()+"WB", JSONObject.toJSONString(equipmentFile));
+                }
+                
+                if (!lockAcquired) {
+                    // 如果超过最大等待时间仍然获取不到锁，记录警告并返回当前数据
+                    LOG.warn("无法获取雾报数据锁（已等待{}ms，重试{}次），直接返回当前数据，设备编号: {}", 
+                            System.currentTimeMillis() - startTime, retryCount, equipmentFile.getSbbh());
+                    return equipmentFile;
+                }
+                
+                LOG.error("获取雾报数据锁成功，设备编号: {}, 锁值: {}, 等待时间: {}ms, 重试次数: {}",
+                        equipmentFile.getSbbh(), lockValue, System.currentTimeMillis() - startTime, retryCount);
+                //判断是否是雾报(前后三分钟都没有报警的数据是雾报数据，雾报数据不保存)
+                EquipmentFile beforeEntity = new EquipmentFile();
+                String wbKey = equipmentFile.getSbbh()+"WB";
+                // 只读取一次Redis，避免重复读取
+                Object wbValue = redisTemplate.opsForValue().get(wbKey);
+                if(!org.springframework.util.StringUtils.isEmpty(wbValue)){
+                    String entityJson = (String) wbValue;
+                    beforeEntity = JSONObject.parseObject(entityJson,EquipmentFile.class);
+                    if(!org.springframework.util.StringUtils.isEmpty(beforeEntity.getCjsj())&&isOverThreeMinute(DateUtil.getFormatDate(beforeEntity.getCjsj(),"yyyy-MM-dd HH:mm:ss"),DateUtil.getFormatDate(equipmentFile.getCjsj(),"yyyy-MM-dd HH:mm:ss"))){
+                        // 更新Redis缓存为当前数据
+                        redisTemplate.opsForValue().set(wbKey, JSONObject.toJSONString(equipmentFile));
+                        return beforeEntity;
+                    }else {
+                        EquipmentFilePPicExample example = new EquipmentFilePPicExample();
+                        EquipmentFilePPicExample.Criteria ca = example.createCriteria();
+                        ca.andSbbhEqualTo(equipmentFile.getSbbh());
+                        ca.andCjsjLessThanOrEqualTo(DateUtil.getMinutesLater(beforeEntity.getCjsj(),-3));
+                        List<EquipmentFilePPic> lastFile = equipmentFilePPicMapper.selectByExample(example);
+                        if(!lastFile.isEmpty()){
+                            return beforeEntity;
+                        }
+                        // 更新Redis缓存为当前数据
+                        redisTemplate.opsForValue().set(wbKey, JSONObject.toJSONString(equipmentFile));
+                        return null;
+                    }
+                }else{
+                    // 首次设置缓存
+                    redisTemplate.opsForValue().set(wbKey, JSONObject.toJSONString(equipmentFile));
                     return null;
                 }
-            }else{
-                redisTemplate.opsForValue().set(equipmentFile.getSbbh()+"WB", JSONObject.toJSONString(equipmentFile));
-                return null;
+            } finally {
+                // 安全释放分布式锁：只有持有者才能释放
+                if (lockAcquired) {
+                    releaseLock(lockKey, lockValue);
+                }
             }
         }else {
             return equipmentFile;
+        }
+    }
+
+    /**
+     * 安全释放分布式锁
+     * 先检查锁的值是否匹配，只有匹配时才删除，避免误释放其他线程的锁
+     * 
+     * @param lockKey 锁的键
+     * @param lockValue 锁的值（唯一标识）
+     */
+    private void releaseLock(String lockKey, String lockValue) {
+        try {
+            // 先获取当前锁的值
+            Object currentValue = redisTemplate.opsForValue().get(lockKey);
+            
+            // 只有当锁的值匹配时，才删除锁
+            // 这样可以避免误释放其他线程的锁（例如：线程A的锁过期后，线程B获取了锁，线程A不应该删除线程B的锁）
+            if (currentValue != null && lockValue.equals(currentValue.toString())) {
+                redisTemplate.delete(lockKey);
+                LOG.debug("成功释放分布式锁，锁键: {}, 锁值: {}", lockKey, lockValue);
+            } else {
+                LOG.warn("释放分布式锁失败，锁值不匹配或锁已过期，锁键: {}, 期望锁值: {}, 实际锁值: {}", 
+                        lockKey, lockValue, currentValue);
+            }
+        } catch (Exception e) {
+            LOG.error("释放分布式锁时发生异常，锁键: {}, 锁值: {}, 错误信息: {}", 
+                    lockKey, lockValue, e.getMessage(), e);
         }
     }
 
@@ -549,63 +636,21 @@ public class EquipmentFileSplitShjService {
      * 如果是聚类类型，就根据聚类的开始时间和结束时间作为视频的剪切时间
      */
     public void saveNewEvent(EquipmentFile record){
-        LOG.error("剪切视频数据："+JSONObject.toJSONString(record));
-        String[] arr = record.getWjmc().split("_");
-        Map<String,String> attrMap = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.ATTRECODEKEY);
-        if(Integer.parseInt(arr[3])<Integer.parseInt(attrMap.get("zskssj")) || Integer.parseInt(arr[3])>Integer.parseInt(attrMap.get("wsjssj"))){
-            return;
-        }
-        String temp = arr[0]+"-"+arr[1]+"-"+arr[2]+" "+arr[3]+":"+arr[4]+":"+arr[5];
-        String temJssj = (String) redisTemplate.opsForValue().get("JQ"+record.getSbbh());
-        if(StringUtils.isEmpty(temJssj) || !StringUtils.isEmpty(temJssj)&& DateUtil.toDate(temp,"yyyy-MM-dd HH:mm:ss").getTime()>DateUtil.toDate(temJssj,"yyyy-MM-dd HH:mm:ss").getTime()){
-            List<CameraInfo> cameraInfoList = cameraInfoService.findBySbbh(record.getSbbh());
-            String jssj = "";
-            for(CameraInfo cameraInfo: cameraInfoList){
-                CameraMiddleDto cameraMiddle = new CameraMiddleDto();
-                cameraMiddle.setSbbh(record.getSbbh());//设备编号
-                cameraMiddle.setIp(cameraInfo.getIp());//摄像头ip
-                cameraMiddle.setPort(cameraInfo.getPort()+"");//nvr剪切端口
-                cameraMiddle.setUsername(cameraInfo.getUsername());//nvr用户名
-                cameraMiddle.setCamerapws(cameraInfo.getCamerapws());//nvr密码
-                cameraMiddle.setTdh(cameraInfo.getSbdk()+"");//通道号
-                cameraMiddle.setDvrip(cameraInfo.getDvrip());//nvrip
-                if("1002,1003,1005,1006".contains(record.getType())){
-                    //cameraMiddle.setJgsj(attrServiceStatic.findByAttrKey("spjqjgsjq"));//视频剪切间隔时间往前推的时间
-                    //cameraMiddle.setJgsj(attrServiceStatic.findByAttrKey("spjqjgsj"));//视频剪切间隔时间往后推的时间
-                    String kssj = DateUtil.getFormatDate(DateUtil.getSecondLater(DateUtil.toDate(temp,"yyyy-MM-dd HH:mm:ss"),Integer.parseInt(attrMap.get("spjqjgsjq"))),"yyyy-MM-dd HH:mm:ss");
-                    jssj = DateUtil.getFormatDate(DateUtil.getSecondLater(DateUtil.toDate(temp,"yyyy-MM-dd HH:mm:ss"),Integer.parseInt(attrMap.get("spjqjgsj"))),"yyyy-MM-dd HH:mm:ss");
-                    cameraMiddle.setJqsj(kssj+","+jssj);
-                    cameraMiddle.setJgsj("0");
-                    //cameraMiddle.setJqsj(arr[0]+"-"+arr[1]+"-"+arr[2]+" "+arr[3]+":"+arr[4]+":"+arr[5]);//剪切时间
-                }else if("1020,1022,1024,1026".contains(record.getType())){
-                    arr = record.getTplj().substring(record.getTplj().lastIndexOf("/")+1,record.getTplj().lastIndexOf("_A4.txt")).split("_");
-                    jssj = "1020".equals(record.getType())||"1026".equals(record.getType())?arr[7]+"-"+arr[8]+"-"+arr[9]+" "+arr[10]+":"+arr[11]+":"+arr[12]:arr[6]+"-"+arr[7]+"-"+arr[8]+" "+arr[9]+":"+arr[10]+":"+arr[11];
-                    if(temp.equals(jssj)){
-                        return;
-                    }
-                    cameraMiddle.setJqsj(temp+","+jssj);
-                    cameraMiddle.setJgsj("0");
-                }
-                cameraMiddle.setSfjq("0");
-                cameraMiddle.setBz(cameraInfo.getSm4());//默认预置位
-                if("1002,1003,1005,1006".contains(record.getType())){
-                    // 提交一个延迟执行的任务
-                    scheduledExecutorService.schedule(() -> {
-                        LOG.error("cameraMiddle数据："+cameraMiddle.toString());
-                        cameraMiddleService.save(cameraMiddle);
-                    }, Integer.parseInt(attrMap.get("spjqjgsj")), TimeUnit.SECONDS);
-                }else{
-                    LOG.error("cameraMiddle数据："+cameraMiddle.toString());
-                    cameraMiddleService.save(cameraMiddle);
-                }
-
+        try {
+            LOG.error("剪切视频数据："+JSONObject.toJSONString(record));
+            String[] arr = record.getWjmc().split("_");
+            Map<String,String> attrMap = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.ATTRECODEKEY);
+            if(StringUtils.isEmpty(attrMap.get("zskssj")) ||  StringUtils.isEmpty(attrMap.get("wsjssj"))){
+                return;
             }
-            redisTemplate.opsForValue().set("JQ"+record.getSbbh(), jssj);
-        }else if("1020,1022,1024,1026".contains(record.getType())){
-            arr = record.getTplj().substring(record.getTplj().lastIndexOf("/")+1,record.getTplj().lastIndexOf("_A4.txt")).split("_");
-            String jssj = "1020".equals(record.getType())||"1026".equals(record.getType())?arr[7]+"-"+arr[8]+"-"+arr[9]+" "+arr[10]+":"+arr[11]+":"+arr[12]:arr[6]+"-"+arr[7]+"-"+arr[8]+" "+arr[9]+":"+arr[10]+":"+arr[11];
-            if(StringUtils.isEmpty(temJssj) || !StringUtils.isEmpty(temJssj)&&(DateUtil.toDate(temJssj,"yyyy-MM-dd HH:mm:ss").getTime()-DateUtil.toDate(temp,"yyyy-MM-dd HH:mm:ss").getTime()>5000 && DateUtil.toDate(jssj,"yyyy-MM-dd HH:mm:ss").getTime()-DateUtil.toDate(temJssj,"yyyy-MM-dd HH:mm:ss").getTime()>5000)){
+            if(Integer.parseInt(arr[3])<Integer.parseInt(attrMap.get("zskssj")) || Integer.parseInt(arr[3])>Integer.parseInt(attrMap.get("wsjssj"))){
+                return;
+            }
+            String temp = arr[0]+"-"+arr[1]+"-"+arr[2]+" "+arr[3]+":"+arr[4]+":"+arr[5];
+            String temJssj = (String) redisTemplate.opsForValue().get("JQ"+record.getSbbh());
+            if(StringUtils.isEmpty(temJssj) || !StringUtils.isEmpty(temJssj)&& DateUtil.toDate(temp,"yyyy-MM-dd HH:mm:ss").getTime()>DateUtil.toDate(temJssj,"yyyy-MM-dd HH:mm:ss").getTime()){
                 List<CameraInfo> cameraInfoList = cameraInfoService.findBySbbh(record.getSbbh());
+                String jssj = "";
                 for(CameraInfo cameraInfo: cameraInfoList){
                     CameraMiddleDto cameraMiddle = new CameraMiddleDto();
                     cameraMiddle.setSbbh(record.getSbbh());//设备编号
@@ -615,15 +660,64 @@ public class EquipmentFileSplitShjService {
                     cameraMiddle.setCamerapws(cameraInfo.getCamerapws());//nvr密码
                     cameraMiddle.setTdh(cameraInfo.getSbdk()+"");//通道号
                     cameraMiddle.setDvrip(cameraInfo.getDvrip());//nvrip
-                    cameraMiddle.setJqsj(StringUtils.isEmpty(temJssj)?temp:temJssj+","+jssj);
-                    cameraMiddle.setJgsj("0");
+                    if("1002,1003,1005,1006".contains(record.getType())){
+                        //cameraMiddle.setJgsj(attrServiceStatic.findByAttrKey("spjqjgsjq"));//视频剪切间隔时间往前推的时间
+                        //cameraMiddle.setJgsj(attrServiceStatic.findByAttrKey("spjqjgsj"));//视频剪切间隔时间往后推的时间
+                        String kssj = DateUtil.getFormatDate(DateUtil.getSecondLater(DateUtil.toDate(temp,"yyyy-MM-dd HH:mm:ss"),Integer.parseInt(attrMap.get("spjqjgsjq"))),"yyyy-MM-dd HH:mm:ss");
+                        jssj = DateUtil.getFormatDate(DateUtil.getSecondLater(DateUtil.toDate(temp,"yyyy-MM-dd HH:mm:ss"),Integer.parseInt(attrMap.get("spjqjgsj"))),"yyyy-MM-dd HH:mm:ss");
+                        cameraMiddle.setJqsj(kssj+","+jssj);
+                        cameraMiddle.setJgsj("0");
+                        //cameraMiddle.setJqsj(arr[0]+"-"+arr[1]+"-"+arr[2]+" "+arr[3]+":"+arr[4]+":"+arr[5]);//剪切时间
+                    }else if("1020,1022,1024,1026".contains(record.getType())){
+                        arr = record.getTplj().substring(record.getTplj().lastIndexOf("/")+1,record.getTplj().lastIndexOf("_A4.txt")).split("_");
+                        jssj = "1020".equals(record.getType())||"1026".equals(record.getType())?arr[7]+"-"+arr[8]+"-"+arr[9]+" "+arr[10]+":"+arr[11]+":"+arr[12]:arr[6]+"-"+arr[7]+"-"+arr[8]+" "+arr[9]+":"+arr[10]+":"+arr[11];
+                        if(temp.equals(jssj)){
+                            return;
+                        }
+                        cameraMiddle.setJqsj(temp+","+jssj);
+                        cameraMiddle.setJgsj("0");
+                    }
                     cameraMiddle.setSfjq("0");
                     cameraMiddle.setBz(cameraInfo.getSm4());//默认预置位
-                    LOG.error("cameraMiddle数据："+cameraMiddle.toString());
-                    cameraMiddleService.save(cameraMiddle);
+                    if("1002,1003,1005,1006".contains(record.getType())){
+                        // 提交一个延迟执行的任务
+                        scheduledExecutorService.schedule(() -> {
+                            LOG.error("cameraMiddle数据："+cameraMiddle.toString());
+                            cameraMiddleService.save(cameraMiddle);
+                        }, Integer.parseInt(attrMap.get("spjqjgsj")), TimeUnit.SECONDS);
+                    }else{
+                        LOG.error("cameraMiddle数据："+cameraMiddle.toString());
+                        cameraMiddleService.save(cameraMiddle);
+                    }
+
                 }
                 redisTemplate.opsForValue().set("JQ"+record.getSbbh(), jssj);
+            }else if("1020,1022,1024,1026".contains(record.getType())){
+                arr = record.getTplj().substring(record.getTplj().lastIndexOf("/")+1,record.getTplj().lastIndexOf("_A4.txt")).split("_");
+                String jssj = "1020".equals(record.getType())||"1026".equals(record.getType())?arr[7]+"-"+arr[8]+"-"+arr[9]+" "+arr[10]+":"+arr[11]+":"+arr[12]:arr[6]+"-"+arr[7]+"-"+arr[8]+" "+arr[9]+":"+arr[10]+":"+arr[11];
+                if(StringUtils.isEmpty(temJssj) || !StringUtils.isEmpty(temJssj)&&(DateUtil.toDate(temJssj,"yyyy-MM-dd HH:mm:ss").getTime()-DateUtil.toDate(temp,"yyyy-MM-dd HH:mm:ss").getTime()>5000 && DateUtil.toDate(jssj,"yyyy-MM-dd HH:mm:ss").getTime()-DateUtil.toDate(temJssj,"yyyy-MM-dd HH:mm:ss").getTime()>5000)){
+                    List<CameraInfo> cameraInfoList = cameraInfoService.findBySbbh(record.getSbbh());
+                    for(CameraInfo cameraInfo: cameraInfoList){
+                        CameraMiddleDto cameraMiddle = new CameraMiddleDto();
+                        cameraMiddle.setSbbh(record.getSbbh());//设备编号
+                        cameraMiddle.setIp(cameraInfo.getIp());//摄像头ip
+                        cameraMiddle.setPort(cameraInfo.getPort()+"");//nvr剪切端口
+                        cameraMiddle.setUsername(cameraInfo.getUsername());//nvr用户名
+                        cameraMiddle.setCamerapws(cameraInfo.getCamerapws());//nvr密码
+                        cameraMiddle.setTdh(cameraInfo.getSbdk()+"");//通道号
+                        cameraMiddle.setDvrip(cameraInfo.getDvrip());//nvrip
+                        cameraMiddle.setJqsj(StringUtils.isEmpty(temJssj)?temp:temJssj+","+jssj);
+                        cameraMiddle.setJgsj("0");
+                        cameraMiddle.setSfjq("0");
+                        cameraMiddle.setBz(cameraInfo.getSm4());//默认预置位
+                        LOG.error("cameraMiddle数据："+cameraMiddle.toString());
+                        cameraMiddleService.save(cameraMiddle);
+                    }
+                    redisTemplate.opsForValue().set("JQ"+record.getSbbh(), jssj);
+                }
             }
+        }catch (Exception e){
+            LOG.error("剪切视频数据出错");
         }
     }
 }
