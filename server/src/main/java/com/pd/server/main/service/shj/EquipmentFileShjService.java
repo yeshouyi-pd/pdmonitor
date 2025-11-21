@@ -210,52 +210,37 @@ public class EquipmentFileShjService extends AbstractScanRequest{
             if(predationsbsn.contains(sbbh)&&("1002".equals(typeUtil.get(TypeUtils.TYPE))||"1003".equals(typeUtil.get(TypeUtils.TYPE))||"1005".equals(typeUtil.get(TypeUtils.TYPE))||"1006".equals(typeUtil.get(TypeUtils.TYPE)))){
                 //判断是否是雾报(前后三分钟都没有报警的数据是雾报数据，雾报数据不保存)
                 EquipmentFile beforeEntity = new EquipmentFile();
-                LOG.error("缓存中的数据："+redisTstaticemplate.opsForValue().get(sbbh+"WB"));
-                if(!StringUtils.isEmpty(redisTstaticemplate.opsForValue().get(sbbh+"WB"))){
-                    String entityJson = (String) redisTstaticemplate.opsForValue().get(sbbh+"WB");
+                // 只读取一次Redis，避免重复读取
+                String wbKey = sbbh+"WB";
+                Object wbValue = redisTemplate.opsForValue().get(wbKey);
+                if(!org.springframework.util.StringUtils.isEmpty(wbValue)){
+                    LOG.error("缓存中的数据："+wbValue);
+                    String entityJson = (String) wbValue;
                     beforeEntity = JSONObject.parseObject(entityJson,EquipmentFile.class);
                     if(!StringUtils.isEmpty(beforeEntity.getCjsj())&&isOverThreeMinute(DateUtil.getFormatDate(beforeEntity.getCjsj(),"yyyy-MM-dd HH:mm:ss"),cjsj)){
                         /**
                          * 保存数据
                          */
-                        // 异步分发保存数据
-                        final EquipmentFile sentity = beforeEntity;
-                        distributeExecutorService.execute(() -> {
-                            try {
-                                equipmentFileSplitShjServiceStatic.distributeAndSave(sentity);
-                            } catch (Exception e) {
-                                LOG.error("异步分发保存失败，EquipmentFile ID: {}, 错误信息: {}",
-                                        entity.getId(), e.getMessage(), e);
-                            }
-                        });
-                        redisTstaticemplate.opsForValue().set(sbbh+"WB", JSONObject.toJSONString(entity));
-
-                    }else{
-                        try{
-                            EquipmentFilePPicExample example = new EquipmentFilePPicExample();
-                            EquipmentFilePPicExample.Criteria ca = example.createCriteria();
-                            ca.andSbbhEqualTo(sbbh);
-                            ca.andCjsjLessThanOrEqualTo(DateUtil.getMinutesLater(beforeEntity.getCjsj(),-3));
-                            List<EquipmentFilePPic> lastFile = equipmentFilePPicServiceStatic.selectByExample(example);
-                            if(!lastFile.isEmpty()){
-                                // 异步分发保存数据
-                                final EquipmentFile sentity = beforeEntity;
-                                distributeExecutorService.execute(() -> {
-                                    try {
-                                        equipmentFileSplitShjServiceStatic.distributeAndSave(sentity);
-                                    } catch (Exception e) {
-                                        LOG.error("异步分发保存失败，EquipmentFile ID: {}, 错误信息: {}",
-                                                entity.getId(), e.getMessage(), e);
-                                    }
-                                });
-                            }
+                        redisTstaticemplate.opsForValue().set(wbKey, JSONObject.toJSONString(entity));
+                        try {
+                            // 异步分发保存数据
+                            final EquipmentFile sentity = beforeEntity;
+                            distributeExecutorService.execute(() -> {
+                                try {
+                                    equipmentFileSplitShjServiceStatic.distributeAndSave(sentity);
+                                } catch (Exception e) {
+                                    LOG.error("异步分发保存失败，EquipmentFile ID: {}, 错误信息: {}",
+                                            entity.getId(), e.getMessage(), e);
+                                }
+                            });
                         }catch (Exception e){
                             LOG.error("错误："+e.getMessage());
                         }
-                        redisTstaticemplate.opsForValue().set(sbbh+"WB", JSONObject.toJSONString(entity));
+                    }else{
+                        redisTstaticemplate.opsForValue().set(wbKey, JSONObject.toJSONString(entity));
                     }
                 }else{
-                    redisTstaticemplate.opsForValue().set(sbbh+"WB", JSONObject.toJSONString(entity));
+                    redisTstaticemplate.opsForValue().set(wbKey, JSONObject.toJSONString(entity));
                 }
                 data="保存成功";
                 JSONObject result = new JSONObject();
