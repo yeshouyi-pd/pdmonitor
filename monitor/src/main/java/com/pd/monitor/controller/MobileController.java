@@ -1,6 +1,7 @@
 package com.pd.monitor.controller;
 
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
 import com.pd.monitor.wx.conf.BaseWxController;
 import com.pd.server.main.domain.*;
@@ -18,8 +19,7 @@ import java.time.LocalDate;
 import java.time.Year;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAdjusters;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -306,15 +306,15 @@ public class MobileController  extends BaseWxController {
         if(null != user){
             if(!StringUtils.isEmpty(user.getDeptcode())){
                 List<String > listdept   =  getUpdeptcode(user.getDeptcode());
-                EquipmentFileEventExample equipmentFileEventExample = new EquipmentFileEventExample();
-                EquipmentFileEventExample.Criteria  ca = equipmentFileEventExample.createCriteria();
+                EquipmentFilePClusterExample equipmentFilePClusterExample = new EquipmentFilePClusterExample();
+                EquipmentFilePClusterExample.Criteria  ca = equipmentFilePClusterExample.createCriteria();
                 if(!CollectionUtils.isEmpty(listdept)){
                     ca.andDeptcodeIn(listdept);
                 }
 
                 //统计当天数据
                 ca.andRqEqualTo(DateTools.getFormatDate(new Date(), DateTools.yyyy_MM_dd));
-                List<EventDto>  list   = equipmentFileEventService.getEquipmentEventByDept(equipmentFileEventExample);
+                List<EventDto>  list   = equipmentFilePClusterService.getEquipmentEventByDept(equipmentFilePClusterExample);
                 responseDto.setContent(list);
             }
         }
@@ -329,20 +329,40 @@ public class MobileController  extends BaseWxController {
         if(null != user){
             if(!StringUtils.isEmpty(user.getDeptcode())){
                 List<String > listdept   =  getUpdeptcode(user.getDeptcode());
-                EquipmentFilePClusterExample  equipmentFileEventExample = new EquipmentFilePClusterExample();
-                EquipmentFilePClusterExample.Criteria  ca = equipmentFileEventExample.createCriteria();
+                EquipmentFilePClusterExample  equipmentFilePClusterExample = new EquipmentFilePClusterExample();
+                EquipmentFilePClusterExample.Criteria  ca = equipmentFilePClusterExample.createCriteria();
                 if(!CollectionUtils.isEmpty(listdept)){
                     ca.andDeptcodeIn(listdept);
                 }
-                List<EquipmentFilePCluster> equipmentEventByDeptdate =  equipmentFilePClusterService.getEquipmentEventByDeptdate(equipmentFileEventExample);
-                if(!CollectionUtils.isEmpty(equipmentEventByDeptdate)){
-                    EquipmentFilePCluster equipmentFileEvent =equipmentEventByDeptdate.get(0);
-                    //统计当天数据
-                    ca.andRqEqualTo(equipmentFileEvent.getRq());
-                    List<EventDto>  list   =equipmentFilePClusterService.getEquipmentEventByDept(equipmentFileEventExample);
+                ca.andRqEqualTo(DateTools.getFormatDate(new Date(), DateTools.yyyy_MM_dd));
+
+                List<EventDto>  list   =equipmentFilePClusterService.getEquipmentEventByDept(equipmentFilePClusterExample);
+
+                if(CollectionUtil.isNotEmpty(list)){
                     map.put("list", list);
-                    map.put("date",equipmentFileEvent.getRq());
+                    map.put("date",DateTools.getFormatDate(new Date(), DateTools.yyyy_MM_dd));
+                    responseDto.setContent(map);
+                }else{
+                    List<EquipmentFilePCluster> equipmentEventByDeptdate =  equipmentFilePClusterService.getEquipmentEventByDeptdate(equipmentFilePClusterExample);
+                    if(!CollectionUtils.isEmpty(equipmentEventByDeptdate)){
+                        EquipmentFilePCluster equipmentFileEvent =equipmentEventByDeptdate.get(0);
+                        //统计当天数据
+                        equipmentFilePClusterExample.clear();
+                        if(!CollectionUtils.isEmpty(listdept)){
+                            ca.andDeptcodeIn(listdept);
+                        }
+                        ca.andRqEqualTo(equipmentFileEvent.getRq());
+                        List<EventDto>  lists   =equipmentFilePClusterService.getEquipmentEventByDept(equipmentFilePClusterExample);
+                        map.put("list", lists);
+                        map.put("date",equipmentFileEvent.getRq());
+                    }
                 }
+
+
+
+
+
+
 
 
                 responseDto.setContent(map);
@@ -363,8 +383,8 @@ public class MobileController  extends BaseWxController {
             if(!StringUtils.isEmpty(user.getDeptcode())){
                 List<String > listdept   =  getUpdeptcode(user.getDeptcode());
 
-                EquipmentFilePClusterExample equipmentFileEventExample = new EquipmentFilePClusterExample();
-                EquipmentFilePClusterExample.Criteria  ca = equipmentFileEventExample.createCriteria();
+                EquipmentFilePClusterExample equipmentFilePClusterExample = new EquipmentFilePClusterExample();
+                EquipmentFilePClusterExample.Criteria  ca = equipmentFilePClusterExample.createCriteria();
                 if(!CollectionUtils.isEmpty(listdept)){
                     ca.andDeptcodeIn(listdept);
                 }
@@ -375,7 +395,7 @@ public class MobileController  extends BaseWxController {
                 Date date = calendar.getTime();
                 //统计当天数据
                 ca.andRqGreaterThanOrEqualTo(DateTools.getFormatDate(date, DateTools.yyyy_MM_dd));
-                List<EventDto>  list   =  equipmentFilePClusterService.getEquipmentEventByDept(equipmentFileEventExample);
+                List<EventDto>  list   =  equipmentFilePClusterService.getEquipmentEventByDept(equipmentFilePClusterExample);
                 responseDto.setContent(list);
             }
         }
@@ -598,8 +618,8 @@ public class MobileController  extends BaseWxController {
 
         if(null != equipmentFileEventDto){
             if(!StringUtils.isEmpty(equipmentFileEventDto.getSbbh())){
-                EquipmentFileEventExample equipmentFileEventExample = new EquipmentFileEventExample();
-                EquipmentFileEventExample.Criteria  ca = equipmentFileEventExample.createCriteria();
+                EquipmentFilePClusterExample  equipmentFilePClusterExample = new EquipmentFilePClusterExample();
+                EquipmentFilePClusterExample.Criteria  ca = equipmentFilePClusterExample.createCriteria();
                 ca.andSbbhEqualTo(equipmentFileEventDto.getSbbh());
                 Date  date = new Date();
                 //本周
@@ -613,8 +633,8 @@ public class MobileController  extends BaseWxController {
                 }else{
                     ca.andRqEqualTo(DateTools.getFormatDate(date, DateTools.yyyy_MM_dd));
                 }
-                equipmentFileEventExample.setOrderByClause("kssj desc");
-                List<EquipmentFileEvent>  list   = equipmentFileEventService.list(equipmentFileEventExample);
+                equipmentFilePClusterExample.setOrderByClause("kssj desc");
+                List<EquipmentFilePCluster>  list   = equipmentFilePClusterService.listByexample(equipmentFilePClusterExample);
                 responseDto.setContent(list);
             }
         }
@@ -628,13 +648,13 @@ public class MobileController  extends BaseWxController {
 
         if(null != equipmentFilePClusterDto){
             if(!StringUtils.isEmpty(equipmentFilePClusterDto.getSbbh())){
-                EquipmentFilePClusterExample equipmentFileEventExample = new EquipmentFilePClusterExample();
-                EquipmentFilePClusterExample.Criteria  ca = equipmentFileEventExample.createCriteria();
+                EquipmentFilePClusterExample equipmentFilePClusterExample = new EquipmentFilePClusterExample();
+                EquipmentFilePClusterExample.Criteria  ca = equipmentFilePClusterExample.createCriteria();
                 ca.andSbbhEqualTo(equipmentFilePClusterDto.getSbbh());
                 Date  date = new Date();
                 ca.andRqEqualTo(equipmentFilePClusterDto.getRq());
-                equipmentFileEventExample.setOrderByClause("kssj desc");
-                List<EquipmentFilePCluster>  list   = equipmentFilePClusterService.listByexample(equipmentFileEventExample);
+                equipmentFilePClusterExample.setOrderByClause("kssj desc");
+                List<EquipmentFilePCluster>  list   = equipmentFilePClusterService.listByexample(equipmentFilePClusterExample);
                 responseDto.setContent(list);
             }
         }
