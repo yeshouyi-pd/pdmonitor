@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.pd.server.main.domain.WaterEquiplog;
 import com.pd.server.main.domain.WaterEquipment;
 import com.pd.server.main.mapper.WaterEquiplogMapper;
+import com.pd.server.main.service.VoicePowerDeviceService;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.slf4j.Logger;
@@ -16,6 +17,7 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import java.net.InetAddress;
 import java.util.Date;
 import java.util.Map;
 
@@ -45,25 +47,7 @@ public class MqttClientSpace implements ApplicationContextAware {
 
     public static RedisTemplate redisTstaticemplate;
     public static WaterEquiplogMapper waterEquiplogMapperStatic;
-
-    @Resource
-    private RedisTemplate redisTemplate;
-    @Resource
-    private WaterEquiplogMapper waterEquiplogMapper;
-
-    @PostConstruct
-    protected void initStruct() {
-        LOG.info("开始初始化MqttClientSpace静态变量...");
-        LOG.info("redisTemplate注入状态: {}", redisTemplate != null ? "已注入" : "未注入");
-        LOG.info("waterEquiplogMapper注入状态: {}", waterEquiplogMapper != null ? "已注入" : "未注入");
-        
-        redisTstaticemplate = redisTemplate;
-        waterEquiplogMapperStatic = waterEquiplogMapper;
-        
-        LOG.info("静态变量初始化完成 - redisTstaticemplate: {}, waterEquiplogMapperStatic: {}", 
-                redisTstaticemplate != null ? "已设置" : "未设置", 
-                waterEquiplogMapperStatic != null ? "已设置" : "未设置");
-    }
+    public static VoicePowerDeviceService voicePowerDeviceServiceStatic;
 
     private MqttClientSpace(String brokerUrl, String clientId, String userName, String passWord) {
         this.brokerUrl = brokerUrl;
@@ -92,37 +76,11 @@ public class MqttClientSpace implements ApplicationContextAware {
     }
     
     /**
-     * 初始化MQTT客户端（在程序启动时调用）
-     */
-    public static void initializeMqttClient(String brokerUrl, String clientId, String userName, String passWord) {
-        if (initializationAttempted) {
-            LOG.info("MQTT客户端初始化已经尝试过，跳过重复初始化");
-            return;
-        }
-        
-        synchronized (MqttClientSpace.class) {
-            if (initializationAttempted) {
-                LOG.info("MQTT客户端初始化已经尝试过，跳过重复初始化");
-                return;
-            }
-            
-            if (instance == null) {
-                LOG.info("正在初始化MQTT客户端...");
-                instance = new MqttClientSpace(brokerUrl, clientId, userName, passWord);
-                LOG.info("MQTT客户端初始化完成");
-
-            } else {
-                LOG.info("MQTT客户端已经初始化");
-            }
-            initializationAttempted = true;
-        }
-    }
-    
-    /**
      * 初始化MQTT客户端（带依赖注入）
      */
-    public static void initializeMqttClient(String brokerUrl, String clientId, String userName, String passWord, 
-                                          RedisTemplate redisTemplate, WaterEquiplogMapper waterEquiplogMapper) {
+    public static void initializeMqttClient(String brokerUrl, String clientId, String userName, String passWord,
+                                            RedisTemplate redisTemplate, WaterEquiplogMapper waterEquiplogMapper,
+                                            VoicePowerDeviceService voicePowerDeviceService) {
         if (initializationAttempted) {
             LOG.info("MQTT客户端初始化已经尝试过，跳过重复初始化");
             return;
@@ -141,6 +99,7 @@ public class MqttClientSpace implements ApplicationContextAware {
                 // 手动设置静态变量
                 redisTstaticemplate = redisTemplate;
                 waterEquiplogMapperStatic = waterEquiplogMapper;
+                voicePowerDeviceServiceStatic = voicePowerDeviceService;
                 LOG.info("静态变量手动设置完成: {}", getStaticInitStatus());
                 
                 LOG.info("MQTT客户端初始化完成");
@@ -148,34 +107,6 @@ public class MqttClientSpace implements ApplicationContextAware {
                 LOG.info("MQTT客户端已经初始化");
             }
             initializationAttempted = true;
-        }
-    }
-    
-    /**
-     * 强制重新初始化MQTT客户端（用于重新初始化）
-     */
-    public static void forceReinitializeMqttClient(String brokerUrl, String clientId, String userName, String passWord) {
-        synchronized (MqttClientSpace.class) {
-            LOG.info("正在强制重新初始化MQTT客户端...");
-            
-            // 关闭现有连接
-            if (instance != null) {
-                try {
-                    instance.close();
-                } catch (Exception e) {
-                    LOG.warn("关闭现有MQTT连接时发生错误: " + e.getMessage());
-                }
-            }
-            
-            // 重置状态
-            instance = null;
-            initializationAttempted = false;
-            
-            // 重新创建实例
-            instance = new MqttClientSpace(brokerUrl, clientId, userName, passWord);
-            initializationAttempted = true;
-            
-            LOG.info("MQTT客户端强制重新初始化完成");
         }
     }
     
@@ -221,30 +152,134 @@ public class MqttClientSpace implements ApplicationContextAware {
             return;
         }
         
+        // 为避免客户端ID冲突，为clientId添加唯一后缀
+        // 使用时间戳和主机名确保唯一性，避免多个实例冲突
+        String originalClientId = clientId;
+        try {
+            String hostname = InetAddress.getLocalHost().getHostName();
+            // 使用主机名和时间戳生成唯一标识
+            // 格式: 原clientId_主机名_时间戳
+            String uniqueSuffix = "_" + hostname + "_" + System.currentTimeMillis();
+            this.clientId = clientId + uniqueSuffix;
+            LOG.info("为客户端ID添加唯一后缀以避免冲突 - 原始ID: {}, 新ID: {}", originalClientId, this.clientId);
+        } catch (Exception e) {
+            // 如果获取主机名失败，仅使用时间戳
+            String uniqueSuffix = "_" + System.currentTimeMillis();
+            this.clientId = clientId + uniqueSuffix;
+            LOG.warn("为客户端ID添加唯一后缀时发生异常，使用时间戳: {}", e.getMessage());
+            LOG.info("为客户端ID添加唯一后缀以避免冲突 - 原始ID: {}, 新ID: {} (使用时间戳)", originalClientId, this.clientId);
+        }
+        
         mqttConnectOptions = new MqttConnectOptions();
         mqttConnectOptions.setUserName(userName);
         mqttConnectOptions.setPassword(passWord.toCharArray());
         mqttConnectOptions.setCleanSession(true);
         mqttConnectOptions.setConnectionTimeout(30); // 设置连接超时时间
-        mqttConnectOptions.setKeepAliveInterval(60); // 设置心跳间隔
-        mqttConnectOptions.setAutomaticReconnect(true); // 启用自动重连
+        
+        // 将心跳间隔从60秒调整为30秒，确保连接保持活跃
+        // 如果服务器端有更短的超时设置，频繁的心跳可以避免连接被断开
+        mqttConnectOptions.setKeepAliveInterval(30); // 设置心跳间隔为30秒（原来是60秒）
+        
+        // 设置MQTT版本，使用MQTT 3.1.1版本以获得更好的兼容性
+        mqttConnectOptions.setMqttVersion(MqttConnectOptions.MQTT_VERSION_3_1_1);
+        
+        // 启用自动重连
+        mqttConnectOptions.setAutomaticReconnect(true);
+        
+        // 注意：setMaxReconnectDelay方法在某些MQTT客户端版本中可能不可用
+        // 如果需要控制重连延迟，可以在重连逻辑中实现
+        
+        // 设置遗嘱消息（可选，但在连接异常断开时可以通知服务器）
+        // 注意：这需要根据实际业务需求来决定是否启用
+        // mqttConnectOptions.setWill("client/disconnected", ("客户端 " + clientId + " 异常断开").getBytes(), 0, false);
+        
+        // 设置是否允许服务器自动重连时恢复之前的会话
+        // 由于我们使用的是CleanSession=true，这个设置影响不大，但保持默认值
+        mqttConnectOptions.setCleanSession(true);
+        
+        LOG.info("MQTT连接选项配置 - KeepAlive: {}秒, 连接超时: {}秒, 自动重连: {}, MQTT版本: {}", 
+                mqttConnectOptions.getKeepAliveInterval(), 
+                mqttConnectOptions.getConnectionTimeout(),
+                mqttConnectOptions.isAutomaticReconnect(),
+                mqttConnectOptions.getMqttVersion() == MqttConnectOptions.MQTT_VERSION_3_1_1 ? "3.1.1" : "3.1");
         memoryPersistence = new MemoryPersistence();
         
         try {
             LOG.info("正在初始化MQTT客户端 - brokerUrl: {}, clientId: {}", brokerUrl, clientId);
+            
+            // 如果存在旧连接，先尝试关闭（防止客户端ID冲突）
+            if (mqttClient != null) {
+                try {
+                    if (mqttClient.isConnected()) {
+                        LOG.warn("检测到已存在的MQTT连接，先关闭旧连接以避免冲突");
+                        mqttClient.disconnect();
+                    }
+                    mqttClient.close();
+                } catch (Exception e) {
+                    LOG.warn("关闭旧MQTT连接时发生异常: {}", e.getMessage());
+                }
+            }
+            
             mqttClient = new org.eclipse.paho.client.mqttv3.MqttClient(brokerUrl, clientId, memoryPersistence);
             
             if (!mqttClient.isConnected()) {
-                LOG.info("正在连接MQTT服务器...");
+                LOG.info("正在连接MQTT服务器... - brokerUrl: {}, clientId: {}", brokerUrl, clientId);
                 mqttClient.connect(mqttConnectOptions);
-                LOG.info("MQTT连接成功");
+                
+                // 连接成功后立即验证连接状态
+                if (mqttClient.isConnected()) {
+                    LOG.info("MQTT连接成功 - clientId: {}, 服务器URI: {}", clientId, mqttClient.getServerURI());
+                    
+                    // 等待一小段时间后再次验证，确保连接稳定
+                    try {
+                        Thread.sleep(500); // 等待500ms
+                        if (!mqttClient.isConnected()) {
+                            LOG.error("连接后立即断开！clientId: {}, 可能是客户端ID冲突或服务器端主动断开", clientId);
+                        } else {
+                            LOG.info("连接验证通过，连接稳定 - clientId: {}", clientId);
+                        }
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        LOG.warn("连接验证等待被中断", e);
+                    }
+                } else {
+                    LOG.error("连接后立即断开！clientId: {}", clientId);
+                }
             }
             
             // 注册回调，确保收到消息时自动调用 messageArrived 方法
             mqttClient.setCallback(new MqttCallback() {
                 @Override
                 public void connectionLost(Throwable cause) {
-                    LOG.warn("MQTT连接丢失: " + (cause != null ? cause.getMessage() : "未知原因"));
+                    // 增强错误日志记录，便于诊断问题
+                    if (cause != null) {
+                        // 检查是否是EOFException（通常表示服务器端主动断开）
+                        Throwable rootCause = cause;
+                        while (rootCause.getCause() != null) {
+                            rootCause = rootCause.getCause();
+                        }
+                        
+                        if (rootCause instanceof java.io.EOFException) {
+                            LOG.error("MQTT连接被服务器端突然关闭 (EOFException) - 这可能是因为:");
+                            LOG.error("  1. 服务器端心跳超时设置太短");
+                            LOG.error("  2. 服务器端检测到连接异常或协议错误");
+                            LOG.error("  3. 网络中间设备（防火墙/NAT）主动断开连接");
+                            LOG.error("  4. 服务器端连接数限制或资源不足");
+                            LOG.error("建议检查: MQTT服务器配置、网络防火墙设置、心跳间隔配置");
+                        }
+                        
+                        LOG.warn("MQTT连接丢失 - 错误类型: {}, 错误消息: {}, 根本原因: {}, 完整堆栈: ", 
+                                cause.getClass().getName(), 
+                                cause.getMessage(),
+                                rootCause.getClass().getName() + ": " + rootCause.getMessage(),
+                                cause);
+                    } else {
+                        LOG.warn("MQTT连接丢失: 未知原因 (cause为null)");
+                    }
+                    LOG.warn("连接丢失时的客户端状态 - brokerUrl: {}, clientId: {}, isConnected: {}, initialized: {}", 
+                            brokerUrl, clientId, 
+                            mqttClient != null ? mqttClient.isConnected() : false, 
+                            initialized);
                     initialized = false; // 重置初始化状态，允许重新连接
                     needResubscribe = true; // 标记需要重新订阅主题
                     
@@ -302,37 +337,13 @@ public class MqttClientSpace implements ApplicationContextAware {
             LOG.info("topic:" + topic + ";message:" + messageContent);
             
             // 检查是否包含$GNRMC和,A,字符串
-            if (messageContent.contains("$GNRMC") && messageContent.contains(",A,")) {
+            if (messageContent.contains("$GNRMC") || messageContent.contains("PLAY")) {
                 LOG.info("检测到GPS NMEA数据，开始解析...");
-                
-                // 检查Redis模板是否可用
-                if (redisTstaticemplate == null) {
-                    LOG.warn("Redis模板未初始化，尝试从Spring容器获取...");
-                    // 尝试从Spring容器获取Redis模板
-                    if (applicationContext != null) {
-                        try {
-                            redisTstaticemplate = applicationContext.getBean(RedisTemplate.class);
-                            LOG.info("从Spring容器成功获取Redis模板");
-                        } catch (Exception e) {
-                            LOG.error("从Spring容器获取Redis模板失败: {}", e.getMessage());
-                        }
-                    }
-                    
-                    if (redisTstaticemplate == null) {
-                        LOG.warn("Redis模板未初始化，跳过GPS数据解析");
-                        return;
-                    }
+                if(messageContent.contains("$GNRMC")){
+                    parseGNRMCData(topic, messageContent);
                 }
-                
-                Map<String,String> topicSbbhMap = (Map<String, String>) redisTstaticemplate.opsForValue().get(RedisCode.TOPICSBBH);
-                if (topicSbbhMap != null) {
-                    for(String key : topicSbbhMap.keySet()){
-                        if(key.contains(topic)){
-                            parseGNRMCData(topicSbbhMap.get(key), messageContent);
-                        }
-                    }
-                } else {
-                    LOG.warn("未找到主题 {} 对应的设备编号，跳过GPS数据解析", topic);
+                if(messageContent.contains("PLAY")){
+                    savePlayData(topic);
                 }
             } else {
                 LOG.debug("消息不包含GPS NMEA数据，跳过解析");
@@ -369,20 +380,52 @@ public class MqttClientSpace implements ApplicationContextAware {
             if (!mqttClient.isConnected()) {
                 if (mqttConnectOptions != null) {
                     try {
-                        LOG.info("正在尝试重新连接MQTT服务器...");
+                        LOG.info("正在尝试重新连接MQTT服务器... - brokerUrl: {}, clientId: {}", brokerUrl, clientId);
                         mqttClient.connect(mqttConnectOptions);
-                        LOG.info("MQTT重连成功");
-                        initialized = true;
-                        reconnecting = false;
-                        reconnectAttempts = 0; // 重置重连次数
                         
-                        // 重连成功后重新订阅主题
-                        if (needResubscribe) {
-                            LOG.info("重连成功，开始重新订阅主题...");
-                            resubscribeAllTopics();
+                        // 重连成功后立即验证连接状态
+                        if (mqttClient.isConnected()) {
+                            LOG.info("MQTT重连成功 - clientId: {}, 服务器URI: {}", clientId, mqttClient.getServerURI());
+                            
+                            // 等待一小段时间后再次验证，确保连接稳定
+                            try {
+                                Thread.sleep(500); // 等待500ms
+                                if (!mqttClient.isConnected()) {
+                                    LOG.error("重连后立即断开！clientId: {}, 可能是客户端ID冲突或服务器端主动断开", clientId);
+                                    initialized = false;
+                                    return;
+                                } else {
+                                    LOG.info("重连验证通过，连接稳定 - clientId: {}", clientId);
+                                }
+                            } catch (InterruptedException e) {
+                                Thread.currentThread().interrupt();
+                                LOG.warn("重连验证等待被中断", e);
+                            }
+                            
+                            initialized = true;
+                            reconnecting = false;
+                            reconnectAttempts = 0; // 重置重连次数
+                            
+                            // 重连成功后重新订阅主题
+                            if (needResubscribe) {
+                                LOG.info("重连成功，开始重新订阅主题...");
+                                resubscribeAllTopics();
+                            }
+                        } else {
+                            LOG.error("重连后立即断开！clientId: {}", clientId);
+                            initialized = false;
                         }
                     } catch (MqttException e) {
-                        LOG.error("MQTT重连失败: " + e.getMessage(), e);
+                        LOG.error("MQTT重连失败 - clientId: {}, 错误代码: {}, 错误消息: {}", 
+                                clientId, e.getReasonCode(), e.getMessage(), e);
+                        // 记录详细的异常信息，帮助诊断问题
+                        if (e.getReasonCode() == MqttException.REASON_CODE_CLIENT_EXCEPTION) {
+                            LOG.error("重连失败原因: 客户端异常，可能是客户端ID冲突或其他客户端配置问题");
+                        } else if (e.getReasonCode() == MqttException.REASON_CODE_NOT_AUTHORIZED) {
+                            LOG.error("重连失败原因: 认证失败，请检查用户名和密码");
+                        } else if (e.getReasonCode() == MqttException.REASON_CODE_CONNECTION_LOST) {
+                            LOG.error("重连失败原因: 连接丢失，可能是网络问题或服务器主动断开");
+                        }
                         initialized = false;
                     }
                 } else {
@@ -549,14 +592,26 @@ public class MqttClientSpace implements ApplicationContextAware {
         }
         initialized = false;
     }
-    
+
+    /**
+     * savePlayData记录播放
+     */
+    private void savePlayData(String topic){
+        try {
+            voicePowerDeviceServiceStatic.updateIsPlay(topic.substring(0,topic.indexOf("[")));
+            LOG.error("当前发声设备播放-主题：{}",topic);
+        } catch (Exception e) {
+            LOG.error("记录PLAY数据时发生错误: " + e.getMessage(), e);
+        }
+    }
+
     /**
      * 解析GNRMC GPS数据
      * GNRMC格式: $GNRMC,时间,状态,纬度,纬度方向,经度,经度方向,速度,航向,日期,磁偏角,磁偏角方向,模式*校验和
      * 例如: $GNRMC,123519.00,A,4807.038,N,01131.000,E,022.4,,230394,,W*6A
      *      $GNRMC,081805.00,A,3027.380,N,11418.938,E,0.032,,161025,,,A,V*19
      */
-    private void parseGNRMCData(String sbbh,String messageContent) {
+    private void parseGNRMCData(String topic,String messageContent) {
         try {
             // 查找$GNRMC行
             String[] lines = messageContent.split("\n");
@@ -595,7 +650,7 @@ public class MqttClientSpace implements ApplicationContextAware {
                         LOG.info("  日期: " + date);
                         
                         // 这里可以添加业务逻辑，比如保存到数据库或发送到其他服务
-                        processGPSData(sbbh, time, status, latDecimal, lonDecimal, speedKmh, course, date);
+                        processGPSData(topic, time, status, latDecimal, lonDecimal, speedKmh, course, date);
                     } else {
                         LOG.warn("GNRMC数据字段不完整，字段数量: " + fields.length);
                     }
@@ -651,47 +706,24 @@ public class MqttClientSpace implements ApplicationContextAware {
      * 处理解析后的GPS数据
      * 可以在这里添加具体的业务逻辑
      */
-    private void processGPSData(String sbbh, String time, String status, double latitude, double longitude,
+    private void processGPSData(String topic, String time, String status, double latitude, double longitude,
                                double speed, String course, String date) {
         try {
             LOG.info("开始处理GPS数据...");
             
             // 检查Redis模板是否可用
             if (redisTstaticemplate == null) {
-                LOG.warn("Redis模板未初始化，尝试从Spring容器获取...");
-                if (applicationContext != null) {
-                    try {
-                        redisTstaticemplate = applicationContext.getBean(RedisTemplate.class);
-                        LOG.info("从Spring容器成功获取Redis模板");
-                    } catch (Exception e) {
-                        LOG.error("从Spring容器获取Redis模板失败: {}", e.getMessage());
-                    }
-                }
-                
-                if (redisTstaticemplate == null) {
-                    LOG.warn("Redis模板未初始化，跳过GPS数据处理");
-                    return;
-                }
+                LOG.warn("Redis模板未初始化，跳过GPS数据处理");
+                return;
             }
-            
+
             // 检查数据库映射器是否可用
             if (waterEquiplogMapperStatic == null) {
-                LOG.warn("数据库映射器未初始化，尝试从Spring容器获取...");
-                if (applicationContext != null) {
-                    try {
-                        waterEquiplogMapperStatic = applicationContext.getBean(WaterEquiplogMapper.class);
-                        LOG.info("从Spring容器成功获取数据库映射器");
-                    } catch (Exception e) {
-                        LOG.error("从Spring容器获取数据库映射器失败: {}", e.getMessage());
-                    }
-                }
-                
-                if (waterEquiplogMapperStatic == null) {
-                    LOG.warn("数据库映射器未初始化，跳过GPS数据处理");
-                    return;
-                }
+                LOG.warn("数据库映射器未初始化，跳过GPS数据处理");
+                return;
             }
-            
+
+            String sbbh = topicToSbbh(topic);
             // 获取设备信息
             Map<String, JSONObject> sbbhEquipMap = (Map<String, JSONObject>) redisTstaticemplate.opsForValue().get(RedisCode.SBBHEQUIPMAP);
             if (sbbhEquipMap == null || sbbhEquipMap.isEmpty()) {
@@ -729,9 +761,23 @@ public class MqttClientSpace implements ApplicationContextAware {
             LOG.info("GPS数据处理完成，设备编号: {}, 坐标: {},{}", sbbh, latitude, longitude);
             
         } catch (Exception e) {
-            LOG.error("处理GPS数据时发生异常，设备编号: " + sbbh, e);
+            LOG.error("处理GPS数据时发生异常，主题: " + topic, e);
             // 不重新抛出异常，避免影响MQTT连接
         }
+    }
+
+    public String topicToSbbh(String topic){
+        Map<String,String> topicSbbhMap = (Map<String, String>) redisTstaticemplate.opsForValue().get(RedisCode.TOPICSBBH);
+        if (topicSbbhMap != null) {
+            for(String key : topicSbbhMap.keySet()){
+                if(key.contains(topic)){
+                    return topicSbbhMap.get(key);
+                }
+            }
+        } else {
+            LOG.warn("未找到主题 {} 对应的设备编号", topic);
+        }
+        return "";
     }
     
     /**
@@ -768,67 +814,6 @@ public class MqttClientSpace implements ApplicationContextAware {
         return String.format("Redis模板: %s, 数据库映射器: %s", 
                 redisTstaticemplate != null ? "已初始化" : "未初始化",
                 waterEquiplogMapperStatic != null ? "已初始化" : "未初始化");
-    }
-    
-    /**
-     * 测试坐标转换方法（用于验证转换准确性）
-     */
-    public static void testCoordinateConversion() {
-        LOG.info("开始测试坐标转换（度分秒格式）...");
-        
-        // 测试用例1: 纬度 3027.380 N (30度27分380秒)
-        double lat1 = testConvertToDecimalDegrees("3027.380", "N");
-        double expectedLat1 = 30.0 + 27.0/60.0 + 380.0/3600.0; // 30.4611
-        LOG.info("纬度测试: 3027.380 N -> {} (期望: {})", lat1, expectedLat1);
-        
-        // 测试用例2: 经度 11418.938 E (114度18分938秒)
-        double lon1 = testConvertToDecimalDegrees("11418.938", "E");
-        double expectedLon1 = 114.0 + 18.0/60.0 + 938.0/3600.0; // 114.3161
-        LOG.info("经度测试: 11418.938 E -> {} (期望: {})", lon1, expectedLon1);
-        
-        // 测试用例3: 南纬 3027.380 S
-        double lat2 = testConvertToDecimalDegrees("3027.380", "S");
-        double expectedLat2 = -(30.0 + 27.0/60.0 + 380.0/3600.0); // -30.4611
-        LOG.info("南纬测试: 3027.380 S -> {} (期望: {})", lat2, expectedLat2);
-        
-        // 测试用例4: 西经 11418.938 W
-        double lon2 = testConvertToDecimalDegrees("11418.938", "W");
-        double expectedLon2 = -(114.0 + 18.0/60.0 + 938.0/3600.0); // -114.3161
-        LOG.info("西经测试: 11418.938 W -> {} (期望: {})", lon2, expectedLon2);
-        
-        LOG.info("坐标转换测试完成");
-    }
-    
-    /**
-     * 静态方法版本的坐标转换（用于测试）
-     */
-    private static double testConvertToDecimalDegrees(String coordinate, String direction) {
-        try {
-            double coord = Double.parseDouble(coordinate);
-            
-            // 分离度、分、秒
-            int degrees = (int) (coord / 100);
-            double minutesAndSeconds = coord - (degrees * 100);
-            
-            // 分离分和秒
-            int minutes = (int) minutesAndSeconds;
-            double seconds = (minutesAndSeconds - minutes) * 100; // 将小数部分转换为秒
-            
-            // 转换为十进制度: 度 + 分/60 + 秒/3600
-            double decimal = degrees + (minutes / 60.0) + (seconds / 3600.0);
-            
-            // 南纬和西经为负值
-            if ("S".equals(direction) || "W".equals(direction)) {
-                decimal = -decimal;
-            }
-            
-            // 保留6位小数
-            decimal = Math.round(decimal * 1000000.0) / 1000000.0;
-            
-            return decimal;
-        } catch (NumberFormatException e) {
-            return 0.0;
-        }
     }
 
     /**
@@ -906,29 +891,5 @@ public class MqttClientSpace implements ApplicationContextAware {
         this.type = type;
     }
 
-    // main方法建议移除或仅做简单演示
-    public static void main(String[] args) throws InterruptedException {
-        try {
-            MqttClientSpace testXH = MqttClientSpace.getInstance("tcp://47.244.23.44", "subClient", "benben", "123456");
-            testXH.type = "temperature";
-            byte[] message = {0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x31, (byte) 0xCA};
-            testXH.publishMessage("WHPD[meg]", message, 2);
-            Thread.sleep(20000);
-
-            testXH.type = "waterDepth";
-            byte[] message2 = {0x34, 0x03, 0x00, 0x15, 0x00, 0x02, (byte) 0xD0, (byte) 0x6A};
-            testXH.publishMessage("WHPD[meg]", message2, 2);
-            Thread.sleep(20000);
-
-            testXH.type = "waterVelocity";
-            byte[] message3 = {0x34, 0x03, 0x00, 0x0F, 0x00, 0x02, (byte) 0xF1, (byte) 0xAD};
-            testXH.publishMessage("WHPD[meg]", message3, 2);
-            Thread.sleep(20000);
-
-            testXH.close();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }
 }
 

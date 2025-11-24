@@ -71,7 +71,8 @@ export default {
       zhbht:LOCAL_ZHBHT,
       ssbrl:LOCAL_SSBRL,
       stime:'',
-      etime:''
+      etime:'',
+      picServer:process.env.VUE_APP_PIC_SERVER
     }
   },
   created() {
@@ -130,16 +131,16 @@ export default {
           let arr = _this.equipments[0].gps.split(",");
           _this.jd = Number(arr[0]);
           _this.wd = Number(arr[1]);
-          _this.amap.setCenter([_this.jd ,_this.wd]);
+          _this.amap.setCenter(new TLngLat(_this.jd,_this.wd));
           _this.getMapMark();
         }
       })
     },
     getMapMark(){
       let _this = this;
-      _this.amap.clearMap();
+      _this.amap.clearOverLays();
       _this.getGpsBySbsn();
-      _this.getGpsBySbsn();
+      _this.selectGpsOb();
       _this.getPontoonGpsBySbsn();
     },
     /**
@@ -169,17 +170,19 @@ export default {
                 let polylineArr = new Array();//多边形覆盖物节点坐标数组
                 gpslist.forEach(function (item){
                   let itemarr = item.gps.split(",");
-                  if(itemarr[0]!='0'&&itemarr[0]!='NaN'){
-                    polylineArr.push(new AMap.LngLat(itemarr[0],itemarr[1].trim()));
+                  const lng = parseFloat(itemarr[0]);
+                  const lat = parseFloat(itemarr[1].trim());
+                  if(lng != 0 && lat != 0 && !isNaN(lng) && !isNaN(lat)){
+                    polylineArr.push(new TLngLat(lng, lat));
                   }
                 })
-                let  polyline = new AMap.Polyline ({
-                    path: polylineArr,//设置多边形边界路径
-                    borderWeight: 2, // 线条宽度，默认为 1
-                    strokeColor: '#dd0310', // 线条颜色
-                    lineJoin: 'round' // 折线拐点连接处样式
+                _this.amap.setCenter(polylineArr[Math.floor(polylineArr.length / 2)]);
+                let  polyline = new TPolyline (polylineArr, {
+                  strokeWeight: 6, // 线条宽度，默认为 1
+                  strokeColor: '#dd0310', // 线条颜色
+                  strokeStyle: 'solid' // 折线拐点连接处样式
                 });
-                _this.amap.add(polyline);
+                _this.amap.addOverLay(polyline);
               }
             }
           }
@@ -200,25 +203,32 @@ export default {
         obj.xmbh = Tool.getLoginUser().xmbh;
       }
       Loading.show();
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileTyToday/selectGpsByDateRange', obj).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileT/selectGpsByDateRange', obj).then((response)=>{
         Loading.hide();
         let resp = response.data;
         let gpslist = resp.content;
         if(gpslist && gpslist.length>0){
           gpslist.forEach(function (item){
             if(item.gps.split(",")[0]!='0'&&item.gps.split(",")[0]!='NaN'){
-              let marker = new AMap.Marker({
-                position: item.gps.split(","),
-                icon: '//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-default.png',
-                anchor:'bottom-center',
-                offset: new AMap.Pixel(0, 0),
-                map: _this.amap
-              });
-              marker.setLabel({
-                direction:'center',
-                offset:new AMap.Pixel(0, -5),
-                content: item.ts, //设置文本标注内容
-              });
+              let itemarr = item.gps.split(",");
+              const lng = parseFloat(itemarr[0]);
+              const lat = parseFloat(itemarr[1].trim());
+              let lnglat = new TLngLat(lng, lat);
+              let icon = new TIcon(window.location.origin+'/static/image/markerBlue.png', new TSize(43, 43));
+              let marker = new TMarker(lnglat,{icon:icon});
+              _this.amap.addOverLay(marker);
+              if(item.ts){
+                // 设置标记的文本
+                let label=new TLabel({
+                  text:item.ts,
+                  offset:new TPixel(-5,-25),
+                  position:lnglat
+                });
+                label.setZIndex(999);
+                label.setBackgroundColor('#1296DB');
+                label.setBorderColor('#1296DB');
+                _this.amap.addOverLay(label);
+              }
             }
           })
         }
@@ -242,21 +252,22 @@ export default {
         if(gpslist && gpslist.length>0){
           gpslist.forEach(function (item){
             if(item.declat != '0' && item.declat != 'NaN'){
-              console.log(JSON.stringify(item))
-              const lat = parseFloat(item.declat);
-              const lng = parseFloat(item.declong);
-              let marker = new AMap.Marker({
-                position: [lat , lng ],
-                icon: '//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-red.png',
-                anchor:'bottom-center',
-                offset: new AMap.Pixel(0, -10),
-                map: _this.amap
-              });
-              marker.setLabel({
-                direction:'center',
-                offset:new AMap.Pixel(0, -5),
-                content: item.data6, //设置文本标注内容
-              });
+              let lnglat = new TLngLat(parseFloat(item.declat), parseFloat(item.declong));
+              let icon = new TIcon(window.location.origin+'/static/image/markerRed.png', new TSize(43, 43));
+              let marker = new TMarker(lnglat,{icon:icon});
+              _this.amap.addOverLay(marker);
+              if(item.data6){
+                // 设置标记的文本
+                let label=new TLabel({
+                  text:item.data6,
+                  offset:new TPixel(-5,-25),
+                  position:lnglat
+                });
+                label.setZIndex(999);
+                label.setBackgroundColor('#D81E06');
+                label.setBorderColor('#D81E06');
+                _this.amap.addOverLay(label);
+              }
             }
           })
         }
@@ -265,18 +276,19 @@ export default {
     initMap(){
       let _this = this;
       if(_this.ssbrl){
-        _this.amap = new AMap.Map('mapDiv', {
+        _this.amap = new TMap('mapDiv', {
           resizeEnable: true,
           zoom: _this.zoom
         });
       }
       if(_this.zhbht){
-        _this.amap = new AMap.Map('mapDiv', {
+        _this.amap = new TMap('mapDiv', {
           resizeEnable: true,
           center:[113.333132,23.114138],
           zoom: _this.zoom
         });
       }
+      _this.amap.enableHandleMouseScroll();
     }
   }
 }

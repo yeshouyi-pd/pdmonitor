@@ -104,6 +104,7 @@
                   <span v-if="item.tplj.includes('txt')">文件</span>
                   <span v-if="item.tplj.includes('wav')">音频</span>
                   <span v-if="item.tplj.includes('png') || item.tplj.includes('jpg')">图片</span>
+                  <span v-if="item.tplj.includes('mp4')">视频</span>
                 </td>
                 <td>{{item.tplj}}</td>
                 <td>
@@ -197,7 +198,7 @@ export default {
       if("460100"!=Tool.getLoginUser().deptcode){
         _this.equipmentFileDto.xmbh=Tool.getLoginUser().xmbh;
       }
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileTy/list', _this.equipmentFileDto).then((response) => {
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileT/lists', _this.equipmentFileDto).then((response) => {
         Loading.hide();
         let resp = response.data;
         _this.equipmentFiles = resp.content.list;
@@ -208,7 +209,7 @@ export default {
     detail(item){
       let _this = this;
       Loading.show();
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileTy/detail/'+item.wjmc, {}).then((response) => {
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileT/allFile', {'cjsj':item.cjsj}).then((response) => {
         Loading.hide();
         let resp = response.data;
         _this.details = resp.content;
@@ -224,15 +225,8 @@ export default {
     },
     //下载文件
     downloadFile(obj){
-      let _this = this;
       let paramsStr = "fileUrl="+obj.tplj.substring(0,obj.tplj.lastIndexOf("/")+1)+"&fileName="+obj.tplj.substring(obj.tplj.lastIndexOf("/")+1,obj.tplj.length);
-      let url = "";
-      if(_this.shj){
-        url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downAudioFile53?'+paramsStr;
-      }else{
-        url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downAudioFile?'+paramsStr;
-      }
-      console.log(url);
+      let url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downAudioFile?'+paramsStr;
       window.location.href = url;
     }
   }

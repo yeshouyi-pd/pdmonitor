@@ -4,6 +4,7 @@ import com.pd.server.main.domain.EquipmentFilePWav;
 import com.pd.server.main.domain.EquipmentFilePWavExample;
 import com.pd.server.main.dto.EquipmentFilePWavDto;
 import com.pd.server.main.dto.PageDto;
+import com.pd.server.main.dto.basewx.my.EquipmentFileDwjkDto;
 import com.pd.server.main.mapper.EquipmentFilePWavMapper;
 import com.pd.server.util.CopyUtil;
 import com.pd.server.util.UuidUtil;
@@ -68,7 +69,14 @@ public class EquipmentFilePWavService {
         equipmentFilePWavMapper.deleteByPrimaryKey(id);
     }
 
+    public List<EquipmentFileDwjkDto> listAllDw(EquipmentFilePWavExample example){
+        return equipmentFilePWavMapper.listAllDw(example);
+    }
     public List<EquipmentFilePWav> listAll(EquipmentFilePWavExample example) {
+        return equipmentFilePWavMapper.selectByExample(example);
+    }
+
+    public List<EquipmentFilePWav> selectByExample(EquipmentFilePWavExample example){
         return equipmentFilePWavMapper.selectByExample(example);
     }
 }

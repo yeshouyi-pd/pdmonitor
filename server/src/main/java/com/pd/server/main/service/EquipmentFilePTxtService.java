@@ -4,6 +4,7 @@ import com.pd.server.main.domain.EquipmentFilePTxt;
 import com.pd.server.main.domain.EquipmentFilePTxtExample;
 import com.pd.server.main.dto.EquipmentFilePTxtDto;
 import com.pd.server.main.dto.PageDto;
+import com.pd.server.main.dto.basewx.my.EquipmentFileDwjkDto;
 import com.pd.server.main.mapper.EquipmentFilePTxtMapper;
 import com.pd.server.util.CopyUtil;
 import com.pd.server.util.UuidUtil;
@@ -68,4 +69,12 @@ public class EquipmentFilePTxtService {
         equipmentFilePTxtMapper.deleteByPrimaryKey(id);
     }
 
+
+    public List<EquipmentFileDwjkDto> listAllDw(EquipmentFilePTxtExample example){
+        return equipmentFilePTxtMapper.listAllDw(example);
+    }
+
+    public List<EquipmentFilePTxt> selectByExample(EquipmentFilePTxtExample example){
+        return equipmentFilePTxtMapper.selectByExample(example);
+    }
 }

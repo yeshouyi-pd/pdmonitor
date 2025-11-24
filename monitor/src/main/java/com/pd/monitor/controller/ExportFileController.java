@@ -1,6 +1,7 @@
 package com.pd.monitor.controller;
 
 import com.alibaba.fastjson.JSONArray;
+import com.pd.monitor.utils.CalculateUtil;
 import com.pd.monitor.wx.conf.BaseWxController;
 import com.pd.server.config.RedisCode;
 import com.pd.server.main.domain.*;
@@ -52,10 +53,6 @@ public class ExportFileController extends BaseWxController{
     @Resource
     private WaterProEquipService waterProEquipService;
     @Resource
-    private EquipmentTyEventService equipmentTyEventService;
-    @Resource
-    private EquipmentFileEventService equipmentFileEventService;
-    @Resource
     private PointerDayService pointerDayService;
     @Resource
     private PointerSecondService pointerSecondService;
@@ -85,7 +82,115 @@ public class ExportFileController extends BaseWxController{
     private SolarPannelService solarPannelService;
     @Resource
     private PontoonGpsService pontoonGpsService;
+    @Resource
+    private EquipmentFilePClusterService equipmentFilePClusterService;
+    @Resource
+    private EquipmentFileTClusterService equipmentFileTClusterService;
+    @Resource
+    private EquipmentFilePPicService equipmentFilePPicService;
+    @Resource
+    private VoicePowerDeviceService voicePowerDeviceService;
 
+    /**
+     * 驱离设备工作日志导出
+     */
+    @GetMapping("/exportVoicePowerDevice")
+    public void exportVoicePowerDevice(HttpServletRequest request, HttpServletResponse response){
+        try {
+            VoicePowerDeviceExample example = new VoicePowerDeviceExample();
+            VoicePowerDeviceExample.Criteria ca = example.createCriteria();
+            if(!StringUtils.isEmpty(request.getParameter("stime"))){
+                ca.andRqGreaterThanOrEqualTo(request.getParameter("stime"));
+            }
+            if(!StringUtils.isEmpty(request.getParameter("etime"))){
+                ca.andRqLessThanOrEqualTo(request.getParameter("etime"));
+            }
+            if(!StringUtils.isEmpty(request.getParameter("sbbh"))){
+                ca.andSbbhEqualTo(request.getParameter("sbbh"));
+            }
+            example.setOrderByClause(" send_time desc ");
+            List<VoicePowerDevice> voicePowerDeviceList = voicePowerDeviceService.selectByExample(example);
+            //导出
+            XSSFWorkbook workbook = new XSSFWorkbook();
+            //设置字体大小
+            XSSFFont fontCommon = workbook.createFont();
+            fontCommon.setFontHeightInPoints((short)12); // 设置字体大小为12磅
+            //设置公共单元格样式
+            XSSFCellStyle cellStyleCommon = workbook.createCellStyle();
+            cellStyleCommon.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+            cellStyleCommon.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
+            XSSFCellStyle cellStyleCommonLeft = workbook.createCellStyle();
+            cellStyleCommonLeft.setAlignment(XSSFCellStyle.ALIGN_LEFT);
+            cellStyleCommonLeft.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
+            //cellStyleCommon.setFont(fontCommon);
+            //设置字体加粗
+            XSSFFont font = workbook.createFont();
+            font.setBoldweight(XSSFFont.BOLDWEIGHT_BOLD);
+            font.setFontHeightInPoints((short)12); // 设置字体大小为12磅
+            XSSFCellStyle cellStyleTitle = workbook.createCellStyle();
+            cellStyleTitle.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+            cellStyleTitle.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
+            cellStyleTitle.setFont(font);
+            // 创建一个工作表
+            String fileName = "设备工作日志(" + new Date().getTime() + ").xls";
+            XSSFSheet sheet = workbook.createSheet("设备工作日志");
+            // 自适应列宽度
+            sheet.autoSizeColumn(1, true);
+            sheet.setDefaultColumnWidth(18);
+            sheet.setDefaultRowHeight((short)(40*10));
+            // 添加表头行
+            XSSFRow titleRow = sheet.createRow(0);//第1行
+            List<String> titleStrList = Arrays.asList("设备名称","设备编号","主题","日期","开始指令下发时间","是否播放","结束指令下发时间");
+            for(int i=0;i<titleStrList.size();i++){
+                XSSFCell cell = titleRow.createCell(i);
+                cell.setCellValue(titleStrList.get(i));
+                cell.setCellStyle(cellStyleTitle);
+            }
+            Map<String,String> mapSbxh = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.SBBHSBMC);
+            int i=0;
+            for(VoicePowerDevice entity : voicePowerDeviceList){
+                XSSFRow comRow = sheet.createRow(i+1);
+                XSSFCell comCell0 = comRow.createCell(0);
+                comCell0.setCellValue(mapSbxh.get("sbmc-"+entity.getSbbh()));
+                comCell0.setCellStyle(cellStyleCommon);
+                XSSFCell comCell1 = comRow.createCell(1);
+                comCell1.setCellValue(entity.getSbbh());
+                comCell1.setCellStyle(cellStyleCommon);
+                XSSFCell comCell2 = comRow.createCell(2);
+                comCell2.setCellValue(entity.getTopicName());
+                comCell2.setCellStyle(cellStyleCommonLeft);
+                XSSFCell comCell3 = comRow.createCell(3);
+                comCell3.setCellValue(entity.getRq());
+                comCell3.setCellStyle(cellStyleCommonLeft);
+                XSSFCell comCell4 = comRow.createCell(4);
+                comCell4.setCellValue(DateUtil.getFormatDate(entity.getSendTime(),"yyyy-MM-dd HH:mm:ss"));
+                comCell4.setCellStyle(cellStyleCommonLeft);
+                XSSFCell comCell5 = comRow.createCell(5);
+                comCell5.setCellValue(1==entity.getIsPlay()?"已播放":"未播放");
+                comCell5.setCellStyle(cellStyleCommonLeft);
+                XSSFCell comCell6 = comRow.createCell(6);
+                comCell6.setCellValue(DateUtil.getFormatDate(entity.getStopTime(),"yyyy-MM-dd HH:mm:ss"));
+                comCell6.setCellStyle(cellStyleCommonLeft);
+                i++;
+            }
+            response.setHeader("content-Type", "application/vnd.ms-excel");
+            // 下载文件的默认名称
+            String agent = request.getHeader("User-Agent");
+            if (agent.contains("MSIE") || agent.contains("Trident") || agent.contains("Edge")) {
+                response.setHeader("Content-Disposition",
+                        "attachment; filename=" + URLEncoder.encode(fileName, "UTF-8"));
+            } else {
+                response.setHeader("Content-Disposition",
+                        "attachment; filename=\"" + new String((fileName).getBytes("UTF-8"), "ISO-8859-1") + "\"");
+            }
+            response.setCharacterEncoding("utf-8");
+            ServletOutputStream out = response.getOutputStream();
+            workbook.write(out);
+            out.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
     /**
      * 路线图导出
@@ -95,13 +200,13 @@ public class ExportFileController extends BaseWxController{
         try {
             PontoonGpsExample example = new PontoonGpsExample();
             PontoonGpsExample.Criteria ca = example.createCriteria();
-            if(!org.apache.commons.lang.StringUtils.isEmpty(request.getParameter("stime"))){
+            if(!StringUtils.isEmpty(request.getParameter("stime"))){
                 ca.andRqGreaterThanOrEqualTo(request.getParameter("stime"));
             }
-            if(!org.apache.commons.lang.StringUtils.isEmpty(request.getParameter("etime"))){
+            if(!StringUtils.isEmpty(request.getParameter("etime"))){
                 ca.andRqLessThanOrEqualTo(request.getParameter("etime"));
             }
-            if(!org.apache.commons.lang.StringUtils.isEmpty(request.getParameter("sbbh"))){
+            if(!StringUtils.isEmpty(request.getParameter("sbbh"))){
                 ca.andSbbhEqualTo(request.getParameter("sbbh"));
             }
             example.setOrderByClause(" cjsj desc ");
@@ -1518,20 +1623,22 @@ public class ExportFileController extends BaseWxController{
     public void exportFileEvent(HttpServletRequest request, HttpServletResponse response){
         try {
             List<String> sbbhs = new ArrayList<>();
-            EquipmentFileEventDto record = new EquipmentFileEventDto();
-            if(!StringUtils.isEmpty(request.getParameter("sbbh"))){
-                record.setSbbh(request.getParameter("sbbh"));
-            }
-            if(!StringUtils.isEmpty(request.getParameter("stime"))){
-                record.setStime(request.getParameter("stime"));
-            }
-            if(!StringUtils.isEmpty(request.getParameter("etime"))){
-                record.setEtime(request.getParameter("etime"));
-            }
             if(!StringUtils.isEmpty(request.getParameter("xmbh"))){
                 sbbhs = waterProEquipService.findSbsnByXmbh(request.getParameter("xmbh"));
             }
-            List<EquipmentFileEvent> equipmentFileEventList = equipmentFileEventService.selectByExampleExport(record);
+            EquipmentFilePClusterExample example = new EquipmentFilePClusterExample();
+            EquipmentFilePClusterExample.Criteria ca = example.createCriteria();
+            if(!StringUtils.isEmpty(request.getParameter("sbbh"))){
+                ca.andSbbhEqualTo(request.getParameter("sbbh"));
+            }
+            if(!StringUtils.isEmpty(request.getParameter("stime"))){
+                ca.andRqGreaterThanOrEqualTo(request.getParameter("stime"));
+            }
+            if(!StringUtils.isEmpty(request.getParameter("etime"))){
+                ca.andRqLessThanOrEqualTo(request.getParameter("etime"));
+            }
+            example.setOrderByClause(" kssj desc ");
+            List<EquipmentFilePCluster> pClusters = equipmentFilePClusterService.selectByExample(example);
             //导出
             XSSFWorkbook workbook = new XSSFWorkbook();
             //设置字体大小
@@ -1568,7 +1675,7 @@ public class ExportFileController extends BaseWxController{
             }
             Map<String,String> mapSbxh = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.SBBHSBMC);
             int i=0;
-            for(EquipmentFileEvent fileEvent : equipmentFileEventList){
+            for(EquipmentFilePCluster fileEvent : pClusters){
                 if(!StringUtils.isEmpty(request.getParameter("xmbh"))){
                     if(sbbhs.contains(fileEvent.getSbbh())){
                         XSSFRow comRow = sheet.createRow(i+1);
@@ -1635,20 +1742,22 @@ public class ExportFileController extends BaseWxController{
     public void exportTyEvent(HttpServletRequest request, HttpServletResponse response){
         try {
             List<String> sbbhs = new ArrayList<>();
-            EquipmentTyEventDto record = new EquipmentTyEventDto();
-            if(!StringUtils.isEmpty(request.getParameter("sbbh"))){
-                record.setSbbh(request.getParameter("sbbh"));
-            }
-            if(!StringUtils.isEmpty(request.getParameter("stime"))){
-                record.setStime(request.getParameter("stime"));
-            }
-            if(!StringUtils.isEmpty(request.getParameter("etime"))){
-                record.setEtime(request.getParameter("etime"));
-            }
             if(!StringUtils.isEmpty(request.getParameter("xmbh"))){
                 sbbhs = waterProEquipService.findSbsnByXmbh(request.getParameter("xmbh"));
             }
-            List<EquipmentTyEvent> equipmentTyEventList = equipmentTyEventService.selectByExampleExport(record);
+            EquipmentFileTClusterExample example = new EquipmentFileTClusterExample();
+            EquipmentFileTClusterExample.Criteria ca = example.createCriteria();
+            if(!StringUtils.isEmpty(request.getParameter("sbbh"))){
+                ca.andSbbhEqualTo(request.getParameter("sbbh"));
+            }
+            if(!StringUtils.isEmpty(request.getParameter("stime"))){
+                ca.andRqGreaterThanOrEqualTo(request.getParameter("stime"));
+            }
+            if(!StringUtils.isEmpty(request.getParameter("etime"))){
+                ca.andRqLessThanOrEqualTo(request.getParameter("etime"));
+            }
+            example.setOrderByClause(" kssj desc ");
+            List<EquipmentFileTCluster> tClusters = equipmentFileTClusterService.selectByExample(example);
             //导出
             XSSFWorkbook workbook = new XSSFWorkbook();
             //设置字体大小
@@ -1684,7 +1793,7 @@ public class ExportFileController extends BaseWxController{
             }
             Map<String,String> mapSbxh = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.SBBHSBMC);
             int i=0;
-            for(EquipmentTyEvent tyEvent : equipmentTyEventList){
+            for(EquipmentFileTCluster tyEvent : tClusters){
                 if(!StringUtils.isEmpty(request.getParameter("xmbh"))){
                     if(sbbhs.contains(tyEvent.getSbbh())){
                         XSSFRow comRow = sheet.createRow(i+1);
@@ -1705,18 +1814,18 @@ public class ExportFileController extends BaseWxController{
                         comCell4.setCellStyle(cellStyleCommon);
                         comCell4.setCellType(XSSFCell.CELL_TYPE_NUMERIC);
                         XSSFCell comCell5 = comRow.createCell(5);
-                        comCell5.setCellValue(tyEvent.getGps());
+                        comCell5.setCellValue(tyEvent.getSm2());
                         comCell5.setCellStyle(cellStyleCommon);
-                        if(!StringUtils.isEmpty(tyEvent.getGps())&&tyEvent.getGps().split(",").length==2){
+                        if(!StringUtils.isEmpty(tyEvent.getSm2())&&tyEvent.getSm2().split(",").length==2){
                             XSSFCell comCell6 = comRow.createCell(6);
-                            comCell6.setCellValue(tyEvent.getGps().split(",")[0]);
+                            comCell6.setCellValue(tyEvent.getSm2().split(",")[0]);
                             comCell6.setCellStyle(cellStyleCommon);
                             XSSFCell comCell7 = comRow.createCell(7);
-                            comCell7.setCellValue(tyEvent.getGps().split(",")[1]);
+                            comCell7.setCellValue(tyEvent.getSm2().split(",")[1]);
                             comCell7.setCellStyle(cellStyleCommon);
                         }
                         XSSFCell comCell8 = comRow.createCell(8);
-                        comCell8.setCellValue(tyEvent.getSm1());
+                        comCell8.setCellValue(tyEvent.getSm6());
                         comCell8.setCellStyle(cellStyleCommon);
                         i++;
                     }
@@ -1739,18 +1848,18 @@ public class ExportFileController extends BaseWxController{
                     comCell4.setCellStyle(cellStyleCommon);
                     comCell4.setCellType(XSSFCell.CELL_TYPE_NUMERIC);
                     XSSFCell comCell5 = comRow.createCell(5);
-                    comCell5.setCellValue(tyEvent.getGps());
+                    comCell5.setCellValue(tyEvent.getSm2());
                     comCell5.setCellStyle(cellStyleCommon);
-                    if(!StringUtils.isEmpty(tyEvent.getGps())&&tyEvent.getGps().split(",").length==2){
+                    if(!StringUtils.isEmpty(tyEvent.getSm2())&&tyEvent.getSm2().split(",").length==2){
                         XSSFCell comCell6 = comRow.createCell(6);
-                        comCell6.setCellValue(tyEvent.getGps().split(",")[0]);
+                        comCell6.setCellValue(tyEvent.getSm2().split(",")[0]);
                         comCell6.setCellStyle(cellStyleCommon);
                         XSSFCell comCell7 = comRow.createCell(7);
-                        comCell7.setCellValue(tyEvent.getGps().split(",")[1]);
+                        comCell7.setCellValue(tyEvent.getSm2().split(",")[1]);
                         comCell7.setCellStyle(cellStyleCommon);
                     }
                     XSSFCell comCell8 = comRow.createCell(8);
-                    comCell8.setCellValue(tyEvent.getSm1());
+                    comCell8.setCellValue(tyEvent.getSm6());
                     comCell8.setCellStyle(cellStyleCommon);
                     i++;
                 }
@@ -2096,48 +2205,31 @@ public class ExportFileController extends BaseWxController{
      */
     @GetMapping("/exportEquipmentFile")
     public void exportEquipmentFile(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String deptcode = request.getParameter("deptcode");
-        String stime = request.getParameter("stime");
-        String etime = request.getParameter("etime");
-        String sbbh = request.getParameter("sbbh");
         String type = request.getParameter("type");
-        List<String> list = getUpdeptcode(deptcode);//获取部门属性
-        EquipmentFileExample example = new EquipmentFileExample();
-        EquipmentFileExample.Criteria ca = example.createCriteria();
-        if(!StringUtils.isEmpty(sbbh)){
-            ca.andSbbhEqualTo(sbbh);
+        EquipmentFilePPicExample example = new EquipmentFilePPicExample();
+        EquipmentFilePPicExample.Criteria ca = example.createCriteria();
+        if(!StringUtils.isEmpty(request.getParameter("sbbh"))){
+            ca.andSbbhEqualTo(request.getParameter("sbbh"));
         }
-        if(!StringUtils.isEmpty(deptcode)){
-            ca.andDeptcodeIn(list);
-        }
-        ca.andTpljLike("%png");
-        EquipmentFileExample.Criteria caor = example.or();
-        if(!StringUtils.isEmpty(sbbh)){
-            caor.andSbbhEqualTo(sbbh);
-        }
-        if(!StringUtils.isEmpty(deptcode)){
-            caor.andDeptcodeIn(list);
-        }
-        caor.andTpljLike("%jpg");
         List<AlarmNumbersDto> lists = new ArrayList<>();
         Optional<Integer> op = null;
         if(type.equals("minute")){
-            if(!StringUtils.isEmpty(stime)){
-                ca.andCjsjGreaterThanOrEqualTo(stime);
+            if(!StringUtils.isEmpty(request.getParameter("stime"))){
+                ca.andFzGreaterThanOrEqualTo(request.getParameter("stime"));
             }
-            if(!StringUtils.isEmpty(etime)){
-                ca.andCjsjLessThanOrEqualTo(etime);
+            if(!StringUtils.isEmpty(request.getParameter("etime"))){
+                ca.andFzLessThanOrEqualTo(request.getParameter("etime"));
             }
-            lists = equipmentFileService.statisticsAlarmNums(example);
+            lists = equipmentFilePPicService.statisticsAlarmNumsByMinute(example);
         }else if(type.equals("hour")){
-            if(!StringUtils.isEmpty(stime)){
-                ca.andRqGreaterThanOrEqualTo(stime);
+            if(!StringUtils.isEmpty(request.getParameter("stime"))){
+                ca.andXsGreaterThanOrEqualTo(request.getParameter("stime")+" 00");
             }
-            if(!StringUtils.isEmpty(etime)){
-                ca.andRqLessThanOrEqualTo(etime);
+            if(!StringUtils.isEmpty(request.getParameter("etime"))){
+                ca.andXsLessThanOrEqualTo(request.getParameter("etime")+" 23");
             }
-            lists = equipmentFileService.statisticsAlarmNumsByHour(example);
-            op = lists.stream().map(AlarmNumbersDto::getAlarmNum).reduce(Integer::sum);
+            lists = equipmentFilePPicService.statisticsAlarmNumsByHour(example);
+            op = lists.stream().filter(Objects::nonNull).map(AlarmNumbersDto::getAlarmNum).reduce(Integer::sum);
         }
         //导出
         XSSFWorkbook workbook = new XSSFWorkbook();
@@ -2181,7 +2273,7 @@ public class ExportFileController extends BaseWxController{
             if(type.equals("minute")){
                 XSSFRow row = sheet.createRow(i+1);//第1行
                 XSSFCell cell = row.createCell(0);//第1行第1列
-                cell.setCellValue(entity.getBjsj()+" "+entity.getXs()+":"+entity.getFz());
+                cell.setCellValue(entity.getFz());
                 cell.setCellStyle(cellStyleCommon);
                 XSSFCell cell1 = row.createCell(1);//第1行第2列
                 cell1.setCellValue(entity.getAlarmNum());
@@ -2189,11 +2281,11 @@ public class ExportFileController extends BaseWxController{
             }else if(type.equals("hour")) {
                 XSSFRow row = sheet.createRow(i+1);//第1行
                 XSSFCell cell = row.createCell(0);//第1行第1列
-                cell.setCellValue(entity.getBjsj()+" "+entity.getXs());
+                cell.setCellValue(entity.getXs());
                 cell.setCellStyle(cellStyleCommon);
                 XSSFCell cell1 = row.createCell(1);//第1行第2列
                 if(op.get()!=null && op.get()!=0){
-                    cell1.setCellValue(div(entity.getAlarmNum(),op.get(),4)*100);
+                    cell1.setCellValue(CalculateUtil.calculateResultOfPercent(entity.getAlarmNum(),op.get()));
                 }
                 cell1.setCellStyle(cellStyleCommon);
             }
@@ -2215,20 +2307,4 @@ public class ExportFileController extends BaseWxController{
     }
 
 
-    /**
-     * 提供（相对）精确的除法运算。当发生除不尽的情况时，由scale参数指 定精度，以后的数字四舍五入。
-     * @param v1            被除数
-     * @param v2            除数
-     * @param scale         表示表示需要精确到小数点以后几位。
-     * @return 两个参数的商
-     */
-    public static double div(int v1, int v2, int scale) {
-        if (scale < 0) {
-            throw new IllegalArgumentException(
-                    "The scale must be a positive integer or zero");
-        }
-        BigDecimal b1 = new BigDecimal(Integer.toString(v1));
-        BigDecimal b2 = new BigDecimal(Integer.toString(v2));
-        return b1.divide(b2, scale, BigDecimal.ROUND_HALF_UP).doubleValue();
-    }
 }

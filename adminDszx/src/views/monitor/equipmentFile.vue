@@ -71,7 +71,7 @@
       <div style="display: flex;flex-wrap: wrap;margin-bottom: 30px;">
         <div v-for="(item,index) in equipmentFiles" style="margin:20px;width: 150px;height: 300px;text-align: center;">
           <div style="text-align: center;width: 100px;margin: 0 auto;">
-            <img alt="无图片" :src="item.tplj.substring(0,item.tplj.lastIndexOf('.')+1)+'jpg'" style="width: 100px;height: 200px;cursor: pointer;" v-on:click="checkImg(item,index)">
+            <img alt="无图片" :src="item.tplj" style="width: 100px;height: 200px;cursor: pointer;" v-on:click="checkImg(item,index)">
           </div>
           <div style="margin: 0 auto;">{{waterEquipments|optionNSArray(item.sbbh)}}</div>
           <div style="margin: 0 auto;word-wrap: break-word;">{{item.cjsj}}</div>
@@ -154,13 +154,6 @@
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
-<!--    <div class="form-group">
-      <div class="col-sm-10">
-        <Uploads    v-bind:suffixs="['mp4']"
-                    v-bind:use="'1'"
-                    v-bind:mainid="'1'" ></Uploads>
-      </div>
-    </div>-->
   </div>
 </template>
 <script>
@@ -184,7 +177,8 @@ export default {
       curWjmc:'',
       waterEquipments:[],
       userDto:null,
-      shj:false
+      shj:false,
+      picServer:process.env.VUE_APP_PIC_SERVER
     }
   },
   mounted() {
@@ -215,7 +209,7 @@ export default {
     beforePic(){
       let _this = this;
       _this.curIndex = _this.curIndex-1;
-      _this.curTplj = _this.equipmentFiles[_this.curIndex].tplj.substring(0,_this.equipmentFiles[_this.curIndex].tplj.lastIndexOf('.')+1)+'jpg';
+      _this.curTplj = _this.equipmentFiles[_this.curIndex].tplj;
       _this.curSbsn = _this.equipmentFiles[_this.curIndex].sbbh;
       _this.curCjsj = _this.equipmentFiles[_this.curIndex].cjsj;
       _this.curWjmc = _this.equipmentFiles[_this.curIndex].tplj;
@@ -224,7 +218,7 @@ export default {
     nextPic(){
       let _this = this;
       _this.curIndex = _this.curIndex+1;
-      _this.curTplj = _this.equipmentFiles[_this.curIndex].tplj.substring(0,_this.equipmentFiles[_this.curIndex].tplj.lastIndexOf('.')+1)+'jpg';
+      _this.curTplj = _this.equipmentFiles[_this.curIndex].tplj;
       _this.curSbsn = _this.equipmentFiles[_this.curIndex].sbbh;
       _this.curCjsj = _this.equipmentFiles[_this.curIndex].cjsj;
       _this.curWjmc = _this.equipmentFiles[_this.curIndex].tplj;
@@ -258,29 +252,12 @@ export default {
         _this.equipmentFileDto.xmbh=Tool.getLoginUser().xmbh;
       }
       _this.$forceUpdate();
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFile/lists',_this.equipmentFileDto).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileP/lists',_this.equipmentFileDto).then((response)=>{
         let resp = response.data;
         _this.equipmentFiles = resp.content.list;
         _this.$refs.pagination.render(page, resp.content.total);
         Loading.hide();
-        //_this.getTs(_this.equipmentFiles);
       })
-    },
-    getTs(equipmentFiles){
-      let _this = this;
-      for(let i=0;i<equipmentFiles.length;i++){
-        let id = equipmentFiles[i].id;
-        _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFile/getTs/'+equipmentFiles[i].wjmc+"/"+equipmentFiles[i].sbbh).then((response)=>{
-          Loading.hide();
-          let resp = response.data;
-          let item = resp.content;
-          if(!Tool.isEmpty(item)){
-            document.getElementById(id).innerText="("+item.ts+")";
-          }else{
-            document.getElementById(id).innerText="";
-          }
-        })
-      }
     },
     /**
      * 查看原图
@@ -288,7 +265,7 @@ export default {
     checkImg(item,index){
       let _this = this;
       _this.curIndex = index;
-      _this.curTplj = item.tplj.substring(0,item.tplj.lastIndexOf('.')+1)+'jpg';
+      _this.curTplj = item.tplj;
       _this.curSbsn = item.sbbh;
       _this.curCjsj = item.cjsj;
       _this.curWjmc = item.tplj;
@@ -308,13 +285,7 @@ export default {
         lj=obj.tplj.substring(0,obj.tplj.lastIndexOf('.')+1)+'txt';
       }
       let paramsStr = "fileUrl="+lj.substring(0,lj.lastIndexOf("/")+1)+"&fileName="+lj.substring(lj.lastIndexOf("/")+1,lj.length);
-      // let url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downAudioFile?'+paramsStr;
-      let url = "";
-      if(_this.shj){
-        url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downAudioFile53?'+paramsStr;
-      }else{
-        url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downAudioFile?'+paramsStr;
-      }
+      let url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downAudioFile?'+paramsStr;
       _this.$ajax.get(url).then((response)=>{
         if((response.data && typeof response.data == 'string'&& response.data.includes("系统异常"))||(response.data.message && response.data.message.includes("系统异常"))){
           Toast.error("未找到该文件！");
@@ -354,15 +325,8 @@ export default {
       if(Tool.isNotEmpty(_this.equipmentFileDto.sbbh)){
         paramsStr = paramsStr + "&sbbh="+_this.equipmentFileDto.sbbh;
       }
-      //Loading.show();
-      let url = "";
-      if(_this.shj){
-        url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downVideoZip53?'+paramsStr;
-      }else{
-        url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downVideoZip?'+paramsStr;
-      }
+      let url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downVideoZip?'+paramsStr;
       _this.$ajax.get(url).then((response)=>{
-        //Loading.hide();
         if(response.data && response.data.message && response.data.message.includes("系统异常")){
           Toast.error("系统异常，请联系管理员！");
         }else if(response.data && response.data.includes("未找到")){

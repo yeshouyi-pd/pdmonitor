@@ -3,12 +3,12 @@ package com.pd.server.main.dto;
         import java.util.Date;
         import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class EquipmentFilePClusterDto {
+public class EquipmentFilePClusterDto extends PageDto{
 
     /**
     * 
     */
-    private Integer id;
+    private Long id;
 
     /**
     * 
@@ -152,11 +152,11 @@ public class EquipmentFilePClusterDto {
     */
     private String jtnr;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

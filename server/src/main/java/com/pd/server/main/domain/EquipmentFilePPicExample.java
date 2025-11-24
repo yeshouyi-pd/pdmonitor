@@ -390,6 +390,11 @@ public class EquipmentFilePPicExample {
             return (Criteria) this;
         }
 
+        public Criteria andCjsjEqualTo(String value) {
+            addCriterion("cjsj =", value, "cjsj");
+            return (Criteria) this;
+        }
+
         public Criteria andCjsjNotEqualTo(Date value) {
             addCriterion("cjsj <>", value, "cjsj");
             return (Criteria) this;
@@ -405,12 +410,27 @@ public class EquipmentFilePPicExample {
             return (Criteria) this;
         }
 
+        public Criteria andCjsjGreaterThanOrEqualTo(String value) {
+            addCriterion("cjsj >=", value, "cjsj");
+            return (Criteria) this;
+        }
+
         public Criteria andCjsjLessThan(Date value) {
             addCriterion("cjsj <", value, "cjsj");
             return (Criteria) this;
         }
 
+        public Criteria andCjsjLessThan(String value) {
+            addCriterion("cjsj <", value, "cjsj");
+            return (Criteria) this;
+        }
+
         public Criteria andCjsjLessThanOrEqualTo(Date value) {
+            addCriterion("cjsj <=", value, "cjsj");
+            return (Criteria) this;
+        }
+
+        public Criteria andCjsjLessThanOrEqualTo(String value) {
             addCriterion("cjsj <=", value, "cjsj");
             return (Criteria) this;
         }

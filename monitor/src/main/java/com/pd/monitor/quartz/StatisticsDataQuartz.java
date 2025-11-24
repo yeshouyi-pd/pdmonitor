@@ -1,5 +1,6 @@
 package com.pd.monitor.quartz;
 
+import com.pd.server.config.RedisCode;
 import com.pd.server.main.domain.*;
 import com.pd.server.main.dto.AppearNumbersDto;
 import com.pd.server.main.dto.EquipmentFileAlarmEventDto;
@@ -15,6 +16,7 @@ import com.pd.server.util.DateUtil;
 import com.pd.server.util.UuidUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -45,14 +47,13 @@ public class StatisticsDataQuartz {
     @Resource
     private WaterEquipmentService waterEquipmentService;
     @Resource
-    private EquipmentFileService equipmentFileService;
-    @Resource
     private DeviceStateLogService deviceStateLogService;
-
-//    @Scheduled(cron = "0 43 10 * * ? ")
-//    public void test() throws ParseException {
-//        loop();
-//    }
+    @Resource
+    private EquipmentFilePPicService equipmentFilePPicService;
+    @Resource
+    private EquipmentFilePClusterService equipmentFilePClusterService;
+    @Resource
+    private RedisTemplate redisTemplate;
 
     //每天凌晨30分执行
     //1.出现次数统计(appear_numbers)
@@ -61,6 +62,7 @@ public class StatisticsDataQuartz {
     //4.清除EquipmentFileToday表中昨天的数据
     @Scheduled(cron = "0 30 0 * * ? ")
     public void loop() throws ParseException {
+        LOG.error("统计开始时间："+DateUtil.getFormatDate(new Date(),"yyyy-MM-dd HH:mm:ss"));
         String beforeDayStr = DateTools.getFormatDate(DateUtil.getDaysLater(new Date(),-1),"yyyy-MM-dd");
         //不是今天的数据
         EquipmentFileTodayExample noTodayExample = new EquipmentFileTodayExample();
@@ -71,6 +73,7 @@ public class StatisticsDataQuartz {
         noTodaySbbhDtoList(noTodaySbbhDtoList);
         //将之前的设备状态改为正常
         changeDeviceStateLog(noTodaySbbhDtoList);
+        LOG.error("统计结束时间："+DateUtil.getFormatDate(new Date(),"yyyy-MM-dd HH:mm:ss"));
     }
 
     public void changeDeviceStateLog(List<NoTodaySbbhDto> noTodaySbbhDtoList){
@@ -90,20 +93,22 @@ public class StatisticsDataQuartz {
         for(EquipmentFileToday entity : list){
             equipmentFileTodayService.delete(entity.getId());
         }
-        list.clear();
+        list=null;
         EquipmentFileTyTodayExample tyExample = new EquipmentFileTyTodayExample();
         tyExample.createCriteria().andRqLessThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(),-1),"yyyy-MM-dd"));
         List<EquipmentFileTyToday> tyTodayList = equipmentFileTyTodayService.selectByExample(tyExample);
         for(EquipmentFileTyToday entity : tyTodayList){
             equipmentFileTyTodayService.delete(entity.getId());
         }
-        tyTodayList.clear();
+        tyTodayList=null;
     }
 
     public void noTodaySbbhDtoList(List<NoTodaySbbhDto> list){
         WaterEquipmentExample exampleTemp = new WaterEquipmentExample();
         exampleTemp.createCriteria().andDqzlEqualTo("A4");
         List<String> sbbha4 = waterEquipmentService.findSbbh(exampleTemp);
+        //设备编号对应的部门编号
+        Map<String,String> deptcodeSbbhMap = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.SBSNCENTERCODE);
         for(NoTodaySbbhDto noTodaySbbhDto : list){
             AppearNumbersExample appearDelExample = new AppearNumbersExample();
             AppearNumbersExample.Criteria appearDelCa = appearDelExample.createCriteria();
@@ -121,16 +126,17 @@ public class StatisticsDataQuartz {
             predationDelCa.andCjsjEqualTo(noTodaySbbhDto.getRq()+" 00:00:00");
             predationNumService.deleteByExample(predationDelExample);
             //出现次数统计(appearNumbers)
-            EquipmentFileExample example = new EquipmentFileExample();
-            EquipmentFileExample.Criteria ca = example.createCriteria();
-            ca.andRqEqualTo(noTodaySbbhDto.getRq());
-            ca.andTxtlxEqualTo("1");
+            EquipmentFilePPicExample example = new EquipmentFilePPicExample();
+            EquipmentFilePPicExample.Criteria ca = example.createCriteria();
             ca.andSbbhEqualTo(noTodaySbbhDto.getSbbh());
-            List<AlarmNumbersDto> lists = equipmentFileService.statisticsAlarmNums(example);
+            ca.andFzGreaterThanOrEqualTo(noTodaySbbhDto.getRq()+" 00:00");
+            ca.andFzLessThanOrEqualTo(noTodaySbbhDto.getRq()+" 23:59");
+            List<AlarmNumbersDto> lists = equipmentFilePPicService.statisticsAlarmNumsByMinute(example);
             for(AlarmNumbersDto item : lists){
                 AppearNumbersDto dto = CopyUtil.copy(item,AppearNumbersDto.class);
                 dto.setBjsj(item.getFz().substring(0,10));
                 dto.setXs(item.getFz().substring(0,13));
+                dto.setDeptcode(deptcodeSbbhMap.get(item.getSbbh()));
                 appearNumbersService.save(dto);
             }
             List<AlarmNumbersDto> listsTemp = lists.stream().sorted(Comparator.comparing(AlarmNumbersDto::getFz)).collect(Collectors.toList());
@@ -203,13 +209,12 @@ public class StatisticsDataQuartz {
                 String jssj = arr[1]+":00";
                 if(sbbha4.contains(noTodaySbbhDto.getSbbh())){
                     //统计头数
-                    EquipmentFileExample tsExample = new EquipmentFileExample();
-                    EquipmentFileExample.Criteria tsCa = tsExample.createCriteria();
-                    tsCa.andSbbhEqualTo(noTodaySbbhDto.getSbbh());
-                    tsCa.andTxtlxEqualTo("4");
-                    tsCa.andFzGreaterThanOrEqualTo(arr[0]);
-                    tsCa.andFzLessThanOrEqualTo(arr[1]);
-                    Integer tsCount = equipmentFileService.countTsByExample(tsExample);
+                    EquipmentFilePClusterExample pClusterExample = new EquipmentFilePClusterExample();
+                    EquipmentFilePClusterExample.Criteria pClusterCa = pClusterExample.createCriteria();
+                    pClusterCa.andSbbhEqualTo(noTodaySbbhDto.getSbbh());
+                    pClusterCa.andFzGreaterThanOrEqualTo(arr[0]);
+                    pClusterCa.andFzLessThanOrEqualTo(arr[1]);
+                    Integer tsCount = equipmentFilePClusterService.countTsByExample(pClusterExample);
                     if(!StringUtils.isEmpty(tsCount)){
                         entity.setSm1(String.valueOf(tsCount));
                     }
@@ -219,27 +224,23 @@ public class StatisticsDataQuartz {
                 kssj = null;
                 jssj = null;
             }
-            lists.clear();
-            listsTemp.clear();
-            resultList.clear();
+            lists = null;
+            listsTemp = null;
+            resultList = null;
             // 用完后置为null，帮助GC
             lists = null;
             listsTemp = null;
             resultList = null;
-            WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
-            waterEquipmentExample.createCriteria().andSbsnEqualTo(noTodaySbbhDto.getSbbh());
-            List<WaterEquipment> waterEquipments = waterEquipmentService.list(waterEquipmentExample);
             //捕食次数
-            EquipmentFileExample example1 = new EquipmentFileExample();
-            EquipmentFileExample.Criteria ca1 = example1.createCriteria();
+            EquipmentFilePPicExample pPicExample = new EquipmentFilePPicExample();
+            EquipmentFilePPicExample.Criteria ca1 = pPicExample.createCriteria();
             ca1.andRqEqualTo(noTodaySbbhDto.getRq());
-            ca1.andTxtlxEqualTo("1");
             ca1.andSbbhEqualTo(noTodaySbbhDto.getSbbh());
-            PredationStaticticsDto predationStaticticsDto = equipmentFileService.predationStatictics(example1);
+            PredationStaticticsDto predationStaticticsDto = equipmentFilePPicService.predationStatictics(pPicExample);
             PredationNumDto dto = new PredationNumDto();
             dto.setPredationNum(predationStaticticsDto.getBscs());
             dto.setAlarmNum(predationStaticticsDto.getCxcs());
-            dto.setDeptcode(waterEquipments.get(0).getDeptcode());
+            dto.setDeptcode(deptcodeSbbhMap.get(noTodaySbbhDto.getSbbh()));
             dto.setCjsj(DateUtil.toDate(noTodaySbbhDto.getRq(),"yyyy-MM-dd"));
             dto.setSbbh(noTodaySbbhDto.getSbbh());
             EquipmentFileAlarmEventExample eventExample = new EquipmentFileAlarmEventExample();
@@ -253,15 +254,12 @@ public class StatisticsDataQuartz {
                 dto.setSm2(StringUtils.isEmpty(tsCount)?"0":String.valueOf(tsCount));
             }
             predationNumService.save(dto);
-            waterEquipments.clear();
-            // 用完后置为null，帮助GC
-            waterEquipments = null;
             predationStaticticsDto = null;
             dto = null;
         }
         clearTodayData();
-        list.clear();
-        sbbha4.clear();
+        list = null;
+        sbbha4 = null;
         // 用完后置为null，帮助GC
         list = null;
         sbbha4 = null;

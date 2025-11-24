@@ -17,15 +17,19 @@ public class UuidUtil {
      * @return
      */
     public static String getShortUuid() {
-        StringBuffer shortBuffer = new StringBuffer();
-        String uuid = UuidUtil.getUuid();
-        for (int i = 0; i < 8; i++) {
-            String str = uuid.substring(i * 4, i * 4 + 4);
-            int x = Integer.parseInt(str, 16);
-            shortBuffer.append(chars[x % 0x3E]); // 对62取余
-        }
-        return shortBuffer.toString();
+        StringBuffer longBuffer = new StringBuffer();
+        // 使用两个UUID拼接
+        String uuid1 = UuidUtil.getUuid().replace("-", "");
+        String uuid2 = UuidUtil.getUuid().replace("-", "");
+        String combinedUuid = uuid1 + uuid2; // 64位字符
 
+        // 现在可以安全地循环12次
+        for (int i = 0; i < 12; i++) {
+            String str = combinedUuid.substring(i * 4, i * 4 + 4);
+            int x = Integer.parseInt(str, 16);
+            longBuffer.append(chars[x % 0x3E]);
+        }
+        return longBuffer.toString();
     }
 
     /**

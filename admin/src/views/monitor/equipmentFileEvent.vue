@@ -80,7 +80,7 @@
               <button :id="'xz'+item.id" v-if="userDto.yj=='Y'" v-on:click="downloadVideo(item.id)" class="btn btn-xs btn-info" style="margin-left: 10px;">
                 <i class="ace-icon fa fa-volume-down bigger-120">下载视频</i>
               </button>
-              <button :id="item.id" v-on:click="watchVideo(item.id)" class="btn btn-xs btn-info" style="margin-left: 10px;">
+              <button :id="item.id" v-on:click="watchVideo(item.cjsj)" class="btn btn-xs btn-info" style="margin-left: 10px;">
                 <i class="ace-icon fa  fa-video-camera bigger-120">历史回放</i>
               </button>
             </div>
@@ -252,9 +252,9 @@ export default {
       }
     },
     //是否有视频
-    hasVideo(id){
+    hasVideo(cjsj,id){
       let _this = this;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileEvent/videoList', {'id':id}).then((response)=> {
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileP/videoList', {'cjsj':cjsj}).then((response)=> {
         let resp = response.data;
         let videoDatas = resp.content;
         if(videoDatas.length>0){
@@ -267,12 +267,12 @@ export default {
       })
     },
     //历史回放
-    watchVideo(id){
+    watchVideo(cjsj){
       let _this = this;
       $("#playbox").empty();
       _this.canPlay = false;
       Loading.show();
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileEvent/videoList', {'id':id}).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileP/videoList', {'cjsj':cjsj}).then((response)=>{
          let resp = response.data;
          let videoDatas = resp.content;
          _this.$forceUpdate();
@@ -300,7 +300,7 @@ export default {
       let _this = this;
       let url = '';
       if(_this.shj){
-        url="http://49.239.193.146:49053/FileInfo.asmx/GetPlayUrl";
+        url="http://146.56.226.176:8088/FileInfo.asmx/GetPlayUrl";
       }else{
         url="http://49.239.193.146:49082/FileInfo.asmx/GetPlayUrl";
       }
@@ -388,7 +388,7 @@ export default {
             let jdarr =  rqandjd[1].split(",");//0:105和1:235
             for(let j=0;j<jdarr.length;j++){
               if(jdarr[j].split(":").length==2){
-                item.push([1.5,jdarr[j].split(":")[1]]);
+                item.push([_this.getRandomNumber(),jdarr[j].split(":")[1]]);
               }
             }
             _this.echartsData.push(item);
@@ -398,6 +398,9 @@ export default {
       }
       _this.loopEchartsData(_this.echartsData,_this.title);
       $("#echart-modal").modal("show");
+    },
+    getRandomNumber() {
+      return Math.random() * (3 - 0.1) + 0.1;
     },
     loopEchartsData(list,title){
       let _this = this;
@@ -520,31 +523,21 @@ export default {
       if("460100"!=Tool.getLoginUser().deptcode){
         _this.equipmentFileEventDto.xmbh=Tool.getLoginUser().xmbh;
       }
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileEvent/list', _this.equipmentFileEventDto).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileP/listClusters', _this.equipmentFileEventDto).then((response)=>{
         Loading.hide();
         let resp = response.data;
         _this.equipmentFileEvents = resp.content.list;
         _this.$refs.pagination.render(page, resp.content.total);
         _this.$nextTick(function (){
           for(let i=0;i<_this.equipmentFileEvents.length;i++){
-            _this.hasVideo(_this.equipmentFileEvents[i].id);
+            _this.hasVideo(_this.equipmentFileEvents[i].cjsj,_this.equipmentFileEvents[i].id);
           }
         });
       })
     },
-    downloadFile(id){
-      let url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downAudioFileById?id='+id;
-      console.log(url);
-      window.location.href = url;
-    },
     downloadVideo(id){
       let _this = this;
-      let url = "";
-      if(_this.shj){
-        url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downZipByA4Id53?id='+id;
-      }else {
-        url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downZipByA4Id?id='+id;
-      }
+      let url = process.env.VUE_APP_SERVER + '/monitor/download/audio/downZipByA4Id?id='+id;
       _this.$ajax.get(url).then((response)=>{
         if(response.data && response.data.message && response.data.message.includes("系统异常")){
           Toast.error("系统异常，请联系管理员！");

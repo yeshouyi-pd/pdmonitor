@@ -68,4 +68,7 @@ public class EquipmentFileTVideoService {
         equipmentFileTVideoMapper.deleteByPrimaryKey(id);
     }
 
+    public List<EquipmentFileTVideo> selectByExample(EquipmentFileTVideoExample example){
+        return equipmentFileTVideoMapper.selectByExample(example);
+    }
 }

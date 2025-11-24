@@ -156,7 +156,7 @@ export default {
       _this.alarmNumbersDto.etime=Tool.dateFormat("yyyy-MM-dd hh:mm",_this.curDate);
       _this.alarmNumbersDto.sbbh=_this.curNode.code;
       _this.$forceUpdate();
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFile/statisticsAlarmNumsByMinute',_this.alarmNumbersDto).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileP/statisticsAlarmNumsByMinute',_this.alarmNumbersDto).then((response)=>{
         Loading.hide();
         let resp = response.data;
         _this.initEchartData('过去一小时(单位：分钟)',resp.content,"echartOneHour");
@@ -169,7 +169,7 @@ export default {
       _this.alarmNumbersDto1.etime=Tool.dateFormat("yyyy-MM-dd hh:mm",_this.curDate);
       _this.alarmNumbersDto1.sbbh=_this.curNode.code;
       _this.$forceUpdate();
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFile/statisticsAlarmNumsByMinute',_this.alarmNumbersDto1).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileP/statisticsAlarmNumsByMinute',_this.alarmNumbersDto1).then((response)=>{
         Loading.hide();
         let resp = response.data;
         _this.initEchartData('过去八小时(单位：分钟)',resp.content,"echartEightHour");
@@ -180,7 +180,7 @@ export default {
       Loading.show();
       _this.alarmNumbersDto2.sbbh=_this.curNode.code;
       _this.$forceUpdate();
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFile/statisticsAlarmNumsByMinute',_this.alarmNumbersDto2).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileP/statisticsAlarmNumsByMinute',_this.alarmNumbersDto2).then((response)=>{
         Loading.hide();
         let resp = response.data;
         _this.initEchartData('过去二十四小时(单位：分钟)',resp.content,"echartDayHour");

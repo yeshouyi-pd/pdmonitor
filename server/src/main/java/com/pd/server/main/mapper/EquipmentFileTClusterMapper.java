@@ -3,6 +3,9 @@ package com.pd.server.main.mapper;
 import com.pd.server.main.domain.EquipmentFileTCluster;
 import com.pd.server.main.domain.EquipmentFileTClusterExample;
 import java.util.List;
+
+import com.pd.server.main.dto.basewx.my.EquipmentTyEventDwDto;
+import com.pd.server.main.dto.basewx.my.GpsKVDto;
 import org.apache.ibatis.annotations.Param;
 
 public interface EquipmentFileTClusterMapper {
@@ -27,4 +30,10 @@ public interface EquipmentFileTClusterMapper {
     int updateByPrimaryKeySelective(EquipmentFileTCluster record);
 
     int updateByPrimaryKey(EquipmentFileTCluster record);
+
+    List<EquipmentTyEventDwDto> listAllDw(EquipmentFileTClusterExample example);
+
+    List<GpsKVDto> selectGpsByExample(EquipmentFileTClusterExample example);
+
+    List<EquipmentFileTCluster> selectByExampleOnlyId(EquipmentFileTClusterExample example);
 }

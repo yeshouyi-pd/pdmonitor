@@ -38,9 +38,9 @@ public class EquipmentTyEventDwDto {
     private String deptcode;
 
     /**
-     * 备注
+     * 文件路径
      */
-    private String bz;
+    private String tplj;
 
     public String getId() {
         return id;
@@ -98,11 +98,11 @@ public class EquipmentTyEventDwDto {
         this.deptcode = deptcode;
     }
 
-    public String getBz() {
-        return bz;
+    public String getTplj() {
+        return tplj;
     }
 
-    public void setBz(String bz) {
-        this.bz = bz;
+    public void setTplj(String tplj) {
+        this.tplj = tplj;
     }
 }

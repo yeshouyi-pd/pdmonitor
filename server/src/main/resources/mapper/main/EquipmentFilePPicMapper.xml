@@ -29,6 +29,27 @@
     <result column="txtlx" jdbcType="VARCHAR" property="txtlx" />
     <result column="wjmc" jdbcType="VARCHAR" property="wjmc" />
   </resultMap>
+  <resultMap id="OtherMap" type="com.pd.server.main.dto.basewx.my.EquipmentFileDwjkDto">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
+    <result column="tplj" jdbcType="VARCHAR" property="tplj" />
+    <result column="cjsj" jdbcType="TIMESTAMP" property="cjsj" />
+  </resultMap>
+  <resultMap id="AlarmNumbersDto" type="com.pd.server.main.dto.basewx.my.AlarmNumbersDto">
+    <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
+    <result column="alarmNum" jdbcType="INTEGER" property="alarmNum" />
+    <result column="fz" jdbcType="VARCHAR" property="fz" />
+    <result column="xs" jdbcType="VARCHAR" property="xs" />
+  </resultMap>
+  <resultMap id="SmsInt" type="com.pd.server.main.dto.basewx.my.SmsIntDto">
+    <result column="sbbh" jdbcType="VARCHAR" property="sbbh" />
+    <result column="bjcs" jdbcType="INTEGER" property="bjcs" />
+    <result column="sumTs" jdbcType="INTEGER" property="sumTs" />
+  </resultMap>
+  <resultMap id="PredaionStatistics" type="com.pd.server.main.dto.basewx.my.PredationStaticticsDto">
+    <result column="cxcs" jdbcType="INTEGER" property="cxcs" />
+    <result column="bscs" jdbcType="INTEGER" property="bscs" />
+  </resultMap>
 
   <resultMap id="BaseResultMapKVint" type="com.pd.server.main.dto.KvIntDto">
     <result column="key" jdbcType="VARCHAR" property="key" />
@@ -617,6 +638,50 @@
       wjmc = #{wjmc,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <select id="listAllDw" parameterType="com.pd.server.main.domain.EquipmentFilePPicExample" resultMap="OtherMap">
+    select id, sbbh, tplj, cjsj from equipment_file_p_pic
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    union all
+    select id, sbbh, tplj, cjsj from equipment_file_t_pic
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <select id="statisticsAlarmNumsByMinute" parameterType="com.pd.server.main.domain.EquipmentFilePPicExample" resultMap="AlarmNumbersDto">
+    select
+    sbbh,count(*) alarmNum, fz
+    from equipment_file_p_pic
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    group by sbbh, fz
+    order by sbbh, fz
+  </select>
+  <select id="statisticsAlarmNumsByHour" parameterType="com.pd.server.main.domain.EquipmentFilePPicExample" resultMap="AlarmNumbersDto">
+    select
+    sbbh,count(*) alarmNum, xs
+    from equipment_file_p_pic
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    group by sbbh, xs
+    order by sbbh, xs
+  </select>
+  <select id="sendSmsQuery" parameterType="com.pd.server.main.domain.EquipmentFilePPicExample" resultMap="SmsInt">
+    SELECT sbbh,COUNT(*) bjcs FROM  equipment_file_p_pic
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    GROUP  BY  sbbh
+  </select>
+  <select id="predationStatictics" parameterType="com.pd.server.main.domain.EquipmentFilePPicExample" resultMap="PredaionStatistics">
+    select count(1) 'cxcs',count(case WHEN jczl='1' then 1 end) 'bscs' from equipment_file_p_pic
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
 
   <select id="getAlljcsjByDeptgetDay" parameterType="com.pd.server.main.domain.EquipmentFilePPicExample"  resultMap="BaseResultMap">
     SELECT * FROM  equipment_file_p_pic

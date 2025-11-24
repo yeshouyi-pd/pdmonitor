@@ -105,6 +105,20 @@
       order by ${orderByClause}
     </if>
   </select>
+  <select id="selectByExampleOnlyId" parameterType="com.pd.server.main.domain.EquipmentFileTPicExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    id
+    from equipment_file_t_pic
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />

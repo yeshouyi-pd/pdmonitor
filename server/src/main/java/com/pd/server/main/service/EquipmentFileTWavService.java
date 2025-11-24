@@ -68,4 +68,8 @@ public class EquipmentFileTWavService {
         equipmentFileTWavMapper.deleteByPrimaryKey(id);
     }
 
+    public List<EquipmentFileTWav> selectByExample(EquipmentFileTWavExample example){
+        return equipmentFileTWavMapper.selectByExample(example);
+    }
+
 }

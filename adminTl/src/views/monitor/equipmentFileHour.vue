@@ -156,7 +156,7 @@ export default {
       _this.alarmNumbersDto.etime=Tool.dateFormat("yyyy-MM-dd",_this.curDate);
       _this.alarmNumbersDto.sbbh=_this.curNode.code;
       _this.$forceUpdate();
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFile/statisticsAlarmNumsByHour',_this.alarmNumbersDto).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileP/statisticsAlarmNumsByHour',_this.alarmNumbersDto).then((response)=>{
         Loading.hide();
         let resp = response.data;
         _this.initEchartData('今天(单位：小时)',resp.content,"echartOneDay");
@@ -169,7 +169,7 @@ export default {
       _this.alarmNumbersDto1.etime=Tool.dateFormat("yyyy-MM-dd",_this.curDate);
       _this.alarmNumbersDto1.sbbh=_this.curNode.code;
       _this.$forceUpdate();
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFile/statisticsAlarmNumsByHour',_this.alarmNumbersDto1).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileP/statisticsAlarmNumsByHour',_this.alarmNumbersDto1).then((response)=>{
         Loading.hide();
         let resp = response.data;
         _this.initEchartData('过去7天(单位：小时)',resp.content,"echartSevenDay");
@@ -180,7 +180,7 @@ export default {
       Loading.show();
       _this.alarmNumbersDto2.sbbh=_this.curNode.code;
       _this.$forceUpdate();
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFile/statisticsAlarmNumsByHour',_this.alarmNumbersDto2).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileP/statisticsAlarmNumsByHour',_this.alarmNumbersDto2).then((response)=>{
         Loading.hide();
         let resp = response.data;
         _this.initEchartData('过去30天(单位：小时)',resp.content,"echartOneMonth");

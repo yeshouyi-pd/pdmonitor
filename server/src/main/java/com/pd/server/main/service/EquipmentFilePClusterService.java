@@ -1,13 +1,15 @@
 package com.pd.server.main.service;
 
-import com.pd.server.main.domain.EquipmentFilePCluster;
-import com.pd.server.main.domain.EquipmentFilePClusterExample;
+import com.pd.server.main.domain.*;
 import com.pd.server.main.dto.EquipmentFilePClusterDto;
 import com.pd.server.main.dto.EventDto;
 import com.pd.server.main.dto.PageDto;
+import com.pd.server.main.dto.basewx.my.EquipmentFileDwjkDto;
+import com.pd.server.main.dto.basewx.my.EquipmentFileEventDwDto;
+import com.pd.server.main.dto.basewx.my.WrjEventDto;
+import com.pd.server.main.dto.basewx.my.WrjTcDto;
 import com.pd.server.main.mapper.EquipmentFilePClusterMapper;
 import com.pd.server.util.CopyUtil;
-import com.pd.server.util.UuidUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
@@ -15,7 +17,6 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
-        import java.util.Date;
 
 @Service
 public class EquipmentFilePClusterService {
@@ -69,6 +70,50 @@ public class EquipmentFilePClusterService {
         equipmentFilePClusterMapper.deleteByPrimaryKey(id);
     }
 
+    public List<EquipmentFilePCluster> selectLastDw(EquipmentFilePClusterExample example){
+        return equipmentFilePClusterMapper.selectLastDw(example);
+    }
+
+    //含拖曳的聚类
+    public List<EquipmentFileDwjkDto> listAllDw(EquipmentFilePClusterExample example){
+        return equipmentFilePClusterMapper.listAllDw(example);
+    }
+
+    //只有A4的聚类
+    public List<EquipmentFileEventDwDto> listDw(EquipmentFilePClusterExample example){
+        return equipmentFilePClusterMapper.listDw(example);
+    }
+
+    //含拖曳的聚类
+    public List<WrjEventDto> listAllTs(EquipmentFilePClusterExample example){
+        return equipmentFilePClusterMapper.listAllTs(example);
+    }
+
+    //含拖曳的聚类
+    public List<WrjTcDto> listSumTs(EquipmentFilePClusterExample example){
+        return equipmentFilePClusterMapper.listSumTs(example);
+    }
+
+    //含拖曳的聚类
+    public List<WrjTcDto> listSumTsGroup(EquipmentFilePClusterExample example){
+        return equipmentFilePClusterMapper.listSumTsGroup(example);
+    }
+
+    public List<EquipmentFilePCluster> selectByExampleOnlyId(EquipmentFilePClusterExample example) {
+        return equipmentFilePClusterMapper.selectByExampleOnlyId(example);
+    }
+
+    public List<EquipmentFilePCluster> selectByExample(EquipmentFilePClusterExample example) {
+        return equipmentFilePClusterMapper.selectByExample(example);
+    }
+
+    public EquipmentFilePCluster selectByPrimaryKey(Long id) {
+        return equipmentFilePClusterMapper.selectByPrimaryKey(id);
+    }
+
+    public Integer countTsByExample(EquipmentFilePClusterExample example){
+        return equipmentFilePClusterMapper.countTsByExample(example);
+    }
     public  List<EventDto>  getEquipmentEventByDept(EquipmentFilePClusterExample equipmentFileEventExample) {
         return equipmentFilePClusterMapper.getEquipmentEventByDept(equipmentFileEventExample);
     }

@@ -50,9 +50,11 @@ public class EquipmentFileShjService extends AbstractScanRequest{
     public static BeconFileTodayService beconFileTodayServiceStatic;
     public static AngleFileService angleFileServiceStatic;
     public static EquipmentFileSplitShjService equipmentFileSplitShjServiceStatic;
+    public static VoicePowerDeviceService voicePowerDeviceServiceStatic;
     public static ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(10);
     // 专门用于数据分发的线程池
     public static ExecutorService distributeExecutorService = Executors.newFixedThreadPool(10);
+    public static EquipmentFilePPicService equipmentFilePPicServiceStatic;
 
     @Resource
     private RedisTemplate redisTemplate;
@@ -88,9 +90,12 @@ public class EquipmentFileShjService extends AbstractScanRequest{
     private BeconFileTodayService beconFileTodayService;
     @Resource
     private AngleFileService angleFileService;
-
+    @Resource
+    private VoicePowerDeviceService voicePowerDeviceService;
     @Resource
     private EquipmentFileSplitShjService equipmentFileSplitShjService;
+    @Resource
+    private EquipmentFilePPicService equipmentFilePPicService;
 
     @PostConstruct
     protected void init() {
@@ -112,6 +117,8 @@ public class EquipmentFileShjService extends AbstractScanRequest{
         beconFileTodayServiceStatic = beconFileTodayService;
         angleFileServiceStatic = angleFileService;
         equipmentFileSplitShjServiceStatic = equipmentFileSplitShjService;
+        voicePowerDeviceServiceStatic = voicePowerDeviceService;
+        equipmentFilePPicServiceStatic = equipmentFilePPicService;
     }
 
 
@@ -126,7 +133,6 @@ public class EquipmentFileShjService extends AbstractScanRequest{
         String tplj = jsonParam.getString("tplj");
         String cjsj = jsonParam.getString("cjsj");
         String wzlx = jsonParam.getString("wzlx");
-        boolean pushData = false;
         if(StringUtils.isEmpty(sbbh)||StringUtils.isEmpty(tplj)||StringUtils.isEmpty(cjsj)){
             data = "参数错误";
             return data;
@@ -200,118 +206,41 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                     return data;
                 }
             }
-            if(!"0".equals(typeUtil.get(TypeUtils.TS))&&("1020".equals(entity.getType())||"1022".equals(entity.getType())||"1024".equals(entity.getType())||"1026".equals(entity.getType()))){
-                String temp = tplj.substring(tplj.lastIndexOf("/")+1,tplj.lastIndexOf("_A4.txt"));
-                String[] arr = temp.split("_");
-                String kssj = arr[0]+"-"+arr[1]+"-"+arr[2]+" "+arr[3]+":"+arr[4]+":"+arr[5];
-                String jssj = "1020".equals(entity.getType())||"1026".equals(entity.getType())?arr[7]+"-"+arr[8]+"-"+arr[9]+" "+arr[10]+":"+arr[11]+":"+arr[12]:arr[6]+"-"+arr[7]+"-"+arr[8]+" "+arr[9]+":"+arr[10]+":"+arr[11];
-                String eventsbsn = attrServiceStatic.findByAttrKey("eventsbsn");
-                if(eventsbsn.contains(sbbh)){
-                    EquipmentFileEvent fileEvent = new EquipmentFileEvent();
-                    fileEvent.setId(UuidUtil.getShortUuid());
-                    fileEvent.setSbbh(sbbh);
-                    fileEvent.setKssj(kssj);
-                    fileEvent.setJssj(jssj);
-                    fileEvent.setRq(arr[0]+"-"+arr[1]+"-"+arr[2]);
-                    fileEvent.setTs(entity.getTs());
-                    fileEvent.setJtnr(entity.getSm1());
-                    fileEvent.setDeptcode(deptcode);
-                    fileEvent.setEquipmentFileId(entity.getId());
-                    fileEvent.setSyncFlag(3);
-                    equipmentFileEventMapperStatic.insertSelective(fileEvent);
-                    staticAzimuthAngle(sbbh,deptcode,fileEvent.getRq(),fileEvent.getJtnr());
-                    //南京设备对接无人机
-                    pushMqMsg(sbbh,entity.getSm1());
-                }else {
-                    if(!kssj.equals(jssj)){
-                        EquipmentFileEvent fileEvent = new EquipmentFileEvent();
-                        fileEvent.setId(UuidUtil.getShortUuid());
-                        fileEvent.setSbbh(sbbh);
-                        fileEvent.setKssj(kssj);
-                        fileEvent.setJssj(jssj);
-                        fileEvent.setRq(arr[0]+"-"+arr[1]+"-"+arr[2]);
-                        fileEvent.setTs(entity.getTs());
-                        fileEvent.setJtnr(entity.getSm1());
-                        fileEvent.setDeptcode(deptcode);
-                        fileEvent.setEquipmentFileId(entity.getId());
-                        fileEvent.setSyncFlag(3);
-                        equipmentFileEventMapperStatic.insertSelective(fileEvent);
-                        staticAzimuthAngle(sbbh,deptcode,fileEvent.getRq(),fileEvent.getJtnr());
-                        //南京设备对接无人机
-                        pushMqMsg(sbbh,entity.getSm1());
-                        //推送文件
-                        if("JXYSA4001".equals(sbbh)&&!pushData){
-                            PushFile.pushFile1(entity.getTplj());
-                            pushData = true;
-                        }
-                    }
-                }
-            }
             String predationsbsn = attrServiceStatic.findByAttrKey("predationsbsn");
-            if(predationsbsn.contains(sbbh)&&tplj.contains("txt")&&("1001".equals(typeUtil.get(TypeUtils.TYPE))||"1007".equals(typeUtil.get(TypeUtils.TYPE)))){
+            if(predationsbsn.contains(sbbh)&&("1002".equals(typeUtil.get(TypeUtils.TYPE))||"1003".equals(typeUtil.get(TypeUtils.TYPE))||"1005".equals(typeUtil.get(TypeUtils.TYPE))||"1006".equals(typeUtil.get(TypeUtils.TYPE)))){
                 //判断是否是雾报(前后三分钟都没有报警的数据是雾报数据，雾报数据不保存)
                 EquipmentFile beforeEntity = new EquipmentFile();
-                LOG.error("缓存中的数据："+redisTstaticemplate.opsForValue().get(sbbh+"WB"));
-                if(!StringUtils.isEmpty(redisTstaticemplate.opsForValue().get(sbbh+"WB"))){
-                    String entityJson = (String) redisTstaticemplate.opsForValue().get(sbbh+"WB");
+                // 只读取一次Redis，避免重复读取
+                String wbKey = sbbh+"WB";
+                Object wbValue = redisTemplate.opsForValue().get(wbKey);
+                if(!org.springframework.util.StringUtils.isEmpty(wbValue)){
+                    LOG.error("缓存中的数据："+wbValue);
+                    String entityJson = (String) wbValue;
                     beforeEntity = JSONObject.parseObject(entityJson,EquipmentFile.class);
                     if(!StringUtils.isEmpty(beforeEntity.getCjsj())&&isOverThreeMinute(DateUtil.getFormatDate(beforeEntity.getCjsj(),"yyyy-MM-dd HH:mm:ss"),cjsj)){
-
                         /**
                          * 保存数据
                          */
-                        // 异步分发保存数据
-                        final EquipmentFile sentity = beforeEntity;
-                        distributeExecutorService.execute(() -> {
-                            try {
-                                equipmentFileSplitShjServiceStatic.distributeAndSave(sentity);
-                            } catch (Exception e) {
-                                LOG.error("异步分发保存失败，EquipmentFile ID: {}, 错误信息: {}",
-                                        entity.getId(), e.getMessage(), e);
-                            }
-                        });
-                        //正式更新需要加上下面一行
-                        beforeEntity.setSyncFlag(3);
-                        equipmentFileMapperStatic.insert(beforeEntity);
-                        todayMapperStatic.insertEquipFile(beforeEntity);
-                        redisTstaticemplate.opsForValue().set(sbbh+"WB", JSONObject.toJSONString(entity));
-                        //白海豚写剪切视频的事件，李响读了去剪切视频
-                        if(("1001,1007,1009,1010,1020,1022,1024,1026".contains(beforeEntity.getType()))&&sbbh.contains("RPCD")){
-                            saveNewEvent(beforeEntity);
-                        }
-                    }else{
-                        try{
-                            EquipmentFile lastFile = equipmentFileMapperStatic.selectLastOneBySbbh(sbbh);
-                            if(!StringUtils.isEmpty(beforeEntity.getCjsj())&&!StringUtils.isEmpty(lastFile.getCjsj())&&isOverThreeMinute(DateUtil.getFormatDate(lastFile.getCjsj(),"yyyy-MM-dd HH:mm:ss"),DateUtil.getFormatDate(beforeEntity.getCjsj(),"yyyy-MM-dd HH:mm:ss"))){
-                                /**
-                                 * 保存数据
-                                 */
-                                // 异步分发保存数据
-                                final EquipmentFile sentity = beforeEntity;
-                                distributeExecutorService.execute(() -> {
-                                    try {
-                                        equipmentFileSplitShjServiceStatic.distributeAndSave(sentity);
-                                    } catch (Exception e) {
-                                        LOG.error("异步分发保存失败，EquipmentFile ID: {}, 错误信息: {}",
-                                                entity.getId(), e.getMessage(), e);
-                                    }
-                                });
-                                //正式更新需要加上下面一行
-                                beforeEntity.setSyncFlag(3);
-                                equipmentFileMapperStatic.insert(beforeEntity);
-                                todayMapperStatic.insertEquipFile(beforeEntity);
-                                //白海豚写剪切视频的事件，李响读了去剪切视频
-                                if(("1001,1007,1009,1010,1020,1022,1024,1026".contains(beforeEntity.getType()))&&sbbh.contains("RPCD")){
-                                    saveNewEvent(beforeEntity);
+                        redisTstaticemplate.opsForValue().set(wbKey, JSONObject.toJSONString(entity));
+                        try {
+                            // 异步分发保存数据
+                            final EquipmentFile sentity = beforeEntity;
+                            distributeExecutorService.execute(() -> {
+                                try {
+                                    equipmentFileSplitShjServiceStatic.distributeAndSave(sentity);
+                                } catch (Exception e) {
+                                    LOG.error("异步分发保存失败，EquipmentFile ID: {}, 错误信息: {}",
+                                            entity.getId(), e.getMessage(), e);
                                 }
-                            }
+                            });
                         }catch (Exception e){
                             LOG.error("错误："+e.getMessage());
                         }
-                        redisTstaticemplate.opsForValue().set(sbbh+"WB", JSONObject.toJSONString(entity));
+                    }else{
+                        redisTstaticemplate.opsForValue().set(wbKey, JSONObject.toJSONString(entity));
                     }
                 }else{
-                    redisTstaticemplate.opsForValue().set(sbbh+"WB", JSONObject.toJSONString(entity));
+                    redisTstaticemplate.opsForValue().set(wbKey, JSONObject.toJSONString(entity));
                 }
                 data="保存成功";
                 JSONObject result = new JSONObject();
@@ -327,34 +256,14 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                     try {
                         equipmentFileSplitShjServiceStatic.distributeAndSave(entity);
                     } catch (Exception e) {
-                        LOG.error("异步分发保存失败，EquipmentFile ID: {}, 错误信息: {}", 
+                        LOG.error("异步分发保存失败，EquipmentFile ID: {}, 错误信息: {}",
                                 entity.getId(), e.getMessage(), e);
                     }
                 });
-                //正式更新需要加上下面一行
-                entity.setSyncFlag(3);
-                equipmentFileMapperStatic.insert(entity);
-                todayMapperStatic.insertEquipFile(entity);
                 data="保存成功";
                 JSONObject result = new JSONObject();
                 result.put("data",data);
                 result.put("entity",entity);
-                //白海豚写剪切视频的事件，李响读了去剪切视频
-                if(("1001,1007,1009,1010,1020,1022,1024,1026".contains(entity.getType()))&&(sbbh.contains("RPCD")||sbbh.contains("tl"))){
-                    try {
-                        saveNewEvent(entity);
-                    }catch (Exception e){
-                        LOG.error("保存视频剪切出错：" + e.getMessage());
-                    }
-                }
-                //推送文件
-                if("JXYSA4001".equals(sbbh)&&!pushData){
-                    try {
-                        PushFile.pushFile1(entity.getTplj());
-                    }catch (Exception e){
-                        LOG.error("推送文件3出错：" + e.getMessage());
-                    }
-                }
                 return result.toJSONString();
             }
         }else {
@@ -400,8 +309,9 @@ public class EquipmentFileShjService extends AbstractScanRequest{
 
     public static void sendMsg(String sbbh){
         try {
-            String angleTemplateId = attrServiceStatic.findByAttrKey("angleTemplateId");
-            String phoneNum = attrServiceStatic.findByAttrKey("anglePhone");
+            Map<String,String> attrMap = (Map<String, String>) redisTstaticemplate.opsForValue().get(RedisCode.ATTRECODEKEY);
+            String angleTemplateId = attrMap.get("angleTemplateId");
+            String phoneNum = attrMap.get("anglePhone");
             SendSmsTool.sendSms(angleTemplateId,sbbh, phoneNum);
         }catch (Exception e){
             LOG.error("仪器姿态发送短信失败："+e.getMessage());
@@ -432,7 +342,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
             spaceFileDto.setRq(DateUtil.getFormatDate(spaceFileDto.getCjsj(),"yyyy-MM-dd"));
             spaceFileServiceStatic.save(spaceFileDto);
             //发送指令，播放音频
-            publishMessage(waterEquipment.getJdfw(),waterEquipment.getSm1(),cjsj);
+            publishMessage(waterEquipment.getSbsn(),waterEquipment.getJdfw(),waterEquipment.getSm1(),cjsj);
             JSONObject result = new JSONObject();
             result.put("data","保存成功");
             result.put("otherFile",true);
@@ -444,24 +354,22 @@ public class EquipmentFileShjService extends AbstractScanRequest{
     }
 
     //发送指令，播放驱离文件，停指播放驱离文件
-    public static void publishMessage(String jdfw,String hex, String cjsj){
+    public static void publishMessage(String sbbh,String jdfw,String hex, String cjsj){
         try {
             if(!StringUtils.isEmpty(jdfw) && !StringUtils.isEmpty(hex)){
-                String[] topicArr = jdfw.split(";");//WHPD[meg],WHPD[updata];RPCD[meg],RPCD[updata]
+                Map<String,String> attrMap = (Map<String, String>) redisTstaticemplate.opsForValue().get(RedisCode.ATTRECODEKEY);
+                if(StringUtils.isEmpty(attrMap.get("spaceInterval"))){
+                    LOG.error("未配置声驱播放间隔时间");
+                    return;
+                }
+                int spaceInterval = Integer.parseInt(attrMap.get("spaceInterval"));
                 //如果接收文件时间和生成文件时间没有超过5分钟
-                if(new Date().getTime()-DateUtil.toDate(cjsj,"yyyy-MM-dd HH:mm:ss").getTime()<=300000){
-                    // 获取MQTT客户端实例
-                    MqttClientSpace client = MqttClientSpace.getInstance();
-                    if(client == null){
-                        LOG.error("MQTT客户端未初始化，无法发送消息。请检查monitor.jar是否正常启动");
-                        return;
-                    }
-                    
-                    // 确保client是final的，以便在lambda中使用
-                    final MqttClientSpace finalClient = client;
-                    byte[] messageStart = hexStringToByteArray(hex);
-                    LOG.info("MQTT客户端状态: {}", finalClient.getConnectionStatus());
-                    
+                if(new Date().getTime()-DateUtil.toDate(cjsj,"yyyy-MM-dd HH:mm:ss").getTime()<=spaceInterval*60*1000){
+                    //1先根据设备编号去缓存中取数据，如果有，就比较缓存中数据的发送指令时间和接收文件时间有没有超过五分钟
+                    //1.1如果超过5分钟，就走发送指令流程；如果没有超过5分钟就忽略当前文件
+                    //2缓存中没有数据，就根据设备编号和当天日期查询数据库最后一条数据
+                    //2.2如果没有查询出来数据，就走发送指令流程；如果查询出来数据就比较发送指令时间和当前时间有没有超过五分钟，后续执行1.1
+                    String[] topicArr = jdfw.split(";");//WHPD[meg],WHPD[updata];RPCD[meg],RPCD[updata]
                     for(int i=0;i<topicArr.length;i++){
                         String oneitem = topicArr[i];
                         String[] oneArr = oneitem.split(",");
@@ -470,27 +378,64 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                             continue;
                         }
                         LOG.info("处理主题配置 - 发布主题: {}, 订阅主题: {}", oneArr[0], oneArr[1]);
-                        // 2. 订阅返回主题
-                        // finalClient.subTopic(oneArr[1]);
-                        // 3. 发布消息
-                        finalClient.publishMessage(oneArr[0], messageStart, 2);
-                        
-                        // 确保oneArr[0]是final的，以便在lambda中使用
-                        final String publishTopic = oneArr[0];
-                        // 提交一个延迟执行的任务，关闭指令
-                        scheduledExecutorService.schedule(() -> {
-                            //43 52 44 02 00 07 10 02 4C
-                            byte[] messageStop = new byte[] { 0x43, 0x52, 0x44, 0x02, 0x00, 0x07, 0x10, 0x02, 0x4C };
-                            finalClient.publishMessage(publishTopic, messageStop, 2);
-
-                        },300, TimeUnit.SECONDS);
+                        String topicName = oneArr[0].substring(0,oneArr[0].indexOf("["));
+                        if(!StringUtils.isEmpty(redisTstaticemplate.opsForValue().get(topicName+"QLWJ"))) {
+                            String entityJson = (String) redisTstaticemplate.opsForValue().get(topicName + "QLWJ");
+                            VoicePowerDevice voicePowerDevice = JSONObject.parseObject(entityJson, VoicePowerDevice.class);
+                            if(DateUtil.toDate(cjsj,"yyyy-MM-dd HH:mm:ss").getTime()-voicePowerDevice.getSendTime().getTime()>spaceInterval*60*1000){
+                                sendTopTopic(sbbh,oneArr[0],hex,spaceInterval);
+                            }
+                        }else{
+                            VoicePowerDevice voicePowerDevice = voicePowerDeviceServiceStatic.selectTodayLastData(topicName);
+                            if(voicePowerDevice==null){
+                                sendTopTopic(sbbh,oneArr[0],hex,spaceInterval);
+                            }else{
+                                if(DateUtil.toDate(cjsj,"yyyy-MM-dd HH:mm:ss").getTime()-voicePowerDevice.getSendTime().getTime()>spaceInterval*60*1000){
+                                    sendTopTopic(sbbh,oneArr[0],hex,spaceInterval);
+                                }
+                            }
+                        }
                     }
+
                 }
             }
         }catch (Exception e){
             LOG.error("发送指令失败："+e.getMessage());
         }
     }
+
+    //发送指令，停止指令
+    public static void sendTopTopic(String sbbh,String topic,String hex,int spaceInterval){
+        // 获取MQTT客户端实例
+        MqttClientSpace client = MqttClientSpace.getInstance();
+        if(client == null){
+            LOG.error("MQTT客户端未初始化，无法发送消息。请检查monitor.jar是否正常启动");
+            return;
+        }
+        // 确保client是final的，以便在lambda中使用
+        final MqttClientSpace finalClient = client;
+        byte[] messageStart = hexStringToByteArray(hex);
+        LOG.info("MQTT客户端状态: {}", finalClient.getConnectionStatus());
+        // 2. 订阅返回主题
+        // finalClient.subTopic(oneArr[1]);
+        // 3. 发布消息 保存发送指令
+        String topicName = topic.substring(0,topic.indexOf("["));
+        VoicePowerDevice voicePowerDevice = voicePowerDeviceServiceStatic.saveData(topicName);
+        redisTstaticemplate.opsForValue().set(topicName+"QLWJ", JSONObject.toJSONString(voicePowerDevice));
+        finalClient.publishMessage(topic, messageStart, 2);
+        LOG.error("发声设备发送指令-设备编号: {},主题: {}", sbbh, topic);
+        // 确保oneArr[0]是final的，以便在lambda中使用
+        final String publishTopic = topic;
+        // 提交一个延迟执行的任务，关闭指令
+        scheduledExecutorService.schedule(() -> {
+            voicePowerDeviceServiceStatic.updateStopTime(topicName);
+            //43 52 44 02 00 07 10 02 4C
+            byte[] messageStop = new byte[] { 0x43, 0x52, 0x44, 0x02, 0x00, 0x07, 0x10, 0x02, 0x4C };
+            finalClient.publishMessage(publishTopic, messageStop, 2);
+            LOG.error("发声设备停止指令-设备编号: {},主题: {}", sbbh, publishTopic);
+        },spaceInterval*60, TimeUnit.SECONDS);
+    }
+
 
     public static byte[] hexStringToByteArray(String hex) {
         hex = hex.replaceAll("\\s+", ""); // 去掉空格
@@ -502,9 +447,6 @@ public class EquipmentFileShjService extends AbstractScanRequest{
         }
         return data;
     }
-    
-    
-
 
     //信标文件
     public static String beconMethod(JSONObject jsonParam){
@@ -554,217 +496,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
         }
     }
 
-    public static Boolean isOverThreeMinute(String curDateStr, String nextDateStr){
-        Date begin = DateUtil.toDate(curDateStr,"yyyy-MM-dd HH:mm");
-        Date end = DateUtil.toDate(nextDateStr,"yyyy-MM-dd HH:mm");
-        long minute=(end.getTime()-begin.getTime())/(1000*60);//除以1000是为了转换成秒
-        String predationInterval = attrServiceStatic.findByAttrKey("predationInterval");
-        if(minute<=Integer.parseInt(predationInterval)){
-            return true;
-        }
-        return false;
-    }
-
-    public static void saveNewEvent(EquipmentFile record){
-        LOG.error("剪切视频数据："+JSONObject.toJSONString(record));
-        String[] arr = record.getWjmc().split("_");
-        if(Integer.parseInt(arr[3])<Integer.parseInt(attrServiceStatic.findByAttrKey("zskssj")) || Integer.parseInt(arr[3])>Integer.parseInt(attrServiceStatic.findByAttrKey("wsjssj"))){
-            return;
-        }
-        String temp = arr[0]+"-"+arr[1]+"-"+arr[2]+" "+arr[3]+":"+arr[4]+":"+arr[5];
-        String temJssj = (String) redisTstaticemplate.opsForValue().get("JQ"+record.getSbbh());
-        if(StringUtils.isEmpty(temJssj) || !StringUtils.isEmpty(temJssj)&&DateUtil.toDate(temp,"yyyy-MM-dd HH:mm:ss").getTime()>DateUtil.toDate(temJssj,"yyyy-MM-dd HH:mm:ss").getTime()){
-            List<CameraInfo> cameraInfoList = cameraInfoServiceStatic.findBySbbh(record.getSbbh());
-            String jssj = "";
-            for(CameraInfo cameraInfo: cameraInfoList){
-                CameraMiddleDto cameraMiddle = new CameraMiddleDto();
-                cameraMiddle.setSbbh(record.getSbbh());//设备编号
-                cameraMiddle.setIp(cameraInfo.getIp());//摄像头ip
-                cameraMiddle.setPort(cameraInfo.getPort()+"");//nvr剪切端口
-                cameraMiddle.setUsername(cameraInfo.getUsername());//nvr用户名
-                cameraMiddle.setCamerapws(cameraInfo.getCamerapws());//nvr密码
-                cameraMiddle.setTdh(cameraInfo.getSbdk()+"");//通道号
-                cameraMiddle.setDvrip(cameraInfo.getDvrip());//nvrip
-                if("1001,1007,1009,1010".contains(record.getType())){
-                    //cameraMiddle.setJgsj(attrServiceStatic.findByAttrKey("spjqjgsjq"));//视频剪切间隔时间往前推的时间
-                    //cameraMiddle.setJgsj(attrServiceStatic.findByAttrKey("spjqjgsj"));//视频剪切间隔时间往后推的时间
-                    String kssj = DateUtil.getFormatDate(DateUtil.getSecondLater(DateUtil.toDate(temp,"yyyy-MM-dd HH:mm:ss"),Integer.parseInt(attrServiceStatic.findByAttrKey("spjqjgsjq"))),"yyyy-MM-dd HH:mm:ss");
-                    jssj = DateUtil.getFormatDate(DateUtil.getSecondLater(DateUtil.toDate(temp,"yyyy-MM-dd HH:mm:ss"),Integer.parseInt(attrServiceStatic.findByAttrKey("spjqjgsj"))),"yyyy-MM-dd HH:mm:ss");
-                    cameraMiddle.setJqsj(kssj+","+jssj);
-                    cameraMiddle.setJgsj("0");
-                    //cameraMiddle.setJqsj(arr[0]+"-"+arr[1]+"-"+arr[2]+" "+arr[3]+":"+arr[4]+":"+arr[5]);//剪切时间
-                }else if("1020,1022,1024,1026".contains(record.getType())){
-                    arr = record.getTplj().substring(record.getTplj().lastIndexOf("/")+1,record.getTplj().lastIndexOf("_A4.txt")).split("_");
-                    jssj = "1020".equals(record.getType())||"1026".equals(record.getType())?arr[7]+"-"+arr[8]+"-"+arr[9]+" "+arr[10]+":"+arr[11]+":"+arr[12]:arr[6]+"-"+arr[7]+"-"+arr[8]+" "+arr[9]+":"+arr[10]+":"+arr[11];
-                    if(temp.equals(jssj)){
-                        return;
-                    }
-                    cameraMiddle.setJqsj(temp+","+jssj);
-                    cameraMiddle.setJgsj("0");
-                }
-                cameraMiddle.setSfjq("0");
-                cameraMiddle.setBz(cameraInfo.getSm4());//默认预置位
-                if("1001,1007,1009,1010".contains(record.getType())){
-                    // 提交一个延迟执行的任务
-                    scheduledExecutorService.schedule(() -> {
-                        LOG.error("cameraMiddle数据："+cameraMiddle.toString());
-                        cameraMiddleServiceStatic.save(cameraMiddle);
-                    }, Integer.parseInt(attrServiceStatic.findByAttrKey("spjqjgsj")), TimeUnit.SECONDS);
-                }else{
-                    LOG.error("cameraMiddle数据："+cameraMiddle.toString());
-                    cameraMiddleServiceStatic.save(cameraMiddle);
-                }
-
-            }
-            redisTstaticemplate.opsForValue().set("JQ"+record.getSbbh(), jssj);
-        }else if("1020,1022,1024,1026".contains(record.getType())){
-            arr = record.getTplj().substring(record.getTplj().lastIndexOf("/")+1,record.getTplj().lastIndexOf("_A4.txt")).split("_");
-            String jssj = "1020".equals(record.getType())||"1026".equals(record.getType())?arr[7]+"-"+arr[8]+"-"+arr[9]+" "+arr[10]+":"+arr[11]+":"+arr[12]:arr[6]+"-"+arr[7]+"-"+arr[8]+" "+arr[9]+":"+arr[10]+":"+arr[11];
-            if(StringUtils.isEmpty(temJssj) || !StringUtils.isEmpty(temJssj)&&(DateUtil.toDate(temJssj,"yyyy-MM-dd HH:mm:ss").getTime()-DateUtil.toDate(temp,"yyyy-MM-dd HH:mm:ss").getTime()>5000 && DateUtil.toDate(jssj,"yyyy-MM-dd HH:mm:ss").getTime()-DateUtil.toDate(temJssj,"yyyy-MM-dd HH:mm:ss").getTime()>5000)){
-                List<CameraInfo> cameraInfoList = cameraInfoServiceStatic.findBySbbh(record.getSbbh());
-                for(CameraInfo cameraInfo: cameraInfoList){
-                    CameraMiddleDto cameraMiddle = new CameraMiddleDto();
-                    cameraMiddle.setSbbh(record.getSbbh());//设备编号
-                    cameraMiddle.setIp(cameraInfo.getIp());//摄像头ip
-                    cameraMiddle.setPort(cameraInfo.getPort()+"");//nvr剪切端口
-                    cameraMiddle.setUsername(cameraInfo.getUsername());//nvr用户名
-                    cameraMiddle.setCamerapws(cameraInfo.getCamerapws());//nvr密码
-                    cameraMiddle.setTdh(cameraInfo.getSbdk()+"");//通道号
-                    cameraMiddle.setDvrip(cameraInfo.getDvrip());//nvrip
-                    cameraMiddle.setJqsj(StringUtils.isEmpty(temJssj)?temp:temJssj+","+jssj);
-                    cameraMiddle.setJgsj("0");
-                    cameraMiddle.setSfjq("0");
-                    cameraMiddle.setBz(cameraInfo.getSm4());//默认预置位
-                    LOG.error("cameraMiddle数据："+cameraMiddle.toString());
-                    cameraMiddleServiceStatic.save(cameraMiddle);
-                }
-                redisTstaticemplate.opsForValue().set("JQ"+record.getSbbh(), jssj);
-            }
-        }
-    }
-
-
-
-    public static void pushMqMsg(String sbbh,String jtnr){
-        try {
-            CodesetExample codesetExample = new CodesetExample();
-            CodesetExample.Criteria codesetCa = codesetExample.createCriteria();
-            codesetCa.andTypeEqualTo("15");
-            List<Codeset> list = codesetMapperStatic.selectByExample(codesetExample);
-            Map<String,String> codesetMap = list==null?new HashMap<>():list.stream().collect(Collectors.toMap(p -> p.getCode(), p -> p.getName()));
-            Set<String> nja4sbsn = codesetMap.keySet();
-            if(nja4sbsn!= null && nja4sbsn.contains(sbbh)){
-                Connection connection = MQUtil.getConnection();
-                Channel channel = connection.createChannel();
-                channel.queueDeclare(MQUtil.QUEUE_NAME,true,false,false,null);
-                String message = sbbh+"&"+codesetMap.get(sbbh)+"@"+jtnr;
-                channel.basicPublish("",MQUtil.QUEUE_NAME,null,message.getBytes("UTF-8"));
-                channel.close();
-                connection.close();
-                LOG.error("无人机数据已发送："+message);
-            }
-        }catch (Exception e){
-            LOG.error("无人机数据错误："+e.getMessage());
-        }
-    }
-
-    //方位角统计
-    public void staticAzimuthAngle(String sbbh,String deptcode,String rq,String jtnr){
-        String[] nrArr = jtnr.split("/");
-        Map<String,Map<String,Integer>> rqMap = new HashMap<>();
-        Map<String,Integer> rqTsMap = new HashMap<>();
-        for(String rqandjdStr : nrArr){
-            String[] rqandjd = rqandjdStr.split("-");//2022_10_15_02_15_14 0:105,1:235
-            String rqStr = rqandjd[0].substring(0,16);//2022_10_15_02_15
-            String jdStr = rqandjd[1];//0:105,1:235
-            if(rqMap.containsKey(rqStr)){
-                Map<String,Integer> jdNum = rqMap.get(rqStr);
-                String[] jdarr = jdStr.split(",");//0:105 1:235
-                rqTsMap.put(rqStr, rqTsMap.get(rqStr)+jdarr.length);
-                for(String jd : jdarr){
-                    String[] arr = jd.split(":");//0 105
-                    Float jtjd = Float.parseFloat(arr[1]);
-                    if(jtjd>=0 && jtjd<45){
-                        jdNum.put("north_northeast",jdNum.get("north_northeast")+1);
-                    }else if(jtjd>=45 && jtjd<90){
-                        jdNum.put("northeast_east",jdNum.get("northeast_east")+1);
-                    }else if(jtjd>=90 && jtjd<135){
-                        jdNum.put("east_eastsouth",jdNum.get("east_eastsouth")+1);
-                    }else if(jtjd>=135 && jtjd<180){
-                        jdNum.put("eastsouth_south",jdNum.get("eastsouth_south")+1);
-                    }else if(jtjd>=180 && jtjd<225){
-                        jdNum.put("south_southwest",jdNum.get("south_southwest")+1);
-                    }else if(jtjd>=225 && jtjd<270){
-                        jdNum.put("southwest_west",jdNum.get("southwest_west")+1);
-                    }else if(jtjd>=270 && jtjd<315){
-                        jdNum.put("west_westnorth",jdNum.get("west_westnorth")+1);
-                    }else if(jtjd>=315 && jtjd<360){
-                        jdNum.put("westnorth_north",jdNum.get("westnorth_north")+1);
-                    }
-                }
-                rqMap.put(rqStr, jdNum);
-            }else{
-                Map<String,Integer> jdNum = new HashMap<>();
-                jdNum.put("north_northeast",0);
-                jdNum.put("northeast_east",0);
-                jdNum.put("east_eastsouth",0);
-                jdNum.put("eastsouth_south",0);
-                jdNum.put("south_southwest",0);
-                jdNum.put("southwest_west",0);
-                jdNum.put("west_westnorth",0);
-                jdNum.put("westnorth_north",0);
-                String[] jdarr = jdStr.split(",");
-                rqTsMap.put(rqStr, jdarr.length);
-                for(String jd : jdarr){
-                    String[] arr = jd.split(":");//0 105
-                    Float jtjd = Float.parseFloat(arr[1]);
-                    if(jtjd>=0 && jtjd<45){
-                        jdNum.put("north_northeast",jdNum.get("north_northeast")+1);
-                    }else if(jtjd>=45 && jtjd<90){
-                        jdNum.put("northeast_east",jdNum.get("northeast_east")+1);
-                    }else if(jtjd>=90 && jtjd<135){
-                        jdNum.put("east_eastsouth",jdNum.get("east_eastsouth")+1);
-                    }else if(jtjd>=135 && jtjd<180){
-                        jdNum.put("eastsouth_south",jdNum.get("eastsouth_south")+1);
-                    }else if(jtjd>=180 && jtjd<225){
-                        jdNum.put("south_southwest",jdNum.get("south_southwest")+1);
-                    }else if(jtjd>=225 && jtjd<270){
-                        jdNum.put("southwest_west",jdNum.get("southwest_west")+1);
-                    }else if(jtjd>=270 && jtjd<315){
-                        jdNum.put("west_westnorth",jdNum.get("west_westnorth")+1);
-                    }else if(jtjd>=315 && jtjd<360){
-                        jdNum.put("westnorth_north",jdNum.get("westnorth_north")+1);
-                    }
-                }
-                rqMap.put(rqStr, jdNum);
-            }
-        }
-        for(String xsStr : rqMap.keySet()){
-            Map<String,Integer> jdNum = rqMap.get(xsStr);
-            String[] rqArr = xsStr.split("_");
-            AzimuthAngleDto dto = new AzimuthAngleDto();
-            dto.setSbbh(sbbh);
-            dto.setRq(rq);
-            dto.setXs(rqArr[0]+"-"+rqArr[1]+"-"+rqArr[2]+" "+rqArr[3]);
-            dto.setFz(rqArr[0]+"-"+rqArr[1]+"-"+rqArr[2]+" "+rqArr[3]+":"+rqArr[4]);
-            dto.setTs(rqTsMap.get(xsStr));
-            dto.setDeptcode(deptcode);
-            dto.setNorthNortheast(jdNum.get("north_northeast"));
-            dto.setNortheastEast(jdNum.get("northeast_east"));
-            dto.setEastEastsouth(jdNum.get("east_eastsouth"));
-            dto.setEastsouthSouth(jdNum.get("eastsouth_south"));
-            dto.setSouthSouthwest(jdNum.get("south_southwest"));
-            dto.setSouthwestWest(jdNum.get("southwest_west"));
-            dto.setWestWestnorth(jdNum.get("west_westnorth"));
-            dto.setWestnorthNorth(jdNum.get("westnorth_north"));
-            azimuthAngleServiceStatic.save(dto);
-            AzimuthAngleRqDto rqDto = new AzimuthAngleRqDto();
-            rqDto.setSbbh(sbbh);
-            rqDto.setRq(rq);
-            azimuthAngleRqServiceStatic.save(rqDto);
-        }
-    }
-
+    //指针数据每秒
     public static String fishMethod(JSONObject jsonParam){
         try {
             String sbbh = jsonParam.getString("sbbh");
@@ -796,6 +528,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
         }
     }
 
+    //指针数据每天
     public static String yfpMethod(JSONObject jsonParam){
         try {
             String sbbh = jsonParam.getString("sbbh");
@@ -827,4 +560,18 @@ public class EquipmentFileShjService extends AbstractScanRequest{
         }
     }
 
+
+    /**
+     * 雾报间隔时间
+     */
+    public Boolean isOverThreeMinute(String curDateStr, String nextDateStr){
+        Map<String,String> attrMap = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.ATTRECODEKEY);
+        Date begin = DateUtil.toDate(curDateStr,"yyyy-MM-dd HH:mm");
+        Date end = DateUtil.toDate(nextDateStr,"yyyy-MM-dd HH:mm");
+        long minute=(end.getTime()-begin.getTime())/(1000*60);//除以1000是为了转换成秒
+        if(minute<=Integer.parseInt(attrMap.get("predationInterval"))){
+            return true;
+        }
+        return false;
+    }
 }

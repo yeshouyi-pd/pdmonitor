@@ -35,6 +35,7 @@ public class SolarPannelQuartz {
     private WaterEquipmentService waterEquipmentService;
 
     /**
+     * 调用电池板太阳能信息
      * 每1个小时执行一次
      * @throws Exception
      */

@@ -68,4 +68,8 @@ public class EquipmentFileTTxtService {
         equipmentFileTTxtMapper.deleteByPrimaryKey(id);
     }
 
+    public List<EquipmentFileTTxt> selectByExample(EquipmentFileTTxtExample example){
+        return equipmentFileTTxtMapper.selectByExample(example);
+    }
+
 }

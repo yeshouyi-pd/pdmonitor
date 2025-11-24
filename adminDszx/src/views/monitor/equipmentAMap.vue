@@ -66,6 +66,10 @@
                       image: '/largemonitors/assets/imgs/anjijiankong.png',
                       size: new AMap.Size(35, 35)
                     })
+                    let fashengshebei = new AMap.Icon({
+                      image: '/largemonitors/assets/imgs/fashengshebei.png',
+                      size: new AMap.Size(29, 29)
+                    })
                     for(let i=0;i<devices.length;i++){
                         if(Tool.isEmpty(devices[i].gps)){
                           continue;
@@ -120,6 +124,35 @@
                                 });
                                 infoWindow.open(_this.amap, e.target.getPosition());
                             });
+                        }else if("F1"==devices[i].dqzl){
+                          let marker = new AMap.Marker({
+                            icon: fashengshebei,
+                            position: devices[i].gps.split(','),
+                            offset: new AMap.Pixel(-12,-12),
+                            zIndex: 101,
+                            map: _this.amap
+                          });
+                          marker.setLabel({
+                            direction:'top',
+                            offset: new AMap.Pixel(0, 10),  //设置文本标注偏移量
+                            content: "<div style='color: green'>"+devices[i].fzwz+"</div>", //设置文本标注内容
+                            style:{
+                              'color': 'black'
+                            }
+                          });
+                          marker.content = [];
+                          marker.content.push(devices[i].deptcode);
+                          marker.content.push(devices[i].centerCode);
+                          marker.content.push(devices[i].fzwz);
+                          marker.content.push(devices[i].sbsn);
+                          AMap.event.addListener(marker, 'click', function (e) {
+                            let infoWindow = new AMap.InfoWindow({
+                              isCustom: true,  //使用自定义窗体
+                              content: _this.createInfoWindow(e.target.content),
+                              offset: new AMap.Pixel(16, -15)
+                            });
+                            infoWindow.open(_this.amap, e.target.getPosition());
+                          });
                         }
                     }
                     new AMap.Marker({icon: wurenji,position: [119.70,32.30],map: _this.amap});

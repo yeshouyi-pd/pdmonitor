@@ -1,8 +1,12 @@
 package com.pd.server.main.mapper;
 
+import com.pd.server.main.domain.EquipmentFilePPic;
+import com.pd.server.main.domain.EquipmentFilePPicExample;
 import com.pd.server.main.domain.EquipmentFilePVideo;
 import com.pd.server.main.domain.EquipmentFilePVideoExample;
 import java.util.List;
+
+import com.pd.server.main.dto.basewx.my.EquipmentFileDwjkDto;
 import org.apache.ibatis.annotations.Param;
 
 public interface EquipmentFilePVideoMapper {
@@ -27,4 +31,8 @@ public interface EquipmentFilePVideoMapper {
     int updateByPrimaryKeySelective(EquipmentFilePVideo record);
 
     int updateByPrimaryKey(EquipmentFilePVideo record);
+
+    List<EquipmentFileDwjkDto> listAllDw(EquipmentFilePVideoExample example);
+
+    EquipmentFilePVideo selectByExampleOnlyIdLimitOne(EquipmentFilePVideoExample example);
 }

@@ -1,5 +1,7 @@
 package com.pd.monitor.quartz;
 
+import com.pd.monitor.utils.SendSmsTool;
+import com.pd.monitor.wx.conf.WxRedisConfig;
 import com.pd.server.main.domain.WaterEquiplog;
 import com.pd.server.main.domain.WaterEquipment;
 import com.pd.server.main.domain.WaterEquipmentExample;
@@ -12,10 +14,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Component
 @EnableScheduling
@@ -32,7 +36,7 @@ public class DataInvalidQuartz {
     @Resource
     private WaterEquiplogService waterEquiplogService;
 
-    //江豚设备
+    //江豚设备状态
     /**
      * 每10分钟执行一次
      * @throws Exception
@@ -56,8 +60,25 @@ public class DataInvalidQuartz {
         }
         reqinterval = null;
         reqintervalextend = null;
-        waterList.clear(); // 清空列表
-        System.gc();
+        waterList = null;
+    }
+
+
+    //每天8点，12点，18点执行，如果有5个设备的状态为离线，则发送短信
+    @Scheduled(cron = "0 0 08,12,18 * * ? ")
+    public void sendMsg(){
+        Map<String, String> attrMap = WxRedisConfig.getAttrMap();
+        if(!StringUtils.isEmpty(attrMap.get("deviceErrorPhone"))){
+            WaterEquipmentExample example = new WaterEquipmentExample();
+            WaterEquipmentExample.Criteria ca = example.createCriteria();
+            ca.andSblbEqualTo("0001");
+            ca.andSbztEqualTo("2");
+            List<WaterEquipment> lists = waterEquipmentService.list(example);
+            if(lists.size()>5){
+                SendSmsTool.sendSms("2038983","",attrMap.get("deviceErrorPhone"));
+            }
+            lists=null;
+        }
     }
 
 }

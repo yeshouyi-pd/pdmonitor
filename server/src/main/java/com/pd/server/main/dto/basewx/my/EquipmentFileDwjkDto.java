@@ -25,8 +25,6 @@ public class EquipmentFileDwjkDto {
      * 采集时间
      */
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
-
-
     private Date cjsj;
 
     public String getId() {

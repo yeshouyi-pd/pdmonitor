@@ -1,14 +1,14 @@
 package com.pd.environment.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.pd.server.main.domain.WaterEquipmentExample;
+import com.pd.server.config.RedisCode;
 import com.pd.server.main.dto.ResponseDto;
 import com.pd.server.main.dto.TurbidityDto;
 import com.pd.server.main.service.TurbidityService;
-import com.pd.server.main.service.WaterEquipmentService;
 import com.pd.server.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/turbidi")
@@ -28,7 +28,7 @@ public class TurbidiHttpController {
     @Resource
     private TurbidityService turbidityService;
     @Resource
-    private WaterEquipmentService waterEquipmentService;
+    private RedisTemplate redisTemplate;
 
     /**
      * 保存数据
@@ -51,9 +51,8 @@ public class TurbidiHttpController {
                 responseDto.setMessage("时间格式错误");
                 return responseDto;
             }
-            WaterEquipmentExample example = new WaterEquipmentExample();
-            List<String> sbbhs= waterEquipmentService.findSbbh(example);
-            if(!sbbhs.contains(jsonObject.getString("sbbh"))){
+            Map<String, JSONObject> sbbhEquipMap = (Map<String, JSONObject>) redisTemplate.opsForValue().get(RedisCode.SBBHEQUIPMAP);
+            if(!sbbhEquipMap.keySet().contains("equip-"+jsonObject.getString("sbbh"))){
                 responseDto.setSuccess(false);
                 responseDto.setMessage("设备编号错误");
                 return responseDto;

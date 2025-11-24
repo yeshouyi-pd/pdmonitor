@@ -4,6 +4,11 @@ import com.pd.server.main.domain.EquipmentFilePPic;
 import com.pd.server.main.domain.EquipmentFilePPicExample;
 import java.util.List;
 
+import com.pd.server.main.dto.basewx.my.AlarmNumbersDto;
+import com.pd.server.main.dto.basewx.my.EquipmentFileDwjkDto;
+import com.pd.server.main.dto.basewx.my.PredationStaticticsDto;
+import com.pd.server.main.dto.basewx.my.SmsIntDto;
+
 import com.pd.server.main.dto.EquipmenInfo;
 import com.pd.server.main.dto.EquipmentMainDto;
 import com.pd.server.main.dto.EquipmentMainListDto;
@@ -34,6 +39,17 @@ public interface EquipmentFilePPicMapper {
     int updateByPrimaryKeySelective(EquipmentFilePPic record);
 
     int updateByPrimaryKey(EquipmentFilePPic record);
+
+    List<EquipmentFileDwjkDto> listAllDw(EquipmentFilePPicExample example);
+
+    List<AlarmNumbersDto> statisticsAlarmNumsByMinute(EquipmentFilePPicExample example);
+
+    List<AlarmNumbersDto> statisticsAlarmNumsByHour(EquipmentFilePPicExample example);
+
+    List<SmsIntDto> sendSmsQuery(EquipmentFilePPicExample example);
+
+    PredationStaticticsDto predationStatictics(EquipmentFilePPicExample example);
+
 
     List<EquipmentFilePPic> getAlljcsjByDeptgetDay(EquipmentFilePPicExample example);
 

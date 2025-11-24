@@ -119,7 +119,7 @@ export default {
       _this.equipmentFileEventDto.etime=_this.cjsj;
       _this.$forceUpdate();
       _this.idJtnrMap = new Map();
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileEvent/yueYangChoose', _this.equipmentFileEventDto).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileP/yueYangChooseEvent', _this.equipmentFileEventDto).then((response)=>{
         Loading.hide();
         let resp = response.data;
         _this.equipmentFileEvents = resp.content.list;

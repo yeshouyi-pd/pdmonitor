@@ -2,25 +2,22 @@ package com.pd.monitor.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.pd.monitor.wx.conf.BaseWxController;
+import com.pd.server.config.RedisCode;
 import com.pd.server.main.domain.*;
-import com.pd.server.main.dto.EquipmentFileDto;
 import com.pd.server.main.dto.InterfaceLogDto;
-import com.pd.server.main.dto.LoginUserDto;
 import com.pd.server.main.dto.ResponseDto;
 import com.pd.server.main.dto.basewx.my.*;
 import com.pd.server.main.service.*;
 import com.pd.server.util.CopyUtil;
-import com.pd.server.util.DateTools;
 import com.pd.server.util.DateUtil;
-import com.pd.server.util.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -36,8 +33,6 @@ public class DwjkController extends BaseWxController {
     @Resource
     private AuthorizeInfoService authorizeInfoService;
     @Resource
-    private EquipmentFileService equipmentFileService;
-    @Resource
     private EquipmentFileTodayService equipmentFileTodayService;
     @Resource
     private AttrService attrService;
@@ -46,15 +41,25 @@ public class DwjkController extends BaseWxController {
     @Resource
     private EquipmentFileAlarmEventService equipmentFileAlarmEventService;
     @Resource
-    private EquipmentTyEventService equipmentTyEventService;
-    @Resource
-    private EquipmentFileEventService equipmentFileEventService;
-    @Resource
     private PointerDayService pointerDayService;
     @Resource
     private PointerSecondService pointerSecondService;
     @Resource
-    private WaterEquipmentService waterEquipmentService;
+    private RedisTemplate redisTemplate;
+    @Resource
+    private EquipmentFilePClusterService equipmentFilePClusterService;
+    @Resource
+    private EquipmentFilePPicService equipmentFilePPicService;
+    @Resource
+    private EquipmentFilePTxtService equipmentFilePTxtService;
+    @Resource
+    private EquipmentFilePWavService equipmentFilePWavService;
+    @Resource
+    private EquipmentFilePVideoService equipmentFilePVideoService;
+    @Resource
+    private EquipmentFileTClusterService equipmentFileTClusterService;
+
+
 
     /**
      * 当天最近的一条聚类信息
@@ -71,19 +76,28 @@ public class DwjkController extends BaseWxController {
                 interfaceLogService.save(interfaceLog);
                 return responseDto;
             }
-            EquipmentFileEventExample example = new EquipmentFileEventExample();
-            EquipmentFileEventExample.Criteria ca = example.createCriteria();
+            // 获取设备信息
+            Map<String, JSONObject> sbbhEquipMap = (Map<String, JSONObject>) redisTemplate.opsForValue().get(RedisCode.SBBHEQUIPMAP);
+            if(!sbbhEquipMap.keySet().contains("equip-"+qqcs.get("sbbh"))){
+                responseDto.setCode("4000");
+                responseDto.setContent("设备sn错误。");
+                interfaceLog.setFhsj(responseDto.toString());
+                interfaceLogService.save(interfaceLog);
+                return responseDto;
+            }
+            EquipmentFilePClusterExample example = new EquipmentFilePClusterExample();
+            EquipmentFilePClusterExample.Criteria ca = example.createCriteria();
             ca.andSbbhEqualTo(qqcs.get("sbbh").toString());
             ca.andRqEqualTo(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd"));
             example.setOrderByClause(" kssj desc ");
-            List<EquipmentFileEvent> equipmentFileEvents = equipmentFileEventService.selectByDw(example);
-            if(equipmentFileEvents.size()>0){
-                EquipmentFileEvent equipmentFileEvent = equipmentFileEvents.get(0);
+            List<EquipmentFilePCluster> pClusters = equipmentFilePClusterService.selectLastDw(example);
+            if(pClusters.size()>0){
+                EquipmentFilePCluster pCluster = pClusters.get(0);
                 EventDwDto eventDwDto = new EventDwDto();
-                eventDwDto.setSbbh(equipmentFileEvent.getSbbh());
+                eventDwDto.setSbbh(pCluster.getSbbh());
                 eventDwDto.setSbwz("116.05429,29.44149");
-                eventDwDto.setCxsj(DateUtil.toDate(equipmentFileEvent.getJssj(),"yyyy-MM-dd HH:mm:ss"));
-                eventDwDto.setFwj(equipmentFileEvent.getJtnr());
+                eventDwDto.setCxsj(DateUtil.toDate(pCluster.getJssj(),"yyyy-MM-dd HH:mm:ss"));
+                eventDwDto.setFwj(pCluster.getJtnr());
                 responseDto.setContent(eventDwDto);
             }else {
                 responseDto.setContent(null);
@@ -148,8 +162,8 @@ public class DwjkController extends BaseWxController {
             }
             AuthorizeInfoExample authorizeInfoExample = new AuthorizeInfoExample();
             AuthorizeInfoExample.Criteria authorizeCa = authorizeInfoExample.createCriteria();
-            authorizeCa.andDwmcEqualTo(qqcs.get("dwmc").toString());
             authorizeCa.andSbsnEqualTo(qqcs.get("sbsn").toString());
+            authorizeCa.andDwmcEqualTo(qqcs.get("dwmc").toString());
             List<AuthorizeInfo> authorizeInfos = authorizeInfoService.listAll(authorizeInfoExample);
             if(authorizeInfos.size()<=0){
                 responseDto.setCode("4000");
@@ -179,14 +193,31 @@ public class DwjkController extends BaseWxController {
                     interfaceLogService.save(interfaceLog);
                     return responseDto;
                 }
-                EquipmentFileExample fileExample = new EquipmentFileExample();
-                EquipmentFileExample.Criteria fileCa = fileExample.createCriteria();
-                fileCa.andSbbhEqualTo(qqcs.get("sbsn").toString());
-                fileCa.andRqEqualTo(qqcs.get("cjrq").toString());
-                List<EquipmentFile> equipmentFiles = equipmentFileService.listAllDw(fileExample);
-                List<EquipmentFileDwjkDto> equipmentFilesDto = CopyUtil.copyList(equipmentFiles, EquipmentFileDwjkDto.class);
+                List<EquipmentFileDwjkDto> resultList = new ArrayList<>();
+                EquipmentFilePClusterExample clusterExample = new EquipmentFilePClusterExample();
+                clusterExample.createCriteria().andSbbhEqualTo(qqcs.get("sbsn").toString()).andRqEqualTo(qqcs.get("cjrq").toString());
+                List<EquipmentFileDwjkDto> clusterList = equipmentFilePClusterService.listAllDw(clusterExample);
+                resultList.addAll(clusterList);
+                EquipmentFilePPicExample picExample = new EquipmentFilePPicExample();
+                picExample.createCriteria().andSbbhEqualTo(qqcs.get("sbsn").toString()).andRqEqualTo(qqcs.get("cjrq").toString());
+                List<EquipmentFileDwjkDto> picList = equipmentFilePPicService.listAllDw(picExample);
+                resultList.addAll(picList);
+                EquipmentFilePTxtExample txtExample = new EquipmentFilePTxtExample();
+                txtExample.createCriteria().andSbbhEqualTo(qqcs.get("sbsn").toString()).andRqEqualTo(qqcs.get("cjrq").toString());
+                List<EquipmentFileDwjkDto> txtList = equipmentFilePTxtService.listAllDw(txtExample);
+                resultList.addAll(txtList);
+                EquipmentFilePWavExample wavExample = new EquipmentFilePWavExample();
+                wavExample.createCriteria().andSbbhEqualTo(qqcs.get("sbsn").toString()).andRqEqualTo(qqcs.get("cjrq").toString());
+                List<EquipmentFileDwjkDto> wavList = equipmentFilePWavService.listAllDw(wavExample);
+                resultList.addAll(wavList);
+                EquipmentFilePVideoExample videoExample = new EquipmentFilePVideoExample();
+                videoExample.createCriteria().andSbbhEqualTo(qqcs.get("sbsn").toString()).andRqEqualTo(qqcs.get("cjrq").toString());
+                List<EquipmentFileDwjkDto> videoList = equipmentFilePVideoService.listAllDw(videoExample);
+                resultList.addAll(videoList);
                 responseDto.setCode("0000");
-                responseDto.setContent(equipmentFilesDto);
+                responseDto.setContent(resultList.stream()
+                        .sorted(Comparator.comparing(EquipmentFileDwjkDto::getCjsj).reversed())
+                        .collect(Collectors.toList()));
             }
         }catch (Exception e){
             responseDto.setCode("2001");
@@ -472,14 +503,13 @@ public class DwjkController extends BaseWxController {
                     interfaceLogService.save(interfaceLog);
                     return responseDto;
                 }
-                EquipmentTyEventExample example = new EquipmentTyEventExample();
-                EquipmentTyEventExample.Criteria ca = example.createCriteria();
+                EquipmentFileTClusterExample example = new EquipmentFileTClusterExample();
+                EquipmentFileTClusterExample.Criteria ca = example.createCriteria();
                 ca.andSbbhEqualTo(qqcs.getString("sbsn"));
                 ca.andRqEqualTo(qqcs.getString("cjrq"));
-                List<EquipmentTyEvent> list = equipmentTyEventService.list(example);
-                List<EquipmentTyEventDwDto> listdto = CopyUtil.copyList(list, EquipmentTyEventDwDto.class);
+                List<EquipmentTyEventDwDto> list = equipmentFileTClusterService.listAllDw(example);
                 responseDto.setCode("0000");
-                responseDto.setContent(listdto);
+                responseDto.setContent(list);
             }
         }catch (Exception e){
             responseDto.setCode("2001");
@@ -569,15 +599,14 @@ public class DwjkController extends BaseWxController {
                     interfaceLogService.save(interfaceLog);
                     return responseDto;
                 }
-                EquipmentFileEventExample example = new EquipmentFileEventExample();
-                EquipmentFileEventExample.Criteria ca = example.createCriteria();
+                EquipmentFilePClusterExample example = new EquipmentFilePClusterExample();
+                EquipmentFilePClusterExample.Criteria ca = example.createCriteria();
                 ca.andSbbhEqualTo(qqcs.getString("sbsn"));
                 ca.andRqEqualTo(qqcs.getString("cjrq"));
                 example.setOrderByClause(" jssj desc");
-                List<EquipmentFileEvent> list = equipmentFileEventService.list(example);
-                List<EquipmentFileEventDwDto> listDto = CopyUtil.copyList(list,EquipmentFileEventDwDto.class);
+                List<EquipmentFileEventDwDto> list = equipmentFilePClusterService.listDw(example);
                 responseDto.setCode("0000");
-                responseDto.setContent(listDto);
+                responseDto.setContent(list);
             }
         }catch (Exception e){
             responseDto.setCode("2001");
@@ -589,7 +618,7 @@ public class DwjkController extends BaseWxController {
 
 
     /**
-     * 获取A4设备聚类事件
+     * 获取最近5天之前的A4设备聚类事件(包含当天)
      */
     @PostMapping("/listEquipmentFileEventToday")
     public ResponseDto listEquipmentFileEventToday(@RequestBody JSONObject qqcs) {
@@ -661,16 +690,15 @@ public class DwjkController extends BaseWxController {
                     interfaceLogService.save(interfaceLog);
                     return responseDto;
                 }
-                EquipmentFileEventExample example = new EquipmentFileEventExample();
-                EquipmentFileEventExample.Criteria ca = example.createCriteria();
+                EquipmentFilePClusterExample example = new EquipmentFilePClusterExample();
+                EquipmentFilePClusterExample.Criteria ca = example.createCriteria();
                 ca.andSbbhEqualTo(qqcs.getString("sbsn"));
-                ca.andJssjGreaterThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getMinutesLater(new Date(),-5),"yyyy-MM-dd HH:mm:ss"));
+                ca.andJssjGreaterThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getMinutesLater(new Date(),-4),"yyyy-MM-dd HH:mm:ss"));
                 ca.andJssjLessThanOrEqualTo(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd HH:mm:ss"));
                 example.setOrderByClause(" jssj desc");
-                List<EquipmentFileEvent> list = equipmentFileEventService.list(example);
-                List<EquipmentFileEventDwDto> listDto = CopyUtil.copyList(list,EquipmentFileEventDwDto.class);
+                List<EquipmentFileEventDwDto> list = equipmentFilePClusterService.listDw(example);
                 responseDto.setCode("0000");
-                responseDto.setContent(listDto);
+                responseDto.setContent(list);
             }
         }catch (Exception e){
             responseDto.setCode("2001");
@@ -714,40 +742,25 @@ public class DwjkController extends BaseWxController {
         return responseDto;
     }
 
-    //无人机当日聚类数据
+    //无人机当日聚类数据（所有设备）
     @GetMapping("/wrjJlsj")
     public ResponseDto wrjJlsj() {
         ResponseDto responseDto = new ResponseDto();
-        WaterEquipmentExample waterEquipmentExample = new WaterEquipmentExample();
-        waterEquipmentExample.createCriteria().andDqzlEqualTo("A4");
-        List<String> a4SbbhList = waterEquipmentService.findSbbh(waterEquipmentExample);
         String wrjDept = attrService.findByAttrKey("wrjDept");
         List<String> listdept = getUpdeptcode(wrjDept);
-        EquipmentTyEventExample example = new EquipmentTyEventExample();
-        EquipmentTyEventExample.Criteria  ca = example.createCriteria();
-        EquipmentTyEventExample example1 = new EquipmentTyEventExample();
-        EquipmentTyEventExample.Criteria  ca1 = example1.createCriteria();
+        EquipmentFilePClusterExample example = new EquipmentFilePClusterExample();
+        EquipmentFilePClusterExample.Criteria  ca = example.createCriteria();
         if(!CollectionUtils.isEmpty(listdept)){
             ca.andDeptcodeIn(listdept);
-            ca1.andDeptcodeIn(listdept);
         }
         ca.andRqEqualTo(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd"));
-        List<EquipmentTyEvent> list = equipmentTyEventService.listByDp(example,String.join(",",a4SbbhList));
-        if(CollectionUtils.isEmpty(list)){
-            ca1.andRqLessThan(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd"));
-            ca1.andRqGreaterThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(),-7),"yyyy-MM-dd"));
-            list = equipmentTyEventService.listByDp(example1,String.join(",",a4SbbhList));
-        }
-        if(!CollectionUtils.isEmpty(list)){
-            list = list.stream().sorted(Comparator.comparing(EquipmentTyEvent::getKssj).reversed()).collect(Collectors.toList());
-        }
-        List<WrjEventDto> eventLists = CopyUtil.copyList(list,WrjEventDto.class);
+        List<WrjEventDto> list = equipmentFilePClusterService.listAllTs(example);
         responseDto.setCode("0000");
-        responseDto.setContent(eventLists);
+        responseDto.setContent(list);
         return responseDto;
     }
 
-    //无人机当日声谱图
+    //无人机当日声谱图（所有设备）
     @PostMapping("/wrjSpt")
     public ResponseDto getSwipeData(@RequestBody Map<String,String> map){
         ResponseDto responseDto = new ResponseDto();
@@ -756,8 +769,8 @@ public class DwjkController extends BaseWxController {
             responseDto.setMessage("参数错误");
             return responseDto;
         }
-        EquipmentFileExample example = new EquipmentFileExample();
-        EquipmentFileExample.Criteria ca = example.createCriteria();
+        EquipmentFilePPicExample example = new EquipmentFilePPicExample();
+        EquipmentFilePPicExample.Criteria ca = example.createCriteria();
         if(!StringUtils.isEmpty(map.get("sbbh"))){
             ca.andSbbhEqualTo(map.get("sbbh"));
         }
@@ -767,20 +780,19 @@ public class DwjkController extends BaseWxController {
         if(!StringUtils.isEmpty(map.get("jssj"))){
             ca.andCjsjLessThanOrEqualTo(DateUtil.toDate(map.get("jssj"),"yyyy-MM-dd HH:mm:ss"));
         }
-        ca.andWjlxEqualTo("1");
-        List<EquipmentFile> list = equipmentFileService.listAllDw(example);
-        List<String> tplist = list.stream().filter(Objects::nonNull).map(EquipmentFile::getTplj).distinct().collect(Collectors.toList());
+        List<EquipmentFileDwjkDto> list = equipmentFilePPicService.listAllDw(example);
+        List<String> tplist = list.stream().filter(Objects::nonNull).map(EquipmentFileDwjkDto::getTplj).distinct().collect(Collectors.toList());
         responseDto.setCode("0000");
         responseDto.setContent(tplist);
         return responseDto;
     }
 
-    //无人机头次统计
+    //无人机头次统计（所有设备前五天的数据）
     @GetMapping("/wrjTctj")
     public ResponseDto wrjTctj(){
         ResponseDto responseDto = new ResponseDto();
-        EquipmentTyEventExample example = new EquipmentTyEventExample();
-        EquipmentTyEventExample.Criteria ca = example.createCriteria();
+        EquipmentFilePClusterExample example = new EquipmentFilePClusterExample();
+        EquipmentFilePClusterExample.Criteria ca = example.createCriteria();
         String wrjDept = attrService.findByAttrKey("wrjDept");
         List<String> listdept = getUpdeptcode(wrjDept);
         if(!CollectionUtils.isEmpty(listdept)){
@@ -788,12 +800,11 @@ public class DwjkController extends BaseWxController {
         }
         ca.andRqGreaterThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(),-4),"yyyy-MM-dd"));
         ca.andRqLessThanOrEqualTo(DateUtil.getFormatDate(DateUtil.getDaysLater(new Date(),-1),"yyyy-MM-dd"));
-        List<EquipmentTyEvent> list = equipmentTyEventService.listSumTs(example);
-        List<WrjTcDto> tsList = CopyUtil.copyList(list,WrjTcDto.class);
+        List<WrjTcDto> list = equipmentFilePClusterService.listSumTs(example);
         Map<String,Object> resultMap = new HashMap<>();
         if(!CollectionUtils.isEmpty(list)){
-            Map<String, List<WrjTcDto>> map = tsList.stream().sorted(Comparator.comparing(WrjTcDto::getRq)).collect(Collectors.groupingBy(WrjTcDto::getSbbh));
-            List<String> rqs= list.stream().sorted(Comparator.comparing(EquipmentTyEvent::getRq)).filter(Objects::nonNull).map(EquipmentTyEvent::getRq).distinct().collect(Collectors.toList());
+            Map<String, List<WrjTcDto>> map = list.stream().sorted(Comparator.comparing(WrjTcDto::getRq)).collect(Collectors.groupingBy(WrjTcDto::getSbbh));
+            List<String> rqs= list.stream().sorted(Comparator.comparing(WrjTcDto::getRq)).filter(Objects::nonNull).map(WrjTcDto::getRq).distinct().collect(Collectors.toList());
             resultMap.put("map",map);
             resultMap.put("rqs",rqs);
         }
