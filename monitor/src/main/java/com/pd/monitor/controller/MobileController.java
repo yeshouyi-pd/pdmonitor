@@ -343,14 +343,16 @@ public class MobileController  extends BaseWxController {
                     map.put("date",DateTools.getFormatDate(new Date(), DateTools.yyyy_MM_dd));
                     responseDto.setContent(map);
                 }else{
+                    equipmentFilePClusterExample.clear();
+                    if(!CollectionUtils.isEmpty(listdept)){
+                        ca.andDeptcodeIn(listdept);
+                    }
                     List<EquipmentFilePCluster> equipmentEventByDeptdate =  equipmentFilePClusterService.getEquipmentEventByDeptdate(equipmentFilePClusterExample);
                     if(!CollectionUtils.isEmpty(equipmentEventByDeptdate)){
                         EquipmentFilePCluster equipmentFileEvent =equipmentEventByDeptdate.get(0);
                         //统计当天数据
-                        equipmentFilePClusterExample.clear();
-                        if(!CollectionUtils.isEmpty(listdept)){
-                            ca.andDeptcodeIn(listdept);
-                        }
+
+
                         ca.andRqEqualTo(equipmentFileEvent.getRq());
                         List<EventDto>  lists   =equipmentFilePClusterService.getEquipmentEventByDept(equipmentFilePClusterExample);
                         map.put("list", lists);
