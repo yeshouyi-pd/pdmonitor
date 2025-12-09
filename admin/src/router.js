@@ -109,6 +109,7 @@ import AppMonitorInfo from "./views/app/appMonitorInfo.vue";
 import AppMonitorDiscovery from "./views/app/appMonitorDiscovery.vue";
 import AppMonitorExp from "./views/app/appMonitorExp.vue";
 import VoicePowerDevice from "./views/fsdevice/voicePowerDevice.vue";
+import LargemonitorsJS from "./views/mobile/largemonitorsJS.vue";//江苏省环境科学研究院验收临时
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -137,6 +138,9 @@ export default new Router({
     },{
         path: "/mobile/largemonitors",
         component: Largemonitors
+    },{
+        path: "/mobile/largemonitorsJS",
+        component: LargemonitorsJS
     },{
         path: "/mobile/largemonitorsZj",
         component: LargemonitorsZj

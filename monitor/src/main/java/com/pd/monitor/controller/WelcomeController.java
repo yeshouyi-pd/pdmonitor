@@ -202,6 +202,30 @@ public class WelcomeController extends BaseWxController{
         return responseDto;
     }
 
+    @PostMapping("/getEventDataPost")
+    public ResponseDto getEventDataPost(@RequestBody JSONObject jsonObject) {
+        ResponseDto responseDto = new ResponseDto();
+        EquipmentFilePClusterExample clusterExample = new EquipmentFilePClusterExample();
+        EquipmentFilePClusterExample.Criteria clusterCa = clusterExample.createCriteria();
+        if(!StringUtils.isEmpty(jsonObject.get("deptcode"))){
+            List<String> listdept = getUpdeptcode(jsonObject.getString("deptcode"));
+            clusterCa.andDeptcodeIn(listdept);
+        }
+        if(!StringUtils.isEmpty(jsonObject.get("sbbhs"))){
+            clusterCa.andSbbhIn(Arrays.asList(jsonObject.getString("sbbhs").split(",")));
+        }
+        if(!StringUtils.isEmpty(jsonObject.get("stime"))){
+            clusterCa.andRqGreaterThanOrEqualTo(jsonObject.getString("stime"));
+        }
+        if(!StringUtils.isEmpty(jsonObject.get("etime"))){
+            clusterCa.andRqLessThanOrEqualTo(jsonObject.getString("etime"));
+        }
+        clusterExample.setOrderByClause(" kssj desc ");
+        List<WrjEventDto> resultList = equipmentFilePClusterService.listAllTs(clusterExample);
+        responseDto.setContent(resultList);
+        return responseDto;
+    }
+
     /**
      *  welcome 水质实时数据
      */
@@ -546,6 +570,36 @@ public class WelcomeController extends BaseWxController{
         return responseDto;
     }
 
+    /**
+     * 统计阵列(PCluster)和拖曳设备(TCluster)三天之前的聚类总头数-按天统计
+     * @return
+     */
+    @PostMapping("/getThreeDayTsPost")
+    public ResponseDto getThreeDayTsPost(@RequestBody JSONObject jsonObject){
+        ResponseDto responseDto = new ResponseDto();
+        EquipmentFilePClusterExample example = new EquipmentFilePClusterExample();
+        EquipmentFilePClusterExample.Criteria ca = example.createCriteria();
+        if(!StringUtils.isEmpty(jsonObject.get("sbbhs"))){
+            ca.andSbbhIn(Arrays.asList(jsonObject.getString("sbbhs").split(",")));
+        }
+        if(!StringUtils.isEmpty(jsonObject.get("stime"))){
+            ca.andRqGreaterThanOrEqualTo(jsonObject.getString("stime"));
+        }
+        if(!StringUtils.isEmpty(jsonObject.get("etime"))){
+            ca.andRqLessThanOrEqualTo(jsonObject.getString("etime"));
+        }
+        List<WrjTcDto> list = equipmentFilePClusterService.listSumTsGroup(example);
+        Map<String,Object> resultMap = new HashMap<>();
+        if(!CollectionUtils.isEmpty(list)){
+            Map<String, List<WrjTcDto>> map = list.stream().sorted(Comparator.comparing(WrjTcDto::getRq)).collect(Collectors.groupingBy(WrjTcDto::getSbbh));
+            List<String> rqs= list.stream().sorted(Comparator.comparing(WrjTcDto::getRq)).filter(Objects::nonNull).map(WrjTcDto::getRq).distinct().collect(Collectors.toList());
+            resultMap.put("map",map);
+            resultMap.put("rqs",rqs);
+        }
+        responseDto.setContent(resultMap);
+        return responseDto;
+    }
+
     @PostMapping("/getSwipeData")
     public ResponseDto getSwipeData(@RequestBody Map<String,String> map){
         ResponseDto responseDto = new ResponseDto();
@@ -645,7 +699,6 @@ public class WelcomeController extends BaseWxController{
         }
         List<PredationNumDwDto> lists = predationNumService.statisticsExample(example);
         Map<String,Object> map = new HashMap<String, Object>();
-        System.out.println(lists.get(0));
         map.put("num",!CollectionUtils.isEmpty(lists)&&!StringUtils.isEmpty(lists.get(0))&&!StringUtils.isEmpty(lists.get(0).getCxcs())?lists.get(0).getCxcs():0);
         map.put("nnm",!CollectionUtils.isEmpty(lists)&&!StringUtils.isEmpty(lists.get(0))&&!StringUtils.isEmpty(lists.get(0).getSjcs())?lists.get(0).getSjcs():0);
         map.put("bnum",!CollectionUtils.isEmpty(lists)&&!StringUtils.isEmpty(lists.get(0))&&!StringUtils.isEmpty(lists.get(0).getBscs())?lists.get(0).getBscs():0);

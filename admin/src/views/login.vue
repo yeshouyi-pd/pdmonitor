@@ -255,6 +255,7 @@
                     if (resp.success) {
                         //Toast.success("保存成功！");
                         Tool.setLoginUser(resp.content);
+                        console.log(resp.content);
                         if(_this.remember){
                             let md5= hex_md5(this.user.password);
                             LocalStorage.set(LOCAL_KEY_REMEMBER_USER,{
@@ -273,7 +274,11 @@
                         if(_this.LOCAL_ZHBHT){
                           _this.$router.push("/mobile/largemonitorsZj")
                         }else if(_this.LOCAL_SSBRL || _this.LOCAL_TLBHQ){
-                          _this.$router.push("/mobile/largemonitors")
+                          if(resp.content.loginName=='jshky'){
+                            _this.$router.push("/mobile/largemonitorsJS")
+                          }else{
+                            _this.$router.push("/mobile/largemonitors")
+                          }
                         }else if(_this.LOCAL_VIDEO){
                           _this.$router.push("/mobile/environmentDp")
                         }
