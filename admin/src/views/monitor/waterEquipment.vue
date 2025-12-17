@@ -126,6 +126,12 @@
               <button v-on:click="restart(waterEquipment.sbcj)" class="btn btn-xs btn-info" title="重启">
                 <i class="ace-icon fa fa-refresh bigger-120"></i>
               </button>
+              <button v-on:click="playBtn(waterEquipment)" class="btn btn-xs btn-info" title="播放指令">
+                <i class="ace-icon fa fa-refresh bigger-120"></i>
+              </button>
+              <button v-on:click="stopBtn(waterEquipment)" class="btn btn-xs btn-info" title="停止指令">
+                <i class="ace-icon fa fa-refresh bigger-120"></i>
+              </button>
             </div>
           </td>
         </tr>
@@ -331,6 +337,37 @@
       _this.checkHeightMax = h*0.8;
     },
     methods: {
+      playBtn(waterEquipment){
+        let _this = this;
+        Confirm.show("确认执行？", function () {
+          Loading.show();
+          let obj = {
+            "jdfw":waterEquipment.jdfw,
+            "hex":waterEquipment.sm1
+          }
+          _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/monitor/mqtt/play',obj).then((response)=>{
+            Loading.hide();
+            let resp = response.data;
+            if (resp.success) {
+              Toast.success(resp.content);
+            }
+          })
+        });
+      },
+      stopBtn(waterEquipment){
+        let _this = this;
+        Loading.show();
+        let obj = {
+          "jdfw":waterEquipment.jdfw
+        }
+        _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/monitor/mqtt/stop',obj).then((response)=>{
+          Loading.hide();
+          let resp = response.data;
+          if (resp.success) {
+            Toast.success(resp.content);
+          }
+        })
+      },
       findByAttrKey(){
         let _this = this;
         _this.$ajax.post(process.env.VUE_APP_SERVER + '/system/admin/attr/findByAttrKey/restartinterval').then((response)=>{

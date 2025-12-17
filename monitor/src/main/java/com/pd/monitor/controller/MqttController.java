@@ -1,16 +1,19 @@
 package com.pd.monitor.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.pd.server.config.MqttClientSpace;
+import com.pd.server.main.domain.VoicePowerDevice;
 import com.pd.server.main.dto.ResponseDto;
 import com.pd.monitor.config.MqttInitializer;
+import com.pd.server.main.service.VoicePowerDeviceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * MQTT控制器 - 在monitor.jar中提供MQTT管理功能
@@ -24,6 +27,101 @@ public class MqttController {
 
     @Resource
     private MqttInitializer mqttInitializer;
+    @Resource
+    private RedisTemplate redisTemplate;
+    @Resource
+    private VoicePowerDeviceService voicePowerDeviceService;
+
+    /**
+     * 发送播放指令
+     */
+    @PostMapping("/play")
+    public ResponseDto<String> play(@RequestBody JSONObject jsonObject) {
+        ResponseDto<String> responseDto = new ResponseDto<>();
+        try {
+            String[] topicArr = jsonObject.getString("jdfw").split(";");//WHPD[meg],WHPD[updata];RPCD[meg],RPCD[updata]
+            for(int i=0;i<topicArr.length;i++) {
+                String oneitem = topicArr[i];
+                String[] oneArr = oneitem.split(",");
+                if (oneArr.length < 2) {
+                    LOG.error("主题配置格式错误: {}", oneitem);
+                    continue;
+                }
+                MqttClientSpace client = MqttClientSpace.getInstance();
+                byte[] messageStart = hexStringToByteArray(jsonObject.getString("hex"));
+                String topicName = oneArr[0].substring(0, oneArr[0].indexOf("["));
+                VoicePowerDevice voicePowerDevice = voicePowerDeviceService.saveData(topicName);
+                redisTemplate.opsForValue().set(topicName+"QLWJ", JSONObject.toJSONString(voicePowerDevice));
+                client.publishMessage(oneArr[0], messageStart, 2);
+                sendStop(oneArr[0]);
+            }
+            responseDto.setContent("播放指令已发送");
+            responseDto.setSuccess(true);
+        } catch (Exception e) {
+            LOG.error("检查MQTT状态失败", e);
+            responseDto.setContent("检查MQTT状态失败: " + e.getMessage());
+            responseDto.setSuccess(false);
+        }
+        return responseDto;
+    }
+
+    public void sendStop(String topic) {
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                MqttClientSpace client = MqttClientSpace.getInstance();
+                byte[] messageStop = new byte[] { 0x43, 0x52, 0x44, 0x02, 0x00, 0x07, 0x10, 0x02, 0x4C };
+                client.publishMessage(topic, messageStop, 2);
+                String topicName = topic.substring(0,topic.indexOf("["));
+                voicePowerDeviceService.updateStopTime(topicName);
+            }
+        };
+        int delay = 60000; // 延迟时间，单位为毫秒
+        timer.schedule(task, delay);
+    }
+
+    /**
+     * 发送停止指令
+     */
+    @PostMapping("/stop")
+    public ResponseDto<String> stop(@RequestBody JSONObject jsonObject) {
+        ResponseDto<String> responseDto = new ResponseDto<>();
+        try {
+            String[] topicArr = jsonObject.getString("jdfw").split(";");//WHPD[meg],WHPD[updata];RPCD[meg],RPCD[updata]
+            for(int i=0;i<topicArr.length;i++) {
+                String oneitem = topicArr[i];
+                String[] oneArr = oneitem.split(",");
+                if (oneArr.length < 2) {
+                    LOG.error("主题配置格式错误: {}", oneitem);
+                    continue;
+                }
+                MqttClientSpace client = MqttClientSpace.getInstance();
+                byte[] messageStop = new byte[] { 0x43, 0x52, 0x44, 0x02, 0x00, 0x07, 0x10, 0x02, 0x4C };
+                client.publishMessage(oneArr[0], messageStop, 2);
+                String topicName = oneArr[0].substring(0,oneArr[0].indexOf("["));
+                voicePowerDeviceService.updateStopTime(topicName);
+            }
+            responseDto.setContent("停止指令已发送");
+            responseDto.setSuccess(true);
+        } catch (Exception e) {
+            LOG.error("检查MQTT状态失败", e);
+            responseDto.setContent("检查MQTT状态失败: " + e.getMessage());
+            responseDto.setSuccess(false);
+        }
+        return responseDto;
+    }
+
+    public static byte[] hexStringToByteArray(String hex) {
+        hex = hex.replaceAll("\\s+", ""); // 去掉空格
+        int len = hex.length();
+        byte[] data = new byte[len / 2];
+        for (int i = 0; i < len; i += 2) {
+            data[i / 2] = (byte) ((Character.digit(hex.charAt(i), 16) << 4)
+                    + Character.digit(hex.charAt(i+1), 16));
+        }
+        return data;
+    }
 
     /**
      * 获取MQTT客户端状态
