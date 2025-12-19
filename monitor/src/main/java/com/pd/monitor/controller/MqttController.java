@@ -77,7 +77,7 @@ public class MqttController {
                 voicePowerDeviceService.updateStopTime(topicName);
             }
         };
-        int delay = 60000; // 延迟时间，单位为毫秒
+        int delay = 600000; // 延迟时间，单位为毫秒
         timer.schedule(task, delay);
     }
 
