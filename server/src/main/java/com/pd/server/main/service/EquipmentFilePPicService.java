@@ -114,6 +114,17 @@ public class EquipmentFilePPicService {
         return equipmentFilePPicMapper.getthisDeptEquipmentinfoday(equipmentFileExample);
     }
 
+    /**
+     * 获取部门设备信息（分页）
+     */
+    public void getthisDeptEquipmentinfoday(PageDto pageDto, EquipmentFilePPicExample equipmentFileExample) {
+        PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
+        List<EquipmentMainListDto> list = equipmentFilePPicMapper.getthisDeptEquipmentinfoday(equipmentFileExample);
+        PageInfo<EquipmentMainListDto> pageInfo = new PageInfo<>(list);
+        pageDto.setTotal(pageInfo.getTotal());
+        pageDto.setList(list);
+    }
+
     public List<EquipmentMainDto> getthisDeptjxsjJT(EquipmentFilePPicExample equipmentFileExample) {
         return equipmentFilePPicMapper.getthisDeptjxsjJT(equipmentFileExample);
     }

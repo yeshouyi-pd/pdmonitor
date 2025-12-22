@@ -125,4 +125,15 @@ public class EquipmentFilePClusterService {
     public List<EquipmentFilePCluster> listByexample(EquipmentFilePClusterExample equipmentFileEventExample) {
         return equipmentFilePClusterMapper.selectByExample(equipmentFileEventExample);
     }
+
+    /**
+     * 根据条件查询列表（分页）
+     */
+    public void listByexample(PageDto pageDto, EquipmentFilePClusterExample equipmentFileEventExample) {
+        PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
+        List<EquipmentFilePCluster> list = equipmentFilePClusterMapper.selectByExample(equipmentFileEventExample);
+        PageInfo<EquipmentFilePCluster> pageInfo = new PageInfo<>(list);
+        pageDto.setTotal(pageInfo.getTotal());
+        pageDto.setList(list);
+    }
 }

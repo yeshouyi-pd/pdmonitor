@@ -600,9 +600,9 @@ public class MobileController  extends BaseWxController {
                 EquipmentFilePPicExample.Criteria  equipmentFileca = equipmentFileExample.createCriteria();
                 equipmentFileca.andSbbhEqualTo(equipmentFilePPicDto.getSbbh());
                 equipmentFileca.andCjsjBetween(DateUtil.beginOfDay(DateUtil.parse(equipmentFilePPicDto.getRq(), "yyyy-MM-dd")) ,DateUtil.endOfDay(DateUtil.parse(equipmentFilePPicDto.getRq(), "yyyy-MM-dd")) );
-                List<EquipmentMainListDto>  list   = equipmentFilePPicService.getthisDeptEquipmentinfoday(equipmentFileExample);
+fen                equipmentFilePPicService.getthisDeptEquipmentinfoday(equipmentFilePPicDto, equipmentFileExample);
 
-                responseDto.setContent(list);
+                responseDto.setContent(equipmentFilePPicDto);
             }
         }
         return responseDto;
@@ -656,8 +656,8 @@ public class MobileController  extends BaseWxController {
                 Date  date = new Date();
                 ca.andRqEqualTo(equipmentFilePClusterDto.getRq());
                 equipmentFilePClusterExample.setOrderByClause("kssj desc");
-                List<EquipmentFilePCluster>  list   = equipmentFilePClusterService.listByexample(equipmentFilePClusterExample);
-                responseDto.setContent(list);
+                equipmentFilePClusterService.listByexample(equipmentFilePClusterDto, equipmentFilePClusterExample);
+                responseDto.setContent(equipmentFilePClusterDto);
             }
         }
         return responseDto;
