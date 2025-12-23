@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pd.server.main.mapper.MobileMapper">
+
+    <resultMap id="UserProjectEquipmentResultMap" type="com.pd.server.main.dto.UserProjectEquipmentDto">
+        <result column="usercode" jdbcType="VARCHAR" property="usercode" />
+        <result column="xmbh" jdbcType="VARCHAR" property="xmbh" />
+        <result column="xmmc" jdbcType="VARCHAR" property="xmmc" />
+        <result column="sbsn_list" jdbcType="VARCHAR" property="sbsnList" />
+        <result column="sbmc_list" jdbcType="VARCHAR" property="sbmcList" />
+    </resultMap>
+
+    <!-- 查询用户关联的所有项目和设备 -->
+    <select id="getUserProjectEquipment" resultMap="UserProjectEquipmentResultMap">
+        SELECT
+            wpu.usercode,
+            wpu.xmbh,
+            wp.xmmc,
+            GROUP_CONCAT(DISTINCT we.sbsn) as sbsn_list,
+            GROUP_CONCAT(DISTINCT we.sbmc) as sbmc_list
+        FROM water_pro_user wpu
+        INNER JOIN water_project wp ON wpu.xmbh = wp.xmbh
+        JOIN water_pro_equip wpe ON wpu.xmbh = wpe.xmbh
+        JOIN water_equipment we ON wpe.sbsn = we.sbsn AND we.sblb = '0005'
+        WHERE wpu.usercode = #{usercode}
+        GROUP BY wpu.usercode, wpu.xmbh, wp.xmmc
+        ORDER BY wpu.xmbh
+    </select>
+
+</mapper>
+

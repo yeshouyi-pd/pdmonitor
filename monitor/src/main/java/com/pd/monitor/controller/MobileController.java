@@ -87,6 +87,18 @@ public class MobileController  extends BaseWxController {
     @Resource
     private EquipmentFilePWavService equipmentFilePWavService;
 
+    /**
+     * 移动端Service
+     */
+    @Resource
+    private MobileService mobileService;
+
+    /**
+     * 设备计划Service
+     */
+    @Resource
+    private DeviceSchedulesService deviceSchedulesService;
+
 
     private static  Set<String> getDateMonth(Date sdate ,Date edate){
         Set<String> set = new TreeSet<>();
@@ -600,7 +612,7 @@ public class MobileController  extends BaseWxController {
                 EquipmentFilePPicExample.Criteria  equipmentFileca = equipmentFileExample.createCriteria();
                 equipmentFileca.andSbbhEqualTo(equipmentFilePPicDto.getSbbh());
                 equipmentFileca.andCjsjBetween(DateUtil.beginOfDay(DateUtil.parse(equipmentFilePPicDto.getRq(), "yyyy-MM-dd")) ,DateUtil.endOfDay(DateUtil.parse(equipmentFilePPicDto.getRq(), "yyyy-MM-dd")) );
-fen                equipmentFilePPicService.getthisDeptEquipmentinfoday(equipmentFilePPicDto, equipmentFileExample);
+                equipmentFilePPicService.getthisDeptEquipmentinfoday(equipmentFilePPicDto, equipmentFileExample);
 
                 responseDto.setContent(equipmentFilePPicDto);
             }
@@ -664,7 +676,118 @@ fen                equipmentFilePPicService.getthisDeptEquipmentinfoday(equipmen
 
     }
 
+    /**
+     * 获取用户关联的所有项目和设备
+     * @param requestDto 请求参数，包含xm字段（用户账号）
+     * @return 用户项目设备列表
+     */
+    @PostMapping("/getUserProjectEquipment")
+    public ResponseDto getUserProjectEquipment(@RequestBody MobileUserRequestDto requestDto){
+        ResponseDto responseDto = new ResponseDto();
 
+        if(null != requestDto && !StringUtils.isEmpty(requestDto.getXm())){
+            List<UserProjectEquipmentDto> list = mobileService.getUserProjectEquipment(requestDto.getXm());
+            responseDto.setContent(list);
+        }
+        return responseDto;
+    }
+
+    /**
+     * 获取设备计划列表
+     * @param requestDto 请求参数，包含device_id字段
+     * @return 设备计划列表
+     */
+    @PostMapping("/getDeviceSchedules")
+    public ResponseDto getDeviceSchedules(@RequestBody DeviceSchedulesDto requestDto){
+        ResponseDto responseDto = new ResponseDto();
+
+        try {
+            if(null != requestDto && requestDto.getDeviceId() != null){
+                List<DeviceSchedulesDto> list = deviceSchedulesService.getByDeviceId(requestDto.getDeviceId());
+                responseDto.setContent(list);
+                responseDto.setSuccess(true);
+            } else {
+                responseDto.setSuccess(false);
+                responseDto.setMessage("参数不能为空或缺少device_id");
+            }
+        } catch (Exception e) {
+            responseDto.setSuccess(false);
+            responseDto.setMessage("查询失败：" + e.getMessage());
+            e.printStackTrace();
+        }
+        return responseDto;
+    }
+
+    /**
+     * 创建设备计划
+     * @param requestDto 计划信息
+     * @return 操作结果
+     */
+    @PostMapping("/createDeviceSchedule")
+    public ResponseDto createDeviceSchedule(@RequestBody DeviceSchedulesDto requestDto){
+        ResponseDto responseDto = new ResponseDto();
+
+        if(null != requestDto){
+            try {
+                
+                deviceSchedulesService.save(requestDto);
+                responseDto.setSuccess(true);
+                responseDto.setMessage("创建成功");
+            } catch (Exception e) {
+                responseDto.setSuccess(false);
+                responseDto.setMessage("创建失败：" + e.getMessage());
+            }
+        } else {
+            responseDto.setSuccess(false);
+            responseDto.setMessage("参数不能为空");
+        }
+        return responseDto;
+    }
+
+    /**
+     * 更新设备计划
+     * @param requestDto 计划信息，必须包含id
+     * @return 操作结果
+     */
+    @PostMapping("/updateDeviceSchedule")
+    public ResponseDto updateDeviceSchedule(@RequestBody DeviceSchedulesDto requestDto){
+        ResponseDto responseDto = new ResponseDto();
+
+        if(null != requestDto && requestDto.getId() != null){
+            try {
+                deviceSchedulesService.save(requestDto);
+                responseDto.setSuccess(true);
+                responseDto.setMessage("更新成功");
+            } catch (Exception e) {
+                responseDto.setSuccess(false);
+                responseDto.setMessage("更新失败：" + e.getMessage());
+            }
+        } else {
+            responseDto.setSuccess(false);
+            responseDto.setMessage("参数不能为空或缺少id");
+        }
+        return responseDto;
+    }
+
+    @PostMapping("/deleteDeviceSchedule")
+    public ResponseDto deleteDeviceSchedule(@RequestBody DeviceSchedulesDto requestDto){
+        ResponseDto responseDto = new ResponseDto();
+
+        if(null != requestDto && requestDto.getId() != null){
+            try {
+                deviceSchedulesService.delete(requestDto.getId());
+                responseDto.setSuccess(true);
+                responseDto.setMessage("删除成功");
+            } catch (Exception e) {
+                responseDto.setSuccess(false);
+                responseDto.setMessage("删除失败：" + e.getMessage());
+            }
+        } else {
+            responseDto.setSuccess(false);
+            responseDto.setMessage("参数不能为空或缺少id");
+        }
+        return responseDto;
+    }
 
 
 }
