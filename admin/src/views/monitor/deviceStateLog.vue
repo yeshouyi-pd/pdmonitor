@@ -5,7 +5,7 @@
         <!-- query start -->
         <div class="widget-box">
           <div class="widget-header">
-            <h4 class="widget-title">图片管理查询</h4>
+            <h4 class="widget-title">设备运行日志查询</h4>
             <div class="widget-toolbar">
               <a href="#" data-action="collapse">
                 <i class="ace-icon fa fa-chevron-up"></i>

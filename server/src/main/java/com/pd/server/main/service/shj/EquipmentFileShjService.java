@@ -379,6 +379,11 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                         }
                         LOG.info("处理主题配置 - 发布主题: {}, 订阅主题: {}", oneArr[0], oneArr[1]);
                         String topicName = oneArr[0].substring(0,oneArr[0].indexOf("["));
+                        //判断发声设备有没有在执行定时任务
+                        if(!StringUtils.isEmpty(redisTstaticemplate.opsForValue().get(topicName+"SFDS"))){
+                            LOG.error("该主题{}对应的发声设备正在执行定时任务", topicName);
+                            continue;
+                        }
                         if(!StringUtils.isEmpty(redisTstaticemplate.opsForValue().get(topicName+"QLWJ"))) {
                             String entityJson = (String) redisTstaticemplate.opsForValue().get(topicName + "QLWJ");
                             VoicePowerDevice voicePowerDevice = JSONObject.parseObject(entityJson, VoicePowerDevice.class);
