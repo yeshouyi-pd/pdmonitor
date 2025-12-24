@@ -70,6 +70,7 @@ ResponseDto responseDto = new ResponseDto();
         ca.andDepttypeEqualTo(deptDto.getDepttype());
     }
     PageHelper.startPage(deptDto.getPage(), deptDto.getSize());
+    deptExample.setOrderByClause(" deptcode desc ");
     List<Dept> deptList =deptService.list(deptExample);
     PageInfo<Dept> pageInfo = new PageInfo<>(deptList);
     deptDto.setTotal(pageInfo.getTotal());
