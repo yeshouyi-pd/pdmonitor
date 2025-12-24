@@ -125,7 +125,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.pd.server.main.domain.ScheduleExecutions">
+  <insert id="insert" parameterType="com.pd.server.main.domain.ScheduleExecutions" useGeneratedKeys="true" keyProperty="id">
     insert into schedule_executions (id, schedule_id, device_id, 
       planned_time, actual_time, execution_status, 
       created_at, error_message)
@@ -133,7 +133,7 @@
       #{plannedTime,jdbcType=DATE}, #{actualTime,jdbcType=DATE}, #{executionStatus,jdbcType=CHAR}, 
       #{createdAt,jdbcType=DATE}, #{errorMessage,jdbcType=LONGVARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.pd.server.main.domain.ScheduleExecutions">
+  <insert id="insertSelective" parameterType="com.pd.server.main.domain.ScheduleExecutions" useGeneratedKeys="true" keyProperty="id">
     insert into schedule_executions
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">

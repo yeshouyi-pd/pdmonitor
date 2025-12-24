@@ -334,11 +334,11 @@ public class MqttClientSpace implements ApplicationContextAware {
     public void messageArrived(String topic, MqttMessage message) throws Exception {
         try {
             String messageContent = new String(message.getPayload(), "UTF-8");
-            LOG.info("topic:" + topic + ";message:" + messageContent);
+           // LOG.info("topic:" + topic + ";message:" + messageContent);
             
             // 检查是否包含$GNRMC和,A,字符串
             if (messageContent.contains("$GNRMC") || messageContent.contains("PLAY")) {
-                LOG.info("检测到GPS NMEA数据，开始解析...");
+              //  LOG.info("检测到GPS NMEA数据，开始解析...");
                 if(messageContent.contains("$GNRMC")){
                     parseGNRMCData(topic, messageContent);
                 }
@@ -618,7 +618,7 @@ public class MqttClientSpace implements ApplicationContextAware {
             for (String line : lines) {
                 line = line.trim();
                 if (line.startsWith("$GNRMC") && line.contains(",A,")) {
-                    LOG.info("找到有效的GNRMC数据: " + line);
+                    //LOG.info("找到有效的GNRMC数据: " + line);
                     
                     // 解析GNRMC数据
                     String[] fields = line.split(",");
@@ -640,14 +640,14 @@ public class MqttClientSpace implements ApplicationContextAware {
                         // 转换速度 (节转公里/小时)
                         double speedKmh = Double.parseDouble(speed) * 1.852;
                         
-                        LOG.info("GPS数据解析结果:");
-                        LOG.info("  时间: " + time);
-                        LOG.info("  状态: " + status);
-                        LOG.info("  纬度: " + latDecimal + "°");
-                        LOG.info("  经度: " + lonDecimal + "°");
-                        LOG.info("  速度: " + String.format("%.2f", speedKmh) + " km/h");
-                        LOG.info("  航向: " + course + "°");
-                        LOG.info("  日期: " + date);
+                       // LOG.info("GPS数据解析结果:");
+                       // LOG.info("  时间: " + time);
+                       // LOG.info("  状态: " + status);
+                       // LOG.info("  纬度: " + latDecimal + "°");
+                       // LOG.info("  经度: " + lonDecimal + "°");
+                       // LOG.info("  速度: " + String.format("%.2f", speedKmh) + " km/h");
+                       // LOG.info("  航向: " + course + "°");
+                       // LOG.info("  日期: " + date);
                         
                         // 这里可以添加业务逻辑，比如保存到数据库或发送到其他服务
                         processGPSData(topic, time, status, latDecimal, lonDecimal, speedKmh, course, date);
@@ -693,8 +693,8 @@ public class MqttClientSpace implements ApplicationContextAware {
             // 保留6位小数
             decimal = Math.round(decimal * 1000000.0) / 1000000.0;
             
-            LOG.debug("坐标转换: {} {} -> {}度 (度: {}, 分: {}, 秒: {})", 
-                     coordinate, direction, decimal, degrees, minutes, seconds);
+           // LOG.debug("坐标转换: {} {} -> {}度 (度: {}, 分: {}, 秒: {})",
+                     //coordinate, direction, decimal, degrees, minutes, seconds);
             return decimal;
         } catch (NumberFormatException e) {
             LOG.error("坐标格式转换失败: " + coordinate, e);
@@ -709,7 +709,7 @@ public class MqttClientSpace implements ApplicationContextAware {
     private void processGPSData(String topic, String time, String status, double latitude, double longitude,
                                double speed, String course, String date) {
         try {
-            LOG.info("开始处理GPS数据...");
+           // LOG.info("开始处理GPS数据...");
             
             // 检查Redis模板是否可用
             if (redisTstaticemplate == null) {
@@ -758,10 +758,10 @@ public class MqttClientSpace implements ApplicationContextAware {
             
             // 保存到数据库
             waterEquiplogMapperStatic.updateBySbbhSelective(record);
-            LOG.info("GPS数据处理完成，设备编号: {}, 坐标: {},{}", sbbh, latitude, longitude);
+            //LOG.info("GPS数据处理完成，设备编号: {}, 坐标: {},{}", sbbh, latitude, longitude);
             
         } catch (Exception e) {
-            LOG.error("处理GPS数据时发生异常，主题: " + topic, e);
+           // LOG.error("处理GPS数据时发生异常，主题: " + topic, e);
             // 不重新抛出异常，避免影响MQTT连接
         }
     }

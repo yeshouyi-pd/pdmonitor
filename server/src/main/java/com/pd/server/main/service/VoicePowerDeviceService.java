@@ -169,4 +169,36 @@ public class VoicePowerDeviceService {
             LOG.error("根据主题 {} 修改停止时间错误", topicName);
         }
     }
+
+    public Boolean findBySbsnAndSentTime(String deviceId, Date startSendTime) {
+        VoicePowerDeviceExample example = new VoicePowerDeviceExample();
+        VoicePowerDeviceExample.Criteria ca = example.createCriteria();
+        ca.andSbbhEqualTo(deviceId);
+        ca.andSendTimeGreaterThanOrEqualTo(startSendTime);
+        ca.andIsPlayEqualTo(1);
+        long l = voicePowerDeviceMapper.countByExample(example);
+        if (l > 0){
+            return true;
+        }else{
+            return false;
+        }
+
+
+    }
+
+    public Boolean findBySbsnAndSentTimeend(String deviceId, Date startSendTime) {
+        VoicePowerDeviceExample example = new VoicePowerDeviceExample();
+        VoicePowerDeviceExample.Criteria ca = example.createCriteria();
+        ca.andSbbhEqualTo(deviceId);
+        ca.andStopTimeGreaterThanOrEqualTo(startSendTime);
+        ca.andIsPlayEqualTo(1);
+        long l = voicePowerDeviceMapper.countByExample(example);
+        if (l > 0){
+            return true;
+        }else{
+            return false;
+        }
+
+
+    }
 }

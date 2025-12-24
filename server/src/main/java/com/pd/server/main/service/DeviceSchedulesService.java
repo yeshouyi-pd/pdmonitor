@@ -42,6 +42,7 @@ public class DeviceSchedulesService {
     public void save(DeviceSchedulesDto deviceSchedulesDto) {
         DeviceSchedules deviceSchedules = CopyUtil.copy(deviceSchedulesDto, DeviceSchedules.class);
         if (StringUtils.isEmpty(deviceSchedulesDto.getId())) {
+            deviceSchedules.setIsRunning(0);
             this.insert(deviceSchedules);
         } else {
             this.update(deviceSchedules);
@@ -104,7 +105,7 @@ public class DeviceSchedulesService {
      * 更新
      */
     private void update(DeviceSchedules deviceSchedules) {
-        deviceSchedulesMapper.updateByPrimaryKey(deviceSchedules);
+        deviceSchedulesMapper.updateByPrimaryKeySelective(deviceSchedules);
     }
 
     /**
