@@ -79,6 +79,12 @@ public class CodeSetUtilController extends BaseWxController {
         if(!"00000000".equals(loginUserDto.getRode())){
             ca.andRodeNotEqualTo("00000000");
         }
+        if(!StringUtils.isEmpty(userDto.getLoginName())){
+            ca.andLoginNameEqualTo(userDto.getLoginName());
+        }
+        if(!StringUtils.isEmpty(userDto.getName())){
+            ca.andNameEqualTo(userDto.getName());
+        }
         List<User> userList = userService.list(userExample);
         PageInfo<User> pageInfo = new PageInfo<>(userList);
         userDto.setTotal(pageInfo.getTotal());
