@@ -262,52 +262,62 @@ public class ScheduleExecutionsExample {
             return (Criteria) this;
         }
 
-        public Criteria andDeviceIdEqualTo(Integer value) {
+        public Criteria andDeviceIdEqualTo(String value) {
             addCriterion("device_id =", value, "deviceId");
             return (Criteria) this;
         }
 
-        public Criteria andDeviceIdNotEqualTo(Integer value) {
+        public Criteria andDeviceIdNotEqualTo(String value) {
             addCriterion("device_id <>", value, "deviceId");
             return (Criteria) this;
         }
 
-        public Criteria andDeviceIdGreaterThan(Integer value) {
+        public Criteria andDeviceIdGreaterThan(String value) {
             addCriterion("device_id >", value, "deviceId");
             return (Criteria) this;
         }
 
-        public Criteria andDeviceIdGreaterThanOrEqualTo(Integer value) {
+        public Criteria andDeviceIdGreaterThanOrEqualTo(String value) {
             addCriterion("device_id >=", value, "deviceId");
             return (Criteria) this;
         }
 
-        public Criteria andDeviceIdLessThan(Integer value) {
+        public Criteria andDeviceIdLessThan(String value) {
             addCriterion("device_id <", value, "deviceId");
             return (Criteria) this;
         }
 
-        public Criteria andDeviceIdLessThanOrEqualTo(Integer value) {
+        public Criteria andDeviceIdLessThanOrEqualTo(String value) {
             addCriterion("device_id <=", value, "deviceId");
             return (Criteria) this;
         }
 
-        public Criteria andDeviceIdIn(List<Integer> values) {
+        public Criteria andDeviceIdLike(String value) {
+            addCriterion("device_id like", value, "deviceId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeviceIdNotLike(String value) {
+            addCriterion("device_id not like", value, "deviceId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeviceIdIn(List<String> values) {
             addCriterion("device_id in", values, "deviceId");
             return (Criteria) this;
         }
 
-        public Criteria andDeviceIdNotIn(List<Integer> values) {
+        public Criteria andDeviceIdNotIn(List<String> values) {
             addCriterion("device_id not in", values, "deviceId");
             return (Criteria) this;
         }
 
-        public Criteria andDeviceIdBetween(Integer value1, Integer value2) {
+        public Criteria andDeviceIdBetween(String value1, String value2) {
             addCriterion("device_id between", value1, value2, "deviceId");
             return (Criteria) this;
         }
 
-        public Criteria andDeviceIdNotBetween(Integer value1, Integer value2) {
+        public Criteria andDeviceIdNotBetween(String value1, String value2) {
             addCriterion("device_id not between", value1, value2, "deviceId");
             return (Criteria) this;
         }

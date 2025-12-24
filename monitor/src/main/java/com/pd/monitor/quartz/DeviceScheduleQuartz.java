@@ -173,14 +173,7 @@ public class DeviceScheduleQuartz {
             // 创建执行记录，状态为 RUNNING（执行中）
             ScheduleExecutions execution = new ScheduleExecutions();
             execution.setScheduleId(schedule.getId());
-            try {
-                // 尝试将 deviceId 从 String 转换为 Integer
-                if (!StringUtils.isEmpty(schedule.getDeviceId())) {
-                    execution.setDeviceId(Integer.parseInt(schedule.getDeviceId()));
-                }
-            } catch (NumberFormatException e) {
-                LOG.warn("设备ID转换失败，计划ID：{}，设备ID：{}", schedule.getId(), schedule.getDeviceId());
-            }
+            execution.setDeviceId(schedule.getDeviceId());
             execution.setPlannedTime(now);
             execution.setActualTime(now);
             execution.setExecutionStatus("RUNNING"); // 执行中状态

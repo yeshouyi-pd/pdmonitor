@@ -7,7 +7,7 @@ public class ScheduleExecutions {
 
     private Integer scheduleId;
 
-    private Integer deviceId;
+    private String deviceId;
 
     private Date plannedTime;
 
@@ -35,11 +35,11 @@ public class ScheduleExecutions {
         this.scheduleId = scheduleId;
     }
 
-    public Integer getDeviceId() {
+    public String getDeviceId() {
         return deviceId;
     }
 
-    public void setDeviceId(Integer deviceId) {
+    public void setDeviceId(String deviceId) {
         this.deviceId = deviceId;
     }
 

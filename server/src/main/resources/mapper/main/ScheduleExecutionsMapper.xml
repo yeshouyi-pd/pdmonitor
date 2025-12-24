@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.pd.server.main.domain.ScheduleExecutions">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="schedule_id" jdbcType="INTEGER" property="scheduleId" />
-    <result column="device_id" jdbcType="INTEGER" property="deviceId" />
+    <result column="device_id" jdbcType="VARCHAR" property="deviceId" />
     <result column="planned_time" jdbcType="DATE" property="plannedTime" />
     <result column="actual_time" jdbcType="DATE" property="actualTime" />
     <result column="execution_status" jdbcType="CHAR" property="executionStatus" />
@@ -129,7 +129,7 @@
     insert into schedule_executions (id, schedule_id, device_id, 
       planned_time, actual_time, execution_status, 
       created_at, error_message)
-    values (#{id,jdbcType=INTEGER}, #{scheduleId,jdbcType=INTEGER}, #{deviceId,jdbcType=INTEGER}, 
+    values (#{id,jdbcType=INTEGER}, #{scheduleId,jdbcType=INTEGER}, #{deviceId,jdbcType=VARCHAR}, 
       #{plannedTime,jdbcType=DATE}, #{actualTime,jdbcType=DATE}, #{executionStatus,jdbcType=CHAR}, 
       #{createdAt,jdbcType=DATE}, #{errorMessage,jdbcType=LONGVARCHAR})
   </insert>
@@ -169,7 +169,7 @@
         #{scheduleId,jdbcType=INTEGER},
       </if>
       <if test="deviceId != null">
-        #{deviceId,jdbcType=INTEGER},
+        #{deviceId,jdbcType=VARCHAR},
       </if>
       <if test="plannedTime != null">
         #{plannedTime,jdbcType=DATE},
@@ -204,7 +204,7 @@
         schedule_id = #{record.scheduleId,jdbcType=INTEGER},
       </if>
       <if test="record.deviceId != null">
-        device_id = #{record.deviceId,jdbcType=INTEGER},
+        device_id = #{record.deviceId,jdbcType=VARCHAR},
       </if>
       <if test="record.plannedTime != null">
         planned_time = #{record.plannedTime,jdbcType=DATE},
@@ -230,7 +230,7 @@
     update schedule_executions
     set id = #{record.id,jdbcType=INTEGER},
       schedule_id = #{record.scheduleId,jdbcType=INTEGER},
-      device_id = #{record.deviceId,jdbcType=INTEGER},
+      device_id = #{record.deviceId,jdbcType=VARCHAR},
       planned_time = #{record.plannedTime,jdbcType=DATE},
       actual_time = #{record.actualTime,jdbcType=DATE},
       execution_status = #{record.executionStatus,jdbcType=CHAR},
@@ -244,7 +244,7 @@
     update schedule_executions
     set id = #{record.id,jdbcType=INTEGER},
       schedule_id = #{record.scheduleId,jdbcType=INTEGER},
-      device_id = #{record.deviceId,jdbcType=INTEGER},
+      device_id = #{record.deviceId,jdbcType=VARCHAR},
       planned_time = #{record.plannedTime,jdbcType=DATE},
       actual_time = #{record.actualTime,jdbcType=DATE},
       execution_status = #{record.executionStatus,jdbcType=CHAR},
@@ -260,7 +260,7 @@
         schedule_id = #{scheduleId,jdbcType=INTEGER},
       </if>
       <if test="deviceId != null">
-        device_id = #{deviceId,jdbcType=INTEGER},
+        device_id = #{deviceId,jdbcType=VARCHAR},
       </if>
       <if test="plannedTime != null">
         planned_time = #{plannedTime,jdbcType=DATE},
@@ -283,7 +283,7 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.pd.server.main.domain.ScheduleExecutions">
     update schedule_executions
     set schedule_id = #{scheduleId,jdbcType=INTEGER},
-      device_id = #{deviceId,jdbcType=INTEGER},
+      device_id = #{deviceId,jdbcType=VARCHAR},
       planned_time = #{plannedTime,jdbcType=DATE},
       actual_time = #{actualTime,jdbcType=DATE},
       execution_status = #{executionStatus,jdbcType=CHAR},
@@ -294,7 +294,7 @@
   <update id="updateByPrimaryKey" parameterType="com.pd.server.main.domain.ScheduleExecutions">
     update schedule_executions
     set schedule_id = #{scheduleId,jdbcType=INTEGER},
-      device_id = #{deviceId,jdbcType=INTEGER},
+      device_id = #{deviceId,jdbcType=VARCHAR},
       planned_time = #{plannedTime,jdbcType=DATE},
       actual_time = #{actualTime,jdbcType=DATE},
       execution_status = #{executionStatus,jdbcType=CHAR},

@@ -23,10 +23,10 @@ public class ScheduleExecutionsService {
     private ScheduleExecutionsMapper scheduleExecutionsMapper;
 
     /**
-    * 列表查询
-    */
+     * 列表查询
+     */
     public void list(PageDto pageDto) {
-    PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
+        PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
         ScheduleExecutionsExample scheduleExecutionsExample = new ScheduleExecutionsExample();
         List<ScheduleExecutions> scheduleExecutionsList = scheduleExecutionsMapper.selectByExample(scheduleExecutionsExample);
         PageInfo<ScheduleExecutions> pageInfo = new PageInfo<>(scheduleExecutionsList);
@@ -36,8 +36,8 @@ public class ScheduleExecutionsService {
     }
 
     /**
-    * 保存，id有值时更新，无值时新增
-    */
+     * 保存，id有值时更新，无值时新增
+     */
     public void save(ScheduleExecutionsDto scheduleExecutionsDto) {
         ScheduleExecutions scheduleExecutions = CopyUtil.copy(scheduleExecutionsDto, ScheduleExecutions.class);
         if (StringUtils.isEmpty(scheduleExecutionsDto.getId())) {
@@ -48,10 +48,10 @@ public class ScheduleExecutionsService {
     }
 
     /**
-    * 新增
-    */
+     * 新增
+     */
     private void insert(ScheduleExecutions scheduleExecutions) {
-                scheduleExecutions.setCreatedAt(new Date());
+        scheduleExecutions.setCreatedAt(new Date());
         scheduleExecutionsMapper.insert(scheduleExecutions);
     }
 
@@ -84,15 +84,15 @@ public class ScheduleExecutionsService {
     }
 
     /**
-    * 更新
-    */
+     * 更新
+     */
     private void update(ScheduleExecutions scheduleExecutions) {
         scheduleExecutionsMapper.updateByPrimaryKey(scheduleExecutions);
     }
 
     /**
-    * 删除
-    */
+     * 删除
+     */
     public void delete(int id) {
         scheduleExecutionsMapper.deleteByPrimaryKey(id);
     }

@@ -16,7 +16,7 @@ public class ScheduleExecutionsDto {
     /**
     * 设备ID
     */
-    private Integer deviceId;
+    private String deviceId;
 
     /**
     * 计划执行时间
@@ -59,11 +59,11 @@ public class ScheduleExecutionsDto {
         this.scheduleId = scheduleId;
     }
 
-    public Integer getDeviceId() {
+    public String getDeviceId() {
         return deviceId;
     }
 
-    public void setDeviceId(Integer deviceId) {
+    public void setDeviceId(String deviceId) {
         this.deviceId = deviceId;
     }
 
