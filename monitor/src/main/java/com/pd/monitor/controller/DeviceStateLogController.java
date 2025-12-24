@@ -43,6 +43,9 @@ public class DeviceStateLogController extends BaseWxController {
                 ca.andSbbhIn(userDto.getXmbhsbsns().get(pageDto.getXmbh()));
             }
         }
+        if(!StringUtils.isEmpty(pageDto.getSbbh())){
+            ca.andSbbhEqualTo(pageDto.getSbbh());
+        }
         if(!StringUtils.isEmpty(pageDto.getStime())){
             ca.andRqGreaterThanOrEqualTo(pageDto.getStime());
         }
