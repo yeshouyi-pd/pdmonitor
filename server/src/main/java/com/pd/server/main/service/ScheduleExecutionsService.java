@@ -87,7 +87,7 @@ public class ScheduleExecutionsService {
      * 更新
      */
     private void update(ScheduleExecutions scheduleExecutions) {
-        scheduleExecutionsMapper.updateByPrimaryKey(scheduleExecutions);
+        scheduleExecutionsMapper.updateByPrimaryKeySelective(scheduleExecutions);
     }
 
     /**
