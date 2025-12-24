@@ -56,6 +56,34 @@ public class ScheduleExecutionsService {
     }
 
     /**
+     * 直接插入执行记录（用于定时任务）
+     * @param scheduleExecutions 执行记录对象
+     * @return 执行记录ID
+     */
+    public Integer insertExecution(ScheduleExecutions scheduleExecutions) {
+        scheduleExecutions.setCreatedAt(new Date());
+        scheduleExecutionsMapper.insert(scheduleExecutions);
+        return scheduleExecutions.getId();
+    }
+
+    /**
+     * 根据ID查询执行记录
+     * @param id 执行记录ID
+     * @return 执行记录对象
+     */
+    public ScheduleExecutions getById(Integer id) {
+        return scheduleExecutionsMapper.selectByPrimaryKey(id);
+    }
+
+    /**
+     * 更新执行记录
+     * @param scheduleExecutions 执行记录对象
+     */
+    public void updateExecution(ScheduleExecutions scheduleExecutions) {
+        scheduleExecutionsMapper.updateByPrimaryKeySelective(scheduleExecutions);
+    }
+
+    /**
     * 更新
     */
     private void update(ScheduleExecutions scheduleExecutions) {

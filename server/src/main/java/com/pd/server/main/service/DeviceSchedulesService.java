@@ -24,10 +24,10 @@ public class DeviceSchedulesService {
     private DeviceSchedulesMapper deviceSchedulesMapper;
 
     /**
-    * 列表查询
-    */
+     * 列表查询
+     */
     public void list(PageDto pageDto) {
-    PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
+        PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
         DeviceSchedulesExample deviceSchedulesExample = new DeviceSchedulesExample();
         List<DeviceSchedules> deviceSchedulesList = deviceSchedulesMapper.selectByExample(deviceSchedulesExample);
         PageInfo<DeviceSchedules> pageInfo = new PageInfo<>(deviceSchedulesList);
@@ -37,8 +37,8 @@ public class DeviceSchedulesService {
     }
 
     /**
-    * 保存，id有值时更新，无值时新增
-    */
+     * 保存，id有值时更新，无值时新增
+     */
     public void save(DeviceSchedulesDto deviceSchedulesDto) {
         DeviceSchedules deviceSchedules = CopyUtil.copy(deviceSchedulesDto, DeviceSchedules.class);
         if (StringUtils.isEmpty(deviceSchedulesDto.getId())) {
@@ -65,23 +65,51 @@ public class DeviceSchedulesService {
     }
 
     /**
-    * 新增
-    */
+     * 查询所有启用的计划
+     * @return 启用的计划列表
+     */
+    public List<DeviceSchedules> getActiveSchedules() {
+        DeviceSchedulesExample example = new DeviceSchedulesExample();
+        DeviceSchedulesExample.Criteria criteria = example.createCriteria();
+        criteria.andIsActiveEqualTo(1);
+        return deviceSchedulesMapper.selectByExample(example);
+    }
+
+    /**
+     * 更新计划的执行状态
+     * @param schedule 计划对象
+     */
+    public void updateScheduleStatus(DeviceSchedules schedule) {
+        deviceSchedulesMapper.updateByPrimaryKeySelective(schedule);
+    }
+
+    /**
+     * 根据ID查询计划
+     * @param id 计划ID
+     * @return 计划对象
+     */
+    public DeviceSchedules getById(Integer id) {
+        return deviceSchedulesMapper.selectByPrimaryKey(id);
+    }
+
+    /**
+     * 新增
+     */
     private void insert(DeviceSchedules deviceSchedules) {
-                deviceSchedules.setCreatedAt(new Date());
+        deviceSchedules.setCreatedAt(new Date());
         deviceSchedulesMapper.insert(deviceSchedules);
     }
 
     /**
-    * 更新
-    */
+     * 更新
+     */
     private void update(DeviceSchedules deviceSchedules) {
         deviceSchedulesMapper.updateByPrimaryKey(deviceSchedules);
     }
 
     /**
-    * 删除
-    */
+     * 删除
+     */
     public void delete(int id) {
         deviceSchedulesMapper.deleteByPrimaryKey(id);
     }
