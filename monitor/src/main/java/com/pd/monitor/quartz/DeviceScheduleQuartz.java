@@ -299,10 +299,6 @@ public class DeviceScheduleQuartz {
                 Date nextRunTime = calculateNextRunTime(schedule, new Date());
                 schedule.setNextRunTime(nextRunTime);
 
-                // 如果是 once 类型且已执行，则禁用计划
-                if ("once".equals(schedule.getRepeatType())) {
-                    schedule.setIsActive(0);
-                }
 
                 deviceSchedulesService.updateScheduleStatus(schedule);
 

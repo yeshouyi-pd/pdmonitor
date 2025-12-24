@@ -115,4 +115,7 @@ public class DeviceSchedulesService {
         deviceSchedulesMapper.deleteByPrimaryKey(id);
     }
 
+    public List<DeviceSchedules> findExample(DeviceSchedulesExample deviceSchedulesExample) {
+        return deviceSchedulesMapper.selectByExample(deviceSchedulesExample);
+    }
 }

@@ -755,6 +755,13 @@ public class MobileController  extends BaseWxController {
 
         if(null != requestDto && requestDto.getId() != null){
             try {
+                DeviceSchedules byId = deviceSchedulesService.getById(requestDto.getId());
+                if(0 != byId.getIsRunning()){
+                    responseDto.setSuccess(false);
+                    responseDto.setMessage("计划运行中，禁止更新");
+                    return responseDto;
+                }
+
                 deviceSchedulesService.save(requestDto);
                 responseDto.setSuccess(true);
                 responseDto.setMessage("更新成功");
@@ -781,6 +788,33 @@ public class MobileController  extends BaseWxController {
             } catch (Exception e) {
                 responseDto.setSuccess(false);
                 responseDto.setMessage("删除失败：" + e.getMessage());
+            }
+        } else {
+            responseDto.setSuccess(false);
+            responseDto.setMessage("参数不能为空或缺少id");
+        }
+        return responseDto;
+    }
+
+    @PostMapping("/getDeviceStuts")
+    public ResponseDto getDeviceStuts(@RequestBody DeviceSchedulesDto requestDto){
+        ResponseDto responseDto = new ResponseDto();
+
+        if(null != requestDto && requestDto.getDeviceId() != null){
+            DeviceSchedulesExample deviceSchedulesExample = new DeviceSchedulesExample();
+            DeviceSchedulesExample.Criteria criteria = deviceSchedulesExample.createCriteria();
+            criteria.andDeviceIdEqualTo(requestDto.getDeviceId());
+            criteria.andIsRunningNotEqualTo(0);
+            criteria.andIsActiveEqualTo(1);
+            List<DeviceSchedules> list =deviceSchedulesService.findExample(deviceSchedulesExample);
+            if(CollectionUtils.isEmpty(list)){
+                responseDto.setSuccess(true);
+                responseDto.setContent(false);
+                responseDto.setMessage("设备未运行");
+            }else{
+                responseDto.setSuccess(true);
+                responseDto.setContent(true);
+                responseDto.setMessage("设备运行中");
             }
         } else {
             responseDto.setSuccess(false);
