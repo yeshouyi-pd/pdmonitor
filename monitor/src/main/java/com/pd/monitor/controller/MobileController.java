@@ -99,6 +99,12 @@ public class MobileController  extends BaseWxController {
     @Resource
     private DeviceSchedulesService deviceSchedulesService;
 
+    /**
+     * 执行记录Service
+     */
+    @Resource
+    private ScheduleExecutionsService scheduleExecutionsService;
+
 
     private static  Set<String> getDateMonth(Date sdate ,Date edate){
         Set<String> set = new TreeSet<>();
@@ -819,6 +825,32 @@ public class MobileController  extends BaseWxController {
         } else {
             responseDto.setSuccess(false);
             responseDto.setMessage("参数不能为空或缺少id");
+        }
+        return responseDto;
+    }
+
+    /**
+     * 根据设备ID查询执行记录，左连接计划表（分页）
+     * @param pageDto 请求参数，包含deviceId、page、size字段
+     * @return 执行记录列表（包含计划信息）和分页信息
+     */
+    @PostMapping("/getScheduleExecutionsByDeviceId")
+    public ResponseDto getScheduleExecutionsByDeviceId(@RequestBody ScheduleExecutionPageDto pageDto){
+        ResponseDto responseDto = new ResponseDto();
+
+        try {
+            if(null != pageDto && !StringUtils.isEmpty(pageDto.getDeviceId())){
+                scheduleExecutionsService.getByDeviceIdWithSchedule(pageDto, pageDto.getDeviceId());
+                responseDto.setContent(pageDto);
+                responseDto.setSuccess(true);
+            } else {
+                responseDto.setSuccess(false);
+                responseDto.setMessage("参数不能为空或缺少deviceId");
+            }
+        } catch (Exception e) {
+            responseDto.setSuccess(false);
+            responseDto.setMessage("查询失败：" + e.getMessage());
+            e.printStackTrace();
         }
         return responseDto;
     }

@@ -301,4 +301,47 @@
       created_at = #{createdAt,jdbcType=DATE}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  
+  <!-- 执行记录与计划关联查询结果映射 -->
+  <resultMap id="ExecutionWithScheduleResultMap" type="com.pd.server.main.dto.ScheduleExecutionWithScheduleDto">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="schedule_id" jdbcType="INTEGER" property="scheduleId" />
+    <result column="device_id" jdbcType="VARCHAR" property="deviceId" />
+    <result column="planned_time" jdbcType="TIMESTAMP" property="plannedTime" />
+    <result column="actual_time" jdbcType="TIMESTAMP" property="actualTime" />
+    <result column="execution_status" jdbcType="CHAR" property="executionStatus" />
+    <result column="error_message" jdbcType="LONGVARCHAR" property="errorMessage" />
+    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
+    <result column="schedule_name" jdbcType="VARCHAR" property="scheduleName" />
+    <result column="start_time" jdbcType="VARCHAR" property="startTime" />
+    <result column="end_time" jdbcType="VARCHAR" property="endTime" />
+    <result column="duration_minutes" jdbcType="INTEGER" property="durationMinutes" />
+    <result column="repeat_type" jdbcType="CHAR" property="repeatType" />
+    <result column="is_active" jdbcType="INTEGER" property="isActive" />
+    <result column="is_running" jdbcType="INTEGER" property="isRunning" />
+  </resultMap>
+  
+  <!-- 根据设备ID查询执行记录，左连接计划表 -->
+  <select id="selectByDeviceIdWithSchedule" resultMap="ExecutionWithScheduleResultMap">
+    SELECT 
+      se.id,
+      se.schedule_id,
+      se.device_id,
+      DATE_FORMAT(se.planned_time, '%Y-%m-%d %H:%i:%s') as planned_time,
+      DATE_FORMAT(se.actual_time, '%Y-%m-%d %H:%i:%s') as actual_time,
+      se.execution_status,
+      se.error_message,
+      DATE_FORMAT(se.created_at, '%Y-%m-%d %H:%i:%s') as created_at,
+      ds.schedule_name,
+      ds.start_time,
+      ds.end_time,
+      ds.duration_minutes,
+      ds.repeat_type,
+      ds.is_active,
+      ds.is_running
+    FROM schedule_executions se
+    LEFT JOIN device_schedules ds ON se.schedule_id = ds.id
+    WHERE se.device_id = #{deviceId}
+    ORDER BY se.created_at DESC
+  </select>
 </mapper>
