@@ -5,10 +5,10 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="schedule_id" jdbcType="INTEGER" property="scheduleId" />
     <result column="device_id" jdbcType="VARCHAR" property="deviceId" />
-    <result column="planned_time" jdbcType="DATE" property="plannedTime" />
-    <result column="actual_time" jdbcType="DATE" property="actualTime" />
+    <result column="planned_time" jdbcType="TIMESTAMP" property="plannedTime" />
+    <result column="actual_time" jdbcType="TIMESTAMP" property="actualTime" />
     <result column="execution_status" jdbcType="CHAR" property="executionStatus" />
-    <result column="created_at" jdbcType="DATE" property="createdAt" />
+    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.pd.server.main.domain.ScheduleExecutions">
     <result column="error_message" jdbcType="LONGVARCHAR" property="errorMessage" />
@@ -130,8 +130,8 @@
       planned_time, actual_time, execution_status, 
       created_at, error_message)
     values (#{id,jdbcType=INTEGER}, #{scheduleId,jdbcType=INTEGER}, #{deviceId,jdbcType=VARCHAR}, 
-      #{plannedTime,jdbcType=DATE}, #{actualTime,jdbcType=DATE}, #{executionStatus,jdbcType=CHAR}, 
-      #{createdAt,jdbcType=DATE}, #{errorMessage,jdbcType=LONGVARCHAR})
+      #{plannedTime,jdbcType=TIMESTAMP}, #{actualTime,jdbcType=TIMESTAMP}, #{executionStatus,jdbcType=CHAR}, 
+      #{createdAt,jdbcType=TIMESTAMP}, #{errorMessage,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.pd.server.main.domain.ScheduleExecutions" useGeneratedKeys="true" keyProperty="id">
     insert into schedule_executions
@@ -172,16 +172,16 @@
         #{deviceId,jdbcType=VARCHAR},
       </if>
       <if test="plannedTime != null">
-        #{plannedTime,jdbcType=DATE},
+        #{plannedTime,jdbcType=TIMESTAMP},
       </if>
       <if test="actualTime != null">
-        #{actualTime,jdbcType=DATE},
+        #{actualTime,jdbcType=TIMESTAMP},
       </if>
       <if test="executionStatus != null">
         #{executionStatus,jdbcType=CHAR},
       </if>
       <if test="createdAt != null">
-        #{createdAt,jdbcType=DATE},
+        #{createdAt,jdbcType=TIMESTAMP},
       </if>
       <if test="errorMessage != null">
         #{errorMessage,jdbcType=LONGVARCHAR},
@@ -207,16 +207,16 @@
         device_id = #{record.deviceId,jdbcType=VARCHAR},
       </if>
       <if test="record.plannedTime != null">
-        planned_time = #{record.plannedTime,jdbcType=DATE},
+        planned_time = #{record.plannedTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.actualTime != null">
-        actual_time = #{record.actualTime,jdbcType=DATE},
+        actual_time = #{record.actualTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.executionStatus != null">
         execution_status = #{record.executionStatus,jdbcType=CHAR},
       </if>
       <if test="record.createdAt != null">
-        created_at = #{record.createdAt,jdbcType=DATE},
+        created_at = #{record.createdAt,jdbcType=TIMESTAMP},
       </if>
       <if test="record.errorMessage != null">
         error_message = #{record.errorMessage,jdbcType=LONGVARCHAR},
@@ -231,10 +231,10 @@
     set id = #{record.id,jdbcType=INTEGER},
       schedule_id = #{record.scheduleId,jdbcType=INTEGER},
       device_id = #{record.deviceId,jdbcType=VARCHAR},
-      planned_time = #{record.plannedTime,jdbcType=DATE},
-      actual_time = #{record.actualTime,jdbcType=DATE},
+      planned_time = #{record.plannedTime,jdbcType=TIMESTAMP},
+      actual_time = #{record.actualTime,jdbcType=TIMESTAMP},
       execution_status = #{record.executionStatus,jdbcType=CHAR},
-      created_at = #{record.createdAt,jdbcType=DATE},
+      created_at = #{record.createdAt,jdbcType=TIMESTAMP},
       error_message = #{record.errorMessage,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -245,10 +245,10 @@
     set id = #{record.id,jdbcType=INTEGER},
       schedule_id = #{record.scheduleId,jdbcType=INTEGER},
       device_id = #{record.deviceId,jdbcType=VARCHAR},
-      planned_time = #{record.plannedTime,jdbcType=DATE},
-      actual_time = #{record.actualTime,jdbcType=DATE},
+      planned_time = #{record.plannedTime,jdbcType=TIMESTAMP},
+      actual_time = #{record.actualTime,jdbcType=TIMESTAMP},
       execution_status = #{record.executionStatus,jdbcType=CHAR},
-      created_at = #{record.createdAt,jdbcType=DATE}
+      created_at = #{record.createdAt,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -263,16 +263,16 @@
         device_id = #{deviceId,jdbcType=VARCHAR},
       </if>
       <if test="plannedTime != null">
-        planned_time = #{plannedTime,jdbcType=DATE},
+        planned_time = #{plannedTime,jdbcType=TIMESTAMP},
       </if>
       <if test="actualTime != null">
-        actual_time = #{actualTime,jdbcType=DATE},
+        actual_time = #{actualTime,jdbcType=TIMESTAMP},
       </if>
       <if test="executionStatus != null">
         execution_status = #{executionStatus,jdbcType=CHAR},
       </if>
       <if test="createdAt != null">
-        created_at = #{createdAt,jdbcType=DATE},
+        created_at = #{createdAt,jdbcType=TIMESTAMP},
       </if>
       <if test="errorMessage != null">
         error_message = #{errorMessage,jdbcType=LONGVARCHAR},
@@ -284,10 +284,10 @@
     update schedule_executions
     set schedule_id = #{scheduleId,jdbcType=INTEGER},
       device_id = #{deviceId,jdbcType=VARCHAR},
-      planned_time = #{plannedTime,jdbcType=DATE},
-      actual_time = #{actualTime,jdbcType=DATE},
+      planned_time = #{plannedTime,jdbcType=TIMESTAMP},
+      actual_time = #{actualTime,jdbcType=TIMESTAMP},
       execution_status = #{executionStatus,jdbcType=CHAR},
-      created_at = #{createdAt,jdbcType=DATE},
+      created_at = #{createdAt,jdbcType=TIMESTAMP},
       error_message = #{errorMessage,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -295,10 +295,10 @@
     update schedule_executions
     set schedule_id = #{scheduleId,jdbcType=INTEGER},
       device_id = #{deviceId,jdbcType=VARCHAR},
-      planned_time = #{plannedTime,jdbcType=DATE},
-      actual_time = #{actualTime,jdbcType=DATE},
+      planned_time = #{plannedTime,jdbcType=TIMESTAMP},
+      actual_time = #{actualTime,jdbcType=TIMESTAMP},
       execution_status = #{executionStatus,jdbcType=CHAR},
-      created_at = #{createdAt,jdbcType=DATE}
+      created_at = #{createdAt,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
   
