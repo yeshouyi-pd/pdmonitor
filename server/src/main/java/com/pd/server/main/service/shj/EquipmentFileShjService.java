@@ -309,10 +309,32 @@ public class EquipmentFileShjService extends AbstractScanRequest{
 
     public static void sendMsg(String sbbh){
         try {
+            String ymd = DateTools.getYMD();
             Map<String,String> attrMap = (Map<String, String>) redisTstaticemplate.opsForValue().get(RedisCode.ATTRECODEKEY);
             String angleTemplateId = attrMap.get("angleTemplateId");
             String phoneNum = attrMap.get("anglePhone");
-            SendSmsTool.sendSms(angleTemplateId,sbbh, phoneNum);
+            if(!StringUtils.isEmpty(redisTstaticemplate.opsForValue().get("YQZTDXFS"+sbbh))){
+                String redisValue = (String) redisTstaticemplate.opsForValue().get("YQZTDXFS"+sbbh);
+                String[] arr = redisValue.split("-");
+                //判断日期是否是今天，如果是，则判断次数是否大于3
+                if(ymd.equals(arr[1])){
+                    int cs = Integer.parseInt(arr[2]);
+                    if(cs<=3){
+                        //发送次数少于等于3次
+                        SendSmsTool.sendSms(angleTemplateId,sbbh, phoneNum);
+                        cs++;
+                        redisTstaticemplate.opsForValue().set("YQZTDXFS"+sbbh, sbbh+"-"+ymd+"-"+cs);
+                    }
+                }else{
+                    //不是今天的数据，直接发送短信
+                    SendSmsTool.sendSms(angleTemplateId,sbbh, phoneNum);
+                    redisTstaticemplate.opsForValue().set("YQZTDXFS"+sbbh, sbbh+"-"+ymd+"-1");
+                }
+            }else{
+                //发送短信
+                SendSmsTool.sendSms(angleTemplateId,sbbh, phoneNum);
+                redisTstaticemplate.opsForValue().set("YQZTDXFS"+sbbh, sbbh+"-"+ymd+"-1");
+            }
         }catch (Exception e){
             LOG.error("仪器姿态发送短信失败："+e.getMessage());
         }

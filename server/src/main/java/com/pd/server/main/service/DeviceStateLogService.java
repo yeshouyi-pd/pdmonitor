@@ -66,4 +66,8 @@ public class DeviceStateLogService {
         deviceStateLogMapper.updateZt(rq,sbbh);
     }
 
+
+    public long countByExample(DeviceStateLogExample example) {
+        return deviceStateLogMapper.countByExample(example);
+    }
 }
