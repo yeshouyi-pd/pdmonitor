@@ -3,12 +3,14 @@ package com.pd.server.main.service.shj;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.pd.server.config.RedisCode;
 import com.pd.server.main.domain.*;
 import com.pd.server.main.mapper.AttrMapper;
 import com.pd.server.main.mapper.WaterEquiplogMapper;
 import com.pd.server.main.mapper.WaterEquipmentMapper;
 import com.pd.server.main.dto.LdTaskListDto;
 import com.pd.server.main.service.LdTaskListService;
+import com.pd.server.util.DateTools;
 import com.pd.server.util.DateUtil;
 import com.pd.server.util.SendSmsTool;
 import org.slf4j.Logger;
@@ -86,22 +88,7 @@ public class WaterEquipShjService extends AbstractScanRequest{
             data = "设备未备案";
             return data;
         }
-        if("true".equals(attrMapperStatic.selectByAttrKey("heartRestartEquip"))){
-            if(!DateUtil.getYMD().equals(sbbhrqMap.get(sbbh))){
-                sbbhrqMap.remove(sbbh);
-            }
-            if("0".equals(code)){
-                if(!sbbhrqMap.containsKey(sbbh)){
-                    restartEquip(listWater.get(0));
-                }else{
-                    if(!DateUtil.getYMD().equals(sbbhrqMap.get(sbbh))){
-                        restartEquip(listWater.get(0));
-                    }
-                }
-                data = "设备离线";
-                return data;
-            }
-        }
+        Map<String,String> attrMap = (Map<String, String>) redisTstaticemplate.opsForValue().get(RedisCode.ATTRECODEKEY);
         try {
             WaterEquiplog record = new WaterEquiplog();
             record.setSbbh(sbbh);
@@ -113,22 +100,23 @@ public class WaterEquipShjService extends AbstractScanRequest{
             record.setSm1(listWater.get(0).getSbcj());
             record.setSm2(listWater.get(0).getSbmc());
             waterEquiplogMapperStatic.updateBySbbhSelective(record);
-            String sbbhHeart = attrMapperStatic.selectByAttrKey("sbbhHeart");
+            String sbbhHeart = attrMap.get("sbbhHeart");
             if(!StringUtils.isEmpty(sbbhHeart)&&sbbhHeart.contains(sbbh)){
                 if(!StringUtils.isEmpty(msg) && !msg.equals("0,0") && !StringUtils.isEmpty(listWater.get(0).getBz())){
                     if(!StringUtils.isEmpty(redisTstaticemplate.opsForValue().get("XT"+sbbh))){
                         String cs = (String) redisTstaticemplate.opsForValue().get("XT"+sbbh);
                         if(Integer.parseInt(cs)>30){
-                            String distance = attrMapperStatic.selectByAttrKey("distance");
+                            String distance = attrMap.get("distance");
                             String[] arr = msg.split(",");
                             String[] arr1 = listWater.get(0).getBz().split(",");
                             try {
                                 double realDistance = calculateDistance(Double.parseDouble(arr[1]),Double.parseDouble(arr[0]),Double.parseDouble(arr1[1]),Double.parseDouble(arr1[0]));
                                 LOG.error("高德地图计算真实差距------------>"+realDistance);
                                 if(realDistance>Long.parseLong(distance)){
-                                    String phoneNum = attrMapperStatic.selectByAttrKey("heartPhone");
+                                    String phoneNum = attrMap.get("heartPhone");
                                     //发送短信
-                                    SendSmsTool.sendSms("1860261",sbbh,phoneNum);
+                                    isSendMsg(sbbh,phoneNum);
+                                    //SendSmsTool.sendSms("1860261",sbbh,phoneNum);
                                 }
                                 redisTstaticemplate.opsForValue().set("XT"+sbbh, "0");
                             }catch (Exception e){
@@ -142,19 +130,46 @@ public class WaterEquipShjService extends AbstractScanRequest{
                     }
                 }
             }
-            AttrExample attrExample = new AttrExample();
-            attrExample.createCriteria().andAttrcodeEqualTo("reqinterval");
-            List<Attr> list = attrMapperStatic.selectByExample(attrExample);
-            if(list.size() == 0){
+            if(StringUtils.isEmpty(attrMap.get("sbbhHeart"))){
                 data = "60";
             }else{
-                data = list.get(0).getAttrkey();
+                data = attrMap.get("sbbhHeart");
             }
         } catch (Exception e){
             data = "保存失败";
             e.printStackTrace();
         }
         return data;
+    }
+
+    /**
+     * 判断是否需要发送短信
+     * 一个设备一天只可发送三条短信
+     */
+    public void isSendMsg(String sbbh,String phoneNum){
+        String ymd = DateTools.getYMD();
+        if(!StringUtils.isEmpty(redisTstaticemplate.opsForValue().get("ISSENDMSG"+sbbh))){
+            String redisValue = (String) redisTstaticemplate.opsForValue().get("ISSENDMSG"+sbbh);
+            String[] arr = redisValue.split("-");
+            //判断日期是否是今天，如果是，则判断次数是否大于3
+            if(ymd.equals(arr[1])){
+                int cs = Integer.parseInt(arr[2]);
+                if(cs<=3){
+                    //发送次数少于等于3次
+                    SendSmsTool.sendSms("1860261",sbbh,phoneNum);
+                    cs++;
+                    redisTstaticemplate.opsForValue().set("ISSENDMSG"+sbbh, sbbh+"-"+ymd+"-"+cs);
+                }
+            }else{
+                //不是今天的数据，直接发送短信
+                SendSmsTool.sendSms("1860261",sbbh,phoneNum);
+                redisTstaticemplate.opsForValue().set("ISSENDMSG"+sbbh, sbbh+"-"+ymd+"-1");
+            }
+        }else{
+            //发送短信
+            SendSmsTool.sendSms("1860261",sbbh,phoneNum);
+            redisTstaticemplate.opsForValue().set("ISSENDMSG"+sbbh, sbbh+"-"+ymd+"-1");
+        }
     }
 
     /**
@@ -199,12 +214,13 @@ public class WaterEquipShjService extends AbstractScanRequest{
     public static void restartEquip(WaterEquipment waterEquipment) throws InterruptedException {
         LOG.error("设备网络不通，重启设备，发送短信");
         sbbhrqMap.put(waterEquipment.getSbsn(), DateUtil.getYMD());
+        Map<String,String> attrMap = (Map<String, String>) redisTstaticemplate.opsForValue().get(RedisCode.ATTRECODEKEY);
         //发送短信
-        String phoneNum = attrMapperStatic.selectByAttrKey("offlinePhone");
+        String phoneNum = attrMap.get("offlinePhone");
         SendSmsTool.sendSms("2142996",waterEquipment.getSbsn(),phoneNum);
         //重启设备
         if(!StringUtils.isEmpty(waterEquipment.getSbcj())){
-            String restartinterval = attrMapperStatic.selectByAttrKey("restartinterval");
+            String restartinterval = attrMap.get("restartinterval");
             LdTaskListDto dto = new LdTaskListDto();
             dto.setIccid(waterEquipment.getSbcj());
             dto.setTask("cmd:203");
