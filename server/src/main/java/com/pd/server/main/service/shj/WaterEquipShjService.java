@@ -133,7 +133,7 @@ public class WaterEquipShjService extends AbstractScanRequest{
             if(StringUtils.isEmpty(attrMap.get("sbbhHeart"))){
                 data = "60";
             }else{
-                data = attrMap.get("sbbhHeart");
+                data = attrMap.get("reqinterval");
             }
         } catch (Exception e){
             data = "保存失败";
