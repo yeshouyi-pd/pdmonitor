@@ -3,10 +3,10 @@ package com.pd.server.main.service;
 import com.pd.server.main.domain.ScheduleExecutions;
 import com.pd.server.main.domain.ScheduleExecutionsExample;
 import com.pd.server.main.dto.ScheduleExecutionsDto;
+import com.pd.server.main.dto.ScheduleExecutionWithScheduleDto;
 import com.pd.server.main.dto.PageDto;
 import com.pd.server.main.mapper.ScheduleExecutionsMapper;
 import com.pd.server.util.CopyUtil;
-import com.pd.server.util.UuidUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
@@ -95,6 +95,29 @@ public class ScheduleExecutionsService {
      */
     public void delete(int id) {
         scheduleExecutionsMapper.deleteByPrimaryKey(id);
+    }
+
+    /**
+     * 根据设备ID查询执行记录，左连接计划表
+     * @param deviceId 设备ID
+     * @return 执行记录列表（包含计划信息）
+     */
+    public List<ScheduleExecutionWithScheduleDto> getByDeviceIdWithSchedule(String deviceId) {
+        List<ScheduleExecutionWithScheduleDto> list = scheduleExecutionsMapper.selectByDeviceIdWithSchedule(deviceId);
+        // 日期字段在 Mapper XML 中已经映射为 String 类型，直接返回
+        return list;
+    }
+
+    /**
+     * 根据设备ID查询执行记录，左连接计划表（分页）
+     * @param pageDto 分页对象，包含deviceId、page、size
+     */
+    public void getByDeviceIdWithSchedule(PageDto<ScheduleExecutionWithScheduleDto> pageDto, String deviceId) {
+        PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
+        List<ScheduleExecutionWithScheduleDto> list = scheduleExecutionsMapper.selectByDeviceIdWithSchedule(deviceId);
+        PageInfo<ScheduleExecutionWithScheduleDto> pageInfo = new PageInfo<>(list);
+        pageDto.setTotal(pageInfo.getTotal());
+        pageDto.setList(list);
     }
 
 }

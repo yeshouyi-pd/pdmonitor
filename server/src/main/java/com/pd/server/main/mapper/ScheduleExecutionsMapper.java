@@ -2,6 +2,7 @@ package com.pd.server.main.mapper;
 
 import com.pd.server.main.domain.ScheduleExecutions;
 import com.pd.server.main.domain.ScheduleExecutionsExample;
+import com.pd.server.main.dto.ScheduleExecutionWithScheduleDto;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -33,4 +34,11 @@ public interface ScheduleExecutionsMapper {
     int updateByPrimaryKeyWithBLOBs(ScheduleExecutions record);
 
     int updateByPrimaryKey(ScheduleExecutions record);
+
+    /**
+     * 根据设备ID查询执行记录，左连接计划表
+     * @param deviceId 设备ID
+     * @return 执行记录列表（包含计划信息）
+     */
+    List<ScheduleExecutionWithScheduleDto> selectByDeviceIdWithSchedule(@Param("deviceId") String deviceId);
 }
