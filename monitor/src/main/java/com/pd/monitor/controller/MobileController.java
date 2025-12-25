@@ -3,13 +3,17 @@ package com.pd.monitor.controller;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
+import com.alibaba.fastjson.JSONObject;
+import com.pd.monitor.quartz.DeviceScheduleQuartz;
 import com.pd.monitor.wx.conf.BaseWxController;
+import com.pd.server.config.MqttClientSpace;
 import com.pd.server.main.domain.*;
 import com.pd.server.main.dto.*;
 import com.pd.server.main.service.*;
 import com.pd.server.util.DateTools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +25,7 @@ import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @RestController
@@ -104,6 +109,14 @@ public class MobileController  extends BaseWxController {
      */
     @Resource
     private ScheduleExecutionsService scheduleExecutionsService;
+
+
+
+    @Resource
+    private VoicePowerDeviceService voicePowerDeviceService;
+
+    @Resource
+    private RedisTemplate redisTemplate;
 
 
     private static  Set<String> getDateMonth(Date sdate ,Date edate){
@@ -853,6 +866,94 @@ public class MobileController  extends BaseWxController {
             e.printStackTrace();
         }
         return responseDto;
+    }
+    @PostMapping("/executeSchedule")
+    public ResponseDto executeSchedule(@RequestBody DeviceSchedulesDto requestDto){
+
+        ResponseDto responseDto = new ResponseDto();
+        try {
+            WaterEquipmentExample equipmentExample = new WaterEquipmentExample();
+            equipmentExample.createCriteria().andSbsnEqualTo(requestDto.getDeviceId());
+            List<WaterEquipment> list = waterEquipmentService.list(equipmentExample);
+            if(CollectionUtils.isEmpty(list)){
+                responseDto.setSuccess( false);
+                responseDto.setMessage("未找到对应发声设备");
+                return responseDto;
+            }
+
+            WaterEquipment waterEquipment = list.get(0);
+            String[] topicArr =waterEquipment.getJdfw().split(";");//WHPD[meg],WHPD[updata];RPCD[meg],RPCD[updata]
+            Date  startSendTime = new Date();
+            //开始调用发声
+            String oneitem = topicArr[0];
+            String[] oneArr = oneitem.split(",");
+            if (oneArr.length < 2) {
+                responseDto.setSuccess( false);
+                responseDto.setMessage("主题配置格式错误"+oneitem);
+                return responseDto;
+
+            }
+
+            MqttClientSpace client = MqttClientSpace.getInstance();
+            byte[] messageStart = DeviceScheduleQuartz.hexStringToByteArray(waterEquipment.getSm1());
+            String topicName = oneArr[0].substring(0, oneArr[0].indexOf("["));
+
+            if( redisTemplate.hasKey(topicName + "SFDS")){
+                responseDto.setSuccess( false);
+                responseDto.setMessage("当前设备正在发声中，请稍后再试！");
+                return responseDto;
+
+            }
+
+            VoicePowerDevice voicePowerDevice = voicePowerDeviceService.saveData(topicName);
+            redisTemplate.opsForValue().set(topicName+"QLWJ", JSONObject.toJSONString(voicePowerDevice));
+
+            client.publishMessage(oneArr[0], messageStart, 2);
+            //提供判断是否正在播放
+            redisTemplate.opsForValue().set(topicName+"SFDS", "SFDS", 120, TimeUnit.SECONDS);
+            sendStop(oneArr[0],2);//异步
+            //这个地方去查询 看是否成功
+
+            Boolean success =false ;
+            for (int i=0;i<8;i++){
+                Thread.sleep(15000);
+                success   = voicePowerDeviceService.findBySbsnAndSentTime(requestDto.getDeviceId(),startSendTime);
+                if(success){
+                    break;
+                }
+            }
+            if(!success){
+                responseDto.setSuccess( false);
+                responseDto.setMessage("设备测试失败");
+                return responseDto;
+            }
+        } catch (Exception e) {
+            responseDto.setSuccess( false);
+            responseDto.setMessage("检查MQTT状态失败"+e.getMessage());
+            return responseDto;
+        }
+        return responseDto;
+    }
+
+    /**
+     * 用于发声测试  2分钟后自动停止
+     * @param topic
+     * @param durationMinutes
+     */
+    private void sendStop(String topic,Integer durationMinutes) {
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                MqttClientSpace client = MqttClientSpace.getInstance();
+                byte[] messageStop = new byte[] { 0x43, 0x52, 0x44, 0x02, 0x00, 0x07, 0x10, 0x02, 0x4C };
+                client.publishMessage(topic, messageStop, 2);
+                String topicName = topic.substring(0,topic.indexOf("["));
+                voicePowerDeviceService.updateStopTime(topicName);
+            }
+        };
+        int delay = durationMinutes*60*1000; // 延迟时间，单位为毫秒
+        timer.schedule(task, delay);
     }
 
 
