@@ -91,7 +91,7 @@ public class ShjController{
             if("参数错误".equals(data) || data.contains("错误")){
                 returnObject.put("returnCode", ShjJsonConstant.CODE_4000);
                 returnObject.put("returnMsg", ShjJsonConstant.MSG_4000);
-            }else if(data.contains("成功")){
+            }else if(data.contains("成功") || data.matches("\\d+")){
                 returnObject.put("returnCode", ShjJsonConstant.CODE_0000);
                 returnObject.put("returnMsg", ShjJsonConstant.MSG_0000);
             }else {
