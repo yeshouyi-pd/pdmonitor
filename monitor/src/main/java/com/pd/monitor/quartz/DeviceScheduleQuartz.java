@@ -20,6 +20,7 @@ import org.springframework.util.StringUtils;
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 设备计划任务调度器
@@ -207,7 +208,7 @@ public class DeviceScheduleQuartz {
 
             client.publishMessage(oneArr[0], messageStart, 2);
             //提供判断是否正在播放
-            redisTemplate.opsForValue().set(topicName+"SFDS", "SFDS", schedule.getDurationMinutes()*60);
+            redisTemplate.opsForValue().set(topicName+"SFDS", "SFDS", schedule.getDurationMinutes(), TimeUnit.MINUTES);
 
 
             // 设置任务为执行中
