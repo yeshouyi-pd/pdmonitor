@@ -125,7 +125,7 @@ export default {
         _this.equipmentFileEvents = resp.content.list;
         for(let i=0;i<this.equipmentFileEvents.length;i++){
           let obj = this.equipmentFileEvents[i];
-          _this.idJtnrMap.set(obj.id,obj.jtnr);
+          _this.idJtnrMap.set(obj.id+"",obj.jtnr);
         }
         _this.$refs.pagination.render(page, resp.content.total);
         _this.$nextTick(function (){
