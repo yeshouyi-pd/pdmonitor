@@ -29,7 +29,7 @@
         <div class="h25">
           <div class="imgs">
             <video width="100%" height="100%" autoplay="autoplay" loop="loop" controls>
-              <source class="video" title="主监控位" src="/video/12.mp4"/>
+              <source class="video" title="主监控位" src="http://110.52.252.7:38084/result/result_DJI_20250401180030_0004_V_h264.mp4"/>
             </video>
           </div>
         </div>
@@ -544,7 +544,7 @@ export default {
         let seriesData = [];
         if(contentDatas.map){
           for(let sbbh in contentDatas.map){
-            legendData.push(sbbh);
+            legendData.push("NJA4004");
             let infos = contentDatas.map[sbbh];
             let rqs = contentDatas.rqs;
             let allData = [];
@@ -565,7 +565,7 @@ export default {
             }
             allData.sort();
             let obj = {
-              name: sbbh,
+              name: "NJA4004",
               type: 'bar',
               data: allData
             }
@@ -632,7 +632,7 @@ export default {
         _this.config.data = []
         for(let i=0;i<eventDatas.length;i++){
           let item = eventDatas[i];
-          let arrItem = [_this.optionKVArray(_this.devices,item.sbbh),item.kssj.substring(11),item.jssj.substring(11),item.ts, `<div class="btn-detail" onclick="getSwipeData('${item.sbbh}','${item.kssj}','${item.jssj}')">查看声谱图</div>`];
+          let arrItem = ["南京六米标",item.kssj.substring(11),item.jssj.substring(11),item.ts, `<div class="btn-detail" onclick="getSwipeData('${item.sbbh}','${item.kssj}','${item.jssj}')">查看声谱图</div>`];
           _this.config.data.push(arrItem);
         }
         this.$refs['scrollBoard'].updateRows(_this.config.data, 0);

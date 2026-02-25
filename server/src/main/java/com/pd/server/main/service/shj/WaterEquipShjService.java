@@ -100,8 +100,7 @@ public class WaterEquipShjService extends AbstractScanRequest{
             record.setSm1(listWater.get(0).getSbcj());
             record.setSm2(listWater.get(0).getSbmc());
             waterEquiplogMapperStatic.updateBySbbhSelective(record);
-            String sbbhHeart = attrMap.get("sbbhHeart");
-            if(!StringUtils.isEmpty(sbbhHeart)&&sbbhHeart.contains(sbbh)){
+            if("1".equals(listWater.get(0).getOpenSbxt())){
                 if(!StringUtils.isEmpty(msg) && !msg.equals("0,0") && !StringUtils.isEmpty(listWater.get(0).getBz())){
                     if(!StringUtils.isEmpty(redisTstaticemplate.opsForValue().get("XT"+sbbh))){
                         String cs = (String) redisTstaticemplate.opsForValue().get("XT"+sbbh);
@@ -130,7 +129,7 @@ public class WaterEquipShjService extends AbstractScanRequest{
                     }
                 }
             }
-            if(StringUtils.isEmpty(attrMap.get("sbbhHeart"))){
+            if(StringUtils.isEmpty(attrMap.get("reqinterval"))){
                 data = "60";
             }else{
                 data = attrMap.get("reqinterval");

@@ -127,10 +127,10 @@
                 <i class="ace-icon fa fa-refresh bigger-120"></i>
               </button>
               <button v-on:click="playBtn(waterEquipment)" class="btn btn-xs btn-info" title="播放指令">
-                <i class="ace-icon fa fa-refresh bigger-120"></i>
+                <i class="ace-icon fa fa-volume-up bigger-120"></i>
               </button>
               <button v-on:click="stopBtn(waterEquipment)" class="btn btn-xs btn-info" title="停止指令">
-                <i class="ace-icon fa fa-refresh bigger-120"></i>
+                <i class="ace-icon fa fa-volume-off bigger-120"></i>
               </button>
             </div>
           </td>
@@ -268,7 +268,48 @@
                       <div class="col-sm-4">
                         <input v-model="waterEquipment.bz" class="form-control">
                       </div>
+                      <label class="col-sm-2 control-label">仪器姿态报警是否开启</label>
+                      <div class="col-sm-4">
+                        <div class="radio">
+                          <label>
+                            <input name="form-yqzt-radio" type="radio"  value="1" v-model="waterEquipment.openYqzt" class="ace input-lg" />
+                            <span class="lbl bigger-120">开启</span>
+                          </label>
+                          <label>
+                            <input name="form-yqzt-radio" type="radio"  value="0"  v-model="waterEquipment.openYqzt" class="ace input-lg" />
+                            <span class="lbl bigger-120">禁用</span>
+                          </label>
+                        </div>
+                      </div>
                     </div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label">太阳能电池板报警是否开启</label>
+                    <div class="col-sm-4">
+                      <div class="radio">
+                        <label>
+                          <input name="form-tyndcb-radio" type="radio"  value="1" v-model="waterEquipment.openTyndcb" class="ace input-lg" />
+                          <span class="lbl bigger-120">开启</span>
+                        </label>
+                        <label>
+                          <input name="form-tyndcb-radio" type="radio"  value="0"  v-model="waterEquipment.openTyndcb" class="ace input-lg" />
+                          <span class="lbl bigger-120">禁用</span>
+                        </label>
+                      </div>
+                    </div>
+                    <label class="col-sm-2 control-label">设备状态报警是否开启</label>
+                    <div class="col-sm-4">
+                      <div class="radio">
+                        <label>
+                          <input name="form-sbxt-radio" type="radio"  value="1" v-model="waterEquipment.openSbxt" class="ace input-lg" />
+                          <span class="lbl bigger-120">开启</span>
+                        </label>
+                        <label>
+                          <input name="form-sbxt-radio" type="radio"  value="0"  v-model="waterEquipment.openSbxt" class="ace input-lg" />
+                          <span class="lbl bigger-120">禁用</span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
             </form>
           </div>
           <div class="modal-footer">

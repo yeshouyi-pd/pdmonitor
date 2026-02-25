@@ -294,7 +294,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
             angleFileDto.setDeptcode(waterEquipment.getDeptcode());
             angleFileDto.setRq(DateUtil.getFormatDate(angleFileDto.getCjsj(),"yyyy-MM-dd"));
             angleFileServiceStatic.save(angleFileDto);
-            if(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd").equals(angleFileDto.getRq())){
+            if("1".equals(waterEquipment.getOpenYqzt()) && DateUtil.getFormatDate(new Date(),"yyyy-MM-dd").equals(angleFileDto.getRq())){
                 sendMsg(sbbh);
             }
             JSONObject result = new JSONObject();
@@ -307,16 +307,18 @@ public class EquipmentFileShjService extends AbstractScanRequest{
         }
     }
 
+    //一个设备一天只能发送3次短信
     public static void sendMsg(String sbbh){
         try {
             String ymd = DateTools.getYMD();
             Map<String,String> attrMap = (Map<String, String>) redisTstaticemplate.opsForValue().get(RedisCode.ATTRECODEKEY);
             String angleTemplateId = attrMap.get("angleTemplateId");
             String phoneNum = attrMap.get("anglePhone");
+            //判断缓存中有没有该设备的数据
             if(!StringUtils.isEmpty(redisTstaticemplate.opsForValue().get("YQZTDXFS"+sbbh))){
                 String redisValue = (String) redisTstaticemplate.opsForValue().get("YQZTDXFS"+sbbh);
                 String[] arr = redisValue.split("-");
-                //判断日期是否是今天，如果是，则判断次数是否大于3
+                //判断缓存中的日期是否是今天，如果是，则判断次数是否大于3
                 if(ymd.equals(arr[1])){
                     int cs = Integer.parseInt(arr[2]);
                     if(cs<=3){
@@ -326,7 +328,7 @@ public class EquipmentFileShjService extends AbstractScanRequest{
                         redisTstaticemplate.opsForValue().set("YQZTDXFS"+sbbh, sbbh+"-"+ymd+"-"+cs);
                     }
                 }else{
-                    //不是今天的数据，直接发送短信
+                    //缓存中的日期不是今天的，直接发送短信
                     SendSmsTool.sendSms(angleTemplateId,sbbh, phoneNum);
                     redisTstaticemplate.opsForValue().set("YQZTDXFS"+sbbh, sbbh+"-"+ymd+"-1");
                 }

@@ -139,6 +139,21 @@ public class WaterEquipmentDto extends PageDto{
 
     private String xmbh;
 
+    /**
+     *是否打开仪器姿态|0未启用1启用
+     */
+    private String openYqzt;
+
+    /**
+     *是否打开设备心跳|0未启用1启用
+     */
+    private String openSbxt;
+
+    /**
+     *是否打开太阳能电池板|0未启用1启用
+     */
+    private String openTyndcb;
+
     public String getId() {
         return id;
     }
@@ -355,6 +370,30 @@ public class WaterEquipmentDto extends PageDto{
         this.xmbh = xmbh;
     }
 
+    public String getOpenYqzt() {
+        return openYqzt;
+    }
+
+    public void setOpenYqzt(String openYqzt) {
+        this.openYqzt = openYqzt;
+    }
+
+    public String getOpenSbxt() {
+        return openSbxt;
+    }
+
+    public void setOpenSbxt(String openSbxt) {
+        this.openSbxt = openSbxt;
+    }
+
+    public String getOpenTyndcb() {
+        return openTyndcb;
+    }
+
+    public void setOpenTyndcb(String openTyndcb) {
+        this.openTyndcb = openTyndcb;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -387,6 +426,9 @@ public class WaterEquipmentDto extends PageDto{
             sb.append(", sm1=").append(sm1);
             sb.append(", sm2=").append(sm2);
             sb.append(", sm3=").append(sm3);
+            sb.append(", openYqzt=").append(openYqzt);
+            sb.append(", openSbxt=").append(openSbxt);
+            sb.append(", openTyndcb=").append(openTyndcb);
         sb.append("]");
         return sb.toString();
     }

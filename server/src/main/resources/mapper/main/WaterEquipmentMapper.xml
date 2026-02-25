@@ -28,6 +28,9 @@
     <result column="sm1" jdbcType="VARCHAR" property="sm1" />
     <result column="sm2" jdbcType="VARCHAR" property="sm2" />
     <result column="sm3" jdbcType="VARCHAR" property="sm3" />
+    <result column="open_yqzt" jdbcType="CHAR" property="openYqzt" />
+    <result column="open_sbxt" jdbcType="CHAR" property="openSbxt" />
+    <result column="open_tyndcb" jdbcType="CHAR" property="openTyndcb" />
   </resultMap>
   <resultMap id="BaseResultMapPieChartDto" type="com.pd.server.main.dto.PieChartDto">
     <result column="label" jdbcType="VARCHAR" property="label" />
@@ -95,7 +98,7 @@
   <sql id="Base_Column_List">
     id, sbmc, sbsn, port, ip, deptcode, center_code, sblb, dqzl, sbxh, gps, fzr, fzrdh, 
     sblc, jdfw, fzwz, sbcj, sbzt, bz, create_time, create_by, gxsj, update_by, sm1, sm2, 
-    sm3
+    sm3, open_yqzt, open_sbxt, open_tyndcb
   </sql>
   <select id="selectByExample" parameterType="com.pd.server.main.domain.WaterEquipmentExample" resultMap="BaseResultMap">
     select
@@ -135,7 +138,7 @@
       sblc, jdfw, fzwz, sbcj, 
       sbzt, bz, create_time, 
       create_by, gxsj, update_by, 
-      sm1, sm2, sm3)
+      sm1, sm2, sm3, open_yqzt, open_sbxt, open_tyndcb)
     values (#{id,jdbcType=VARCHAR}, #{sbmc,jdbcType=VARCHAR}, #{sbsn,jdbcType=VARCHAR}, 
       #{port,jdbcType=INTEGER}, #{ip,jdbcType=VARCHAR}, #{deptcode,jdbcType=VARCHAR}, 
       #{centerCode,jdbcType=VARCHAR}, #{sblb,jdbcType=VARCHAR}, #{dqzl,jdbcType=VARCHAR}, 
@@ -143,7 +146,8 @@
       #{sblc,jdbcType=VARCHAR}, #{jdfw,jdbcType=VARCHAR}, #{fzwz,jdbcType=VARCHAR}, #{sbcj,jdbcType=VARCHAR}, 
       #{sbzt,jdbcType=VARCHAR}, #{bz,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{createBy,jdbcType=VARCHAR}, #{gxsj,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, 
-      #{sm1,jdbcType=VARCHAR}, #{sm2,jdbcType=VARCHAR}, #{sm3,jdbcType=VARCHAR})
+      #{sm1,jdbcType=VARCHAR}, #{sm2,jdbcType=VARCHAR}, #{sm3,jdbcType=VARCHAR}, #{openYqzt,jdbcType=CHAR},
+      #{openSbxt,jdbcType=CHAR}, #{openTyndcb,jdbcType=CHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.pd.server.main.domain.WaterEquipment">
     insert into water_equipment
@@ -226,6 +230,15 @@
       <if test="sm3 != null">
         sm3,
       </if>
+      <if test="openYqzt != null">
+        open_yqzt,
+      </if>
+      <if test="openSbxt != null">
+        open_sbxt,
+      </if>
+      <if test="openTyndcb != null">
+        open_tyndcb,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -305,6 +318,15 @@
       </if>
       <if test="sm3 != null">
         #{sm3,jdbcType=VARCHAR},
+      </if>
+      <if test="openYqzt != null">
+        #{openYqzt,jdbcType=CHAR},
+      </if>
+      <if test="openSbxt != null">
+        #{openSbxt,jdbcType=CHAR},
+      </if>
+      <if test="openTyndcb != null">
+        #{openTyndcb,jdbcType=CHAR},
       </if>
     </trim>
   </insert>
@@ -395,6 +417,15 @@
       <if test="record.sm3 != null">
         sm3 = #{record.sm3,jdbcType=VARCHAR},
       </if>
+      <if test="record.openYqzt != null">
+        open_yqzt = #{record.openYqzt,jdbcType=CHAR},
+      </if>
+      <if test="record.openSbxt != null">
+        open_sbxt = #{record.openSbxt,jdbcType=CHAR},
+      </if>
+      <if test="record.openTyndcb != null">
+        open_tyndcb = #{record.openTyndcb,jdbcType=CHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -427,7 +458,10 @@
       update_by = #{record.updateBy,jdbcType=VARCHAR},
       sm1 = #{record.sm1,jdbcType=VARCHAR},
       sm2 = #{record.sm2,jdbcType=VARCHAR},
-      sm3 = #{record.sm3,jdbcType=VARCHAR}
+      sm3 = #{record.sm3,jdbcType=VARCHAR},
+      open_yqzt = #{record.openYqzt,jdbcType=CHAR},
+      open_sbxt = #{record.openSbxt,jdbcType=CHAR},
+      open_tyndcb = #{record.openTyndcb,jdbcType=CHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -510,6 +544,15 @@
       <if test="sm3 != null">
         sm3 = #{sm3,jdbcType=VARCHAR},
       </if>
+      <if test="openYqzt != null">
+        open_yqzt = #{openYqzt,jdbcType=CHAR},
+      </if>
+      <if test="openSbxt != null">
+        open_sbxt = #{openSbxt,jdbcType=CHAR},
+      </if>
+      <if test="openTyndcb != null">
+        open_tyndcb = #{openTyndcb,jdbcType=CHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -539,7 +582,10 @@
       update_by = #{updateBy,jdbcType=VARCHAR},
       sm1 = #{sm1,jdbcType=VARCHAR},
       sm2 = #{sm2,jdbcType=VARCHAR},
-      sm3 = #{sm3,jdbcType=VARCHAR}
+      sm3 = #{sm3,jdbcType=VARCHAR},
+      open_yqzt = #{openYqzt,jdbcType=CHAR},
+      open_sbxt = #{openSbxt,jdbcType=CHAR},
+      open_tyndcb = #{openTyndcb,jdbcType=CHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 

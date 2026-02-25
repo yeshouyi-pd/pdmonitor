@@ -1894,6 +1894,217 @@ public class WaterEquipmentExample {
             addCriterion("sm3 not between", value1, value2, "sm3");
             return (Criteria) this;
         }
+
+        public Criteria andOpenYqztIsNull() {
+            addCriterion("open_yqzt is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenYqztIsNotNull() {
+            addCriterion("open_yqzt is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenYqztEqualTo(String value) {
+            addCriterion("open_yqzt =", value, "open_yqzt");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenYqztNotEqualTo(String value) {
+            addCriterion("open_yqzt <>", value, "open_yqzt");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenYqztGreaterThan(String value) {
+            addCriterion("open_yqzt >", value, "open_yqzt");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenYqztGreaterThanOrEqualTo(String value) {
+            addCriterion("open_yqzt >=", value, "open_yqzt");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenYqztLessThan(String value) {
+            addCriterion("open_yqzt <", value, "open_yqzt");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenYqztLessThanOrEqualTo(String value) {
+            addCriterion("open_yqzt <=", value, "open_yqzt");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenYqztLike(String value) {
+            addCriterion("open_yqzt like", value, "open_yqzt");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenYqztNotLike(String value) {
+            addCriterion("open_yqzt not like", value, "open_yqzt");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenYqztIn(List<String> values) {
+            addCriterion("open_yqzt in", values, "open_yqzt");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenYqztNotIn(List<String> values) {
+            addCriterion("open_yqzt not in", values, "open_yqzt");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenYqztBetween(String value1, String value2) {
+            addCriterion("open_yqzt between", value1, value2, "open_yqzt");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenYqztNotBetween(String value1, String value2) {
+            addCriterion("open_yqzt not between", value1, value2, "open_yqzt");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenSbxtIsNull() {
+            addCriterion("open_sbxt is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenSbxtIsNotNull() {
+            addCriterion("open_sbxt is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenSbxtEqualTo(String value) {
+            addCriterion("open_sbxt =", value, "open_sbxt");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenSbxtNotEqualTo(String value) {
+            addCriterion("open_sbxt <>", value, "open_sbxt");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenSbxtGreaterThan(String value) {
+            addCriterion("open_sbxt >", value, "open_sbxt");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenSbxtGreaterThanOrEqualTo(String value) {
+            addCriterion("open_sbxt >=", value, "open_sbxt");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenSbxtLessThan(String value) {
+            addCriterion("open_sbxt <", value, "open_sbxt");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenSbxtLessThanOrEqualTo(String value) {
+            addCriterion("open_sbxt <=", value, "open_sbxt");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenSbxtLike(String value) {
+            addCriterion("open_sbxt like", value, "open_sbxt");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenSbxtNotLike(String value) {
+            addCriterion("open_sbxt not like", value, "open_sbxt");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenSbxtIn(List<String> values) {
+            addCriterion("open_sbxt in", values, "open_sbxt");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenSbxtNotIn(List<String> values) {
+            addCriterion("open_sbxt not in", values, "open_sbxt");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenSbxtBetween(String value1, String value2) {
+            addCriterion("open_sbxt between", value1, value2, "open_sbxt");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenSbxtNotBetween(String value1, String value2) {
+            addCriterion("open_sbxt not between", value1, value2, "open_sbxt");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenTyndcbIsNull() {
+            addCriterion("open_tyndcb is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenTyndcbIsNotNull() {
+            addCriterion("open_tyndcb is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenTyndcbEqualTo(String value) {
+            addCriterion("open_tyndcb =", value, "open_tyndcb");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenTyndcbNotEqualTo(String value) {
+            addCriterion("open_tyndcb <>", value, "open_tyndcb");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenTyndcbGreaterThan(String value) {
+            addCriterion("open_tyndcb >", value, "open_tyndcb");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenTyndcbGreaterThanOrEqualTo(String value) {
+            addCriterion("open_tyndcb >=", value, "open_tyndcb");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenTyndcbLessThan(String value) {
+            addCriterion("open_tyndcb <", value, "open_tyndcb");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenTyndcbLessThanOrEqualTo(String value) {
+            addCriterion("open_tyndcb <=", value, "open_tyndcb");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenTyndcbLike(String value) {
+            addCriterion("open_tyndcb like", value, "open_tyndcb");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenTyndcbNotLike(String value) {
+            addCriterion("open_tyndcb not like", value, "open_tyndcb");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenTyndcbIn(List<String> values) {
+            addCriterion("open_tyndcb in", values, "open_tyndcb");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenTyndcbNotIn(List<String> values) {
+            addCriterion("open_tyndcb not in", values, "open_tyndcb");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenTyndcbBetween(String value1, String value2) {
+            addCriterion("open_tyndcb between", value1, value2, "open_tyndcb");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenTyndcbNotBetween(String value1, String value2) {
+            addCriterion("open_tyndcb not between", value1, value2, "open_tyndcb");
+            return (Criteria) this;
+        }
+
     }
 
     public static class Criteria extends GeneratedCriteria {

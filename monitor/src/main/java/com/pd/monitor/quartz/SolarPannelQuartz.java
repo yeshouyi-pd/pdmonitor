@@ -45,7 +45,7 @@ public class SolarPannelQuartz {
      * 每1个小时执行一次
      * @throws Exception
      */
-    @Scheduled(cron="0 0 */1 * * ?")
+    @Scheduled(cron="0 */30 * * * ?")
     public void getSolarPannelInfo(){
         Map<String, String> attrMap = WxRedisConfig.getAttrMap();
         String openConnect = attrMap.get("openConnect");
@@ -65,7 +65,9 @@ public class SolarPannelQuartz {
                         SolarPannel solarPannel = jsonObject.getJSONObject("data").toJavaObject(SolarPannel.class);
                         solarPannel.setId(UuidUtil.getShortUuid());
                         solarPannelService.saveEntity(solarPannel);
-                        isJudgeSendMsg(solarPannel);
+                        if("1".equals(entity.getOpenTyndcb())){
+                            isJudgeSendMsg(solarPannel);
+                        }
                     } catch (DuplicateKeyException e){
                         LOG.error("主键冲突，不能插入。");
                     } catch (Exception e){
@@ -80,9 +82,9 @@ public class SolarPannelQuartz {
     public void isJudgeSendMsg(SolarPannel solarPannel){
         if(!StringUtils.isEmpty(solarPannel.getLoadCurrent()) && !StringUtils.isEmpty(solarPannel.getDailyElectricityConsumption())){
             String loadCurrent = solarPannel.getLoadCurrent().substring(0,solarPannel.getLoadCurrent().indexOf("A")).trim();
-            String dailyElectricity = solarPannel.getDailyElectricityConsumption().substring(0,solarPannel.getDailyElectricityConsumption().indexOf("KWH")).trim();
+            //String dailyElectricity = solarPannel.getDailyElectricityConsumption().substring(0,solarPannel.getDailyElectricityConsumption().indexOf("KWH")).trim();
             //负载电流>=2，当日用电量>=0.3
-            if(Double.parseDouble(loadCurrent)>=2 && Double.parseDouble(dailyElectricity)>=0.3){
+            if(Double.parseDouble(loadCurrent)>=3){
                 //太阳能板出现故障，发送短信
                 sendMsg(solarPannel.getDeviceNumber(),solarPannel.getDeviceName());
             }
