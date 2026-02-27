@@ -32,7 +32,7 @@ public class SendSmsQuartzXz {
      * 中午12点执行（昨天中午12点到今日12点）一次
      * @throws Exception
      */
-    @Scheduled(cron="0 0 8 * * ? ")
+    @Scheduled(cron="0 0 12 * * ? ")
     public void sendSmsCount(){
         Map<String, String> attrMap = WxRedisConfig.getAttrMap();
         String phoneNum = attrMap.get("xzphoneNumber");
