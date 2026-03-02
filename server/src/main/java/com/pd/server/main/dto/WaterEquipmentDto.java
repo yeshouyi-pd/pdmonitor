@@ -154,6 +154,11 @@ public class WaterEquipmentDto extends PageDto{
      */
     private String openTyndcb;
 
+    /**
+     *是否打开设备离线|0未启用1启用
+     */
+    private String openSblx;
+
     public String getId() {
         return id;
     }
@@ -394,6 +399,14 @@ public class WaterEquipmentDto extends PageDto{
         this.openTyndcb = openTyndcb;
     }
 
+    public String getOpenSblx() {
+        return openSblx;
+    }
+
+    public void setOpenSblx(String openSblx) {
+        this.openSblx = openSblx;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -429,6 +442,7 @@ public class WaterEquipmentDto extends PageDto{
             sb.append(", openYqzt=").append(openYqzt);
             sb.append(", openSbxt=").append(openSbxt);
             sb.append(", openTyndcb=").append(openTyndcb);
+            sb.append(", openSblx=").append(openSblx);
         sb.append("]");
         return sb.toString();
     }

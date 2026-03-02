@@ -2105,6 +2105,76 @@ public class WaterEquipmentExample {
             return (Criteria) this;
         }
 
+        public Criteria andOpenSblxIsNull() {
+            addCriterion("open_sblx is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenSblxIsNotNull() {
+            addCriterion("open_sblx is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenSblxEqualTo(String value) {
+            addCriterion("open_sblx =", value, "open_sblx");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenSblxNotEqualTo(String value) {
+            addCriterion("open_sblx <>", value, "open_sblx");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenSblxGreaterThan(String value) {
+            addCriterion("open_sblx >", value, "open_sblx");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenSblxGreaterThanOrEqualTo(String value) {
+            addCriterion("open_sblx >=", value, "open_sblx");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenSblxLessThan(String value) {
+            addCriterion("open_sblx <", value, "open_sblx");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenSblxLessThanOrEqualTo(String value) {
+            addCriterion("open_sblx <=", value, "open_sblx");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenSblxLike(String value) {
+            addCriterion("open_sblx like", value, "open_sblx");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenSblxNotLike(String value) {
+            addCriterion("open_sblx not like", value, "open_sblx");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenSblxIn(List<String> values) {
+            addCriterion("open_sblx in", values, "open_sblx");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenSblxNotIn(List<String> values) {
+            addCriterion("open_sblx not in", values, "open_sblx");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenSblxBetween(String value1, String value2) {
+            addCriterion("open_sblx between", value1, value2, "open_sblx");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenSblxNotBetween(String value1, String value2) {
+            addCriterion("open_sblx not between", value1, value2, "open_sblx");
+            return (Criteria) this;
+        }
+
     }
 
     public static class Criteria extends GeneratedCriteria {

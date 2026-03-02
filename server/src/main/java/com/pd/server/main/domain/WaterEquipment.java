@@ -61,6 +61,8 @@ public class WaterEquipment {
 
     private String openTyndcb;
 
+    private String openSblx;
+
     public String getId() {
         return id;
     }
@@ -293,6 +295,14 @@ public class WaterEquipment {
         this.openTyndcb = openTyndcb;
     }
 
+    public String getOpenSblx() {
+        return openSblx;
+    }
+
+    public void setOpenSblx(String openSblx) {
+        this.openSblx = openSblx;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -328,6 +338,7 @@ public class WaterEquipment {
         sb.append(", openYqzt=").append(openYqzt);
         sb.append(", openSbxt=").append(openSbxt);
         sb.append(", openTyndcb=").append(openTyndcb);
+        sb.append(", openSblx=").append(openSblx);
         sb.append("]");
         return sb.toString();
     }

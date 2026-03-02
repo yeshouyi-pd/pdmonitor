@@ -3,9 +3,12 @@ package com.pd.monitor.quartz;
 import com.pd.server.config.RedisCode;
 import com.pd.server.main.domain.DeviceStateLogExample;
 import com.pd.server.main.domain.WaterEquiplog;
+import com.pd.server.main.domain.WaterEquipment;
+import com.pd.server.main.domain.WaterEquipmentExample;
 import com.pd.server.main.dto.DeviceStateLogDto;
 import com.pd.server.main.service.DeviceStateLogService;
 import com.pd.server.main.service.WaterEquiplogService;
+import com.pd.server.main.service.WaterEquipmentService;
 import com.pd.server.util.DateUtil;
 import com.pd.server.util.SendSmsTool;
 import org.slf4j.Logger;
@@ -33,16 +36,19 @@ public class DeviceStateLogQuartz {
     private WaterEquiplogService waterEquiplogService;
     @Resource
     private RedisTemplate redisTemplate;
+    @Resource
+    private WaterEquipmentService waterEquipmentService;
 
     //判断设备最近两天是不是没有在线，如果没有就发送短信
     @Scheduled(cron = "0 45 8 * * ? ")
     public void sendMsg(){
         Map<String,String> attrMap = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.ATTRECODEKEY);
-        String deviceStateSbbh = attrMap.get("deviceStateSbbh");
-        if(!StringUtils.isEmpty(deviceStateSbbh) && deviceStateSbbh.contains(",")){
+        WaterEquipmentExample equipmentExample = new WaterEquipmentExample();
+        equipmentExample.createCriteria().andOpenSblxEqualTo("1");
+        List<String> sbbhs = waterEquipmentService.findSbbh(equipmentExample);
+        if(!sbbhs.isEmpty()){
             String phoneNum = attrMap.get("phoneNum");
-            String[] arr = deviceStateSbbh.split(",");
-            for(String sbbh : arr){
+            for(String sbbh : sbbhs){
                 DeviceStateLogExample example = new DeviceStateLogExample();
                 DeviceStateLogExample.Criteria ca = example.createCriteria();
                 ca.andSbbhEqualTo(sbbh);

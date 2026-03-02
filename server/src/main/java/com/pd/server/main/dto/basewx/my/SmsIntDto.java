@@ -8,6 +8,8 @@ public class SmsIntDto {
 
     private int sumTs;
 
+    private String bjsj;
+
     public String getSbbh() {
         return sbbh;
     }
@@ -30,5 +32,13 @@ public class SmsIntDto {
 
     public void setSumTs(int sumTs) {
         this.sumTs = sumTs;
+    }
+
+    public String getBjsj() {
+        return bjsj;
+    }
+
+    public void setBjsj(String bjsj) {
+        this.bjsj = bjsj;
     }
 }

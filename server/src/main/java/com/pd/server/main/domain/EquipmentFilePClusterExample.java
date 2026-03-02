@@ -410,7 +410,17 @@ public class EquipmentFilePClusterExample {
             return (Criteria) this;
         }
 
+        public Criteria andCjsjGreaterThanOrEqualTo(String value) {
+            addCriterion("cjsj >=", value, "cjsj");
+            return (Criteria) this;
+        }
+
         public Criteria andCjsjLessThan(Date value) {
+            addCriterion("cjsj <", value, "cjsj");
+            return (Criteria) this;
+        }
+
+        public Criteria andCjsjLessThan(String value) {
             addCriterion("cjsj <", value, "cjsj");
             return (Criteria) this;
         }

@@ -2,9 +2,12 @@ package com.pd.monitor.quartz;
 
 import com.pd.monitor.utils.SendSmsTool;
 import com.pd.monitor.wx.conf.WxRedisConfig;
+import com.pd.server.main.domain.EquipmentFilePCluster;
+import com.pd.server.main.domain.EquipmentFilePClusterExample;
 import com.pd.server.main.domain.EquipmentFilePPicExample;
 import com.pd.server.main.domain.EquipmentFileTodayExample;
 import com.pd.server.main.dto.basewx.my.SmsIntDto;
+import com.pd.server.main.service.EquipmentFilePClusterService;
 import com.pd.server.main.service.EquipmentFilePPicService;
 import com.pd.server.main.service.EquipmentFileTodayService;
 import com.pd.server.util.DateUtil;
@@ -27,6 +30,8 @@ public class SendSmsQuartzXz {
     private EquipmentFileTodayService equipmentFileTodayService;
     @Resource
     private EquipmentFilePPicService equipmentFilePPicService;
+    @Resource
+    private EquipmentFilePClusterService equipmentFilePClusterService;
 
     /**
      * 中午12点执行（昨天中午12点到今日12点）一次
@@ -45,12 +50,26 @@ public class SendSmsQuartzXz {
         ca.andCjsjLessThan(nowhour);
         List<SmsIntDto> list = equipmentFilePPicService.sendSmsQuery(example);
         String bjcs = list.size()>0?list.get(0).getBjcs()+"":"0";
-        SendSmsTool.sendSms("1929099","新洲WH001设备-昨日中午12点至今日中午12点"+"-"+bjcs, phoneNum);
+        //查询聚类总头数，最大头数及最大头数的出现时间
+        EquipmentFilePClusterExample pClusterExample = new EquipmentFilePClusterExample();
+        EquipmentFilePClusterExample.Criteria clusterCa = pClusterExample.createCriteria();
+        clusterCa.andSbbhEqualTo("WH001");
+        clusterCa.andCjsjGreaterThanOrEqualTo(lasthour);
+        clusterCa.andCjsjLessThan(nowhour);
+        pClusterExample.setOrderByClause(" ts desc,fz desc ");
+        List<EquipmentFilePCluster> pClusterList = equipmentFilePClusterService.listByexample(pClusterExample);
+        if(Integer.parseInt(bjcs)>0 && pClusterList.size()==0){
+            SendSmsTool.sendSms("2604026","新洲WH001-昨日中午12点至今日中午12点"+"-"+bjcs+"-"+"1"+"-"+"1"+"-"+list.get(0).getBjsj(), phoneNum);
+        }else{
+            int sum = pClusterList.stream().mapToInt(p -> Integer.parseInt(p.getTs())).sum();
+            SendSmsTool.sendSms("2604026","新洲WH001-昨日中午12点至今日中午12点"+"-"+bjcs+"-"+sum+"-"+pClusterList.get(0).getTs()+"-"+pClusterList.get(0).getFz(), phoneNum);
+        }
         lasthour = null;
         nowhour = null;
         phoneNum = null;
         bjcs = null;
-        list = null;
+        list.clear();
+        pClusterList.clear();
     }
 
 
