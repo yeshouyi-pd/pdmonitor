@@ -309,6 +309,8 @@
                         </label>
                       </div>
                     </div>
+                  </div>
+                  <div class="form-group">
                     <label class="col-sm-2 control-label">设备离线报警是否开启</label>
                     <div class="col-sm-4">
                       <div class="radio">

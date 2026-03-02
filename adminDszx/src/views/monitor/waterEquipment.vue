@@ -290,7 +290,7 @@
                     </label>
                   </div>
                 </div>
-                <label class="col-sm-2 control-label">设备状态报警是否开启</label>
+                <label class="col-sm-2 control-label">设备移动报警是否开启</label>
                 <div class="col-sm-4">
                   <div class="radio">
                     <label>
@@ -299,6 +299,21 @@
                     </label>
                     <label>
                       <input name="form-sbxt-radio" type="radio"  value="0"  v-model="waterEquipment.openSbxt" class="ace input-lg" />
+                      <span class="lbl bigger-120">禁用</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">设备离线报警是否开启</label>
+                <div class="col-sm-4">
+                  <div class="radio">
+                    <label>
+                      <input name="form-sbxt-radio" type="radio"  value="1" v-model="waterEquipment.openSblx" class="ace input-lg" />
+                      <span class="lbl bigger-120">开启</span>
+                    </label>
+                    <label>
+                      <input name="form-sbxt-radio" type="radio"  value="0"  v-model="waterEquipment.openSblx" class="ace input-lg" />
                       <span class="lbl bigger-120">禁用</span>
                     </label>
                   </div>
