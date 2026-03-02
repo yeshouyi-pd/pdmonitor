@@ -309,11 +309,11 @@
                 <div class="col-sm-4">
                   <div class="radio">
                     <label>
-                      <input name="form-sbxt-radio" type="radio"  value="1" v-model="waterEquipment.openSblx" class="ace input-lg" />
+                      <input name="form-sblx-radio" type="radio"  value="1" v-model="waterEquipment.openSblx" class="ace input-lg" />
                       <span class="lbl bigger-120">开启</span>
                     </label>
                     <label>
-                      <input name="form-sbxt-radio" type="radio"  value="0"  v-model="waterEquipment.openSblx" class="ace input-lg" />
+                      <input name="form-sblx-radio" type="radio"  value="0"  v-model="waterEquipment.openSblx" class="ace input-lg" />
                       <span class="lbl bigger-120">禁用</span>
                     </label>
                   </div>
