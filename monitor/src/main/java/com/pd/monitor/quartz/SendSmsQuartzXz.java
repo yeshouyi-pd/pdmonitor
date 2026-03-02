@@ -18,6 +18,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Component
@@ -59,10 +61,15 @@ public class SendSmsQuartzXz {
         pClusterExample.setOrderByClause(" ts desc,fz desc ");
         List<EquipmentFilePCluster> pClusterList = equipmentFilePClusterService.listByexample(pClusterExample);
         if(Integer.parseInt(bjcs)>0 && pClusterList.size()==0){
-            SendSmsTool.sendSms("2604026","新洲WH001-昨日中午12点至今日中午12点"+"-"+bjcs+"-"+"1"+"-"+"1"+"-"+list.get(0).getBjsj(), phoneNum);
+            SendSmsTool.sendSms("2604172","新洲WH001-"+bjcs+"-"+"1"+"-"+"1"+"-"+list.get(0).getBjsj(), phoneNum);
         }else{
-            int sum = pClusterList.stream().mapToInt(p -> Integer.parseInt(p.getTs())).sum();
-            SendSmsTool.sendSms("2604026","新洲WH001-昨日中午12点至今日中午12点"+"-"+bjcs+"-"+sum+"-"+pClusterList.get(0).getTs()+"-"+pClusterList.get(0).getFz(), phoneNum);
+            if(pClusterList.size()==0){
+                SendSmsTool.sendSms("2604172","新洲WH001-"+bjcs+"-"+0+"-"+0+"-"+"空", phoneNum);
+            }else {
+                int sum = pClusterList.stream().mapToInt(p -> Integer.parseInt(p.getTs())).sum();
+                SendSmsTool.sendSms("2604172","新洲WH001-"+bjcs+"-"+sum+"-"+pClusterList.get(0).getTs()+"-"+pClusterList.get(0).getFz(), phoneNum);
+            }
+
         }
         lasthour = null;
         nowhour = null;
@@ -71,7 +78,6 @@ public class SendSmsQuartzXz {
         list.clear();
         pClusterList.clear();
     }
-
 
 //    /**
 //     * 早上8点执行（昨天晚上8点到今日8点）一次

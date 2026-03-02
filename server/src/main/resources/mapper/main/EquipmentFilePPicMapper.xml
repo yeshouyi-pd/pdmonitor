@@ -670,7 +670,7 @@
     order by sbbh, xs
   </select>
   <select id="sendSmsQuery" parameterType="com.pd.server.main.domain.EquipmentFilePPicExample" resultMap="SmsInt">
-    SELECT sbbh,COUNT(*),MAX(fz) bjsj FROM  equipment_file_p_pic
+    SELECT sbbh,COUNT(*) bjcs,MAX(fz) bjsj FROM  equipment_file_p_pic
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
