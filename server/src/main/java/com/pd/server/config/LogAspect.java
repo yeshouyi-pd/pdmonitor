@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.support.spring.PropertyPreFilters;
 import com.pd.server.main.dto.LoginUserDto;
 import com.pd.server.main.service.SysLogService;
+import com.pd.server.util.IpUtil;
 import com.pd.server.util.UuidUtil;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -140,7 +141,7 @@ public class LogAspect {
          * 操作人为空 可过滤系统请求
          */
         if(!StringUtils.isEmpty(czr) && !StringUtils.isEmpty(businessName)){
-            sysLogService.addLog(czr ,request.getRemoteAddr(),businessName+"["+thisurlMethod+"]",nameCn,
+            sysLogService.addLog(czr , IpUtil.getClientIp(request),businessName+"["+thisurlMethod+"]",nameCn,
                     "1" ,"",JSONObject.toJSONString(arguments, excludefilter),"",
                     "","1",xmbh);
         }

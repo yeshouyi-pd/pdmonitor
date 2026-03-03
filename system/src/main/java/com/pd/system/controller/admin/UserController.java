@@ -16,6 +16,7 @@ import com.pd.server.main.dto.UserDto;
 import com.pd.server.main.service.SysLogService;
 import com.pd.server.main.service.UserService;
 import com.pd.server.util.CopyUtil;
+import com.pd.server.util.IpUtil;
 import com.pd.server.util.UuidUtil;
 import com.pd.server.util.ValidatorUtil;
 import com.pd.system.controller.conf.BaseController;
@@ -160,7 +161,7 @@ return responseDto;
             responseDto.setSuccess(false);
             responseDto.setMessage("验证码已过期");
             LOG.info("用户登录失败，验证码已过期");
-            sysLogService.addLog(userDto.getLoginName() ,request.getRemoteAddr(),"用户登录","登录",
+            sysLogService.addLog(userDto.getLoginName() ,IpUtil.getClientIp(request),"用户登录","登录",
                     "1" ,"", JSONObject.toJSONString(userDto),"",
                     "用户登录失败，验证码已过期","1",xmbh);
             return responseDto;
@@ -173,7 +174,7 @@ return responseDto;
             responseDto.setSuccess(false);
             responseDto.setMessage("验证码不对");
             LOG.info("用户登录失败，验证码不对");
-            sysLogService.addLog(userDto.getLoginName() ,request.getRemoteAddr(),"用户登录","登录",
+            sysLogService.addLog(userDto.getLoginName() ,IpUtil.getClientIp(request),"用户登录","登录",
                     "1" ,"", JSONObject.toJSONString(userDto),"",
                     "验证码不对","1",xmbh);
             return responseDto;
@@ -223,7 +224,7 @@ return responseDto;
 
          //request.getSession().setAttribute(Constants.LOGIN_USER,loginUserDto);
         responseDto.setContent(loginUserDto);
-        sysLogService.addLog(userDto.getLoginName() ,request.getRemoteAddr(),"用户登录","登录",
+        sysLogService.addLog(userDto.getLoginName() ,IpUtil.getClientIp(request),"用户登录","登录",
                 "0" ,"", JSONObject.toJSONString(userDto),"",
                 "","1",xmbh);
         return responseDto;

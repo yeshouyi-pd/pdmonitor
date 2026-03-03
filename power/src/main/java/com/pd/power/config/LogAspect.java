@@ -2,6 +2,7 @@ package com.pd.power.config;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.support.spring.PropertyPreFilters;
+import com.pd.power.util.IpUtil;
 import com.pd.power.util.UuidUtil;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -76,7 +77,7 @@ public class LogAspect {
         LOG.info("------------- 【{}】{}开始 -------------", businessName, nameCn);
         LOG.info("请求地址: {} {}", request.getRequestURL().toString(), request.getMethod());
         LOG.info("类名方法: {}.{}", signature.getDeclaringTypeName(), name);
-        LOG.info("远程地址: {}", request.getRemoteAddr());
+        LOG.info("远程地址: {}", IpUtil.getClientIp(request));
 
         // 打印请求参数
         Object[] args = joinPoint.getArgs();

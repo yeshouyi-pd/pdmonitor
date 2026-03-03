@@ -15,6 +15,7 @@ import com.pd.server.main.dto.*;
 import com.pd.server.main.service.SysLogService;
 import com.pd.server.main.service.UserVideoService;
 import com.pd.server.util.CopyUtil;
+import com.pd.server.util.IpUtil;
 import com.pd.server.util.UuidUtil;
 import com.pd.server.util.ValidatorUtil;
 import com.pd.system.controller.conf.BaseController;
@@ -154,7 +155,7 @@ public class UserVideoController extends BaseController {
             responseDto.setSuccess(false);
             responseDto.setMessage("验证码已过期");
             LOG.info("用户登录失败，验证码已过期");
-            sysLogService.addLog(userVideoDto.getLoginName() ,request.getRemoteAddr(),"用户登录","登录",
+            sysLogService.addLog(userVideoDto.getLoginName() ,IpUtil.getClientIp(request),"用户登录","登录",
                     "1" ,"", JSONObject.toJSONString(userVideoDto),"",
                     "用户登录失败，验证码已过期","1",xmbh);
             return responseDto;
@@ -167,7 +168,7 @@ public class UserVideoController extends BaseController {
             responseDto.setSuccess(false);
             responseDto.setMessage("验证码不对");
             LOG.info("用户登录失败，验证码不对");
-            sysLogService.addLog(userVideoDto.getLoginName() ,request.getRemoteAddr(),"用户登录","登录",
+            sysLogService.addLog(userVideoDto.getLoginName() ,IpUtil.getClientIp(request),"用户登录","登录",
                     "1" ,"", JSONObject.toJSONString(userVideoDto),"",
                     "验证码不对","1",xmbh);
             return responseDto;
@@ -212,7 +213,7 @@ public class UserVideoController extends BaseController {
 
         //request.getSession().setAttribute(Constants.LOGIN_USER,loginUserDto);
         responseDto.setContent(loginUserDto);
-        sysLogService.addLog(userVideoDto.getLoginName() ,request.getRemoteAddr(),"用户登录","登录",
+        sysLogService.addLog(userVideoDto.getLoginName() ,IpUtil.getClientIp(request),"用户登录","登录",
                 "0" ,"", JSONObject.toJSONString(userVideoDto),"",
                 "","1",xmbh);
         return responseDto;
