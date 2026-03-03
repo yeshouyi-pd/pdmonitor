@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.*;
 
 @Component
@@ -61,13 +62,37 @@ public class SendSmsQuartzXz {
         pClusterExample.setOrderByClause(" ts desc,fz desc ");
         List<EquipmentFilePCluster> pClusterList = equipmentFilePClusterService.listByexample(pClusterExample);
         if(Integer.parseInt(bjcs)>0 && pClusterList.size()==0){
-            SendSmsTool.sendSms("2604172","新洲WH001-"+bjcs+"-"+"1"+"-"+"1"+"-"+list.get(0).getBjsj(), phoneNum);
+            String fzStr = list.get(0).getBjsj();
+            String fzDisplay = fzStr;
+            try {
+                DateTimeFormatter inFormatter = new DateTimeFormatterBuilder()
+                        .appendPattern("yyyy-MM-dd HH:mm")
+                        .optionalStart().appendPattern(":ss").optionalEnd()
+                        .toFormatter();
+                LocalDateTime dateTime = LocalDateTime.parse(fzStr, inFormatter);
+                fzDisplay = dateTime.format(DateTimeFormatter.ofPattern("yyyy年MM月dd日HH:mm"));
+            } catch (Exception e) {
+                LOG.warn("解析时间格式失败: {}", fzStr, e);
+            }
+            SendSmsTool.sendSms("2604172","新洲WH001-"+bjcs+"-"+"1"+"-"+"1"+"-"+fzDisplay, phoneNum);
         }else{
             if(pClusterList.size()==0){
                 SendSmsTool.sendSms("2604172","新洲WH001-"+bjcs+"-"+0+"-"+0+"-"+"空", phoneNum);
             }else {
                 int sum = pClusterList.stream().mapToInt(p -> Integer.parseInt(p.getTs())).sum();
-                SendSmsTool.sendSms("2604172","新洲WH001-"+bjcs+"-"+sum+"-"+pClusterList.get(0).getTs()+"-"+pClusterList.get(0).getFz(), phoneNum);
+                String fzStr = pClusterList.get(0).getFz();
+                String fzDisplay = fzStr;
+                try {
+                    DateTimeFormatter inFormatter = new DateTimeFormatterBuilder()
+                            .appendPattern("yyyy-MM-dd HH:mm")
+                            .optionalStart().appendPattern(":ss").optionalEnd()
+                            .toFormatter();
+                    LocalDateTime dateTime = LocalDateTime.parse(fzStr, inFormatter);
+                    fzDisplay = dateTime.format(DateTimeFormatter.ofPattern("yyyy年MM月dd日HH:mm"));
+                } catch (Exception e) {
+                    LOG.warn("解析时间格式失败: {}", fzStr, e);
+                }
+                SendSmsTool.sendSms("2604172","新洲WH001-"+bjcs+"-"+sum+"-"+pClusterList.get(0).getTs()+"-"+fzDisplay, phoneNum);
             }
 
         }

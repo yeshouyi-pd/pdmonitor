@@ -209,32 +209,6 @@ public class WaterEquipShjService extends AbstractScanRequest{
         return result.toString();
     }
 
-    //网络不通，重启设备，发送短信
-    public static void restartEquip(WaterEquipment waterEquipment) throws InterruptedException {
-        LOG.error("设备网络不通，重启设备，发送短信");
-        sbbhrqMap.put(waterEquipment.getSbsn(), DateUtil.getYMD());
-        Map<String,String> attrMap = (Map<String, String>) redisTstaticemplate.opsForValue().get(RedisCode.ATTRECODEKEY);
-        //发送短信
-        String phoneNum = attrMap.get("offlinePhone");
-        SendSmsTool.sendSms("2142996",waterEquipment.getSbsn(),phoneNum);
-        //重启设备
-        if(!StringUtils.isEmpty(waterEquipment.getSbcj())){
-            String restartinterval = attrMap.get("restartinterval");
-            LdTaskListDto dto = new LdTaskListDto();
-            dto.setIccid(waterEquipment.getSbcj());
-            dto.setTask("cmd:203");
-            dto.setFsdate(new Date());
-            ldTaskListServiceStatic.save(dto);
-            Thread.sleep(Long.parseLong(restartinterval));
-            LdTaskListDto dto1 = new LdTaskListDto();
-            dto1.setIccid(waterEquipment.getSbcj());
-            dto1.setTask("cmd:202");
-            dto1.setFsdate(new Date());
-            ldTaskListServiceStatic.save(dto1);
-            LOG.error("设备已重启");
-        }
-    }
-
     public static void main(String[] args){
 //        long distance = getDistance("117.729483166667,30.851357","117.73000,30.84791");
 //        System.out.println(distance);
