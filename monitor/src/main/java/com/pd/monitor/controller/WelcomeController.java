@@ -679,29 +679,117 @@ public class WelcomeController extends BaseWxController{
     @PostMapping("/statisticsAlarmNumsByTimeSum")
     public ResponseDto statisticsAlarmNumsByTimeSum(@RequestBody JSONObject jsonObject) throws ParseException {
         ResponseDto responseDto = new ResponseDto();
-        PredationNumExample example = new PredationNumExample();
-        PredationNumExample.Criteria ca = example.createCriteria();
-        if(!StringUtils.isEmpty(jsonObject.get("sbbh"))){
-            ca.andSbbhEqualTo(jsonObject.getString("sbbh"));
-        }
-        if(!StringUtils.isEmpty(jsonObject.get("topDayType"))&&"1".equals(jsonObject.get("topDayType"))){
-            //上个月
-            ca.andCjsjGreaterThanOrEqualTo(DateUtils.getStrToDate(DateUtils.getBeginDayStrOfSomeMonth(1)));
-            ca.andCjsjLessThanOrEqualTo(DateUtils.getStrToDate(DateUtils.getEndDayStrOfSomeMonth(1)));
-        }else if(!StringUtils.isEmpty(jsonObject.get("topDayType"))&&"2".equals(jsonObject.get("topDayType"))){
-            //本月
-            ca.andCjsjGreaterThanOrEqualTo(DateUtils.getStrToDate(DateUtils.getBeginDayStrOfSomeMonth(0)));
-            ca.andCjsjLessThanOrEqualTo(DateUtils.getStrToDate(DateUtils.getEndDayStrOfSomeMonth(0)));
-        }else if(!StringUtils.isEmpty(jsonObject.get("topDayType"))&&"3".equals(jsonObject.get("topDayType"))){
-            //本周
-            ca.andCjsjGreaterThanOrEqualTo(DateUtils.getStrToDate(DateUtils.getBeginWeek()));
-            ca.andCjsjLessThanOrEqualTo(DateUtils.getStrToDate(DateUtils.getEndWeek()));
-        }
-        List<PredationNumDwDto> lists = predationNumService.statisticsExample(example);
         Map<String,Object> map = new HashMap<String, Object>();
-        map.put("num",!CollectionUtils.isEmpty(lists)&&!StringUtils.isEmpty(lists.get(0))&&!StringUtils.isEmpty(lists.get(0).getCxcs())?lists.get(0).getCxcs():0);
-        map.put("nnm",!CollectionUtils.isEmpty(lists)&&!StringUtils.isEmpty(lists.get(0))&&!StringUtils.isEmpty(lists.get(0).getSjcs())?lists.get(0).getSjcs():0);
-        map.put("bnum",!CollectionUtils.isEmpty(lists)&&!StringUtils.isEmpty(lists.get(0))&&!StringUtils.isEmpty(lists.get(0).getBscs())?lists.get(0).getBscs():0);
+        LoginUserDto userDto = getRequestHeader();
+        List<String> deptList = getUpdeptcode(userDto.getDeptcode());
+        if(!StringUtils.isEmpty(jsonObject.get("topDayType"))&&"4".equals(jsonObject.get("topDayType"))){
+            EquipmentFileTodayExample example = new EquipmentFileTodayExample();
+            EquipmentFileTodayExample example1 = new EquipmentFileTodayExample();
+            EquipmentFileTodayExample.Criteria ca = example.createCriteria();
+            EquipmentFileTodayExample.Criteria ca1 = example1.createCriteria();
+            if(!CollectionUtils.isEmpty(deptList)){
+                ca.andDeptcodeIn(deptList);
+                ca1.andDeptcodeIn(deptList);
+            }
+            ca.andRqEqualTo(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd"));
+            ca1.andRqEqualTo(DateUtil.getFormatDate(new Date(),"yyyy-MM-dd"));
+            ca.andTxtlxEqualTo("1");
+            List<AlarmNumbersDto> lists = equipmentFileTodayService.statisticsAlarmNums(example);
+            ca1.andTxtlxEqualTo("1");
+            ca1.andJczlEqualTo("1");
+            List<EquipmentFileToday> predationList = equipmentFileTodayService.listAll(example1);
+            List<AlarmNumbersDto> resultList = new ArrayList<>();
+            Map<String, List<AlarmNumbersDto>> mapList = lists.stream().collect(Collectors.groupingBy(AlarmNumbersDto::getSbbh));
+            for(String key : mapList.keySet()){
+                List<AlarmNumbersDto> listsTemp = mapList.get(key);
+                if(!CollectionUtils.isEmpty(listsTemp)){
+                    AlarmNumbersDto firstEntity = listsTemp.get(0);
+                    String curDateStr = firstEntity.getFz();
+                    Integer bjsl = firstEntity.getAlarmNum();
+                    for(int i=1;i<listsTemp.size();i++){
+                        AlarmNumbersDto entity = listsTemp.get(i);
+                        AlarmNumbersDto beforeEntity = listsTemp.get(i-1);
+                        String beforeDateStr = beforeEntity.getFz();
+                        String nextDateStr = entity.getFz();
+                        if(entity.getSbbh().equals(firstEntity.getSbbh())){
+                            if(isOverThreeMinute(beforeDateStr, nextDateStr)){
+                                bjsl = bjsl + entity.getAlarmNum();
+                            }else {
+                                AlarmNumbersDto result = new AlarmNumbersDto();
+                                result.setDeptcode(entity.getDeptcode());
+                                result.setSbbh(entity.getSbbh());
+                                result.setBjsj(curDateStr+" 至 "+beforeDateStr);
+                                result.setAlarmNum(bjsl);
+                                resultList.add(result);
+                                firstEntity = entity;
+                                curDateStr = firstEntity.getFz();
+                                bjsl = firstEntity.getAlarmNum();
+                            }
+                        }else {
+                            AlarmNumbersDto result = new AlarmNumbersDto();
+                            result.setDeptcode(firstEntity.getDeptcode());
+                            result.setSbbh(firstEntity.getSbbh());
+                            result.setBjsj(curDateStr+" 至 "+beforeDateStr);
+                            result.setAlarmNum(bjsl);
+                            resultList.add(result);
+                            firstEntity = entity;
+                            curDateStr = firstEntity.getFz();
+                            bjsl = firstEntity.getAlarmNum();
+                        }
+                        if(i==listsTemp.size()-1){
+                            AlarmNumbersDto result = new AlarmNumbersDto();
+                            result.setDeptcode(entity.getDeptcode());
+                            result.setSbbh(entity.getSbbh());
+                            result.setBjsj(curDateStr+" 至 "+nextDateStr);
+                            result.setAlarmNum(bjsl);
+                            resultList.add(result);
+                        }
+                    }
+                    if(listsTemp.size()==1){
+                        AlarmNumbersDto result = new AlarmNumbersDto();
+                        result.setDeptcode(firstEntity.getDeptcode());
+                        result.setSbbh(firstEntity.getSbbh());
+                        result.setBjsj(curDateStr+" 至 "+curDateStr);
+                        result.setAlarmNum(bjsl);
+                        resultList.add(result);
+                    }
+                }
+            }
+            Integer num = 0;
+            for (int i = 0; i < resultList.size(); i++) {
+                Integer alarmNum = resultList.get(i).getAlarmNum();
+                num = num + alarmNum;
+            }
+            map.put("num",num);
+            map.put("nnm",resultList.size());
+            map.put("bnum",predationList.size());
+        }else{
+            PredationNumExample example = new PredationNumExample();
+            PredationNumExample.Criteria ca = example.createCriteria();
+            if(!CollectionUtils.isEmpty(deptList)){
+                ca.andDeptcodeIn(deptList);
+            }
+            if(!StringUtils.isEmpty(jsonObject.get("sbbh"))){
+                ca.andSbbhEqualTo(jsonObject.getString("sbbh"));
+            }
+            if(!StringUtils.isEmpty(jsonObject.get("topDayType"))&&"1".equals(jsonObject.get("topDayType"))){
+                //上个月
+                ca.andCjsjGreaterThanOrEqualTo(DateUtils.getStrToDate(DateUtils.getBeginDayStrOfSomeMonth(1)));
+                ca.andCjsjLessThanOrEqualTo(DateUtils.getStrToDate(DateUtils.getEndDayStrOfSomeMonth(1)));
+            }else if(!StringUtils.isEmpty(jsonObject.get("topDayType"))&&"2".equals(jsonObject.get("topDayType"))){
+                //本月
+                ca.andCjsjGreaterThanOrEqualTo(DateUtils.getStrToDate(DateUtils.getBeginDayStrOfSomeMonth(0)));
+                ca.andCjsjLessThanOrEqualTo(DateUtils.getStrToDate(DateUtils.getEndDayStrOfSomeMonth(0)));
+            }else if(!StringUtils.isEmpty(jsonObject.get("topDayType"))&&"3".equals(jsonObject.get("topDayType"))){
+                //本周
+                ca.andCjsjGreaterThanOrEqualTo(DateUtils.getStrToDate(DateUtils.getBeginWeek()));
+                ca.andCjsjLessThanOrEqualTo(DateUtils.getStrToDate(DateUtils.getEndWeek()));
+            }
+            List<PredationNumDwDto> lists = predationNumService.statisticsExample(example);
+            map.put("num",!CollectionUtils.isEmpty(lists)&&!StringUtils.isEmpty(lists.get(0))&&!StringUtils.isEmpty(lists.get(0).getCxcs())?lists.get(0).getCxcs():0);
+            map.put("nnm",!CollectionUtils.isEmpty(lists)&&!StringUtils.isEmpty(lists.get(0))&&!StringUtils.isEmpty(lists.get(0).getSjcs())?lists.get(0).getSjcs():0);
+            map.put("bnum",!CollectionUtils.isEmpty(lists)&&!StringUtils.isEmpty(lists.get(0))&&!StringUtils.isEmpty(lists.get(0).getBscs())?lists.get(0).getBscs():0);
+        }
         responseDto.setContent(map);
         return responseDto;
     }
