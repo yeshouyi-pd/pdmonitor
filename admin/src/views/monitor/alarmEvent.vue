@@ -107,7 +107,7 @@
         <pagination ref="pagination" v-bind:list="list" v-bind:itemCount="10"></pagination>
       </div>
     </div>
-    <div  v-show="!defaultShow"  style="display: flex">
+    <div  v-if="!defaultShow"  style="display: flex">
       <div id="treeAlarm" class="ztree" :style="{height: txheightMax + 'px', overflowY: 'auto', width:'20%', border:'1px solid #ccc'}"></div>
       <div :style="{height: txheightMax + 'px',overflowY: 'auto', width:'78%', border: '1px solid #ccc', marginLeft: '1%'}">
         <div>
@@ -316,7 +316,7 @@ export default {
       Loading.show();
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/monitor/admin/equipmentFileAlarmEvent/detailByParam', {
         'sbbh':alarmEvent.sbbh,
-        'deptcode':alarmEvent.deptcode,
+        // 'deptcode':alarmEvent.deptcode,
         'bjsj':alarmEvent.cjsj
       }).then((response)=>{
         Loading.hide();

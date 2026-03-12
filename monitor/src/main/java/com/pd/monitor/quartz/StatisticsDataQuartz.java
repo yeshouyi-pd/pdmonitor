@@ -198,7 +198,7 @@ public class StatisticsDataQuartz {
                 AlarmNumbersDto alarmNumbersDto = resultList.get(i);
                 EquipmentFileAlarmEventDto entity = new EquipmentFileAlarmEventDto();
                 entity.setId(UuidUtil.getShortUuid());
-                entity.setDeptcode(alarmNumbersDto.getDeptcode());
+                entity.setDeptcode(deptcodeSbbhMap.get(alarmNumbersDto.getSbbh()));
                 entity.setSbbh(alarmNumbersDto.getSbbh());
                 entity.setEventTime(alarmNumbersDto.getBjsj());
                 entity.setAlarmNum(alarmNumbersDto.getAlarmNum());

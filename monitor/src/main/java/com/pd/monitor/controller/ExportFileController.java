@@ -2163,7 +2163,7 @@ public class ExportFileController extends BaseWxController{
             XSSFCell comCell0 = comRow.createCell(0);
             comCell0.setCellValue(mapDept.get(entity.getDeptcode()));
             comCell0.setCellStyle(cellStyleCommon);
-            efae.setDeptcode(entity.getDeptcode());
+            //efae.setDeptcode(entity.getDeptcode());
             XSSFCell comCell1 = comRow.createCell(1);
             comCell1.setCellValue(mapSbxh.get("sbmc-"+entity.getSbbh()));
             comCell1.setCellStyle(cellStyleCommon);
