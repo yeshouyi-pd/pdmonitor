@@ -107,7 +107,7 @@
         <pagination ref="pagination" v-bind:list="list" v-bind:itemCount="10"></pagination>
       </div>
     </div>
-    <div  v-show="!defaultShow"  style="display: flex">
+    <div  v-if="!defaultShow"  style="display: flex">
       <div id="treeAlarm" class="ztree" :style="{height: txheightMax + 'px', overflowY: 'auto', width:'20%', border:'1px solid #ccc'}"></div>
       <div :style="{height: txheightMax + 'px',overflowY: 'auto', width:'78%', border: '1px solid #ccc', marginLeft: '1%'}">
         <div>
@@ -151,6 +151,7 @@
             <table class="table  table-bordered table-hover">
               <thead>
               <tr>
+                <th>序号</th>
                 <th>监测点</th>
                 <th>设备名称</th>
                 <th>设备sn</th>
@@ -160,7 +161,8 @@
               </tr>
               </thead>
               <tbody>
-              <tr v-for="item in detailList">
+              <tr v-for="(item,index) in detailList">
+                <td>{{index}}</td>
                 <td>{{deptMap|optionMapKV(item.deptcode)}}</td>
                 <td>{{waterEquipments|optionNSArray(item.sbbh)}}</td>
                 <td>{{item.sbbh}}</td>

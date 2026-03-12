@@ -151,6 +151,7 @@
             <table class="table  table-bordered table-hover">
               <thead>
               <tr>
+                <th>序号</th>
                 <th>监测点</th>
                 <th>设备名称</th>
                 <th>设备sn</th>
@@ -160,7 +161,8 @@
               </tr>
               </thead>
               <tbody>
-              <tr v-for="item in detailList">
+              <tr v-for="(item,index) in detailList">
+                <td>{{index}}</td>
                 <td>{{deptMap|optionMapKV(item.deptcode)}}</td>
                 <td>{{waterEquipments|optionNSArray(item.sbbh)}}</td>
                 <td>{{item.sbbh}}</td>
