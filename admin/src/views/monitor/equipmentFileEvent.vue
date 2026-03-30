@@ -373,6 +373,10 @@ export default {
     },
     showEcharts(item){
       let _this = this;
+      if(Tool.isEmpty(item.jtnr)){
+        Toast.error("已侦测，未定位！");
+        return;
+      }
       _this.equipmentFileEvent = $.extend({}, item);
       _this.$forceUpdate();
       _this.initEcharts();
