@@ -7,6 +7,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.pd.monitor.quartz.DeviceScheduleQuartz;
 import com.pd.monitor.wx.conf.BaseWxController;
 import com.pd.server.config.MqttClientSpace;
+import com.pd.server.config.RedisCode;
 import com.pd.server.main.domain.*;
 import com.pd.server.main.dto.*;
 import com.pd.server.main.service.*;
@@ -119,6 +120,24 @@ public class MobileController  extends BaseWxController {
     private RedisTemplate redisTemplate;
 
 
+
+    @GetMapping("/getAppVersion")
+    public ResponseDto getAppVersion(){
+        ResponseDto responseDto = new ResponseDto();
+        Map<String,String> attrMap = (Map<String, String>) redisTemplate.opsForValue().get(RedisCode.ATTRECODEKEY);
+        String appVersion = attrMap.get("app_version");
+        String appUrl = attrMap.get("app_url");
+        Map<String,String> map = new HashMap<>();
+        map.put("appVersion",appVersion);
+        map.put("appUrl",appUrl);
+        responseDto.setContent(map);
+        return responseDto;
+    }
+
+
+
+
+
     private static  Set<String> getDateMonth(Date sdate ,Date edate){
         Set<String> set = new TreeSet<>();
         // 获取当月第一天的日期
@@ -177,36 +196,36 @@ public class MobileController  extends BaseWxController {
                 List<KvIntDtoTj>  list = new ArrayList<>();
                 Set<String>    set = new TreeSet<>();
                 //周统计
-                 if("day".equals(user.getType())){
-                     Date  endDate= DateUtil.parse(user.getRq(), "yyyy-MM-dd");
-                     Date startDate =  DateUtil.offsetDay(endDate,-7);
-                     ca.andCjsjBetween(DateUtil.beginOfDay(startDate),DateUtil.endOfDay(endDate));
-                     set=getDateMonth(startDate,endDate);
-                     list   = predationNumService.gettjByDept(example);
+                if("day".equals(user.getType())){
+                    Date  endDate= DateUtil.parse(user.getRq(), "yyyy-MM-dd");
+                    Date startDate =  DateUtil.offsetDay(endDate,-7);
+                    ca.andCjsjBetween(DateUtil.beginOfDay(startDate),DateUtil.endOfDay(endDate));
+                    set=getDateMonth(startDate,endDate);
+                    list   = predationNumService.gettjByDept(example);
 
 
                     //月统计
                 }else if("month".equals(user.getType())){
-                     Date  date= DateUtil.parse(user.getRq()+"-01", "yyyy-MM-dd");
-                     Date startDate =  DateUtil.beginOfMonth(date);
-                     Date  endDate= DateUtil.endOfMonth(date);
-                     ca.andCjsjBetween(DateUtil.beginOfDay(startDate),DateUtil.endOfDay(endDate));
-                     set=getDateMonth(startDate,endDate);
-                     list   = predationNumService.gettjByDept(example);
+                    Date  date= DateUtil.parse(user.getRq()+"-01", "yyyy-MM-dd");
+                    Date startDate =  DateUtil.beginOfMonth(date);
+                    Date  endDate= DateUtil.endOfMonth(date);
+                    ca.andCjsjBetween(DateUtil.beginOfDay(startDate),DateUtil.endOfDay(endDate));
+                    set=getDateMonth(startDate,endDate);
+                    list   = predationNumService.gettjByDept(example);
 
-                     //年统计
+                    //年统计
                 } else if("year".equals(user.getType())){
-                     Date  date= DateUtil.parse(user.getRq()+"-01-01", "yyyy-MM-dd");
-                     Date startDate =  DateUtil.beginOfYear(date);
-                     Date  endDate= DateUtil.endOfYear(date);
-                     ca.andCjsjBetween(DateUtil.beginOfDay(startDate),DateUtil.endOfDay(endDate));
-                     set=getDateMonth(Integer.parseInt(user.getRq()));
-                     list   = predationNumService.gettjByDeptyear(example);
+                    Date  date= DateUtil.parse(user.getRq()+"-01-01", "yyyy-MM-dd");
+                    Date startDate =  DateUtil.beginOfYear(date);
+                    Date  endDate= DateUtil.endOfYear(date);
+                    ca.andCjsjBetween(DateUtil.beginOfDay(startDate),DateUtil.endOfDay(endDate));
+                    set=getDateMonth(Integer.parseInt(user.getRq()));
+                    list   = predationNumService.gettjByDeptyear(example);
                 }
-                 Set<String> setsb = new TreeSet<>();
-                 for (KvIntDtoTj kvIntDtoTj : list){
-                     setsb.add(kvIntDtoTj.getSbbh());
-                 }
+                Set<String> setsb = new TreeSet<>();
+                for (KvIntDtoTj kvIntDtoTj : list){
+                    setsb.add(kvIntDtoTj.getSbbh());
+                }
 
                 /**返回个数服下
                  *{
@@ -223,69 +242,69 @@ public class MobileController  extends BaseWxController {
                  *             ]
                  *           }
                  */
-                 NameAndDataRes  nameAndDataRes = new NameAndDataRes();
-                 NameAndDataRes  nameAndDataRes2 = new NameAndDataRes();
+                NameAndDataRes  nameAndDataRes = new NameAndDataRes();
+                NameAndDataRes  nameAndDataRes2 = new NameAndDataRes();
 
-                  Set<String>    resset = new TreeSet<>();
-                  for (String s : set){
-                      if(!"year".equals(user.getType())){
-                          resset.add(  s.substring(5,10).replaceAll( "-" , "/"));
-                      }else{
-                          resset.add(s.replaceAll( "-" , "/"));
-                      }
+                Set<String>    resset = new TreeSet<>();
+                for (String s : set){
+                    if(!"year".equals(user.getType())){
+                        resset.add(  s.substring(5,10).replaceAll( "-" , "/"));
+                    }else{
+                        resset.add(s.replaceAll( "-" , "/"));
+                    }
 
-                  }
-                 nameAndDataRes.setCategories(resset.toArray(new String[resset.size()]));
-                 nameAndDataRes2.setCategories(resset.toArray(new String[resset.size()]));
+                }
+                nameAndDataRes.setCategories(resset.toArray(new String[resset.size()]));
+                nameAndDataRes2.setCategories(resset.toArray(new String[resset.size()]));
 
-                 List<NameAndData>  listnameAndData = new ArrayList<>();
-                 List<NameAndData>  listnameAndData2 = new ArrayList<>();
+                List<NameAndData>  listnameAndData = new ArrayList<>();
+                List<NameAndData>  listnameAndData2 = new ArrayList<>();
 
-                 if(setsb.size() > 0){
-                     for (String b : setsb){
-                         NameAndData  nameAndData = new NameAndData();
-                         NameAndData  nameAndData2 = new NameAndData();
-                         nameAndData.setName(b);
-                         nameAndData2.setName(b);
+                if(setsb.size() > 0){
+                    for (String b : setsb){
+                        NameAndData  nameAndData = new NameAndData();
+                        NameAndData  nameAndData2 = new NameAndData();
+                        nameAndData.setName(b);
+                        nameAndData2.setName(b);
 
-                         int data[] = new int[set.size()];
-                         int data2[] = new int[set.size()];
-                         int i = 0;
-                         for (String s : set){
+                        int data[] = new int[set.size()];
+                        int data2[] = new int[set.size()];
+                        int i = 0;
+                        for (String s : set){
 
-                             List<KvIntDtoTj> collect = list.stream().filter(x -> x.getSbbh().equals(b) && x.getSj().equals(s)).collect(Collectors.toList());
-                             if(!CollectionUtils.isEmpty(collect)){
-                                 data[i] = collect.get(0).getV1();
-                             }else{
-                                 data[i] = 0;
-                             }
+                            List<KvIntDtoTj> collect = list.stream().filter(x -> x.getSbbh().equals(b) && x.getSj().equals(s)).collect(Collectors.toList());
+                            if(!CollectionUtils.isEmpty(collect)){
+                                data[i] = collect.get(0).getV1();
+                            }else{
+                                data[i] = 0;
+                            }
 
-                             if(!CollectionUtils.isEmpty(collect)){
-                                 data2[i] = collect.get(0).getV2();
-                             }else{
-                                 data2[i] = 0;
-                             }
-                             nameAndData.setData(data);
-                             nameAndData2.setData(data2);
-                             i = i+1;
-                         }
+                            if(!CollectionUtils.isEmpty(collect)){
+                                data2[i] = collect.get(0).getV2();
+                            }else{
+                                data2[i] = 0;
+                            }
+                            nameAndData.setData(data);
+                            nameAndData2.setData(data2);
+                            i = i+1;
+                        }
 
-                         listnameAndData.add(nameAndData);
-                         listnameAndData2.add(nameAndData2);
-                     }
+                        listnameAndData.add(nameAndData);
+                        listnameAndData2.add(nameAndData2);
+                    }
 
-                 }else {
-                     NameAndData  nameAndData = new NameAndData();
-                     NameAndData  nameAndData2 = new NameAndData();
-                     nameAndData.setName("");
-                     nameAndData2.setName("");
-                     int data[] = new int[set.size()];
-                     int data2[] = new int[set.size()];
-                     nameAndData.setData(data);
-                     nameAndData2.setData(data2);
-                     listnameAndData.add(nameAndData);
-                     listnameAndData2.add(nameAndData2);
-                 }
+                }else {
+                    NameAndData  nameAndData = new NameAndData();
+                    NameAndData  nameAndData2 = new NameAndData();
+                    nameAndData.setName("");
+                    nameAndData2.setName("");
+                    int data[] = new int[set.size()];
+                    int data2[] = new int[set.size()];
+                    nameAndData.setData(data);
+                    nameAndData2.setData(data2);
+                    listnameAndData.add(nameAndData);
+                    listnameAndData2.add(nameAndData2);
+                }
                 nameAndDataRes.setSeries(listnameAndData);
                 nameAndDataRes2.setSeries(listnameAndData2);
                 Map<String,NameAndDataRes> map  = new HashMap<String,NameAndDataRes>();
@@ -307,10 +326,10 @@ public class MobileController  extends BaseWxController {
     @PostMapping("/getAlljcsjByDept")
     public ResponseDto getAlljcsjByDept(@RequestBody  LoginUserDto user){
         ResponseDto responseDto = new ResponseDto();
-       
+
         if(null != user){
             if(!StringUtils.isEmpty(user.getDeptcode())){
-               List<String > listdept   =  getUpdeptcode(user.getDeptcode());
+                List<String > listdept   =  getUpdeptcode(user.getDeptcode());
                 WaterQualityResultExample waterQualityResultExample = new WaterQualityResultExample();
                 WaterQualityResultExample.Criteria  waterQualityResultca = waterQualityResultExample.createCriteria();
                 if(!CollectionUtils.isEmpty(listdept)){
@@ -333,7 +352,7 @@ public class MobileController  extends BaseWxController {
     @PostMapping("/getEquipmentEventByDept")
     public ResponseDto getEquipmentEventByDept(@RequestBody  LoginUserDto user){
         ResponseDto responseDto = new ResponseDto();
-       
+
         if(null != user){
             if(!StringUtils.isEmpty(user.getDeptcode())){
                 List<String > listdept   =  getUpdeptcode(user.getDeptcode());
@@ -411,7 +430,7 @@ public class MobileController  extends BaseWxController {
     @PostMapping("/getBzEquipmentEventByDept")
     public ResponseDto getBzEquipmentEventByDept(@RequestBody  LoginUserDto user){
         ResponseDto responseDto = new ResponseDto();
-       
+
         if(null != user){
             if(!StringUtils.isEmpty(user.getDeptcode())){
                 List<String > listdept   =  getUpdeptcode(user.getDeptcode());
@@ -446,7 +465,7 @@ public class MobileController  extends BaseWxController {
     @PostMapping("/getAlljtByDept")
     public ResponseDto getAlljtByDept(@RequestBody  LoginUserDto user){
         ResponseDto responseDto = new ResponseDto();
-       
+
         if(null != user){
             if(!StringUtils.isEmpty(user.getDeptcode())){
                 List<String > listdept   =  getUpdeptcode(user.getDeptcode());
@@ -748,7 +767,7 @@ public class MobileController  extends BaseWxController {
 
         if(null != requestDto){
             try {
-                
+
                 deviceSchedulesService.save(requestDto);
                 responseDto.setSuccess(true);
                 responseDto.setMessage("创建成功");
